@@ -16,6 +16,9 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
+import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.Distribution;
+import uk.ac.liv.util.HeavyweightDistribution;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -29,7 +32,7 @@ import org.apache.log4j.Logger;
 /**
  * An abstract report that keeps track of the ratio of actual
  * verses theoretical profits for a particular grouping of agents.
- * Concrete implementations define 
+ * Concrete implementations define how agents are grouped together.
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -38,6 +41,11 @@ import org.apache.log4j.Logger;
 public abstract class PayoffReport extends DynamicSurplusReport 
 								implements Serializable {
 
+  /**
+   * Maps keys representing groups onto the PayoffStats for that group.
+   * 
+   * @seealso PayoffStats
+   */
   private HashMap table = new HashMap();
   
   protected double totalProfits;
@@ -51,43 +59,33 @@ public abstract class PayoffReport extends DynamicSurplusReport
 
 
   public void calculate() {
+    int numAgents = auction.getNumberOfRegisteredTraders();
+    double averageSurplus = calculateTotalEquilibriumSurplus() / numAgents; 
     table.clear();
     totalProfits = 0;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
       double profits = agent.getProfits();
-      //assert profits >= 0;
-      Object key = getKey(agent);
-      StrategyStats stats = (StrategyStats) table.get(key);
+      double payoff = 1;
+      if ( averageSurplus != 0 ) {
+        payoff = profits / averageSurplus;
+      }      
+      Object key = getKey(agent);      
+      PayoffStats stats = (PayoffStats) table.get(key);
       if ( stats == null ) {
-        stats = new StrategyStats(1, profits);
+        stats = new PayoffStats(1, profits);
         table.put(key, stats);
       } else {
         stats.profits += profits;
         stats.numAgents++;
       }
+      stats.recordPayoff(payoff);
       totalProfits += profits;
-    }
-    calculatePayoffs();
+    }   
   }
 
 
-  protected void calculatePayoffs() {
-    int totalAgents = auction.getNumberOfRegisteredTraders();
-    double averageSurplus = calculateTotalEquilibriumSurplus() / totalAgents;    
-    double totalPayoff = 0;
-    Iterator i = table.keySet().iterator();
-    while ( i.hasNext() ) {
-      Object key = i.next();
-      StrategyStats stats = (StrategyStats) table.get(key);
-      if ( averageSurplus != 0 ) {
-        stats.payoff = ((stats.profits / stats.numAgents)  ) / averageSurplus;      
-      } else {
-        stats.payoff = 1;        
-      }
-    }
-  }
 
 
   public double getTotalProfits() {
@@ -95,8 +93,8 @@ public abstract class PayoffReport extends DynamicSurplusReport
   }
 
   public double getProfits( Object key ) {
-    StrategyStats stats =
-        (StrategyStats) table.get(key);
+    PayoffStats stats =
+        (PayoffStats) table.get(key);
     if ( stats != null ) {
       return stats.profits;
     } else {
@@ -104,25 +102,34 @@ public abstract class PayoffReport extends DynamicSurplusReport
     }
   }
 
-  public double getPayoff( Object key ) {
-    StrategyStats stats =
-       (StrategyStats) table.get(key);
+  public double getMeanPayoff( Object key ) {
+    PayoffStats stats =
+       (PayoffStats) table.get(key);
     if ( stats != null ) {
-      return stats.payoff;
+      return stats.getPayoffDistribution().getMean();
     } else {
       return 0;
     }
   }
 
   public int getNumberOfAgents( Object key ) {
-    StrategyStats stats =
-        (StrategyStats) table.get(key);
+    PayoffStats stats =
+        (PayoffStats) table.get(key);
     if ( stats != null ) {
       return stats.numAgents;
     } else {
       return 0;
     }
 
+  }
+  
+  public HeavyweightDistribution getPayoffDistribution( Object key ) {
+    PayoffStats stats = (PayoffStats) table.get(key);
+    if ( stats == null ) {
+      return null;
+    } else {
+      return stats.getPayoffDistribution();
+    }
   }
 
 
@@ -134,11 +141,11 @@ public abstract class PayoffReport extends DynamicSurplusReport
     Iterator i = table.keySet().iterator();
     while ( i.hasNext() ) {
       Object key = (Object) i.next();
-      StrategyStats stats = (StrategyStats) table.get(key);
+      PayoffStats stats = (PayoffStats) table.get(key);
       logger.info(stats.numAgents + " " + getReportText() + " " +
                    key + "\n\ttotal profits: " + stats.profits +
-                                        "\n\tpayoff: " + stats.payoff +
-                   "\n");
+                          "\n\tmean payoff: " + 
+                               stats.getPayoffDistribution().getMean() + "\n");
     }
     super.produceUserOutput();
   }
@@ -150,10 +157,10 @@ public abstract class PayoffReport extends DynamicSurplusReport
     Iterator i = table.keySet().iterator();
     while ( i.hasNext() ) {
       Object key = i.next();
-      StrategyStats stats = (StrategyStats) table.get(key);
+      PayoffStats stats = (PayoffStats) table.get(key);
       String varName = "payoff." + key.toString();
       ReportVariable var = new ReportVariable(varName, "Payoff to " + key);
-      vars.put(var, new Double(stats.payoff));
+      vars.put(var, new Double(stats.getPayoffDistribution().getMean()));
     }
     return vars;
   }
@@ -181,15 +188,25 @@ public abstract class PayoffReport extends DynamicSurplusReport
 }
 
 
-class StrategyStats {
+class PayoffStats {
 
   public double profits = 0;
   public int numAgents = 0;
-  public double payoff = 0;
+  
+  protected HeavyweightDistribution payoffDistribution = 
+    new HeavyweightDistribution();
 
-  public StrategyStats( int numAgents, double profits ) {
+  public PayoffStats( int numAgents, double profits ) {
     this.numAgents = numAgents;
     this.profits = profits;
+  }
+  
+  public void recordPayoff( double payoff ) {
+    payoffDistribution.newData(payoff);    
+  }
+  
+  public HeavyweightDistribution getPayoffDistribution() {
+    return payoffDistribution;
   }
 
 }
