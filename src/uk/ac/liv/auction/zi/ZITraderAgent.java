@@ -13,8 +13,9 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.agent;
+package uk.ac.liv.auction.zi;
 
+import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 
 import ec.util.ParameterDatabase;

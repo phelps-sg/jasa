@@ -14,9 +14,10 @@
  */
 
 
-package uk.ac.liv.auction.agent;
+package uk.ac.liv.auction.zi;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.agent.*;
 
 import uk.ac.liv.ai.learning.MimicryLearner;
 import uk.ac.liv.ai.learning.Learner;

@@ -13,12 +13,12 @@
  * See the GNU General Public License for more details.
  */
 
-package test.uk.ac.liv.auction.agent;
+package test.uk.ac.liv.auction.zi;
 
 import junit.framework.*;
 
-import uk.ac.liv.auction.agent.ZIPStrategy;
-import uk.ac.liv.auction.agent.ZITraderAgent;
+import uk.ac.liv.auction.zi.ZIPStrategy;
+import uk.ac.liv.auction.zi.ZITraderAgent;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.*;
 

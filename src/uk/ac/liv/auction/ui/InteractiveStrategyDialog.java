@@ -13,8 +13,9 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.agent;
+package uk.ac.liv.auction.ui;
 
+import uk.ac.liv.auction.agent.TraderAgent;
 import uk.ac.liv.auction.core.Shout;
 
 import javax.swing.*;
@@ -30,7 +31,7 @@ import java.awt.*;
  * @version $Revision$
  */
 
-public class InteractiveTraderDialog extends JDialog {
+public class InteractiveStrategyDialog extends JDialog {
 
   /**
    * The trader who owns this auction shout.
@@ -62,7 +63,7 @@ public class InteractiveTraderDialog extends JDialog {
   JRadioButton bidButton, askButton;
 
 
-  public InteractiveTraderDialog( TraderAgent trader ) {
+  public InteractiveStrategyDialog( TraderAgent trader ) {
 
     super();
 

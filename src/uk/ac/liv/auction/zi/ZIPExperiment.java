@@ -13,7 +13,7 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction;
+package uk.ac.liv.auction.zi;
 
 import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;

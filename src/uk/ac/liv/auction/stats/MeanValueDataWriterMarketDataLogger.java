@@ -87,7 +87,6 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
 
 
   public void updateShoutLog( int time, Shout shout ) {
-    round = time;
     if (shout.isBid()) {
       bidStats.newData(shout.getPrice());
     } else {
@@ -110,6 +109,8 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
       logger.debug(allStats[i]);
       allStats[i].reset();
     }
+
+    round++;
   }
 
   public void endOfDay() {

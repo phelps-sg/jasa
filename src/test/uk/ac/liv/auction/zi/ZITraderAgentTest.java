@@ -13,11 +13,12 @@
  * See the GNU General Public License for more details.
  */
 
-package test.uk.ac.liv.auction.agent;
+package test.uk.ac.liv.auction.zi;
 
 import junit.framework.*;
 
 import uk.ac.liv.auction.agent.*;
+import uk.ac.liv.auction.zi.*;
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.ai.learning.Learner;
