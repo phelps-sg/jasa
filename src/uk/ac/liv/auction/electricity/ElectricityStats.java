@@ -175,9 +175,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
 
   public double calculateEquilibriumPrice() {
-    //FIXME
-    double k = ((ParameterizablePricing) auction.getAuctioneer()).getK();
-    return (standardStats.getMinPrice()*(1-k) + k*standardStats.getMaxPrice()); // / 2;
+    return (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2;
   }
 
 
