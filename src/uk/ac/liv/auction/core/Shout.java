@@ -217,7 +217,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   public int hashCode() {
-    return (int) id; // * getAgent().hashCode();
+    return (int) id * getAgent().hashCode();
   }
 
   public boolean equals( Object other ) {
