@@ -29,6 +29,16 @@ import ec.util.ParameterDatabase;
  * private value.
  * </p>
  *
+ * <b>Parameters</b><br>
+ *
+ * <table>
+ *
+ * <tr><td valign=top><i>base.</i><tt>delta</tt><br>
+ * <font size=-1>double</font></td>
+ * <td valign=top>(the markup over our private valuation to bid for)</td></tr>
+ *
+ * </table>
+ *
  * @author Steve Phelps
  */
 
