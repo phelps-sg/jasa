@@ -28,6 +28,8 @@ import java.io.Serializable;
  * The underlying data structure is a Vector.  Items are organised in such
  * a way that retrieving the smallest, or largest, item can be done in O(1) time.
  *
+ * @deprecated
+ * 
  * @author Steve Phelps
  * @version $Revision$
  *
