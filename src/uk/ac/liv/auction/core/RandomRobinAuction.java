@@ -17,6 +17,7 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.TradingAgent;
 
+
 import uk.ac.liv.prng.GlobalPRNG;
 
 /**
@@ -38,7 +39,31 @@ public class RandomRobinAuction extends RoundRobinAuction {
   public RandomRobinAuction( String name ) {
     super(name);
   }
-
+//  
+//  public Iterator getTraderIterator() {
+//    Object[] randomlySortedTraders = registeredTraders.toArray();
+//    GlobalPRNG.randomPermutation(randomlySortedTraders);
+//    ArrayList r = new ArrayList(randomlySortedTraders.length);
+//    for( int i=0; i<randomlySortedTraders.length; i++ ) {
+//      r.add(randomlySortedTraders[i]);
+//    }
+//    return r.iterator();
+//  }
+//
+//
+//  protected void fireEvent( AuctionEvent event ) {
+//    List listeners = (List) eventListeners.get(event.getClass());
+//    if ( listeners != null ) {
+//      Object[] randListeners = listeners.toArray();
+//      GlobalPRNG.randomPermutation(randListeners);
+//      for ( int i = 0; i < randListeners.length; i++ ) {
+//        AuctionEventListener listener = (AuctionEventListener) randListeners[i];
+//        listener.eventOccurred(event);
+//      }
+//    }
+//  } 
+//  
+  
   public void requestShouts() {
     Object[] randomlySortedTraders = activeTraders.toArray();
     GlobalPRNG.randomPermutation(randomlySortedTraders);    

@@ -125,6 +125,7 @@ public abstract class AuctionImpl extends Observable
 
   public void reset() {    
     initialise();
+    eventListeners.clear();
   }
 
   public void setAuctioneer( Auctioneer auctioneer ) {

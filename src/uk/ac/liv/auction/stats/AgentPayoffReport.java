@@ -26,19 +26,18 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
  * @author Steve Phelps
  * @version $Revision$
  */
-public class GroupPayoffReport extends PayoffReport {
+public class AgentPayoffReport extends PayoffReport {
 
   public Object getKey( AbstractTradingAgent agent ) {   
-    return agent.getGroup();
-  }
-
-  public String getKeyName() {
-    return "group";
+    return new Long(agent.getId());
   }
   
+  public String getKeyName() {
+    return "agent";
+  }
 
   public String getReportText() {
-    return "in group";
+    return "agent";
   }
 
 }

@@ -91,6 +91,8 @@ public class MarketSimulation implements Serializable, Runnable {
    */
   protected int iterations = 0;
   
+  protected boolean verbose = true;
+  
   /**
    * If running more than one iteration, then write batch statistics
    * to this DataWriter.
@@ -102,7 +104,8 @@ public class MarketSimulation implements Serializable, Runnable {
   public static final String P_SIMULATION = "simulation";
   public static final String P_ITERATIONS = "iterations";
   public static final String P_WRITER = "writer";
-
+  public static final String P_VERBOSE = "verbose";
+  	
   static Logger logger = Logger.getLogger("JASA");
 
 
@@ -153,6 +156,8 @@ public class MarketSimulation implements Serializable, Runnable {
     iterations = 
       parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
     
+    verbose = parameters.getBoolean(base.push(P_VERBOSE), null, verbose);
+    
     try {
       resultsFile = 
         (DataWriter) 
@@ -190,13 +195,17 @@ public class MarketSimulation implements Serializable, Runnable {
 
   
   public void runBatchExperiment( int n ) {
-    HashMap resultsStats = new HashMap();
+    HashMap resultsStats = new HashMap();    
     for( int i=0; i<n; i++ ) {
-      logger.info("Running experiment " + (i+1) + " of " + n + "... ");
+      if ( verbose ) {
+        logger.info("Running experiment " + (i+1) + " of " + n + "... ");
+      }
       auction.reset();
       auction.run();
       recordResults(auction.getResults(), resultsStats);
-      logger.info("done.\n");
+      if ( verbose ) {
+        logger.info("done.\n");        
+      }      
     }
     finalReport(resultsStats);
   }

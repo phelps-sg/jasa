@@ -65,8 +65,8 @@ public class EquilibriumSurplusLoggerTest extends TestCase
   protected static final double SELLER_MIN_VALUE = 75;
   protected static final double SELLER_MAX_VALUE = 300;
   protected static final int TRADE_ENT = 10;
-  protected static final int MAX_DAYS = 150;
-  protected static final int DAY_LEN = 10;
+  protected static final int MAX_DAYS = 1500;
+  protected static final int DAY_LEN = 20;
   
 
   public EquilibriumSurplusLoggerTest( String name ) {

@@ -49,6 +49,10 @@ public class AgentGroup implements Serializable {
     return "(" + getClass() + " description:\"" + description + "\")";
   }
   
+  public String getDescription() {
+    return description;
+  }
+  
   /**
    * Get group n
    * 

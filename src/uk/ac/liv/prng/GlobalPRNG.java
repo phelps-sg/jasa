@@ -77,6 +77,7 @@ public class GlobalPRNG {
     GlobalPRNG.seed = seedGenerator.nextSeed();
     prng = PRNGFactory.getFactory().create(seed);
   }
+  
 
   public static void randomPermutation( Object[] a ) {
     for( int i = 0; i < a.length - 1; i++ ) {

@@ -43,81 +43,95 @@ import org.apache.log4j.Logger;
  * A class representing an auction in which RoundRobinTraders can trade by
  * placing shouts in a synchronous round-robin shedule.
  * </p>
- *
+ * 
  * <p>
- * TraderAgents are notified that it is their turn to bid by invokation
- * of the requestShout() method on each agent.
+ * TraderAgents are notified that it is their turn to bid by invokation of the
+ * requestShout() method on each agent.
  * </p>
- *
+ * 
  * <p>
  * This class implements Runnable so auctions can be run as threads, e.g.:
  * </p>
- *
+ * 
  * <code>
  *  Thread t = new Thread(auction);
  *  t.start();
  * </code><br>
- *
+ * 
  * <p>
  * However, this class is not necessarily itself thread-safe.
  * </p>
- *
+ * 
  * <p>
- * This class is designed for high-performance lightweight simulation of
- * auctions.  Developers wishing to provide asynchronous auction functionality
- * through, e.g. a web servlet, should either extend AuctionImpl or implement
- * the Auction directly directly using the existing Auctioneer classes to provide
- * the "bidding logic".
+ * <b>Parameters </b> <br>
  * </p>
- *
- *
- * <p><b>Parameters</b><br></p>
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.maximumrounds</tt><br>
- * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of auction rounds)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.maximumdays</tt><br>
- * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of days in the auction)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.lengthofday</tt><br>
- * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the maximum number of rounds in a trading day)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.auctioneer</tt><br>
- * <font size=-1>class, inherits uk.ac.liv.auction.core.Auctioneer</font></td>
- * <td valign=top>(the auction protocol to use)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.logger</tt><br>
- * <font size=-1>class, inherits uk.ac.liv.auction.stats.MarketDataLogger</font></td>
- * <td valign=top>(the MarketDataLogger to use)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.stats</tt><br>
- * <font size=-1>class, inherits uk.ac.liv.auction.stats.MarketStats</font></td>
- * <td valign=top>(the MarketStats to use)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.name</tt><br>
- * <font size=-1>string</font></td>
- * <td valign=top>(the name of this auction)</td><tr>
-
- * <tr><td valign=top><i>base</i><tt>.agenttype.</tt><i>n</i><br>
- * <font size=-1>int</font></td>
- * <td valign=top>(the number of different agent types)</td></tr>
- *
- * <tr><td valign=top><i>base</i><tt>.agenttype.</tt><i>i</i><br>
- * <font size=-1>classname, inherits uk.ac.liv.auction.agent.RoundRobinTrader</font></td>
- * <td valign=top>(the class for agent type #<i>i</i>)</td></tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.maximumrounds</tt><br>
+ * <font size=-1>int >= 0 </font></td>
+ * <td valign=top>(the number of auction rounds)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.maximumdays</tt><br>
+ * <font size=-1>int >= 0 </font></td>
+ * <td valign=top>(the number of days in the auction)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.lengthofday</tt><br>
+ * <font size=-1>int >= 0 </font></td>
+ * <td valign=top>(the maximum number of rounds in a trading day)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.auctioneer</tt><br>
+ * <font size=-1>class, inherits uk.ac.liv.auction.core.Auctioneer </font></td>
+ * <td valign=top>(the auction protocol to use)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.logger</tt><br>
+ * <font size=-1>class, inherits uk.ac.liv.auction.stats.MarketDataLogger
+ * </font></td>
+ * <td valign=top>(the MarketDataLogger to use)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.stats</tt><br>
+ * <font size=-1>class, inherits uk.ac.liv.auction.stats.MarketStats </font>
+ * </td>
+ * <td valign=top>(the MarketStats to use)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.name</tt><br>
+ * <font size=-1>string </font></td>
+ * <td valign=top>(the name of this auction)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.agenttype.</tt> <i>n </i> <br>
+ * <font size=-1>int </font></td>
+ * <td valign=top>(the number of different agent types)</td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.agenttype.</tt> <i>i </i> <br>
+ * <font size=-1>classname, inherits uk.ac.liv.auction.agent.RoundRobinTrader
+ * </font></td>
+ * <td valign=top>(the class for agent type # <i>i </i>)</td>
+ * </tr>
  * 
  * </table>
- *
- *
+ * 
+ * 
  * @see uk.ac.liv.auction.agent.TradingAgent
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
- *
+ *  
  */
 
 public class RoundRobinAuction extends AuctionImpl
@@ -581,12 +595,11 @@ public class RoundRobinAuction extends AuctionImpl
       ((Resetable) auctioneer).reset();
     }
 
-    if ( report != null && report instanceof Resetable ) {
-      ((Resetable) report).reset();
-    }
-
-    if ( report != null && report instanceof Resetable ) {
-      ((Resetable) report).reset();
+    if ( report != null ) {
+      if ( report instanceof Resetable ) {
+        ((Resetable) report).reset();
+      }
+      addAuctionEventListener(report);
     }
 
     if ( guiConsole != null ) {
@@ -657,7 +670,7 @@ public class RoundRobinAuction extends AuctionImpl
     while ( i.hasNext() ) {
       TradingAgent defunct = (TradingAgent) i.next();
       activeTraders.remove(defunct);
-      removeAuctionEventListener(defunct);
+      //removeAuctionEventListener(defunct);
     }
   }
 

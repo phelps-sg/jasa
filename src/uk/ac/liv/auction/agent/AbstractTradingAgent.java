@@ -470,6 +470,14 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   public void setGroup( AgentGroup group ) {
     this.group = group;
   }
+  
+  public boolean equals( Object other )  {
+    return this.id == ((AbstractTradingAgent) other).id;
+  }
+  
+  public int hashCode() {
+    return (int) id;
+  }
 
 
   /**
