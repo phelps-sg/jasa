@@ -32,8 +32,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import JSci.swing.JLineGraph;
-import JSci.swing.JGraphLayout;
+import uchicago.src.sim.analysis.plot.RepastPlot;
 
 import org.apache.log4j.Logger;
 
@@ -64,12 +63,10 @@ public class AuctionConsoleFrame extends JFrame
   protected JButton pauseButton;
   protected JButton resetAgentsButton;
 
-  protected JGraphLayout graphLayout;
-  protected JLineGraph graph;
-  protected JPanel graphPanel;
+  protected RepastPlot graph;
+ 
   protected float graphXExtrema = 0f;
-  protected GraphMarketDataLogger graphModel;
-
+ 
   protected Font decimalFont = new Font("Monospaced", Font.TRUETYPE_FONT, 10);
 
   protected DecimalFormat currencyFormatter =
@@ -298,32 +295,18 @@ public class AuctionConsoleFrame extends JFrame
       }
     });
 
-    if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
-      createGraphPanel();
+    if ( (graph = GraphMarketDataLogger.getGraphSingleton()) != null ) {
+      c.gridx = 0;
+      c.gridy = 0;
+      c.gridwidth = 3;
+      gridBag.setConstraints(graph, c);
+      contentPane.add(graph);
     }
 
     setAuctionName(name);
   }
 
 
-  protected void createGraphPanel() {
-    graphPanel = new JPanel(graphLayout = new JGraphLayout());
-    graph = new JLineGraph(graphModel);
-    graphPanel.add(graph, "Graph");
-    GridBagConstraints c = new GridBagConstraints();
-    c.gridx = 0;
-    c.gridy = 0;
-    c.gridwidth = 8;
-    c.gridheight = 1;
-    c.weightx = 1;
-    c.weighty = 1;
-    c.fill = c.BOTH;
-    graphPanel.setPreferredSize(new Dimension(600, 200));
-    gridBag.setConstraints(graphPanel, c);
-    getContentPane().add(graphPanel);
-    graph.setYExtrema(0f, 0f, 0f);
-    graph.setXExtrema(0f, 500f, 500f);
-  }
 
   public void setAuctionName( String name ) {
     setTitle("Auction Console for " + name);
@@ -372,7 +355,7 @@ public class AuctionConsoleFrame extends JFrame
     dayLabel.setText(decimalFormatter.format(auction.getDay()));
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
 
-    if ( graphModel != null && auction.getAge() != currentRound) {
+    if ( graph != null && auction.getAge() != currentRound) {
       currentRound = auction.getAge();
 //      if ( currentRound > 1 && currentRound % 500 == 0 ) {
 //        graphXExtrema += 500f;
@@ -465,13 +448,7 @@ public class AuctionConsoleFrame extends JFrame
     // Reset everything
     reset();
     auction.reset();
-    if ( graphModel != null ) {
-      graphModel.reset();
-      graphPanel.remove(graph);
-      graph = new JLineGraph(graphModel);
-      graphPanel.add(graph, "Graph");
-    }
-
+   
     // Start a new auction thread
     auctionRunner = new Thread(auction);
     auctionRunner.start();
@@ -487,11 +464,7 @@ public class AuctionConsoleFrame extends JFrame
   }
 
   public void reset() {
-    if ( graphModel != null ) {
-      graphModel.reset();
-      getContentPane().remove(graphPanel);
-      createGraphPanel();
-    }
+    //TODO
   }
 
   protected void notifyGraphModelChanged() {
@@ -499,7 +472,7 @@ public class AuctionConsoleFrame extends JFrame
 //    try {
       SwingUtilities.invokeLater(new Runnable() {
         public void run() {
-          graphModel.dataUpdated();
+          graph.repaint();
         }
       });
 //      Thread.currentThread().sleep(1);
