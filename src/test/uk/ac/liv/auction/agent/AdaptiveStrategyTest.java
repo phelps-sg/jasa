@@ -45,10 +45,21 @@ public class AdaptiveStrategyTest extends TestCase {
     agent.setStrategy(strategy);
     auction.register(agent);
     auction.run();
+    System.out.println("AdaptiveStrategyTest: Testing reward/action cycle count");
     System.out.println("Number of actions = " + strategy.actions);
     System.out.println("Number of rewards = " + strategy.rewards);
+    System.out.println("done.");
     assertTrue(strategy.actions==NUM_ROUNDS);
     assertTrue(strategy.rewards==NUM_ROUNDS-1);
+  }
+
+  public void testReset() {
+    System.out.println("AdaptiveStrategyTest: Testing reset()");
+    testActionsAndRewards();
+    strategy.actions = 0;
+    strategy.rewards = 0;
+    strategy.reset();
+    testActionsAndRewards();
   }
 
   public static void main( String[] args ) {
@@ -74,5 +85,6 @@ class TestStrategy extends AdaptiveStrategy {
   public void calculateReward( Auction auction ) {
     rewards++;
   }
+
 
 }

@@ -21,14 +21,21 @@ import uk.ac.liv.auction.core.Auction;
 
 public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
 
-  boolean firstShout = true;
+  boolean firstShout;
 
   public AdaptiveStrategy( AbstractTraderAgent agent ) {
     super(agent);
+    initialise();
   }
 
   public AdaptiveStrategy() {
     super();
+    initialise();
+  }
+
+  public void initialise() {
+    firstShout = true;
+    super.initialise();
   }
 
   public void modifyShout( Shout shout, Auction auction ) {

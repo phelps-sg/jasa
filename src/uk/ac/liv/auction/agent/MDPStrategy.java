@@ -33,6 +33,8 @@ import ec.util.Parameter;
  * A trading strategy that uses an MDP learning algorithm,
  * such as the Q-learning algorithm, to adapt its trading behaviour in
  * successive auction rounds.
+ *
+ * @author Steve Phelps
  * </p>
  */
 
