@@ -38,5 +38,6 @@ public class RepastAuctionConsoleGraph extends OpenSequenceGraph {
       RepastGraphSequence sequence = (RepastGraphSequence) i.next();
       addSequence(sequence.getName(), sequence);
     }
+    
   }
 }
