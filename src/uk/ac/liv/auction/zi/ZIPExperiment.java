@@ -179,7 +179,7 @@ public class ZIPExperiment extends MarketSimulation {
       logger.info("\nSample " + sample + "... ");
       initialiseAgents();
       auction.run();
-      logger.debug("Auction terminated at round " + auction.getAge());
+      logger.debug("Auction terminated at round " + auction.getRound());
 
       for( int day=0; day<numDays; day++ ) {
         CummulativeDistribution stats = marketData.getTransPriceStats(day);

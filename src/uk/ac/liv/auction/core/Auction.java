@@ -98,7 +98,7 @@ public interface Auction extends QuoteProvider {
   /**
    * Get the age of the auction in unspecified units
    */
-  public int getAge();
+  public int getRound();
   public int getDay();
 
   /**

@@ -297,7 +297,7 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
   }
 
   protected int calculateAuctionAge() {
-    return auction.getAge();
+    return auction.getRound();
   }
 
 

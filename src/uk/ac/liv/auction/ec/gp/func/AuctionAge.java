@@ -31,7 +31,7 @@ public class AuctionAge extends GPNode {
   	GPGenericIndividual gpInd = (GPGenericIndividual) individual;
   	GPTradingStrategy strategy = (GPTradingStrategy) gpInd.getGPObject();
     ((GPGenericData) input).data = 
-      new UntypedLong(strategy.getAuction().getAge());
+      new UntypedLong(strategy.getAuction().getRound());
   }
 
   public String toString() {

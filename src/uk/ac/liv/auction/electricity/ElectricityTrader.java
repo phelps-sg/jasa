@@ -150,7 +150,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
     if (surplus < 0) {
       surplus = 0;
     }
-    return auction.getAge() * quantity * surplus;
+    return auction.getRound() * quantity * surplus;
   }
 
 
