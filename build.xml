@@ -130,14 +130,25 @@
   <echo message="host = ${hostname}"/>
 </target>
 
-<target name="version" depends="gethostname">
-        <propertyfile
+<target name="incminorversion">
+	<propertyfile
+	    file="version.properties" comment="Build version info">
+		<entry key="minorVersion" type="int" operation="+" value="0"/>
+ 		<entry key="buildNum" type="int" value="1"/>
+	</propertyfile>
+</target>
+
+<target name="incbuildnum" depends="gethostname">
+       <propertyfile
             file="version.properties" comment="Build version info">
             <entry key="buildDate" type="date" value="now"/>
             <entry key="buildNum" default="0" type="int" operation="+" value="1"/>
 	    <entry key="buildHost" type="string" value="${hostname}"/>
         </propertyfile>
-        <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}"/>
+</target>
+
+<target name="versionsrc">
+         <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}"/>
         <replace
             file="${versionSrc}"
             value="value not found in version.properties"
@@ -151,7 +162,32 @@
  	    <replacefilter
 		token="@buildHost@"
 		property="buildHost"/>
+	    <replacefilter
+		token="@minorVersion@"
+   		property="minorVersion"/>
+	    <replacefilter
+ 		token="@majorVersion@"
+		property="majorVersion"/>
         </replace>
     </target>
+
+<target name="devversion">
+        <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}"/>
+        <replace
+            file="${versionSrc}"
+            value="value not found in version.properties"
+            propertyFile="version.properties">
+            <replacefilter
+                token="@buildDate@"
+                property="buildDate"/>
+            <replacefilter
+                token="@buildNum@"
+                value="-1"/>
+ 	    <replacefilter
+		token="@buildHost@"
+		property="buildHost"/>
+        </replace>
+    </target>
+
 
 </project>

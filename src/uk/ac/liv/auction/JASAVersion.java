@@ -25,9 +25,9 @@ public class JASAVersion {
   
   static final int majorVersion = 0;
 
-  static final int buildNumber = 3;
+  static final int buildNumber = 10;
 
-  static final String buildDate = "2005/02/15 14:33";
+  static final String buildDate = "2005/02/15 14:59";
 
   static final String buildHost = "mbc1.staff";
 
@@ -43,6 +43,10 @@ public class JASAVersion {
   public static String getVersion() {
     return majorVersion + "." + minorVersion; 
   }
+
+  public static String getFullVersion() {
+    return majorVersion + "." + minorVersion + "." + buildNumber + "." + buildHost + " (" + buildDate + ")";
+  }
   
   public static int getMinorVersion() {
     return minorVersion;
@@ -57,7 +61,7 @@ public class JASAVersion {
   }
   
   public static void main( String[] args ) {
-    System.out.println("JASA v" + getVersion());
+    System.out.println("JASA v" + getFullVersion());
   }
   
   

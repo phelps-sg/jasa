@@ -21,9 +21,9 @@ package uk.ac.liv.auction;
 
 public class JASAVersion {
   
-  static final int minorVersion = 34;
+  static final int minorVersion = @minorVersion@;
   
-  static final int majorVersion = 0;
+  static final int majorVersion = @majorVersion@;
 
   static final int buildNumber = @buildNum@;
 
@@ -43,6 +43,10 @@ public class JASAVersion {
   public static String getVersion() {
     return majorVersion + "." + minorVersion; 
   }
+
+  public static String getFullVersion() {
+    return majorVersion + "." + minorVersion + "." + buildNumber + "." + buildHost + " (" + buildDate + ")";
+  }
   
   public static int getMinorVersion() {
     return minorVersion;
@@ -57,7 +61,7 @@ public class JASAVersion {
   }
   
   public static void main( String[] args ) {
-    System.out.println("JASA v" + getVersion());
+    System.out.println("JASA v" + getFullVersion());
   }
   
   
