@@ -272,13 +272,17 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   /**
    * Return the profit made in the most recent auction round.
    * Sub-classes should override this to return something sensible.
+   * This can be used as, e.g. input to a re-inforcement learning
+   * algorithm.
    */
   public double getLastProfit() {
     return 0;
   }
 
   /**
-   *
+   * Return the amount of commodity to trade in the current round.
+   * The default quantity is 1.  Sub-classes should override this
+   * method if they wish to trade different quantities.
    */
   public int determineQuantity( Auction auction ) {
     return 1;

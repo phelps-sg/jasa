@@ -171,7 +171,7 @@ public class ElectricityAuctionSimulation  {
 
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
-      MREElectricityTrader trader = (MREElectricityTrader) i.next();
+      ElectricityTrader trader = (ElectricityTrader) i.next();
 //      int numPeaks = ((RothErevLearner) trader.getLearner()).countPeaks();
 //      if ( numPeaks > 1 ) {
 //        System.out.println("WARNING: No. of peaks for trader " + trader + "\n=" + numPeaks);
@@ -188,7 +188,19 @@ public class ElectricityAuctionSimulation  {
                                       int[] values ) {
     for( int i=0; i<num; i++ ) {
 
+/*
+      ElectricityTrader trader =
+        new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);
+
+      StimuliResponseStrategy strategy =
+        new StimuliResponseStrategy(trader);
+
+      strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X, System.currentTimeMillis()) );
+
+      trader.setStrategy(strategy);
+*/
       // Construct a trader for this record
+
       MREElectricityTrader trader =
         new MREElectricityTrader(capacity, values[i % values.length], 0, areSellers);
 

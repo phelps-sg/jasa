@@ -40,7 +40,9 @@ public class RandomConstrainedStrategy extends AbstractStrategy {
   }
 
   public void modifyShout( Shout shout, Auction auction ) {
-    shout.setQuantity(agent.determineQuantity(auction));
+
+    super.modifyShout(shout, auction);
+
     double markup = randGenerator.nextDouble() * maxMarkup;
     double price = 0;
     if ( agent.isBuyer() ) {
@@ -53,8 +55,6 @@ public class RandomConstrainedStrategy extends AbstractStrategy {
     } else {
       shout.setPrice(0);
     }
-    shout.setIsBid(agent.isBuyer());
-
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {

@@ -36,7 +36,6 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
 import uk.ac.liv.auction.stats.*;
-
 import uk.ac.liv.auction.ec.gp.func.*;
 
 
@@ -203,15 +202,21 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   }
 
 
-  protected void randomizePrivateValues( Auctioneer auctioneer ) {
-    Iterator traders = allTraders.iterator();
-    for( int i=0; traders.hasNext(); i++ ) {
-      ElectricityTrader trader = (ElectricityTrader) traders.next();
-      trader.setPrivateValue(randGenerator.nextDouble() * maxPrivateValue);
-      if ( verbose ) {
-        System.out.println("pv " +  i + " = " + trader.getPrivateValue());
+  protected void randomizePrivateValues() {
+    do {
+      Iterator traders = allTraders.iterator();
+      for( int i=0; traders.hasNext(); i++ ) {
+        ElectricityTrader trader = (ElectricityTrader) traders.next();
+        trader.setPrivateValue(randGenerator.nextDouble() * maxPrivateValue);
+        if ( verbose ) {
+          System.out.println("pv " +  i + " = " + trader.getPrivateValue());
+        }
       }
-    }
+      stats.calculate();
+      if ( verbose ) {
+        System.out.println("Post randomization stats = " + stats);
+      }
+    } while ( Double.isNaN(stats.standardStats.getEquilibriaPriceStats().getMean()) );
   }
 
 
@@ -222,13 +227,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     }
 
     if ( randomPrivateValues && ((context.getState().generation % shockInterval)==0)) {
-      do {
-        randomizePrivateValues(auction.getAuctioneer());
-        stats.calculate();
-        if ( verbose ) {
-          System.out.println("Post randomization stats = " + stats);
-        }
-      } while ( Double.isNaN(stats.standardStats.getEquilibriaPriceStats().getMean()) );
+      randomizePrivateValues();
     }
 
   }

@@ -62,7 +62,7 @@ public class PureSimpleStrategy extends AbstractStrategy {
   }
 
   public void modifyShout( Shout shout, Auction auction ) {
-    shout.setIsBid(agent.isBuyer());
+    super.modifyShout(shout, auction);
     shout.setPrice(agent.getPrivateValue() + delta);
     shout.setQuantity(quantity);
     if ( shout.getPrice() < 0 ) {
