@@ -60,4 +60,14 @@ public class GlobalPRNG {
 		prng = PRNGFactory.getFactory().create(seed);
 	}
 	
+	public static void randomPermutation( Object[] a ) {
+		for( int i=0; i<a.length-1; i++ ) {
+			int choice = prng.choose(i, a.length);
+			Object tmp = a[i];
+			a[i] = a[choice];
+			a[choice] = tmp;
+		}
+	}
+	
+	
 }
