@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 /**
  * A comparator that can be used for arranging shouts in descending
- * order, i.e. highest price first.
+ * order; that is, highest price first.
  *
  * @author Steve Phelps
  */

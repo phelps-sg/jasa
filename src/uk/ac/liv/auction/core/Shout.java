@@ -126,8 +126,6 @@ public class Shout implements Comparable, Cloneable, Serializable {
    *
    * @param excess The excess quantity
    *
-   * @see getChild()
-   *
    */
   public Shout split( int excess ) {
     quantity -= excess;

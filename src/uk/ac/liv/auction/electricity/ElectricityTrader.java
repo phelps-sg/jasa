@@ -37,8 +37,7 @@ import java.io.Serializable;
 /**
  *
  * <p>
- * An adaptive trader, trading in a simulated Elecitricty market, as described
- * in:
+ * An adaptive trader, trading in a simulated Elecitricty market.  See:
  * </p>
  * <p>
  * "Markert Power and Efficiency in a Computational Electricity Market

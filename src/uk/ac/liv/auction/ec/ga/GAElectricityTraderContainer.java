@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.ec.ga;
 
+import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
 
 import uk.ac.liv.ai.learning.RothErevLearner;
@@ -27,16 +28,16 @@ import ec.vector.DoubleVectorIndividual;
 
 public class GAElectricityTraderContainer extends DoubleVectorIndividual {
 
-  MREElectricityTrader trader = null;
+  ElectricityTrader trader = null;
 
   public ElectricityTrader getTrader() {
     double propensities[] = (double []) getGenome();
-    ((RothErevLearner) trader.getLearner()).setPropensities(propensities);
+    ((RothErevLearner) ((StimuliResponseStrategy) trader.getStrategy()).getLearner()).setPropensities(propensities);
     trader.reset();
     return trader;
   }
 
-  public void setTrader( MREElectricityTrader trader ) {
+  public void setTrader( ElectricityTrader trader ) {
     this.trader = trader;
   }
 

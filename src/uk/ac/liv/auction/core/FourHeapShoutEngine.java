@@ -33,13 +33,12 @@ import java.io.Serializable;
 
 /**
  * <p>
- * This class provides auction shout management services using the 4-Heap algorithm
- * presented in the paper:
+ * This class provides auction shout management services using the 4-Heap algorithm. See:
  * </p>
  *
  * <p>
  * "Flexible Double Auctions for Electronic Commerce: Theory and Implementation"
- * by Wurman, Walsh amnd Wellman 1998.
+ * by Wurman, Walsh and Wellman 1998.
  * </p>
  *
  * <p>

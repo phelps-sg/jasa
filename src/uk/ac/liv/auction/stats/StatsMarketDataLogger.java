@@ -25,7 +25,7 @@ import uk.ac.liv.util.Resetable;
 
 /**
  * <p>
- * A market data logger that keeps cummulative statistics on a number of variables
+ * A market data logger that keeps cummulative statistics on a number of variables.
  * </p>
  *
  * @author Steve Phelps
