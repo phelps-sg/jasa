@@ -371,8 +371,8 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
         pST += truthProfits;
       }
     }
-    sMPB = (pBA - pBT) / pBT;
-    sMPS = (pSA - pST) / pST;
+    sMPB = (pBA - pBT) / pBCE;
+    sMPS = (pSA - pST) / pSCE;
   }
 
   protected double truthProfits( double singleRoundProfits ) {
