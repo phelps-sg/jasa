@@ -17,6 +17,8 @@ package test.uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.agent.AbstractStrategy;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
 
 /**
  * @author Steve Phelps
@@ -33,6 +35,12 @@ public class MockStrategy extends AbstractStrategy  {
  
   public MockStrategy( Shout[] shouts ) {
     this.shouts = shouts;
+  }
+  
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof RoundClosedEvent ) {
+      endOfRound(event.getAuction());
+    }
   }
   
   public void endOfRound ( Auction auction) {

@@ -19,6 +19,8 @@ import java.io.Serializable;
 
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
 
 import uk.ac.liv.util.Resetable;
 
@@ -93,5 +95,12 @@ public abstract class AbstractStrategy implements
   public void initialise() {
     currentShout = new Shout.MutableShout();
   }
-
+  
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof RoundClosedEvent ) {
+      endOfRound(event.getAuction());
+    }
+  }
+  
+  public abstract void endOfRound( Auction auction );
 }
