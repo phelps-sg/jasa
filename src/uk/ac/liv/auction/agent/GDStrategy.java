@@ -193,6 +193,17 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
   }
 
   private void getMax( double a1, double p1, double a2, double p2 ) {
+    
+    if ( a1 > MAX_PRICE ) {
+      a1 = MAX_PRICE;
+    }
+    
+    if ( a2 > MAX_PRICE ) {
+      a2 = MAX_PRICE;
+    }
+    
+    assert p1 >=0 && p1 <= (1 + 10E-6) && p2 >=0 && p2 <= (1 + 10E-6);
+    
     double pvalue = agent.getValuation(auction);
 
     double denom = (-6 * a1 * a1 * a2 * a2) + (4 * a1 * a1 * a1 * a2)
