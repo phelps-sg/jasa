@@ -94,6 +94,10 @@ public class ElectricityTrader extends AbstractTraderAgent {
     this.fixedCosts = fixedCosts;
     initialise();
   }
+  
+  public ElectricityTrader() {
+    this(0, 0, 0, false);
+  }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
