@@ -80,14 +80,13 @@ public class GPTradingStrategy extends GPIndividualCtx
   public void modifyShout( Shout shout, Auction auction ) {
     currentShout = shout;
     currentAuction = auction;
-    GPGenericData input = new GPGenericData();
+    GPGenericData input = GPGenericData.newGPGenericData();
     double price = Double.NaN;
     GenericNumber result = null;
     try {
       evaluateTree(0, input);
       result = (GenericNumber) input.data;
       price = result.doubleValue();
-      result.release();
     } catch ( ArithmeticException e ) {
       System.out.println("Caught: " + e);
       price = 0;
@@ -105,6 +104,8 @@ public class GPTradingStrategy extends GPIndividualCtx
     shout.setQuantity(quantity);
     shout.setIsBid(agent.isBuyer());
     priceStats.newData(price);
+    result.release();
+    input.release();
   }
 
   public double getLastProfit() {
