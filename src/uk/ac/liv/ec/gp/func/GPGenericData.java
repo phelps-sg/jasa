@@ -17,8 +17,6 @@ package uk.ac.liv.ec.gp.func;
 
 import ec.gp.*;
 
-import huyd.poolit.*;
-
 import uk.ac.liv.util.Pooled;
 
 

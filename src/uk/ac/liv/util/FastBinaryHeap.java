@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import huyd.poolit.*;
+import org.ascentphase.poolit.*;
+import org.ascentphase.poolit.poolers.*;
 
 /**
  * <p>

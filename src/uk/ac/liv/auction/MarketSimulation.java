@@ -148,7 +148,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    logger.info("Setup.. ");
+    logger.info("Setup...");
 
     PRNGFactory.setup(parameters, base.push(P_PRNG));
 
@@ -197,15 +197,17 @@ public class MarketSimulation implements Parameterizable, Runnable,
     }
 
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
-    logger.info("seed = " + prngSeed);
-    logger.info("");
+    logger.info("seed = " + prngSeed + "\n");
+
     seedObjects();
 
   }
 
 
   public void run() {
+    logger.info("Running auction...");
     auction.run();
+    logger.info("Auction finished.");
   }
 
 

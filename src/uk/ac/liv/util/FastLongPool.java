@@ -16,7 +16,8 @@
 
 package uk.ac.liv.util;
 
-import huyd.poolit.*;
+import org.ascentphase.poolit.*;
+import org.ascentphase.poolit.poolers.*;
 
 /**
  * @author Steve Phelps
@@ -61,7 +62,7 @@ public class FastLongPool {
         pooler = new FixedPooler(FastLong.class, poolSize);
       } catch ( CreateException e ) {
         e.printStackTrace();
-        throw new Error(e.getMessage());
+        throw new Error(e);
       }
     }
   }

@@ -16,7 +16,8 @@
 
 package uk.ac.liv.auction.core;
 
-import huyd.poolit.*;
+import org.ascentphase.poolit.*;
+import org.ascentphase.poolit.poolers.*;
 
 import uk.ac.liv.auction.agent.TraderAgent;
 

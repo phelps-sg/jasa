@@ -519,7 +519,7 @@ public class RoundRobinAuction extends AuctionImpl
 
     } catch ( AuctionClosedException e ) {
       e.printStackTrace();
-      throw new Error(e.getMessage());
+      throw new Error(e);
     }
 
     informAuctionClosed();

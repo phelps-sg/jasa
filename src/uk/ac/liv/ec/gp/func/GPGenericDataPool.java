@@ -16,7 +16,8 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import huyd.poolit.*;
+import org.ascentphase.poolit.*;
+import org.ascentphase.poolit.poolers.*;
 
 /**
  * @author Steve Phelps
@@ -55,7 +56,7 @@ public class GPGenericDataPool {
         pooler = new FixedPooler(GPGenericData.class, poolSize);
       } catch ( CreateException e ) {
         e.printStackTrace();
-        throw new Error(e.getMessage());
+        throw new Error(e);
       }
     }
   }
