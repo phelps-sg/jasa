@@ -46,9 +46,14 @@ public class WeightedAuctioneerFitness extends SimpleFitness
       return;
     }
 
-    float ea = (float) efficiency.getMean();
-    float mpb = (float) buyerMP.getMean();
-    float mps = (float) sellerMP.getMean();
+    float ea =
+      NormalisationFunctions.efficiencyFitness(efficiency.getMean());
+
+    float mpb =
+      NormalisationFunctions.mpFitness(buyerMP.getMean());
+
+    float mps =
+      NormalisationFunctions.mpFitness(sellerMP.getMean());
 
     fitness = (1-w)*(mpb+mps)/2 + w*ea;
 
