@@ -61,11 +61,11 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected int iterations = 100;
 
   protected int auctioneerKSamples = 10;
-  
+
   protected double minK = 0;
-  
+
   protected double maxK = 1;
-  
+
   protected double deltaK = 0.01;
 
   protected int numBuyers, numSellers;
@@ -89,7 +89,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected boolean collectIterData = false;
 
   protected StandardRandomizer randomizer;
-  
+
   protected CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
   protected CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
   protected CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
@@ -115,7 +115,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   protected CummulativeStatCounter[] variables = new CummulativeStatCounter[] {
     efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
-    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, reMean, reStdev 
+    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, reMean, reStdev
   };
 
   static Logger logger = Logger.getLogger(ElectricityAuctionSimulation.class);
@@ -145,24 +145,24 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   static final int DATAFILE_NUM_COLUMNS = 81;
 
-  
-  public ElectricityAuctionSimulation() {    
-   
+
+  public ElectricityAuctionSimulation() {
+
   }
 
-  
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    
+
     Debug.assertTrue("CSV file not configured with correct number of columns",
                        variables.length*4 == DATAFILE_NUM_COLUMNS-1);
-    
+
     maxRounds =
       parameters.getIntWithDefault(base.push(P_MAXROUNDS), null, maxRounds);
 
     auctioneerKSamples =
         parameters.getIntWithDefault(base.push(P_AUCTIONEERKSAMPLES),
                                           null, auctioneerKSamples);
-    
+
     minK = parameters.getDoubleWithDefault(base.push(P_KMIN), null, minK);
     maxK = parameters.getDoubleWithDefault(base.push(P_KMAX), null, maxK);
     deltaK = parameters.getDoubleWithDefault(base.push(P_KDELTA), null, deltaK);
@@ -292,9 +292,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
                 new FileOutputStream(outputDir + "/" + "npt-"
                                       + paramSummary + ".csv"),
                                           DATAFILE_NUM_COLUMNS);
-    
+
     writeDataFileHeadings();
-  
+
     marketData = new StatsMarketDataLogger();
     ((Resetable) auctioneer).reset();
     auction.setAuctioneer(auctioneer);
@@ -313,22 +313,22 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     randomizedPrivateValues =
         randomizer.generateRandomizedPrivateValues(numTraders, iterations);
 
-    for( double k=minK; k<=maxK; k+=deltaK ) {            
+    for( double k=minK; k<=maxK; k+=deltaK ) {
 
       experiment(k, randomizedPrivateValues, prngSeeds);
-      
-      reportSummary(k);      
+
+      reportSummary(k);
       recordVariables(k);
     }
 
     dataFile.close();
   }
-  
-  
-  public void experiment( double auctioneerK, 
-                            double[][] randomizedPrivateValues, 
+
+
+  public void experiment( double auctioneerK,
+                            double[][] randomizedPrivateValues,
                             long[][] prngSeeds ) throws FileNotFoundException {
-    
+
     ((ParameterizablePricing) auctioneer).setK(auctioneerK);
     auction.reset();
 
@@ -337,7 +337,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     logger.info("k = " + auctioneerK);
 
     initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
-    
+
     resetVariables();
 
     for( int i=0; i<iterations; i++ ) {
@@ -378,7 +378,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       dumpIterResults();
     }
- 
+
   }
 
 
@@ -406,46 +406,55 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       auction.register(trader);
     }
   }
-  
-  protected void initStats() {   
-    
-    
+
+  protected void initStats() {
+
+
 
   }
 
 
-  protected void recordVariables( double auctioneerK ) {    
+  protected void recordVariables( double auctioneerK ) {
     dataFile.newData(auctioneerK);
-    for( int i=0; i<variables.length; i++ ) {     
+    for( int i=0; i<variables.length; i++ ) {
       dataFile.newData(variables[i].getMean());
       dataFile.newData(variables[i].getStdDev());
       dataFile.newData(variables[i].getMin());
       dataFile.newData(variables[i].getMax());
     }
   }
-  
-  protected void resetVariables() {        
-    for( int i=0; i<variables.length; i++ ) {     
-      variables[i].reset();      
+
+
+  protected void resetVariables() {
+    for( int i=0; i<variables.length; i++ ) {
+      variables[i].reset();
     }
   }
-  
-  protected void writeDataFileHeadings() {
-    dataFile.newData("k");
+
+
+  protected void writeDataFileHeadings() throws IOException {
+    CSVWriter headings = new CSVWriter(
+            new FileOutputStream(outputDir + "/" + "headings-"
+                                  + paramSummary + ".csv"),
+                                      DATAFILE_NUM_COLUMNS);
+
+    headings.newData("k");
     for( int i=0; i<variables.length; i++ ) {
       String name = variables[i].getName();
-      dataFile.newData(name + "_mean");
-      dataFile.newData(name + "_stdev");
-      dataFile.newData(name + "_min");
-      dataFile.newData(name + "_max");
+      headings.newData(name + "_mean");
+      headings.newData(name + "_stdev");
+      headings.newData(name + "_min");
+      headings.newData(name + "_max");
     }
+    headings.close();
   }
-  
+
+
   protected void reportSummary( double auctioneerK ) {
     logger.info("\n*** Summary results for: k = " + auctioneerK +"\n");
     for( int i=0; i<variables.length; i++ ) {
       logger.info(variables[i]);
-    }    
+    }
   }
 
 
@@ -460,11 +469,11 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       iterResults.newData(stats.calculateEquilibriumPrice());
     }
   }
-  
-  
-  protected void calculateREStats( CummulativeStatCounter reMean, 
+
+
+  protected void calculateREStats( CummulativeStatCounter reMean,
                                     CummulativeStatCounter reStdev) {
-    Iterator i = auction.getTraderIterator();    
+    Iterator i = auction.getTraderIterator();
     AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
     AdaptiveStrategy s = (AdaptiveStrategy) agent.getStrategy();
     if ( s.getLearner() instanceof RothErevLearner ) {

@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2003 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -30,29 +30,25 @@ import org.apache.log4j.Logger;
  * @author Steve Phelps
  */
 public class EPRandomizer extends StandardRandomizer {
-  
+
   MersenneTwisterFast equilibPricePRNG;
-  
+
   static Logger logger = Logger.getLogger(EPRandomizer.class);
-  
+
   public EPRandomizer() {
     super();
     equilibPricePRNG = new MersenneTwisterFast();
   }
-    
+
   public void setup(ParameterDatabase parameters, Parameter base) {
     super.setup(parameters, base);
     equilibPricePRNG.setSeed(seed);
   }
-  
-  
-  public void randomizePrivateValues( double[][] values, int iteration ) {
-    super.randomizePrivateValues(values, 0);
-  }
-  
+
+
   protected double[][] generateRandomizedPrivateValues( int numTraders,
                                                          int numIterations ) {
-    double[][] values = new double[numIterations][numTraders];    
+    double[][] values = new double[numIterations][numTraders];
     for( int i=0; i<numIterations; i++ ) {
       double equilibMinPrice = randomValue(equilibPricePRNG, 0, maxPrivateValue);
       double equilibMaxPrice = randomValue(equilibPricePRNG, equilibMinPrice, maxPrivateValue);
@@ -62,30 +58,30 @@ public class EPRandomizer extends StandardRandomizer {
     }
     return values;
   }
-  
-  
+
+
   public double[] generateValues( double equilibPriceMin,
                                     double equilibPriceMax,
                                     int equilibQty ) {
-                  
+
     int ns = simulation.numSellers;
     int nb = simulation.numBuyers;
     int cs = simulation.sellerCapacity;
     int cb = simulation.buyerCapacity;
-    double[] values = new double[ns+nb]; 
-    
+    double[] values = new double[ns+nb];
+
     int b0 = (equilibQty / cb);
     int s0 = equilibQty / cs;
     generateValues(s0, 0, equilibPriceMin,  values, 0);
     generateValues(ns-s0, equilibPriceMax, maxPrivateValue, values, s0);
     generateValues(b0, 0, equilibPriceMin, values, ns);
     generateValues(nb-b0, equilibPriceMax, maxPrivateValue, values, ns+b0);
-    return values;    
-  } 
-  
-  protected void generateValues( int numAgents, double startPrice, double targetPrice, 
-                                      double[] values, int offset ) {   
-    logger.debug("generateValues(" + numAgents + ", " + startPrice + ", " + targetPrice + ", " + values + ", " + offset + ")");                                      
+    return values;
+  }
+
+  protected void generateValues( int numAgents, double startPrice, double targetPrice,
+                                      double[] values, int offset ) {
+    logger.debug("generateValues(" + numAgents + ", " + startPrice + ", " + targetPrice + ", " + values + ", " + offset + ")");
     double p = (targetPrice-startPrice) / numAgents;
     double p0 = startPrice;
     int n = offset+numAgents;
@@ -99,5 +95,5 @@ public class EPRandomizer extends StandardRandomizer {
     logger.debug("values[" + (n-1) + "] = " + targetPrice);
     values[n-1] = targetPrice;
   }
-  
+
 }
