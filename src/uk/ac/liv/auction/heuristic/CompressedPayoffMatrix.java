@@ -18,12 +18,9 @@ package uk.ac.liv.auction.heuristic;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.List;
-import java.util.HashMap;
 
 import java.io.*;
 
-import uk.ac.liv.util.MutableDoubleWrapper;
-import uk.ac.liv.util.MutableIntWrapper;
 import uk.ac.liv.util.Partitioner;
 import uk.ac.liv.util.BaseNIterator;
 
@@ -270,132 +267,5 @@ public class CompressedPayoffMatrix {
   }
 
 
-  public static void main( String[] args ) {
-
-    CompressedPayoffMatrix payoffMatrix = new CompressedPayoffMatrix(6, 3);
-
-    edu.cornell.lassp.houle.RngPack.RandomElement prng = new edu.cornell.lassp.houle.RngPack.RanMT(System.currentTimeMillis());
-
-    String filename = args[0];
-
-    try {
-
-      FileInputStream file = new FileInputStream(filename);
-      CSVReader csvIn = new CSVReader(file, new Class[] {Integer.class, Integer.class, Integer.class, Double.class, Double.class, Double.class} );
-      EquilibriaDistribution ed = new EquilibriaDistribution();
-
-      payoffMatrix.importFromCSV(csvIn);
-
-      for( int i=0; i<1000; i++ ) {
-        double x, y;
-        do {
-          x = prng.uniform(0, 1);
-          y = prng.uniform(0, 1);
-        } while ( x+y > 1 );
-
-        double z = 1 - x - y;
-
-        uk.ac.liv.util.io.CSVWriter rdPlot = new uk.ac.liv.util.io.CSVWriter( new FileOutputStream("/tmp/rdplot" + i + ".csv"), 3);
-        double[] equilibrium =
-          payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.000001, 200000);
-        rdPlot.close();
-
-        ed.newEquilibrium(equilibrium);
-      }
-
-      ed.generateReport();
-
-    } catch ( Exception e  ) {
-      e.printStackTrace();
-    }
-  }
-
 }
 
-
-class EquilibriaDistribution {
-
-  protected HashMap equilibria;
-
-  protected int totalInstances;
-
-  static Logger logger = Logger.getLogger(EquilibriaDistribution.class);
-
-  public EquilibriaDistribution() {
-    equilibria = new HashMap();
-    totalInstances = 0;
-  }
-
-  public void newEquilibrium( double[] probabilities ) {
-    MixedStrategy equilibrium = new MixedStrategy(probabilities);
-    MutableIntWrapper instances;
-    instances = (MutableIntWrapper) equilibria.get(equilibrium);
-    if ( instances == null ) {
-      instances = new MutableIntWrapper(1);
-      equilibria.put(equilibrium, instances);
-    } else {
-      instances.value++;
-    }
-    totalInstances++;
-  }
-
-  public void generateReport() {
-    Iterator i = equilibria.keySet().iterator();
-    while ( i.hasNext() ) {
-      MixedStrategy strategy = (MixedStrategy) i.next();
-      MutableIntWrapper instanceCount =
-        (MutableIntWrapper) equilibria.get(strategy);
-      System.out.println(strategy + ": " + instanceCount.value / (double) totalInstances);
-    }
-  }
-
-}
-
-class MixedStrategy {
-
-  protected double[] probabilities;
-
-  protected static double precision = 10;
-
-  public MixedStrategy( double[] mixedStrategy ) {
-    this.probabilities = new double[mixedStrategy.length];
-    for( int i=0; i<mixedStrategy.length; i++ ) {
-      probabilities[i] = mixedStrategy[i];
-    }
-    round();
-  }
-
-  public void round() {
-    for( int i=0; i<probabilities.length; i++ ) {
-      probabilities[i] = Math.round(probabilities[i]*precision) / precision;
-    }
-  }
-
-  public boolean equals( Object other ) {
-    for( int i=0; i<probabilities.length; i++ ) {
-      if ( probabilities[i] != ((MixedStrategy) other).probabilities[i] ) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  public int hashCode() {
-    int hash = 0;
-    int base = 1;
-    for( int i=0; i<probabilities.length; i++ ) {
-      hash += probabilities[i] * base;
-      base *= 2;
-    }
-    return hash;
-  }
-
-  public String toString() {
-    StringBuffer result = new StringBuffer();
-    for( int i=0; i<probabilities.length; i++ ) {
-      result.append(probabilities[i] + " ");
-    }
-    return result.toString();
-  }
-
-}
