@@ -9,7 +9,7 @@
    <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng"/>
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
-   <property name="jsciPath" value="${javaLibPath}/jsci/classes"/>
+   <property name="jsciPath" value="${javaLibPath}/JSci/classes/core.jar:${javaLibPath}/JSci/classes/xtra.jar:${javaLibPath}/JSci/sci.jar:${javaLibPath}/JSci/JSciBeans.jar"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj"/>
    <property name="rngpackLoc" value="${javaLibPath}/rngpack/rngpack.jar"/>
    <property name="poolitLoc" value="${javaLibPath}/poolit/poolit.jar"/>
@@ -19,17 +19,16 @@
    <property name="jadePath" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
 
    <path id="project.classpath">
-     <pathelement location="${jsciPath}" />
-     <pathelement location="${ecjLoc}" />
-     <pathelement location="${poolitLoc}" />
-     <pathelement location="${junitLoc}" />
-     <pathelement location="${skijLoc}" />
-     <pathelement location="${rngpackLoc}" />
-     <pathelement location="${log4jLoc}" />
-     <pathelement location="${jasaLoc}" />
-     <pathelement path="${jadePath}" /> 
-     <pathelement location="./classes" />
-     <pathelement path="${java.class.path}" />
+     <pathelement path="${jsciPath}"/>
+     <pathelement location="${ecjLoc}"/>
+     <pathelement location="${poolitLoc}"/>
+     <pathelement location="${junitLoc}"/>
+     <pathelement location="${skijLoc}"/>
+     <pathelement location="${rngpackLoc}"/>
+     <pathelement location="${log4jLoc}"/>     
+     <pathelement path="${jadePath}"/> 
+     <pathelement location="./classes"/>
+     <pathelement path="${java.class.path}"/>
    </path>
 
    <target name="cleanOutput">
@@ -49,14 +48,14 @@
    </target>
 
    <target depends="prepareOutput" name="compile">
-      <javac debug="on" destdir="${outputDir}" srcdir="${sourceDir}" deprecation="on" source="1.4">
-        <classpath refid="project.classpath" />
+      <javac debug="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${sourceDir}">
+        <classpath refid="project.classpath"/>
      </javac>
    </target>
 
    <target depends="compile,prepareDoc" name="doc">
-     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" sourcepath="${sourceDir}" windowtitle="${projectName}" source="1.4">
-        <classpath refid="project.classpath" />
+     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}" windowtitle="${projectName}">
+        <classpath refid="project.classpath"/>
      </javadoc>
    </target>
 
@@ -65,7 +64,7 @@
    </target>
 
    <target depends="jar,doc" name="tar">
-   	<tar  compression="gzip" tarfile="jasa.tar.gz">
+   	<tar compression="gzip" tarfile="jasa.tar.gz">
 		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params" prefix="jasa">
                   <exclude name="src/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
@@ -74,22 +73,22 @@
     </target>
 
     <target name="anoncvspass">
-	    <cvspass cvsroot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" password="" />
+	    <cvspass cvsroot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" password=""/>
 	</target>
 
    <target depends="anoncvspass" name="cvsupdate">
-	   <cvs command="update" compression="3" cvsRsh="rsh" cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" />
+	   <cvs command="update" compression="3" cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" cvsRsh="rsh"/>
     </target>
 
    <target depends="compile" name="test">
 	   <java classname="test.uk.ac.liv.auction.AllTests" fork="true">
-        	<classpath refid="project.classpath" />
-		<jvmarg value="-ea" />
+        	<classpath refid="project.classpath"/>
+		<jvmarg value="-ea"/>
 	   </java>
     </target>
 
     <target name="libtar">
-    	<tar basedir="." includes="lib/**" compression="gzip" tarfile="lib.tar.gz"/>
+    	<tar basedir="." compression="gzip" includes="lib/**" tarfile="lib.tar.gz"/>
     </target>
 
 
