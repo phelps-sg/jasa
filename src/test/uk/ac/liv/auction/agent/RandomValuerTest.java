@@ -38,6 +38,10 @@ public class RandomValuerTest extends TestCase {
   
   public static final int SAMPLES = (int) 10E7;
   
+  public RandomValuerTest( String name ) {
+    super(name);
+  }
+  
   public void setUp() {
     GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     valuer = new RandomValuer(MIN_VALUE, MAX_VALUE);
