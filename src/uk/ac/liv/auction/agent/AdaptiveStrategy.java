@@ -30,6 +30,16 @@ import ec.util.ParameterDatabase;
  * A class representing a strategy in which we adapt our bids
  * using some kind of learning algorithm.
  *
+ * </p><p><b>Parameters</b><br>
+ *
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.markupscale</tt><br>
+ * <font size=-1>double &gt;= 0</font></td>
+ * <td valign=top>(scaling factor by which to multiply the output from the learner)</td></tr>
+ *
+ * </table>
+ *
  * @author Steve Phelps
  */
 
@@ -106,5 +116,6 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
    * Get the learning algorithm currently being used by this strategy.
    */
   public abstract Learner getLearner();
+  
 
 }

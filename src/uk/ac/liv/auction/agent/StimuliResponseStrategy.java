@@ -32,6 +32,18 @@ import ec.util.Parameter;
  * such as the Roth-Erev algorithm, to adapt its trading behaviour in
  * successive auction rounds.
  * </p>
+ *
+ * </p><p><b>Parameters</b><br>
+ *
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.learner</tt><br>
+ * <font size=-1>classname, inherits StimuliResponseLearner</font></td>
+ * <td valign=top>(the learning algorithm to use)</td></tr>
+ *
+ * </table>
+ *
+ * @author Steve Phelps 
  */
 
 public class StimuliResponseStrategy extends AdaptiveStrategy {
@@ -86,7 +98,8 @@ public class StimuliResponseStrategy extends AdaptiveStrategy {
   }
 
   public String toString() {
-    return "(" + getClass() + " learner:" + learner + " markupScale:" + markupScale + ")";
+    return "(" + getClass() + " markupscale:" + markupScale + " learner:" +
+              learner + "quantity:" + quantity + ")";      
   }
 
 }

@@ -52,7 +52,7 @@ import java.io.Serializable;
  *
  * <tr><td valign=top><i>base</i><tt>.initialstock</tt><br>
  * <font size=-1>int &gt;= 0</font></td>
- * <td valign=top>(the initial quantity of the commodotiy possessed by this agent)</td><tr> 
+ * <td valign=top>(the initial quantity of the commoditiy possessed by this agent)</td><tr> 
  *
  * <tr><td valign=top><i>base</i><tt>.initialfunds</tt><br>
  * <font size=-1>double</font></td>
