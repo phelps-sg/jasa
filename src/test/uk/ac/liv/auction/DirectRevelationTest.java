@@ -41,8 +41,10 @@ public class DirectRevelationTest extends ElectricityTest {
    */
   public void testTruthTelling() {
     experimentSetup(3, 3, 10, 10);
-    runExperiment();
+    runExperiment();    
+    assertTrue(eA.getMin() >= 99.99);
     assertTrue(eA.getMean() >= 99.99);    
+    assertTrue(eA.getMax() <= 100.99 );
   }
 
   public void experimentSetup( int ns, int nb, int cs, int cb ) {
