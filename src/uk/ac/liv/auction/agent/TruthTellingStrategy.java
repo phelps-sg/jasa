@@ -24,20 +24,20 @@ import uk.ac.liv.auction.core.Shout;
  */
 
 public class TruthTellingStrategy extends FixedQuantityStrategyImpl {
-	
-  public TruthTellingStrategy( AbstractTraderAgent agent ) {
+
+  public TruthTellingStrategy ( AbstractTraderAgent agent) {
     super(agent);
   }
-  
-  public TruthTellingStrategy() {
+
+  public TruthTellingStrategy () {
     super();
   }
-	
-  public boolean modifyShout( Shout.MutableShout shout ) {    
-    shout.setPrice(agent.getValuation(auction));       
+
+  public boolean modifyShout ( Shout.MutableShout shout) {
+    shout.setPrice(agent.getValuation(auction));
     return super.modifyShout(shout);
   }
 
-	public void endOfRound( Auction auction ) {		
-	}
+  public void endOfRound ( Auction auction) {
+  }
 }
