@@ -21,8 +21,11 @@ import uk.ac.liv.util.Parameterizable;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
+
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 /**
  *  Auctioneer for standard multi-unit english ascending auction.
@@ -50,23 +53,33 @@ public class AscendingAuctioneer extends AbstractAuctioneer
   public static final String P_QUANTITY = "quantity";
   public static final String P_SELLER = "seller";
 
+  static Logger logger = Logger.getLogger(AscendingAuctioneer.class);
+
 
   public AscendingAuctioneer( Auction auction, TraderAgent seller,
                                   int quantity, double reservePrice ) {
     super(auction);
-    try {
-      newAsk( new Shout(seller, quantity, 0, false) );
-    } catch ( DuplicateShoutException e ) {
-      throw new AuctionError("Fatal error: invalid auction state on initialisation!");
-    }
+
     this.reservePrice = reservePrice;
     this.quantity = quantity;
     this.seller = seller;
+
+    initialise();
   }
 
   public AscendingAuctioneer() {
     super();
   }
+
+  public void initialise() {
+    super.initialise();
+    try {
+     newAsk( new Shout(seller, quantity, 0, false) );
+   } catch ( DuplicateShoutException e ) {
+     throw new AuctionError("Fatal error: invalid auction state on initialisation!");
+   }
+  }
+
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
@@ -81,14 +94,21 @@ public class AscendingAuctioneer extends AbstractAuctioneer
     if ( seller instanceof Parameterizable ) {
       ((Parameterizable) seller).setup(parameters, base.push(P_SELLER));
     }
+
+    initialise();
   }
+
 
   public void endOfRoundProcessing() {
     generateQuote();
   }
 
+
   public void endOfAuctionProcessing() {
+    logger.debug("Clearing at end of auction..");
+    shoutEngine.printState();
     clear();
+    logger.debug("clearing done.");
   }
 
   public void clear() {
@@ -127,6 +147,7 @@ public class AscendingAuctioneer extends AbstractAuctioneer
     // TODO: Additional logic to enforce bid amounts at round nos and/or
     // beat existing bids by certain amount?
     super.newShout(shout);
+    shoutEngine.printState();
   }
 
 }

@@ -99,6 +99,10 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
 
   public synchronized void reset() {
     shoutEngine.reset();
+    initialise();
+  }
+
+  public void initialise() {
     currentQuote = null;
   }
 
@@ -141,7 +145,7 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
    */
   public Auction getAuction() {
     return auction;
-  }  
+  }
 
 }
 

@@ -275,7 +275,6 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * Return the number of traders currently active in the auction.
    */
-
   public int getNumberOfTraders() {
     return numTraders;
   }
