@@ -18,6 +18,8 @@ package uk.ac.liv.ec.coevolve;
 import ec.*;
 import ec.util.*;
 
+import uk.ac.liv.prng.GlobalPRNG;
+
 import java.util.Vector;
 
 /**
@@ -39,6 +41,8 @@ public class CoEvolutionaryEvaluator extends Evaluator {
 
   public void setup( final EvolutionState state, final Parameter base ) {
 
+  	GlobalPRNG.setup(state.parameters, base);
+		
     super.setup( state, base );
 
     numSubpops = state.parameters.getInt(new Parameter("pop.subpops"), null, 1);

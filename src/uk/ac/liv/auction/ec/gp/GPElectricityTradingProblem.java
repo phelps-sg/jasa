@@ -134,7 +134,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
 
   public void setup( EvolutionState state, Parameter base ) {
-
+  	
     super.setup(state, base);
 
     numSellers =
@@ -213,8 +213,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     auction = new RandomRobinAuction();
     auction.setMaximumRounds(maxRounds);
 
-    stats.setAuction(auction);
-    stats.calculate();
+    stats.setAuction(auction);    
 
     logger = new StatsMarketDataLogger();
     auction.setMarketDataLogger(logger);

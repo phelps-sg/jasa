@@ -30,11 +30,11 @@ public class CoEvolveStrategyStatistics extends GPBestStatistics {
         println("Misbehaved? " + strategy.misbehaved());
         println();
         print("type: ");
-        if (strategy.getAgent().isSeller()) {
-          println("seller");
-        } else {
-          println("buyer");
-        }
+        //if (strategy.getAgent().isSeller()) {
+//          println("seller");
+        //} else {
+//          println("buyer");
+        //}
         println();
         println("--------");
         println();
