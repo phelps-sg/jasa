@@ -17,6 +17,7 @@ package uk.ac.liv.prng;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Prototypeable;
 
 import org.apache.log4j.Logger;
 
@@ -33,7 +34,7 @@ import java.io.Serializable;
  */
 
 public class DiscreteProbabilityDistribution 
-    implements Resetable, Serializable {
+    implements Resetable, Serializable, Prototypeable {
 
   /**
    * The probability distribution.
@@ -60,6 +61,17 @@ public class DiscreteProbabilityDistribution
   public DiscreteProbabilityDistribution( int k ) {
     this.k = k;
     p = new double[k];
+  }
+  
+  public Object protoClone() {
+  	DiscreteProbabilityDistribution clonedDistribution;
+  	try {
+  		clonedDistribution = (DiscreteProbabilityDistribution) clone();
+  		clonedDistribution.p = (double[]) this.p.clone();
+  	} catch ( CloneNotSupportedException e ) {
+  		throw new Error(e);
+  	}
+  	return clonedDistribution;
   }
 
   /**
