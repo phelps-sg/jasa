@@ -66,6 +66,10 @@ public class MixedSubpopulation extends Subpopulation {
     species = speciesArray[0];
   }
 
+  public Species getSpecies( int n ) {
+    return speciesArray[n];
+  }
+  
   public void populate( EvolutionState state ) {
     try {
       int currentIndividual = 0;
