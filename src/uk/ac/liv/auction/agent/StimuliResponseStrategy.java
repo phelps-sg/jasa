@@ -80,10 +80,15 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy {
   }
 
   public Object protoClone() {
-    StimuliResponseStrategy clone = new StimuliResponseStrategy();
-    Prototypeable prototypeLearner = (Prototypeable) this.learner;
-    clone.learner = (StimuliResponseLearner) prototypeLearner.protoClone();
-    return clone;
+  	StimuliResponseStrategy clonedStrategy;
+  	try {
+  		clonedStrategy = (StimuliResponseStrategy) clone();
+  		clonedStrategy.learner =
+				(StimuliResponseLearner) ((Prototypeable) this.learner).protoClone();
+  	} catch ( CloneNotSupportedException e ) {
+  		throw new Error(e);
+  	}
+    return clonedStrategy;
   }
 
   public int act() {
