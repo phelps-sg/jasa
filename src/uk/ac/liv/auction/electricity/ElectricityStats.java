@@ -351,7 +351,6 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   }
 
   public void calculateStrategicMarketPower() {
-    int auctionAge = auction.getAge();
     simulateTruthfulBidding();
     Iterator i = auction.getTraderIterator();
     double buyerProfits = 0;
@@ -364,10 +363,15 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
         sellerProfits += trader.getProfits();
       }
     }
-    pBT = (buyerProfits - pBA)*auctionAge;
-    pST = (sellerProfits - pSA)*auctionAge;
+    pBT = truthfulProfits(buyerProfits, pBA);
+    pST = truthfulProfits(sellerProfits, pSA);
     sMPB = (pBA - pBT) / pBT;
     sMPS = (pSA - pST) / pST;
+  }
+
+  protected double truthfulProfits( double singleRoundProfits,
+                                    double accumulatedProfits ) {
+    return (singleRoundProfits - accumulatedProfits) * auction.getAge();
   }
 
 
