@@ -94,10 +94,6 @@ public class GPTradingStrategy extends GPIndividualCtx
     shout.setQuantity(quantity);
     shout.setIsBid(agent.isBuyer());
     priceStats.newData(price);
-    if ( priceStats.getN() != 1 ) {
-      System.out.println(priceStats);
-      Debug.assertTrue( priceStats.getN() == 1 );
-    }
     result.release();
   }
 
