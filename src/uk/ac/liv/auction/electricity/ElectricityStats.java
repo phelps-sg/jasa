@@ -72,11 +72,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
   protected double mPS;
 
   /**
-   * Global market efficiency.
-   */
-  protected double eA;
-
-  /**
    * Strategic market-power for buyers.
    */
   protected double sMPB = Double.NaN;
@@ -169,8 +164,7 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     rCap = (double) buyerCap / (double) sellerCap;
     mPB = (pBA - pBCE) / pBCE;
     mPS = (pSA - pSCE) / pSCE;
-    eA = (pBA + pSA) / (pBCE + pSCE) * 100;
-
+    
 //    calculateStrategicMarketPower();
   }
 
@@ -251,7 +245,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
       + "\n\tsMPB:" + sMPB + "\n\tsMPS:" + sMPS + "\n\tpBA:" + pBA
       + "\n\tpSA:" + pSA + "\n\tpBCE:" + pBCE + "\n\tpSCE:" + pSCE
       + "\n\tpST:" + pST + "\n\tpBT:" + pBT
-      + "\n\teA:" + eA
       + "\n)";
   }
 
@@ -402,13 +395,12 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     super.generateReport();
     logger.info("NPT Auction statistics");
     logger.info("----------------------");
-    logger.info("Market efficiency (EA) = " + getEA());
-    logger.info("Buyer market-power (MPB) = " + getMPB());
-    logger.info("Seller market-power (MPS) = " + getMPS());
-    logger.info("Relative generating capacity (RCAP) = " + getRCAP());
-    logger.info("Relative concentration (RCON) = " + getRCON());
-    logger.info("Strategic buyer market-power (SMPB) = " + getSMPB());
-    logger.info("Strategic seller market-power (SMPS) = " + getSMPS());
+    logger.info("Buyer market-power (MPB) =\t" + getMPB());
+    logger.info("Seller market-power (MPS) =\t" + getMPS());
+    logger.info("Relative generating capacity (RCAP) =\t" + getRCAP());
+    logger.info("Relative concentration (RCON) =\t" + getRCON());
+    logger.info("Strategic buyer market-power (SMPB) =\t" + getSMPB());
+    logger.info("Strategic seller market-power (SMPS) =\t" + getSMPS());
   }
 
 }

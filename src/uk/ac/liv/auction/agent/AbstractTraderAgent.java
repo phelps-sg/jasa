@@ -303,7 +303,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   public int deliver( Auction auction, int quantity, double price ) {
     stock -= quantity;
     lastProfit = quantity * (price-valuer.determineValue(auction));
-//    assert lastProfit >= 0;
+    if ( lastProfit < 0 ) {
+      logger.debug("Negative profit for seller trading at price " + price);
+    }
     profits += lastProfit;
     valuer.consumeUnit(auction);
     return quantity;

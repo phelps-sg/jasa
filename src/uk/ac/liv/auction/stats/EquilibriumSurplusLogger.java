@@ -72,8 +72,10 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
     AbstractTraderAgent buyer = (AbstractTraderAgent) bid.getAgent();
     AbstractTraderAgent seller = (AbstractTraderAgent) ask.getAgent();
     double ep = equilibriaStats.calculateMidEquilibriumPrice();
-    updateStats(buyer, equilibriumSurplus(buyer, ep, quantity));
-    updateStats(seller, equilibriumSurplus(seller, ep, quantity));
+    double buyerSurplus = equilibriumSurplus(buyer, ep, quantity);
+    double sellerSurplus = equilibriumSurplus(seller, ep, quantity);   
+    updateStats(buyer, buyerSurplus);
+    updateStats(seller, sellerSurplus);   
   }
 
   public double getEquilibriumProfits( AbstractTraderAgent agent ) {
@@ -95,8 +97,7 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
     return totalSurplus;
   }
 
-  protected void updateStats( AbstractTraderAgent agent, double lastSurplus ) {
-    assert lastSurplus >= 0;
+  protected void updateStats( AbstractTraderAgent agent, double lastSurplus ) {   
     MutableDoubleWrapper stats = (MutableDoubleWrapper) surplusTable.get(agent);
     if ( stats == null ) {
       stats = new MutableDoubleWrapper(lastSurplus);
@@ -112,11 +113,12 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
       surplus = (ep - agent.getPrivateValue(auction)) * quantity;
     } else {
       surplus = (agent.getPrivateValue(auction) - ep) * quantity;
+    }  
+    if ( surplus >= 0 ) {      
+      return surplus;
+    } else {  
+      return 0;
     }
-    if ( surplus < 0 ) { 
-      surplus = 0;
-    }
-    return surplus;
   }
 
   public void initialise() {

@@ -133,7 +133,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   public void endOfDay( Auction auction ) {
     logger.debug("Performing end-of-day processing..");
     tradeEntitlement = initialTradeEntitlement;
-    quantityTraded = 0;
+    //quantityTraded = 0;
     lastShoutSuccessful = false;
     logger.debug("done.");
   }
@@ -150,8 +150,8 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
                                   double price, int quantity) {
     super.informOfSeller(auction, winningShout, seller, price, quantity);
     AbstractTraderAgent agent = (AbstractTraderAgent) seller;
-    if ( price < valuer.determineValue(auction) ) {
-      logger.debug("Unprofitable transaction, seller=" + seller + ", shout=" + winningShout);
+    if ( price > valuer.determineValue(auction) ) {
+      logger.debug("Unprofitable transaction, price=" + price + ", shout=" + winningShout);
     }
     purchaseFrom(auction, agent, quantity, price);
   }
@@ -184,7 +184,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     if (surplus < 0) {
       surplus = 0;
     }
-    return auction.getDay() * initialTradeEntitlement * surplus;
+    return quantityTraded * surplus;
   }
 
 

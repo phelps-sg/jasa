@@ -21,6 +21,8 @@ import uk.ac.liv.auction.core.*;
 
 import java.util.*;
 
+import java.text.DecimalFormat;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -59,6 +61,14 @@ public class SurplusStats extends EquilibriaStats {
    */
   protected double pSA = 0;
 
+  /**
+   * Global market efficiency.
+   */
+  protected double eA;
+
+  private DecimalFormat percentageFormatter =
+      new DecimalFormat("#00.00");
+
   static Logger logger = Logger.getLogger(SurplusStats.class);
 
 
@@ -86,6 +96,8 @@ public class SurplusStats extends EquilibriaStats {
     }
 
     calculateActualProfits();
+    
+    eA = (pBA + pSA) / (pBCE + pSCE) * 100;
   }
 
 
@@ -163,6 +175,9 @@ public class SurplusStats extends EquilibriaStats {
     logger.info("");
     logger.info("\tbuyers' actual profits:\t" + pBA);
     logger.info("\tsellers' actual profits:\t" + pSA);
+    logger.info("");
+    logger.info("\tAllocative efficiency:\t" + 
+                  percentageFormatter.format(eA) + "%");
     logger.info("");
   }
 

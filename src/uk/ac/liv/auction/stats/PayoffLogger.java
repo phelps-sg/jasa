@@ -60,7 +60,8 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      double profits = agent.getProfits();     
+      double profits = agent.getProfits();
+      assert profits >= 0;
       Class strategyClass = agent.getStrategy().getClass();
       StrategyStats stats = (StrategyStats) table.get(strategyClass);
       if ( stats == null ) {

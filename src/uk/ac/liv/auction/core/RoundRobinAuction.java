@@ -300,6 +300,8 @@ public class RoundRobinAuction extends AuctionImpl
 
 
   public void clear( Shout ask, Shout bid, double price ) {
+    assert price >= ask.getPrice();
+    assert price <= bid.getPrice();    
     updateTransPriceLog(round, ask, bid, price, ask.getQuantity());
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
