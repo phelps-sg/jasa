@@ -17,7 +17,7 @@ public class AuctionOntology extends Ontology {
 
   // Concepts
   public static final String CONCEPT_SHOUT = "SHOUT";
-  public static final String CONCEPT_SHOUT_AGENT = "agent";
+  public static final String CONCEPT_SHOUT_AGENT = "agent-name";
   public static final String CONCEPT_SHOUT_QUANTITY = "quantity";
   public static final String CONCEPT_SHOUT_PRICE = "price";
   public static final String CONCEPT_SHOUT_IS_BID = "is-bid";
@@ -67,7 +67,7 @@ public class AuctionOntology extends Ontology {
 
     try {
 
-      PredicateSchema shoutSchema = new PredicateSchema(CONCEPT_SHOUT);
+      ConceptSchema shoutSchema = new ConceptSchema(CONCEPT_SHOUT);
 
       shoutSchema.add(CONCEPT_SHOUT_AGENT,
                       (PrimitiveSchema)getSchema(BasicOntology.STRING));
