@@ -84,9 +84,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
     learn(auction);
   }
 
-  public void modifyShout( Shout.MutableShout shout ) {
-
-    super.modifyShout(shout);
+  public boolean modifyShout( Shout.MutableShout shout ) {
 
     // Generate an action from the learning algorithm
     int action = act();
@@ -105,6 +103,8 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
 
     shout.setPrice(price);
     shout.setQuantity(quantity);
+
+    return super.modifyShout(shout);
   }
 
   public double getMarkupScale() {

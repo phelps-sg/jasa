@@ -65,9 +65,10 @@ public abstract class AbstractStrategy implements
                                              currentShout.isBid());
   }
 
-  public void modifyShout( Shout.MutableShout shout ) {
+  public boolean modifyShout( Shout.MutableShout shout ) {
     shout.setIsBid(agent.isBuyer());
     shout.setAgent(agent);
+    return true;
   }
 
   public void initialise() {

@@ -411,6 +411,17 @@ public class RoundRobinAuction extends AuctionImpl
     return round;
   }
 
+
+  public int getRemainingTime() {
+    if ( lengthOfDay > 0 ) {
+      return lengthOfDay-round;
+    } else if ( maximumRounds > 0 ) {
+      return maximumRounds-round;
+    } else {
+      return -1;
+    }
+  }
+
   /**
    * Get the last bid placed in the auction.
    */

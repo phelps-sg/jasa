@@ -70,9 +70,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     this.maxMarkup = maxMarkup;
   }
 
-  public void modifyShout( Shout.MutableShout shout ) {
-
-    super.modifyShout(shout);
+  public boolean modifyShout( Shout.MutableShout shout ) {
 
     double markup = randGenerator.raw() * maxMarkup;
     double price = 0;
@@ -87,6 +85,8 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
       shout.setPrice(0);
     }
     shout.setQuantity(quantity);
+
+    return super.modifyShout(shout);
   }
 
   public void endOfRound( Auction auction ) {

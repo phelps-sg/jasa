@@ -97,9 +97,8 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
   }
 
-  public void modifyShout( Shout.MutableShout shout ) {
+  public boolean modifyShout( Shout.MutableShout shout ) {
     try {
-      super.modifyShout(shout);
       Shout lastShout = auction.getLastShout();
       if (agent.isSeller()) {
         sellerStrategy(lastShout);
@@ -119,6 +118,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
       if (currentPrice > 0) {
         shout.setPrice(currentPrice);
       }
+      return super.modifyShout(shout);
     } catch ( ShoutsNotVisibleException e ) {
       logger.error(e.getMessage());
       throw new AuctionError("ZIPStrategy can only be used with auctioneers who permit shout visibility");

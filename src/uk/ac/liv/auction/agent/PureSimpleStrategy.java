@@ -74,13 +74,13 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
     delta = parameters.getDoubleWithDefault(base.push(P_DELTA), null, DEFAULT_DELTA);
   }
 
-  public void modifyShout( Shout.MutableShout shout ) {
-    super.modifyShout(shout);
+  public boolean modifyShout( Shout.MutableShout shout ) {
     shout.setPrice(agent.getPrivateValue(auction) + delta);
     shout.setQuantity(quantity);
     if ( shout.getPrice() < 0 ) {
       //shout.setPrice(0);
     }
+    return super.modifyShout(shout);
   }
 
   public void endOfRound( Auction auction ) {

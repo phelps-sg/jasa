@@ -64,9 +64,9 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
     return quantity;
   }
 
-  public void modifyShout( Shout.MutableShout shout ) {
-    super.modifyShout(shout);
+  public boolean modifyShout( Shout.MutableShout shout ) {
     shout.setQuantity(quantity);
+    return super.modifyShout(shout);
   }
 
 }

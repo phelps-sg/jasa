@@ -16,9 +16,12 @@
 package uk.ac.liv.auction.agent.jade;
 
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.Auctioneer;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.MarketQuote;
+
+import uk.ac.liv.util.CummulativeStatCounter;
 
 import jade.core.Agent;
 import jade.core.AID;
@@ -125,5 +128,26 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
     /**@todo Implement this uk.ac.liv.auction.core.QuoteProvider method*/
     throw new java.lang.UnsupportedOperationException("Method getQuote() not yet implemented.");
   }
+
+  public int getRemainingTime() {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
+
+  public Auctioneer getAuctioneer() {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
+
+  public CummulativeStatCounter getPreviousDayTransPriceStats() {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
+
+  public int getNumberOfAsks( double price, boolean accepted ) {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
+
+  public int getNumberOfBids( double price, boolean accepted ) {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
+
 
 }

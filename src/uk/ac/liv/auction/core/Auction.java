@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
+import uk.ac.liv.util.CummulativeStatCounter;
+
 /**
  * The interface used by agents to interact with an auction.
  *
@@ -53,6 +55,33 @@ public interface Auction extends QuoteProvider {
   public Shout getLastShout() throws ShoutsNotVisibleException;
 
   /**
+   * Return the current auctioneer for this auction.
+   */
+  public Auctioneer getAuctioneer();
+
+  /**
+   * Return statistics on yesterday's transaction price.
+   */
+  public CummulativeStatCounter getPreviousDayTransPriceStats()
+      throws DataUnavailableException;
+
+  /**
+   * Calculate the number of unaccepted asks >= price.
+   * If accepted is true then count the number of accepted asks.
+   * If price is negative then count the number of asks < price.
+   */
+  public int getNumberOfAsks( double price, boolean accepted )
+    throws DataUnavailableException;
+
+  /**
+   * Calculate the number of unaccepted bids >= price.
+   * If accepted is true then count the number of accepted bids.
+   * If price is negative then count the number of bids < price.
+   */
+  public int getNumberOfBids( double price, boolean accepted )
+    throws DataUnavailableException;
+
+  /**
    * Report the state of the auction.
    */
   public void printState();
@@ -68,10 +97,19 @@ public interface Auction extends QuoteProvider {
   public int getAge();
 
   /**
+   * Get the remaining time before the auction closes.
+   */
+  public int getRemainingTime();
+
+  /**
    * Get the number of traders known to be trading in the auction.
    */
   public int getNumberOfTraders();
 
+  /**
+   * Find out whether the given shout has resulted in a transaction
+   * in the current round of trading.
+   */
   public boolean shoutAccepted( Shout shout );
 
 }

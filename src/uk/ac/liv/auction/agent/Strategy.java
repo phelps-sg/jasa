@@ -36,6 +36,7 @@ public interface Strategy {
    *
    * @param shout   The shout to be updated
    * @param auction The auction in which this strategy is being employed
+   * @return The new shout, or null if no shout is to be placed.
    */
   public Shout modifyShout( Shout shout, Auction auction );
 
