@@ -13,11 +13,12 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction;
+package uk.ac.liv.auction.heuristic;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import uk.ac.liv.auction.MarketSimulation;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.PayoffLogger;
@@ -69,9 +70,9 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     implements  Runnable, Serializable, EndOfDayListener {
 
   protected String resultsFileName = "/tmp/payoffs.csv";
-
-  protected CSVWriter results;
-
+  
+  protected String gambitFileName;  
+  
   protected RoundRobinAuction auction;
 
   protected PayoffLogger payoffLogger;
@@ -101,6 +102,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   protected ParameterDatabase parameters;
 
   protected RandomElement prng = PRNGFactory.getFactory().create();
+  
+  protected CompressedPayoffMatrix payoffMatrix;
 
   public static final String P_NUMAGENTS = "numagents";
   public static final String P_STRATEGY = "strategy";
@@ -113,6 +116,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   public static final String P_VALUERANGEMAX = "valuerangemax";
   public static final String P_N = "n";
   public static final String P_RESULTS = "results";
+  public static final String P_GAMBITEXPORT = "gambitexport";
   public static final String P_NUMSAMPLES = "numsamples";
 
   static Logger logger = Logger.getLogger(HeuristicPayoffCalculator.class);
@@ -140,11 +144,25 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       ParameterDatabase parameters = new ParameterDatabase(file);
       HeuristicPayoffCalculator calculator = new HeuristicPayoffCalculator();
       calculator.setup(parameters, new Parameter(P_HEURISTIC));
-      calculator.run();
+      calculator.computePayoffMatrix();
+      calculator.exportPayoffMatrixToCSV();
+      calculator.exportPayoffMatrixToGambit();            
 
     } catch ( Exception e ) {
       logger.error(e);
       e.printStackTrace();
+    }
+  }
+  
+  public void exportPayoffMatrixToCSV() throws FileNotFoundException {
+    CSVWriter results = new CSVWriter( new FileOutputStream(resultsFileName), numStrategies*2);
+    payoffMatrix.export(results);
+  }
+  
+  public void exportPayoffMatrixToGambit() throws FileNotFoundException {
+    if ( gambitFileName != null ) {    
+      PrintWriter gambitNfg = new PrintWriter( new FileOutputStream(gambitFileName));
+      payoffMatrix.exportToGambit(gambitNfg);
     }
   }
 
@@ -212,14 +230,10 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     resultsFileName =
         parameters.getStringWithDefault(base.push(P_RESULTS), null,
                                          resultsFileName);
-    try {
-      results = new CSVWriter(new FileOutputStream(resultsFileName),
-                               numStrategies * 2);
-    } catch (FileNotFoundException e) {
-      logger.error(e);
-      throw new Error(e);
-    }
-
+    
+    gambitFileName = 
+        parameters.getStringWithDefault(base.push(P_GAMBITEXPORT), null, null);
+      
     logger.info("numAgents = " + numAgents);
     logger.info("numStrategies = " + numStrategies);
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
@@ -232,9 +246,14 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
 
   public void run() {
-    Partitioner partitioner = new Partitioner(numAgents, numStrategies);
-    while ( partitioner.hasNext() ) {
-      int[] payoffMatrixEntry = (int[]) partitioner.next();
+    computePayoffMatrix();
+  }
+  
+  public void computePayoffMatrix() {
+    payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
+    Iterator i = payoffMatrix.compressedEntryIterator();
+    while ( i.hasNext() ) {
+      int[] payoffMatrixEntry = (int[]) i.next();
       calculateExpectedPayoffs(payoffMatrixEntry);
     }
   }
@@ -245,8 +264,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     logger.info("");
     logger.info("Calculating expected payoffs for ");
     for( int i=0; i<numStrategies; i++ ) {
-      logger.info("\t" + entry[i] + "/" + strategies[i].getClass().getName() + " ");
-      results.newData(entry[i]);
+      logger.info("\t" + entry[i] + "/" + strategies[i].getClass().getName() + " ");    
     }
     logger.info("");
 
@@ -274,20 +292,24 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
       payoffLogger.calculate();
 //      payoffLogger.finalReport();
-
+      
       for( int i=0; i<numStrategies; i++ ) {
         payoffs[i].newData(payoffLogger.getPayoff(strategies[i].getClass()));
       }
 
     }
 
+    double[] outcome = payoffMatrix.getCompressedOutcome(entry);
     for( int i=0; i<numStrategies; i++ ) {
       logger.info("");
       payoffs[i].log();
-      results.newData(payoffs[i].getMean());
+      outcome[i] = payoffs[i].getMean();     
     }
-
-    results.flush();
+    
+  }
+  
+  public CompressedPayoffMatrix getCompressedPayoffMatrix() {
+    return payoffMatrix;
   }
 
   public void endOfDay( Auction a ) {

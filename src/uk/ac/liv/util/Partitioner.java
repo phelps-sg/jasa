@@ -72,9 +72,9 @@ public class Partitioner implements Iterator {
   }
 
   public static void main( String[] args ) {
-    Partitioner partioner = new Partitioner(20, 3);
-    while ( partioner.hasNext() ) {
-      int[] partition = (int[]) partioner.next();
+    Partitioner p = new Partitioner(20, 3);
+    while ( p.hasNext() ) {
+      int[] partition = (int[]) p.next();
       for( int i=0; i<partition.length; i++ ) {
         System.out.print(partition[i] + " ");
       }

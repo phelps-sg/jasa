@@ -29,15 +29,13 @@ import java.util.StringTokenizer;
 public class CSVReader  {
 
   BufferedReader in;
-  char seperator;
-  int numColumns;
+  char seperator; 
   List types;
   static final char DEFAULT_SEPERATOR = '\t';
 
 
   public CSVReader( InputStream in, List types, char seperator ) {
-    this.in = new BufferedReader(new InputStreamReader(in));
-    this.numColumns = numColumns;
+    this.in = new BufferedReader(new InputStreamReader(in));    
     this.seperator = seperator;
     this.types = types;
   }
