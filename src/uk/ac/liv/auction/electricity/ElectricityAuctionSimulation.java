@@ -72,7 +72,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   protected ElectricityStats stats;
 
-  protected RandomRobinAuction auction = new RandomRobinAuction("electricity");
+  protected RoundRobinAuction auction = new RoundRobinAuction("electricity");
 
   protected Auctioneer auctioneer;
 
@@ -106,7 +106,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_RANDOMIZER = "randomizer";
 
 
-  static final int DATAFILE_NUM_COLUMNS = 35;
+  static final int DATAFILE_NUM_COLUMNS = 37;
 
   public ElectricityAuctionSimulation() {
   }
@@ -298,6 +298,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
       CummulativeStatCounter equilibPrice =
           new CummulativeStatCounter("equilibPrice");
+      CummulativeStatCounter numREPeaks = new CummulativeStatCounter("peaks");
 
       LinkedList variables = new LinkedList();
       variables.add(efficiency);
@@ -317,6 +318,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       variables.add(equilibPrice);
       variables.add(pBCE);
       variables.add(pSCE);
+      variables.add(numREPeaks);
 
 
       Debug.assertTrue("CSV file not configured with correct number of columns",
@@ -355,6 +357,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         double ep = (stats.getEquilibriaStats().getMinPrice()
                                + stats.getEquilibriaStats().getMaxPrice()) / 2;
         equilibPrice.newData(ep);
+        
+        calculateNumPeaks(numREPeaks);
 
         dumpIterResults();
       }
@@ -419,6 +423,17 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       iterResults.newData(marketData.getAskPriceStats().getMean());
       iterResults.newData(marketData.getBidPriceStats().getMean());
       iterResults.newData(stats.calculateEquilibriumPrice());
+    }
+  }
+  
+  
+  protected void calculateNumPeaks( CummulativeStatCounter n ) {
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      AdaptiveStrategy s = (AdaptiveStrategy) agent.getStrategy();
+      RothErevLearner l = (RothErevLearner) s.getLearner();
+      n.newData(l.countPeaks());      
     }
   }
 
