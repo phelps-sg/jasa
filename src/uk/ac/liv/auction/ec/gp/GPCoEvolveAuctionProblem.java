@@ -50,6 +50,13 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
   boolean auctioneerMisbehaved;
 
+  public void setup( EvolutionState state, Parameter base ) {
+    super.setup(state, base);
+    float w = state.parameters.getFloatWithDefault(base.push("w"),
+                                                    null, 0.5f);
+    WeightedAuctioneerFitness.setW(w);
+  }
+
 
   protected void postEvaluationStats() {
     try {
@@ -91,34 +98,10 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
   protected void setAuctioneerFitness( GPIndividualCtx auctioneer ) {
 
-    MultiObjectiveFitness fitness = (MultiObjectiveFitness) auctioneer.fitness;
-
-    if ( auctioneerMisbehaved ) {
-      for( int i=0; i<fitness.multifitness.length; i++ ) {
-        fitness.multifitness[i] = 0;
-      }
-      return;
-    }
-
-    fitness.multifitness[0] = efficiencyFitness(efficiency.getMean());
-    fitness.multifitness[1] = mpFitness(sellerMP.getMean());
-    fitness.multifitness[2] = mpFitness(buyerMP.getMean());
-
+    ((AuctioneerFitness) auctioneer.fitness).compute(efficiency,
+                                                      buyerMP, sellerMP,
+                                                      auctioneerMisbehaved);
     auctioneer.doneEvaluating();
-  }
-
-
-  protected float mpFitness( double mp ) {
-    return (float) (1 / (Math.abs(mp) + 1));
-  }
-
-  protected float efficiencyFitness( double eA ) {
-    float fitness = (float) eA/100;
-    if ( fitness > 1 && Math.abs(fitness) < 2 ) {
-      return 1f;
-    } else {
-      return fitness;
-    }
   }
 
 

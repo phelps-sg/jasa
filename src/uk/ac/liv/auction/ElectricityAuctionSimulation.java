@@ -84,6 +84,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
+  String paramSummary;
+
   static final String DEFAULT_PARAMETER_FILE = "examples/electricity.params";
 
   static final String P_MAXROUNDS = "maxrounds";
@@ -186,21 +188,24 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     System.out.println("S1 = " + S1);
     System.out.println("random private values = " + randomPrivateValues);
 
-
-    experiment( 3, 3, 10, 10 );
-    experiment( 6, 3, 10, 20 );
-    experiment( 6, 3, 10, 40 );
-    experiment( 3, 3, 20, 10 );
-    experiment( 3, 3, 10, 20 );
-    experiment( 3, 6, 40, 10 );
-    experiment( 3, 6, 20, 10 );
-    experiment( 3, 6, 10, 10 );
+    try {
+      experiment( 3, 3, 10, 10 );
+      experiment( 6, 3, 10, 20 );
+      experiment( 6, 3, 10, 40 );
+      experiment( 3, 3, 20, 10 );
+      experiment( 3, 3, 10, 20 );
+      experiment( 3, 6, 40, 10 );
+      experiment( 3, 6, 20, 10 );
+      experiment( 3, 6, 10, 10 );
+    } catch ( FileNotFoundException e ) {
+      e.printStackTrace();
+    }
   }
 
-  public void experiment( int ns, int nb, int cs, int cb ) {
+  public void experiment( int ns, int nb, int cs, int cb ) throws FileNotFoundException {
 
     try {
-      String paramSummary = ns + "-" + nb + "-" + cs + "-" + cb;
+      paramSummary = ns + "-" + nb + "-" + cs + "-" + cb;
       String rothErevDataFileName = outputDir + "/rotherev-"
                                       + paramSummary + ".csv";
       distributionFile = new CSVWriter(
@@ -242,32 +247,38 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter pSA = new CummulativeStatCounter("pSA");
       CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
 
+      String iterResultsDataFileName = outputDir + "/iter-"
+                                      + paramSummary + "-"+auctioneerK+".csv";
+      FileOutputStream iterOut =
+        new FileOutputStream(iterResultsDataFileName);
+      CSVWriter iterResults = new CSVWriter(iterOut, 3);
+
       for( int i=0; i<iterations; i++ ) {
+
         if ( randomPrivateValues ) {
           randomizePrivateValues();
         }
+
         ElectricityStats results = runExperiment();
+
         efficiency.newData(results.eA);
         mPB.newData(results.mPB);
         mPS.newData(results.mPS);
         pBA.newData(results.pBA);
         pSA.newData(results.pSA);
-//        System.out.println("\nResults for iteration " + i + "\n" + results);
-//        if ( results.mPB > 10 || results.mPS > 10 ) {
-//          System.out.println("outlying MP data!!");
-//          System.out.println(results);
-//          Iterator it = auction.getTraderIterator();
-//          while ( it.hasNext() ) {
-//            System.out.println(it.next().toString());
-//          }
-//        }
+
+        iterResults.newData(results.eA);
+        iterResults.newData(results.mPB);
+        iterResults.newData(results.mPS);
       }
+
       System.out.println("\n*** Summary results for ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
       System.out.println(efficiency);
       System.out.println(mPB);
       System.out.println(mPS);
       System.out.println(pSA);
       System.out.println(pBA);
+
       dataFile.newData(auctioneerK);
       dataFile.newData(efficiency.getMean());
       dataFile.newData(efficiency.getStdDev());
@@ -275,6 +286,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       dataFile.newData(mPB.getStdDev());
       dataFile.newData(mPS.getMean());
       dataFile.newData(mPS.getStdDev());
+
       Iterator i = auction.getTraderIterator();
       while ( i.hasNext() ) {
         ElectricityTrader trader = (ElectricityTrader) i.next();

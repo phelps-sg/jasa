@@ -1,0 +1,61 @@
+/*
+ * JASA Java Auction Simulator API
+ * Copyright (C) 2001-2002 Steve Phelps
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ */
+
+package uk.ac.liv.auction.ec.gp;
+
+import uk.ac.liv.util.CummulativeStatCounter;
+
+import ec.simple.SimpleFitness;
+import ec.*;
+import ec.util.*;
+
+public class WeightedAuctioneerFitness extends SimpleFitness
+    implements AuctioneerFitness {
+
+  static float w;
+
+  static final String P_W = "w";
+
+
+  /*
+  public void setup(final EvolutionState state, Parameter base) {
+    super.setup(state,base);
+    w = state.parameters.getFloat(base.push(P_W), null, 0);
+  } */
+
+
+  public void compute( CummulativeStatCounter efficiency,
+                          CummulativeStatCounter buyerMP,
+                          CummulativeStatCounter sellerMP,
+                          boolean misbehaved ) {
+
+    if ( misbehaved ) {
+      fitness = 0f;
+      return;
+    }
+
+    float ea = (float) efficiency.getMean();
+    float mpb = (float) buyerMP.getMean();
+    float mps = (float) sellerMP.getMean();
+
+    fitness = (1-w)*(mpb+mps)/2 + w*ea;
+
+  }
+
+  public static void setW( float w ) {
+    WeightedAuctioneerFitness.w = w;
+  }
+
+}
