@@ -84,7 +84,7 @@ public class DoubleERC extends ERC {
   }
 
   public String toStringForHumans() {
-    return "" + (float)value;
+    return "" + value;
   }
 
   public void eval( EvolutionState state,
