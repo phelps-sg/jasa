@@ -18,8 +18,8 @@ package uk.ac.liv.auction.stats;
 /**
  * A class representing a variable produced by an AuctionReport.
  * 
- * @see AuctionReport.getVariables()
- * @see uk.ac.liv.auction.core.AuctionImpl.getResults()
+ * @see AuctionReport#getVariables
+ * @see uk.ac.liv.auction.core.AuctionImpl#getResults
  * 
  * @author Steve Phelps
  * @version $Revision$

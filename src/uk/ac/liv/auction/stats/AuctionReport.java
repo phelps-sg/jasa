@@ -36,7 +36,7 @@ public interface AuctionReport {
    * produced in the report. The Map maps variables, represented by objects of
    * type ReportVariable, onto values, which may be of any class.  
    * 
-   * @seea AuctionVariable
+   * @see AuctionVariable
    */
   public Map getVariables();
   
