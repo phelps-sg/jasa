@@ -80,8 +80,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
 
   protected void setup() {
-    super.setup();
-    activateUI();
+    super.setup();    
   }
 
 
@@ -93,9 +92,10 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
       container = getContainerController();
 
-      Object[] auctioneerArguments = new Object[2];
+      Object[] auctioneerArguments = new Object[3];
       auctioneerArguments[0] = parameters;
       auctioneerArguments[1] = base;
+      auctioneerArguments[2] = this;
       AgentController auctioneerController =
           container.createNewAgent(AGENTNAME_AUCTIONEER,
                                     JADEAuctionAdaptor.class.getName(),
@@ -142,30 +142,22 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
   }
 
 
-  public void activateUI() {
-    ManagerUIFrame ui = new ManagerUIFrame(this);
-    ui.setSize( 400, 200 );
-    ui.setLocation( 400, 400 );
-    ui.pack();
-    ui.setVisible(true);
-  }
-
-
   public String getServiceName() {
     return "AUCTION_MANAGER";
   }
 
 
-  public void startAuction() {
+  public void startAuction() {    
     try {
       if ( auctioneerAID == null ) {
         auctioneerAID = findAuctioneer();
       }
       ACLMessage start = new ACLMessage(ACLMessage.INFORM);
       start.addReceiver(auctioneerAID);
-      StartAuctionAction startContent = new StartAuctionAction();
-      sendMessage(start, startContent);
+      StartAuctionAction startContent = new StartAuctionAction();      
+      sendMessageAsynch(start, startContent);
     } catch ( Exception e ) {
+      logger.error(e.getMessage());
       e.printStackTrace();
     }
   }

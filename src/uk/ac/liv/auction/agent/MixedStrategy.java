@@ -72,8 +72,12 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
   public MixedStrategy( DiscreteProbabilityDistribution probabilities,
                           Strategy[] pureStrategies ) {
-    pureStrategies = pureStrategies;
-    this.probabilities = probabilities;
+    this();
+    this.pureStrategies = pureStrategies;
+    this.probabilities = probabilities;    
+  }
+  
+  public MixedStrategy() {
     currentStrategy = null;
   }
   

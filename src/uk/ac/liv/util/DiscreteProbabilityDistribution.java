@@ -72,13 +72,14 @@ public class DiscreteProbabilityDistribution
     double cummProb = 0;
     for( int i=0; i<k; i++ ) {
       cummProb += p[i];
-      if ( rand <= cummProb ) {
+      if ( rand < cummProb ) {
         return i;
       }
     }
-    logger.warn("generateRandomEvent(): probabilities do not sum to 1");
-    reset();
-    return randGenerator.nextInt(k);
+    throw new ProbabilityError();    
+    //logger.warn("generateRandomEvent(): probabilities do not sum to 1");
+    //reset();
+    //return randGenerator.nextInt(k);   
   }
 
   public void reset() {
@@ -91,11 +92,44 @@ public class DiscreteProbabilityDistribution
     randGenerator.setSeed(seed);
   }
   
-  public void computeStats( CummulativeStatCounter stats ) {
-    stats.reset();   
+  
+  public double computeMean() {
+    double total = 0;
     for( int i=0; i<k; i++ ) {
-      stats.newData(i*p[i]);
-    }      
+      total += i*p[i];
+    }
+    return total;      
+  }
+  
+  
+  public int computeMin() {
+    for( int i=0; i<k; i++ ) {
+      if ( p[i] > 0 ) {
+        return i;
+      }
+    }
+    throw new ProbabilityError();    
+  }
+  
+  public int computeMax() {
+    for( int i=k-1; i>=0; i-- ) {
+      if ( p[i] > 0 ) {
+        return i;
+      }
+    }
+    throw new ProbabilityError();    
+  }
+  
+  public void computeStats( CummulativeStatCounter stats ) {  
+  }
+  
+  
+  public class ProbabilityError extends Error {
+    
+    public ProbabilityError() {
+      super("Probabilities do not sum to 1");
+    }
   }
 
 }
+

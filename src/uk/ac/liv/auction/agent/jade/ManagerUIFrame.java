@@ -21,41 +21,55 @@ import java.beans.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 
-public class ManagerUIFrame extends JFrame {
+import uk.ac.liv.auction.core.AuctionConsoleFrame;
+import uk.ac.liv.auction.core.AuctionImpl;
+
+import org.apache.log4j.Logger;
+
+
+/**
+ *  An AuctionConsoleFrame extended with a button to start the auction.
+ *
+ *  @author Steve Phelps
+ */
+public class ManagerUIFrame extends AuctionConsoleFrame {
 
   protected AuctionManager manager;
 
-  private JButton start = new JButton();
-  private JPanel jPanel1 = new JPanel();
-  private FlowLayout flowLayout1 = new FlowLayout();
+  protected JButton startButton;
+  
+  static Logger logger = Logger.getLogger(ManagerUIFrame.class);
+  
 
-  public ManagerUIFrame( AuctionManager manager )  {
-    this.manager = manager;
-    try {
-      jbInit();
-    }
-    catch(Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-
-  private void jbInit() throws Exception {
-    start.setActionCommand("startAuction");
-    start.setText("Start");
-    start.addActionListener(new java.awt.event.ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        start_actionPerformed(e);
-      }
+  public ManagerUIFrame( AuctionManager manager, AuctionImpl auction )  {
+    super(auction, "JADE auction");
+    this.manager = manager;   
+        
+    GridBagConstraints c = new GridBagConstraints();
+    Container contentPane = getContentPane();    
+    
+    startButton = new JButton("Start");
+    c.gridx = 0;
+    c.gridy = 4;
+    c.fill = GridBagConstraints.NONE;
+    c.anchor = GridBagConstraints.EAST;
+    c.ipadx = 0;
+    c.ipady = 0;
+    c.gridwidth = 1;
+    c.insets = new Insets(20,20,20,20);
+    gridBag.setConstraints(startButton, c);
+    
+    contentPane.add(startButton);
+    startButton.addActionListener(new ActionListener() {
+        public void actionPerformed( ActionEvent e ) {          
+          startAuction();
+        }
     });
-    jPanel1.setLayout(flowLayout1);
-    this.setTitle("AuctionManager console");
-    this.getContentPane().add(jPanel1, BorderLayout.CENTER);
-    jPanel1.setPreferredSize(new Dimension(300, 200));
-    jPanel1.add(start, null);
+
   }
 
-  void start_actionPerformed(ActionEvent e) {
+  void startAuction() {
+    logger.debug("Starting auction..");
     manager.startAuction();
   }
 }

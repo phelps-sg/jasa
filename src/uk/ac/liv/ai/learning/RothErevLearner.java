@@ -39,6 +39,29 @@ import uk.ac.liv.util.io.DataWriter;
  * Games and Economic Behiour, Volume 8
  * </p>
  *
+ *
+ * <p><b>Parameters</b><br></p>
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.k</tt><br>
+ * <font size=-1>int >= 0</font></td>
+ * <td valign=top>(the number of a possible actions)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.r</tt><br>
+ * <font size=-1>double [0,1]</font></td>
+ * <td valign=top>(the recency parameter)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.e</tt><br>
+ * <font size=-1>double [0,1]</font></td>
+ * <td valign=top>(the experimentation parameter)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.s1</tt><br>
+ * <font size=-1>int >= 0</font></td>
+ * <td valign=top>(the scaling parameter)</td><tr> 
+ *
+ * </table>
+ *
+ *
  * @author Steve Phelps
  *
  */

@@ -87,7 +87,18 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
   public String getServiceName() {
     return SERVICE_AUCTIONEER;
   }
-
+  
+  protected void examineArguments() {
+    super.examineArguments();
+    Object[] args = getArguments();    
+    if ( args != null && args.length > 2 ) {
+      AuctionManager manager = (AuctionManager) args[2];
+      ManagerUIFrame gui = new ManagerUIFrame(manager, auction);
+      logger.debug("Setting console to " + gui);
+      auction.setConsole(gui);
+      auction.activateGUIConsole();      
+    }
+  }
   
   public void addBehaviours() {
       
@@ -131,7 +142,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
 
 
     public void action() {
-      try {
+      try {       
         ACLMessage msg = receive();
         if ( msg != null ) {
           if ( msg.getPerformative() == msg.INFORM ) {
@@ -150,13 +161,14 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
           }
         }
       } catch ( Exception e ) {
+        logger.error(e.getMessage());
         e.printStackTrace();
         //TODO
-        throw new Error(e.getMessage());
+        //throw new Error(e.getMessage());
       }
     }
 
-    public boolean done() {
+    public boolean done() {      
       return finished;
     }
 

@@ -27,24 +27,26 @@ import java.awt.event.*;
 
 public class AuctionConsoleFrame extends JFrame implements Observer {
 
-  Auction auction;
+  protected Auction auction;
 
-  JLabel bidLabel;
-  JLabel askLabel;
-  JLabel lastShoutLabel;
-  JLabel roundLabel;
-  JLabel numTradersLabel;
-  JButton closeAuctionButton;
+  protected JLabel bidLabel;
+  protected JLabel askLabel;
+  protected JLabel lastShoutLabel;
+  protected JLabel roundLabel;
+  protected JLabel numTradersLabel;
+  protected JButton closeAuctionButton;
 
-  DecimalFormat currencyFormatter = new DecimalFormat("+000000.00;-000000.00");
-  DecimalFormat decimalFormatter = new DecimalFormat(" #########;-#########");
+  protected DecimalFormat currencyFormatter = new DecimalFormat("+000000.00;-000000.00");
+  protected DecimalFormat decimalFormatter = new DecimalFormat(" #########;-#########");
+  
+  protected GridBagLayout gridBag;
 
   public AuctionConsoleFrame( Auction auction, String name ) {
 
     this.auction = auction;
 
     Container contentPane = getContentPane();
-    GridBagLayout gridBag = new GridBagLayout();
+    gridBag = new GridBagLayout();
     GridBagConstraints c = new GridBagConstraints();
     contentPane.setLayout(gridBag);
 

@@ -184,7 +184,9 @@ public abstract class AuctionImpl extends Observable
    * may significantly impact the time performance of the auction.
    */
   public void activateGUIConsole() {
-    guiConsole = new AuctionConsoleFrame(this,name);
+    if ( guiConsole == null ) {
+      guiConsole = new AuctionConsoleFrame(this, name);
+    }
     guiConsole.activate();
     // Add the console as an observer so that it will be informed
     // of state changes when we call notifyObservers().

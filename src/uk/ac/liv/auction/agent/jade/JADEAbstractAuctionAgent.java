@@ -23,6 +23,7 @@ import jade.core.*;
 
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.SenderBehaviour;
 
 import jade.content.*;
 import jade.content.onto.OntologyException;
@@ -112,6 +113,15 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
     msg.setOntology(AuctionOntology.NAME);
     getContentManager().fillContent(msg, content);
     send(msg);
+  }
+  
+  
+  public void sendMessageAsynch( ACLMessage msg, ContentElement content ) 
+                               throws OntologyException, Codec.CodecException {
+    msg.setLanguage(FIPANames.ContentLanguage.FIPA_SL0);
+    msg.setOntology(AuctionOntology.NAME);
+    getContentManager().fillContent(msg, content);
+    addBehaviour(new SenderBehaviour(this, msg));
   }
 
 
