@@ -26,8 +26,8 @@ import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 
 public class MixedStrategyTest extends TestCase {
 
-  TestStrategy pureStrategy1;
-  TestStrategy pureStrategy2;
+  TestLearnerStrategy pureStrategy1;
+  TestLearnerStrategy pureStrategy2;
 
   MixedStrategy mixedStrategy;
 
@@ -45,10 +45,10 @@ public class MixedStrategyTest extends TestCase {
 
   public void setUp() {
 
-    pureStrategy1 = new TestStrategy();
+    pureStrategy1 = new TestLearnerStrategy();
     pureStrategy1.setQuantity(1);
 
-    pureStrategy2 = new TestStrategy();
+    pureStrategy2 = new TestLearnerStrategy();
     pureStrategy2.setQuantity(1);
 
     probabilities = new DiscreteProbabilityDistribution(2);

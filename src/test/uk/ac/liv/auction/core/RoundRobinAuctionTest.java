@@ -27,6 +27,7 @@ import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 import uk.ac.liv.util.Distribution;
 
 import test.uk.ac.liv.auction.agent.TestTrader;
+import test.uk.ac.liv.auction.agent.TestStrategy;
 
 import org.apache.log4j.Logger;
 
@@ -53,20 +54,26 @@ public class RoundRobinAuctionTest extends TestCase {
     traders[2] = new TestTrader(this, 15, 10000, 725, true);
 
     TestTrader trader = traders[0];
-    trader.shouts = new Shout[] { new Shout(trader, 1, 500, true),
-        						new Shout(trader, 1, 600, true), 
-        						new Shout(trader, 1, 700, true) };
+    trader.setStrategy( new TestStrategy(
+        						new Shout[] { 
+        						    new Shout(trader, 1, 500, true),
+        						    new Shout(trader, 1, 600, true), 
+        						    new Shout(trader, 1, 700, true) } ));
 
     trader = traders[1];
-    trader.shouts = new Shout[] { new Shout(trader, 1, 500, true),
-        						new Shout(trader, 1, 550, true),
-        						new Shout(trader, 1, 750, true) };
+    trader.setStrategy( new TestStrategy( 
+        						new Shout[] {
+        							new Shout(trader, 1, 500, true),
+        							new Shout(trader, 1, 550, true),
+        							new Shout(trader, 1, 750, true) } ));
 
     trader = traders[2];
-    trader.shouts = new Shout[] { new Shout(trader, 1, 900, false),
-        						new Shout(trader, 1, 950, false), 
-        						new Shout(trader, 1, 725, false) };
-  }
+    trader.setStrategy( new TestStrategy( 
+      						new Shout[] { 
+      						    new Shout(trader, 1, 900, false),
+      						    new Shout(trader, 1, 950, false), 
+      						    new Shout(trader, 1, 725, false) } ));
+  }	
 
   public void setUp () {
     auctioneer = new KDoubleAuctioneer(auction, 0);
@@ -167,8 +174,6 @@ public class RoundRobinAuctionTest extends TestCase {
       assertTrue(auction.closed());
       assertTrue(auction.getNumberOfTraders() == 0);
       assertTrue(traders[1].lastWinningPrice == 725);
-
-      assertTrue(auction.getQuote().getBid() == 700);
 
       auction.reset();
 

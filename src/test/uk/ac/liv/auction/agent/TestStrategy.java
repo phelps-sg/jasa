@@ -1,4 +1,5 @@
-/* JASA Java Auction Simulator API
+/*
+ * JASA Java Auction Simulator API
  * Copyright (C) 2001-2004 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
@@ -11,35 +12,47 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
-
 package test.uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.agent.AbstractStrategy;
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.Shout;
 
-import uk.ac.liv.ai.learning.Learner;
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 
+public class TestStrategy extends AbstractStrategy {
 
-class TestStrategy extends DiscreteLearnerStrategy {
-
-  public int actions = 0;
-
-  public int rewards = 0;
-
-  public int act() {
-    return actions++;
+  protected int currentShout = 0;
+  
+  public Shout[] shouts;
+  
+  public boolean lastShoutAccepted;
+ 
+  public TestStrategy( Shout[] shouts ) {
+    this.shouts = shouts;
   }
-
-  public void learn( Auction auction ) {
-    rewards++;
+  
+  public void endOfRound ( Auction auction) {
+    currentShout++;
   }
-
-  public Learner getLearner() {
-    return null;
+  
+  public int determineQuantity( Auction auction ) {
+    return shouts[currentShout].getQuantity();
   }
-
-  public void setLearner( Learner l ) {
+  
+  public boolean modifyShout( Shout.MutableShout shout ) {
+    if ( currentShout >= shouts.length ) {
+      return false;
+    }
+    super.modifyShout(shout);
+    lastShoutAccepted = agent.lastShoutAccepted();
+    Shout current = shouts[currentShout];
+    shout.setPrice(current.getPrice());
+    shout.setQuantity(current.getQuantity());
+    return true;
   }
 
 }
-

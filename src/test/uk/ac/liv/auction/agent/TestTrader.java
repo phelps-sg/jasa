@@ -30,13 +30,11 @@ public class TestTrader extends AbstractTraderAgent {
   public Shout lastWinningShout = null;
   public double lastWinningPrice = 0;
   public int lastWinningQuantity;
-  public Shout[] shouts;
   public boolean receivedAuctionOpen = false;
   public boolean receivedAuctionClosed = false;
   public boolean receivedAuctionClosedAfterAuctionOpen = false;
   public int receivedRoundClosed = 0;
   public int receivedRequestShout = 0;
-  int currentShoutIndex = 0;
   TestCase test;
 
   static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
@@ -54,6 +52,7 @@ public class TestTrader extends AbstractTraderAgent {
 
   public void informOfSeller( Auction auction, Shout winningShout, RoundRobinTrader seller,
                               double price, int quantity ) {
+    super.informOfSeller(auction, winningShout, seller, price, quantity);
     test.assertTrue(((AbstractTraderAgent) seller).isSeller());
     System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity + " and seller: " + seller);
     lastWinningShout = winningShout;
@@ -65,28 +64,17 @@ public class TestTrader extends AbstractTraderAgent {
   }
 
   public void requestShout( Auction auction ) {
-    if ( currentShoutIndex >= shouts.length ) {
-      logger.debug(this + ": all shouts made - quiting from auction");
-      ((RoundRobinAuction) auction).remove(this); //TODO
-      return;
-    }
-    if ( currentShoutIndex > 0 ) {
-      auction.removeShout(shouts[currentShoutIndex-1]);
-    }
-    try {
-      auction.newShout(shouts[currentShoutIndex++]);
-    } catch ( AuctionException e ) {
-      e.printStackTrace();
-      test.fail();
-    }
+    super.requestShout(auction);
     receivedRequestShout++;
   }
 
   public void auctionOpen( Auction auction ) {
+    super.auctionOpen(auction);
     receivedAuctionOpen = true;
   }
 
   public void auctionClosed( Auction auction ) {
+    super.auctionClosed(auction);
     logger.debug(this + ": recieved auctionClosed()");
     ((RoundRobinAuction) auction).remove(this);
     receivedAuctionClosed = true;
@@ -94,6 +82,7 @@ public class TestTrader extends AbstractTraderAgent {
   }
 
   public void roundClosed( Auction auction ) {
+    super.roundClosed(auction);
     receivedRoundClosed++;
   }
 

@@ -23,7 +23,7 @@ import uk.ac.liv.auction.core.*;
 
 public class AdaptiveStrategyTest extends TestCase {
 
-  TestStrategy strategy;
+  TestLearnerStrategy strategy;
 
   static final int NUM_ROUNDS = 10;
 
@@ -32,7 +32,7 @@ public class AdaptiveStrategyTest extends TestCase {
   }
 
   public void setUp() {
-    strategy = new TestStrategy();
+    strategy = new TestLearnerStrategy();
     strategy.setQuantity(1);
   }
 

@@ -15,8 +15,10 @@
 
 package test.uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.KDoubleAuctioneer;
 
 
 import junit.framework.*;
@@ -26,7 +28,7 @@ public class AbstractTraderAgentTest extends TestCase {
 
   TestTrader trader1, trader2;
 
-  Auction auction;
+  RoundRobinAuction auction;
 
   public static final int TRADER1_STOCK = 0;
   public static final int TRADER2_STOCK = 5;
@@ -34,19 +36,43 @@ public class AbstractTraderAgentTest extends TestCase {
   public static final double TRADER1_FUNDS = 10000;
   public static final double TRADER2_FUNDS = 20000;
 
-  public static final double TRADER1_VALUE = 2000;
-  public static final double TRADER2_VALUE = 900;
+  public static final double TRADER1_VALUE = 250;
+  public static final double TRADER2_VALUE = 140;
 
   public AbstractTraderAgentTest( String name ) {
     super(name);
   }
 
   public void setUp() {
+    
     trader1 = new TestTrader(this, TRADER1_STOCK, TRADER1_FUNDS, TRADER1_VALUE,
                               false);
+    
     trader2 = new TestTrader(this, TRADER2_STOCK, TRADER2_FUNDS, TRADER2_VALUE,
                               true);
+
+    trader1.setStrategy( new TestStrategy( new Shout[] { 
+        						new Shout(trader1, 1, TRADER1_VALUE-100, true),
+        						new Shout(trader1, 1, TRADER1_VALUE-50, true), 
+        						new Shout(trader1, 1, TRADER1_VALUE, true),
+        						new Shout(trader1, 1, TRADER1_VALUE-100, true)
+        				}
+    ));
+
+    
+    trader2.setStrategy( new TestStrategy( new Shout[] { 
+							new Shout(trader1, 1, TRADER1_VALUE+100, true),
+							new Shout(trader1, 1, TRADER1_VALUE+50, true), 
+							new Shout(trader1, 1, TRADER1_VALUE, true),
+							new Shout(trader1, 1, TRADER1_VALUE+100, true)
+							} 
+    ));
+    
+    
     auction = new RoundRobinAuction();
+    auction.setAuctioneer(new KDoubleAuctioneer(0.5));
+    auction.register(trader1);
+    auction.register(trader2);
   }
 
   public void testPurchase() {
@@ -75,6 +101,42 @@ public class AbstractTraderAgentTest extends TestCase {
     assertTrue( trader2.getLastProfit() == 0 );
     assertTrue( trader2.getProfits() == 0 );
 
+  }
+  
+  public void testLastShoutAccepted() {
+    
+    assertTrue(!trader1.lastShoutAccepted());
+    assertTrue(!trader2.lastShoutAccepted());
+   
+    auction.begin();
+    
+    try {
+      
+      auction.step();
+      assertTrue(!trader1.lastShoutAccepted());
+      assertTrue(!trader2.lastShoutAccepted());
+      
+      auction.step();
+      assertTrue(!((TestStrategy) trader1.getStrategy()).lastShoutAccepted);
+      assertTrue(!((TestStrategy) trader2.getStrategy()).lastShoutAccepted);
+      assertTrue(!trader1.lastShoutAccepted());
+      assertTrue(!trader2.lastShoutAccepted());
+      
+      auction.step();
+      assertTrue(trader1.lastShoutAccepted());
+      trader1.purchaseFrom(auction, trader2, 1, TRADER1_VALUE);
+      assertTrue(trader2.lastShoutAccepted());
+      
+      auction.step();
+      assertTrue(((TestStrategy) trader1.getStrategy()).lastShoutAccepted);
+      assertTrue(((TestStrategy) trader2.getStrategy()).lastShoutAccepted);
+      assertTrue(!trader1.lastShoutAccepted());
+      assertTrue(!trader2.lastShoutAccepted());
+      
+    } catch ( AuctionClosedException e ) {
+      fail("we tried to step through a closed auction.");
+    }
+    
   }
 
   public static void main( String[] args ) {
