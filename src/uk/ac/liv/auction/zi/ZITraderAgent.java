@@ -18,12 +18,12 @@ package uk.ac.liv.auction.zi;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 
+import uk.ac.liv.prng.GlobalPRNG;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import java.io.Serializable;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
 
@@ -156,7 +156,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   
   public boolean determineRandomActivation() {
     if ( activationProbability < 1.0 ) {
-      return prng.coin(activationProbability);
+      return GlobalPRNG.getInstance().coin(activationProbability);
     } else {
       return true;
     }
