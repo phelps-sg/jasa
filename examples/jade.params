@@ -35,3 +35,10 @@ auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 auction.agenttype.1.strategy.quantity = 20
 auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 auction.agenttype.1.isseller = false
+
+# log4j configuration
+log4j.rootCategory=DEBUG, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=[%p] - %m%n
+

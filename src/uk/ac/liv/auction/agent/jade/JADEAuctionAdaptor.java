@@ -41,6 +41,8 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+import org.apache.log4j.Logger;
+
 /**
  * An adaptor that lets a JASA auction pretend to be a JADE agent.
  * This adaptor translates incoming ACL messages into JASA
@@ -53,6 +55,8 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
                                  implements Parameterizable {
 
   protected JADEAuction auction;
+
+  static Logger logger = Logger.getLogger(JADEAuctionAdaptor.class);
 
   public static final String SERVICE_AUCTIONEER = "JASAAuctioneer";
 
@@ -83,8 +87,9 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
               RegisterAction action = (RegisterAction) content;
               AID traderAID = new AID(action.getAgent(), true);
               auction.register(new JASATraderAgentProxy(traderAID, myAgent));
+              block();
             } else if ( content instanceof StartAuctionAction ) {
-              System.out.println("Starting auction");
+              logger.info("Starting auction");
               finished = true;
             }
           } else {
@@ -129,7 +134,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
 
     public int onEnd() {
       if ( auctionClosed ) {
-        System.out.println("Auction closed");
+        logger.info("Auction closed");
         return FSM_EVENT_AUCTION_CLOSED;
       } else {
         return 0;
@@ -183,7 +188,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
 
     public void action() {
       auction.finaliseRound();
-      System.out.println("End of round " + auction.getAge());
+      logger.debug("End of round " + (auction.getAge()-1));
     }
 
   }

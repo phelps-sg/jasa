@@ -45,8 +45,17 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.Parameterizable;
 
+import org.apache.log4j.Logger;
 
+
+/**
+ * Super-class for all JADE auction agents.
+ *
+ * @author Steve Phelps
+ */
 public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
+
+  static Logger logger = Logger.getLogger(JADEAbstractAuctionAgent.class);
 
   /**
    * The time in ms. to sleep in between attempts to contact
@@ -57,9 +66,8 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
 
   protected void setup() {
     try {
-      System.out.println( getLocalName() + " setting up");
 
-      // Create the agent descrption of itself
+      // Create the agent's description of itself
       DFAgentDescription dfd = new DFAgentDescription();
       dfd.setName(getAID());
       ServiceDescription sd = new ServiceDescription();
@@ -84,8 +92,11 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
 
   }
 
+
   protected void examineArguments() {
     Object[] args = getArguments();
+    // Initialise ourselves from a parameter database if we are given
+    // any arguments.
     if ( args != null && args.length > 0 ) {
       ParameterDatabase parameters = (ParameterDatabase) args[0];
       Parameter base = (Parameter) args[1];
@@ -93,14 +104,16 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
     }
   }
 
-  public static void sendMessage( Agent agent, ACLMessage msg,
-                                  ContentElement content )
-       throws OntologyException, Codec.CodecException {
+
+  public void sendMessage( ACLMessage msg, ContentElement content )
+                     throws OntologyException, Codec.CodecException {
+
     msg.setLanguage(FIPANames.ContentLanguage.FIPA_SL0);
     msg.setOntology(AuctionOntology.NAME);
-    agent.getContentManager().fillContent(msg, content);
-    agent.send(msg);
+    getContentManager().fillContent(msg, content);
+    send(msg);
   }
+
 
   public AID findAuctioneer() throws FIPAException, InterruptedException  {
     AID auctioneerAID = null;
@@ -121,6 +134,7 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
     }
     return auctioneerAID;
   }
+
 
   public abstract void addBehaviours();
 

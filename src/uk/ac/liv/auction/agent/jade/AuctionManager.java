@@ -46,6 +46,9 @@ import jade.domain.*;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 
 /**
  * A JADE agent for starting an auction simulation.
@@ -56,6 +59,8 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
   AID auctioneerAID = null;
 
   PlatformController container;
+
+  static Logger logger = Logger.getLogger(AuctionManager.class);
 
   static final String P_AUCTION = "auction";
   static final String P_NUM_AGENT_TYPES = "numagenttypes";
@@ -81,7 +86,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
     try {
 
-      System.out.print("Setup.. ");
+      logger.info("Setup.. ");
 
       container = getContainerController();
 
@@ -90,14 +95,15 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
       auctioneerArguments[1] = base.push(P_AUCTIONEER);
       AgentController auctioneerController =
           container.createNewAgent("auctioneer",
-          JADERandomRobinAuctioneer.class.getName(),
-          auctioneerArguments);
+                                    JADERandomRobinAuctioneer.class.getName(),
+                                    auctioneerArguments);
 
       auctioneerController.start();
 
       auctioneerAID = findAuctioneer();
 
-      int numAgentTypes = parameters.getInt(base.push(P_NUM_AGENT_TYPES), null, 1);
+      int numAgentTypes =
+          parameters.getInt(base.push(P_NUM_AGENT_TYPES), null, 1);
 
       for( int t=0; t<numAgentTypes; t++ ) {
 
@@ -107,19 +113,20 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
         int numAgents = parameters.getInt(typeParam.push(P_NUM_AGENTS), null, 0);
         for( int i=0; i<numAgents; i++ ) {
 
-          JADETraderAgentAdaptor dummyAgent =
-                   (JADETraderAgentAdaptor) parameters.getInstanceForParameter(typeParam, null,
-                   JADETraderAgentAdaptor.class);
+          JADETraderAgentAdaptor dummyAgent = (JADETraderAgentAdaptor)
+              parameters.getInstanceForParameter(typeParam,
+                                                  null,
+                                                  JADETraderAgentAdaptor.class);
 
           try {
             Object[] agentParameters = new Object[2];
             agentParameters[0] = parameters;
             agentParameters[1] = typeParam;
             String agentClassName = dummyAgent.getClass().getName();
-            System.out.println("Attempting to start trader agent with class name " + agentClassName);
+            logger.debug("Attempting to start trader agent with class name " + agentClassName);
             AgentController agentController =
-                container.createNewAgent("trader-" + i + "-" + t, agentClassName,
-                agentParameters);
+                container.createNewAgent("trader-" + i + "-" + t,
+                                           agentClassName, agentParameters);
             agentController.start();
           } catch ( Exception e ) {
             e.printStackTrace();
@@ -128,7 +135,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
         }
       }
-      System.out.println("done.");
+      logger.info("done.");
     } catch ( Exception e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());
@@ -137,7 +144,6 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
 
   public void activateUI() {
-    System.out.println("auction manager activating UI");
     ManagerUIFrame ui = new ManagerUIFrame(this);
     ui.setSize( 400, 200 );
     ui.setLocation( 400, 400 );
@@ -159,7 +165,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
       ACLMessage start = new ACLMessage(ACLMessage.INFORM);
       start.addReceiver(auctioneerAID);
       StartAuctionAction startContent = new StartAuctionAction();
-      JADEAbstractAuctionAgent.sendMessage(this, start, startContent);
+      sendMessage(start, startContent);
     } catch ( Exception e ) {
       e.printStackTrace();
     }
@@ -180,23 +186,25 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
 
   public void setupFromParameterFile() {
-    System.out.println(this + ": setting up... ");
     Object[] arguments = getArguments();
     String parameterFileName = DEFAULT_PARAMETER_FILE;
     if ( arguments != null && arguments.length >= 1 ) {
       parameterFileName = (String) arguments[0];
     }
-    System.out.println("Using parameter file " + parameterFileName);
+
     File paramFile = new File(parameterFileName);
     if ( ! paramFile.canRead() ) {
       System.err.println("Cannot read parameter file " + parameterFileName);
       throw new Error("Cannot read parameter file " + parameterFileName);
     }
 
+    org.apache.log4j.PropertyConfigurator.configure(parameterFileName);
+    logger.debug("Using parameter file " + parameterFileName);
+
     try {
       ParameterDatabase parameters = new ParameterDatabase(paramFile);
       setup(parameters, new Parameter(P_AUCTION));
-      System.out.println("done.");
+      logger.info("done.");
     } catch ( IOException e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());

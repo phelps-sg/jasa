@@ -79,6 +79,7 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
                     new JASAAuctionProxy(msg.getSender(), myAgent));
               } else if ( content instanceof BidSuccessfulPredicate ) {
                 BidSuccessfulPredicate p = (BidSuccessfulPredicate) content;
+                logger.debug("Successful bid: " + p);
                 //TODO
                 //jasaTraderAgent.informOfSeller(p.getShout().jasaShout(),
                 //    new JASATraderAgentProxy(new AID(p.getSeller(), true), myAgent),
@@ -93,7 +94,7 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
           //TODO
         }
 
-        //block();
+        block();
       }
     } );
 
@@ -105,7 +106,7 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
           msg.addReceiver(auctioneerAID);
           RegisterAction content = new RegisterAction();
           content.setAgent(getAID().getName());
-          JADEAbstractAuctionAgent.sendMessage(myAgent, msg, content);
+          ((JADEAbstractAuctionAgent) myAgent).sendMessage(msg, content);
         } catch (Exception fe) {
           fe.printStackTrace();
         }

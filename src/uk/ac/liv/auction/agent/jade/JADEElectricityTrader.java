@@ -23,6 +23,8 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import org.apache.log4j.Logger;
+
 /**
  * An ElectricityTrader agent that is pretending to be a JADE agent
  * through use of a JADETraderAgentAdaptor.
@@ -32,6 +34,8 @@ import ec.util.ParameterDatabase;
 
 public class JADEElectricityTrader extends JADETraderAgentAdaptor
                                     implements Parameterizable {
+
+  static Logger logger = Logger.getLogger(JADEElectricityTrader.class)                                ;
 
   public JADEElectricityTrader( int capacity, double privateValue, double fixedCosts,
                                boolean isSeller, Strategy strategy ) {
@@ -45,10 +49,10 @@ public class JADEElectricityTrader extends JADETraderAgentAdaptor
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    System.out.println(this + ": setup... ");
+    logger.debug("setup... ");
     ((ElectricityTrader) jasaTraderAgent).setup(parameters, base);
-    System.out.println("done");
-    System.out.println(this + ": jadeTraderAgent = " + jasaTraderAgent);
+    logger.debug("done");
+    logger.debug("jadeTraderAgent = " + jasaTraderAgent);
   }
 
 }
