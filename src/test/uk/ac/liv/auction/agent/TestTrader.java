@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
 public class TestTrader extends AbstractTraderAgent {
 
   public Shout lastWinningShout = null;
-  public double lastWinningPrice;
+  public double lastWinningPrice = 0;
   public int lastWinningQuantity;
   public Shout[] shouts;
   public boolean receivedAuctionOpen = false;
@@ -54,7 +54,8 @@ public class TestTrader extends AbstractTraderAgent {
 
   public void informOfSeller( Auction auction, Shout winningShout, RoundRobinTrader seller,
                               double price, int quantity ) {
-    logger.debug(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity);
+    test.assertTrue(((AbstractTraderAgent) seller).isSeller());
+    System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity + " and seller: " + seller);
     lastWinningShout = winningShout;
     lastWinningPrice = price;
   }
@@ -111,7 +112,7 @@ public class TestTrader extends AbstractTraderAgent {
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
+    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
   }
 
 
