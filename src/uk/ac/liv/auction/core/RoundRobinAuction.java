@@ -80,33 +80,33 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * The collection of TraderAgents currently taking part in this auction.
    */
-  LinkedList activeTraders = new LinkedList();
+  protected LinkedList activeTraders = new LinkedList();
 
   /**
    * The collection of idle TraderAgents
    */
-  LinkedList defunctTraders = new LinkedList();
+  protected LinkedList defunctTraders = new LinkedList();
 
   /**
    * The collection of all TraderAgents registered in the auction.
    */
-  LinkedList registeredTraders = new LinkedList();
+  protected LinkedList registeredTraders = new LinkedList();
 
   /**
    * The current round.
    */
-  int round;
+  protected int round;
 
   /**
    * The maximum number of rounds in the auction.
    * Ignored if negative.
    */
-  int maximumRounds = -1;
+  protected int maximumRounds = -1;
 
   /**
    * The current number of traders in the auction.
    */
-  int numTraders;
+  protected int numTraders;
 
 
 
@@ -278,7 +278,7 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * Remove defunct traders.
    */
-  private void sweepDefunctTraders() {
+  protected void sweepDefunctTraders() {
     Iterator i = defunctTraders.iterator();
     while ( i.hasNext() ) {
       TraderAgent defunct = (TraderAgent) i.next();

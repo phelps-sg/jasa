@@ -24,48 +24,19 @@ import jade.domain.FIPAAgentManagement.*;
 import jade.domain.*;
 
 
-public class JADETraderAgentAdaptor extends jade.core.Agent {
+public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
 
-  RoundRobinTrader jasaTraderAgent;
+  AbstractTraderAgent jasaTraderAgent;
 
   public static final String SERVICE_TRADER = "JASATrader";
 
 
-  public JADETraderAgentAdaptor( RoundRobinTrader jasaTraderAgent ) {
+  public JADETraderAgentAdaptor( AbstractTraderAgent jasaTraderAgent ) {
     this.jasaTraderAgent = jasaTraderAgent;
   }
 
-
-  /**
-   * Setup the agent.  Registers with the DF, and adds a behaviour to
-   * process incoming messages.
-   */
-  protected void setup() {
-    try {
-      System.out.println( getLocalName() + " setting up");
-
-      // Create the agent descrption of itself
-      DFAgentDescription dfd = new DFAgentDescription();
-      dfd.setName(getAID());
-      ServiceDescription sd = new ServiceDescription();
-      sd.setType(SERVICE_TRADER);
-      dfd.addServices(sd);
-      DFService.register(this, dfd);
-
-      // Register the codec for the SL0 language
-      getContentManager().registerLanguage(new SLCodec(), FIPANames.ContentLanguage.FIPA_SL0);
-
-      // Register the ontology used by this application
-      getContentManager().registerOntology(AuctionOntology.getInstance());
-
-      addBehaviours();
-
-      registerWithAuctioneer();
-
-    } catch ( Exception e ) {
-      e.printStackTrace();
-    }
-
+  public String getServiceName() {
+    return SERVICE_TRADER;
   }
 
   public void addBehaviours() {
@@ -99,40 +70,43 @@ public class JADETraderAgentAdaptor extends jade.core.Agent {
           //TODO
         }
 
+        block();
+      }
+    } );
+
+    addBehaviour( new OneShotBehaviour(this) {
+      public void action() {
+        try {
+          AID auctioneerAID = null;
+          DFAgentDescription dfd = new DFAgentDescription();
+          ServiceDescription sd = new ServiceDescription();
+          sd.setType(JADEAuctionAdaptor.SERVICE_AUCTIONEER);
+          dfd.addServices(sd);
+          while (true) {
+            System.out.println(getLocalName()+ " waiting for a JASAAuctioneer registering with the DF");
+            SearchConstraints c = new SearchConstraints();
+            c.setMaxDepth(new Long(3));
+            DFAgentDescription[] result = DFService.search(myAgent,dfd,c);
+            if ((result != null) && (result.length > 0)) {
+              dfd = result[0];
+              auctioneerAID = dfd.getName();
+              break;
+            }
+            Thread.sleep(10000);
+          }
+          ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+          RegisterAction content = new RegisterAction();
+          content.setAgent(getAID().getName());
+          getContentManager().fillContent(msg, content);
+          JADEAbstractAuctionAgent.sendMessage(myAgent, msg);
+        } catch (Exception fe) {
+          fe.printStackTrace();
+        }
       }
     } );
   }
 
 
-  public void registerWithAuctioneer() {
-    AID auctioneerAID = null;
-    DFAgentDescription dfd = new DFAgentDescription();
-    ServiceDescription sd = new ServiceDescription();
-    sd.setType("JASAAuctioneer");
-    dfd.addServices(sd);
-    try {
-      while (true) {
-        System.out.println(getLocalName()+ " waiting for a JASAAuctioneer registering with the DF");
-        SearchConstraints c = new SearchConstraints();
-        c.setMaxDepth(new Long(3));
-        DFAgentDescription[] result = DFService.search(this,dfd,c);
-        if ((result != null) && (result.length > 0)) {
-          dfd = result[0];
-          auctioneerAID = dfd.getName();
-          break;
-        }
-        Thread.sleep(10000);
-      }
-      ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-      RegisterAction content = new RegisterAction();
-      content.setAgent(getAID().getName());
-      getContentManager().fillContent(msg, content);
-      send(msg);
-    } catch (Exception fe) {
-      fe.printStackTrace();
-      doDelete();
-    }
-  }
 
 
 }

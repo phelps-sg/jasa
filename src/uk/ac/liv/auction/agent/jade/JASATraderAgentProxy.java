@@ -20,10 +20,10 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
       ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
       RequestShoutAction content = new RequestShoutAction();
       sender.getContentManager().fillContent(msg, content);
-      sender.send(msg);
+      JADEAbstractAuctionAgent.sendMessage(sender, msg);
     } catch ( Exception e ) {
       e.printStackTrace();
-      throw new Error(e);
+      throw new Error(e.getMessage());
     }
   }
 
@@ -36,10 +36,10 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
       content.setQuantity(quantity);
       content.setSeller(((JASATraderAgentProxy) seller).getSenderAID().getName());
       sender.getContentManager().fillContent(msg, content);
-      sender.send(msg);
+      JADEAbstractAuctionAgent.sendMessage(sender, msg);
     } catch ( Exception e ) {
       e.printStackTrace();
-      throw new Error(e);
+      throw new Error(e.getMessage());
     }
   }
 

@@ -38,7 +38,7 @@ public abstract class AuctionImpl extends Observable
   /**
    * The name of this auction.
    */
-  String name;
+  protected String name;
 
   /**
    * Used to assign unique ids to each instance.
@@ -48,47 +48,47 @@ public abstract class AuctionImpl extends Observable
   /**
    * A unique id for this auction.  It's main use is in debugging.
    */
-  int id;
+  protected int id;
 
   /**
    * PrintStream for log output.
    */
-  PrintStream logOut = System.out;
+  protected PrintStream logOut = System.out;
 
   /**
    * The last shout placed in the auction.
    */
-  Shout lastShout;
+  protected Shout lastShout;
 
   /**
    * The last bid placed in the auction.
    */
-  Shout lastBid;
+  protected Shout lastBid;
 
   /**
    * The last ask placed in the auction.
    */
-  Shout lastAsk;
+  protected Shout lastAsk;
 
   /**
    * Flag indicating whether the auction is currently closed.
    */
-  boolean closed;
+  protected boolean closed;
 
   /**
    * Optional graphical console
    */
-  AuctionConsoleFrame guiConsole = null;
+  protected AuctionConsoleFrame guiConsole = null;
 
   /**
    * The plugable bidding logic to use for this auction, e.g. AscendingAuctioneer
    */
-  Auctioneer auctioneer = null;
+  protected Auctioneer auctioneer = null;
 
   /**
    * Helper class for logging to CSV files
    */
-  MarketDataLogger logger = null;
+  protected MarketDataLogger logger = null;
 
 
   public AuctionImpl( String name, MarketDataLogger logger ) {

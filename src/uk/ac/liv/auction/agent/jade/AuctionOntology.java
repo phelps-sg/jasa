@@ -33,6 +33,7 @@ public class AuctionOntology extends Ontology {
   public static final String ACTION_REGISTER = "REGISTER";
   public static final String ACTION_REGISTER_AGENT = "agent";
 
+  public static final String ACTION_START_AUCTION = "START-AUCTION";
 
   // Predicates
   public static final String PREDICATE_BID_SUCCESSFUL = "BID-SUCCESSFUL";
@@ -94,8 +95,12 @@ public class AuctionOntology extends Ontology {
 
       AgentActionSchema registerSchema = new AgentActionSchema(ACTION_REGISTER);
       registerSchema.add(ACTION_REGISTER_AGENT,
-                         (PrimitiveSchema)getSchema(BasicOntology.STRING));
+                         (PrimitiveSchema) getSchema(BasicOntology.STRING));
       add(registerSchema, RegisterAction.class);
+
+      AgentActionSchema startAuctionSchema =
+          new AgentActionSchema(ACTION_START_AUCTION);
+      add(startAuctionSchema, StartAuctionAction.class);
 
       PredicateSchema bidSuccessfulSchema =
           new PredicateSchema(PREDICATE_BID_SUCCESSFUL);
@@ -113,8 +118,7 @@ public class AuctionOntology extends Ontology {
 
       add(bidSuccessfulSchema, BidSuccessfulPredicate.class);
 
-    }
-    catch(OntologyException oe) {
+    } catch(OntologyException oe) {
       oe.printStackTrace();
     }
   }

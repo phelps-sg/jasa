@@ -253,6 +253,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     auction.setMaximumRounds(maxRounds);
 
+    double[][] randomizedPrivateValues = null;
+    if ( randomPrivateValues ) {
+      randomizedPrivateValues = generateRandomizedPrivateValues(ns+nb,
+                                                                iterations);
+    }
+
     for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
 
       double auctioneerK = kMultiple/(double) auctioneerKSamples;
@@ -282,7 +288,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       for( int i=0; i<iterations; i++ ) {
 
         if ( randomPrivateValues ) {
-          randomizePrivateValues();
+          randomizePrivateValues(randomizedPrivateValues, i);
         }
 
         ElectricityStats results = runExperiment();
@@ -369,16 +375,33 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
               (maxPrivateValue - minPrivateValue) * randGenerator.nextDouble();
   }
 
-  protected void randomizePrivateValues() {
+  protected void randomizePrivateValues( double[][] values, int iteration ) {
+
+    Iterator i = auction.getTraderIterator();
+    int traderNumber=0;
+    while ( i.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) i.next();
+      trader.setPrivateValue(values[traderNumber++][iteration]);
+    }
+  }
+
+  protected double[][] generateRandomizedPrivateValues( int numTraders,
+                                                         int numIterations ) {
+    double[][] values = new double[numTraders][numIterations];
     EquilibriaStats stats = new EquilibriaStats(auction);
-    do {
-      Iterator i = auction.getTraderIterator();
-      while ( i.hasNext() ) {
-        ElectricityTrader trader = (ElectricityTrader) i.next();
-        trader.setPrivateValue(randomPrivateValue());
-      }
-      stats.recalculate();
-    } while ( ! stats.equilibriaExists() );
+    for( int i=0; i<numIterations; i++ ) {
+      do {
+        Iterator traderIterator = auction.getTraderIterator();
+        for( int t=0; t<numTraders; t++ ) {
+          ElectricityTrader trader = (ElectricityTrader) traderIterator.next();
+          double value = randomPrivateValue();
+          trader.setPrivateValue(value);
+          values[t][i] = value;
+        }
+        stats.recalculate();
+      } while ( ! stats.equilibriaExists() );
+    }
+    return values;
   }
 
 

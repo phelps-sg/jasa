@@ -185,6 +185,10 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     } else {
       surplus = trader.getPrivateValue() - equilibPrice;
     }
+    //TODO
+    if ( surplus < 0 ) {
+      surplus = 0;
+    }
     return auction.getAge() * equilibQuant(trader, equilibPrice) * surplus;
   }
 
