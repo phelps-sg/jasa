@@ -19,6 +19,8 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -33,6 +35,8 @@ public class GlobalPRNG {
   public static final String P_SEED = "seed";
 
   public static final String P_PRNG = "prng";
+  
+  static Logger logger = Logger.getLogger(GlobalPRNG.class);
 
   public static void setup( ParameterDatabase parameters, Parameter base ) {
 
@@ -46,6 +50,11 @@ public class GlobalPRNG {
   }
 
   public static RandomElement getInstance() {
+    if ( prng == null ) {
+      logger.warn("No PRNG configured: using default");
+      long defaultSeed = PRNGFactory.getFactory().create().ClockSeed();
+      prng = PRNGFactory.getFactory().create(defaultSeed);
+    }
     return prng;
   }
 
@@ -60,7 +69,7 @@ public class GlobalPRNG {
 
   public static void randomPermutation( Object[] a ) {
     for( int i = 0; i < a.length - 1; i++ ) {
-      int choice = prng.choose(i, a.length-1);
+      int choice = getInstance().choose(i, a.length-1);
       Object tmp = a[i];
       a[i] = a[choice];
       a[choice] = tmp;
