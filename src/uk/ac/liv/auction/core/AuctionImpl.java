@@ -217,10 +217,7 @@ public abstract class AuctionImpl extends Observable
   }
 
   protected void recordShout( Shout shout ) {
-    if ( lastShout == null ) {
-      lastShout = new Shout();
-    }
-    lastShout.copyFrom(shout);
+    lastShout = shout;
     if ( shout.isAsk() ) {
       lastAsk = shout;
     } else {

@@ -94,7 +94,8 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    initialTradeEntitlement = parameters.getIntWithDefault(base.push(P_INITIAL_TRADE_ENTITLEMENT), null, 100);
+    initialTradeEntitlement =
+        parameters.getInt(base.push(P_INITIAL_TRADE_ENTITLEMENT));
     super.setup(parameters, base);
   }
 

@@ -2,14 +2,12 @@
 simulation.days=10
 simulation.console = false
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-#simulation.auction.logger = uk.ac.liv.auction.stats.GraphMarketDataLogger
 simulation.auction.maximumrounds = 3000
 simulation.auction.lengthofday = 100
 simulation.auction.maximumdays = 20
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 simulation.auction.auctioneer.pricing.k = 0.5
-simulation.auction.logger = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
 simulation.console = true
 
@@ -19,6 +17,7 @@ simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.0.numagents = 11
 simulation.agenttype.0.isseller = true
 simulation.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.agenttype.0.strategy.scaling = 0.001
 simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 simulation.agenttype.0.initialtradeentitlement = 1
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.FixedValuer
@@ -27,6 +26,7 @@ simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.1.numagents = 11
 simulation.agenttype.1.isseller = false
 simulation.agenttype.1.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.agenttype.1.strategy.scaling = 0.001
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 simulation.agenttype.1.initialtradeentitlement = 1
 simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.FixedValuer

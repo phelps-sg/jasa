@@ -18,11 +18,17 @@ package uk.ac.liv.ai.learning;
 import uk.ac.liv.util.io.DataWriter;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Seeder;
+import uk.ac.liv.util.Seedable;
+
+import uk.ac.liv.prng.PRNGFactory;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import java.io.Serializable;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 /**
  * An implementation of the Widrow-Hoff learning algorithm with momentum
@@ -54,6 +60,8 @@ public class WidrowHoffLearner extends AbstractLearner
    * The momentum of the learner.
    */
   protected double momentum;
+
+  protected RandomElement paramPRNG = PRNGFactory.getFactory().create();
 
   public static final double DEFAULT_LEARNING_RATE = 0.1;
 
@@ -107,9 +115,17 @@ public class WidrowHoffLearner extends AbstractLearner
     initialise();
   }
 
+  public void setSeed( long seed ) {
+    paramPRNG = PRNGFactory.getFactory().create(seed);
+  }
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
+  }
+
   protected void initialise() {
-    delta = 0;
-    currentOutput = 0;
+    learningRate = 0.1 + paramPRNG.raw() * 0.4;
+    momentum = 0.2 + paramPRNG.raw() * 0.6;
   }
 
 

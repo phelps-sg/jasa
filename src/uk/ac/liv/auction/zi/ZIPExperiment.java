@@ -154,8 +154,8 @@ public class ZIPExperiment extends MarketSimulation {
 
     numSamples =
         parameters.getIntWithDefault(base.push(P_NUMSAMPLES), null, numSamples);
-    marketData = new DailyStatsMarketDataLogger();
 
+    marketData = new DailyStatsMarketDataLogger();
     auction.addMarketDataLogger(marketData);
 
     numDays = auction.getMaximumDays();
@@ -189,7 +189,7 @@ public class ZIPExperiment extends MarketSimulation {
     for( int sample=0; sample<numSamples; sample++ ) {
 
       logger.info("\nSample " + sample + "... ");
-      selectRandomLearnerParameters();
+      resetAgents();
       auction.run();
       logger.debug("Auction terminated at round " + auction.getAge());
 
@@ -227,19 +227,11 @@ public class ZIPExperiment extends MarketSimulation {
   }
 
 
-  protected void selectRandomLearnerParameters() {
+  protected void resetAgents() {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
-      ZIPStrategy strategy = new ZIPStrategy(trader);
-      double learningRate = 0.1 + paramPRNG.raw() * 0.4;
-      double momentum = 0.2 + paramPRNG.raw() * 0.6;
-      double margin = paramPRNG.raw() * 1000;
-      WidrowHoffLearner learner = new WidrowHoffLearner(learningRate, momentum);
-      strategy.setLearner(learner);
-      trader.setStrategy(strategy);
-      logger.debug("Configured agent " + trader + " with momentum " + momentum +
-                    " and learning rate " + learningRate);
+      trader.reset();
     }
   }
 

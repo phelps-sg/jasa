@@ -32,8 +32,8 @@ public interface Seedable {
   public void setSeed( long seed );
 
   /**
-   * Deep-seed this object.  Seed our own PRNG and also seed the PRNG
-   * of any Seedable attributes of this object.
+   * Deep-seed this object.  Seed our own PRNG and also recusrively seed
+   * the PRNG of any Seedable attributes of this object.
    *
    * @param seeder The object providing a series of PRNG seeds.
    */

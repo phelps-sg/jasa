@@ -89,7 +89,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    capacity = parameters.getIntWithDefault(base.push(P_CAPACITY), null, 0);
+    capacity = parameters.getInt(base.push(P_CAPACITY));
     fixedCosts = parameters.getDoubleWithDefault(base.push(P_FIXED_COSTS), null, 0);
     initialise();
   }

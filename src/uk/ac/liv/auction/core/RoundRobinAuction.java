@@ -183,7 +183,7 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * The set of shouts that have been matched in the current round.
    */
-  protected Set acceptedShouts = new HashSet();
+  protected HashSet acceptedShouts = new HashSet();
 
   /**
    * The optional logger used to calculate statistics for the previous
