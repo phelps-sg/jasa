@@ -46,6 +46,10 @@ public class HeavyweightDistribution extends CummulativeDistribution {
     super(name);
   }
   
+  public HeavyweightDistribution() {
+    super();
+  }
+  
   public void initialise() {
     super.initialise();
     data = new TDoubleArrayList(INITIAL_SIZE); 
@@ -70,6 +74,17 @@ public class HeavyweightDistribution extends CummulativeDistribution {
     trimmedMean = trimmedTotal / (n - trimmedN * 2);
     hasChanged = false;
     return trimmedMean;    
+  }
+  
+  protected TDoubleArrayList getData() {
+    return data;
+  }
+  
+  public void combine( HeavyweightDistribution other ) {
+    TDoubleArrayList otherData = other.getData();
+    for( int i=0; i<otherData.size(); i++ ) {
+      newData(otherData.get(i));
+    }
   }
     
 }
