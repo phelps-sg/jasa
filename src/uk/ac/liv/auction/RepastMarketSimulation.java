@@ -38,7 +38,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import uchicago.src.collection.BaseMatrix;
 
@@ -57,7 +57,10 @@ import org.apache.log4j.Logger;
  * <p>
  * A RePast model of an auction simulation. This application takes as an
  * argument the name of a parameter file describing an auction experiment, and
- * proceeds to run that experiment.
+ * proceeds to run that experiment interactively using the RePast framework.  
+ * For unattended batch experiments, use the MarketSimulation application.
+ * 
+ * @see MarketSimulation
  * </p>
  * 
  * <p>
@@ -310,13 +313,13 @@ public class RepastMarketSimulation extends SimModelImpl
   
   class AgentMatrix implements BaseMatrix {
     
-    protected Vector agents;
+    protected ArrayList agents;
     
     protected int height;
     
     protected int width;
     
-    public AgentMatrix( Vector agents, int height, int width ) {
+    public AgentMatrix( ArrayList agents, int height, int width ) {
       this.agents = agents;
       this.height = height;
       this.width = width;
@@ -376,7 +379,7 @@ public class RepastMarketSimulation extends SimModelImpl
     
     protected int height;
     
-    protected Vector agents;
+    protected ArrayList agents;
     
     protected AgentMatrix matrix;
     
@@ -384,7 +387,7 @@ public class RepastMarketSimulation extends SimModelImpl
       this.width = width;
       this.auction = auction;
       height = auction.getNumberOfRegisteredTraders() / width;
-      agents = new Vector();
+      agents = new ArrayList();
       Iterator i = auction.getTraderIterator();
       while ( i.hasNext() ) {
         AbstractTradingAgent agent = (AbstractTradingAgent) i.next();

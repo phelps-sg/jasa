@@ -45,7 +45,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class DynamicSurplusReport extends AbstractAuctionReport
+public class DynamicSurplusReport extends AbstractMarketStatsReport
     implements Resetable {
 
   protected EquilibriumReport equilibriaStats;
@@ -73,9 +73,13 @@ public class DynamicSurplusReport extends AbstractAuctionReport
   }
 
   public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
     if ( event instanceof EndOfDayEvent ) {
       recalculate(event);
     }
+  }
+  
+  public void calculate() {    
   }
 
   public void recalculate( AuctionEvent event  ) {

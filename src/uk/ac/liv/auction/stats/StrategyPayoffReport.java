@@ -30,7 +30,7 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
 public class StrategyPayoffReport extends PayoffReport {
 
   public Object getKey( AbstractTradingAgent agent ) {
-    return agent.getStrategy().getClass();
+    return agent.getStrategy().getClass().getName();
   }
   
   public String getKeyName() {

@@ -45,7 +45,12 @@ import org.apache.log4j.Logger;
  * <p>
  * The main JASA application class.  This application takes as an argument
  * the name of a parameter file describing an auction experiment, and
- * proceeds to run that experiment.
+ * proceeds to run that experiment.  This application can be used to
+ * run many iterations of an experiment in batch-mode, in contrast to
+ * the interactive mode provided by RepastMarketSimulation.
+ * 
+ * @see RepastMarketSimulation
+ * 
  * </p>
  *
  * <p><b>Parameters</b><br>

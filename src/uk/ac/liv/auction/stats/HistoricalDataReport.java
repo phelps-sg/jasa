@@ -196,27 +196,22 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public int getNumberOfShouts( List shouts, double price, boolean accepted ) {
-//    try {
-      int numShouts = 0;
-      Iterator i = shouts.iterator();
-      while ( i.hasNext() ) {
-        Shout shout = (Shout) i.next();
-        if ( (price >= 0 && shout.getPrice() >= price)
-            || (price < 0 && shout.getPrice() <= -price) ) {
-          if ( accepted ) {
-//            if ( auction.shoutAccepted(shout) ) {
-            if ( acceptedShouts.contains(shout) ) {
-              numShouts++;
-            }
-          } else {
+    int numShouts = 0;
+    Iterator i = shouts.iterator();
+    while ( i.hasNext() ) {
+      Shout shout = (Shout) i.next();
+      if ( (price >= 0 && shout.getPrice() >= price)
+          || (price < 0 && shout.getPrice() <= -price) ) {
+        if ( accepted ) {
+          if ( acceptedShouts.contains(shout) ) {
             numShouts++;
           }
+        } else {
+          numShouts++;
         }
       }
-      return numShouts;
-//    } catch ( ShoutsNotVisibleException e ) {
-//      throw new AuctionError(e);
-//    }
+    }
+    return numShouts;
   }
 
   public void produceUserOutput() {

@@ -142,9 +142,22 @@ public abstract class PayoffReport extends DynamicSurplusReport
     }
     super.produceUserOutput();
   }
+     
   
-
-
+  public Map getVariables() {    
+    HashMap vars = new HashMap();
+    vars.putAll(super.getVariables());
+    Iterator i = table.keySet().iterator();
+    while ( i.hasNext() ) {
+      Object key = i.next();
+      StrategyStats stats = (StrategyStats) table.get(key);
+      String varName = "payoff." + key.toString();
+      ReportVariable var = new ReportVariable(varName, "Payoff to " + key);
+      vars.put(var, new Double(stats.payoff));
+    }
+    return vars;
+  }
+  
   public void initialise() {
     super.initialise();
     totalProfits = 0;

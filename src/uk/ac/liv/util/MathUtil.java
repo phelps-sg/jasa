@@ -61,8 +61,10 @@ public class MathUtil {
   }
   
   /**
+   * Use cern.jet.random.Arithmetic.factorial instead.
+   * 
    * @deprecated
-   * @see cern.jet.random.Arithmetic.factorial
+   * 
    */
   public static long factorial( int n ) {
   	long result = 1;

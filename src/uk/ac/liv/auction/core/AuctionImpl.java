@@ -235,7 +235,7 @@ public abstract class AuctionImpl extends Observable
   /**
    * Add a new market data logger.
    *
-   * @param newLogger  The new logger to add.
+   * @param newReport  The new logger to add.
    */
   public void addReport( AuctionReport newReport ) {
     AuctionReport oldReport = report;
