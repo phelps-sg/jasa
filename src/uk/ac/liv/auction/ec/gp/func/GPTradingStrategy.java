@@ -150,8 +150,9 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     ((Resetable) momentumLearner).reset();
     rlLearner.reset();
     gpIndividual.reset();
-    momentumLearner.setOutputLevel(currentMargin=0.5);
-    super.reset();        
+    momentumLearner.setOutputLevel(currentMargin=0.5);    
+    super.reset();
+    gpInitialise();
   }
   
   public boolean misbehaved() {
@@ -217,9 +218,11 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   }
   
   public void gpInitialise() {
-    if ( gpIndividual.getGPContext() != null ) {
+    if ( gpIndividual.getGPContext() != null && 
+          gpIndividual.trees[TREE_GPINIT].child != null ) {
       gpIndividual.evaluateNumberTree(TREE_GPINIT);
     }
   }
+  
 }
 
