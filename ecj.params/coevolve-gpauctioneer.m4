@@ -2,9 +2,26 @@
 include(`ecj.m4')
 include(`utils.m4')
 
+define(`NUM_SELLERS', 30)
+define(`NUM_BUYERS', 20)
+define(`POPULATION_SIZE', 50)
+define(`NUM_GENERATIONS', 3000)
+
 parent.0 = CONF_ECJHOME/ec/simple/simple.params
 
 eval = uk.ac.liv.ec.coevolve.CoEvolutionaryEvaluator
+
+
+eval.problem = uk.ac.liv.auction.ec.gp.GPCoEvolveAuctionProblem
+eval.problem.maxrounds = 10
+eval.problem.ns = NUM_SELLERS
+eval.problem.nb = NUM_BUYERS
+
+generations = NUM_GENERATIONS
+checkpoint = false
+
+eval.problem.data = uk.ac.liv.ec.gp.func.GPGenericData
+eval.problem.stack.context.data = uk.ac.liv.ec.gp.func.GPGenericData
 
 gp.type.a.size = 2
 gp.type.a.0.name = number
@@ -135,17 +152,6 @@ gp.koza.xover.source.0 = ec.select.BestSelection
 select.best.n = 10
 
 
-
-eval.problem = uk.ac.liv.auction.ec.gp.GPCoEvolveAuctionProblem
-eval.problem.maxrounds = 10
-
-generations = 200
-checkpoint = false
-
-eval.problem.data = uk.ac.liv.ec.gp.func.GPGenericData
-eval.problem.stack.context.data = uk.ac.liv.ec.gp.func.GPGenericData
-
-
 ##
 
 
@@ -160,10 +166,9 @@ eval.problem.stack.context.data = uk.ac.liv.ec.gp.func.GPGenericData
 init = ec.gp.GPInitializer
 stat = ec.gp.koza.KozaStatistics
 
-define(`NUM_STRATEGIES', 6)
-define(`POPULATION_SIZE', 50)
 
-define(`NUM_SUBPOPS', incr(NUM_STRATEGIES))
+define(`NUM_STRATEGIES', eval(NUM_SELLERS+NUM_BUYERS))
+define(`NUM_SUBPOPS', eval(NUM_STRATEGIES+1))
 
 pop.subpops = NUM_SUBPOPS
 
@@ -281,8 +286,8 @@ select.tournament.size = 7
 # This means that if someone decided to use GROW to generate
 # new individual trees, it's also use the defaults below
 # unless he overrided them locally.
-gp.koza.grow.min-depth = 5
-gp.koza.grow.max-depth = 5
+gp.koza.grow.min-depth = 1
+gp.koza.grow.max-depth = 3
 
 
 
