@@ -29,6 +29,18 @@ import ec.util.MersenneTwisterFast;
  * A trading strategy that in which we bid a different random markup on our
  * agent's private value in each auction round.
  * </p>
+ *
+ * </p><p><b>Parameters</b><br>
+ *
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.maxmarkup</tt><br>
+ * <font size=-1>double &gt;= 0</font></td>
+ * <td valign=top>(the maximum markup to bid for)</td></tr>
+ *
+ * </table>
+ *
+ * @author Steve Phelps
  */
 
 public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
