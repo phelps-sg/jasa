@@ -90,5 +90,12 @@ public class DiscreteProbabilityDistribution
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
+  
+  public void computeStats( CummulativeStatCounter stats ) {
+    stats.reset();   
+    for( int i=0; i<k; i++ ) {
+      stats.newData(i*p[i]);
+    }      
+  }
 
 }

@@ -122,6 +122,7 @@ public class NPTReplicationTest extends TestCase {
       setPRNGseeds(i);
       auction.run();
       stats.calculate();
+      System.out.println(i + ": " + stats.getEA() + ", " + stats.getMPB() + ", " + stats.getMPS());
       mPS.newData(stats.getMPS());
       mPB.newData(stats.getMPB());
       eA.newData(stats.getEA());

@@ -106,7 +106,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_RANDOMIZER = "randomizer";
 
 
-  static final int DATAFILE_NUM_COLUMNS = 37;
+  static final int DATAFILE_NUM_COLUMNS = 39;
 
   public ElectricityAuctionSimulation() {
   }
@@ -297,8 +297,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
       CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
       CummulativeStatCounter equilibPrice =
-          new CummulativeStatCounter("equilibPrice");
-      CummulativeStatCounter numREPeaks = new CummulativeStatCounter("peaks");
+          new CummulativeStatCounter("Equilib Price");
+      CummulativeStatCounter reMean = new CummulativeStatCounter("RE mean");
+      CummulativeStatCounter reStdev = new CummulativeStatCounter("RE stdev");
 
       LinkedList variables = new LinkedList();
       variables.add(efficiency);
@@ -318,7 +319,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       variables.add(equilibPrice);
       variables.add(pBCE);
       variables.add(pSCE);
-      variables.add(numREPeaks);
+      variables.add(reMean);
+      variables.add(reStdev);
 
 
       Debug.assertTrue("CSV file not configured with correct number of columns",
@@ -358,20 +360,13 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
                                + stats.getEquilibriaStats().getMaxPrice()) / 2;
         equilibPrice.newData(ep);
         
-        calculateNumPeaks(numREPeaks);
+        calculateREStats(reMean, reStdev);
 
         dumpIterResults();
       }
 
-      logger.info("\n*** Summary results for: k = " + auctioneerK + " ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
-      Iterator i = variables.iterator();
-      while ( i.hasNext() ) {
-        logger.info(i.next());
-      }
-
-      dataFile.newData(auctioneerK);
-
-      recordVariables(variables);
+      reportSummary(auctioneerK, ns, nb, cs, cb, variables);      
+      recordVariables(auctioneerK, variables);
     }
 
     dataFile.close();
@@ -404,12 +399,23 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 
-  protected void recordVariables( List variables ) {
+  protected void recordVariables( double auctioneerK, List variables ) {    
+    dataFile.newData(auctioneerK);
     Iterator i = variables.iterator();
     while ( i.hasNext() ) {
       CummulativeStatCounter variable = (CummulativeStatCounter) i.next();
       dataFile.newData(variable.getMean());
       dataFile.newData(variable.getStdDev());
+    }
+  }
+  
+  
+  protected void reportSummary( double auctioneerK, int ns, int nb, 
+                                  int cs, int cb, List variables ) {
+   logger.info("\n*** Summary results for: k = " + auctioneerK + " ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
+    Iterator i = variables.iterator();
+    while ( i.hasNext() ) {
+      logger.info(i.next());
     }
   }
 
@@ -427,14 +433,16 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
   
   
-  protected void calculateNumPeaks( CummulativeStatCounter n ) {
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      AdaptiveStrategy s = (AdaptiveStrategy) agent.getStrategy();
-      RothErevLearner l = (RothErevLearner) s.getLearner();
-      n.newData(l.countPeaks());      
-    }
+  protected void calculateREStats( CummulativeStatCounter reMean, 
+                                    CummulativeStatCounter reStdev) {
+    Iterator i = auction.getTraderIterator();    
+    AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+    AdaptiveStrategy s = (AdaptiveStrategy) agent.getStrategy();
+    RothErevLearner l = (RothErevLearner) s.getLearner();
+    CummulativeStatCounter reStats = new CummulativeStatCounter("re");
+    l.computeDistributionStats(reStats);
+    reMean.newData(reStats.getMean());
+    reStdev.newData(reStats.getStdDev());
   }
 
 

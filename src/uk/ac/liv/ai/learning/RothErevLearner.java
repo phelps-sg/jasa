@@ -24,6 +24,7 @@ import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
+import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.io.DataWriter;
 
 /**
@@ -248,6 +249,11 @@ public class RothErevLearner implements
     validateParams();
   }
 
+  /**
+   *  Count the number of peaks in the probability distribution.
+   *
+   *  @returns  The number of peaks in the distribution.
+   */
   public int countPeaks() {
     int peaks = 0;
     double lastValue = 0;
@@ -255,7 +261,7 @@ public class RothErevLearner implements
     double delta = 0;
     for( int i=0; i<k; i++ ) {
       delta = q[i] - lastValue;
-      if ( Math.abs(delta) < 1.0/(k*100) ) {
+      if ( Math.abs(delta) < 1.0/(k*100000) ) {
         delta = 0;
       }
       if ( delta<0 && sign(delta) != sign(lastDelta) ) {
@@ -263,8 +269,15 @@ public class RothErevLearner implements
       }
       lastDelta = delta;
       lastValue = q[i];
-    }
+    }    
     return peaks;
+  }
+  
+  /**
+   *  Compute modes of the probability distribution p.
+   */
+  public void computeDistributionStats( CummulativeStatCounter stats ) {
+    p.computeStats(stats);
   }
 
   private static int sign( double value ) {
