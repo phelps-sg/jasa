@@ -34,17 +34,17 @@ import java.util.Vector;
 
 public abstract class StrategyMixer implements Parameterizable {
 
-  protected GPElectricityTradingProblem problem;
+  protected GPTradingProblem problem;
 
 
-  public StrategyMixer( GPElectricityTradingProblem problem ) {
+  public StrategyMixer( GPTradingProblem problem ) {
     this.problem = problem;
   }
 
   public StrategyMixer() {
   }
 
-  public void setProblem( GPElectricityTradingProblem problem ) {
+  public void setProblem( GPTradingProblem problem ) {
     this.problem = problem;
 
   }

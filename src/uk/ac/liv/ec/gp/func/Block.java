@@ -13,19 +13,31 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp;
+package uk.ac.liv.ec.gp.func;
 
-import java.io.Serializable;
-
-import uk.ac.liv.util.Prototypeable;
+import ec.EvolutionState;
+import ec.Problem;
+import ec.gp.ADFStack;
+import ec.gp.GPData;
+import ec.gp.GPIndividual;
+import ec.gp.GPNode;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public interface GPObject extends Prototypeable, Serializable {
+public class Block extends GPNode {
 	
-	public void setGPIndividual( GPGenericIndividual individual );
-	
+  public void eval( EvolutionState state, int thread, GPData input,
+                      ADFStack stack, GPIndividual individual, Problem problem ) {
+
+    children[0].eval(state, thread, input, stack, individual, problem);
+
+    children[1].eval(state, thread, input, stack, individual, problem);    
+  }
+  
+  public String toString() {
+		return "Block";
+	}
 }

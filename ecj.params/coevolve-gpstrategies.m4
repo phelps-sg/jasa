@@ -2,32 +2,33 @@
 include(`ecj.m4')
 include(`utils.m4') 
 
-define(`NUM_SELLERS', ENV_VAR(`$GP_NS', 3))
-define(`NUM_BUYERS', ENV_VAR(`$GP_NB', 3))
+define(`NUM_AGENTS', ENV_VAR(`$GP_N', 6))
 define(`SELLER_CAPACITY', ENV_VAR(`$GP_CS', 10))
 define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
 
-define(`POPULATION_SIZE', 500)
-define(`NUM_GENERATIONS', 100)
+define(`POPULATION_SIZE', 100)
+define(`NUM_GENERATIONS', 1000)
 
 define(`RESULTS', `CONF_OUTHOME/gpcoevolve-MRE')
 
-define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
+define(`PARAM_SUMMARY', `NUM_AGENTS')
 
 parent.0 = CONF_ECJHOME/ec/simple/simple.params
 
 eval = uk.ac.liv.ec.coevolve.CoEvolutionaryEvaluator
 
 eval.problem = uk.ac.liv.auction.ec.gp.GPCoEvolveStrategyProblem
-eval.problem.maxrounds = 1000
-eval.problem.ns = NUM_SELLERS
-eval.problem.nb = NUM_BUYERS
-eval.problem.cs = SELLER_CAPACITY
-eval.problem.cb = BUYER_CAPACITY
-eval.problem.randomprivatevalues = false
-eval.problem.marketstatsfile = RESULTS/marketstats-PARAM_SUMMARY.csv
-eval.problem.strategymixer = uk.ac.liv.auction.ec.gp.GPBuyerSellerStrategyMixer
-eval.problem.stats = uk.ac.liv.auction.electricity.ElectricityStats
+eval.problem.auction = uk.ac.liv.auction.core.RandomRobinAuction
+eval.problem.auction.maximumdays = 20
+eval.problem.auction.lengthofday = 30
+eval.problem.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+eval.problem.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+eval.problem.auction.auctioneer.pricing.k = 0.5
+eval.problem.numagents = NUM_AGENTS
+eval.problem.agent = uk.ac.liv.auction.zi.ZITraderAgent
+eval.problem.agent.initialtradeentitlement = 1
+eval.problem.agent.valuer = uk.ac.liv.auction.agent.RandomValuer
+eval.problem.agent.strategy = uk.ac.liv.auction.agent.TruthTellingStrategy
 
 stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
 stat.file = RESULTS/gpcoevolve-PARAM_SUMMARY.out
@@ -48,25 +49,19 @@ gp.type.s.size = 0
 
 ## Two tree constraints, one for each method we are trying to evolve
 
-gp.tc.size = 2
+gp.tc.size = 1
 
 gp.tc.0 = ec.gp.GPTreeConstraints
-gp.tc.0.name = auctioneerTreeConstraints
-gp.tc.0.fset = determineClearingPrice
+gp.tc.0.name = strategyTreeConstraints
+gp.tc.0.fset = tradingStrategy
 gp.tc.0.returns = number
 gp.tc.0.init = ec.gp.koza.HalfBuilder
-
-gp.tc.1 = ec.gp.GPTreeConstraints
-gp.tc.1.name = strategyTreeConstraints
-gp.tc.1.fset = tradingStrategy
-gp.tc.1.returns = number
-gp.tc.1.init = ec.gp.koza.HalfBuilder
 
 gp.koza.half.min-depth = 2
 gp.koza.half.max-depth = 6
 gp.koza.half.growp = 0.5
 
-gp.nc.size = 8
+gp.nc.size = 9
 
 gp.nc.0 = ec.gp.GPNodeConstraints
 gp.nc.0.name = binaryarithop
@@ -120,28 +115,19 @@ gp.nc.7.name = bool
 gp.nc.7.size = 0
 gp.nc.7.returns = bool
 
+gp.nc.8 = ec.gp.GPNodeConstraints
+gp.nc.8.name = unaryarithop
+gp.nc.8.size = 1
+gp.nc.8.child.0 = number
+gp.nc.8.returns = number
+
 ### Two function sets
 
-gp.fs.size = 2
-
-################### determineClearingPrice
-
-NEW_FUNCTION_SET(determineClearingPrice, 10)
-
-NEW_FUNCTION(uk.ac.liv.ec.gp.func.Add, binaryarithop)
-NEW_FUNCTION(uk.ac.liv.ec.gp.func.Subtract, binaryarithop)
-NEW_FUNCTION(uk.ac.liv.ec.gp.func.Multiply, binaryarithop)
-NEW_FUNCTION(uk.ac.liv.ec.gp.func.Divide, binaryarithop)
-NEW_FUNCTION(uk.ac.liv.ec.gp.func.One, numberterminal)
-NEW_FUNCTION(uk.ac.liv.ec.gp.func.DoubleERC, numberterminal)
-NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.AskPrice, numberterminal)
-NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.BidPrice, numberterminal)
-NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteAskPrice, numberterminal)
-NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteBidPrice, numberterminal)
+gp.fs.size = 1
 
 ################### tradingStrategy
 
-NEW_FUNCTION_SET(tradingStrategy, 15)
+NEW_FUNCTION_SET(tradingStrategy, 19)
 
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Add, binaryarithop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Subtract, binaryarithop)
@@ -155,89 +141,46 @@ NEW_FUNCTION(uk.ac.liv.ec.gp.func.IfElse, numberboolnumbernumber)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Nand, binaryboolop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.True, bool)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.DoubleERC, numberterminal)
+NEW_FUNCTION(uk.ac.liv.ec.gp.func.Block, binaryarithop)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.PrivateValue, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteAskPrice, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteBidPrice, numberterminal)
+NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.AdjustMargin, unaryarithop)
+NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.MarkedUpPrice, numberterminal)
+NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.LastShoutAccepted, bool)
 
 ###############################################
 
 gp.koza.xover.source.0 = ec.select.BestSelection
 select.best.n = 10
 
-
-##
-
-
-
-
-#
-# We define the fitness of an individual to use the traditional
-# Koza-style fitness metrics, just to make everyone happy :-)
-#
-
-
 init = ec.gp.GPInitializer
 
-
-define(`NUM_STRATEGIES', eval(NUM_SELLERS+NUM_BUYERS))
-#define(`NUM_SUBPOPS', eval(NUM_STRATEGIES+1))
-define(`NUM_SUBPOPS', 2)
-
-pop.subpops = NUM_SUBPOPS
-
-
+pop.subpops = 1
 
 #
 # Co-evolution group sizes
 #
-eval.groupsize.0 = NUM_SELLERS
-eval.groupsize.1 = NUM_BUYERS
+eval.groupsize.0 = NUM_AGENTS
 
-#
-# The auctioneer population
-#
-#pop.subpop.0 = ec.Subpopulation
-#pop.subpop.0.size = POPULATION_SIZE
-#pop.subpop.0.fitness = ec.gp.koza.KozaFitness
-#pop.subpop.0.duplicate-retries = 100
-#pop.subpop.0.species = ec.gp.GPSpecies
-#pop.subpop.0.species.ind = uk.ac.liv.auction.ec.gp.func.GPAuctioneer
-#pop.subpop.0.species.ind.numtrees = 1
-#pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
-#pop.subpop.0.species.ind.tree.0.tc = auctioneerTreeConstraints
-#pop.subpop.0.species.pipe = ec.breed.MultiBreedingPipeline
-#pop.subpop.0.species.pipe.generate-max = false
-#pop.subpop.0.species.pipe.num-sources = 2
-#pop.subpop.0.species.pipe.source.0 = ec.gp.koza.CrossoverPipeline
-#pop.subpop.0.species.pipe.source.0.prob = 0.9
-#pop.subpop.0.species.pipe.source.1 = ec.breed.ReproductionPipeline
-#pop.subpop.0.species.pipe.source.1.prob = 0.1
-
-#
-# the strategy populations
-#
-define( STRATEGY_SUBPOPULATION, `
-pop.subpop.$1 = ec.Subpopulation
-pop.subpop.$1.size = POPULATION_SIZE
-pop.subpop.$1.fitness = ec.gp.koza.KozaFitness
-pop.subpop.$1.duplicate-retries = 100
-pop.subpop.$1.species = ec.gp.GPSpecies
-pop.subpop.$1.species.ind = uk.ac.liv.auction.ec.gp.func.GPTradingStrategy
-pop.subpop.$1.species.ind.numtrees = 1
-pop.subpop.$1.species.ind.tree.0 = ec.gp.GPTree
-pop.subpop.$1.species.ind.tree.0.tc = strategyTreeConstraints
-pop.subpop.$1.species.pipe = ec.breed.MultiBreedingPipeline
-pop.subpop.$1.species.pipe.generate-max = false
-pop.subpop.$1.species.pipe.num-sources = 2
-pop.subpop.$1.species.pipe.source.0 = ec.gp.koza.CrossoverPipeline
-pop.subpop.$1.species.pipe.source.0.prob = 0.9
-pop.subpop.$1.species.pipe.source.1 = ec.breed.ReproductionPipeline
-pop.subpop.$1.species.pipe.source.1.prob = 0.1
-' )
-
-forloop(`i', 0, NUM_SUBPOPS, STRATEGY_SUBPOPULATION(i) )
-
-
+pop.subpop.0 = ec.Subpopulation
+pop.subpop.0.size = POPULATION_SIZE
+pop.subpop.0.fitness = ec.simple.SimpleFitness
+pop.subpop.0.duplicate-retries = 100
+pop.subpop.0.species = ec.gp.GPSpecies
+pop.subpop.0.species.ind = uk.ac.liv.ec.gp.GPGenericIndividual
+pop.subpop.0.species.ind.object = uk.ac.liv.auction.ec.gp.func.GPTradingStrategy
+pop.subpop.0.species.ind.object.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
+pop.subpop.0.species.ind.numtrees = 1
+pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
+pop.subpop.0.species.ind.tree.0.tc = strategyTreeConstraints
+pop.subpop.0.species.pipe = ec.breed.MultiBreedingPipeline
+pop.subpop.0.species.pipe.generate-max = false
+pop.subpop.0.species.pipe.num-sources = 2
+pop.subpop.0.species.pipe.source.0 = ec.gp.koza.CrossoverPipeline
+pop.subpop.0.species.pipe.source.0.prob = 0.9
+pop.subpop.0.species.pipe.source.1 = ec.breed.ReproductionPipeline
+pop.subpop.0.species.pipe.source.1.prob = 0.1
 
 #
 # Here we define the default values for Crossover,

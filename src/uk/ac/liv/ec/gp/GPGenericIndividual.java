@@ -19,13 +19,14 @@ import ec.util.Parameter;
 import ec.EvolutionState;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class GPGenericIndividual extends GPIndividualCtx {
+public class GPGenericIndividual extends GPIndividualCtx implements Resetable {
 	
 	protected GPObject object;
 	
@@ -41,12 +42,25 @@ public class GPGenericIndividual extends GPIndividualCtx {
 		
 		object.setGPIndividual(this);
 		if ( object instanceof Parameterizable ) {
-			((Parameterizable) object).setup(state.parameters, base);
+			((Parameterizable) object).setup(state.parameters, base.push(P_OBJECT));
 		}
 	}
 	
 	public GPObject getGPObject() {
 		return object;
+	}
+	
+	public Object protoClone() throws CloneNotSupportedException {
+		GPGenericIndividual clonedIndividual = 
+			(GPGenericIndividual) super.protoClone();
+		clonedIndividual.object = (GPObject) object.protoClone();
+		clonedIndividual.object.setGPIndividual(clonedIndividual);
+		return clonedIndividual;
+	}
+	
+	public void reset() {
+		super.reset();
+		context.getStack().reset();
 	}
 	
 	

@@ -35,7 +35,7 @@ import java.util.Vector;
 
 public class GPBuyerSellerStrategyMixer extends StrategyMixer {
 
-  public GPBuyerSellerStrategyMixer( GPElectricityTradingProblem problem ) {
+  public GPBuyerSellerStrategyMixer( GPTradingProblem problem ) {
     super(problem);
   }
 

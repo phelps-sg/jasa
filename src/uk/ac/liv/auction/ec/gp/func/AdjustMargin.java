@@ -15,35 +15,40 @@
 
 package uk.ac.liv.auction.ec.gp.func;
 
-import ec.gp.*;
-import ec.*;
+import ec.EvolutionState;
+import ec.Problem;
 
-import uk.ac.liv.ec.gp.func.*;
+import ec.gp.ADFStack;
+import ec.gp.GPData;
+import ec.gp.GPIndividual;
+import ec.gp.GPNode;
+
 import uk.ac.liv.ec.gp.GPGenericIndividual;
+import uk.ac.liv.ec.gp.func.GPGenericData;
 
-import uk.ac.liv.util.UntypedDouble;
+import uk.ac.liv.util.UntypedNumber;
 
-
-/** 
+/**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class QuoteBidPrice extends GPNode {
+public class AdjustMargin extends GPNode {
 
-	public void eval( EvolutionState state, int thread, GPData input, 
+	public void eval( EvolutionState state, int thread, GPData input,
 											ADFStack stack, GPIndividual individual, 
 											Problem problem ) {
 
-		GPTradingStrategy strategy =  
-				(GPTradingStrategy) ((GPGenericIndividual) individual).getGPObject();
-
-		((GPGenericData) input).data = 
-				new UntypedDouble(strategy.getQuote().getBid());
+    children[0].eval(state, thread, input, stack, individual, problem);
+    UntypedNumber arg1 = (UntypedNumber) ((GPGenericData) input).data;
+    
+  	GPTradingStrategy strategy = 
+  		(GPTradingStrategy) ((GPGenericIndividual) individual).getGPObject();
+  	
+  	strategy.adjustMargin(arg1.doubleValue());    
 	}
 
-	public String toString() {
-		return "QuoteBidPrice";
+	public String toString() {		
+		return "AdjustMargin";
 	}
-
 }

@@ -88,4 +88,8 @@ public class GPIndividualCtx extends GPIndividual implements Serializable {
   public void prepareForEvaluating() {
   }
 
+  public void reset() {
+  	misbehaved = false;
+		evaluated = false;
+  }
 }

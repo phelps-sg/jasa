@@ -18,15 +18,16 @@ package uk.ac.liv.auction.ec.gp;
 
 import java.util.*;
 
-import ec.gp.koza.*;
+import uk.ac.liv.ec.gp.GPGenericIndividual;
+import ec.simple.SimpleFitness;
+
 
 import uk.ac.liv.ec.coevolve.*;
 
-import uk.ac.liv.util.*;
+
+import uk.ac.liv.auction.agent.AbstractTraderAgent;
 
 import uk.ac.liv.auction.ec.gp.func.*;
-
-import uk.ac.liv.ec.gp.GPGenericIndividual;
 
 /**
  * Scenario in which we co-evolve trading strategies using GP.
@@ -35,84 +36,39 @@ import uk.ac.liv.ec.gp.GPGenericIndividual;
  * @version $Revision$
  */
 
-public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
+public class GPCoEvolveStrategyProblem extends GPTradingProblem
                                        implements CoEvolutionaryProblem {
 
-  protected CummulativeStatCounter[] strategyFitnesses;
 
-  protected void initialiseFitnesses() {
-    strategyFitnesses = new CummulativeStatCounter[numTraders];
-    for( int s=0; s<numTraders; s++ ) {
-      strategyFitnesses[s] = new CummulativeStatCounter("strategyFitness");
-    }
-  }
-
-  protected void resetFitnesses() {
-    for( int s=0; s<numTraders; s++ ) {
-      strategyFitnesses[s].reset();
-    }
-  }
-
-  protected void setFitnesses( Vector[] group ) {
-    setStrategyFitnesses(group);
-  }
-
-  protected void computeFitnesses() {
-    computeStrategyFitnesses();
-  }
-
-  protected void setStrategyFitnesses( Vector[] group ) {
-    for( int s=0; s<numTraders; s++ ) {
-      GPGenericIndividual strategy = (GPGenericIndividual) getStrategy(s, group);
-      KozaFitness fitness = (KozaFitness) strategy.fitness;
-      fitness.setStandardizedFitness(context.getState(),
-                                      (float) strategyFitnesses[s].getMean());
-    }
+  protected void computeFitnesses( Vector[] group ) {
+    computeStrategyFitnesses(group);
   }
 
 
-  protected void computeStrategyFitnesses() {
+  protected void computeStrategyFitnesses( Vector[] group ) {
 
-    Iterator traders = allTraders.iterator();
+    for( int i=0; i<numAgents; i++ ) {
 
-    for( int i=0; traders.hasNext(); i++ ) {
-
-      GPElectricityTrader trader = (GPElectricityTrader) traders.next();
+      AbstractTraderAgent trader = agents[i];
       double profits = trader.getProfits();
-      double fitness = Float.MAX_VALUE;
-
-      if ( ! (Double.isNaN(profits)
-              || ((GPTradingStrategy) trader.getStrategy()).misbehaved()) ) {
-        fitness = 200000 - profits;
+      double equilibriumProfits = surplusLogger.getEquilibriumProfits(trader);
+      double payoff = profits / equilibriumProfits;
+            
+      GPTradingStrategy strategy = (GPTradingStrategy) trader.getStrategy();
+      GPGenericIndividual individual = strategy.getGPIndividual();
+      SimpleFitness f = (SimpleFitness) individual.fitness;
+            
+      if ( !individual.misbehaved() && payoff > 0 && equilibriumProfits > 0 ) { 
+      	if ( payoff > 10 ) {
+      		System.out.println("Warning: large payoff of " + payoff);
+      	}
+	      f.setFitness(context.getState(), (float) payoff, false);	     
+      } else {
+      	f.setFitness(context.getState(), 0, false);
       }
-      if ( fitness < 0 ) {
-        System.err.println("WARNING: trader " + trader + " had negative fitness!");
-        fitness = 0;
-      }
-
-      strategyFitnesses[i].newData(fitness );
-      if ( generateCSV ) {
-        statsOut.newData(profits);
-      }
-
+      
+      individual.evaluated = true;            
     }
-  }
-
-
-  protected void preAuctionProcessing() {
-    super.preAuctionProcessing();
-  }
-
-
-  protected void postAuctionProcessing() {
-    super.postAuctionProcessing();
-  }
-
-  public Object protoClone() throws CloneNotSupportedException {
-
-    GPCoEvolveStrategyProblem myobj = (GPCoEvolveStrategyProblem) super.protoClone();
-    //TODO?
-    return myobj;
   }
 
   public int getFirstStrategySubpop() {

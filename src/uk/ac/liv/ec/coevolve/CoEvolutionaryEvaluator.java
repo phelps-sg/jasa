@@ -60,14 +60,14 @@ public class CoEvolutionaryEvaluator extends Evaluator {
   }
 
 
-  public void randomizeOrder(final EvolutionState state, final Individual[] individuals) {
+  public void randomizeOrder( EvolutionState state, Individual[] individuals ) {
     // copy the inds into a new array, then dump them randomly into the
     // subpopulation again
     Individual[] queue = new Individual[individuals.length];
     int len = queue.length;
-    System.arraycopy(individuals,0,queue,0,len);
+    System.arraycopy(individuals, 0, queue, 0, len);
 
-    for(int x=len;x>0;x--) {
+    for( int x=len; x>0; x-- ) {
       int i = state.random[0].nextInt(x);
       individuals[x-1] = queue[i];
       // get rid of queue[i] by swapping the highest guy there and then
