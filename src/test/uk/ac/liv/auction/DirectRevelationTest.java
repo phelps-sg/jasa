@@ -68,7 +68,7 @@ public class DirectRevelationTest extends ElectricityTest {
   }
   
   public void assignValuer( ElectricityTrader agent ) {
-    agent.setValuer( new RandomValuer(VALUE_MIN, VALUE_MAX) );
+    agent.setValuationPolicy( new RandomValuer(VALUE_MIN, VALUE_MAX) );
   }
 
   public static void main( String[] args ) {
