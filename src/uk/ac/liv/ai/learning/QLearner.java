@@ -17,13 +17,22 @@ package uk.ac.liv.ai.learning;
 
 import java.io.Serializable;
 
+import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.DataWriter;
 
-import ec.util.MersenneTwisterFast;
+import uk.ac.liv.prng.PRNGFactory;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
+import ec.util.MersenneTwisterFast;
+
+import org.apache.log4j.Logger;
+
+
 
 /**
  * <p>
@@ -116,7 +125,7 @@ public class QLearner extends AbstractLearner
   /**
    * The PRNG
    */
-  MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  RandomElement prng = PRNGFactory.getFactory().create();
 
   /**
    * The best action for the current state
@@ -132,6 +141,9 @@ public class QLearner extends AbstractLearner
   static final String P_DISCOUNT_RATE = "g";
   static final String P_NUM_ACTIONS = "k";
   static final String P_NUM_STATES = "s";
+
+  static Logger logger = Logger.getLogger(QLearner.class);
+
 
   public QLearner( int numStates, int numActions, double epsilon,
                     double learningRate, double discountRate  ) {
@@ -203,9 +215,9 @@ public class QLearner extends AbstractLearner
 
 
   public int act() {
-    double e = randGenerator.nextDouble();
+    double e = prng.raw();
     if ( e <= epsilon ) {
-      lastActionChosen = randGenerator.nextInt(numActions);
+      lastActionChosen = prng.choose(0, numActions);
     } else {
       lastActionChosen = bestAction(currentState);
     }
@@ -250,7 +262,12 @@ public class QLearner extends AbstractLearner
 
 
   public void setSeed( long seed ) {
-    randGenerator.setSeed(seed);
+    prng = PRNGFactory.getFactory().create(seed);
+  }
+
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
   }
 
 

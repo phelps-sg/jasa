@@ -19,6 +19,7 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Seeder;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -100,6 +101,10 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 
   public void setSeed( long seed ) {
     randGenerator = PRNGFactory.getFactory().create(seed);
+  }
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
   }
 
   public String toString() {

@@ -18,6 +18,7 @@ package uk.ac.liv.ai.learning;
 
 import ec.util.MersenneTwisterFast;
 
+import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.io.DataWriter;
 
 import java.io.Serializable;
@@ -44,6 +45,10 @@ public class DumbRandomLearner extends AbstractLearner
 
   public void setSeed( long seed ) {
     prng.setSeed(seed);
+  }
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
   }
 
   public int act() {

@@ -23,9 +23,13 @@ import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
 
+import uk.ac.liv.ai.learning.Learner;
+
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Seeder;
+import uk.ac.liv.util.Seedable;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -420,6 +424,23 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     return valuer;
   }
 
+  public void seed( Seeder seeder ) {
+    if ( this instanceof Seedable ) {
+      ((Seedable) this).setSeed(seeder.nextSeed());
+    }
+    if ( valuer instanceof Seedable ) {
+      ((Seedable) valuer).seed(seeder);
+    }
+    if ( strategy instanceof Seedable ) {
+      ((Seedable) strategy).seed(seeder);
+    }
+    if ( strategy instanceof AdaptiveStrategy ) {
+      Learner l = ((AdaptiveStrategy) strategy).getLearner();
+      if ( l instanceof Seedable ) {
+        ((Seedable) l).seed(seeder);
+      }
+    }
+  }
 
   /**
    * Determine whether or not this trader is active.
@@ -429,5 +450,6 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
    * @return true if the trader is active.
    */
   public abstract boolean active();
+
 
 }

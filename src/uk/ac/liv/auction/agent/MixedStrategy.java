@@ -22,6 +22,7 @@ import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Seeder;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -154,6 +155,10 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
   public void setSeed( long seed ) {
     probabilities.setSeed(seed);
+  }
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
   }
 
   public int determineQuantity( Auction auction ) {

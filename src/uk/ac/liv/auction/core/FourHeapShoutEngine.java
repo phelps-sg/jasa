@@ -371,7 +371,6 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   public List getMatchedShouts() {
     ArrayList result = new ArrayList(sIn.size() + bIn.size());
     while ( ! sIn.isEmpty() ) {
-      assert !bIn.isEmpty();
       Shout sInTop = (Shout) sIn.pop();
       Shout bInTop = (Shout) bIn.pop();
       int nS = sInTop.getQuantity();
@@ -388,6 +387,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
       result.add(bInTop);
       result.add(sInTop);
     }
+    assert bIn.isEmpty();
     return result;
   }
 

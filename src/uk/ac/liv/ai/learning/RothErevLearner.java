@@ -25,6 +25,7 @@ import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.MathUtil;
+import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.io.DataWriter;
 
 import java.io.Serializable;
@@ -322,6 +323,10 @@ public class RothErevLearner extends AbstractLearner implements
 
   public void setSeed( long seed ) {
     p.setSeed(seed);
+  }
+
+  public void seed( Seeder s ) {
+    p.seed(s);
   }
 
   public void dumpState( DataWriter out ) {

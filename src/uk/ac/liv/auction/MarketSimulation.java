@@ -26,6 +26,7 @@ import uk.ac.liv.ai.learning.StochasticLearner;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Seeder;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -72,7 +73,7 @@ import org.apache.log4j.PropertyConfigurator;
  */
 
 public class MarketSimulation implements Parameterizable, Runnable,
-                                          Serializable {
+                                          Serializable, Seeder {
 
   /**
    * The auction used in this simulation.
@@ -231,18 +232,8 @@ public class MarketSimulation implements Parameterizable, Runnable,
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      Strategy s = agent.getStrategy();
-      if ( s instanceof Seedable ) {
-        ((Seedable) s).setSeed(nextSeed());
-      } else if ( s instanceof AdaptiveStrategy ) {
-        Learner l = ((AdaptiveStrategy) s).getLearner();
-        if ( l instanceof StochasticLearner ) {
-          ((StochasticLearner) l).setSeed(nextSeed());
-        }
-      }
-      Valuer v = agent.getValuer();
-      if ( v instanceof Seedable ) {
-        ((Seedable) v).setSeed(nextSeed());
+      if ( agent instanceof Seedable ) {
+        agent.seed(this);
       }
       agent.reset();
     }
@@ -251,7 +242,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
   protected void seedAuction() {
     if ( auction instanceof Seedable ) {
-      ((Seedable) auction).setSeed(nextSeed());
+      ((Seedable) auction).seed(this);
     }
   }
 
@@ -264,7 +255,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
     logger.info("Seeding done.\n");
   }
 
-  protected long nextSeed() {
+  public long nextSeed() {
     return seeds.choose(0, Integer.MAX_VALUE);
   }
 

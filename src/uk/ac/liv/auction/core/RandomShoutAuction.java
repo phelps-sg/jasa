@@ -21,6 +21,7 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Seeder;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -72,6 +73,10 @@ public class RandomShoutAuction extends RoundRobinAuction implements Seedable {
 
   public void setSeed( long seed ) {
     prng = PRNGFactory.getFactory().create(seed);
+  }
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
   }
 
   public void setShoutProbability( double shoutProbability ) {

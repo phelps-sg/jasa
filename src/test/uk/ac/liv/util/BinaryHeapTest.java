@@ -112,6 +112,7 @@ public class BinaryHeapTest extends TestCase {
       }
 //      System.out.println("Testing heap " + h);
       for( int r=0; r<20; r++ ) {
+        h.remove( new Integer(r) );
         Integer n = new Integer( randGenerator.nextInt(100) );
         h.add(n);
       }

@@ -25,12 +25,6 @@ package uk.ac.liv.auction.core;
 
 public class KContinuousDoubleAuctioneer extends KAuctioneer {
 
-  /**
-   * Reusable exceptions for performance
-   */
-  private static NotAnImprovementOverQuoteException askException = null;
-  private static NotAnImprovementOverQuoteException bidException = null;
-
   public KContinuousDoubleAuctioneer() {
     this(null, 0);
   }
@@ -91,8 +85,8 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
   private void askNotAnImprovementException()
       throws NotAnImprovementOverQuoteException {
     if ( askException == null ) {
-      // Only construct a new exception the once for improved performance
-      askException = new NotAnImprovementOverQuoteException();
+      // Only construct a new exception the once (for improved performance)
+      askException = new NotAnImprovementOverQuoteException(DISCLAIMER);
     }
     throw askException;
   }
@@ -100,10 +94,18 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
   private void bidNotAnImprovementException()
       throws NotAnImprovementOverQuoteException {
     if ( bidException == null ) {
-      // Only construct a new exception the once for improved performance
-      bidException = new NotAnImprovementOverQuoteException();
+      // Only construct a new exception the once (for improved performance)
+      bidException = new NotAnImprovementOverQuoteException(DISCLAIMER);
     }
     throw bidException;
   }
 
+  /**
+   * Reusable exceptions for performance
+   */
+  private static NotAnImprovementOverQuoteException askException = null;
+  private static NotAnImprovementOverQuoteException bidException = null;
+
+
+  private static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
 }

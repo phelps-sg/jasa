@@ -17,7 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.AbstractSeedable;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -39,15 +39,14 @@ import org.apache.log4j.Logger;
  */
 
 
-public class RandomValuer implements Valuer, Seedable, Serializable {
+public class RandomValuer extends AbstractSeedable
+    implements Valuer, Serializable {
 
   protected double value;
 
   protected double minValue;
 
   protected double maxValue;
-
-  protected RandomElement valuesPRNG = PRNGFactory.getFactory().create();
 
   public static final String P_MINVALUE = "minvalue";
   public static final String P_MAXVALUE = "maxvalue";
@@ -78,12 +77,9 @@ public class RandomValuer implements Valuer, Seedable, Serializable {
     drawRandomValue();
   }
 
-  public void setSeed( long prngSeed ) {
-    valuesPRNG = PRNGFactory.getFactory().create(prngSeed);
-  }
 
   protected void drawRandomValue() {
-    value = minValue + valuesPRNG.raw()*(maxValue-minValue);
+    value = minValue + prng.raw()*(maxValue-minValue);
   }
 
 }

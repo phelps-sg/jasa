@@ -23,6 +23,9 @@ import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 
+import org.apache.log4j.Logger;
+
+
 public class QLearnerTest extends TestCase {
 
   QLearner learner1;
@@ -35,8 +38,9 @@ public class QLearnerTest extends TestCase {
 
   static final int NUM_ACTIONS = 10;
   static final int CORRECT_ACTION = 2;
-  static final int NUM_TRIALS = 10000;
+  static final int NUM_TRIALS = 20000;
 
+  static Logger logger = Logger.getLogger(QLearnerTest.class);
 
   public QLearnerTest( String name ) {
     super(name);
@@ -47,6 +51,7 @@ public class QLearnerTest extends TestCase {
                               DISCOUNT_RATE);
     learner1.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     score = 0;
+    org.apache.log4j.BasicConfigurator.configure();
   }
 
   public void testBestAction() {
@@ -65,13 +70,13 @@ public class QLearnerTest extends TestCase {
         learner1.newState(0.0, 0);
       }
     }
-    System.out.println("final state of learner1 = " + learner1);
-    System.out.println("learner1 score = " + score(correctActions) + "%");
+    logger.info("final state of learner1 = " + learner1);
+    logger.info("learner1 score = " + score(correctActions) + "%");
     System.out.println(stats);
   }
 
   public void testMinimumScore() {
-    System.out.println("testMinimumScore()");
+    logger.info("testMinimumScore()");
     CummulativeStatCounter stats = new CummulativeStatCounter("action");
     int correctActions = 0;
     int bestActionChosen = 0;
@@ -90,22 +95,22 @@ public class QLearnerTest extends TestCase {
         learner1.newState(0.0, 0);
       }
     }
-    System.out.println("final state of learner1 = " + learner1);
+    logger.info("final state of learner1 = " + learner1);
     double score = score(correctActions);
     double bestActionPercent = score(bestActionChosen);
-    System.out.println("learner1 score = " + score + "%");
-    System.out.println(stats);
-    System.out.println("chose best action " + bestActionPercent + "% of the time.");
+    logger.info("learner1 score = " + score + "%");
+    logger.info(stats);
+    logger.info("chose best action " + bestActionPercent + "% of the time.");
     assertTrue(score > 80);
     assertTrue(1-(bestActionPercent/100) <= EPSILON);
   }
 
   public void testStates() {
-    System.out.println("testStates()");
+    logger.info("testStates()");
     int[] correctChoices = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     int correctActions = 0;
     learner1.setStatesAndActions(correctChoices.length, NUM_ACTIONS);
-    int s = 0;
+    int s = 3;
     for( int i=0; i<NUM_TRIALS; i++ ) {
       int action = learner1.act();
       double reward = 0;
@@ -120,19 +125,20 @@ public class QLearnerTest extends TestCase {
       assertTrue(learner1.getState() == s);
     }
     score = score(correctActions);
-    System.out.println("score = " + score + "%");
+    logger.info("score = " + score + "%");
+    logger.info("learner1 = " + learner1);
     assertTrue(score >= 70);
   }
 
   public void testReset() {
-    System.out.println("testReset()");
-    System.out.println("virgin learner1 = " + learner1);
+    logger.info("testReset()");
+    logger.info("virgin learner1 = " + learner1);
     learner1.setSeed(1);
     testStates();
     double score1 = score;
     learner1.setSeed(1);
     learner1.reset();
-    System.out.println("reseted learner1 = " + learner1);
+    logger.info("reseted learner1 = " + learner1);
     testStates();
     double score2 = score;
     assertTrue(score1 == score2);

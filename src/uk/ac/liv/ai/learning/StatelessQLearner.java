@@ -18,6 +18,7 @@ package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Seeder;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -73,6 +74,10 @@ public class StatelessQLearner extends AbstractLearner
 
   public void setSeed( long seed ) {
     qLearner.setSeed(seed);
+  }
+
+  public void seed( Seeder s ) {
+    qLearner.seed(s);
   }
 
   public double getLearningDelta() {
