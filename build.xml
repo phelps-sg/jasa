@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="compile" name="JASA">
    <property file="build.ant.properties"/>
-   <target name="init">
-      <property name="build.compiler" value="modern"/>
-      <property name="sourceDir" value="src"/>
-      <property name="outputDir" value="classes"/>
-      <property name="projectName" value="JASA"/>
-      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io"/>
-      <property name="docDir" value="doc"/>
-      <property name="javaLibPath" value="/usr/local/java/lib"/>
-      <property name="ecjPath" value="${javaLibPath}/ecj"/>
-      <property name="poolitPath" value="${javaLibPath}/poolit/poolit.jar"/>
-      <property name="junitPath" value="${javaLibPath}/junit3.7/junit.jar"/>
-      <property name="skijPath" value="${javaLibPath}/skij.jar"/>      
-      <property name="jadePath" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
-      <property name="classPath" value="${ecjPath}:${poolitPath}:${junitPath}:${skijPath}:${jadePath}"/>
-   </target>
 
-   <target depends="init" name="cleanOutput">
+   <property name="build.compiler" value="modern"/>
+   <property name="sourceDir" value="src"/>
+   <property name="outputDir" value="classes"/>
+   <property name="projectName" value="JASA"/>
+   <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io"/>
+   <property name="docDir" value="doc"/>
+   <property name="javaLibPath" value="/usr/local/java/lib"/>
+   <property name="ecjLoc" value="${javaLibPath}/ecj"/>
+   <property name="poolitLoc" value="${javaLibPath}/poolit/poolit.jar"/>
+   <property name="junitLoc" value="${javaLibPath}/junit3.7/junit.jar"/>
+   <property name="skijLoc" value="${javaLibPath}/skij.jar"/>
+   <property name="jadeLoc" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
+
+   <path id="project.classpath">
+     <pathelement location="${ecjLoc}" />
+     <pathelement location="${poolitLoc}" />
+     <pathelement location="${junitLoc}" />
+     <pathelement location="${skijLoc}" />
+     <pathelement location="${jasaLoc}" />
+     <pathelement path="${jadePath}" />
+     <pathelement location="./classes" />
+     <pathelement path="${java.class.path}" />
+   </path>
+
+   <target name="cleanOutput">
       <delete dir="${outputDir}"/>
    </target>
 
@@ -25,7 +34,7 @@
       <mkdir dir="${outputDir}"/>
    </target>
 
-   <target depends="init" name="cleanDoc">
+   <target name="cleanDoc">
       <delete dir="${docDir}"/>
    </target>
 
@@ -35,23 +44,19 @@
 
    <target depends="prepareOutput" name="compile">
       <javac debug="on" destdir="${outputDir}" srcdir="${sourceDir}" deprecation="on">
-        <classpath>
-            <pathelement path="${classPath}"/>       
-        </classpath>
+        <classpath refid="project.classpath" />
      </javac>
    </target>
 
    <target depends="compile,prepareDoc" name="doc">
      <javadoc author="true" destdir="${docDir}" packagenames="${packages}" sourcepath="${sourceDir}" windowtitle="${projectName}">
-        <classpath>
-            <pathelement path="${classPath}"/>       
-        </classpath>
+        <classpath refid="project.classpath" />
      </javadoc>
    </target>
 
    <target depends="compile,doc" name="jar">
    	<jar basedir="${outputDir}" jarfile="jasa.jar"/>
-   </target>	
+   </target>
 
    <target depends="jar" name="tar">
    	<tar basedir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/**" tarfile="jasa.tar"/>
@@ -64,11 +69,9 @@
 
    <target depends="compile" name="test">
 	   <java classname="test.uk.ac.liv.auction.AllTests" fork="true">
-        	<classpath>
-			<pathelement path="${classPath}:./classes"/>       
-        	</classpath>
+        	<classpath refid="project.classpath" />
 	   </java>
-    </target>	
+    </target>
 
 
 </project>
