@@ -1,7 +1,8 @@
 simulation.auction = uk.ac.liv.auction.core.RoundRobinAuction
 simulation.auction.maximumrounds = 200
 simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
-simulation.auction.auctioneer.k = 0.5
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+simulation.auction.auctioneer.pricing.k = 0.5
 
 # Get cummulative stats
 simulation.auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
@@ -14,7 +15,7 @@ simulation.gatherstats = true
 simulation.stats = uk.ac.liv.auction.stats.EquilibriaStats
 
 # Two populations of agents
-simulation.numagenttypes = 2
+simulation.agenttype.n = 2
 
 # 1st population- 50000 sellers 
 simulation.agenttype.0 = uk.ac.liv.auction.agent.ZITraderAgent

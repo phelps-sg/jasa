@@ -11,7 +11,8 @@ auction = uk.ac.liv.auction.agent.jade.JADEAuction
 auction.maximumrounds = 50
 auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
 auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
-auction.auctioneer.k = 0.5
+auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+auction.auctioneer.pricing.k = 0.5
 
 # Maximum number of rounds
 auction.maximumrounds = 10
@@ -27,7 +28,7 @@ auction.auctioneer.k = 0.5
 auction.auctioneer.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
 
 # Two populations of trader agents
-auction.numagenttypes = 2
+auction.agenttype.n = 2
 
 # 1st population- 30 sellers bidding using the modified Roth-Erev 
 # learning algorithm
