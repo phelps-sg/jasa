@@ -211,7 +211,7 @@ public class EquilibriaStats implements MarketStats, Resetable {
 
 
   public String toString() {
-    return "(" + getClass() + " equilibriaFound:" + equilibriaFound + " minPrice:" + minPrice + " maxPrice:" + maxPrice + " minQty: " + minQty + " maxQty:" + maxQty + ")";
+    return "(" + getClass() + " equilibriaFound:" + equilibriaFound + " minPrice:" + minPrice + " maxPrice:" + maxPrice + " minQty: " + minQty + " maxQty:" + maxQty + " pBCE:" + pBCE + " pSCE:" + pSCE + ")";
   }
 
 }

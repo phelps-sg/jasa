@@ -25,6 +25,8 @@ import java.util.HashMap;
 
 import java.io.PrintStream;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * An abstract class representing an auctioneer managing shouts in an auction.
@@ -51,6 +53,8 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
    */
   protected MarketQuote currentQuote = null;
 
+  static Logger logger = Logger.getLogger(AbstractAuctioneer.class);
+
 
   public AbstractAuctioneer() {
   }
@@ -72,7 +76,7 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
    */
   public synchronized void newShout( Shout shout ) throws IllegalShoutException {
     if ( ! shout.isValid() ) {
-      System.err.println(shout);
+      logger.error("malformed shout: " + shout);
       throw new IllegalShoutException("Malformed shout");
     }
     if ( shout.isBid() ) {

@@ -89,7 +89,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String P_GATHER_STATS = "gatherstats";
 
 
-  public static final String VERSION = "0.18";
+  public static final String VERSION = "0.19";
 
   public static final String GNU_MESSAGE =
     "JASA v" + VERSION + " - (C) 2001-2003 Steve Phelps\n" +
@@ -101,15 +101,49 @@ public class MarketSimulation implements Parameterizable, Runnable,
   static Logger logger = Logger.getLogger("JASA");
 
 
+
+  public static void main( String[] args ) {
+
+    try {
+
+      if ( args.length < 1 ) {
+        fatalError("Must specify a parameter file");
+      }
+
+      String fileName = args[0];
+      File file = new File(fileName);
+      if ( ! file.canRead() ) {
+        fatalError("Cannot read parameter file " + fileName);
+      }
+
+      org.apache.log4j.PropertyConfigurator.configure(fileName);
+
+      gnuMessage();
+
+      ParameterDatabase parameters = new ParameterDatabase(file);
+      MarketSimulation simulation = new MarketSimulation();
+      simulation.setup(parameters, new Parameter(P_SIMULATION));
+      simulation.run();
+      simulation.report();
+
+    } catch ( Exception e ) {
+      logger.error(e);
+      e.printStackTrace();
+    }
+  }
+
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
     logger.info("Setup.. ");
 
-    gatherStats = parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
+    gatherStats =
+        parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
 
     auction =
-      (RoundRobinAuction) parameters.getInstanceForParameterEq(base.push(P_AUCTION),
-                                                               null,
-                                                               RoundRobinAuction.class);
+      (RoundRobinAuction)
+        parameters.getInstanceForParameterEq(base.push(P_AUCTION),
+                                              null,
+                                              RoundRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
 
@@ -120,12 +154,14 @@ public class MarketSimulation implements Parameterizable, Runnable,
     if ( gatherStats ) {
       stats =
         (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS),
-                                                         null, MarketStats.class);
-      //((Parameterizable) stats).setup(parameters, base.push(P_STATS));
+                                                         null,
+                                                         MarketStats.class);
       stats.setAuction(auction);
     }
 
-    int numAgentTypes = parameters.getInt(base.push(P_NUM_AGENT_TYPES), null, 1);
+    int numAgentTypes = parameters.getInt(base.push(P_NUM_AGENT_TYPES),
+                                           null, 1);
+
     for( int t=0; t<numAgentTypes; t++ ) {
 
       Parameter typeParam = base.push(P_AGENT_TYPE).push(""+t);
@@ -135,8 +171,9 @@ public class MarketSimulation implements Parameterizable, Runnable,
       for( int i=0; i<numAgents; i++ ) {
 
       	RoundRobinTrader agent =
-          (RoundRobinTrader) parameters.getInstanceForParameter(typeParam, null,
-                                                                RoundRobinTrader.class);
+          (RoundRobinTrader)
+            parameters.getInstanceForParameter(typeParam, null,
+                                                RoundRobinTrader.class);
         ((Parameterizable) agent).setup(parameters, typeParam);
         auction.register(agent);
 
@@ -160,39 +197,13 @@ public class MarketSimulation implements Parameterizable, Runnable,
   }
 
 
-  public static void main( String[] args ) {
-
-    try {
-
-      if ( args.length < 1 ) {
-        logger.error("Must specify a parameter file");
-        System.exit(1);
-      }
-
-      String fileName = args[0];
-      File file = new File(fileName);
-      if ( ! file.canRead() ) {
-        logger.error("Cannot read parameter file " + fileName);
-        System.exit(1);
-      }
-
-      org.apache.log4j.PropertyConfigurator.configure(fileName);
-
-      gnuMessage();
-
-      ParameterDatabase parameters = new ParameterDatabase(file);
-      MarketSimulation simulation = new MarketSimulation();
-      simulation.setup(parameters, new Parameter(P_SIMULATION));
-      simulation.run();
-      simulation.report();
-
-    } catch ( Exception e ) {
-      logger.error(e.getMessage());
-      e.printStackTrace();
-    }
-  }
-
   public static void gnuMessage() {
     logger.info(GNU_MESSAGE);
+  }
+
+
+  public static void fatalError( String message ) {
+    System.err.println(message);
+    System.exit(1);
   }
 }
