@@ -70,7 +70,7 @@
     </target>
 
     <target name="anoncvspass">
-	    <cvspass cvsRsh="rsh" cvsroot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" password="" />
+	    <cvspass cvsroot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" password="" />
 	</target>
 
    <target depends="anoncvspass" name="cvsupdate">
