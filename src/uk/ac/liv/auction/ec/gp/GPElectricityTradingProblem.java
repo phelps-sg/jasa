@@ -236,6 +236,10 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     System.out.println("buyerCapacity = " + buyerCapacity);
     System.out.println("maxRounds = " + maxRounds);
     System.out.println("randomPrivateValues = " + randomPrivateValues);
+    System.out.println("minSellerPrivateValue = " + minSellerPrivateValue);
+    System.out.println("maxSellerPrivateValue = " + maxSellerPrivateValue);
+    System.out.println("minBuyerPrivateValue = " + minBuyerPrivateValue);
+    System.out.println("maxBuyerPrivateValue = " + maxBuyerPrivateValue);
   }
 
 
