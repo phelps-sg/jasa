@@ -24,7 +24,6 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.Parameterizable;
 
-
 /**
  * A class for writing data to CSV (comma-separated variables) text files.
  *
@@ -34,14 +33,21 @@ import uk.ac.liv.util.Parameterizable;
 
 public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
-  PrintStream out;
-  int numColumns;
-  int currentColumn = 0;
-  char seperator = DEFAULT_SEPERATOR;
-  static final char DEFAULT_SEPERATOR = '\t';
+  protected PrintStream out;
+
+  protected int numColumns;
+
+  protected int currentColumn = 0;
+
+  protected char seperator = DEFAULT_SEPERATOR;
   
+  protected boolean append = false;
+
+  static final char DEFAULT_SEPERATOR = '\t';
+
   public static final String P_FILENAME = "filename";
   public static final String P_COLUMNS = "columns";
+  public static final String P_APPEND = "append";
 
   public CSVWriter( OutputStream out, int numColumns, char seperator ) {
     this.out = new PrintStream(out);
@@ -52,20 +58,22 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   public CSVWriter( OutputStream out, int numColumns ) {
     this(out, numColumns, DEFAULT_SEPERATOR);
   }
-  
+
   public CSVWriter() {
   }
-  
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
     try {
       String fileName = parameters.getString(base.push(P_FILENAME), null);
-      out = new PrintStream(new FileOutputStream(new File(fileName)));
-      numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null, numColumns);
+      append = parameters.getBoolean(base.push(P_APPEND), null, append);
+      out = new PrintStream(new FileOutputStream(new File(fileName), append));
+      numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null,
+          numColumns);
     } catch ( FileNotFoundException e ) {
       throw new Error(e);
     }
   }
-  
+
   public void newData( Iterator i ) {
     while ( i.hasNext() ) {
       newData(i.next());
@@ -73,7 +81,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   }
 
   public void newData( Object[] data ) {
-    for( int i=0; i<data.length; i++ ) {
+    for ( int i = 0; i < data.length; i++ ) {
       newData(data[i]);
     }
   }
@@ -118,7 +126,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   public void close() {
     out.close();
   }
-  
+
   public void setNumColumns( int numColumns ) {
     this.numColumns = numColumns;
   }
@@ -133,12 +141,11 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
     }
   }
 
-  private void writeObject(java.io.ObjectOutputStream out)
-     throws IOException {
+  private void writeObject( java.io.ObjectOutputStream out ) throws IOException {
   }
 
-  private void readObject(java.io.ObjectInputStream in)
-     throws IOException, ClassNotFoundException {
+  private void readObject( java.io.ObjectInputStream in ) throws IOException,
+      ClassNotFoundException {
   }
 
 }
