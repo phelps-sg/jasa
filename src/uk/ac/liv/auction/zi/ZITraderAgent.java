@@ -156,7 +156,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   
   public boolean determineRandomActivation() {
     if ( activationProbability < 1.0 ) {
-      return GlobalPRNG.getInstance().coin(activationProbability);
+      return GlobalPRNG.getInstance().uniform(0, 1) <= activationProbability;
     } else {
       return true;
     }
