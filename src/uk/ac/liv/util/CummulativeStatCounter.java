@@ -173,6 +173,13 @@ public class CummulativeStatCounter implements Serializable, Cloneable, Resetabl
   public double getMax() {
     return max;
   }
+  
+  /**
+   * Get the total of the data
+   */
+  public double getTotal() {
+  	return total;
+  }
 
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
