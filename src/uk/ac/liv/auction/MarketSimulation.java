@@ -220,8 +220,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
       Strategy s = agent.getStrategy();
       if ( s instanceof Seedable ) {
         ((Seedable) s).setSeed(seeds.nextLong());
-      }
-      if ( s instanceof AdaptiveStrategy ) {
+      } else if ( s instanceof AdaptiveStrategy ) {
         Learner l = ((AdaptiveStrategy) s).getLearner();
         if ( l instanceof StochasticLearner ) {
           ((StochasticLearner) l).setSeed(seeds.nextLong());

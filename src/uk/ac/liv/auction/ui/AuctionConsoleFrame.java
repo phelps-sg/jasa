@@ -356,11 +356,16 @@ public class AuctionConsoleFrame extends JFrame
 
   public void graphSupplyAndDemand() {
     logger.debug("graphSupplyAndDemand()");
-    SupplyAndDemandFrame graphFrame =
-        new SupplyAndDemandFrame((RoundRobinAuction) auction);
-    graphFrame.pack();
-    graphFrame.setVisible(true);
-    graphs.add(graphFrame);
+    pause();
+    new Thread() {
+      public void run() {
+        SupplyAndDemandFrame graphFrame =
+            new SupplyAndDemandFrame( (RoundRobinAuction) auction);
+        graphFrame.pack();
+        graphFrame.setVisible(true);
+        graphs.add(graphFrame);
+      }
+    }.start();
     logger.debug("exiting GraphSupplyAndDemand()");
   }
 
@@ -389,12 +394,16 @@ public class AuctionConsoleFrame extends JFrame
 
   public void resetAgents() {
     pause();
-    Iterator i = auction.getTraderIterator();
-    while (i.hasNext()) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      agent.reset();
-    }
-    updateSupplyAndDemandGraphs();
+    new Thread() {
+      public void run() {
+        Iterator i = auction.getTraderIterator();
+        while (i.hasNext()) {
+          AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+          agent.reset();
+        }
+        updateSupplyAndDemandGraphs();
+      }
+    }.start();
   }
 
   public void updateSupplyAndDemandGraphs() {
@@ -452,11 +461,17 @@ public class AuctionConsoleFrame extends JFrame
 
   public void generateReport() {
     pause();
-    auction.generateReport();
+    new Thread() {
+      public void run() {
+        auction.generateReport();
+      }
+    }.start();
   }
 
   public void reset() {
-    graphModel.clear();
+    if ( graphModel != null ) {
+      graphModel.clear();
+    }
   }
 
   protected void notifyGraphModelChanged() {

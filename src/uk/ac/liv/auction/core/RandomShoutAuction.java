@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
- 
+
 package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
@@ -27,54 +27,56 @@ import java.util.Iterator;
 
 /**
  * <p>
- * An auction in which each trader is given an equal probability of being able to place a shout in the auction
- * on each auction round.
+ * An auction in which each trader is given an equal probability of being able
+ * to place a shout in the auction on each auction round.
  * </p>
- * 
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class RandomShoutAuction extends RoundRobinAuction implements Seedable {
 
-	/**
-	 * The PRNG used to draw the probability of each shout.
-	 */
-	protected MersenneTwisterFast prng = new MersenneTwisterFast();
-	
-	/**
-	 * The probability of each trader being given a chance to place a shout.
-	 */
-	protected double shoutProbability = 1.0;
-	
-	public static final String P_SHOUTPROBABILITY = "shoutprobability";
-	
-	public void setup( ParameterDatabase parameters, Parameter base ) {
-		super.setup(parameters, base);		
-		shoutProbability = parameters.getDoubleWithDefault(base.push(P_SHOUTPROBABILITY), null, shoutProbability);
-	}
-	
-	public void requestShouts() {
-		Iterator i = activeTraders.iterator();
-		while ( i.hasNext() ) {
-			RoundRobinTrader trader = (RoundRobinTrader) i.next();
-			double probability = prng.nextDouble();
-			if ( probability <= shoutProbability ) {
-				trader.requestShout(this);
-			}
-		}
-	}
-	
-	public void setSeed( long seed ) {
-		prng.setSeed(seed);
-	}
-	
-	public void setShoutProbability( double shoutProbability ) {
-		this.shoutProbability = shoutProbability;
-	}
-	
-	public double getShoutProbability() {
-		return shoutProbability;
-	}
-	
+  /**
+   * The PRNG used to draw the probability of each shout.
+   */
+  protected MersenneTwisterFast prng = new MersenneTwisterFast();
+
+  /**
+   * The probability of each trader being given a chance to place a shout.
+   */
+  protected double shoutProbability = 1.0;
+
+  public static final String P_SHOUTPROBABILITY = "shoutprobability";
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
+    shoutProbability =
+        parameters.getDoubleWithDefault(base.push(P_SHOUTPROBABILITY), null,
+                                         shoutProbability);
+  }
+
+  public void requestShouts() {
+    Iterator i = activeTraders.iterator();
+    while (i.hasNext()) {
+      RoundRobinTrader trader = (RoundRobinTrader) i.next();
+      double probability = prng.nextDouble();
+      if (probability <= shoutProbability) {
+        trader.requestShout(this);
+      }
+    }
+  }
+
+  public void setSeed( long seed ) {
+    prng.setSeed(seed);
+  }
+
+  public void setShoutProbability( double shoutProbability ) {
+    this.shoutProbability = shoutProbability;
+  }
+
+  public double getShoutProbability() {
+    return shoutProbability;
+  }
+
 }

@@ -281,11 +281,12 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   }
 
   public void roundClosed( Auction auction ) {
-	if ( currentShout != null ) {
-		auction.removeShout(currentShout);
-		ShoutPool.release(currentShout);
-	}
-	strategy.endOfRound(auction);    
+    if ( currentShout != null ) {
+      auction.removeShout(currentShout);
+      ShoutPool.release(currentShout);
+      currentShout = null;
+    }
+    strategy.endOfRound(auction);
   }
 
   public Shout getCurrentShout() {
@@ -397,7 +398,6 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
 
   /**
    * Return the profit made in the most recent auction round.
-   * Sub-classes should override this to return something sensible.
    * This can be used as, e.g. input to a re-inforcement learning
    * algorithm.
    */
