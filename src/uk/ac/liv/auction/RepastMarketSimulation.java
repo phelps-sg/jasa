@@ -248,7 +248,7 @@ public class RepastMarketSimulation extends SimModelImpl
   }
   
   public void generateNewSeed () {
-    // TODO Auto-generated method stub
+    GlobalPRNG.generateNewSeed();
     logger.debug("Repast is changing the PRNG seed to default");
   }
   
