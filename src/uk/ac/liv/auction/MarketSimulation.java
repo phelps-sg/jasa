@@ -68,7 +68,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
   static final String P_GATHER_STATS = "gatherstats";
 
 
-  static final String VERSION = "0.14";
+  static final String VERSION = "0.15";
 
   static final String GNU_MESSAGE =
     "JASA v" + VERSION + " - (C) 2001-2003 Steve Phelps\n" +
