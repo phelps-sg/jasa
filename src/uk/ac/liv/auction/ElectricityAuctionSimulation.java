@@ -190,24 +190,22 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       System.out.println("S1 = " + S1);
       System.out.println("random private values = " + randomPrivateValues);
 
-//      auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
-      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
-
-      experiment( 30, 30, 10, 10 );
-
       auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
-      experiment( 30, 30, 9, 9 );
-      auctioneer = new ControlAuctioneer(auction, 0.9);
 
-      experiment( 30, 30, 1, 1 );
+      experiment( 3, 3, 10, 10 );
+
+      auctioneer = new ControlAuctioneer(auction, 0.5);
+
+      experiment( 3, 3, 1, 1 );
+
 /*
-      experiment( 6, 3, 10, 20 );
       experiment( 6, 3, 10, 40 );
       experiment( 3, 3, 20, 10 );
       experiment( 3, 3, 10, 20 );
       experiment( 3, 6, 40, 10 );
       experiment( 3, 6, 20, 10 );
       experiment( 3, 6, 10, 10 );
+
 */
     } catch ( FileNotFoundException e ) {
       e.printStackTrace();
@@ -299,12 +297,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       dataFile.newData(mPS.getMean());
       dataFile.newData(mPS.getStdDev());
 
-      Iterator i = auction.getTraderIterator();
-      while ( i.hasNext() ) {
-        ElectricityTrader trader = (ElectricityTrader) i.next();
+//      Iterator i = auction.getTraderIterator();
+//      while ( i.hasNext() ) {
+//        ElectricityTrader trader = (ElectricityTrader) i.next();
 //        RothErevLearner learner = (RothErevLearner) ((StimuliResponseStrategy) trader.getStrategy()).getLearner();
 //        learner.dumpDistributionToCSV(distributionFile);
-      }
+//      }
     }
     dataFile.close();
   }
@@ -332,13 +330,11 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       ElectricityTrader trader =
         new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);
 
-
       StimuliResponseStrategy strategy = new StimuliResponseStrategy(trader);
 
       strategy.setQuantity(trader.getCapacity());
       strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X) );
-//                                System.currentTimeMillis()) );
-
+                                //System.currentTimeMillis()) );
 
       trader.setStrategy(strategy);
 

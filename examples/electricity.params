@@ -1,11 +1,13 @@
 electricity.r = 0.10
 electricity.e = 0.20
-electricity.k = 10
+electricity.k = 10 
 electricity.x = 1
 electricity.s1 = 1
 electricity.maxrounds = 100
-electricity.iterations = 1000
+electricity.iterations = 100
 electricity.outputfile = electricity-data.csv
-electricity.outputdir = results/electricity
-electricity.ksamples = 100
+electricity.outputdir = results/electricity/control
 electricity.randomprivatevalues = true
+electricity.minprivatevalue = 30
+electricity.maxprivatevalue = 100
+electricity.ksamples = 100
