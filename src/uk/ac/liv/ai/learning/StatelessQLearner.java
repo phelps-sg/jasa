@@ -56,8 +56,25 @@ public class StatelessQLearner extends AbstractLearner
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+
     super.setup(parameters, base);
-    qLearner.setup(parameters, base);
+
+    double learningRate =
+      parameters.getDoubleWithDefault(base.push(QLearner.P_LEARNING_RATE), null,
+                                      QLearner.DEFAULT_LEARNING_RATE);
+
+    double discountRate =
+      parameters.getDoubleWithDefault(base.push(QLearner.P_DISCOUNT_RATE), null,
+                                      QLearner.DEFAULT_DISCOUNT_RATE);
+
+    double epsilon =
+      parameters.getDoubleWithDefault(base.push(QLearner.P_EPSILON), null,
+                                      QLearner.DEFAULT_EPSILON);
+
+    int numActions = 
+      parameters.getInt(base.push(QLearner.P_NUM_ACTIONS), null);
+    
+    qLearner.setStatesAndActions(1, numActions);
   }
 
   public int act() {
