@@ -186,7 +186,7 @@ public class MarketSimulation implements Serializable, Runnable {
   public void runBatchExperiment( int n ) {
     HashMap resultsStats = new HashMap();
     for( int i=0; i<n; i++ ) {
-      logger.info("Running experiment " + i + " of " + n + "... ");
+      logger.info("Running experiment " + (i+1) + " of " + n + "... ");
       auction.reset();
       auction.run();
       recordResults(auction.getResults(), resultsStats);
@@ -203,6 +203,8 @@ public class MarketSimulation implements Serializable, Runnable {
   
   
   protected void finalReport( Map resultsStats ) {
+    logger.info("\nResults");
+    logger.info("-------");
     ArrayList variableList = new ArrayList(resultsStats.keySet());
     Collections.sort(variableList);
     Iterator i = variableList.iterator();
@@ -224,8 +226,8 @@ public class MarketSimulation implements Serializable, Runnable {
     while ( i.hasNext() ) {
       String variableName = (String) i.next();
       Object value = results.get(variableName);
-      if ( value instanceof Double ) {
-        double v = ((Double) value).doubleValue();
+      if ( value instanceof Number ) {
+        double v = ((Number) value).doubleValue();
         CummulativeDistribution varStats = 
           (CummulativeDistribution) resultsStats.get(variableName);
         if ( varStats == null ) {
