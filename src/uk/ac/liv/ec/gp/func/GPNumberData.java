@@ -8,9 +8,7 @@ import uk.ac.liv.util.GenericNumber;
  * @author Steve Phelps
  */
 
-public class GPNumberData extends GPData {
-
-  public GenericNumber data;
+public class GPNumberData extends GPGenericData {
 
   public GPData copyTo( GPData other ) {
     ((GPNumberData) other).data = this.data;

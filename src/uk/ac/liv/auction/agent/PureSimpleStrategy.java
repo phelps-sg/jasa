@@ -1,6 +1,7 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.Auction;
 
 /**
  * @author Steve Phelps
@@ -25,7 +26,7 @@ public class PureSimpleStrategy implements Strategy {
     this.quantity = quantity;
   }
 
-  public void modifyShout( Shout shout ) {
+  public void modifyShout( Shout shout, Auction auction ) {
     shout.setIsBid(agent.isBuyer());
     shout.setPrice(agent.getPrivateValue() + delta);
     shout.setQuantity(quantity);

@@ -11,12 +11,12 @@ import uk.ac.liv.auction.agent.TraderAgent;
  *
  */
 
-public interface Auction {
+public interface Auction extends QuoteProvider {
 
   /**
    * Request a market quote from the auction.
    */
-  public MarketQuote getQuote();
+  //public MarketQuote getQuote();
 
   /**
    * Returns true if the auciton is closed.

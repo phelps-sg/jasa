@@ -8,7 +8,7 @@ package uk.ac.liv.util;
  *
  */
 
-public abstract class GenericNumber extends Number {
+public abstract class GenericNumber extends Number implements Comparable {
 
   public abstract GenericNumber multiply( GenericNumber other );
 

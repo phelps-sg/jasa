@@ -10,6 +10,7 @@ import ec.*;
 import uk.ac.liv.util.*;
 
 import uk.ac.liv.ec.gp.func.GPNumberData;
+import uk.ac.liv.ec.gp.*;
 
 import java.util.List;
 import java.util.Iterator;
@@ -19,7 +20,7 @@ import java.util.Iterator;
  *
  */
 
-public class GPAuctioneer extends GPIndividual implements Auctioneer {
+public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   final ShoutEngine shoutEngine = new FourHeapShoutEngine();
 
@@ -31,12 +32,6 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
 
   protected Shout clearBid, clearAsk;
 
-  // Why doesn't ECJ wrap this up in a context object?!
-  EvolutionState contextState;
-  int contextThread;
-  ADFStack contextStack;
-  Problem contextProblem;
-
   public GPAuctioneer() {
     super();
   }
@@ -46,14 +41,6 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
   }
 
   public void reset() {
-  }
-
-  public void setGPContext( EvolutionState state, int thread, ADFStack stack,
-                        Problem problem ) {
-    contextState = state;
-    contextThread = thread;
-    contextStack = stack;
-    contextProblem = problem;
   }
 
   public void endOfRoundProcessing() {
@@ -83,13 +70,13 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
     clearAsk = ask;
     GPNumberData input = new GPNumberData();
     try {
-      trees[0].child.eval(contextState, contextThread, input, contextStack, this, contextProblem);
+      evaluateTree(0, input);
     } catch ( ArithmeticException e ) {
       System.out.println("Caught: " + e);
       //e.printStackTrace();
       return 0;
     }
-    return input.data.doubleValue();
+    return ((GenericNumber) input.data).doubleValue();
   }
 
   public void generateQuote() {
@@ -125,14 +112,4 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
   }
 
 
-}
-
-class GPDoubleData extends GPData {
-
-  public double data;
-
-  public GPData copyTo(GPData parm1) {
-    ((GPDoubleData) parm1).data = this.data;
-    return this;
-  }
 }

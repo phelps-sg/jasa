@@ -4,6 +4,7 @@ import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.ai.learning.*;
 
@@ -61,7 +62,7 @@ public class MREElectricityTrader extends ElectricityTrader {
   protected Strategy constructStrategy() {
     return new Strategy() {
 
-      public void modifyShout( Shout shout ) {
+      public void modifyShout( Shout shout, Auction auction ) {
 
         // Reward the learner based on last earnings
         learner.reward(lastProfit);

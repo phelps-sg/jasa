@@ -1,24 +1,24 @@
 package uk.ac.liv.util;
 
 /**
- * This encapsulation of Integer can be used in combination with the
+ * This encapsulation of Long can be used in combination with the
  * GenericNumber and GenericDouble classes, for performing weakly-typed
  * arithmetic operations.
  * @author Steve Phelps
  *
  */
 
-public class GenericInteger extends GenericNumber {
+public class GenericLong extends GenericNumber {
 
-  Integer value;
+  Long value;
 
-  public GenericInteger( Integer value ) {
+  public GenericLong( Long value ) {
     this.value = value;
   }
 
   public GenericNumber add( GenericNumber other ) {
-    if ( other instanceof GenericInteger ) {
-      return new GenericInteger( new Integer(value.intValue() + other.intValue()) );
+    if ( other instanceof GenericLong ) {
+      return new GenericLong( new Long(value.longValue() + other.longValue()) );
     } else if ( other instanceof GenericDouble ) {
       return new GenericDouble( new Double(value.doubleValue() + other.doubleValue()) );
     } else {
@@ -27,8 +27,8 @@ public class GenericInteger extends GenericNumber {
   }
 
   public GenericNumber multiply( GenericNumber other ) {
-    if ( other instanceof GenericInteger ) {
-      return new GenericInteger( new Integer(value.intValue() * other.intValue()) );
+    if ( other instanceof GenericLong ) {
+      return new GenericLong( new Long(value.longValue() * other.longValue()) );
     } else if ( other instanceof GenericDouble ) {
       return new GenericDouble( new Double(value.doubleValue() * other.doubleValue()) );
     } else {
@@ -37,8 +37,8 @@ public class GenericInteger extends GenericNumber {
   }
 
   public GenericNumber subtract( GenericNumber other ) {
-    if ( other instanceof GenericInteger ) {
-      return new GenericInteger( new Integer(value.intValue() - other.intValue()) );
+    if ( other instanceof GenericLong ) {
+      return new GenericLong( new Long(value.longValue() - other.longValue()) );
     } else if ( other instanceof GenericDouble ) {
       return new GenericDouble( new Double(value.doubleValue() - other.doubleValue()) );
     } else {
@@ -53,7 +53,7 @@ public class GenericInteger extends GenericNumber {
   protected GenericNumber opResult( double tempResult ) {
     long intResult = Math.round(tempResult);
     if ( intResult == tempResult ) {
-      return new GenericInteger( new Integer( (int) intResult) );
+      return new GenericLong( new Long(intResult) );
     } else {
       return new GenericDouble( new Double(tempResult) );
     }
@@ -61,8 +61,8 @@ public class GenericInteger extends GenericNumber {
 
 
   public int compareTo( Object other ) {
-    if ( other instanceof GenericInteger ) {
-      return value.compareTo( ((GenericInteger) other).getValue() );
+    if ( other instanceof GenericLong ) {
+      return value.compareTo( ((GenericLong) other).getValue() );
     } else if ( other instanceof GenericDouble ) {
       double d0 = doubleValue();
       double d1 = ((GenericDouble) other).doubleValue();
@@ -74,7 +74,7 @@ public class GenericInteger extends GenericNumber {
         return 0;
       }
     } else {
-      throw new ClassCastException();
+      throw new ClassCastException("");
     }
   }
 
@@ -94,8 +94,22 @@ public class GenericInteger extends GenericNumber {
     return value.longValue();
   }
 
-  public Integer getValue() {
+  public Long getValue() {
     return value;
+  }
+
+  public String toString() {
+    return value.toString();
+  }
+
+  public boolean equals( Object other ) {
+    if ( other instanceof GenericLong ) {
+      return value.longValue() == ((GenericLong) other).longValue();
+    } else if ( other instanceof GenericNumber ) {
+      return value.longValue() == ((GenericNumber) other).doubleValue();
+    } else {
+      return super.equals(other);
+    }
   }
 
 }

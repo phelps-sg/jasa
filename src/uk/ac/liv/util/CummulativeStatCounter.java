@@ -9,7 +9,6 @@ package uk.ac.liv.util;
  * <p>
  * Example usage:
  * </p>
- * <br>
  * <p>
  * <code>
  * CummulativeStatCounter series1 = new CummulativeStatCounter("series1");<br>

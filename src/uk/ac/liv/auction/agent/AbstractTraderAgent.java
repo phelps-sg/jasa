@@ -9,7 +9,11 @@ import uk.ac.liv.util.IdAllocator;
 import java.io.Serializable;
 
 /**
+ * <p>
  * An abstract class representing a simple agent trading in a round-robin auction.
+ * Traders of this type deal in a single commodity for which they have a
+ * well-defined private valuation.
+ * </p>
  *
  * @see TraderAgent
  * @see uk.ac.liv.auction.core.RoundRobinAuction
@@ -17,6 +21,7 @@ import java.io.Serializable;
  * @author Steve Phelps
  *
  */
+
 public abstract class AbstractTraderAgent implements RoundRobinTrader,
                                                       TraderAgent,
                                                       Serializable {
@@ -117,15 +122,11 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   public void requestShout( RoundRobinAuction auction ) {
     try {
       auction.removeShout(currentShout);
-      strategy.modifyShout(currentShout);
+      strategy.modifyShout(currentShout, auction);
       auction.newShout(currentShout);
     } catch ( AuctionException e ) {
       e.printStackTrace();
     }
-  }
-
-  public void requestRemoval( RoundRobinAuction auction ) {
-    //auction.removeShout(currentShout);
   }
 
   public Shout getCurrentShout() {
