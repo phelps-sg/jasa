@@ -47,6 +47,8 @@ public class DrawableAgentAdaptor implements Drawable {
   
   protected static float maxProfit = Float.NEGATIVE_INFINITY;
   
+  protected static float maxMarkup = Float.NEGATIVE_INFINITY;
+  
   public float scale = 1000;
   
   public DrawableAgentAdaptor( Auction auction ) {
@@ -64,7 +66,7 @@ public class DrawableAgentAdaptor implements Drawable {
     if ( agent != null ) {
       Valuer valuer = agent.getValuer();
       if ( valuer instanceof RandomValuer ) {
-        scale = (float) ((RandomValuer) valuer).getMaxValue() * 2;
+        scale = (float) ((RandomValuer) valuer).getMaxValue() / 2;
       }
     }
   }
@@ -72,7 +74,10 @@ public class DrawableAgentAdaptor implements Drawable {
   public void draw( SimGraphics g ) {
     int cellHeight = g.getCurHeight();
     int cellWidth = g.getCurWidth();
-    float price = getLastShoutPrice();
+    float price = Math.abs(getLastShoutPrice() - getCurrentValuation());
+    if ( price > DrawableAgentAdaptor.maxMarkup) {
+      DrawableAgentAdaptor.maxMarkup = price;
+    }
     float profit = getTotalProfits();
     if ( profit < DrawableAgentAdaptor.minProfit ) {
       DrawableAgentAdaptor.minProfit = profit;
@@ -81,11 +86,13 @@ public class DrawableAgentAdaptor implements Drawable {
       DrawableAgentAdaptor.maxProfit = profit;
     }
     float relProfit = profit / DrawableAgentAdaptor.maxProfit;
-    int y =  (int) ((price / scale) * 5);
+    float relPrice = price / DrawableAgentAdaptor.maxMarkup;
+    int y =  1 + (int) (relPrice * 4);
     g.setDrawingParameters(5, y, 1);
     Color color = Color.BLACK;
     if ( colorMap == null ) {
       if ( relProfit > 0.01 ) {
+        relProfit = 0.2f + 0.8f * relProfit;
         if ( agent.isBuyer() ) {
           color = new Color(relProfit, 0, 0);
         } else {
@@ -129,7 +136,11 @@ public class DrawableAgentAdaptor implements Drawable {
   }
   
   public float getCurrentValuation() {
-    return (float) agent.getValuation(auction);
+    float valuation = 0;
+    if ( agent != null ) {
+      valuation = (float) agent.getValuation(auction);
+    } 
+    return valuation;
   }
   
   public long getId() {
