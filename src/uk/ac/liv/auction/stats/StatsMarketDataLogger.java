@@ -136,6 +136,11 @@ public class StatsMarketDataLogger
     StatsMarketDataLogger copy = null;
     try {
       copy = (StatsMarketDataLogger) clone();
+      copy.transPriceStats = (CummulativeStatCounter) transPriceStats.clone();
+      copy.bidPriceStats = (CummulativeStatCounter) bidPriceStats.clone();
+      copy.askPriceStats = (CummulativeStatCounter) askPriceStats.clone();
+      copy.bidQuoteStats = (CummulativeStatCounter) bidQuoteStats.clone();
+      copy.askQuoteStats = (CummulativeStatCounter) askQuoteStats.clone();
     } catch ( CloneNotSupportedException e ) {
     }
     return copy;

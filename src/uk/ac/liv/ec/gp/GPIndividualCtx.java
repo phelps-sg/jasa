@@ -30,12 +30,9 @@ import uk.ac.liv.ec.gp.func.*;
 import uk.ac.liv.util.FastNumber;
 
 /**
- * <p>Title: JASA</p>
- * <p> </p>
- * <p>Copyright: Copyright (c) 2002</p>
- * <p> </p>
- * @author Steve Phelps
+ * A temporary place to put some misc ECJ extensions.
  *
+ * @author Steve Phelps
  */
 
 public class GPIndividualCtx extends GPIndividual {

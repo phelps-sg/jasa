@@ -107,12 +107,12 @@ public class RoundRobinAuction extends AuctionImpl
    * The current number of traders in the auction.
    */
   int numTraders;
-  
 
-  
+
+
   static final String P_MAXIMUM_ROUNDS = "maximumrounds";
 
-  
+
   /**
    * Construct a new auction in the stopped state, with no traders, no shouts,
    * and no auctioneer.
@@ -196,17 +196,17 @@ public class RoundRobinAuction extends AuctionImpl
   public int getAge() {
     return round;
   }
-  
+
   /**
    * Get the last bid placed in the auction.
    */
   public Shout getLastBid() {
     return lastBid;
   }
-  
+
   /**
    * Get the last ask placed in the auction.
-   */ 
+   */
   public Shout getLastAsk() {
     return lastAsk;
   }
@@ -248,8 +248,8 @@ public class RoundRobinAuction extends AuctionImpl
     super.newShout(shout);
     logger.updateShoutLog(round, shout);
   }
-  
-  
+
+
   public void changeShout( Shout shout ) throws AuctionException {
     removeShout(shout);
     newShout(shout);
