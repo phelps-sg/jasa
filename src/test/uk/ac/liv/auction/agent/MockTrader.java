@@ -57,8 +57,18 @@ public class MockTrader extends AbstractTraderAgent  {
     System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity + " and seller: " + seller);
     lastWinningShout = winningShout;
     lastWinningPrice = price;
+    purchaseFrom(auction, (AbstractTraderAgent) seller, quantity, price);
   }
-
+  
+  
+  public void informOfBuyer( Auction auction, RoundRobinTrader buyer,
+      double price, int quantity ) {
+    super.informOfBuyer(auction, buyer, price, quantity);
+    test.assertTrue(((AbstractTraderAgent) buyer).isBuyer());
+    lastWinningPrice = price;
+    lastWinningShout = getCurrentShout();
+  }
+  
   public int determineQuantity( Auction auction ) {
     return 1;
   }
