@@ -188,10 +188,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     auction = new RandomRobinAuction("Electricity Auction");
     stats = new ElectricityStats(auction);
 
+    experiment( 3, 3, 10, 10 );
     experiment( 6, 3, 10, 20 );
     experiment( 6, 3, 10, 40 );
     experiment( 3, 3, 20, 10 );
-    experiment( 3, 3, 10, 10 );
     experiment( 3, 3, 10, 20 );
     experiment( 3, 6, 40, 10 );
     experiment( 3, 6, 20, 10 );
@@ -218,6 +218,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
 
       double auctioneerK = kMultiple/auctioneerKSamples;
+
       System.out.println("\n*** Experiment with parameters");
       System.out.println("ns = " + ns);
       System.out.println("nb = " + nb);
@@ -271,6 +272,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     auction = new RandomRobinAuction("Electricity Auction");
     auctioneer = new DiscrimPriceCDAAuctioneer(auction, auctioneerK);
+
     auction.setAuctioneer(auctioneer);
 
     registerTraders(auction, true, ns, cs, sellerValues);
@@ -321,3 +323,27 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
 }
 
+
+class ControlAuctioneer extends DiscrimPriceCDAAuctioneer {
+
+  public ControlAuctioneer( RoundRobinAuction auction, double k ) {
+    super(auction, k);
+  }
+
+  public synchronized void clear() {
+    List shouts = shoutEngine.getMatchedShouts();
+    Iterator i = shouts.iterator();
+    while ( i.hasNext() ) {
+      Shout bid = (Shout) i.next();  Debug.assertTrue( bid.isBid() );
+      Shout ask = (Shout) i.next();  Debug.assertTrue( ask.isAsk() );
+      if ( ! ( bid.getPrice() >= ask.getPrice()) ) {
+        System.out.println("bid = " + bid);
+        System.out.println("ask = " + ask);
+        Debug.assertTrue( bid.getPrice() >= ask.getPrice() );
+      }
+      double price = 0.9 * bid.getPrice();
+      auction.clear(ask, bid.getAgent(), ask.getAgent(), price, ask.getQuantity());
+    }
+  }
+
+}

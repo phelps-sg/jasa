@@ -207,7 +207,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
                                               base.push(P_STRATEGYMIXER));
 
     stats = (ElectricityStats)
-      state.parameters.getInstanceForParameter(base.push(P_STATS), null,
+      state.parameters.getInstanceForParameterEq(base.push(P_STATS), null,
                                                 ElectricityStats.class);
     stats.setup(state.parameters, base.push(P_STATS));
 
