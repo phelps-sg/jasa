@@ -21,11 +21,11 @@ import uk.ac.liv.auction.core.*;
 
 import test.uk.ac.liv.auction.agent.MockTrader;
 
-public class AuctioneerTest extends TestCase {
+public abstract class AuctioneerTest extends TestCase {
 
-  KDoubleAuctioneer auctioneer;
+  Auctioneer auctioneer;
   RoundRobinAuction auction;
-  MockTrader trader1, trader2, trader3, trader4, trader5;
+  MockTrader[] traders;
 
 
   public AuctioneerTest( String name ) {
@@ -34,78 +34,26 @@ public class AuctioneerTest extends TestCase {
 
   public void setUp() {
     auction = new RoundRobinAuction("unit test auction");
-    auctioneer = new KDoubleAuctioneer(auction, 0);
-    auction.setAuctioneer(auctioneer);
-
-    trader1 = new MockTrader(this, 30, 1000, 400, false);
-    trader2 = new MockTrader(this, 10, 10000, 400, false);
-    trader3 = new MockTrader(this, 15, 10000, 1000, true);
-    trader4 = new MockTrader(this, 10, 10000, 1000, true);
-    trader5 = new MockTrader(this, 15, 10000, 1000, true);
-  }
-
-  public void testAuction1() {
-
-    MarketQuote quote;
-
-    // round 0
-    try {
-      auctioneer.newShout( new Shout(trader1, 1, 500, true) );
-      auctioneer.newShout( new Shout(trader2, 1, 400, true) );
-      auctioneer.newShout( new Shout(trader3, 2, 900, false) );
-    } catch ( IllegalShoutException e ) {
-      fail("invalid IllegalShoutException exception thrown " + e);
-      e.printStackTrace();
-    }
-
-    auctioneer.endOfRoundProcessing();
-    auctioneer.printState();
-
-    quote = auctioneer.getQuote();
-    assertTrue( quote.getAsk() == 900 );
-
-    System.out.println("quote = " + quote);
-
-    // round 1
-    System.out.println("round1");
-    try {
-      auctioneer.newShout( new Shout(trader1, 1, 920, true) );
-      auctioneer.newShout( new Shout(trader2, 1, 950, true) );
-
-    } catch ( IllegalShoutException e ) {
-      fail("invalid IllegalShoutException thrown " + e );
-      e.printStackTrace();
-    }
-
-    auctioneer.endOfRoundProcessing();
-    auctioneer.printState();
-
-    quote = auctioneer.getQuote();
-    System.out.println("quote = " + quote);
-    System.out.println("trader1's price = " + trader1.lastWinningPrice);
-    System.out.println("trader2's price = " + trader2.lastWinningPrice);
-
-//    assertTrue( quote.getAsk() > 900 );
-    assertTrue( trader1.lastWinningPrice == 900 );
-    assertTrue( trader2.lastWinningPrice == 900 );
-
-    auctioneer.reset();
-    System.out.println("after reseting, quote = " + auctioneer.getQuote());
-
-    assertTrue( auctioneer.getQuote().getBid() < 0 );
-
+   
+    traders = new MockTrader[5];
+    traders[0] = new MockTrader(this, 30, 1000, 1000, false);
+    traders[1] = new MockTrader(this, 10, 10000, 1000, false);
+    traders[2] = new MockTrader(this, 15, 10000, 400, true);
+    traders[3] = new MockTrader(this, 10, 10000, 400, true);
+    traders[4] = new MockTrader(this, 15, 10000, 400, true);
   }
 
   public void testDelete() {
 
     // round 0
-    Shout testShout = new Shout(trader3, 1, 13, false);
+    Shout testShout = null; 
     try {
-      auctioneer.newShout( new Shout(trader1, 1, 21, false) );
-      auctioneer.newShout( new Shout(trader2, 1, 42, false) );
+      auctioneer.newShout( new Shout(traders[0], 1, 21, true) );
+      auctioneer.newShout( new Shout(traders[1], 1, 42, true) );
+      testShout = new Shout(traders[2], 1, 43, false);
       auctioneer.newShout(testShout);
-      auctioneer.newShout( new Shout(trader4, 1, 23, true) );
-      auctioneer.newShout( new Shout(trader5, 1, 10, true) );
+      auctioneer.newShout( new Shout(traders[3], 1, 23, false) );
+      auctioneer.newShout( new Shout(traders[4], 1, 10, false) );
     } catch ( IllegalShoutException e ) {
       fail("invalid IllegalShoutException exception thrown " + e);
       e.printStackTrace();
@@ -118,13 +66,7 @@ public class AuctioneerTest extends TestCase {
 
   }
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run (suite());
-  }
 
-  public static Test suite() {
-    return new TestSuite(AuctioneerTest.class);
-  }
 
 }
 

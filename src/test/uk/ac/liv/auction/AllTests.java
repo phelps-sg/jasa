@@ -47,7 +47,8 @@ public class AllTests {
 
     suite.addTest(test.uk.ac.liv.auction.electricity.ElectricityStatsTest.suite());
 
-    suite.addTest(test.uk.ac.liv.auction.core.AuctioneerTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.core.KDoubleAuctioneerTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.core.KContinuousDoubleAuctioneerTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.RoundRobinAuctionTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.RandomRobinAuctionTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.FourHeapTest.suite());
