@@ -55,21 +55,25 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * The main JASA application class.  This application takes as an argument
- * the name of a parameter file describing an auction experiment, and
+ * A RePast model of an auction simulation. This application takes as an
+ * argument the name of a parameter file describing an auction experiment, and
  * proceeds to run that experiment.
  * </p>
- *
- * <p><b>Parameters</b><br>
- *
+ * 
+ * <p>
+ * <b>Parameters </b> <br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.auction</tt><br>
- * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
- * <td valign=top>(the class of auction to use)</td></tr>
- *
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.auction</tt><br>
+ * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction
+ * </font></td>
+ * <td valign=top>(the class of auction to use)</td>
+ * </tr>
+ * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
