@@ -275,7 +275,7 @@ public class RothErevLearner implements
   /**
    *  Count the number of peaks in the probability distribution.
    *
-   *  @returns  The number of peaks in the distribution.
+   *  @return  The number of peaks in the distribution.
    */
   public int countPeaks() {
     int peaks = 0;
