@@ -193,16 +193,18 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       System.out.println("random private values = " + randomPrivateValues);
 
       auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+//      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
 
-      experiment(60, 30, 10, 10);
-      experiment(60, 30, 10, 20);
-      experiment(60, 30, 10, 40);
-      experiment(30, 30, 20, 10);
+//      experiment(60, 30, 10, 10);
+//      experiment(60, 30, 10, 20);
+//      experiment(60, 30, 10, 40);
+//      experiment(30, 30, 20, 10);
       experiment(30, 30, 10, 10);
-      experiment(30, 30, 10, 20);
-      experiment(30, 60, 40, 10);
-      experiment(30, 60, 20, 10);
-      experiment(30, 60, 10, 10);
+      experiment(3,3,10,10);
+//      experiment(30, 30, 10, 20);
+//      experiment(30, 60, 40, 10);
+//      experiment(30, 60, 20, 10);
+//      experiment(30, 60, 10, 10);
 
     } catch ( FileNotFoundException e ) {
       e.printStackTrace();
@@ -359,6 +361,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       ElectricityTrader trader =
         new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);
 
+//      PureSimpleStrategy strategy = new PureSimpleStrategy(trader, 0, trader.getCapacity());
+
       StimuliResponseStrategy strategy = new StimuliResponseStrategy(trader);
       strategy.setMarkupScale(100);
 
@@ -385,6 +389,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
       trader.setPrivateValue(values[traderNumber++][iteration]);
+      //trader.setPrivateValue(values[traderNumber++][0]);
     }
   }
 
@@ -425,9 +430,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     int traderNumber = 0;
     while ( i.hasNext() ) {
       ElectricityTrader t = (ElectricityTrader) i.next();
-      StimuliResponseStrategy strategy = (StimuliResponseStrategy) t.getStrategy();
-      RothErevLearner learner = (RothErevLearner) strategy.getLearner();
-      learner.setSeed(seeds[traderNumber++][iteration]); //FIXME
+      //StimuliResponseStrategy strategy = (StimuliResponseStrategy) t.getStrategy();
+      //RothErevLearner learner = (RothErevLearner) strategy.getLearner();
+      //learner.setSeed(seeds[traderNumber++][iteration]); //FIXME
     }
   }
 
