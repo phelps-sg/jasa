@@ -335,7 +335,11 @@ public class HeuristicPayoffCalculator
     //ensureEquilibriaExists();
   }
 
-  public void ensureEquilibriaExists() {
+  public void setStrategy( int i, Strategy s ) {
+  	strategies[i] = s;
+  }
+  
+  protected void ensureEquilibriaExists() {
     EquilibriaStats stats = new EquilibriaStats(auction);
     stats.calculate();
     while ( ! (stats.equilibriaExists() && stats.getQuantity() >= ((numAgents) / 2)-2) ) {
@@ -389,8 +393,9 @@ public class HeuristicPayoffCalculator
     for( int i=0; i<numStrategies; i++ ) {
       for( int s=0; s<entry[i]; s++ ) {
         Prototypeable prototypeStrategy = (Prototypeable) strategies[i];
+        Strategy clonedStrategy = (Strategy) prototypeStrategy.protoClone();
         AbstractTraderAgent agent = agents[agentIndex++];
-        agent.setStrategy((Strategy) prototypeStrategy.protoClone());
+        agent.setStrategy(clonedStrategy);
         agent.reset();
       }
     }

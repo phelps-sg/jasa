@@ -1,0 +1,73 @@
+#
+# Compute heuristic payoff matrix for 20 agent / 3 strategy k-CDA game.
+#
+# Run using:
+#
+#  java uk.ac.liv.auction.HeuristicPayoffCalculator examples/heuristic.params
+#
+
+# Number of games to play per entry in the payoff matrix
+#  (for real experiments should be 2000+)
+heuristic.numsamples = 100
+
+# Total number of agents in the game
+heuristic.numagents = 6
+
+# Total number of different strategies
+heuristic.strategy.n = 2
+
+# Truth
+heuristic.strategy.0 = uk.ac.liv.auction.agent.PureSimpleStrategy
+heuristic.strategy.0.delta = 0
+
+# Momentum
+heuristic.strategy.1 = uk.ac.liv.auction.agent.SimpleMomentumStrategy
+heuristic.strategy.1.scaling = 0.2
+heuristic.strategy.1.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
+heuristic.strategy.1.learner.momentum = 0.05
+heuristic.strategy.1.learner.learningrate = 0.3
+
+# Agent configuration
+heuristic.agent = uk.ac.liv.auction.zi.ZITraderAgent
+heuristic.agent.initialtradeentitlement = 1
+# Dummy valuer
+heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomValuer
+# Dummy strategy 
+heuristic.agent.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
+
+heuristic.auction = uk.ac.liv.auction.core.RandomRobinAuction
+heuristic.auction.lengthofday = 6
+heuristic.auction.maximumdays = 100
+
+heuristic.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
+heuristic.auction.logger.n = 2
+heuristic.auction.logger.0 = uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger
+heuristic.auction.logger.1 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
+
+# Use a k-CDA (clearing after every new shout) with k=0.5
+heuristic.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+heuristic.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+heuristic.auction.auctioneer.pricing.k = 0.5
+
+# Use the Mersenne Twister PRNG
+heuristic.prng = uk.ac.liv.prng.MT
+
+# Store results in this file in CSV format
+heuristic.results = results/heuristic/tt-re-pvt-cda-6.csv
+heuristic.gambitexport = results/heuristic/tt-re-pvt-cda-6.nfg
+
+# log4j configuration - substitute DEBUG for INFO to turn on debugging output
+
+log4j.rootCategory=INFO, stdout
+#log4j.rootCategory=DEBUG, dfile
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n
+
+log4j.appender.dfile=org.apache.log4j.FileAppender
+log4j.appender.dfile.file=/tmp/debug.out
+log4j.appender.dfile.append=false
+log4j.appender.dfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.dfile.layout.ConversionPattern=%c: %m%n
+

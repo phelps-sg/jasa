@@ -125,7 +125,9 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
 
   public void reset() {
     priceStats.reset();
-    //TODO gpIndividual.reset();
+    ((Resetable) momentumLearner).reset();
+    gpIndividual.reset();
+    super.reset();    
   }
   
   public boolean misbehaved() {
@@ -140,7 +142,9 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     GPTradingStrategy copy = null;
     try {
       copy = (GPTradingStrategy) super.protoClone();
-      copy.priceStats = (CummulativeStatCounter) priceStats.clone();      
+      copy.priceStats = (CummulativeStatCounter) priceStats.clone();  
+      copy.gpIndividual = (GPGenericIndividual) gpIndividual.shallowClone();
+      copy.gpIndividual.setGPObject(copy);
     } catch ( CloneNotSupportedException e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());

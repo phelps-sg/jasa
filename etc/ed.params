@@ -1,0 +1,7 @@
+equilibria.numagents = 6
+equilibria.numstrategies = 2
+equilibria.numrdsamples = 1000
+equilibria.minvelocity = 0.00000001
+equilibria.precision = 10000
+equilibria.payoffmatrix = results/heuristic/tt-re-pvt-cda-6-p.csv
+equilibria.rdprefix = results/heuristic/perterbed/rdplot

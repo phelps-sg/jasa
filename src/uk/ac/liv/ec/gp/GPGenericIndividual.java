@@ -50,6 +50,10 @@ public class GPGenericIndividual extends GPSchemeIndividual implements Resetable
 		return object;
 	}
 	
+	public void setGPObject( GPObject object ) {
+		this.object = object;
+	}
+	
 	public Object protoClone() throws CloneNotSupportedException {
 		GPGenericIndividual clonedIndividual = 
 			(GPGenericIndividual) super.protoClone();
@@ -58,9 +62,21 @@ public class GPGenericIndividual extends GPSchemeIndividual implements Resetable
 		return clonedIndividual;
 	}
 	
+	public Object shallowClone() {
+		Object clonedIndividual;
+		try {
+			clonedIndividual = this.clone();
+		} catch ( CloneNotSupportedException e ) {
+			throw new Error(e);
+		}
+		return clonedIndividual;
+	}
+	
 	public void reset() {
 		super.reset();
-		context.getStack().reset();
+		if ( context != null && context.getStack() != null ) {
+			context.getStack().reset();
+		}
 	}
 	
 	
