@@ -19,6 +19,11 @@ import java.util.Iterator;
 
 import java.io.*;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
+import uk.ac.liv.util.Parameterizable;
+
 
 /**
  * A class for writing data to CSV (comma-separated variables) text files.
@@ -27,13 +32,16 @@ import java.io.*;
  * @version $Revision$
  */
 
-public class CSVWriter implements Serializable, DataWriter {
+public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
   PrintStream out;
   int numColumns;
   int currentColumn = 0;
-  char seperator;
+  char seperator = DEFAULT_SEPERATOR;
   static final char DEFAULT_SEPERATOR = '\t';
+  
+  public static final String P_FILENAME = "filename";
+  public static final String P_COLUMNS = "columns";
 
   public CSVWriter( OutputStream out, int numColumns, char seperator ) {
     this.out = new PrintStream(out);
@@ -44,7 +52,20 @@ public class CSVWriter implements Serializable, DataWriter {
   public CSVWriter( OutputStream out, int numColumns ) {
     this(out, numColumns, DEFAULT_SEPERATOR);
   }
-
+  
+  public CSVWriter() {
+  }
+  
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    try {
+      String fileName = parameters.getString(base.push(P_FILENAME), null);
+      out = new PrintStream(new FileOutputStream(new File(fileName)));
+      numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null, numColumns);
+    } catch ( FileNotFoundException e ) {
+      throw new Error(e);
+    }
+  }
+  
   public void newData( Iterator i ) {
     while ( i.hasNext() ) {
       newData(i.next());
@@ -96,6 +117,10 @@ public class CSVWriter implements Serializable, DataWriter {
 
   public void close() {
     out.close();
+  }
+  
+  public void setNumColumns( int numColumns ) {
+    this.numColumns = numColumns;
   }
 
   protected void nextColumn() {
