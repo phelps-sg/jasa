@@ -69,8 +69,5 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl {
     }
   }
 
-  public void setQuantity( int quantity ) {
-    this.quantity = quantity;
-  }
 
 }

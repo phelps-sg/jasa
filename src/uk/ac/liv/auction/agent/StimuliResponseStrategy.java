@@ -107,10 +107,6 @@ public class StimuliResponseStrategy extends FixedQuantityStrategyImpl {
     this.learner = learner;
   }
 
-  public void setQuantity( int quantity ) {
-    this.quantity = quantity;
-  }
-
   public String toString() {
     return "(" + getClass() + " learner:" + learner + ")";
   }

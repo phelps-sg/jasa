@@ -65,10 +65,6 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl {
     shout.setQuantity(quantity);
   }
 
-  public void setQuantity( int quantity ) {
-    this.quantity = quantity;
-  }
-
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null, 100);
