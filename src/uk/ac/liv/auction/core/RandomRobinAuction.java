@@ -40,13 +40,10 @@ public class RandomRobinAuction extends RoundRobinAuction {
   }
 
   public void requestShouts() {
-    Object[] candidates = activeTraders.toArray();
-    int numCandidates = candidates.length;
-    for( int i=0; i<numTraders; i++ ) {
-      int choice = GlobalPRNG.getInstance().choose(numCandidates-1);
-      RoundRobinTrader trader = (RoundRobinTrader) candidates[choice];
-      candidates[choice] = candidates[numCandidates-1];
-      numCandidates--;
+    Object[] randomlySortedTraders = activeTraders.toArray();
+    GlobalPRNG.randomPermutation(randomlySortedTraders);    
+    for( int i=0; i<numTraders; i++ ) {      
+      RoundRobinTrader trader = (RoundRobinTrader) randomlySortedTraders[i];      
       trader.requestShout(this);
     }
   }
