@@ -63,7 +63,7 @@ public class GPBestStatistics extends KozaStatistics {
     }
   }
   
-  public void finalStatistics( EvolutionState state ) {
+  public void finalStatistics( EvolutionState state, int result ) {
       // do nothing
   }
 }
