@@ -102,5 +102,9 @@ public abstract class AbstractStrategy implements
     }
   }
   
+  public AbstractTradingAgent getAgent() {
+    return agent;
+  }
+  
   public abstract void endOfRound( Auction auction );
 }
