@@ -148,6 +148,8 @@ public class StandardRandomizer implements Parameterizable, Serializable {
         if ( learner instanceof StochasticLearner ) {
           ((StochasticLearner) learner).setSeed(seeds[traderNumber++][iteration]);
         }
+      } else if ( strategy instanceof Seedable ) {
+        ((Seedable) strategy).setSeed(seeds[traderNumber++][iteration]);
       }
     }
   }
