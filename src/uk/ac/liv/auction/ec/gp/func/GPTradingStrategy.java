@@ -34,56 +34,56 @@ import uk.ac.liv.util.*;
  *
  */
 
-public class GPTradingStrategy extends FixedQuantityStrategyImpl
-    implements GPObject, Cloneable, Serializable, Resetable {
+public class GPTradingStrategy extends FixedQuantityStrategyImpl implements
+    GPObject, Cloneable, Serializable, Resetable {
 
-	protected GPGenericIndividual gpIndividual;
+  protected GPGenericIndividual gpIndividual;
 
-	protected MimicryLearner momentumLearner;
-  
+  protected MimicryLearner momentumLearner;
+
   protected GPRothErevLearner rlLearner;
-	
-	protected double currentMargin;
-  
+
+  protected double currentMargin;
+
   protected double rlScale;
-  
+
   protected int rlLastAction;
-	
-  private CummulativeDistribution priceStats = 
-  	new CummulativeDistribution("priceStats");
-  
+
+  private CummulativeDistribution priceStats = new CummulativeDistribution(
+      "priceStats");
+
   public static final String P_MLEARNER = "mlearner";
+
   public static final String P_RLLEARNER = "rllearner";
+
   public static final String P_RLSCALE = "rlscale";
-  
+
   public static final int TREE_STRATEGY = 0;
+
   public static final int TREE_GPINIT = 1;
 
-
   public void setup( ParameterDatabase parameters, Parameter base ) {
-  	
-  	momentumLearner = (MimicryLearner)
-  		parameters.getInstanceForParameterEq(base.push(P_MLEARNER), null,
-  																					MimicryLearner.class);
-  	if ( momentumLearner instanceof Parameterizable ) {
-  		((Parameterizable) momentumLearner).setup(parameters, 
-  																									base.push(P_MLEARNER));
-  	}
-    
-    rlLearner = (GPRothErevLearner)
-      parameters.getInstanceForParameterEq(base.push(P_RLLEARNER), null,
-                                            GPRothErevLearner.class);
+
+    momentumLearner = (MimicryLearner) parameters.getInstanceForParameterEq(
+        base.push(P_MLEARNER), null, MimicryLearner.class);
+    if ( momentumLearner instanceof Parameterizable ) {
+      ((Parameterizable) momentumLearner).setup(parameters, base
+          .push(P_MLEARNER));
+    }
+
+    rlLearner = (GPRothErevLearner) parameters.getInstanceForParameterEq(base
+        .push(P_RLLEARNER), null, GPRothErevLearner.class);
     rlLearner.setup(parameters, base.push(P_RLLEARNER));
-    
+
     rlScale = parameters.getDouble(base.push(P_RLSCALE), null, 0);
-    
-    momentumLearner.setOutputLevel(currentMargin=0.5);  		
+
+    momentumLearner.setOutputLevel(currentMargin = 0.5);
   }
-  
+
   public void setGPIndividual( GPGenericIndividual individual ) {
-  	this.gpIndividual = individual;
+    this.gpIndividual = individual;
   }
-  
+
   public void setAgent( AbstractTradingAgent agent ) {
     this.agent = agent;
   }
@@ -91,7 +91,6 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   public AbstractTradingAgent getAgent() {
     return agent;
   }
-
 
   protected double getPrivateValue() {
     return agent.getValuation(auction);
@@ -105,8 +104,8 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     return auction.getQuote();
   }
 
-  public boolean modifyShout( Shout.MutableShout shout ) { 
-  	super.modifyShout(shout);
+  public boolean modifyShout( Shout.MutableShout shout ) {
+    super.modifyShout(shout);
     Number result = gpIndividual.evaluateNumberTree(TREE_STRATEGY);
     double price;
     if ( !gpIndividual.misbehaved() ) {
@@ -114,16 +113,16 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     } else {
       return false;
     }
-    if ( Double.isInfinite(price) || Double.isNaN(price)) {      
-      gpIndividual.illegalResult();      
+    if ( Double.isInfinite(price) || Double.isNaN(price) ) {
+      gpIndividual.illegalResult();
       return false;
     }
     if ( price < 0 ) {
       return false;
     }
-    shout.setPrice(price);    
+    shout.setPrice(price);
     rlLastAction = rlAction(price);
-    priceStats.newData(price - agent.getValuation(auction)); 
+    priceStats.newData(price - agent.getValuation(auction));
     return true;
   }
 
@@ -136,9 +135,9 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   public double getLastProfit() {
     return agent.getLastProfit();
   }
-  
+
   public boolean lastShoutAccepted() {
-  	return agent.lastShoutAccepted();
+    return agent.lastShoutAccepted();
   }
 
   public CummulativeDistribution getPriceStats() {
@@ -150,24 +149,24 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     ((Resetable) momentumLearner).reset();
     rlLearner.reset();
     gpIndividual.reset();
-    momentumLearner.setOutputLevel(currentMargin=0.5);    
+    momentumLearner.setOutputLevel(currentMargin = 0.5);
     super.reset();
     gpInitialise();
   }
-  
+
   public boolean misbehaved() {
-  	return gpIndividual.misbehaved();
+    return gpIndividual.misbehaved();
   }
-  
+
   public GPGenericIndividual getGPIndividual() {
-  	return gpIndividual;
+    return gpIndividual;
   }
 
   public Object protoClone() {
     GPTradingStrategy copy = null;
     try {
       copy = (GPTradingStrategy) super.protoClone();
-      copy.priceStats = (CummulativeDistribution) priceStats.clone();  
+      copy.priceStats = (CummulativeDistribution) priceStats.clone();
       copy.gpIndividual = (GPGenericIndividual) gpIndividual.shallowClone();
       copy.gpIndividual.setGPObject(copy);
     } catch ( CloneNotSupportedException e ) {
@@ -178,24 +177,24 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   }
 
   public void setMargin( double margin ) {
-  	this.currentMargin = margin;  
+    this.currentMargin = margin;
   }
-  
-  public double markedUpPrice() {  	
-  	double price;
-  	if ( agent.isBuyer() ) {
+
+  public double markedUpPrice() {
+    double price;
+    if ( agent.isBuyer() ) {
       price = agent.getValuation(auction) * (1 - currentMargin);
     } else {
       price = agent.getValuation(auction) * (1 + currentMargin);
-    }    
-  	return price;
+    }
+    return price;
   }
 
   public void adjustMargin( double targetMargin ) {
-    momentumLearner.train(targetMargin);   
+    momentumLearner.train(targetMargin);
     currentMargin = momentumLearner.act();
   }
-  
+
   public double rlPrice() {
     double markup = rlLearner.act() * rlScale;
     if ( agent.isBuyer() ) {
@@ -204,25 +203,25 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
       return agent.getValuation(auction) + markup;
     }
   }
-  
+
   public int rlAction( double price ) {
     return (int) (Math.abs(agent.getValuation(auction) - price) / rlScale);
   }
-  
+
   public GPRothErevLearner getRlLearner() {
     return rlLearner;
   }
-  
+
   public MimicryLearner getMomentumLearner() {
     return momentumLearner;
   }
-  
+
   public void gpInitialise() {
-    if ( gpIndividual.getGPContext() != null && 
-          gpIndividual.trees[TREE_GPINIT].child != null ) {
+    if ( gpIndividual.getGPContext() != null
+        && gpIndividual.trees[TREE_GPINIT].child != null ) {
       gpIndividual.evaluateNumberTree(TREE_GPINIT);
     }
   }
-  
+
 }
 

@@ -32,9 +32,10 @@ public class HighestBidPrice extends GPSchemeNode {
   public void eval( GPGenericData input ) {
     GPTradingStrategy strategy = (GPTradingStrategy)
       ((GPGenericIndividual) currentIndividual).getGPObject();
-    //HistoricalDataReport historyStats = 
-      //strategy.getAuction().getHistoryStats();
-    //input.data =new UntypedDouble(historyStats.getHighestBidPrice());
+    // TODO optimize this
+    HistoricalDataReport historyStats = (HistoricalDataReport)
+      strategy.getAuction().getReport(HistoricalDataReport.class);
+    input.data =new UntypedDouble(historyStats.getHighestBidPrice());
   }
 
   public String toString() {

@@ -227,7 +227,7 @@ public class AuctionConsoleFrame extends JFrame
     auction.printState();
   }
 
-  public void updateCurrencyLabel( JLabel label, double price ) {
+  public void updatePriceLabel( JLabel label, double price ) {
     if ( Double.isInfinite(price) ) {
       label.setText("      OPEN");
     } else {
@@ -243,8 +243,8 @@ public class AuctionConsoleFrame extends JFrame
     MarketQuote quote = auction.getQuote();
     currencyFormatter.setMaximumIntegerDigits(6);
     if ( quote != null ) {
-      updateCurrencyLabel(bidLabel, quote.getBid());
-      updateCurrencyLabel(askLabel, quote.getAsk());      
+      updatePriceLabel(bidLabel, quote.getBid());
+      updatePriceLabel(askLabel, quote.getAsk());      
     }
     Shout lastShout = null;
     try {
@@ -309,7 +309,8 @@ public class AuctionConsoleFrame extends JFrame
     public AuctionConsoleMenu() {
       JMenu viewMenu = new JMenu("View");
       
-      viewTrueSupplyAndDemand = new JCheckBoxMenuItem("True Supply and Demand");
+      viewTrueSupplyAndDemand = 
+        new JCheckBoxMenuItem("True Supply and Demand");
       ActionListener viewListener = new ActionListener() {
         public void actionPerformed( ActionEvent event ) {
           toggleTrueSupplyAndDemand();
@@ -318,7 +319,8 @@ public class AuctionConsoleFrame extends JFrame
       viewTrueSupplyAndDemand.addActionListener(viewListener);
       viewMenu.add(viewTrueSupplyAndDemand);
       
-      viewReportedSupplyAndDemand = new JCheckBoxMenuItem("Reported Supply and Demand");
+      viewReportedSupplyAndDemand = 
+        new JCheckBoxMenuItem("Reported Supply and Demand");
       viewListener = new ActionListener() {
         public void actionPerformed( ActionEvent event ) {
           toggleReportedSupplyAndDemand();
@@ -423,7 +425,7 @@ public class AuctionConsoleFrame extends JFrame
         };
         reportedSupDemGraph.addComponentListener(listener);
         reportedSupDemGraph.open();
-        viewTrueSupplyAndDemand.setSelected(true);
+        viewReportedSupplyAndDemand.setSelected(true);
       } else {
         reportedSupDemGraph.close();
       }
