@@ -17,20 +17,19 @@ package uk.ac.liv.auction.ui;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
-import uk.ac.liv.auction.stats.ReportedSupplyAndDemandStats;
+import uk.ac.liv.auction.stats.AuctionStateStats;
 import uk.ac.liv.auction.stats.SupplyAndDemandStats;
-
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class ReportedSupplyAndDemandFrame extends SupplyAndDemandFrame {
+public class AuctionStateFrame extends SupplyAndDemandFrame {
   
-  public static final String TITLE = "Reported Supply and Demand";
+  public static final String TITLE = "Auction State";
 
-  public ReportedSupplyAndDemandFrame( RoundRobinAuction auction ) {
+  public AuctionStateFrame( RoundRobinAuction auction ) {
     super(auction);
   }
   
@@ -39,7 +38,7 @@ public class ReportedSupplyAndDemandFrame extends SupplyAndDemandFrame {
   }
 
   public SupplyAndDemandStats getSupplyAndDemandStats() {
-    return new ReportedSupplyAndDemandStats(auction, supplyCurve, demandCurve);
+    return new AuctionStateStats(auction, supplyCurve, demandCurve);
   }
 
 
