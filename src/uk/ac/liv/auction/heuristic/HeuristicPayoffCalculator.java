@@ -19,16 +19,26 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.MarketSimulation;
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
+
+import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.EndOfDayListener;
+import uk.ac.liv.auction.core.Auction;
+
+import uk.ac.liv.auction.agent.Strategy;
+import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.RandomValuer;
+
 import uk.ac.liv.auction.stats.PayoffLogger;
 import uk.ac.liv.auction.stats.EquilibriaStats;
 import uk.ac.liv.auction.stats.SurplusStats;
 
-import uk.ac.liv.util.*;
+import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Prototypeable;
+
 import uk.ac.liv.util.io.CSVWriter;
 
-import uk.ac.liv.prng.*;
+import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 
 import java.util.Iterator;
