@@ -18,6 +18,9 @@ import uk.ac.liv.auction.agent.TradingAgent;
 import uk.ac.liv.auction.core.Auction;
 
 /**
+ * An event that is fired whenever any agent is polled by an auction for its
+ * shout via the requestShout() method.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -25,8 +28,8 @@ public class AgentPolledEvent extends AuctionEvent {
 
   protected TradingAgent agent;
  
-  public AgentPolledEvent( Auction auction, TradingAgent agent ) {
-    super(auction);
+  public AgentPolledEvent( Auction auction, int time, TradingAgent agent ) {
+    super(auction, time);
     this.agent = agent;
   }
 

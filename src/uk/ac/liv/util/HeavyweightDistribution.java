@@ -34,8 +34,6 @@ public class HeavyweightDistribution extends CummulativeDistribution {
 
   protected TDoubleArrayList data;
   
-  protected double trimmedMean = Double.NaN;
-  
   protected boolean hasChanged = false;
   
   private static final int INITIAL_SIZE = 10000;
@@ -71,20 +69,26 @@ public class HeavyweightDistribution extends CummulativeDistribution {
     for ( int i = trimmedN; i < (n - trimmedN); i++ ) {
       trimmedTotal += data.get(i);
     }
-    trimmedMean = trimmedTotal / (n - trimmedN * 2);
+    double trimmedMean = trimmedTotal / (n - trimmedN * 2);
     hasChanged = false;
     return trimmedMean;    
   }
   
-  protected TDoubleArrayList getData() {
-    return data;
-  }
-  
+
+  /**
+   * Add the data in the supplied distribution to the data
+   * in this one yielding a combined distribution.
+   */
   public void combine( HeavyweightDistribution other ) {
     TDoubleArrayList otherData = other.getData();
     for( int i=0; i<otherData.size(); i++ ) {
       newData(otherData.get(i));
     }
   }
+  
+  protected TDoubleArrayList getData() {
+    return data;
+  }
+  
     
 }

@@ -300,16 +300,16 @@ public abstract class AuctionImpl extends Observable
   }
 
   public void informAuctionClosed() {
-    fireEvent( new AuctionClosedEvent(this) );
+    fireEvent( new AuctionClosedEvent(this, getRound()) );
   }
 
   public void informEndOfDay() {
-    fireEvent( new EndOfDayEvent(this) );
+    fireEvent( new EndOfDayEvent(this, getRound()) );
   }
 
 
   public void informAuctionOpen() {
-    fireEvent( new AuctionOpenEvent(this) );
+    fireEvent( new AuctionOpenEvent(this, getRound()) );
   }
 
   /**

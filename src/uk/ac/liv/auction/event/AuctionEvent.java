@@ -18,18 +18,33 @@ package uk.ac.liv.auction.event;
 import uk.ac.liv.auction.core.Auction;
 
 /**
+ * Superclass for all types of auction event.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public abstract class AuctionEvent {
   
+  /**
+   * The auction that this event occurred in.
+   */
   protected Auction auction;
+
+  /**
+   * The time at which this event occurred.
+   */
+  protected int time;
+
   
-  public AuctionEvent( Auction auction ) {
+  public AuctionEvent( Auction auction, int time ) {
     this.auction = auction;    
+    this.time = time;
   }
   
+  /**
+   * Get the auction that this event occured in.
+   */
   public Auction getAuction() {
     return auction;
   }

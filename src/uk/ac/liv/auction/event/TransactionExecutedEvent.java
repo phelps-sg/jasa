@@ -19,25 +19,35 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
 /**
+ * An event that is fired every time a good is sold in an auction.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class TransactionExecutedEvent extends AuctionEvent {
   
-  protected int time;
   
+  /**
+   * The offers that led to this transaction.
+   */
   protected Shout ask, bid;
   
+  /**
+   * The price at which the good was sold for.
+   */
   protected double price;
   
+  /**
+   * The quantity of the good that was sold.
+   */
   protected int quantity;
 
   public TransactionExecutedEvent ( Auction auction,
       							int time,
       							Shout ask, Shout bid,
       							double price, int quantity ) {
-    super(auction);
+    super(auction, time);
     this.ask = ask;
     this.bid = bid;
     this.price = price;

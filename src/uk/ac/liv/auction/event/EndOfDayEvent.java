@@ -18,13 +18,15 @@ package uk.ac.liv.auction.event;
 import uk.ac.liv.auction.core.Auction;
 
 /**
+ * An event that is fired at the end of every trading period.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class EndOfDayEvent extends AuctionEvent {
 
-  public EndOfDayEvent( Auction auction ) {
-    super(auction);
+  public EndOfDayEvent( Auction auction, int time ) {
+    super(auction, time);
   }
 }

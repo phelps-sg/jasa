@@ -18,19 +18,21 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
 /**
+ * An event that is fired every time a shout is placed in an auction.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class ShoutPlacedEvent extends AuctionEvent {
-  
-  protected int time;
-  
+ 
+  /**
+   * The shout that led to this event.
+   */
   protected Shout shout;
 
   public ShoutPlacedEvent( Auction auction, int time, Shout shout ) {
-    super(auction);
-    this.time = time;
+    super(auction, time);    
     this.shout = shout;
   }
   

@@ -18,14 +18,15 @@ package uk.ac.liv.auction.event;
 import uk.ac.liv.auction.core.Auction;
 
 /**
+ * An event that is fired when an auction opens.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
-
 public class AuctionOpenEvent extends AuctionEvent {
   
-  public AuctionOpenEvent( Auction auction ) {
-    super(auction);
+  public AuctionOpenEvent( Auction auction, int time ) {
+    super(auction, time);
   }
 
 }

@@ -18,13 +18,15 @@ package uk.ac.liv.auction.event;
 import uk.ac.liv.auction.core.Auction;
 
 /**
+ * An event that is fired when an auction closes.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class AuctionClosedEvent extends AuctionEvent {
 
-  public AuctionClosedEvent( Auction auction ) {
-    super(auction);
+  public AuctionClosedEvent( Auction auction, int time ) {
+    super(auction, time);
   }
 }

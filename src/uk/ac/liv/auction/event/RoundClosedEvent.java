@@ -18,6 +18,8 @@ package uk.ac.liv.auction.event;
 import uk.ac.liv.auction.core.Auction;
 
 /**
+ * An event that is fired at the end of each round.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -26,11 +28,8 @@ public class RoundClosedEvent extends AuctionEvent {
   
   protected Auction auction;
   
-  protected int time;
-  
   public RoundClosedEvent( Auction auction, int time ) {
-    super(auction);
-    this.time = time;
+    super(auction, time);  
   }
 
   public int getTime() {

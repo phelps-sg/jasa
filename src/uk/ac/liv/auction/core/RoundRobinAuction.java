@@ -387,7 +387,7 @@ public class RoundRobinAuction extends AuctionImpl
   
   public void requestShout( TradingAgent trader ) {
     trader.requestShout(this);
-    fireEvent(new AgentPolledEvent(this, trader));
+    fireEvent(new AgentPolledEvent(this, getRound(), trader));
   }
 
 
