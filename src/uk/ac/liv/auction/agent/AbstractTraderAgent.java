@@ -31,18 +31,46 @@ import ec.util.MersenneTwisterFast;
 
 import java.io.Serializable;
 
-/**
- * <p>
+/** <p>
  * An abstract class representing a simple agent trading in a round-robin auction.
  * Traders of this type deal in a single commodity for which they have a
  * well-defined private valuation.
- * </p>
+ *
+ * </p><p><b>Parameters</b><br>
+ * <table>
+ * <tr><td valign=top><i>base</i><tt>.privatevalue</tt><br>
+ * <font size=-1>double &gt;= 0</font></td>
+ * <td valign=top>(the private value for the agent)</td></tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.isseller</tt><br>
+ * <font size=-1>boolean</font></td>
+ * <td valign=top>(is this agent a seller)</td><tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.strategy</tt><br>
+ * <font size=-1>class</font></td>
+ * <td valign=top>(the trading strategy to use)</td><tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.initialstock</tt><br>
+ * <font size=-1>int &gt;= 0</font></td>
+ * <td valign=top>(the initial quantity of the commodotiy possessed by this agent)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.initialfunds</tt><br>
+ * <font size=-1>double</font></td>
+ * <td valign=top>(the initial funds)</td><tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.randomprivatevalue</tt><br>
+ * <font size=-1>boolean</font></td>
+ * <td valign=top>(use a random private value?)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.maxprivatevalue</tt><br>
+ * <font size=-1>double &gt;= 0</font></td>
+ * <td valign=top>(the maximum private value if we are drawing randomly)</td><tr> 
+ *
+ * </table>
  *
  * @see TraderAgent
  * @see uk.ac.liv.auction.core.RoundRobinAuction
- *
  * @author Steve Phelps
- *
  */
 
 public abstract class AbstractTraderAgent implements RoundRobinTrader,
