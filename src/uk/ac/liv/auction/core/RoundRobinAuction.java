@@ -16,9 +16,7 @@
 package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.TradingAgent;
-import uk.ac.liv.auction.event.AuctionClosedEvent;
-import uk.ac.liv.auction.event.AuctionOpenEvent;
-import uk.ac.liv.auction.event.EndOfDayEvent;
+import uk.ac.liv.auction.event.AgentPolledEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
@@ -213,7 +211,7 @@ public class RoundRobinAuction extends AuctionImpl
   public static final String ERROR_SHOUTSVISIBLE =
     "Auctioneer does not permit shout inspection";
 
-  static Logger log4jLogger = Logger.getLogger(RoundRobinAuction.class);
+  static Logger logger = Logger.getLogger(RoundRobinAuction.class);
 
   /**
    * Construct a new auction in the stopped state, with no traders, no shouts,
@@ -246,19 +244,19 @@ public class RoundRobinAuction extends AuctionImpl
                                                 null, -1);
 
     try {
-      logger =
+      marketDataLogger =
           (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
                                                                  null,
                                                                  MarketDataLogger.class);
-      logger.setAuction(this);
-      addAuctionEventListener(logger);
+      marketDataLogger.setAuction(this);
+      addAuctionEventListener(marketDataLogger);
 
     } catch ( ParamClassLoadException e ) {
-      logger = null;
+      marketDataLogger = null;
     }
 
-    if ( logger != null && logger instanceof Parameterizable ) {
-      ((Parameterizable) logger).setup(parameters, base.push(P_LOGGER));
+    if ( marketDataLogger != null && marketDataLogger instanceof Parameterizable ) {
+      ((Parameterizable) marketDataLogger).setup(parameters, base.push(P_LOGGER));
     }
 
     try {
@@ -305,7 +303,7 @@ public class RoundRobinAuction extends AuctionImpl
      
       int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS), null, 0);
 
-      log4jLogger.info("Configuring agent population " + t + ":\n\t" + numAgents +
+      logger.info("Configuring agent population " + t + ":\n\t" + numAgents +
                    " agents of type " + parameters.getString(typeParamT, null));
 
       for( int i=0; i<numAgents; i++ ) {
@@ -317,7 +315,7 @@ public class RoundRobinAuction extends AuctionImpl
         register(agent);
       }
       
-      log4jLogger.info("done.\n");
+      logger.info("done.\n");
     }
 
     initialise();
@@ -390,11 +388,14 @@ public class RoundRobinAuction extends AuctionImpl
     Iterator i = activeTraders.iterator();
     while ( i.hasNext() ) {
       TradingAgent trader = (TradingAgent) i.next();
-      trader.requestShout(this);
+      requestShout(trader);
     }
   }
-
-
+  
+  public void requestShout( TradingAgent trader ) {
+    trader.requestShout(this);
+    fireEvent(new AgentPolledEvent(this, trader));
+  }
 
 
   /**
@@ -548,10 +549,10 @@ public class RoundRobinAuction extends AuctionImpl
 
 
   public void newShout( Shout shout ) throws AuctionException {
+    fireEvent( new ShoutPlacedEvent(this, round, shout) );
     super.newShout(shout);
     setChanged();
     notifyObservers();
-    fireEvent( new ShoutPlacedEvent(this, round, shout) );
     shoutsProcessed = true;
   }
 
@@ -597,8 +598,8 @@ public class RoundRobinAuction extends AuctionImpl
       ((Resetable) auctioneer).reset();
     }
 
-    if ( logger != null && logger instanceof Resetable ) {
-      ((Resetable) logger).reset();
+    if ( marketDataLogger != null && marketDataLogger instanceof Resetable ) {
+      ((Resetable) marketDataLogger).reset();
     }
 
     if ( marketStats != null && marketStats instanceof Resetable ) {
@@ -620,8 +621,8 @@ public class RoundRobinAuction extends AuctionImpl
    * Generate a report.
    */
   public void generateReport() {
-    if ( logger != null ) {
-      logger.generateReport();
+    if ( marketDataLogger != null ) {
+      marketDataLogger.generateReport();
     }
     if ( marketStats != null ) {
       marketStats.calculate();
@@ -692,10 +693,7 @@ public class RoundRobinAuction extends AuctionImpl
     while ( i.hasNext() ) {
       TradingAgent defunct = (TradingAgent) i.next();
       activeTraders.remove(defunct);
-      removeAuctionEventListener(AuctionOpenEvent.class, defunct);
-      removeAuctionEventListener(AuctionClosedEvent.class, defunct);
-      removeAuctionEventListener(EndOfDayEvent.class, defunct);
-      removeAuctionEventListener(RoundClosedEvent.class, defunct);
+      removeAuctionEventListener(defunct);
     }
   }
 
@@ -715,10 +713,7 @@ public class RoundRobinAuction extends AuctionImpl
 
   protected void activate( TradingAgent agent ) {
     activeTraders.add(agent);
-    addAuctionEventListener(AuctionOpenEvent.class, agent);
-    addAuctionEventListener(AuctionClosedEvent.class, agent);
-    addAuctionEventListener(EndOfDayEvent.class, agent);
-    addAuctionEventListener(RoundClosedEvent.class, agent);
+    addAuctionEventListener(agent);
     numTraders++;
   }
 
@@ -743,14 +738,14 @@ public class RoundRobinAuction extends AuctionImpl
    * Terminate the current trading period (day)
    */
   protected void endDay() {
-    log4jLogger.debug("endDay()");
+    logger.debug("endDay()");
+    day++;
+    logger.debug("new day = " + day + " of " + maximumDays);
+    round = 0;
     informEndOfDay();
     auctioneer.endOfDayProcessing();
-    day++;
-    log4jLogger.debug("new day = " + day + " of " + maximumDays);
-    round = 0;
     if ( day >= maximumDays ) {
-      log4jLogger.debug("exceeded maximum days- closing auction");
+      logger.debug("exceeded maximum days- closing auction");
       close();
     }
   }

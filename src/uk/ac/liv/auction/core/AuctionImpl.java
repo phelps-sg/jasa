@@ -93,7 +93,7 @@ public abstract class AuctionImpl extends Observable
   /**
    * The optional MarketDataLogger to log data to.
    */
-  protected MarketDataLogger logger = null;
+  protected MarketDataLogger marketDataLogger = null;
 
   protected HashMap eventListeners = new HashMap();
   
@@ -104,7 +104,7 @@ public abstract class AuctionImpl extends Observable
   private static final Class[] allEvents = 
   	{ RoundClosedEvent.class, AuctionOpenEvent.class, AuctionClosedEvent.class,
         EndOfDayEvent.class, TransactionExecutedEvent.class, 
-        ShoutPlacedEvent.class }; 
+        ShoutPlacedEvent.class, AgentPolledEvent.class }; 
   
   
   public AuctionImpl( String name ) {
@@ -165,7 +165,7 @@ public abstract class AuctionImpl extends Observable
    * Assign a data logger
    */
   public void setMarketDataLogger( MarketDataLogger logger ) {
-    this.logger = logger;
+    this.marketDataLogger = logger;
     removeAuctionEventListener(logger);
     addAuctionEventListener(logger);
   }
@@ -174,7 +174,7 @@ public abstract class AuctionImpl extends Observable
    * Get the current data logger
    */
   public MarketDataLogger getMarketDataLogger() {
-    return logger;
+    return marketDataLogger;
   }
 
   /**
@@ -243,12 +243,12 @@ public abstract class AuctionImpl extends Observable
    * @param newLogger  The new logger to add.
    */
   public void addMarketDataLogger( MarketDataLogger newLogger ) {
-    MarketDataLogger oldLogger = logger;
+    MarketDataLogger oldLogger = marketDataLogger;
     setMarketDataLogger(new CombiMarketDataLogger());
     if ( oldLogger != null ) {
-      ( (CombiMarketDataLogger) logger).addLogger(oldLogger);
+      ( (CombiMarketDataLogger) marketDataLogger).addLogger(oldLogger);
     }
-    ((CombiMarketDataLogger) logger).addLogger(newLogger);
+    ((CombiMarketDataLogger) marketDataLogger).addLogger(newLogger);
   }
 
   public void addListener( LinkedList listeners, AuctionEventListener listener ) {
@@ -322,7 +322,7 @@ public abstract class AuctionImpl extends Observable
    * @see uk.ac.liv.auction.stats.ReportVariable
    */
   public Map getResults() {
-    return logger.getVariables();
+    return marketDataLogger.getVariables();
   }
 
   public DailyStatsMarketDataLogger getDailyStats() {

@@ -12,41 +12,25 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
-
-package uk.ac.liv.auction.core;
+package uk.ac.liv.auction.event;
 
 import uk.ac.liv.auction.agent.TradingAgent;
-
-import uk.ac.liv.prng.GlobalPRNG;
+import uk.ac.liv.auction.core.Auction;
 
 /**
- * <p>
- * A round-robin auction in which the ordering of traders in
- * randomized for each round.
- * </p>
- *
  * @author Steve Phelps
  * @version $Revision$
  */
+public class AgentPolledEvent extends AuctionEvent {
 
-public class RandomRobinAuction extends RoundRobinAuction {
-
-  public RandomRobinAuction() {
-    super();
+  protected TradingAgent agent;
+ 
+  public AgentPolledEvent( Auction auction, TradingAgent agent ) {
+    super(auction);
+    this.agent = agent;
   }
 
-  public RandomRobinAuction( String name ) {
-    super(name);
+  public TradingAgent getAgent() {
+    return agent;
   }
-
-  public void requestShouts() {
-    Object[] randomlySortedTraders = activeTraders.toArray();
-    GlobalPRNG.randomPermutation(randomlySortedTraders);    
-    for( int i=0; i<numTraders; i++ ) {      
-      TradingAgent trader = (TradingAgent) randomlySortedTraders[i];      
-      requestShout(trader);
-    }
-  }
-
-
 }
