@@ -83,6 +83,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected boolean collectIterData = false;
 
   protected StandardRandomizer randomizer;
+  
+  protected CummulativeStatCounter[] variables;
 
   static Logger logger = Logger.getLogger(ElectricityAuctionSimulation.class);
 
@@ -217,45 +219,37 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
 
   public void run() {
-
     try {
-
-      logger.info("\nUsing global parameters:\n");
-      logger.info("maxRounds = " + maxRounds);
-      logger.info("iterations = " + iterations);
-      logger.info("auctioneer = " + auctioneer);
-      logger.info("ns = " + numSellers);
-      logger.info("nb = " + numBuyers);
-      logger.info("cs = " + sellerCapacity);
-      logger.info("cb = " + buyerCapacity);
-      logger.info("stats = " + stats + "\n");
-
       experiment();
-
-    } catch ( FileNotFoundException e ) {
+    } catch ( IOException e ) {
+      logger.error(e.getMessage());
       e.printStackTrace();
     }
   }
 
 
-  public void experiment() throws FileNotFoundException {
+  public void experiment() throws IOException {
+
+    logger.info("\nUsing global parameters:\n");
+    logger.info("maxRounds = " + maxRounds);
+    logger.info("iterations = " + iterations);
+    logger.info("auctioneer = " + auctioneer);
+    logger.info("ns = " + numSellers);
+    logger.info("nb = " + numBuyers);
+    logger.info("cs = " + sellerCapacity);
+    logger.info("cb = " + buyerCapacity);
+    logger.info("stats = " + stats + "\n");
 
     int numTraders = numBuyers + numSellers;
-    
-    try {
-      paramSummary = numSellers + "-" + numBuyers + "-" +
-                      sellerCapacity + "-" + buyerCapacity;
 
-      dataFile = new CSVWriter(
-                  new FileOutputStream(outputDir + "/" + "npt-"
-                                        + paramSummary + ".csv"),
-                                            DATAFILE_NUM_COLUMNS);
+    paramSummary = numSellers + "-" + numBuyers + "-" +
+                    sellerCapacity + "-" + buyerCapacity;
 
-    } catch ( IOException e ) {
-      e.printStackTrace();
-      throw new Error(e.getMessage());
-    }
-
+    dataFile = new CSVWriter(
+                new FileOutputStream(outputDir + "/" + "npt-"
+                                      + paramSummary + ".csv"),
+                                          DATAFILE_NUM_COLUMNS);
+  
     marketData = new StatsMarketDataLogger();
     ((Resetable) auctioneer).reset();
     auction.setAuctioneer(auctioneer);
@@ -274,106 +268,99 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     randomizedPrivateValues =
         randomizer.generateRandomizedPrivateValues(numTraders, iterations);
 
-    for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
+    for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {            
 
       double auctioneerK = kMultiple/(double) auctioneerKSamples;
-      ((ParameterizablePricing) auctioneer).setK(auctioneerK);
-      auction.reset();
-
-      logger.info("\n*** Experiment with parameters");
-
-      logger.info("k = " + auctioneerK);
-
-      CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
-      CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
-      CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
-      CummulativeStatCounter pSA = new CummulativeStatCounter("PSA");
-      CummulativeStatCounter pBA = new CummulativeStatCounter("PBA");
-      CummulativeStatCounter pST = new CummulativeStatCounter("PST");
-      CummulativeStatCounter pBT = new CummulativeStatCounter("PBT");
-      CummulativeStatCounter eAN = new CummulativeStatCounter("EAN");
-      CummulativeStatCounter mPBN = new CummulativeStatCounter("MPBN");
-      CummulativeStatCounter mPSN = new CummulativeStatCounter("MPSN");
-      CummulativeStatCounter sMPB = new CummulativeStatCounter("SMPB");
-      CummulativeStatCounter sMPS = new CummulativeStatCounter("SMPS");
-      CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
-      CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
-      CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
-      CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
-      CummulativeStatCounter equilibPrice =
-          new CummulativeStatCounter("Equilib Price");
-      CummulativeStatCounter reMean = new CummulativeStatCounter("RE mean");
-      CummulativeStatCounter reStdev = new CummulativeStatCounter("RE stdev");
-
-      LinkedList variables = new LinkedList();
-      variables.add(efficiency);
-      variables.add(mPB);
-      variables.add(mPS);
-      variables.add(pBA);
-      variables.add(pSA);
-      variables.add(pBT);
-      variables.add(pST);
-      variables.add(eAN);
-      variables.add(mPBN);
-      variables.add(mPSN);
-      variables.add(sMPB);
-      variables.add(sMPS);
-      variables.add(sMPBN);
-      variables.add(sMPSN);
-      variables.add(equilibPrice);
-      variables.add(pBCE);
-      variables.add(pSCE);
-      variables.add(reMean);
-      variables.add(reStdev);
-
-
-      Debug.assertTrue("CSV file not configured with correct number of columns",
-                         variables.size()*2 == DATAFILE_NUM_COLUMNS-1);
-
-      initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
-
-      for( int i=0; i<iterations; i++ ) {
-
-        randomizer.randomizePrivateValues(randomizedPrivateValues, i);
-
-        randomizer.setStrategyPRNGseeds(prngSeeds, i);
-
-        auction.reset();
-        auction.run();
-        stats.calculate();
-        stats.calculateStrategicMarketPower();
-
-        efficiency.newData(stats.getEA());
-        mPB.newData(stats.getMPB());
-        mPS.newData(stats.getMPS());
-        sMPB.newData(stats.getSMPB());
-        sMPS.newData(stats.getSMPS());
-        pBA.newData(stats.getPBA());
-        pSA.newData(stats.getPSA());
-        eAN.newData(stats.getEA()/100);
-        mPBN.newData(mpNormalise(stats.getMPB()));
-        mPSN.newData(mpNormalise(stats.getMPS()));
-        sMPBN.newData(mpNormalise(stats.getSMPB()));
-        sMPSN.newData(mpNormalise(stats.getSMPS()));
-        pBT.newData(stats.getPBT());
-        pST.newData(stats.getPST());
-        pBCE.newData(stats.getPBCE());
-        pSCE.newData(stats.getPSCE());
-
-        double ep = (stats.getEquilibriaStats().getMinPrice()
-                               + stats.getEquilibriaStats().getMaxPrice()) / 2;
-        equilibPrice.newData(ep);
-        
-        calculateREStats(reMean, reStdev);
-
-        dumpIterResults();
-      }
-
-      reportSummary(auctioneerK, variables);      
-      recordVariables(auctioneerK, variables);
+      
+      experiment(auctioneerK, randomizedPrivateValues, prngSeeds);
+      
+      reportSummary(auctioneerK);      
+      recordVariables(auctioneerK);
     }
 
     dataFile.close();
+  }
+  
+  
+  public void experiment( double auctioneerK, 
+                            double[][] randomizedPrivateValues, 
+                            long[][] prngSeeds ) throws FileNotFoundException {
+    
+    ((ParameterizablePricing) auctioneer).setK(auctioneerK);
+    auction.reset();
+
+    logger.info("\n*** Experiment with parameters");
+
+    logger.info("k = " + auctioneerK);
+
+    CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
+    CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
+    CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
+    CummulativeStatCounter pSA = new CummulativeStatCounter("PSA");
+    CummulativeStatCounter pBA = new CummulativeStatCounter("PBA");
+    CummulativeStatCounter pST = new CummulativeStatCounter("PST");
+    CummulativeStatCounter pBT = new CummulativeStatCounter("PBT");
+    CummulativeStatCounter eAN = new CummulativeStatCounter("EAN");
+    CummulativeStatCounter mPBN = new CummulativeStatCounter("MPBN");
+    CummulativeStatCounter mPSN = new CummulativeStatCounter("MPSN");
+    CummulativeStatCounter sMPB = new CummulativeStatCounter("SMPB");
+    CummulativeStatCounter sMPS = new CummulativeStatCounter("SMPS");
+    CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
+    CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
+    CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
+    CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
+    CummulativeStatCounter equilibPrice =
+        new CummulativeStatCounter("Equilib Price");
+    CummulativeStatCounter reMean = new CummulativeStatCounter("RE mean");
+    CummulativeStatCounter reStdev = new CummulativeStatCounter("RE stdev");
+
+    variables = new CummulativeStatCounter[] {
+      efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
+      sMPBN, sMPSN, equilibPrice, pBCE, reMean, reStdev 
+    };
+    
+    Debug.assertTrue("CSV file not configured with correct number of columns",
+                       variables.length*2 == DATAFILE_NUM_COLUMNS-1);
+
+    initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
+
+    for( int i=0; i<iterations; i++ ) {
+
+      randomizer.randomizePrivateValues(randomizedPrivateValues, i);
+
+      randomizer.setStrategyPRNGseeds(prngSeeds, i);
+
+      auction.reset();
+      auction.run();
+      stats.calculate();
+      stats.calculateStrategicMarketPower();
+
+      efficiency.newData(stats.getEA());
+      mPB.newData(stats.getMPB());
+      mPS.newData(stats.getMPS());
+      sMPB.newData(stats.getSMPB());
+      sMPS.newData(stats.getSMPS());
+      pBA.newData(stats.getPBA());
+      pSA.newData(stats.getPSA());
+      eAN.newData(stats.getEA()/100);
+      mPBN.newData(mpNormalise(stats.getMPB()));
+      mPSN.newData(mpNormalise(stats.getMPS()));
+      sMPBN.newData(mpNormalise(stats.getSMPB()));
+      sMPSN.newData(mpNormalise(stats.getSMPS()));
+      pBT.newData(stats.getPBT());
+      pST.newData(stats.getPST());
+      pBCE.newData(stats.getPBCE());
+      pSCE.newData(stats.getPSCE());
+
+      double ep = (stats.getEquilibriaStats().getMinPrice()
+                             + stats.getEquilibriaStats().getMaxPrice()) / 2;
+      equilibPrice.newData(ep);
+
+      calculateREStats(reMean, reStdev);
+
+      dumpIterResults();
+    }
+ 
   }
 
 
@@ -403,23 +390,20 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 
-  protected void recordVariables( double auctioneerK, List variables ) {    
+  protected void recordVariables( double auctioneerK ) {    
     dataFile.newData(auctioneerK);
-    Iterator i = variables.iterator();
-    while ( i.hasNext() ) {
-      CummulativeStatCounter variable = (CummulativeStatCounter) i.next();
-      dataFile.newData(variable.getMean());
-      dataFile.newData(variable.getStdDev());
+    for( int i=0; i<variables.length; i++ ) {     
+      dataFile.newData(variables[i].getMean());
+      dataFile.newData(variables[i].getStdDev());
     }
   }
   
   
-  protected void reportSummary( double auctioneerK, List variables ) {
-   logger.info("\n*** Summary results for: k = " + auctioneerK +"\n");
-    Iterator i = variables.iterator();
-    while ( i.hasNext() ) {
-      logger.info(i.next());
-    }
+  protected void reportSummary( double auctioneerK ) {
+    logger.info("\n*** Summary results for: k = " + auctioneerK +"\n");
+    for( int i=0; i<variables.length; i++ ) {
+      logger.info(variables[i]);
+    }    
   }
 
 
@@ -441,11 +425,13 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     Iterator i = auction.getTraderIterator();    
     AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
     AdaptiveStrategy s = (AdaptiveStrategy) agent.getStrategy();
-    RothErevLearner l = (RothErevLearner) s.getLearner();
-    CummulativeStatCounter reStats = new CummulativeStatCounter("re");
-    l.computeDistributionStats(reStats);
-    reMean.newData(reStats.getMean());
-    reStdev.newData(reStats.getStdDev());
+    if ( s.getLearner() instanceof RothErevLearner ) {
+      RothErevLearner l = (RothErevLearner) s.getLearner();
+      CummulativeStatCounter reStats = new CummulativeStatCounter("re");
+      l.computeDistributionStats(reStats);
+      reMean.newData(reStats.getMean());
+      reStdev.newData(reStats.getStdDev());
+    }
   }
 
 
