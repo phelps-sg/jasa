@@ -124,13 +124,14 @@ gp.fs.size = 2
 
 ################### determineClearingPrice
 
-NEW_FUNCTION_SET(determineClearingPrice, 9)
+NEW_FUNCTION_SET(determineClearingPrice, 10)
 
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Add, binaryarithop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Subtract, binaryarithop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Multiply, binaryarithop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Divide, binaryarithop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.One, numberterminal)
+NEW_FUNCTION(uk.ac.liv.ec.gp.func.DoubleERC, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.AskPrice, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.BidPrice, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteAskPrice, numberterminal)
