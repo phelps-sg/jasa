@@ -124,6 +124,7 @@ public class RothErevLearner implements
     e = parameters.getDoubleWithDefault(base.push("e"), null, DEFAULT_E);
     s1 = parameters.getDoubleWithDefault(base.push("s1"), null, DEFAULT_S1);
     validateParams();
+    p = new DiscreteProbabilityDistribution(k);
     initialise();
   }
 
