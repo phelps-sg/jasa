@@ -74,7 +74,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
     randGenerator.setSeed(seed);
   }
 
-  public void setAuction( RandomRobinAuction auction ) {
+  public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
   }
 
