@@ -66,6 +66,7 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
     checkImprovement(shout);
     super.newShout(shout);
     clear();
+    generateQuote();
   }
 
   public void checkImprovement( Shout shout ) throws IllegalShoutException {
