@@ -203,10 +203,6 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     ((Parameterizable) strategyMixer).setup(state.parameters,
                                               base.push(P_STRATEGYMIXER));
 
-    GPTradingStrategy.setMemorySize(
-      state.parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null, 10));
-
-
     System.out.println("numSellers = " + numSellers);
     System.out.println("numBuyers = " + numBuyers);
     System.out.println("sellerCapacity = " + sellerCapacity);
@@ -334,7 +330,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   protected void preAuctionProcessing() {
 
     if ( stats == null ) {
-      stats = new ElectricityStats(0, 200, auction);
+      stats = new ElectricityStats(auction);
     }
 
     if ( randomPrivateValues &&

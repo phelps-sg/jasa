@@ -37,7 +37,7 @@ import uk.ac.liv.util.*;
  *
  */
 
-public class GPTradingStrategy extends GPIndividualWithMemory
+public class GPTradingStrategy extends GPIndividualCtx
     implements FixedQuantityStrategy, QuoteProvider, Serializable, Resetable {
 
 
@@ -51,15 +51,6 @@ public class GPTradingStrategy extends GPIndividualWithMemory
 
   CummulativeStatCounter priceStats = new CummulativeStatCounter("priceStats");
 
-  static int memorySize = 10;
-
-  public GPTradingStrategy() {
-    super(memorySize);
-  }
-
-  public static void setMemorySize( int memorySize ) {
-    GPTradingStrategy.memorySize = memorySize;
-  }
 
   public void setAgent( AbstractTraderAgent agent ) {
     this.agent = agent;
@@ -132,17 +123,6 @@ public class GPTradingStrategy extends GPIndividualWithMemory
     return copy;
   }
 
-  public GPGenericData get( long address ) {
-    // hack to turn nulls into 0
-    GPGenericData result = super.get(address);
-    if ( result == null ) {
-      GPGenericData zero = GPGenericDataPool.fetch();
-      zero.data = FastLong.newFastLong(0L);
-      return zero;
-    } else {
-      return result;
-    }
-  }
 
 }
 
