@@ -26,6 +26,7 @@ import java.io.Serializable;
 import uk.ac.liv.util.Debug;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.ParameterizablePricing;
 
 import uk.ac.liv.auction.stats.*;
 
@@ -174,7 +175,9 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
 
   public double calculateEquilibriumPrice() {
-    return (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2; 
+    //FIXME
+    double k = ((ParameterizablePricing) auction.getAuctioneer()).getK();
+    return (standardStats.getMinPrice()*(1-k) + k*standardStats.getMaxPrice()); // / 2;
   }
 
 

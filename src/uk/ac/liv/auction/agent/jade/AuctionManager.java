@@ -28,11 +28,41 @@ import jade.domain.*;
 
 public class AuctionManager extends JADEAbstractAuctionAgent {
 
+  AID auctioneerAID = null;
+
   public AuctionManager() {
+  }
+
+  protected void setup() {
+    super.setup();
+    activateUI();
+  }
+
+  public void activateUI() {
+    System.out.println("auction manager activating UI");
+    ManagerUIFrame ui = new ManagerUIFrame(this);
+    ui.setSize( 400, 200 );
+    ui.setLocation( 400, 400 );
+    ui.pack();
+    ui.setVisible(true);
   }
 
   public String getServiceName() {
     return "AUCTION_MANAGER";
+  }
+
+  public void startAuction() {
+    try {
+      if ( auctioneerAID == null ) {
+        auctioneerAID = findAuctioneer();
+      }
+      ACLMessage start = new ACLMessage(ACLMessage.INFORM);
+      start.addReceiver(auctioneerAID);
+      StartAuctionAction startContent = new StartAuctionAction();
+      JADEAbstractAuctionAgent.sendMessage(this, start, startContent);
+    } catch ( Exception e ) {
+      e.printStackTrace();
+    }
   }
 
   public void addBehaviours() {
@@ -49,7 +79,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
           auctioneerController.start();
           trader1Controller.start();
 
-          AID auctioneerAID = findAuctioneer();
+          auctioneerAID = findAuctioneer();
 /*
           ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
           msg.addReceiver(auctioneerAID);

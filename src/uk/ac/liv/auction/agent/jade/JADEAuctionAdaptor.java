@@ -120,24 +120,33 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
 
     public void action() {
       try {
+        System.out.println("auctioneer: processing shouts");
         ACLMessage msg = receive();
         System.out.println("Got msg " + msg);
         if ( msg != null ) {
           ContentElement content = getContentManager().extractContent(msg);
+          System.out.println("auctioneer: msg content = " + content);
           if ( content instanceof NewShoutAction ) {
             System.out.println("Recieved new shout " + msg);
             ACLShout shout = ((NewShoutAction) content).getShout();
+            System.out.println("JASA shout = " + shout.jasaShout());
             auction.newShout(shout.jasaShout());
+          } else if ( content instanceof RemoveShoutAction ) {
+            System.out.println("Removing shout " + msg);
+            ACLShout shout = ((RemoveShoutAction) content).getShout();
+            //auction.removeShout(shout.jasaShout());
           }
         }
       } catch ( Exception e ) {
         e.printStackTrace();
         throw new Error(e.getMessage());
       }
-      block();
+      //block();
     }
 
     public boolean done() {
+      System.out.println("auctioneer: checking end of auction");
+      System.out.println("finished = " + auction.roundFinished());
       return auction.roundFinished();
     }
 

@@ -65,28 +65,31 @@ public class Shout implements Comparable, Cloneable, Serializable {
    */
   protected boolean isBid;
 
-  /**
-   * Used to allocate each agent with a unique id.
-   */
-  static IdAllocator idAllocator = new IdAllocator();
 
-  protected int id;
+  /**
+   * The unique id of this shout
+   */
+  protected int id = -1;
 
   /**
    * The child of this shout.
    */
   protected Shout child = null;
 
+  /**
+   * Used to allocate each agent with a unique id.
+   */
+  static IdAllocator idAllocator = new IdAllocator();
 
   public Shout( TraderAgent agent, int quantity, double price, boolean isBid ) {
-    this();
-    this.agent = agent;
+    this(agent);
     this.quantity = quantity;
     this.price = price;
     this.isBid = isBid;
   }
 
   public Shout( TraderAgent agent ) {
+    this();
     this.agent = agent;
   }
 
@@ -214,13 +217,14 @@ public class Shout implements Comparable, Cloneable, Serializable {
     id = other.getId();
     child = null;
   }
-/*
+
   public int hashCode() {
     return id;
   }
 
   public boolean equals( Object other ) {
-    return this.id == ((Shout) other).id;
+    return id == ((Shout) other).id
+                   && getAgent().equals(((Shout) other).getAgent());
   }
-*/
+
 }

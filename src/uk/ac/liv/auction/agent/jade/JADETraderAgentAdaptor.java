@@ -68,7 +68,7 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
           //TODO
         }
 
-        block();
+        //block();
       }
     } );
 

@@ -192,14 +192,14 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       System.out.println("S1 = " + S1);
       System.out.println("random private values = " + randomPrivateValues);
 
-      auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
-//      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
+//      auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
 
 //      experiment(60, 30, 10, 10);
 //      experiment(60, 30, 10, 20);
 //      experiment(60, 30, 10, 40);
 //      experiment(30, 30, 20, 10);
-      experiment(30, 30, 10, 10);
+//      experiment(30, 30, 10, 10);
       experiment(3,3,10,10);
 //      experiment(30, 30, 10, 20);
 //      experiment(30, 60, 40, 10);
