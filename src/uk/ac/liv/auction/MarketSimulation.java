@@ -32,7 +32,13 @@ import java.util.Iterator;
 
 import java.io.File;
 
-
+/**
+ * <p>
+ * The main JASA application class.  This application takes as an argument
+ * the name of a parameter file describing an auction experiment, and
+ * proceeds to run that experiment.
+ * </p>
+ */
 
 public class MarketSimulation implements Parameterizable, Runnable {
 

@@ -19,7 +19,7 @@ import huyd.poolit.*;
 
 /**
  * This encapsulation of Double can be used in combination with the
- * GenericNumber and GenericInteger classes, for performing weakly-typed
+ * GenericNumber and GenericLong classes, for performing weakly-typed
  * arithmetic operations.
  * @author Steve Phelps
  *

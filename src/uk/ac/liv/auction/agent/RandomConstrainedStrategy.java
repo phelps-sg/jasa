@@ -22,11 +22,19 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 import ec.util.MersenneTwisterFast;
 
+/**
+ * <p>
+ * A trading strategy that in which we bid a different random markup on our
+ * agent's private value in each auction round.
+ * </p>
+ */
+
 public class RandomConstrainedStrategy extends AbstractStrategy {
 
   double maxMarkup = 50;
 
-  static MersenneTwisterFast randGenerator = new MersenneTwisterFast(System.currentTimeMillis());
+  static MersenneTwisterFast randGenerator =
+    new MersenneTwisterFast(System.currentTimeMillis());
 
   static final String P_MAX_MARKUP = "maxmarkup";
 

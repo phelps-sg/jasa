@@ -28,8 +28,19 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+/**
+ * <p>
+ * A trading strategy that uses a stimuli-response learning algorithm,
+ * such as the Roth-Erev algorithm, to adapt its trading behaviour in
+ * successive auction rounds.
+ * </p>
+ */
+
 public class StimuliResponseStrategy extends AbstractStrategy {
 
+  /**
+   * The learning algorithm to use.
+   */
   StimuliResponseLearner learner;
 
   static final String P_LEARNER = "learner";

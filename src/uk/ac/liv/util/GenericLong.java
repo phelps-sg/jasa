@@ -21,6 +21,7 @@ import huyd.poolit.*;
  * This encapsulation of Long can be used in combination with the
  * GenericNumber and GenericDouble classes, for performing weakly-typed
  * arithmetic operations.
+ *
  * @author Steve Phelps
  *
  */
