@@ -11,7 +11,6 @@
    <property name="javaLibPath" value="./lib"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj"/>
    <property name="repastLoc" value="${javaLibPath}/RePast-2.2"/>
-   <property name="rngpackLoc" value="${javaLibPath}/rngpack/rngpack.jar"/>
    <property name="junitLoc" value="${javaLibPath}/junit/junit.jar"/>
    <property name="log4jLoc" value="${javaLibPath}/log4j.jar"/>
    <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
@@ -22,7 +21,6 @@
    <path id="project.classpath">
      <pathelement location="${ecjLoc}"/>
      <pathelement location="${junitLoc}"/>
-     <pathelement location="${rngpackLoc}"/>
      <pathelement location="${log4jLoc}"/>     
      <pathelement location="${schemeLoc}"/>     
      <pathelement location="${collectionsLoc}"/>     
@@ -92,5 +90,18 @@
     	<tar basedir="." compression="gzip" includes="lib/**" tarfile="lib.tar.gz"/>
     </target>
 
+    <target name="batchrun">
+	<java classname="uk.ac.liv.auction.MarketSimulation" fork="true">
+		<classpath refid="project.classpath"/>
+		<arg value="${params}"/>
+	</java>
+    </target>
+
+    <target name="run">
+	<java classname="uk.ac.liv.auction.RepastMarketSimulation" fork="true">
+		<classpath refid="project.classpath"/>
+		<arg value="${params}"/>
+	</java>
+    </target>
 
 </project>
