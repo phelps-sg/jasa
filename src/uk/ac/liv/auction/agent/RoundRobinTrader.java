@@ -47,6 +47,10 @@ public interface RoundRobinTrader
   public void requestShout( Auction auction );
 
   public void auctionOpen( Auction auction );
+  
+  public boolean isBuyer();
+  
+  public boolean isSeller();
 
   /**
    * This method is used by an auction to notify a buyer that one of
