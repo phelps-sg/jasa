@@ -18,15 +18,13 @@ package uk.ac.liv.auction.zi;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.MarketSimulation;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.GlobalPRNG;
 
-import uk.ac.liv.ai.learning.WidrowHoffLearner;
+import uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum;
 import uk.ac.liv.util.CummulativeDistribution;
 import java.util.Iterator;
 
@@ -76,8 +74,6 @@ public class ZIPExperiment extends MarketSimulation {
   protected int numSamples = 50;
 
   protected CummulativeDistribution[] transPriceMean, transPriceStdDev;
-
-  protected RandomElement paramPRNG;
 
   protected boolean console = false;
 
@@ -148,8 +144,6 @@ public class ZIPExperiment extends MarketSimulation {
 
     numDays = auction.getMaximumDays();
 
-    paramPRNG = PRNGFactory.getFactory().create(prngSeed);
-
     setSupplyAndDemand();
 
     logger.info("");
@@ -216,15 +210,16 @@ public class ZIPExperiment extends MarketSimulation {
 
 
   protected void initialiseAgents() {
-    //double momentum = 0.1 + paramPRNG.raw() * 0.4;
-    double learningRate = 0.2 + paramPRNG.raw() * 0.6;
+    double momentum = 0.1 + GlobalPRNG.getInstance().raw() * 0.4;
+    double learningRate = 0.2 + GlobalPRNG.getInstance().raw() * 0.6;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
-      WidrowHoffLearner l =
-          (WidrowHoffLearner)
+      WidrowHoffLearnerWithMomentum l =
+          (WidrowHoffLearnerWithMomentum)
             ((AdaptiveStrategy) trader.getStrategy()).getLearner();
       l.setLearningRate(learningRate);      
+      l.setMomentum(momentum);
 //      l.randomInitialise();
       trader.reset();
     }
