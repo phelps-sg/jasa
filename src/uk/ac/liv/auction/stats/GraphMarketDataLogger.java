@@ -15,9 +15,8 @@
 
 package uk.ac.liv.auction.stats;
 
-import JSci.awt.Graph2DModel;
-import JSci.awt.GraphDataEvent;
-import JSci.awt.GraphDataListener;
+import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.MarketQuote;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -29,10 +28,11 @@ import uk.ac.liv.util.io.DataWriter;
 import uk.ac.liv.util.io.DataSeriesWriter;
 
 import javax.swing.event.EventListenerList;
+import java.awt.Dimension;
 
 import org.apache.log4j.Logger;
 
-import java.util.Iterator;
+import uchicago.src.sim.analysis.plot.RepastPlot;
 
 /**
  * <p>
@@ -45,13 +45,13 @@ import java.util.Iterator;
  */
 
 public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
-    implements Graph2DModel, Parameterizable, Resetable {
+    implements  Parameterizable, Resetable {
 
   protected int currentSeries;
 
   protected DataWriter[] allSeries;
 
-  protected static GraphMarketDataLogger singletonInstance;
+  protected static RepastPlot graph;
 
   protected EventListenerList listenerList = new EventListenerList();
 //  protected GraphDataEvent event = new GraphDataEvent(this);
@@ -65,7 +65,7 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    singletonInstance = this;
+    graph = new JASAGraph();
   }
 
   public void initialise() {
@@ -81,110 +81,51 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
     currentSeries = 0;
   }
 
-  public Iterator seriesIterator() {
-    return new SeriesIterator();
-  }
-
-  public float getXCoord( int i ) {
-    return (float) getCurrentSeries().getXCoord(i);
-  }
-
-  public DataSeriesWriter getCurrentSeries() {
-    logger.debug("getCurrentSeries()");
-    logger.debug("currentSeries = " + currentSeries);
-//    logger.debug("allSeries[currentSeries] = " + allSeries[currentSeries]);
-    return (DataSeriesWriter) allSeries[currentSeries];
-  }
-
-  public float getYCoord( int i ) {
-    logger.debug("Getting y coordinate for " + i);
-    if ( i < getCurrentSeries().length() ) {
-      return (float) getCurrentSeries().getYCoord(i);
-    } else {
-      return 0f;
-    }
-  }
-
-  public int seriesLength() {
-    int size = getCurrentSeries().length();
-    logger.debug("Size of current series = " + size);
-    return size;
-  }
-
-  public void firstSeries() {
-    logger.debug("firstSeries()");
-    currentSeries = 0;
-  }
-
-  public boolean nextSeries() {
-    logger.debug("nextSeries()");
-    if ( currentSeries == allSeries.length-1 ) {
-      logger.debug("No more serieses..");
-      return false;
-    } else {
-      currentSeries++;
-      return true;
-    }
-  }
-
-  public void dataUpdated() {
-    logger.debug("dataUpdated()");
-    for( int i=0; i<allSeries.length; i++ ) {
-      fireGraphChanged(new GraphDataEvent(this, i, true));
-    }
-  }
-
-  protected final void fireGraphChanged( GraphDataEvent event ) {
-    final Object listeners[] = listenerList.getListenerList();
-    for (int i = listeners.length - 2; i >= 0; i -= 2) {
-      if (listeners[i] == GraphDataListener.class)
-        ( (GraphDataListener) listeners[i + 1]).dataChanged(event);
-    }
-  }
-
-
-  public final void addGraphDataListener( GraphDataListener l ) {
-    listenerList.add(GraphDataListener.class, l);
-  }
-
-  public final void removeGraphDataListener( GraphDataListener l ) {
-    listenerList.remove(GraphDataListener.class, l);
-  }
-
-  public static GraphMarketDataLogger getSingletonInstance() {
-    return singletonInstance;
-  }
-
-  public void clear() {
-    for( int i=0; i<allSeries.length; i++ ) {
-      ((DataSeriesWriter) allSeries[i]).clear();
-    }
-  }
-
 
   public void reset() {
     initialise();
 //    fireGraphChanged(new GraphDataEvent(this));
   }
-
-
-  class SeriesIterator implements Iterator {
-
-    int currentSeries = 0;
-
-    SeriesIterator() {
+  
+  public void updateTransPriceLog( int time, Shout ask, Shout bid, 
+      							double price, int quantity ) {
+    super.updateTransPriceLog(time, ask, bid, price, quantity);
+    graph.addPoint(0, time, transPriceStats.getMean(), true);
+  }
+  
+  public void updateQuoteLog( int time, MarketQuote quote ) {
+    super.updateQuoteLog(time, quote);
+    double bid = quote.getBid();
+    if ( ! Double.isInfinite(bid)) {
+      graph.addPoint(1, time, bid, true);
+    } else {
+      graph.addPoint(1, time, 0, false);
     }
-
-    public boolean hasNext() {
-      return currentSeries < allSeries.length;
-    }
-
-    public Object next() {
-      return allSeries[currentSeries++];
-    }
-
-    public void remove() {
+    double ask = quote.getAsk();
+    if ( ! Double.isInfinite(ask)) {
+      graph.addPoint(2, time, ask, true);
+    } else {
+      graph.addPoint(2, time, 0, false);
     }
   }
+  
+  public static RepastPlot getGraphSingleton() {
+    return graph;
+  }
 
+
+
+}
+
+
+class JASAGraph extends RepastPlot {
+  
+  public JASAGraph() {
+    super(null);
+    setColor(true);
+    addLegend(0, "Mean transaction price");
+    addLegend(1, "bid quote");
+    addLegend(2, "ask quote");
+    setPreferredSize(new Dimension(640, 480));
+  }
 }
