@@ -32,18 +32,13 @@ import ec.util.ParameterDatabase;
  * @author Steve Phelps
  */
 
-public class PureSimpleStrategy extends AbstractStrategy
-                                 implements FixedQuantityStrategy {
+public class PureSimpleStrategy extends FixedQuantityStrategyImpl {
 
   double delta;
 
-  int quantity;
-
   static final String P_DELTA = "delta";
-  static final String P_QUANTITY = "quantity";
 
   static final double DEFAULT_DELTA = 0;
-  static final int DEFAULT_QUANTITY = 1;
 
   public PureSimpleStrategy( AbstractTraderAgent agent, double margin, int quantity ) {
     super(agent);
@@ -58,12 +53,11 @@ public class PureSimpleStrategy extends AbstractStrategy
   public PureSimpleStrategy() {
     super(null);
     delta = DEFAULT_DELTA;
-    quantity = DEFAULT_QUANTITY;
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
     delta = parameters.getDoubleWithDefault(base.push(P_DELTA), null, DEFAULT_DELTA);
-    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), null, DEFAULT_QUANTITY);
   }
 
   public void modifyShout( Shout shout, Auction auction ) {
