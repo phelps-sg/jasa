@@ -713,7 +713,7 @@ public class RoundRobinAuction extends AuctionImpl
   protected void endDay() {
     logger.debug("endDay()");
     day++;
-    logger.debug("new day = " + day + " of " + maximumDays);
+//    logger.debug("new day = " + day + " of " + maximumDays);
     round = 0;
     informEndOfDay();
     auctioneer.endOfDayProcessing();
