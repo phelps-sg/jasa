@@ -34,15 +34,15 @@ import java.io.*;
  *
  * <tr><td valign=top><i>base</i><tt>.quotelogfile</tt><br>
  * <font size=-1>string</font></td>
- * <td valign=top>(the filename to store the quote data)</td><tr> 
+ * <td valign=top>(the filename to store the quote data)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.shoutlogfile</tt><br>
  * <font size=-1>string</font></td>
- * <td valign=top>(the filename to store the shout data)</td><tr> 
+ * <td valign=top>(the filename to store the shout data)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.translogfile</tt><br>
  * <font size=-1>string</font></td>
- * <td valign=top>(the filename to store the transaction price data)</td><tr> 
+ * <td valign=top>(the filename to store the transaction price data)</td><tr>
  *
  * </table>
  *
@@ -56,7 +56,7 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
    */
   static final int CSV_QUOTE_COLS       = 3;
   static final int CSV_SHOUT_COLS       = 4;
-  static final int CSV_TRANSPRICE_COLS  = 4;
+  static final int CSV_TRANSPRICE_COLS  = 5;
 
   /**
    * CSV output for market quotes as time series.
@@ -77,7 +77,7 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
   static final String P_SHOUT_LOG_FILE = "shoutlogfile";
   static final String P_TRANS_LOG_FILE = "translogfile";
 
-  
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
     String quoteLogFile = parameters.getString(base.push(P_QUOTE_LOG_FILE), null);
     String shoutLogFile = parameters.getString(base.push(P_SHOUT_LOG_FILE), null);
@@ -127,12 +127,14 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
     }
   }
 
-  public void updateTransPriceLog( int time, Shout ask, double price ) {
+  public void updateTransPriceLog( int time, Shout shout, double price,
+                                    int quantity ) {
     if ( csvTransPriceLog != null ) {
       csvTransPriceLog.newData(time);
-      csvTransPriceLog.newData(ask.getAgent().getId());
-      csvTransPriceLog.newData(ask.getPrice());
+      csvTransPriceLog.newData(shout.getAgent().getId());
+      csvTransPriceLog.newData(shout.getPrice());
       csvTransPriceLog.newData(price);
+      csvTransPriceLog.newData(quantity);
     }
   }
 

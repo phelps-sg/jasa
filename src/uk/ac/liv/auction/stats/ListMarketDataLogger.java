@@ -55,11 +55,14 @@ public class ListMarketDataLogger implements MarketDataLogger {
     }
   }
 
-  public void updateTransPriceLog( int time, Shout ask, double price ) {
+  public void updateTransPriceLog( int time, Shout ask, double price,
+                                    int quantity ) {
     try {
       if ( transPriceLog != null ) {
         transPriceLog.add(new Integer(time));
         transPriceLog.add(ask.clone());
+        transPriceLog.add(new Double(price));
+        transPriceLog.add(new Integer(quantity));
       }
     } catch ( CloneNotSupportedException e ) {
       Debug.assertTrue("Shouts should be cloneable!", false);

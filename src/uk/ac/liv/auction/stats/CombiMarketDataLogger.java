@@ -37,7 +37,7 @@ import uk.ac.liv.util.Parameterizable;
  * <table>
  * <tr><td valign=top><i>base</i><tt>.n</tt><br>
  * <font size=-1>int &gt;= 1</font></td>
- * <td valign=top>(the number of different loggers to configure)</td><tr> 
+ * <td valign=top>(the number of different loggers to configure)</td><tr>
  * </table>
  *
  *
@@ -47,9 +47,9 @@ import uk.ac.liv.util.Parameterizable;
 public class CombiMarketDataLogger implements MarketDataLogger, Parameterizable {
 
   List loggers = null;
-  
+
   static final String P_NUMLOGGERS = "n";
-  
+
 
   public CombiMarketDataLogger(List loggers) {
     this.loggers = loggers;
@@ -60,20 +60,20 @@ public class CombiMarketDataLogger implements MarketDataLogger, Parameterizable 
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    
+
     int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), null, 1);
-    
-    for( int i=0; i<numLoggers; i++ ) {      
+
+    for( int i=0; i<numLoggers; i++ ) {
       MarketDataLogger logger = (MarketDataLogger)
-        parameters.getInstanceForParameter(base.push(i+""), null, 
+        parameters.getInstanceForParameter(base.push(i+""), null,
                                             MarketDataLogger.class);
       if ( logger instanceof Parameterizable ) {
         ((Parameterizable) logger).setup(parameters, base.push(i+""));
       }
       addLogger(logger);
-    }    
+    }
   }
-  
+
   /**
    * Add a new logger
    */
@@ -89,11 +89,12 @@ public class CombiMarketDataLogger implements MarketDataLogger, Parameterizable 
     }
   }
 
-  public void updateTransPriceLog(int time, Shout ask, double price) {
+  public void updateTransPriceLog( int time, Shout ask, double price,
+                                    int quantity ) {
     Iterator i = loggers.iterator();
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.updateTransPriceLog(time, ask, price);
+      logger.updateTransPriceLog(time, ask, price, quantity);
     }
   }
 

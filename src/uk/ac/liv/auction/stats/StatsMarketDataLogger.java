@@ -69,7 +69,8 @@ public class StatsMarketDataLogger
     askQuoteStats.newData((double) quote.getAsk());
   }
 
-  public void updateTransPriceLog( int time, Shout ask, double price ) {
+  public void updateTransPriceLog( int time, Shout ask, double price,
+                                    int quantity ) {
     transPriceStats.newData(price);
   }
 

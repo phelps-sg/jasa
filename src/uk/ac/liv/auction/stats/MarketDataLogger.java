@@ -46,7 +46,8 @@ public interface MarketDataLogger extends Resetable {
    * @param ask   The shout of the seller that gave rise to this transaction
    * @param price The actual price of the transaction that took place.
    */
-  public void updateTransPriceLog( int time, Shout ask, double price );
+  public void updateTransPriceLog( int time, Shout ask, double price,
+                                    int quantity );
 
   /**
    * Record an individual shout that occured in the auction.
