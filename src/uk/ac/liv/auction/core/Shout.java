@@ -33,11 +33,6 @@ import java.io.Serializable;
  * to rely on, e.g. shouts held in collections remaining constant.
  * </p>
  *
- * <p>
- * Note that equality is determined by reference equivalence, hence this
- * class's natural ordering is not consistent with equals.
- * </p>
- *
  * @author Steve Phelps
  *
  */
@@ -65,11 +60,10 @@ public class Shout implements Comparable, Cloneable, Serializable {
    */
   protected boolean isBid;
 
-
   /**
    * The unique id of this shout
    */
-  protected int id = -1;
+  protected long id = -1;
 
   /**
    * The child of this shout.
@@ -80,6 +74,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
    * Used to allocate each agent with a unique id.
    */
   static IdAllocator idAllocator = new IdAllocator();
+
 
   public Shout( TraderAgent agent, int quantity, double price, boolean isBid ) {
     this(agent);
@@ -202,7 +197,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
     return child;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
@@ -220,7 +215,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   public int hashCode() {
-    return id;
+    return (int) id;
   }
 
   public boolean equals( Object other ) {
