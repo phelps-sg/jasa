@@ -141,7 +141,7 @@ public class GenericDouble extends GenericNumber {
       }
     } catch ( CreateException e ) {
       e.printStackTrace();
-      throw new Error(e);
+      throw new Error(e.getMessage());
     }
   }
 

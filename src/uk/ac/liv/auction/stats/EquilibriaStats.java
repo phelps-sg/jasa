@@ -117,7 +117,7 @@ public class EquilibriaStats implements MarketStats {
       }
     } catch ( CreateException e ) {
       e.printStackTrace();
-      throw new Error(e);
+      throw new Error(e.getMessage());
     }
   }
 

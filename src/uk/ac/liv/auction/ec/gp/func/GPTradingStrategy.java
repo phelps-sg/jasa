@@ -57,6 +57,10 @@ public class GPTradingStrategy extends GPIndividualCtx
     this.agent = agent;
   }
 
+  public AbstractTraderAgent getAgent() {
+    return agent;
+  }
+
   public void setQuantity( int quantity ) {
     this.quantity = quantity;
   }
@@ -106,6 +110,7 @@ public class GPTradingStrategy extends GPIndividualCtx
   public double getLastProfit() {
     return agent.getLastProfit();
   }
+
 
   public CummulativeStatCounter getPriceStats() {
     return priceStats;
