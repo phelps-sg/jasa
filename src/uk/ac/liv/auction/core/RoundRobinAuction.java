@@ -136,6 +136,8 @@ public class RoundRobinAuction extends AuctionImpl
    * The current round.
    */
   protected int round;
+  
+  protected int age = 0;
 
   /**
    * The maximum number of rounds in the auction.
@@ -428,10 +430,14 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   /**
-   * Get the age of the auction in rounds
+   * Get the current round number
    */
-  public int getAge() {
+  public int getRound() {
     return round;
+  }
+  
+  public int getAge() {
+    return age;
   }
 
   public int getDay() {
@@ -541,12 +547,11 @@ public class RoundRobinAuction extends AuctionImpl
 
     isRunning = true;
 
-    informAuctionOpen();
+    begin();
 
     try {
       while (!closed()) {
-        runSingleRound();
-        checkEndOfDay();
+        step();
         checkPaused();
       }
 
@@ -555,9 +560,25 @@ public class RoundRobinAuction extends AuctionImpl
       throw new AuctionError(e);
     }
 
-    informAuctionClosed();
+    end();
 
     isRunning = false;
+  }
+  
+  
+  public void begin() {
+    informAuctionOpen();
+  }
+  
+  
+  public void end() {
+    informAuctionClosed();
+  }
+  
+  
+  public void step() throws AuctionClosedException {
+    runSingleRound();
+    checkEndOfDay();
   }
 
 
@@ -574,7 +595,7 @@ public class RoundRobinAuction extends AuctionImpl
       acceptedShouts.clear();
       requestShouts();
       updateQuoteLog(round, getQuote());
-      round++;
+      round++;  age++;
       sweepDefunctTraders();
       auctioneer.endOfRoundProcessing();
       informRoundClosed();
@@ -774,6 +795,7 @@ public class RoundRobinAuction extends AuctionImpl
     numTraders = 0;
     round = 0;
     day = 0;
+    age = 0;
 
     acceptedShouts.clear();
     defunctTraders.clear();
