@@ -90,8 +90,6 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   public static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
   public static final String P_ACTIVATION_PROBABILITY = "activationprobability";
 
-  static final double DEFAULT_MAX_MARKUP = 100;
-
   static Logger logger = Logger.getLogger(ZITraderAgent.class);
 
   public ZITraderAgent() {
@@ -100,8 +98,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
 
   public ZITraderAgent( int stock, double funds, double privateValue,
                           int tradeEntitlement, boolean isSeller ) {
-    super(stock, funds, privateValue, isSeller, null);
-    setStrategy(new RandomConstrainedStrategy(this, DEFAULT_MAX_MARKUP));
+    super(stock, funds, privateValue, isSeller);
     this.initialTradeEntitlement = tradeEntitlement;
     initialise();
   }
