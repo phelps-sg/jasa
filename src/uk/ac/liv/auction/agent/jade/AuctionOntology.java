@@ -64,7 +64,7 @@ public class AuctionOntology extends Ontology {
 
     try {
 
-      ConceptSchema shoutSchema = new ConceptSchema(CONCEPT_SHOUT);
+      PredicateSchema shoutSchema = new PredicateSchema(CONCEPT_SHOUT);
 
       shoutSchema.add(CONCEPT_SHOUT_AGENT,
                       (PrimitiveSchema)getSchema(BasicOntology.STRING));
@@ -81,25 +81,25 @@ public class AuctionOntology extends Ontology {
       add(shoutSchema, ACLShout.class);
 
 
-      AgentActionSchema requestShoutSchema =
-          new AgentActionSchema(ACTION_REQUEST_SHOUT);
+      PredicateSchema requestShoutSchema =
+          new PredicateSchema(ACTION_REQUEST_SHOUT);
 
       add(requestShoutSchema, RequestShoutAction.class);
 
-      AgentActionSchema newShoutSchema = new AgentActionSchema(ACTION_NEW_SHOUT);
+      PredicateSchema newShoutSchema = new PredicateSchema(ACTION_NEW_SHOUT);
 
       newShoutSchema.add(ACTION_NEW_SHOUT_SHOUT, shoutSchema);
 
       add(newShoutSchema, NewShoutAction.class);
 
 
-      AgentActionSchema registerSchema = new AgentActionSchema(ACTION_REGISTER);
+      PredicateSchema registerSchema = new PredicateSchema(ACTION_REGISTER);
       registerSchema.add(ACTION_REGISTER_AGENT,
                          (PrimitiveSchema) getSchema(BasicOntology.STRING));
       add(registerSchema, RegisterAction.class);
 
-      AgentActionSchema startAuctionSchema =
-          new AgentActionSchema(ACTION_START_AUCTION);
+      PredicateSchema startAuctionSchema =
+          new PredicateSchema(ACTION_START_AUCTION);
       add(startAuctionSchema, StartAuctionAction.class);
 
       PredicateSchema bidSuccessfulSchema =

@@ -1,6 +1,6 @@
 package uk.ac.liv.auction.agent.jade;
 
-import jade.content.AgentAction;
+import jade.content.Predicate;
 
 /**
  * <p>Title: </p>
@@ -11,7 +11,7 @@ import jade.content.AgentAction;
  * @version 1.0
  */
 
-public class NewShoutAction implements AgentAction {
+public class NewShoutAction implements Predicate {
 
   ACLShout shout;
 

@@ -48,19 +48,17 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
         try {
 
           if ( msg != null ) {
-            if ( msg.getPerformative() == msg.REQUEST ) {
+            if ( msg.getPerformative() == msg.INFORM ) {
               ContentElement content = getContentManager().extractContent(msg);
               if ( content instanceof RequestShoutAction ) {
                 jasaTraderAgent.requestShout(
                     new JASAAuctionProxy(msg.getSender(), myAgent));
-              }
-            } else if ( msg.getPerformative() == msg.INFORM ) {
-              ContentElement content = getContentManager().extractContent(msg);
-              if ( content instanceof BidSuccessfulPredicate ) {
+              } else if ( content instanceof BidSuccessfulPredicate ) {
                 BidSuccessfulPredicate p = (BidSuccessfulPredicate) content;
                 jasaTraderAgent.informOfSeller(p.getShout().getJASAShout(),
                     new JASATraderAgentProxy(new AID(p.getSeller(), true), myAgent),
                     p.getPrice(), p.getQuantity());
+
               }
             }
           }
@@ -78,7 +76,7 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
       public void action() {
         try {
           AID auctioneerAID = findAuctioneer();
-          ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+          ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
           msg.addReceiver(auctioneerAID);
           RegisterAction content = new RegisterAction();
           content.setAgent(getAID().getName());

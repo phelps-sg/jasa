@@ -1,8 +1,8 @@
 package uk.ac.liv.auction.agent.jade;
 
-import jade.content.AgentAction;
+import jade.content.Predicate;
 
-public class RequestShoutAction implements AgentAction {
+public class RequestShoutAction implements Predicate {
 
   public RequestShoutAction() {
   }

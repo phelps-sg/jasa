@@ -47,15 +47,20 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
       try {
         ACLMessage msg = receive();
         if ( msg != null ) {
-          if ( msg.getPerformative() == msg.REQUEST ) {
+          if ( msg.getPerformative() == msg.INFORM ) {
+            System.out.println("Message content = " + msg.getContent());
             ContentElement content = getContentManager().extractContent(msg);
             if ( content instanceof RegisterAction ) {
               RegisterAction action = (RegisterAction) content;
               AID traderAID = new AID(action.getAgent(), true);
-              auction.register(new JASATraderAgentProxy(traderAID, myAgent));
+              System.out.println("Registering trader " + traderAID);
+              auction.register(new JASATraderAgentProxy(getAID(),traderAID, myAgent));
             } else if ( content instanceof StartAuctionAction ) {
+              System.out.println("Starting auction");
               finished = true;
             }
+          } else {
+            System.out.println("Received non-understood message: " + msg);
           }
         }
         block();
@@ -88,6 +93,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
 
     public void action() {
       try {
+        System.out.println("Initiating auction round..");
         auction.initiateRound();
       } catch ( AuctionClosedException e ) {
         auctionClosed = true;
@@ -96,6 +102,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
 
     public int onEnd() {
       if ( auctionClosed ) {
+        System.out.println("Auction closed");
         return FSM_EVENT_AUCTION_CLOSED;
       } else {
         return 0;
@@ -114,9 +121,11 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
     public void action() {
       try {
         ACLMessage msg = receive();
+        System.out.println("Got msg " + msg);
         if ( msg != null ) {
           ContentElement content = getContentManager().extractContent(msg);
           if ( content instanceof NewShoutAction ) {
+            System.out.println("Recieved new shout " + msg);
             ACLShout shout = ((NewShoutAction) content).getShout();
             auction.newShout(shout.getJASAShout());
           }
@@ -142,6 +151,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
     }
 
     public void action() {
+      System.out.println("Finalising auction round");
       auction.finaliseRound();
     }
 

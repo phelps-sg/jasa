@@ -11,13 +11,17 @@ import jade.content.onto.OntologyException;
 
 public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader {
 
-  public JASATraderAgentProxy( AID targetJadeID, Agent sender ) {
+  AID auctioneerID;
+
+  public JASATraderAgentProxy( AID auctioneerID, AID targetJadeID, Agent sender ) {
     super(targetJadeID, sender);
+    this.auctioneerID = auctioneerID;
   }
 
   public void requestShout( Auction auction ) {
     try {
-      ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+      ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+      msg.addReceiver(targetJadeID);
       RequestShoutAction content = new RequestShoutAction();
       JADEAbstractAuctionAgent.sendMessage(sender, msg, content);
     } catch ( Exception e ) {

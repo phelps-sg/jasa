@@ -25,14 +25,6 @@ import jade.content.lang.sl.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.*;
 
-/**
- * <p>Title: </p>
- * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2002</p>
- * <p>Company: </p>
- * @author unascribed
- * @versio
- */
 
 public class AuctionManager extends JADEAbstractAuctionAgent {
 
@@ -58,11 +50,11 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
           trader1Controller.start();
 
           AID auctioneerAID = findAuctioneer();
-
-          ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+/*
+          ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
           msg.addReceiver(auctioneerAID);
           StartAuctionAction content = new StartAuctionAction();
-          JADEAbstractAuctionAgent.sendMessage(myAgent, msg, content);
+          JADEAbstractAuctionAgent.sendMessage(myAgent, msg, content); */
         } catch ( Exception e ) {
           e.printStackTrace();
         }

@@ -19,7 +19,7 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
 
   public void newShout( Shout shout ) throws AuctionException {
     try {
-      ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+      ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
       NewShoutAction content = new NewShoutAction();
       ACLShout aclShout = new ACLShout(shout);
       aclShout.setAgent(sender.getAID().getName());
