@@ -27,9 +27,12 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.Resetable;
-import uk.ac.liv.util.MutableDoubleWrapper;
+//import uk.ac.liv.util.MutableDoubleWrapper;
 
 import org.apache.log4j.Logger;
+
+import gnu.trove.TObjectDoubleHashMap;
+import gnu.trove.TObjectDoubleIterator;
 
 /**
  * <p>
@@ -48,9 +51,16 @@ import org.apache.log4j.Logger;
 public class DynamicSurplusReport extends AbstractMarketStatsReport
     implements Resetable {
 
+  /**
+   * The report used to calculate the equilibrium price.
+   */
   protected EquilibriumReport equilibriaStats;
 
-  private HashMap surplusTable = new HashMap();
+  /**
+   * Total theoretically available profits per agent.
+   * This table maps AbstractTradingAgent keys onto double values. 
+   */
+  private TObjectDoubleHashMap surplusTable = new TObjectDoubleHashMap();
   
   /**
    * The quantity that each agent can theoretically trade per day.
@@ -97,35 +107,44 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
   }
 
   public double getEquilibriumProfits( AbstractTradingAgent agent ) {
-    MutableDoubleWrapper stats = (MutableDoubleWrapper) surplusTable.get(agent);
-    if ( stats == null ) {
-      return 0;
-    } else {
-      return stats.value;
-    }
+    return surplusTable.get(agent);    
   }
 
   public double calculateTotalEquilibriumSurplus() {
-    double totalSurplus = 0;
-    Iterator i = surplusTable.keySet().iterator();
+    double totalSurplus = 0;    
+    TObjectDoubleIterator i = surplusTable.iterator();
     while ( i.hasNext() ) {
-      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-      totalSurplus += getEquilibriumProfits(agent);
+      i.advance();
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.key();
+      totalSurplus += i.value();
     }
     return totalSurplus;
   }
 
-  protected void updateStats( AbstractTradingAgent agent, double lastSurplus ) {   
-    MutableDoubleWrapper stats = (MutableDoubleWrapper) surplusTable.get(agent);
-    if ( stats == null ) {
-      stats = new MutableDoubleWrapper(lastSurplus);
-      surplusTable.put(agent, stats);
-    } else {
-      stats.value += lastSurplus;
+  /**
+   * Increment the surplus available to the specified agent by the specified
+   * amount.
+   */
+  protected void updateStats( AbstractTradingAgent agent, double lastSurplus ) {    
+    if ( ! surplusTable.adjustValue(agent, lastSurplus) ) {
+      surplusTable.put(agent, 0.0);
     }
   }
 
-  protected double equilibriumSurplus( AbstractTradingAgent agent, double ep, int quantity ) {
+  /**
+   * Calculate the surplus available to the specified agent given the specified
+   * equilibrium price and quantity.
+   * 
+   * @param agent
+   *          The agent to calculate theoretically available surplus to.
+   * @param ep
+   *          The hypothetical equilibrium price
+   * @param quantity
+   *          The hypothetical quantity that this agent is able to trade in any
+   *          given day.
+   */
+  protected double equilibriumSurplus( AbstractTradingAgent agent, 
+      									double ep, int quantity ) {
     double surplus;
     if ( agent.isSeller() ) {
       surplus = (ep - agent.getValuation(auction)) * quantity;
