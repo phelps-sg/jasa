@@ -74,7 +74,7 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
    *
    *  @exception IllegalShoutException  Thrown if the shout is invalid in some way.
    */
-  public synchronized void newShout( Shout shout ) throws IllegalShoutException {
+  public void newShout( Shout shout ) throws IllegalShoutException {
     if ( ! shout.isValid() ) {
       logger.error("malformed shout: " + shout);
       throw new IllegalShoutException("Malformed shout");
@@ -90,18 +90,18 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
   /**
    * Handle a request to retract a shout.
    */
-  public synchronized void removeShout( Shout shout ) {
+  public void removeShout( Shout shout ) {
     shoutEngine.removeShout(shout);
   }
 
   /**
    * Log the current state of the auction.
    */
-  public synchronized void printState() {
+  public void printState() {
     shoutEngine.printState();
   }
 
-  public synchronized void reset() {
+  public void reset() {
     shoutEngine.reset();
     initialise();
   }
