@@ -171,6 +171,10 @@ public class CummulativeStatCounter implements Serializable, Cloneable, Resetabl
   public void reset() {
     initialise();
   }
+  
+  public String getName() {
+    return varName;
+  }
 
   public String toString() {
     return "(" + getClass() + " varName:\"" + varName + "\" n:" + n + " mean:" + getMean() + " stdev:" + getStdDev() + " min:" + min + " max:" + max + ")";

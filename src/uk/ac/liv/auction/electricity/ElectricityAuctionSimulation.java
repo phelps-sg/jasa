@@ -90,7 +90,33 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   protected StandardRandomizer randomizer;
   
-  protected CummulativeStatCounter[] variables;
+  protected CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
+  protected CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
+  protected CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
+  protected CummulativeStatCounter pSA = new CummulativeStatCounter("PSA");
+  protected CummulativeStatCounter pBA = new CummulativeStatCounter("PBA");
+  protected CummulativeStatCounter pST = new CummulativeStatCounter("PST");
+  protected CummulativeStatCounter pBT = new CummulativeStatCounter("PBT");
+  protected CummulativeStatCounter eAN = new CummulativeStatCounter("EAN");
+  protected CummulativeStatCounter mPBN = new CummulativeStatCounter("MPBN");
+  protected CummulativeStatCounter mPSN = new CummulativeStatCounter("MPSN");
+  protected CummulativeStatCounter sMPB = new CummulativeStatCounter("SMPB");
+  protected CummulativeStatCounter sMPS = new CummulativeStatCounter("SMPS");
+  protected CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
+  protected CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
+  protected CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
+  protected CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
+  protected CummulativeStatCounter equilibPrice =
+      new CummulativeStatCounter("EquilibPrice");
+  protected CummulativeStatCounter equilibQty =
+      new CummulativeStatCounter("EquilibQty");
+  protected CummulativeStatCounter reMean = new CummulativeStatCounter("REmean");
+  protected CummulativeStatCounter reStdev = new CummulativeStatCounter("REstdev");
+
+  protected CummulativeStatCounter[] variables = new CummulativeStatCounter[] {
+    efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
+    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, reMean, reStdev 
+  };
 
   static Logger logger = Logger.getLogger(ElectricityAuctionSimulation.class);
 
@@ -120,12 +146,16 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final int DATAFILE_NUM_COLUMNS = 81;
 
   
-  public ElectricityAuctionSimulation() {
+  public ElectricityAuctionSimulation() {    
+   
   }
 
   
   public void setup( ParameterDatabase parameters, Parameter base ) {
-
+    
+    Debug.assertTrue("CSV file not configured with correct number of columns",
+                       variables.length*4 == DATAFILE_NUM_COLUMNS-1);
+    
     maxRounds =
       parameters.getIntWithDefault(base.push(P_MAXROUNDS), null, maxRounds);
 
@@ -262,6 +292,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
                 new FileOutputStream(outputDir + "/" + "npt-"
                                       + paramSummary + ".csv"),
                                           DATAFILE_NUM_COLUMNS);
+    
+    writeDataFileHeadings();
   
     marketData = new StatsMarketDataLogger();
     ((Resetable) auctioneer).reset();
@@ -304,38 +336,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     logger.info("k = " + auctioneerK);
 
-    CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
-    CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
-    CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
-    CummulativeStatCounter pSA = new CummulativeStatCounter("PSA");
-    CummulativeStatCounter pBA = new CummulativeStatCounter("PBA");
-    CummulativeStatCounter pST = new CummulativeStatCounter("PST");
-    CummulativeStatCounter pBT = new CummulativeStatCounter("PBT");
-    CummulativeStatCounter eAN = new CummulativeStatCounter("EAN");
-    CummulativeStatCounter mPBN = new CummulativeStatCounter("MPBN");
-    CummulativeStatCounter mPSN = new CummulativeStatCounter("MPSN");
-    CummulativeStatCounter sMPB = new CummulativeStatCounter("SMPB");
-    CummulativeStatCounter sMPS = new CummulativeStatCounter("SMPS");
-    CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
-    CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
-    CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
-    CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
-    CummulativeStatCounter equilibPrice =
-        new CummulativeStatCounter("Equilib Price");
-    CummulativeStatCounter equilibQty =
-        new CummulativeStatCounter("Equilib Qty");
-    CummulativeStatCounter reMean = new CummulativeStatCounter("RE mean");
-    CummulativeStatCounter reStdev = new CummulativeStatCounter("RE stdev");
-
-    variables = new CummulativeStatCounter[] {
-      efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
-      sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, reMean, reStdev 
-    };
-    
-    Debug.assertTrue("CSV file not configured with correct number of columns",
-                       variables.length*4 == DATAFILE_NUM_COLUMNS-1);
-
     initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
+    
+    resetVariables();
 
     for( int i=0; i<iterations; i++ ) {
 
@@ -403,6 +406,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       auction.register(trader);
     }
   }
+  
+  protected void initStats() {   
+    
+    
+
+  }
 
 
   protected void recordVariables( double auctioneerK ) {    
@@ -415,6 +424,22 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     }
   }
   
+  protected void resetVariables() {        
+    for( int i=0; i<variables.length; i++ ) {     
+      variables[i].reset();      
+    }
+  }
+  
+  protected void writeDataFileHeadings() {
+    dataFile.newData("k");
+    for( int i=0; i<variables.length; i++ ) {
+      String name = variables[i].getName();
+      dataFile.newData(name + "_mean");
+      dataFile.newData(name + "_stdev");
+      dataFile.newData(name + "_min");
+      dataFile.newData(name + "_max");
+    }
+  }
   
   protected void reportSummary( double auctioneerK ) {
     logger.info("\n*** Summary results for: k = " + auctioneerK +"\n");

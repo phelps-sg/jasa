@@ -57,7 +57,7 @@ public class CSVWriter implements Serializable, DataWriter {
   }
 
   public void newData( Object data ) {
-    out.print(data);
+    out.print(data.toString());
     nextColumn();
   }
 
