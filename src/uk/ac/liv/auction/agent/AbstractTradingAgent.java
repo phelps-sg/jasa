@@ -367,7 +367,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
     lastProfit = 0;
     profits = 0;
     lastShoutAccepted = false;
-    currentShout = null;    
+    currentShout = null;  
   }
 
   public void reset() {

@@ -121,10 +121,10 @@ public class RoundRobinAuctionTest extends TestCase {
     int unacceptedBids = stats.getNumberOfBids(0, false);
     int acceptedAsks = stats.getNumberOfAsks(0, true);
     int unacceptedAsks = stats.getNumberOfAsks(0, false);
-    logger.info("Number of accepted bids above 0 = " + acceptedBids);
-    logger.info("Number of unaccepted bids above 0 = " + unacceptedBids);
-    logger.info("Number of accepted asks above 0 = " + acceptedAsks);
-    logger.info("Number of unaccepted asks above 0 = " + unacceptedAsks);
+    System.out.println("Number of accepted bids above 0 = " + acceptedBids);
+    System.out.println("Number of unaccepted bids above 0 = " + unacceptedBids);
+    System.out.println("Number of accepted asks above 0 = " + acceptedAsks);
+    System.out.println("Number of unaccepted asks above 0 = " + unacceptedAsks);
     assertTrue(acceptedBids == acceptedAsks);
     assertTrue(acceptedBids == 1);
 

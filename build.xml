@@ -6,7 +6,7 @@
    <property name="sourceDir" value="src"/>
    <property name="outputDir" value="classes"/>
    <property name="projectName" value="JASA"/>
-   <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng"/>
+   <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event"/>
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj12"/>
