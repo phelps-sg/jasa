@@ -16,7 +16,6 @@
 package uk.ac.liv.prng;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;
-import edu.cornell.lassp.houle.RngPack.RandomSeedable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -39,7 +38,7 @@ public class GlobalPRNG {
 
     uk.ac.liv.prng.PRNGFactory.setup(parameters, base.push(P_PRNG));
 
-    long defaultSeed = RandomSeedable.ClockSeed();
+    long defaultSeed = PRNGFactory.getFactory().create().ClockSeed();
     
     seed =
         parameters.getLongWithDefault(base.push(P_SEED), null, defaultSeed);
