@@ -7,7 +7,7 @@
 
 # Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.maximumrounds = 10000
+simulation.auction.maximumrounds = 1000
 
 # Use a double-auction with clearing occuring every time a new shout arrives
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer

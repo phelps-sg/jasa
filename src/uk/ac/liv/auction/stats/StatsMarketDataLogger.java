@@ -53,6 +53,10 @@ public class StatsMarketDataLogger
 
   static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
 
+  public StatsMarketDataLogger() {
+    initialise();
+  }
+
   public void updateQuoteLog( int time, MarketQuote quote ) {
     stats[BID_QUOTE].newData((double) quote.getBid());
     stats[ASK_QUOTE].newData((double) quote.getAsk());
