@@ -51,6 +51,10 @@ public class GPIndividualCtx extends GPIndividual {
     context.setProblem(problem);
   }
 
+  public void setGPContext( GPContext context ) {
+    this.context = context;
+  }
+
   public void evaluateTree( int treeNumber, GPData input ) {
     trees[treeNumber].child.eval(context.state, context.thread, input,
                                     context.stack, this, context.problem);
@@ -123,16 +127,21 @@ public class GPIndividualCtx extends GPIndividual {
    * Utility method for converting building an ArrayList from a scheme list
    * according to some mapping between scheme symbols and GPNode classes.
    */
-  public static void consToArray( Cons list, ArrayList aList, HashMap map ) {
-    aList.add(buildTreeFromScheme(list.car, map));
-    if ( list.cdr != Nil.nil ) {
-      consToArray((Cons) list.cdr, aList, map);
+  public static void consToArray( Cons list, ArrayList aList, HashMap map,
+                                  GPNode parent ) {
+    if ( list.car != null ) {
+        GPNode node = buildTreeFromScheme(list.car, map);
+        node.parent = parent;
+    	aList.add(node);
+    }
+    if ( list.cdr != null && list.cdr != Nil.nil ) {
+      consToArray((Cons) list.cdr, aList, map, parent);
     }
   }
 
-  public static GPNode[] consToArray( Cons list, HashMap map ) {
+  public static GPNode[] consToArray( Cons list, HashMap map, GPNode parent ) {
     ArrayList aList = new ArrayList();
-    consToArray(list, aList, map);
+    consToArray(list, aList, map, parent);
     return (GPNode[]) aList.toArray( GPNODE_ARR );
   }
 
@@ -140,11 +149,11 @@ public class GPIndividualCtx extends GPIndividual {
    * Utility method to convert scheme s-expression into a GPNode.
    */
   public static GPNode buildTreeFromScheme( Object scheme, HashMap map ) {
-    GPNode result = null;
+    GPNode result = new uk.ac.liv.ec.gp.func.Nil();
     if ( scheme instanceof Cons ) {
       Cons list = (Cons) scheme;
       GPNode node = buildNodeFromScheme(list.car, map);
-      node.children = consToArray((Cons) list.cdr, map);
+      node.children = consToArray((Cons) list.cdr, map, node);
       result = node;
     } else {
       result = buildNodeFromScheme(scheme, map);
@@ -158,22 +167,21 @@ public class GPIndividualCtx extends GPIndividual {
    * @param map A list defining a mapping between scheme symbols and
    * GPNode class names.
    */
-  public static GPTree makeTree( Object scheme, Cons map ) {
+  public static GPNode makeTree( Object scheme, Cons map ) {
     HashMap hashMap = new HashMap();
     for( Cons i = map; i != Nil.nil; i=(Cons) i.cdr ) {
       Cons pair = (Cons) i.car;
       hashMap.put(pair.car, pair.cdr);
     }
-    GPTree result = new GPTree();
-    result.child = buildTreeFromScheme(scheme, hashMap);
-    return result;
+    return buildTreeFromScheme(scheme, hashMap);
   }
 
   /**
    * Set the given tree number by convertng a scheme s-expression.
    */
   public void setTree( int treeNum, Object scheme, Cons map ) {
-    trees[treeNum] = makeTree(scheme, map);
+    trees[treeNum].child = makeTree(scheme, map);
+    trees[treeNum].child.parent = trees[treeNum];
   }
 
   public void setTree( Object scheme, Cons map ) {
@@ -181,7 +189,7 @@ public class GPIndividualCtx extends GPIndividual {
   }
 
   public static GPNode buildNodeFromScheme( Object scheme, HashMap map ) {
-    GPNode result = null;
+    GPNode result = new uk.ac.liv.ec.gp.func.Nil();
     if ( scheme instanceof Symbol ) {
       Symbol className = (Symbol) map.get(scheme);
       try {
@@ -203,6 +211,8 @@ public class GPIndividualCtx extends GPIndividual {
         node.children = new GPNode[0];
         result = node;
       }
+    } else {
+      System.out.println("WARNING: Uknown data type " + scheme);
     }
     return result;
   }

@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -38,7 +38,7 @@ public class ElectricityStats implements Serializable, Cloneable {
 
   public double rCon, rCap;
 
-  public double pBCE, pSCE;
+  public double pBCE = 0, pSCE = 0;
 
   public double pBA, pSA;
 
@@ -53,9 +53,12 @@ public class ElectricityStats implements Serializable, Cloneable {
 
   public MetaMarketStats standardStats;
 
+  protected long minPrice, maxPrice;
+
   public ElectricityStats( long minPrice, long maxPrice, RoundRobinAuction auction ) {
     this.auction = auction;
-    standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction.getTraderList());
+    this.minPrice = minPrice;
+    this.maxPrice = maxPrice;
     calculate();
   }
 
@@ -67,6 +70,7 @@ public class ElectricityStats implements Serializable, Cloneable {
   }
 
   public void calculate() {
+    standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction.getTraderList());
     calculate(true);
   }
 
@@ -78,6 +82,10 @@ public class ElectricityStats implements Serializable, Cloneable {
     pSA = 0;
     numBuyers = 0;
     numSellers = 0;
+    if ( equilibrium ) {
+      pSCE = 0;
+      pBCE = 0;
+    }
     double equilibPrice = standardStats.getEquilibriaPriceStats().getMean();
     //Debug.println("equilibPrice = " + equilibPrice);
     while ( i.hasNext() ) {
