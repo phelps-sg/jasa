@@ -15,9 +15,6 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.MarketQuote;
-
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
