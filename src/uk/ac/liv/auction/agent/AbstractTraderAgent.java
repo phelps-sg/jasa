@@ -228,9 +228,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
       currentShout = strategy.modifyShout(currentShout, auction);
       if ( active() && currentShout != null ) {
         auction.newShout(currentShout);
-      } else {
-        logger.debug(this + ": inactive");
-      }
+      } 
     } catch ( AuctionClosedException e ) {
       logger.debug("requestShout(): Received AuctionClosedException");
       // do nothing
