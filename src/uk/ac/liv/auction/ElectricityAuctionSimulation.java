@@ -311,7 +311,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       StimuliResponseStrategy strategy = new StimuliResponseStrategy(trader);
 
       strategy.setQuantity(trader.getCapacity());
-      strategy.setLearner( new RothErevLearner(K, R, E, S1*X) );
+      strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X) );
 //                                System.currentTimeMillis()) );
 
 

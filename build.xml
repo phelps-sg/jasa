@@ -7,10 +7,11 @@
       <property name="projectName" value="JASA"/>
       <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io"/>
       <property name="docDir" value="doc"/>
-      <property name="ecjPath" value="/usr/local/java/lib/ecj8"/>
-      <property name="poolitPath" value="/usr/local/java/lib/poolit/poolit.jar"/>
-      <property name="junitPath" value="/usr/local/java/lib/junit3.7/junit.jar"/>
-      <property name="skijPath" value="/usr/local/java/lib/skij.jar"/>      
+      <property name="javaLibPath" value="/usr/local/java/lib"/>
+      <property name="ecjPath" value="${javaLibPath}/ecj"/>
+      <property name="poolitPath" value="${javaLibPath}/poolit/poolit.jar"/>
+      <property name="junitPath" value="${javaLibPath}/junit3.7/junit.jar"/>
+      <property name="skijPath" value="${javaLibPath}/skij.jar"/>      
       <property name="classPath" value="${ecjPath}:${poolitPath}:${junitPath}:${skijPath}"/>
    </target>
 
