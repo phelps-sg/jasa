@@ -25,11 +25,14 @@ import java.util.List;
 import java.util.Iterator;
 
 /**
+ * Abstract superclass for auctioneers who set transaction-price
+ * according to the parameter k.
+ *
  * <p><b>Parameters</b><br></p>
  * <table>
- * <tr><td valign=top><i>base</i><tt>.k</tt><br>
- * <font size=-1>double [0, 1]</font></td>
- * <td valign=top>(the pricing parameter)</td><tr>
+ * <tr><td valign=top><i>base</i><tt>.pricing</tt><br>
+ * <font size=-1>class inherits uk.ac.liv.auction.KPricingPolicy</font></td>
+ * <td valign=top>(the pricing policy to use)</td><tr>
  * </table>
 
  * @author Steve Phelps

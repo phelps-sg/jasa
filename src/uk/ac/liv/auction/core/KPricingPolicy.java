@@ -21,6 +21,9 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
+ * Abstract superclass for auctioneer pricing policies parameterised by
+ * k.
+ *
  * @author Steve Phelps
  */
 

@@ -16,6 +16,10 @@
 package uk.ac.liv.auction.core;
 
 /**
+ * A pricing policy in which we set the transaction price in the
+ * interval between the ask quote and the bid quote as determined by
+ * the parameter k.
+ *
  * @author Steve Phelps
  */
 
