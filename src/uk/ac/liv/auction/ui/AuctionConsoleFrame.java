@@ -188,8 +188,8 @@ public class AuctionConsoleFrame extends JFrame
 
     JButton logAuctionStatusButton = new JButton("Dump");
     logAuctionStatusButton.setToolTipText("Display the current state of the auction");
-    c.gridx = 3;
-    c.gridy = 5;
+    c.gridx = 0;
+    c.gridy = 6;
     c.weightx = 0;
     gridBag.setConstraints(logAuctionStatusButton, c);
     contentPane.add(logAuctionStatusButton);
@@ -229,7 +229,7 @@ public class AuctionConsoleFrame extends JFrame
     JButton resetAgentsButton = new JButton("Reset");
     resetAgentsButton.setToolTipText("Reset all agents");
     c.gridx = 3;
-    c.gridy = 7;
+    c.gridy = 6;
     gridBag.setConstraints(resetAgentsButton, c);
     contentPane.add(resetAgentsButton);
     resetAgentsButton.addActionListener(new ActionListener() {
