@@ -25,6 +25,9 @@ import ec.util.ParamClassLoadException;
 import org.apache.log4j.Logger;
 
 /**
+ * Factory for constructing pseudo-random number generators (PRNGs).
+ * The default configuration is to use RngPack's implementation of the
+ * Mersenne Twister algorithm.
  *
  * @author Steve Phelps
  * @version $Revision$

@@ -21,6 +21,7 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
 import uk.ac.liv.prng.PRNGFactory;
 
 /**
+ * Abstract class for objects making use of a PRNG.
  *
  * @author Steve Phelps
  * @version $Revision$

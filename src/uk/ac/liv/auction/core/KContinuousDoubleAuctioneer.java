@@ -18,6 +18,7 @@ package uk.ac.liv.auction.core;
 /**
  * An auctioneer for a k-double-auction with continuous clearing.
  * The clearing operation is performed every time a shout arrives.
+ * Shouts must beat the current quote in order to be accepted.
  *
  * @author Steve Phelps
  * @version $Revision$

@@ -236,7 +236,8 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
 
 
   /**
-   * Default trading behaviour for agents.
+   * Place a shout in the auction as determined by our currently configured
+   * strategy.
    */
   public void requestShout( Auction auction ) {
     try {
