@@ -75,7 +75,7 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
   }
 
   public void endOfRound( Auction auction ) {
-    calculateReward(auction);
+    learn(auction);
   }
 
   public void modifyShout( Shout shout, Auction auction ) {
@@ -108,9 +108,15 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
     this.markupScale = markupScale;
   }
 
+  /**
+   *  Generate an action from the learning algorithm.
+   */
   public abstract int act();
 
-  public abstract void calculateReward( Auction auction );
+  /**
+   *  Perform learning.
+   */
+  public abstract void learn( Auction auction );
 
   /**
    * Get the learning algorithm currently being used by this strategy.

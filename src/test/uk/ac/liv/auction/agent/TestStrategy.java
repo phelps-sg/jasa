@@ -32,7 +32,7 @@ class TestStrategy extends AdaptiveStrategy {
     return actions++;
   }
 
-  public void calculateReward( Auction auction ) {
+  public void learn( Auction auction ) {
     rewards++;
   }
 

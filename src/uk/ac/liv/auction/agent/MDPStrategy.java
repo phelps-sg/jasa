@@ -101,7 +101,7 @@ public class MDPStrategy extends AdaptiveStrategy {
     return learner.act();
   }
 
-  public void calculateReward( Auction auction ) {
+  public void learn( Auction auction ) {
     learner.newState(agent.getLastProfit(), auctionState(auction));
   }
 

@@ -80,7 +80,7 @@ public class StimuliResponseStrategy extends AdaptiveStrategy {
     return learner.act();
   }
 
-  public void calculateReward( Auction auction ) {
+  public void learn( Auction auction ) {
     learner.reward(agent.getLastProfit());
   }
 
