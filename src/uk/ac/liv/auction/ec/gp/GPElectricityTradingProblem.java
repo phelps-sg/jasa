@@ -241,12 +241,12 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
       statsOut.newData(state.generation);
     }
 
-    auction.reset();
     auctioneer = assignAuctioneer(group);
     auctioneer.setAuction(auction);
     auction.setAuctioneer(auctioneer);
 
     initialiseTraders(group);
+
     resetStatCounters();
     resetFitnesses();
 

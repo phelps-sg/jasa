@@ -36,6 +36,10 @@ public class GPBuyerSellerStrategyMixer extends StrategyMixer {
     super(problem);
   }
 
+  public GPBuyerSellerStrategyMixer() {
+    super();
+  }
+
   public Strategy getStrategy( int i, Vector[] group ) {
     GPTradingStrategy strategy = null;
     int numSellers = problem.getNumSellers();

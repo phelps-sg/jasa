@@ -83,16 +83,16 @@ public class CoEvolveAuctionStatistics extends CoEvolveStrategyStatistics {
       while ( strategies.hasNext() ) {
         Object s = strategies.next();
         if ( s instanceof GPTradingStrategy ) {
-          GPTradingStrategy strategy = (GPTradingStrategy) strategies.next();
+          GPTradingStrategy strategy = (GPTradingStrategy) s;
           printIndividual(strategy);
           println();
           println("Price stats for trader: " + strategy.getPriceStats());
           println();
           println("Misbehaved? " + strategy.misbehaved());
           println();
-        } else {
+        } //else {
           println(s.toString());
-        }
+//        }
         println("-------------");
       }
 

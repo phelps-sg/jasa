@@ -22,6 +22,7 @@ import uk.ac.liv.auction.core.AuctionException;
 
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -245,6 +246,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
 
   public void reset() {
     initialise();
+    if ( strategy != null ) {
+      ((Resetable) strategy).reset();
+    }
   }
 
   public double getPrivateValue() {
