@@ -37,13 +37,14 @@ import uk.ac.liv.auction.agent.*;
 
 /**
  * <p>
- * Calculate the market-power and efficiency variables described in:
+ * Calculate the market-power and efficiency variables described in the 
+ * following paper.
  * </p>
  * <p>
- * "Markert Power and Efficiency in a Computational Electricity Market
+ * "Market Power and Efficiency in a Computational Electricity Market
  * with Discriminatory Double-Auction Pricing"
  * Nicolaisen, J.; Petrov, V.; and Tesfatsion, L.
- * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
+ * in IEEE Transactions on Evolutionary Computation, Vol. 5, No. 5. 2001
  * </p>
  *
  * @author Steve Phelps

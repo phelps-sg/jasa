@@ -21,6 +21,9 @@ import ec.util.Parameter;
 import uk.ac.liv.util.Parameterizable;
 
 /**
+ *
+ * An abstract implementation of FixedQuantityStrategy.
+ *
  * </p><p><b>Parameters</b><br>
  * <table>
  * <tr><td valign=top><i>base</i><tt>.quantity</tt><br>
