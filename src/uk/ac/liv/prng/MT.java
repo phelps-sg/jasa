@@ -17,17 +17,19 @@
 package uk.ac.liv.prng;
 
 import edu.cornell.lassp.houle.RngPack.RandomSeedable;
-import edu.cornell.lassp.houle.RngPack.RanMT;
+//import edu.cornell.lassp.houle.RngPack.RanMT;
+
+import cern.jet.random.engine.MersenneTwister64;;
 
 
 public class MT extends PRNGFactory {
 
   public RandomSeedable create() {
-     return new RanMT();
+     return new MersenneTwister64();
   }
 
   public RandomSeedable create( long seed ) {
-    return new RanMT(seed);
+    return new MersenneTwister64((int) seed);
   }
 
   public String getDescription() {
