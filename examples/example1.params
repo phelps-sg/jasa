@@ -14,7 +14,7 @@ simulation.auction.maximumrounds = 10000
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 
 # Set the transaction price as a function of individual bid and ask prices
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 
 # Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
@@ -44,9 +44,9 @@ simulation.agenttype.n = 2
 simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.0.numagents = 50
 simulation.agenttype.0.isseller = true
-# Valuations will be drawn randomly for each unit that we trade
+# Valuations will be drawn randomly at the start of the auction
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
-# Valuations will be in the range (10, 100)
+# Valuations will be distributed uniformly in the range (10, 100)
 simulation.agenttype.0.valuer.minvalue = 10
 simulation.agenttype.0.valuer.maxvalue = 100
 # Generating capacity is 10MWh

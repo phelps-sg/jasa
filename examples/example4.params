@@ -1,7 +1,7 @@
 
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.lengthofday = 20
-simulation.auction.maximumdays = 20
+simulation.auction.maximumdays = 200
 simulation.auction.name = Example 4: Zip/RothErev/Kaplan
 simulation.console = true
 
@@ -21,7 +21,7 @@ simulation.auction.logger.3 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 simulation.agenttype.n = 3
 
 simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.agenttype.0.numagents = 20
+simulation.agenttype.0.numagents = 30
 simulation.agenttype.0.isseller = true
 simulation.agenttype.0.initialtradeentitlement = 2
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
@@ -41,7 +41,7 @@ simulation.agenttype.1.valuer.minvalue = 80
 simulation.agenttype.1.valuer.maxvalue = 150
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.1.strategy.markupscale = 1
-simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 simulation.agenttype.1.strategy.learner.k = 100
 
 
@@ -49,7 +49,7 @@ simulation.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.2.numagents = 20
 simulation.agenttype.2.isseller = false
 simulation.agenttype.2.initialtradeentitlement = 1
-simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomValuer
 simulation.agenttype.2.valuer.minvalue = 100
 simulation.agenttype.2.valuer.maxvalue = 200
 simulation.agenttype.2.strategy = uk.ac.liv.auction.agent.KaplanStrategy

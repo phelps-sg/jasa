@@ -10,7 +10,7 @@ simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.shoutprobability = 0.9
 
 simulation.auction.name = Example 2: Uniform-price k-DA
-simulation.auction.maximumrounds = 200
+simulation.auction.maximumrounds = 10000
 
 # Use a k-DA auctioneer which will clear the auction after each round
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
@@ -41,7 +41,7 @@ simulation.agenttype.n = 2
 
 # 1st population- 5000 ZI-C sellers
 simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.agenttype.0.numagents = 5000
+simulation.agenttype.0.numagents = 500
 simulation.agenttype.0.initialtradeentitlement = 1000
 simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.agenttype.0.strategy.maxmarkup = 100
@@ -49,20 +49,21 @@ simulation.agenttype.0.isseller = true
 # Private values will be randomly drawn for each unit that we trade
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Range for private values is (10, 100)
-simulation.agenttype.0.valuer.minvalue = 10
-simulation.agenttype.0.valuer.maxvalue = 100
+simulation.agenttype.0.valuer.minvalue = 110
+simulation.agenttype.0.valuer.maxvalue = 200
 
 # 2nd population- 5000 ZI-C buyers
 simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.agenttype.1.numagents = 5000
+simulation.agenttype.1.numagents = 500
 simulation.agenttype.1.initialtradeentitlement = 1000
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
+simulation.agenttype.1.strategy.maxmarkup = 100
 simulation.agenttype.1.isseller = false
 # Private values will be randomly drawn for each unit that we trade
 simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Range for private values is (20, 150)
-simulation.agenttype.1.valuer.minvalue = 20
-simulation.agenttype.1.valuer.maxvalue = 150
+simulation.agenttype.1.valuer.minvalue = 120
+simulation.agenttype.1.valuer.maxvalue = 250
 
 # PRNG configuration
 #  Use the RanMar algorithm

@@ -1,0 +1,57 @@
+
+
+simulation.days=10
+simulation.console = false
+simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
+simulation.auction.name = ZIP Experiment
+simulation.auction.maximumrounds = 10000
+simulation.auction.lengthofday = 100
+simulation.auction.maximumdays = 50
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+simulation.auction.auctioneer.pricing.k = 0.5
+simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
+simulation.auction.logger.n = 3
+simulation.auction.logger.0 = uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger
+simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+simulation.auction.logger.2 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
+
+simulation.console = true
+
+simulation.agenttype.n = 2
+
+simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.agenttype.0.numagents = 11
+simulation.agenttype.0.isseller = true
+simulation.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.agenttype.0.strategy.scaling = 0.001
+simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
+simulation.agenttype.0.strategy.learner.learningrate = 0.3
+simulation.agenttype.0.strategy.learner.momentum = 0.05
+simulation.agenttype.0.initialtradeentitlement = 1
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.SellerIntervalValuer
+simulation.agenttype.0.valuer.minvalue = 75
+simulation.agenttype.0.valuer.step = 25
+
+simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.agenttype.1.numagents = 11
+simulation.agenttype.1.isseller = false
+simulation.agenttype.1.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.agenttype.1.strategy.scaling = 0.001
+simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
+simulation.agenttype.1.strategy.learner.learningrate = 0.3
+simulation.agenttype.1.strategy.learner.momentum = 0.05
+simulation.agenttype.1.initialtradeentitlement = 1
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.BuyerIntervalValuer
+simulation.agenttype.1.valuer.minvalue = 75
+simulation.agenttype.1.valuer.step = 25
+
+# prng configuration
+simulation.prng = uk.ac.liv.prng.Mar
+simulation.seed = 3465
+
+# log4j configuration
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n

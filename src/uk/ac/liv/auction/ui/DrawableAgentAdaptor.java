@@ -43,8 +43,6 @@ public class DrawableAgentAdaptor implements Drawable {
   
   protected ColorMap colorMap;
   
-  protected float price;
-  
   public float scale = 1000;
   
   public DrawableAgentAdaptor( Auction auction ) {
@@ -76,13 +74,7 @@ public class DrawableAgentAdaptor implements Drawable {
   public void draw( SimGraphics g ) {
     int cellHeight = g.getCurHeight();
     int cellWidth = g.getCurWidth();
-    price = 0;
-    if ( agent != null ) {
-      Shout shout = agent.getCurrentShout();
-      if ( shout != null ) {
-        price = (float) shout.getPrice();
-      }
-    }
+    float price = getLastShoutPrice();
     int y =  (int) ((price / scale) * 5);
     g.setDrawingParameters(5, y, 1);
     if ( colorMap == null ) {
@@ -124,16 +116,23 @@ public class DrawableAgentAdaptor implements Drawable {
     }
   }
   
+  public float getLastShoutPrice() {
+    float price = 0;
+    if ( agent != null ) {
+      Shout shout = agent.getCurrentShout();
+      if ( shout != null ) {
+        price = (float) shout.getPrice();
+      }
+    }
+    return price;
+  }
+  
   public Object getAgentType() {
     return agent;
   }
   
   public boolean getLastShoutAccepted() {
     return agent.lastShoutAccepted();
-  }
-  
-  public float getLastShoutPrice() {
-    return price;
   }
 
   public float getLearningDelta() {
