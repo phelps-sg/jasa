@@ -5,14 +5,15 @@
       <property name="sourceDir" value="src"/>
       <property name="outputDir" value="classes"/>
       <property name="projectName" value="JASA"/>
-      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io"/>
+      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io"/>
       <property name="docDir" value="doc"/>
       <property name="javaLibPath" value="/usr/local/java/lib"/>
       <property name="ecjPath" value="${javaLibPath}/ecj"/>
       <property name="poolitPath" value="${javaLibPath}/poolit/poolit.jar"/>
       <property name="junitPath" value="${javaLibPath}/junit3.7/junit.jar"/>
       <property name="skijPath" value="${javaLibPath}/skij.jar"/>      
-      <property name="classPath" value="${ecjPath}:${poolitPath}:${junitPath}:${skijPath}"/>
+      <property name="jadePath" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
+      <property name="classPath" value="${ecjPath}:${poolitPath}:${junitPath}:${skijPath}:${jadePath}"/>
    </target>
 
    <target depends="init" name="cleanOutput">

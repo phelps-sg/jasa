@@ -1,6 +1,6 @@
 /*
  * JASA Java Auction Simulator API
- * Copyright (C) 2001-2002 Steve Phelps
+ * Copyright (C) 2001-2003 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -65,7 +65,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
   static final String P_GATHER_STATS = "gatherstats";
 
   static final String GNU_MESSAGE =
-    "JASA - (C) 2001-2002 Steve Phelps\n" +
+    "JASA - (C) 2001-2003 Steve Phelps\n" +
     "JASA comes with ABSOLUTELY NO WARRANTY; see the GNU General Public\n" +
     "license for more details.  This is free software, and you are welcome\n" +
     "to redistribute it under certain conditions; see the GNU General Public\n" +

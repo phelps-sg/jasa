@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2003 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -21,14 +21,12 @@ import uk.ac.liv.auction.core.*;
 import jade.content.onto.*;
 import jade.content.schema.*;
 
+/**
+ * The ontology for the auction application.
+ */
 public class AuctionOntology extends Ontology {
 
-  /**
-    A symbolic constant, containing the name of this ontology.
-   */
   public static final String NAME = "jasa-auction-ontology";
-
-  // VOCABULARY
 
   // Concepts
   public static final String CONCEPT_SHOUT = "SHOUT";
@@ -62,15 +60,9 @@ public class AuctionOntology extends Ontology {
 
   private static Ontology theInstance = new AuctionOntology();
 
-  /**
-     This method grants access to the unique instance of the
-     ontology.
-     @return An <code>Ontology</code> object, containing the concepts
-     of the ontology.
-  */
-   public static Ontology getInstance() {
-                return theInstance;
-   }
+  public static Ontology getInstance() {
+    return theInstance;
+  }
 
   /**
    * Constructor
