@@ -96,6 +96,8 @@ public class QLearner
   static final String P_EPSILON = "e";
   static final String P_LEARNING_RATE = "p";
   static final String P_DISCOUNT_RATE = "g";
+  static final String P_NUM_ACTIONS = "k";
+  static final String P_NUM_STATES = "s";
 
   public QLearner( int numStates, int numActions, double epsilon,
                     double learningRate, double discountRate  ) {
@@ -126,7 +128,22 @@ public class QLearner
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    //TODO
+
+    learningRate =
+      parameters.getDoubleWithDefault(base.push(P_LEARNING_RATE), null,
+                                      DEFAULT_LEARNING_RATE);
+
+    discountRate =
+      parameters.getDoubleWithDefault(base.push(P_DISCOUNT_RATE), null,
+                                      DEFAULT_DISCOUNT_RATE);
+
+    epsilon =
+      parameters.getDoubleWithDefault(base.push(P_EPSILON), null,
+                                      DEFAULT_EPSILON);
+
+    numStates = parameters.getInt(base.push(P_NUM_STATES), null, 0);
+    numActions = parameters.getInt(base.push(P_NUM_ACTIONS), null, 0);
+    setStatesAndActions(numStates, numActions);
   }
 
   public void setState( int newState ) {
