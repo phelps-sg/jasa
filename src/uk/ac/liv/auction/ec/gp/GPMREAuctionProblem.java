@@ -178,7 +178,7 @@ public class GPMREAuctionProblem extends GPProblem implements CoEvolutionaryProb
         trader.setPrivateValue(randGenerator.nextDouble() * maxPrivateValue);
       }
       trader.reset();
-      Debug.assert( trader.getProfits() == 0 );
+      Debug.assertTrue( trader.getProfits() == 0 );
       //strategies.add(strategy);
     }
     // Save the strategies used in this auction for posterity

@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -62,7 +62,7 @@ public class ListMarketDataLogger implements MarketDataLogger {
         transPriceLog.add(ask.clone());
       }
     } catch ( CloneNotSupportedException e ) {
-      Debug.assert("Shouts should be cloneable!", false);
+      Debug.assertTrue("Shouts should be cloneable!", false);
     }
   }
 
@@ -73,7 +73,7 @@ public class ListMarketDataLogger implements MarketDataLogger {
         shoutLog.add(shout.clone());
       }
     } catch ( CloneNotSupportedException e ) {
-      Debug.assert("Shouts should be cloneable!", false);
+      Debug.assertTrue("Shouts should be cloneable!", false);
     }
   }
 

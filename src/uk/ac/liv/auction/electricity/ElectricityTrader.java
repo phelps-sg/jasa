@@ -99,7 +99,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
 
   public void informOfBuyer( double price, int quantity ) {
-    Debug.assert(isSeller);
+    Debug.assertTrue(isSeller);
 
     // Reward the learning algorithm according to profits made.
     double profit = quantity * (price - privateValue);
@@ -112,7 +112,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                                double price, int quantity) {
-    Debug.assert(!isSeller);
+    Debug.assertTrue(!isSeller);
 
     // Reward the learning algorithm according to profits made
     double profit = quantity * (privateValue - price);
@@ -136,7 +136,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
   }
 
   public boolean acceptDeal( double price, int quantity ) {
-    Debug.assert(isSeller);
+    Debug.assertTrue(isSeller);
     return price > privateValue;
   }
 

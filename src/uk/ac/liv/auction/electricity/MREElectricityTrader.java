@@ -85,7 +85,7 @@ public class MREElectricityTrader extends ElectricityTrader {
         // Generate an action from the learning algorithm
         int action = learner.act();
 
-        Debug.assert("action >= 0", action >= 0);
+        Debug.assertTrue("action >= 0", action >= 0);
         // Now turn the action into a price
         double price;
         if ( isSeller() ) {
