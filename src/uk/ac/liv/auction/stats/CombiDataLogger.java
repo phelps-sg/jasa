@@ -23,6 +23,9 @@ import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 
 /**
+ * An implementation of MarketDataLogger that can be used to log
+ * data to a number of different sources.
+ *
  * @author Steve Phelps
  */
 
@@ -38,6 +41,9 @@ public class CombiDataLogger implements MarketDataLogger {
     this.loggers = new LinkedList();
   }
 
+  /**
+   * Add a new logger
+   */
   public void addLogger( MarketDataLogger logger ) {
     loggers.add(logger);
   }

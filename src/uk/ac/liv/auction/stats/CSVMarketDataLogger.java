@@ -18,7 +18,7 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.io.CSVWriter;
+import uk.ac.liv.util.io.*;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -44,17 +44,17 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
   /**
    * CSV output for market quotes as time series.
    */
-  CSVWriter csvQuoteLog = null;
+  DataWriter csvQuoteLog = null;
 
   /**
    * CSV output for shout data as time series.
    */
-  CSVWriter csvShoutLog = null;
+  DataWriter csvShoutLog = null;
 
   /*
    * CSV output for transaction price time series.
    */
-  CSVWriter csvTransPriceLog = null;
+  DataWriter csvTransPriceLog = null;
 
   static final String P_QUOTE_LOG_FILE = "quotelogfile";
   static final String P_SHOUT_LOG_FILE = "shoutlogfile";

@@ -26,7 +26,7 @@ import java.io.*;
  * @author Steve Phelps
  */
 
-public class CSVWriter implements Serializable {
+public class CSVWriter implements Serializable, DataWriter {
 
   PrintStream out;
   int numColumns;

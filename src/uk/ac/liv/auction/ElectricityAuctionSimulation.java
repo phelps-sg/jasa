@@ -71,7 +71,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   double minPrivateValue = 10;
   double maxPrivateValue = 50;
 
-  CSVWriter dataFile, distributionFile, iterResults;
+  DataWriter dataFile, distributionFile, iterResults;
 
   ElectricityStats stats;
 

@@ -30,7 +30,9 @@ public class AllTests {
   }
 
   public static Test suite() {
+
     TestSuite suite = new TestSuite("auction test suite");
+
     suite.addTest(test.uk.ac.liv.util.BinaryHeapTest.suite());
     suite.addTest(test.uk.ac.liv.auction.NPTReplicationTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.RoundRobinTraderTest.suite());
@@ -40,6 +42,7 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.auction.core.RandomRobinAuctionTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.FourHeapTest.suite());
     suite.addTest(test.uk.ac.liv.ai.learning.RothErevLearnerTest.suite());
+    suite.addTest(test.uk.ac.liv.ai.learning.QLearnerTest.suite());
 
     return suite;
   }
