@@ -45,8 +45,9 @@ public class CoEvolveAuctionStatistics extends CoEvolveStrategyStatistics {
 
   public void postEvaluationStatistics( EvolutionState state ) {
 
-    super.postEvaluationStatistics(state);
+    //TODO super.postEvaluationStatistics(state);
 
+    findBestOfGeneration();
     if ( best[0] instanceof GPAuctioneer ) {
 
       GPAuctioneer auctioneer = (GPAuctioneer) best[0];

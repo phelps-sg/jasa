@@ -60,9 +60,13 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
   protected boolean generateCSV = false;
 
-  protected double maxPrivateValue = 100;
+  protected double maxSellerPrivateValue = 100;
 
-  protected double minPrivateValue = 50;
+  protected double maxBuyerPrivateValue = 100;
+
+  protected double minSellerPrivateValue = 50;
+
+  protected double minBuyerPrivateValue = 50;
 
   protected int shockInterval = 1;
 
@@ -101,8 +105,10 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   static final String P_TRADERS = "numtraders";
   static final String P_ROUNDS = "maxrounds";
   static final String P_RANDOMPRIVATEVALUES = "randomprivatevalues";
-  static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
-  static final String P_MINPRIVATEVALUE = "minprivatevalue";
+  static final String P_MAXSELLERPRIVATEVALUE = "maxsellerprivatevalue";
+  static final String P_MINSELLERPRIVATEVALUE = "minsellerprivatevalue";
+  static final String P_MAXBUYERPRIVATEVALUE = "maxbuyerprivatevalue";
+  static final String P_MINBUYERPRIVATEVALUE = "minbuyerprivatevalue";
   static final String P_VERBOSE = "verbose";
   static final String P_GENERATECSV ="generatecsv";
   static final String P_SHOCKINTERVAL = "shockinterval";
@@ -149,13 +155,23 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     randomPrivateValues =
       state.parameters.getBoolean(base.push(P_RANDOMPRIVATEVALUES), null,
                                     randomPrivateValues);
-    maxPrivateValue =
-      state.parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null,
-                                              maxPrivateValue);
 
-    minPrivateValue =
-      state.parameters.getDoubleWithDefault(base.push(P_MINPRIVATEVALUE), null,
-                                              minPrivateValue);
+    maxSellerPrivateValue =
+      state.parameters.getDoubleWithDefault(base.push(P_MAXSELLERPRIVATEVALUE),
+                                              null, maxSellerPrivateValue);
+
+    minSellerPrivateValue =
+      state.parameters.getDoubleWithDefault(base.push(P_MINSELLERPRIVATEVALUE),
+                                              null, minSellerPrivateValue);
+
+
+    maxBuyerPrivateValue =
+      state.parameters.getDoubleWithDefault(base.push(P_MAXSELLERPRIVATEVALUE),
+                                              null, maxSellerPrivateValue);
+
+    minBuyerPrivateValue =
+      state.parameters.getDoubleWithDefault(base.push(P_MINSELLERPRIVATEVALUE),
+                                              null, minSellerPrivateValue);
 
     shockInterval =
       state.parameters.getIntWithDefault(base.push(P_SHOCKINTERVAL), null,
@@ -182,7 +198,6 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     System.out.println("buyerCapacity = " + buyerCapacity);
     System.out.println("maxRounds = " + maxRounds);
     System.out.println("randomPrivateValues = " + randomPrivateValues);
-    System.out.println("maxPrivateValue = " + maxPrivateValue);
 
     randGenerator = new MersenneTwisterFast();
 
@@ -259,10 +274,16 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
         ElectricityTrader trader = (ElectricityTrader) traders.next();
 
-        double randPrivValue = minPrivateValue +
-              randGenerator.nextDouble() * (maxPrivateValue - minPrivateValue);
+        double value;
+        if ( randGenerator.nextBoolean() ) {  //TODO!
+          value =
+            nextRandomDouble(minBuyerPrivateValue, maxBuyerPrivateValue);
+        } else {
+          value =
+            nextRandomDouble(minSellerPrivateValue, maxSellerPrivateValue);
+        }
 
-        trader.setPrivateValue(randPrivValue);
+        trader.setPrivateValue(value);
 
         if ( verbose ) {
           System.out.println("pv " +  i + " = " + trader.getPrivateValue());
@@ -275,6 +296,9 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     } while ( ! stats.standardStats.equilibriaExists() );
   }
 
+  protected double nextRandomDouble( double min, double max ) {
+    return min + randGenerator.nextDouble() * (max - min);
+  }
 
   protected void preAuctionProcessing() {
 
@@ -397,12 +421,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     ArrayList result = new ArrayList();
     for( int i=0; i<num; i++ ) {
 
-      double value;
-      if ( randomPrivateValues ) {
-        value = randGenerator.nextDouble() * maxPrivateValue;
-      } else {
-        value = values[i % values.length];
-      }
+      double value = values[i % values.length];
 
       GPElectricityTrader trader =
         new GPElectricityTrader(capacity, value, 0, areSellers);
