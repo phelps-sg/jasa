@@ -353,6 +353,8 @@ public class RoundRobinAuction extends AuctionImpl
 
   public void newShout( Shout shout ) throws AuctionException {
     super.newShout(shout);
+    setChanged();
+    notifyObservers();
     updateShoutLog(round, shout);
   }
 
