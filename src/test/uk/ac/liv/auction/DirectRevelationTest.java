@@ -21,17 +21,6 @@ import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
 
 /**
- *
- * Attempt an approximate replication of some of the experiments
- * described in
- *
- * "Market Power and Efficiency in a Computational Electricity Market
- * with Discriminatory Double-Auction Pricing"
- * <br>
- * Nicolaisen, Petrov, and Tesfatsion
- * <i>IEEE Transactions on Evolutionary Computation, Vol. 5, No. 5. 2001</I>
- * </p>
- *
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -48,7 +37,7 @@ public class DirectRevelationTest extends ElectricityTest {
 
 
   /*
-   * Test that truth-telling in a DA always results in 100% efficiency
+   * Test that truth-telling in a DA (CH) always results in 100% efficiency
    */
   public void testTruthTelling() {
     experimentSetup(3, 3, 10, 10);

@@ -62,6 +62,10 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.ai.learning.QLearnerTest.suite());
     suite.addTest(test.uk.ac.liv.ai.learning.WidrowHoffLearnerTest.suite());
 
+    suite.addTest(test.uk.ac.liv.auction.agent.RothErevEfficiencyTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.agent.EPEfficiencyTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.agent.GDEfficiencyTest.suite());
+    
     return suite;
   }
 
