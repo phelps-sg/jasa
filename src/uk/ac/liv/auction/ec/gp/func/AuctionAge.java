@@ -22,6 +22,8 @@ import uk.ac.liv.ec.gp.func.*;
 
 import uk.ac.liv.ec.gp.GPGenericIndividual;
 
+import uk.ac.liv.util.UntypedLong;
+
 public class AuctionAge extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, 
@@ -29,7 +31,7 @@ public class AuctionAge extends GPNode {
   	GPGenericIndividual gpInd = (GPGenericIndividual) individual;
   	GPTradingStrategy strategy = (GPTradingStrategy) gpInd.getGPObject();
     ((GPGenericData) input).data = 
-      new Long(strategy.getAuction().getAge());
+      new UntypedLong(strategy.getAuction().getAge());
   }
 
   public String toString() {
