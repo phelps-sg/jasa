@@ -99,7 +99,6 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
     println("========================================================");
     println("");
 
-    /*
     Iterator strategies = auctioneer.getStrategies().iterator();
     while ( strategies.hasNext() ) {
       GPTradingStrategy strategy = (GPTradingStrategy) strategies.next();
@@ -110,8 +109,6 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
       println("-------------");
       println("");
     }
-    */
-    //TODO
   }
 
   public void println( String message ) {
