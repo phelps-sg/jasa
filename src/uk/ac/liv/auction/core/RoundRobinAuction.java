@@ -18,6 +18,7 @@ package uk.ac.liv.auction.core;
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 import uk.ac.liv.auction.agent.TraderAgent;
 import uk.ac.liv.auction.stats.MarketDataLogger;
+import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
 import uk.ac.liv.util.io.CSVWriter;
 import uk.ac.liv.util.IdAllocator;
@@ -140,6 +141,11 @@ public class RoundRobinAuction extends AuctionImpl
    * trading?
    */
   protected boolean shoutsProcessed;
+
+  /**
+   * Optional graphical console
+   */
+  protected AuctionConsoleFrame guiConsole = null;
 
 
 
@@ -448,6 +454,39 @@ public class RoundRobinAuction extends AuctionImpl
       logger.finalReport();
     }
   }
+
+  /**
+   * Activate a graphical console for monitoring and controlling
+   * the progress of the auction.  Activation of the console
+   * may significantly impact the time performance of the auction.
+   */
+  public void activateGUIConsole() {
+    if ( guiConsole == null ) {
+      guiConsole = new AuctionConsoleFrame(this, name);
+    }
+    guiConsole.activate();
+    // Add the console as an observer so that it will be informed
+    // of state changes when we call notifyObservers().
+    addObserver(guiConsole);
+  }
+
+  /**
+   * Deactivate the graphical console.
+   */
+  public void deactivateGUIConsole() {
+    guiConsole.deactivate();
+    deleteObserver(guiConsole);
+    guiConsole = null;
+  }
+
+  public void setConsole( AuctionConsoleFrame console ) {
+    this.guiConsole = console;
+  }
+
+  public AuctionConsoleFrame getConsole() {
+    return guiConsole;
+  }
+
 
   protected void initialise() {
     super.initialise();

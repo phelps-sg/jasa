@@ -17,8 +17,6 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.stats.*;
 
-import uk.ac.liv.auction.ui.AuctionConsoleFrame;
-
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
 
@@ -78,10 +76,6 @@ public abstract class AuctionImpl extends Observable
    */
   protected boolean closed;
 
-  /**
-   * Optional graphical console
-   */
-  protected AuctionConsoleFrame guiConsole = null;
 
   /**
    * The plugable bidding logic to use for this auction, e.g. AscendingAuctioneer
@@ -133,13 +127,6 @@ public abstract class AuctionImpl extends Observable
     return auctioneer;
   }
 
-  public void setConsole( AuctionConsoleFrame console ) {
-    this.guiConsole = console;
-  }
-
-  public AuctionConsoleFrame getConsole() {
-    return guiConsole;
-  }
 
   public boolean closed() {
     return closed;
@@ -189,33 +176,6 @@ public abstract class AuctionImpl extends Observable
    */
   public void setName( String name ) {
     this.name = name;
-    if ( guiConsole != null ) {
-      guiConsole.setAuctionName(name);
-    }
-  }
-
-  /**
-   * Activate a graphical console for monitoring and controlling
-   * the progress of the auction.  Activation of the console
-   * may significantly impact the time performance of the auction.
-   */
-  public void activateGUIConsole() {
-    if ( guiConsole == null ) {
-      guiConsole = new AuctionConsoleFrame(this, name);
-    }
-    guiConsole.activate();
-    // Add the console as an observer so that it will be informed
-    // of state changes when we call notifyObservers().
-    addObserver(guiConsole);
-  }
-
-  /**
-   * Deactivate the graphical console.
-   */
-  public void deactivateGUIConsole() {
-    guiConsole.deactivate();
-    deleteObserver(guiConsole);
-    guiConsole = null;
   }
 
   public MarketQuote getQuote() {

@@ -194,7 +194,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
       }
     }
 
-    seedStrategies();
+    seedAgents();
 
     logger.info("done.");
   }
@@ -225,7 +225,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
   }
 
 
-  protected void seedStrategies() {
+  protected void seedAgents() {
     logger.info("seed = " + prngSeed);
     MersenneTwisterFast prng = new MersenneTwisterFast(prngSeed);
     Iterator i = auction.getTraderIterator();
@@ -241,6 +241,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
           ((StochasticLearner) l).setSeed(prng.nextLong());
         }
       }
+      agent.reset();
     }
   }
 

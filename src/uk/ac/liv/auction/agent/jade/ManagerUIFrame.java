@@ -22,7 +22,7 @@ import javax.swing.event.*;
 import java.awt.event.*;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
-import uk.ac.liv.auction.core.AuctionImpl;
+import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import org.apache.log4j.Logger;
 
@@ -41,7 +41,7 @@ public class ManagerUIFrame extends AuctionConsoleFrame {
   static Logger logger = Logger.getLogger(ManagerUIFrame.class);
 
 
-  public ManagerUIFrame( AuctionManager manager, AuctionImpl auction )  {
+  public ManagerUIFrame( AuctionManager manager, RoundRobinAuction auction )  {
     super(auction, "JADE auction");
     this.manager = manager;
 

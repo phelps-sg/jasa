@@ -407,4 +407,8 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     return lastShoutAccepted;
   }
 
+  public void setSeed( long seed ) {
+    randGenerator.setSeed(seed);
+  }
+
 }

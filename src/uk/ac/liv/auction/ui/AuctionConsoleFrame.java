@@ -44,7 +44,7 @@ import org.apache.log4j.Logger;
 public class AuctionConsoleFrame extends JFrame
     implements Observer {
 
-  protected Auction auction;
+  protected RoundRobinAuction auction;
 
   protected JLabel bidLabel;
   protected JLabel askLabel;
@@ -53,6 +53,8 @@ public class AuctionConsoleFrame extends JFrame
   protected JLabel numTradersLabel;
   protected JButton closeAuctionButton;
   protected JButton supplyAndDemandButton;
+  protected JButton rerunAuctionButton;
+  protected JButton reportButton;
 
   protected DecimalFormat currencyFormatter =
       new DecimalFormat("+000000.00;-000000.00");
@@ -66,9 +68,11 @@ public class AuctionConsoleFrame extends JFrame
 
   protected GraphMarketDataLogger graphModel;
 
+  private Thread auctionRunner;
+
   static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);
 
-  public AuctionConsoleFrame( Auction auction, String name ) {
+  public AuctionConsoleFrame( RoundRobinAuction auction, String name ) {
 
     this.auction = auction;
     Container contentPane = getContentPane();
@@ -150,7 +154,7 @@ public class AuctionConsoleFrame extends JFrame
     gridBag.setConstraints(roundLabel, c);
     contentPane.add(roundLabel);
 
-    closeAuctionButton = new JButton("Close Auction");
+    closeAuctionButton = new JButton("Close");
     c.gridx = 1;
     c.gridy = 5;
     c.ipadx = 0;
@@ -164,8 +168,24 @@ public class AuctionConsoleFrame extends JFrame
         }
     });
 
-    JButton logAuctionStatusButton = new JButton("Dump bids");
+
+    rerunAuctionButton = new JButton("Rerun");
     c.gridx = 2;
+    c.gridy = 5;
+    c.ipadx = 0;
+    c.ipady = 0;
+    c.gridwidth = 1;
+    gridBag.setConstraints(rerunAuctionButton, c);
+    contentPane.add(rerunAuctionButton);
+    rerunAuctionButton.addActionListener(new ActionListener() {
+        public void actionPerformed( ActionEvent e ) {
+          rerunAuction();
+        }
+    });
+
+
+    JButton logAuctionStatusButton = new JButton("Dump");
+    c.gridx = 3;
     c.gridy = 5;
     c.weightx = 0;
     gridBag.setConstraints(logAuctionStatusButton, c);
@@ -176,8 +196,21 @@ public class AuctionConsoleFrame extends JFrame
         }
     });
 
+    JButton reportButton = new JButton("Report");
+    c.gridx = 4;
+    c.gridy = 5;
+    c.weightx = 0;
+    gridBag.setConstraints(reportButton, c);
+    contentPane.add(reportButton);
+    reportButton.addActionListener(new ActionListener() {
+        public void actionPerformed( ActionEvent e ) {
+          generateReport();
+        }
+    });
+
+
     JButton supplyAndDemandButton = new JButton("Graph S/D");
-    c.gridx = 3;
+    c.gridx = 5;
     c.gridy = 5;
     c.weightx = 0;
     gridBag.setConstraints(supplyAndDemandButton, c);
@@ -193,7 +226,7 @@ public class AuctionConsoleFrame extends JFrame
       graph.setMinimumSize(new Dimension(600,200));
       c.gridx = 0;
       c.gridy = 0;
-      c.gridwidth = 5;
+      c.gridwidth = 7;
       c.gridheight = 1;
       c.weightx = 1;
       c.weighty = 1;
@@ -212,6 +245,7 @@ public class AuctionConsoleFrame extends JFrame
    *  Close the auction.
    */
   public void closeAuction() {
+    logger.debug("closeAuction()");
     auction.close();
   }
 
@@ -223,9 +257,10 @@ public class AuctionConsoleFrame extends JFrame
   }
 
   public void update( Observable o, Object arg ) {
-    logger.debug("update(" + o + ", " + arg);
+    logger.debug("update(" + o + ", " + arg + ")");
 
-     Auction auction = (Auction) o;
+    Auction auction = (Auction) o;
+    logger.debug("round = " + auction.getAge());
     MarketQuote quote = auction.getQuote();
     currencyFormatter.setMaximumIntegerDigits(6);
     if ( quote != null ) {
@@ -257,6 +292,7 @@ public class AuctionConsoleFrame extends JFrame
   }
 
   public void graphSupplyAndDemand() {
+    logger.debug("graphSupplyAndDemand()");
     SupplyAndDemandFrame graphFrame =
         new SupplyAndDemandFrame((RoundRobinAuction) auction);
     graphFrame.pack();
@@ -278,5 +314,16 @@ public class AuctionConsoleFrame extends JFrame
     setVisible(false);
   }
 
+  public void rerunAuction() {
+    logger.debug("rerunAuction()");
+    auction.close();
+    while ( !auction.closed() );
+    auction.reset();
+    auctionRunner = new Thread(auction);
+    auctionRunner.start();
+  }
 
+  public void generateReport() {
+    auction.generateReport();
+  }
 }

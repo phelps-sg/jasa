@@ -32,6 +32,8 @@ import org.apache.log4j.Logger;
 
 
 /**
+ * A frame containing a graph of the supply and demand curves for the
+ * specified auction.
  *
  * @author Steve Phelps
  */
@@ -59,8 +61,8 @@ public class SupplyAndDemandFrame extends JFrame {
     c.ipadx = 80;
     c.insets = new Insets(40,40,40,40);
 
-    Graph2DModel graphModel = constructSupplyAndDemandModel(auction);
-    JLineGraph graph = new JLineGraph(graphModel);
+    Graph2DModel supplyAndDemand = constructSupplyAndDemandModel(auction);
+    JLineGraph graph = new JLineGraph(supplyAndDemand);
     graph.setPreferredSize(new Dimension(400,400));
     c.gridx = 0;
     c.gridy = 0;

@@ -136,6 +136,7 @@ public class EquilibriaStats extends DirectRevelationStats
 
       pSCE += equilibriumProfits(ask.getQuantity(),
                                   (AbstractTraderAgent) ask.getAgent());
+
     }
 
     minQty = qty;
@@ -174,6 +175,7 @@ public class EquilibriaStats extends DirectRevelationStats
   }
 
   protected void calculateEquilibriaPriceRange() {
+    shoutEngine.printState();
     minPrice = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine.getHighestUnmatchedBid());
     maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
     if ( ! (minPrice <= maxPrice) ) {

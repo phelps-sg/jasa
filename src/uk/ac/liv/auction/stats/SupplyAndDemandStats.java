@@ -51,6 +51,10 @@ public class SupplyAndDemandStats extends DirectRevelationStats
 
   protected DataWriter demandStats;
 
+  protected ArrayList bids = new ArrayList();
+
+  protected ArrayList asks = new ArrayList();
+
 
   public SupplyAndDemandStats( RoundRobinAuction auction,
                                 DataWriter supplyStats,
@@ -71,29 +75,55 @@ public class SupplyAndDemandStats extends DirectRevelationStats
   }
 
   public void writeSupplyStats() {
-    writeStats(supplyStats, asks, new DescendingShoutComparator());
+    writeStats(supplyStats, asks, new AscendingShoutComparator());
   }
 
 
   public void writeDemandStats() {
-    writeStats(demandStats, bids, new AscendingShoutComparator());
+    writeStats(demandStats, bids, new DescendingShoutComparator());
   }
 
   public void writeStats( DataWriter stats, List shouts,
                            Comparator comparator ) {
+    int qty = 0, qty1 = 0;
     if ( shouts.isEmpty() ) {
       return;
     }
     Collections.sort(shouts, comparator);
+    Shout shout = (Shout) shouts.get(0);
     Iterator i = shouts.iterator();
-    Shout shout = (Shout) i.next();
-    int qty = 0;
     while ( i.hasNext() ) {
-      qty += shout.getQuantity();
+      shout = (Shout) i.next();
+      qty1 = qty + shout.getQuantity();
       stats.newData(qty);
       stats.newData(shout.getPrice());
-      shout = (Shout) i.next();
+      stats.newData(qty1);
+      stats.newData(shout.getPrice());
+      qty = qty1;
     }
   }
+
+  protected void enumerateShout( Shout shout ) {
+    Shout copyOfShout = new Shout();
+    copyOfShout.copyFrom(shout);
+    if ( shout.isBid() ) {
+      bids.add(copyOfShout);
+    } else {
+      asks.add(copyOfShout);
+    }
+  }
+
+  protected void releaseShouts() {
+    super.releaseShouts();
+    releaseShouts(bids.iterator());
+    releaseShouts(asks.iterator());
+  }
+
+  public void initialise() {
+    super.initialise();
+    asks.clear();
+    bids.clear();
+  }
+
 
 }

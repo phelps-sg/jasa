@@ -59,10 +59,6 @@ public class DirectRevelationStats implements Resetable, Serializable {
    */
   protected ArrayList shouts;
 
-  protected ArrayList bids;
-
-  protected ArrayList asks;
-
 
   static Logger logger = Logger.getLogger(DirectRevelationStats.class);
 
@@ -73,8 +69,6 @@ public class DirectRevelationStats implements Resetable, Serializable {
 
   public DirectRevelationStats() {
     shouts = new ArrayList();
-    bids = new ArrayList();
-    asks = new ArrayList();
   }
 
   public void setAuction( RoundRobinAuction auction ) {
@@ -100,11 +94,10 @@ public class DirectRevelationStats implements Resetable, Serializable {
         shouts.add(shout);
         if ( isBid ) {
           shoutEngine.newBid(shout);
-          bids.add(shout);
         } else {
           shoutEngine.newAsk(shout);
-          asks.add(shout);
         }
+        enumerateShout(shout);
       }
     } catch ( DuplicateShoutException e ) {
       e.printStackTrace();
@@ -114,7 +107,10 @@ public class DirectRevelationStats implements Resetable, Serializable {
 
 
   protected void releaseShouts() {
-    Iterator i = shouts.iterator();
+    releaseShouts(shouts.iterator());
+  }
+
+  protected void releaseShouts( Iterator i ) {
     while ( i.hasNext() ) {
       Shout s = (Shout) i.next();
       ShoutPool.release(s);
@@ -125,13 +121,15 @@ public class DirectRevelationStats implements Resetable, Serializable {
   public void initialise() {
     shouts.clear();
     shoutEngine.reset();
-    bids.clear();
-    asks.clear();
   }
 
 
   public void reset() {
     initialise();
+  }
+
+  protected void enumerateShout( Shout shout ) {
+    // Do nothing
   }
 
 
