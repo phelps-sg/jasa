@@ -78,7 +78,13 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
 
   public double determineClearingPrice( Shout bid, Shout ask ) {
     GPNumberData input = new GPNumberData();
-    trees[0].child.eval(contextState, contextThread, input, contextStack, this, contextProblem);
+    try {
+      trees[0].child.eval(contextState, contextThread, input, contextStack, this, contextProblem);
+    } catch ( ArithmeticException e ) {
+      System.out.println("Caught: " + e);
+      e.printStackTrace();
+      return 0;
+    }
     return input.data.doubleValue();
   }
 
