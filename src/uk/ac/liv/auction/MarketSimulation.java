@@ -64,12 +64,16 @@ public class MarketSimulation implements Parameterizable, Runnable {
   static final String P_STATS = "stats";
   static final String P_GATHER_STATS = "gatherstats";
 
+
+  static final String VERSION = "0.13";
+
   static final String GNU_MESSAGE =
-    "JASA - (C) 2001-2003 Steve Phelps\n" +
+    "JASA v" + VERSION + " - (C) 2001-2003 Steve Phelps\n" +
     "JASA comes with ABSOLUTELY NO WARRANTY; see the GNU General Public\n" +
     "license for more details.  This is free software, and you are welcome\n" +
     "to redistribute it under certain conditions; see the GNU General Public\n" +
     "license for more details.\n";
+
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     System.out.print("Setup.. ");
