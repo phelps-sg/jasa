@@ -127,7 +127,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
           if ( content instanceof NewShoutAction ) {
             System.out.println("Recieved new shout " + msg);
             ACLShout shout = ((NewShoutAction) content).getShout();
-            auction.newShout(shout.getJASAShout());
+            auction.newShout(shout);
           }
         }
       } catch ( Exception e ) {

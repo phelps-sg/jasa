@@ -55,7 +55,7 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
                     new JASAAuctionProxy(msg.getSender(), myAgent));
               } else if ( content instanceof BidSuccessfulPredicate ) {
                 BidSuccessfulPredicate p = (BidSuccessfulPredicate) content;
-                jasaTraderAgent.informOfSeller(p.getShout().getJASAShout(),
+                jasaTraderAgent.informOfSeller(p.getShout(),
                     new JASATraderAgentProxy(new AID(p.getSeller(), true), myAgent),
                     p.getPrice(), p.getQuantity());
 

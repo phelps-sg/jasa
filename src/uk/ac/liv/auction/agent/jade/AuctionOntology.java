@@ -16,12 +16,12 @@ public class AuctionOntology extends Ontology {
   // VOCABULARY
 
   // Concepts
-
   public static final String CONCEPT_SHOUT = "SHOUT";
   public static final String CONCEPT_SHOUT_AGENT = "agent";
   public static final String CONCEPT_SHOUT_QUANTITY = "quantity";
   public static final String CONCEPT_SHOUT_PRICE = "price";
   public static final String CONCEPT_SHOUT_IS_BID = "is-bid";
+  public static final String CONCEPT_SHOUT_ID = "id";
 
   // Actions
 
@@ -34,6 +34,9 @@ public class AuctionOntology extends Ontology {
   public static final String ACTION_REGISTER_AGENT = "agent";
 
   public static final String ACTION_START_AUCTION = "START-AUCTION";
+
+  public static final String ACTION_REMOVE_SHOUT = "REMOVE-SHOUT";
+  public static final String ACTION_REMOVE_SHOUT_SHOUT = "shout";
 
   // Predicates
   public static final String PREDICATE_BID_SUCCESSFUL = "BID-SUCCESSFUL";
@@ -78,6 +81,9 @@ public class AuctionOntology extends Ontology {
       shoutSchema.add(CONCEPT_SHOUT_IS_BID,
                       (PrimitiveSchema)getSchema(BasicOntology.BOOLEAN));
 
+      shoutSchema.add(CONCEPT_SHOUT_ID,
+                      (PrimitiveSchema)getSchema(BasicOntology.INTEGER));
+
       add(shoutSchema, ACLShout.class);
 
 
@@ -86,11 +92,19 @@ public class AuctionOntology extends Ontology {
 
       add(requestShoutSchema, RequestShoutAction.class);
 
+
       PredicateSchema newShoutSchema = new PredicateSchema(ACTION_NEW_SHOUT);
 
       newShoutSchema.add(ACTION_NEW_SHOUT_SHOUT, shoutSchema);
 
       add(newShoutSchema, NewShoutAction.class);
+
+
+      PredicateSchema removeShoutSchema = new PredicateSchema(ACTION_REMOVE_SHOUT);
+
+      removeShoutSchema.add(ACTION_REMOVE_SHOUT_SHOUT, shoutSchema);
+
+      add(removeShoutSchema, RemoveShoutAction.class);
 
 
       PredicateSchema registerSchema = new PredicateSchema(ACTION_REGISTER);
