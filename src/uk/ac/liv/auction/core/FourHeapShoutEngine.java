@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.io.Serializable;
 
 import org.apache.commons.collections.buffer.PriorityBuffer;
+import org.apache.commons.collections.iterators.CollatingIterator;
 
 import org.apache.log4j.Logger;
 
@@ -348,7 +349,15 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
 //  protected Iterator matchedAskDisassembler() {
 //    return new QueueDisassembler(sIn);
 //  }
-
+  
+  public Iterator askIterator() {
+    return new CollatingIterator(greaterThan, sIn.iterator(), sOut.iterator());
+  }
+  
+  public Iterator bidIterator() {
+    return new CollatingIterator(lessThan, bIn.iterator(), bOut.iterator());
+  }
+  
 
   /**
    * <p>

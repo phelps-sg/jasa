@@ -80,6 +80,14 @@ public class GPAuctioneer extends GPSchemeIndividual
     }
     return currentQuote;
   }
+  
+  public Iterator bidIterator() {
+    return shoutEngine.bidIterator();
+  }
+  
+  public Iterator askIterator() {
+    return shoutEngine.askIterator();
+  }
 
 
   public synchronized void clear() {

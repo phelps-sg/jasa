@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.core;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -42,14 +43,21 @@ public interface ShoutEngine extends uk.ac.liv.util.Resetable {
 
   /**
    * <p>
-   * Return a list of matched bids and asks.  The list is of the form
-   * </p><br>
-   *
-   *   ( b0, a0, b1, a1 .. bn, an )<br>
-   *
+   * Destructively fetch the list of matched bids and asks. The list is of the
+   * form
+   * </p>
+   * <br>
+   *  ( b0, a0, b1, a1 .. bn, an )<br>
+   * 
    * <p>
-   * where bi is the ith bid and a0 is the ith ask.  A typical auctioneer would
-   * clear by matching bi with ai for all i at some price.</p>
+   * where bi is the ith bid and a0 is the ith ask. A typical auctioneer would
+   * clear by matching bi with ai for all i at some price. 
+   * </p>
+   * 
+   * <p>
+   * Note that the engine's set of matched shouts will become empty as
+   * a result of invoking this method.
+   * </p>
    */
   public List getMatchedShouts();
 
@@ -72,5 +80,17 @@ public interface ShoutEngine extends uk.ac.liv.util.Resetable {
    * Get the highest matched ask.
    */
   public Shout getHighestMatchedAsk();
+  
+  /**
+   * Return an iterator that non-destructively iterates over every
+   * ask in the auction (both matched and unmatched).
+   */
+  public Iterator askIterator();
+  
+  /**
+   * Return an iterator that non-destructively iterates over 
+   * every bid in the auction (both matched and unmatched).
+   */
+  public Iterator bidIterator();
 
 }

@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
+import java.util.Iterator;
+
 
 /**
  * <p>
@@ -66,6 +68,10 @@ public interface Auctioneer
    * Find out which auction we are the auctioneer for.
    */
   public Auction getAuction();
+  
+  public Iterator askIterator();
+  
+  public Iterator bidIterator();
 
   /**
    * Return true if the shouts of others are visible.
