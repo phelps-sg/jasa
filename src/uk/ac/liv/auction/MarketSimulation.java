@@ -15,19 +15,28 @@
 
 package uk.ac.liv.auction;
 
+import ec.util.ParamClassLoadException;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
-
-import uk.ac.liv.util.Parameterizable;
 
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.Distribution;
+import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.io.CSVWriter;
+import uk.ac.liv.util.io.DataWriter;
 
 import java.io.File;
 import java.io.Serializable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -45,51 +54,50 @@ import org.apache.log4j.Logger;
  * <tr><td valign=top><i>base</i><tt>.auction</tt><br>
  * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
  * <td valign=top>(the class of auction to use)</td></tr>
- *
- * <tr><td valign=top><i>base</i><tt>.agenttype.</tt><i>n</i><br>
+ * 
+ * <tr><td valign=top><i>base</i><tt>iterations</tt><br>
  * <font size=-1>int</font></td>
- * <td valign=top>(the number of different agent types)</td></tr>
- *
- * <tr><td valign=top><i>base</i><tt>.agenttype.</tt><i>i</i><br>
- * <font size=-1>classname, inherits uk.ac.liv.auction.agent.RoundRobinTrader</font></td>
- * <td valign=top>(the class for agent type #<i>i</i>)</td></tr>
- *
+ * <td valign=top>(the number of repetitions of this experiment to sample)</td></tr>
+ * 
+ * <tr><td valign=top><i>base</i><tt>w</tt><br>
+ * <font size=-1>int</font></td>
+ * <td valign=top>(the number of repetitions of this experiment to sample)</td></tr>
+ * 
+ * <tr><td valign=top><i>base</i><tt>.writer</tt><br>
+ * <font size=-1>classname inherits uk.ac.liv.auction.io.DataWriter</font></td>
+ * <td valign=top>(the data writer used to record results if running a batch of experiments)</td></tr>
+ * 
  * </table>
  *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class MarketSimulation 
-     implements Runnable, Serializable {
+public class MarketSimulation implements Serializable, Runnable {
 
   /**
    * The auction used in this simulation.
    */
   protected RoundRobinAuction auction;
+  
+  /**
+   * The number of repeatitions of this experiment to sample.
+   */
+  protected int iterations = 0;
+  
+  /**
+   * If running more than one iterations, then write batch statistics
+   * to this DataWriter.
+   */
+  protected DataWriter resultsFile = null;
 
+  
   public static final String P_AUCTION = "auction";
-  public static final String P_NUM_AGENT_TYPES = "n";
-  public static final String P_NUM_AGENTS = "numagents";
-  public static final String P_AGENT_TYPE = "agenttype";
-  public static final String P_AGENTS = "agents";
-  public static final String P_CONSOLE = "console";
   public static final String P_SIMULATION = "simulation";
-
-
-  public static final String VERSION = "0.33";
-
-  public static final String GNU_MESSAGE =
-    "\n" +
-    "JASA v" + VERSION + " - (C) 2001-2004 Steve Phelps\n" +
-    "JASA comes with ABSOLUTELY NO WARRANTY. This is free software,\n" +
-    "and you are welcome to redistribute it under certain conditions;\n" +
-    "see the GNU General Public license for more details.\n\n" +
-    "This is alpha test software.  Please report any bugs, issues\n" +
-    "or suggestions to sphelps@csc.liv.ac.uk.\n";
+  public static final String P_ITERATIONS = "iterations";
+  public static final String P_WRITER = "writer";
 
   static Logger logger = Logger.getLogger("JASA");
-
 
 
   public static void main( String[] args ) {
@@ -114,7 +122,6 @@ public class MarketSimulation
       MarketSimulation simulation = new MarketSimulation();
       simulation.setup(parameters, new Parameter(P_SIMULATION));
       simulation.run();
-      simulation.report();
 
     } catch ( Exception e ) {
       logger.error(e);
@@ -136,37 +143,20 @@ public class MarketSimulation
                                               RoundRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
-
-    if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
-      auction.activateGUIConsole();
-    }
-
-    Parameter typeParam = base.push(P_AGENT_TYPE);
-
-    int numAgentTypes = parameters.getInt(typeParam.push("n"), null, 1);
-
-    for( int t=0; t<numAgentTypes; t++ ) {
-
-      Parameter typeParamT = typeParam.push(""+t);
-      Parameter agentParam = typeParamT.push(P_AGENTS);
-
-      int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS), null, 0);
-
-      logger.info("Configuring agent population " + t + ":\n\t" + numAgents +
-                   " agents of type " + parameters.getString(typeParamT, null));
-
-      for( int i=0; i<numAgents; i++ ) {
-
-      	RoundRobinTrader agent =
-          (RoundRobinTrader)
-            parameters.getInstanceForParameter(typeParamT, null,
-                                                RoundRobinTrader.class);
-        ((Parameterizable) agent).setup(parameters, typeParamT);
-        auction.register(agent);
-
+    
+    iterations = 
+      parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
+    
+    try {
+      resultsFile = 
+        (DataWriter) 
+        	parameters.getInstanceForParameter(base.push(P_WRITER), null, 
+        	    								DataWriter.class);
+      if ( resultsFile instanceof Parameterizable ) {
+        ((Parameterizable) resultsFile).setup(parameters, base.push(P_WRITER));
       }
-
-      logger.info("done.\n");
+    } catch ( ParamClassLoadException e ) {
+      resultsFile = null;
     }
 
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
@@ -174,22 +164,74 @@ public class MarketSimulation
     
     logger.debug("Setup complete.");
   }
-
-
+  
   public void run() {
+    if ( iterations <= 0 ) {
+      runSingleExperiment();
+    } else {
+      runBatchExperiment(iterations);
+    }
+  }
+  
+  public void runSingleExperiment() {
     logger.info("Running auction...");
     auction.run();
     logger.info("Auction finished.");
-  }
-
-
-  public void report() {
     auction.generateReport();
   }
 
+  public void runBatchExperiment( int n ) {
+    HashMap resultsStats = new HashMap();
+    for( int i=0; i<n; i++ ) {
+      logger.info("Running experiment " + i + " of " + n + "... ");
+      auction.reset();
+      auction.run();
+      recordResults(auction.getResults(), resultsStats);
+      logger.info("done.\n");
+    }
+    finalReport(resultsStats);
+  }
+  
+  protected void finalReport( Map resultsStats ) {
+    ArrayList variableList = new ArrayList(resultsStats.keySet());
+    Collections.sort(variableList);
+    Iterator i = variableList.iterator();
+    while ( i.hasNext() ) {
+      String varName = (String) i.next();
+      logger.info("");
+      Distribution stats = (Distribution) resultsStats.get(varName);
+      stats.log();
+    }
+  }
 
+  protected void recordResults( Map results, Map resultsStats ) {
+    ArrayList vars = new ArrayList(results.keySet());
+    if ( resultsFile != null && resultsFile instanceof CSVWriter ) {
+      ((CSVWriter) resultsFile).setNumColumns(results.size());
+    }
+    Collections.sort(vars);
+    Iterator i = vars.iterator();
+    while ( i.hasNext() ) {
+      String variableName = (String) i.next();
+      Object value = results.get(variableName);
+      if ( value instanceof Double ) {
+        double v = ((Double) value).doubleValue();
+        CummulativeDistribution varStats = 
+          (CummulativeDistribution) resultsStats.get(variableName);
+        if ( varStats == null ) {
+          varStats = new CummulativeDistribution(variableName);
+          resultsStats.put(variableName, varStats);
+        }
+        varStats.newData(v);
+      }
+      if ( resultsFile != null ) {
+        resultsFile.newData(value);
+      }
+    }
+  }
+  
   public static void gnuMessage() {
-    System.out.println(GNU_MESSAGE);
+    System.out.println(JASAConstants.getGnuMessage());
   }
 
 
