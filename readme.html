@@ -51,27 +51,30 @@ The javadoc documentation can be found <a href="doc/index.html">here</a>.
 Required libraries
 </h2>
 
-<p>
-<a href="http://www.junit.org">JUnit</a> (Optional) required for running the unit tests</a>
-</p>
 
 <p>
 <a href="http://www.cs.umd.edu/projects/plus/ec/ecj/">ECJ</a>
 <p>
 
+<p>
+<a href="http://www.junit.org">JUnit</a> (Optional) required for running the unit tests</a>
+</p>
+
+<p>
+<a href="http://alphaworks.ibm.com/tech/Skij">Skij</a> (Optional) required for manipulating koza trees as scheme s-expressions
+</p>
+
 <h2>
 Examples
 </h2>
 
-<p>The following examples demonstrate the use of the auction simulator:</p>
+<p>
+<code>
+java uk.ac.liv.auction.MarketSimulation examples/auction.params
+</code>
+</p>
 
-<p><code>
-uk.ac.liv.auction.DCSimulation<br>
-uk.ac.liv.auction.MarketSimulation<br>
-uk.ac.liv.auction.SupplyRingSimulation<br>
-</p></code>
-
-<p>Each of these examples can be run as an independent application. The file <a href="auction.params">auction.params</a> can be used to initialise ECJ to run the genetic programming experiments.
+<hr>
 
 <a href="http://www.csc.liv.ac.uk/~sphelps">Steve Phelps</p>
 

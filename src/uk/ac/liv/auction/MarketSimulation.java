@@ -44,6 +44,10 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
   MarketDataLogger logger;
 
+  MarketStats stats;
+
+  boolean gatherStats;
+
   static final String P_LOGGER = "logger";
   static final String P_AUCTION = "auction";
   static final String P_AUCTIONEER = "auctioneer";
@@ -53,9 +57,12 @@ public class MarketSimulation implements Parameterizable, Runnable {
   static final String P_AGENTS = "agents";
   static final String P_CONSOLE = "console";
   static final String P_SIMULATION = "simulation";
+  static final String P_STATS = "stats";
+  static final String P_GATHER_STATS = "gatherstats";
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     System.out.print("Setup.. ");
+    gatherStats = parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
     auction = (RoundRobinAuction) parameters.getInstanceForParameterEq(base.push(P_AUCTION), null, RoundRobinAuction.class);
     auction.setup(parameters, base.push(P_AUCTION));
     auctioneer = (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER), null, Auctioneer.class);
@@ -67,6 +74,12 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
     if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
       auction.activateGUIConsole();
+    }
+
+    if ( gatherStats ) {
+      stats = (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS), null, MarketStats.class);
+      stats.setup(parameters, base.push(P_STATS));
+      stats.setAuction(auction);
     }
 
     int numAgentTypes = parameters.getInt(base.push(P_NUM_AGENT_TYPES), null, 1);
@@ -87,15 +100,29 @@ public class MarketSimulation implements Parameterizable, Runnable {
     auction.run();
   }
 
+  public void report() {
+    logger.finalReport();
+    if ( gatherStats ) {
+      stats.calculate();
+      System.out.println(stats);
+    }
+  }
+
   public static void main( String[] args ) {
 
     try {
 
-      ParameterDatabase parameters = new ParameterDatabase( new File(args[0]) );
+      if ( args.length < 1 ) {
+        System.err.println("Must specify a parameter file");
+        System.exit(1);
+      }
+
+      String fileName = args[0];
+      ParameterDatabase parameters = new ParameterDatabase(new File(fileName));
       MarketSimulation simulation = new MarketSimulation();
       simulation.setup(parameters, new Parameter(P_SIMULATION));
       simulation.run();
-      simulation.logger.finalReport();
+      simulation.report();
 
     } catch ( Exception e ) {
       e.printStackTrace();

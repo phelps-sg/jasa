@@ -18,13 +18,16 @@ package uk.ac.liv.auction.electricity;
 import java.util.Iterator;
 import java.util.List;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 import java.io.Serializable;
 
 import uk.ac.liv.util.Debug;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
-import uk.ac.liv.auction.stats.MetaMarketStats;
+import uk.ac.liv.auction.stats.*;
 
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
 
@@ -32,8 +35,10 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
  * @author Steve Phelps
  */
 
-public class ElectricityStats implements Serializable, Cloneable {
+public class ElectricityStats
+    implements Serializable, Cloneable, MarketStats {
 
+//  RoundRobinAuction auction;
   RoundRobinAuction auction;
 
   public double rCon, rCap;
@@ -55,11 +60,31 @@ public class ElectricityStats implements Serializable, Cloneable {
 
   protected long minPrice, maxPrice;
 
+  static final String P_MIN_PRICE = "minprice";
+  static final String P_MAX_PRICE = "maxprice";
+
   public ElectricityStats( long minPrice, long maxPrice, RoundRobinAuction auction ) {
     this.auction = auction;
     this.minPrice = minPrice;
     this.maxPrice = maxPrice;
     calculate();
+  }
+
+  public ElectricityStats() {
+  }
+
+  public void setPriceRange( long minPrice, long maxPrice ) {
+    this.minPrice = minPrice;
+    this.maxPrice = maxPrice;
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    minPrice = parameters.getLongWithDefault(base.push(P_MIN_PRICE), null, 0);
+    maxPrice = parameters.getLongWithDefault(base.push(P_MAX_PRICE), null, 200);
+  }
+
+  public void setAuction( RoundRobinAuction auction ) {
+    this.auction = auction;
   }
 
   /**
@@ -70,7 +95,7 @@ public class ElectricityStats implements Serializable, Cloneable {
   }
 
   public void calculate() {
-    standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction.getTraderList());
+    standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction);
     calculate(true);
   }
 
@@ -169,8 +194,8 @@ public class ElectricityStats implements Serializable, Cloneable {
 
 class ElectricityMetaStats extends MetaMarketStats {
 
-  public ElectricityMetaStats( double min, double max, List traders ) {
-    super( (long) min, (long) max, traders);
+  public ElectricityMetaStats( double min, double max, RoundRobinAuction auction  ) {
+    super( (long) min, (long) max, auction);
   }
 
   public int quantity( AbstractTraderAgent agent ) {
