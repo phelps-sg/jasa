@@ -75,12 +75,16 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
   protected int quantityTraded = 0;
 
 
-  public ZITraderAgent( int stock, long funds, long privateValue,
+  public ZITraderAgent( int stock, double funds, double privateValue,
                           int tradeEntitlement, boolean isSeller ) {
     super(stock, funds, privateValue, isSeller);
     randGenerator = new Random();
     this.initialTradeEntitlement = tradeEntitlement;
     initialise();
+  }
+
+  public ZITraderAgent( double privateValue, int tradeEntitlement, boolean isSeller ) {
+    this(0, 0, privateValue, tradeEntitlement, isSeller);
   }
 
   protected void initialise() {
@@ -89,10 +93,6 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
     tradeEntitlement = initialTradeEntitlement;
     quantityTraded = 0;
     shout = null;
-  }
-
-  public ZITraderAgent( long privateValue, int tradeEntitlement, boolean isSeller ) {
-    this(0, 0, privateValue, tradeEntitlement, isSeller);
   }
 
   /**

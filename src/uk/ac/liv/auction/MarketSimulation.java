@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -32,7 +32,10 @@ import java.io.FileInputStream;
 
 public class MarketSimulation {
 
-  static final int NUM_TRADERS = 5;
+  static final int NUM_INTERACTIVE_AGENTS = 1;
+
+  static final int NUM_ZC_AGENTS = 5;
+
   static final int MAX_ROUNDS = 20;
 
   static Random randGenerator = new Random();
@@ -45,7 +48,7 @@ public class MarketSimulation {
     try {
 
       RoundRobinAuction auction = new RoundRobinAuction("Apples");
-      //InteractiveTraderAgent seller = new InteractiveTraderAgent(100,100);
+
       ContinuousDoubleAuctioneer auctioneer =
         new ContinuousDoubleAuctioneer(auction);
       auctioneer.setK(0.0);
@@ -58,9 +61,13 @@ public class MarketSimulation {
 
       auction.setMaximumRounds(MAX_ROUNDS);
 
-      for(int i=0; i<NUM_TRADERS; i++ ) {
-        // auction.register( new ZICTraderAgent(limit,DAILY_ENTITLEMENT,seller) );
+      for( int i=0; i<NUM_INTERACTIVE_AGENTS; i++ ) {
         auction.register(new InteractiveTraderAgent(100,1000));
+      }
+
+      for( int i=0; i<NUM_ZC_AGENTS; i++ ) {
+        double privateValue = randGenerator.nextDouble() * 100;
+        auction.register(new ZICTraderAgent(privateValue, 100, true));
       }
 
       auction.run();

@@ -40,7 +40,7 @@ public class ZISTraderAgent extends ZITraderAgent {
   static final double learningRate = 0.3;
 
 
-  public ZISTraderAgent( long privateValue, int tradeEntitlement,
+  public ZISTraderAgent( double privateValue, int tradeEntitlement,
                           boolean isSeller ) {
     super(privateValue, tradeEntitlement, isSeller);
   }
