@@ -17,6 +17,7 @@ package test.uk.ac.liv.auction.core;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import uk.ac.liv.auction.core.AbstractAuctioneer;
 import uk.ac.liv.auction.core.IllegalShoutException;
 import uk.ac.liv.auction.core.KDoubleAuctioneer;
 import uk.ac.liv.auction.core.MarketQuote;
@@ -93,7 +94,7 @@ public class KDoubleAuctioneerTest extends AuctioneerTest {
   
   public void testQuote() {
     
-    System.out.println("testQuote()");
+    System.out.println("\n\ntestQuote()\n");
     
     MarketQuote quote = auctioneer.getQuote();
     System.out.println("quote at start of auction: " + quote);
@@ -114,30 +115,32 @@ public class KDoubleAuctioneerTest extends AuctioneerTest {
       
       // quote should not have changed yet
       quote = auctioneer.getQuote();
-      System.out.println("quote before end of round: " + quote);
+      System.out.println("quote before clearing: " + quote);
       assertTrue( quote.getAsk() == Double.POSITIVE_INFINITY );
       assertTrue( quote.getBid() == Double.NEGATIVE_INFINITY );
       
-      // at the end of a round it should change
-      auctioneer.endOfRoundProcessing();
+      // after clearing it should change
+      auctioneer.clear();
+      ((AbstractAuctioneer) auctioneer).generateQuote();
       auctioneer.printState();
       
       // but clearing results it no matches, 
       //  so we should have a bid and an ask to beat
       quote = auctioneer.getQuote();
-      System.out.println("at end of round quote = " + quote);
+      System.out.println("quote after clearing: " + quote);
       assertTrue( quote.getAsk() == 10 );
       assertTrue( quote.getBid() == 5 );
       
       // ok, now lets match the bid by placing an ask for $4
       System.out.println("Bidding $4");
       auctioneer.newShout( new Shout(traders[2], 1, 4, false));
-      auctioneer.endOfRoundProcessing();
+      auctioneer.clear();
+      ((AbstractAuctioneer) auctioneer).generateQuote();
       auctioneer.printState();
       
       // now we should have a single unmatched ask for $10
       quote = auctioneer.getQuote();
-      System.out.println(quote);
+      System.out.println("quote after clearing: " + quote);
       // so in order to guarantee a successful bid, we must bid >= $10
       assertTrue( quote.getAsk() == 10);
       // but we cannot guarantee a successful ask
@@ -146,21 +149,24 @@ public class KDoubleAuctioneerTest extends AuctioneerTest {
       // ok, lets match that ask by bidding $11
       System.out.println("Bidding $11");
       auctioneer.newShout( new Shout(traders[0], 1, 11, true) );
-      auctioneer.endOfRoundProcessing();
+      auctioneer.clear();
+      ((AbstractAuctioneer) auctioneer).generateQuote();
       auctioneer.printState();
       
-      // so we should infinite spread
+      // so we should have infinite spread
       quote = auctioneer.getQuote();
+      System.out.println("quote after clearing: " + quote);
       assertTrue( quote.getAsk() == Double.POSITIVE_INFINITY );
       assertTrue( quote.getBid() == Double.NEGATIVE_INFINITY );
       
       // now see what happens when we have a single unmatched bid of $4
+      System.out.println("Bidding $4");
       auctioneer.newShout( new Shout(traders[1], 1, 4, true) );
-      auctioneer.endOfRoundProcessing();
+      ((AbstractAuctioneer) auctioneer).generateQuote();;
       auctioneer.printState();
       
       quote = auctioneer.getQuote();
-      System.out.println(quote);
+      System.out.println("quote after clearing: " + quote);
       // in order to guarantee a successsful ask, we must ask <= $4
       assertTrue( quote.getBid() == 4 );
       // but we cannot guarantee a successful bid because there are no asks
