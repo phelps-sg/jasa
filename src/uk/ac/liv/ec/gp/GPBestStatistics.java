@@ -6,12 +6,15 @@ import ec.gp.koza.*;
 import ec.util.*;
 
 import java.io.*;
+import java.util.Iterator;
 
-public class GPBestStatistics extends KozaStatistics {
+public class GPBestStatistics extends Statistics {
 
   protected Individual best[];
 
   EvolutionState state;
+  
+  protected int statisticslog = 0;
 
   public void setup( final EvolutionState state, final Parameter base ) {
     super.setup(state, base);
@@ -65,5 +68,32 @@ public class GPBestStatistics extends KozaStatistics {
   
   public void finalStatistics( EvolutionState state, int result ) {
       // do nothing
+  }
+  
+  public Iterator allIndividualsIterator() {
+    return new Iterator() {
+      
+      int subpop = 0;
+      int ind = 0;
+      int numSubpops = state.population.subpops.length;
+      
+      public boolean hasNext() {
+        return subpop < numSubpops && ind < state.population.subpops[subpop].individuals.length;
+      }
+      
+      public Object next() {       
+        Object n = state.population.subpops[subpop].individuals[ind++];  
+        if ( ind+1 > state.population.subpops[subpop].individuals.length ) {
+          subpop++;
+          ind = 0;
+        }
+        return n;
+      }
+      
+      public void remove() {        
+      }
+      
+    };
+    
   }
 }

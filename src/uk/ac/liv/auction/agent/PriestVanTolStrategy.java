@@ -46,7 +46,7 @@ public class PriestVanTolStrategy extends MomentumStrategy
 
   public void auctionOpen( AuctionOpenEvent event ) {
     historyStats = 
-      (HistoricalDataReport) auction.getReport(HistoricalDataReport.class);
+      (HistoricalDataReport) event.getAuction().getReport(HistoricalDataReport.class);
 
     if ( historyStats == null ) {
       throw new AuctionError(getClass() + " requires a HistoryStatsMarketDataLogger to be configured");
