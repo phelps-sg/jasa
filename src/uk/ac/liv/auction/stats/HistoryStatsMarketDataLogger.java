@@ -21,6 +21,7 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.ShoutsNotVisibleException;
 
+import java.io.Serializable;
 import java.util.*;
 
 import ec.util.Parameter;
@@ -42,8 +43,7 @@ import org.apache.log4j.Logger;
  */
 
 public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
-                                                                          implements
-                                                                          Resetable {
+                                           implements Serializable, Resetable {
 
   protected LinkedList asks = new LinkedList();
 

@@ -20,6 +20,8 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import java.io.Serializable;
+
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -33,7 +35,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class PayoffLogger extends EquilibriumSurplusLogger {
+public abstract class PayoffLogger extends EquilibriumSurplusLogger 
+								implements Serializable {
 
   private HashMap table = new HashMap();
 

@@ -18,6 +18,8 @@ package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.*;
 
+import java.io.Serializable;
+
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -33,7 +35,7 @@ import org.apache.log4j.Logger;
  */
 
 public class EquilibriaStats extends DirectRevelationStats
-    implements MarketStats {
+    implements MarketStats, Serializable {
 
   /**
    * The minimum equilibrium price.
