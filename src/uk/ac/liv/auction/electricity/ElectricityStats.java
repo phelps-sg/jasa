@@ -56,7 +56,7 @@ public class ElectricityStats
 
   int buyerCap, sellerCap;
 
-  public MetaMarketStats standardStats;
+  public EquilibriaStats standardStats;
 
   protected long minPrice, maxPrice;
 
@@ -95,7 +95,9 @@ public class ElectricityStats
   }
 
   public void calculate() {
-    standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction);
+//    standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction);
+    standardStats = new EquilibriaStats(auction);
+    standardStats.calculate();
     calculate(true);
   }
 
@@ -111,7 +113,7 @@ public class ElectricityStats
       pSCE = 0;
       pBCE = 0;
     }
-    double equilibPrice = standardStats.getEquilibriaPriceStats().getMean();
+    double equilibPrice = (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2;
     //Debug.println("equilibPrice = " + equilibPrice);
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();

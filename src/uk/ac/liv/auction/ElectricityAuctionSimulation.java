@@ -129,7 +129,7 @@ public class ElectricityAuctionSimulation  {
       mPS.newData(results.mPS);
       pBA.newData(results.pBA);
       pSA.newData(results.pSA);
-      //System.out.println("\nResults for iteration " + i + "\n" + results);
+      System.out.println("\nResults for iteration " + i + "\n" + results);
     }
     System.out.println("\n*** Summary results for ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
     System.out.println(efficiency);

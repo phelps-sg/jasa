@@ -114,7 +114,9 @@ public class MetaMarketStats implements MarketStats, Serializable {
         equilibria.add(new Integer(supply.intValue() - demand.intValue()));
         priceStats.newData(price.doubleValue());
         qtyStats.newData(supply.doubleValue());
-        threshold = true;
+        if (! supply.equals(demand) ) {
+          threshold = true;
+        }
       }
     }
   }

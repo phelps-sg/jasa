@@ -249,7 +249,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       if ( verbose ) {
         System.out.println("Post randomization stats = " + stats);
       }
-    } while ( Double.isNaN(stats.standardStats.getEquilibriaPriceStats().getMean()) );
+    } while ( ! stats.standardStats.equilibriaExists() );
   }
 
 
