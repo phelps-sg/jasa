@@ -82,6 +82,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   ContinuousDoubleAuctioneer auctioneer;
 
+  StatsMarketDataLogger marketData;
+
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
   String paramSummary;
@@ -194,9 +196,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       experiment( 3, 3, 10, 10 );
 
-      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
+//      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
 
-      experiment( 3, 3, 9, 9 );
+//      experiment( 3, 3, 9, 9 );
 
       auctioneer = new ControlAuctioneer(auction, 0.5);
 
@@ -206,9 +208,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       experiment( 30, 30, 10, 10 );
 
-      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
+//      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
 
-      experiment( 30, 30, 9, 9 );
+//      experiment( 30, 30, 9, 9 );
 
       auctioneer = new ControlAuctioneer(auction, 0.5);
 
@@ -238,15 +240,17 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       dataFile = new CSVWriter(
                   new FileOutputStream(outputDir + "/" + "npt-"
-                                        + paramSummary + ".csv"), 7);
+                                        + paramSummary + ".csv"), 13);
 
     } catch ( IOException e ) {
       e.printStackTrace();
     }
 
     auction = new RandomRobinAuction("Electricity Auction");
+    marketData = new StatsMarketDataLogger();
     auctioneer.reset();
     auction.setAuctioneer(auctioneer);
+    auction.setMarketDataLogger(marketData);
 
     registerTraders(auction, true, ns, cs, sellerValues);
     registerTraders(auction, false, nb, cb, buyerValues);
@@ -280,12 +284,15 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter pSA = new CummulativeStatCounter("pSA");
       CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
       CummulativeStatCounter equilibPrice = new CummulativeStatCounter("equilibPrice");
+      CummulativeStatCounter eAN = new CummulativeStatCounter("eAN");
+      CummulativeStatCounter mPBN = new CummulativeStatCounter("mPBN");
+      CummulativeStatCounter mPSN = new CummulativeStatCounter("mPSN");
 
       String iterResultsDataFileName = outputDir + "/iter-"
                                       + paramSummary + "-"+auctioneerK+".csv";
       FileOutputStream iterOut =
         new FileOutputStream(iterResultsDataFileName);
-      CSVWriter iterResults = new CSVWriter(iterOut, 3);
+      CSVWriter iterResults = new CSVWriter(iterOut, 7);
 
       for( int i=0; i<iterations; i++ ) {
 
@@ -302,13 +309,19 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         mPS.newData(results.mPS);
         pBA.newData(results.pBA);
         pSA.newData(results.pSA);
-        equilibPrice.newData( (results.standardStats.getMinPrice()
-                               + results.standardStats.getMaxPrice()) / 2);
-
-
+        eAN.newData(results.eA/100);
+        mPBN.newData(1/(1+Math.abs(results.mPB)));
+        mPSN.newData(1/(1+Math.abs(results.mPS)));
+        double ep = (results.standardStats.getMinPrice()
+                               + results.standardStats.getMaxPrice()) / 2;
+        equilibPrice.newData(ep);
         iterResults.newData(results.eA);
         iterResults.newData(results.mPB);
         iterResults.newData(results.mPS);
+        iterResults.newData(marketData.getTransPriceStats().getMean());
+        iterResults.newData(marketData.getAskPriceStats().getMean());
+        iterResults.newData(marketData.getBidPriceStats().getMean());
+        iterResults.newData(ep);
       }
 
       System.out.println("\n*** Summary results for ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
@@ -326,6 +339,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       dataFile.newData(mPB.getStdDev());
       dataFile.newData(mPS.getMean());
       dataFile.newData(mPS.getStdDev());
+      dataFile.newData(eAN.getMean());
+      dataFile.newData(eAN.getStdDev());
+      dataFile.newData(mPBN.getMean());
+      dataFile.newData(mPBN.getStdDev());
+      dataFile.newData(mPSN.getMean());
+      dataFile.newData(mPSN.getStdDev());
 
 //      Iterator i = auction.getTraderIterator();
 //      while ( i.hasNext() ) {
