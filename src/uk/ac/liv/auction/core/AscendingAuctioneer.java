@@ -148,7 +148,6 @@ public class AscendingAuctioneer extends AbstractAuctioneer
     // TODO: Additional logic to enforce bid amounts at round nos and/or
     // beat existing bids by certain amount?
     super.newShout(shout);
-    shoutEngine.printState();
   }
 
 }

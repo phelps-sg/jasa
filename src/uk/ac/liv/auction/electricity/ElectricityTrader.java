@@ -19,6 +19,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.agent.Strategy;
+import uk.ac.liv.auction.agent.FixedQuantityStrategy;
 
 import uk.ac.liv.ai.learning.NPTRothErevLearner;
 import uk.ac.liv.ai.learning.RothErevLearner;
@@ -92,7 +93,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
                               double fixedCosts, boolean isSeller ) {
     this(capacity, privateValue, fixedCosts, isSeller, null);
   }
-  
+
   public ElectricityTrader() {
     this(1, 0, 0, false);
   }
@@ -108,6 +109,9 @@ public class ElectricityTrader extends AbstractTraderAgent {
     super.initialise();
     profits = 0;
     lastProfit = 0;
+    if ( strategy instanceof FixedQuantityStrategy ) {
+      ((FixedQuantityStrategy) strategy).setQuantity(capacity);
+    }
   }
 
   public void requestShout( Auction auction ) {

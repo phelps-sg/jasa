@@ -37,7 +37,7 @@ import uk.ac.liv.auction.agent.*;
 
 /**
  * <p>
- * Calculate the NPT market-power and efficiency variables. These are described 
+ * Calculate the NPT market-power and efficiency variables. These are described
  * in detail in the following paper.
  * </p>
  * <p>
@@ -155,7 +155,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   /**
    * The age of the auction in rounds.
    */
-  protected int auctionAge;    
+  protected int auctionAge;
 
 
   public ElectricityStats( RoundRobinAuction auction ) {
@@ -235,7 +235,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     mPS = (pSA - pSCE) / pSCE;
     eA = (pBA + pSA) / (pBCE + pSCE) * 100;
 
-    calculateStrategicMarketPower();
+    // calculateStrategicMarketPower();
   }
 
 
@@ -327,17 +327,17 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
   public String toString() {
     return "(" + getClass() + "\n\trCon:" + rCon + "\n\trCap:" + rCap
-      + "\n\tmPB:" + mPB + "\n\tmPS:" + mPS 
+      + "\n\tmPB:" + mPB + "\n\tmPS:" + mPS
       + "\n\tsMPB:" + sMPB + "\n\tsMPS:" + sMPS + "\n\tpBA:" + pBA
       + "\n\tpSA:" + pSA + "\n\tpBCE:" + pBCE + "\n\tpSCE:" + pSCE
-      + "\n\tpST:" + pST + "\n\tPBT:" + pBT
+      + "\n\tpST:" + pST + "\n\tpBT:" + pBT
       + "\n\teA:" + eA
       + "\n\tstandardStats:" + standardStats
       + "\n)";
   }
 
   protected void simulateTruthfulBidding() {
-    Auctioneer auctioneer = auction.getAuctioneer();   
+    Auctioneer auctioneer = auction.getAuctioneer();
     ((Resetable) auctioneer).reset();
     LinkedList shouts = new LinkedList();
     Iterator i = auction.getTraderIterator();
