@@ -29,7 +29,7 @@ import uk.ac.liv.util.Parameterizable;
  * @version $Revision$
  */
 
-public interface Valuer extends Resetable, Parameterizable {
+public interface ValuationPolicy extends Resetable, Parameterizable {
 
   /**
    * Determine the current valuation of commodity in the given auction.

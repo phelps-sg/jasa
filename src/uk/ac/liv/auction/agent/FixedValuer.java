@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class FixedValuer implements Valuer, Serializable {
+public class FixedValuer implements ValuationPolicy, Serializable {
 
   protected double value;
 

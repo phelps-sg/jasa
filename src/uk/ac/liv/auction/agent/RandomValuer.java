@@ -47,7 +47,7 @@ import org.apache.log4j.Logger;
  */
 
 public class RandomValuer 
-    implements Valuer, Serializable {
+    implements ValuationPolicy, Serializable {
 
   /**
    * The current valuation.

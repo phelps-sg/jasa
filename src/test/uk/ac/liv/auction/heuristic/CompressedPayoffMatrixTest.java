@@ -19,6 +19,8 @@ import junit.framework.TestCase;
 
 import uk.ac.liv.auction.heuristic.*;
 
+import uk.ac.liv.util.MathUtil;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -26,22 +28,18 @@ import uk.ac.liv.auction.heuristic.*;
 
 public class CompressedPayoffMatrixTest extends TestCase {
   
-  CompressedPayoffMatrix matrix; 
+  CompressedPayoffMatrix pdMatrix; 
   
-  int[][] entries = new int[][] { new int[] { 1, 1, 0 },
-                                  new int[] { 0, 1, 1 },
-                                  new int[] { 1, 0, 1 },
-                                  new int[] { 2, 0, 0 },
-                                  new int[] { 0, 2, 0 },
-                                  new int[] { 0, 0, 2 }
+  int[][] pdEntries = new int[][] { 
+      new int[] { 2, 0 },   
+      new int[] { 1, 1 },
+      new int[] { 0, 2 }      
   };
   
-  double[][] payoffs = new double[][] { new double[] { 10, 0, 0 },
-                                        new double[] { 0, 10, 0 },
-                                        new double[] { 0, 0, 10 },
-                                        new double[] { 0, 0, 0 },
-                                        new double[] { 0, 0, 0 },
-                                        new double[] { 0, 0, 0 }
+  double[][] pdPayoffs = new double[][] { 
+      new double[] { 1, 0 },
+      new double[] { 5, 1 },
+      new double[] { 0, 3 }
   };
   
   
@@ -49,8 +47,8 @@ public class CompressedPayoffMatrixTest extends TestCase {
     super(name);
   }
   
-  public void setUp() {
-    matrix = new CompressedPayoffMatrix(2, 3);
+  public void initialiseMatrix( CompressedPayoffMatrix matrix,
+                                  int[][] entries, double[][] payoffs ) {
     for( int i=0; i<entries.length; i++ ) {
       CompressedPayoffMatrix.Entry entry = 
         new CompressedPayoffMatrix.Entry(entries[i]);
@@ -58,9 +56,31 @@ public class CompressedPayoffMatrixTest extends TestCase {
     }
   }
   
-  public void testRD() {
-    double[] p = new double[] { 0.2, 0.2, 0.6 };
-    matrix.plotRDflow(new uk.ac.liv.util.io.CSVWriter(System.out, 3), p, 0.001, 100);
+  public void setUp() {
+    pdMatrix = new CompressedPayoffMatrix(2, 2);
+    initialiseMatrix(pdMatrix, pdEntries, pdPayoffs);
+  }
+  
+  public void printPopulation( double[] population ) {
+    for( int i=0; i<population.length; i++ ) {
+      System.out.println("Strategy " + i + " = " + population[i]);
+    }
+  }
+  
+  public void checkPureStrategyEquilibrium( int strategy, CompressedPayoffMatrix matrix, double[] initialPopulation) {
+    System.out.println("\nEvolving from ");
+    printPopulation(initialPopulation);
+    double[] finalPopulation = matrix.plotRDflow(initialPopulation, 10E-12, (int) 10E7);
+    System.out.println("\nyields..");
+    printPopulation(finalPopulation);    
+    assertTrue(MathUtil.approxEqual(finalPopulation[strategy], 1, 0.01));
+  }
+  
+  public void testPDequilibria() {
+    checkPureStrategyEquilibrium(0, pdMatrix, new double[] { 0.3, 0.7 });
+    checkPureStrategyEquilibrium(0, pdMatrix, new double[] { 1, 0 });
+    checkPureStrategyEquilibrium(0, pdMatrix, new double[] { 0.01, 0.99 });
+    checkPureStrategyEquilibrium(0, pdMatrix, new double[] { 0.7, 0.3 });
   }
 }
 

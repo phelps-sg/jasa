@@ -24,6 +24,8 @@ package uk.ac.liv.util;
  */
 
 public class MathUtil {
+  
+  public static final double DEFAULT_ERROR = 0.0000001;
 
   /**
    * Calculate the square of x.
@@ -44,6 +46,18 @@ public class MathUtil {
    */
   public static boolean approxEqual( double x, double y, double error ) {
     return Math.abs(x-y) <= error;
+  }
+  
+  public static boolean approxEqual( double x, double y ) {
+    return MathUtil.approxEqual(x, y, DEFAULT_ERROR);
+  }
+  
+  public static double sum( double[] series ) {
+    double total = 0;
+    for( int i=0; i<series.length; i++ ) {
+      total += series[i];
+    }
+    return total;
   }
   
   public static long factorial( int n ) {

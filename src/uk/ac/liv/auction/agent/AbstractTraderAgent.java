@@ -108,7 +108,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   /**
    * The valuer for this agent
    */
-  protected Valuer valuer;
+  protected ValuationPolicy valuer;
 
   /**
    * Unique id for this trader.  Its used mainly for debugging purposes.
@@ -213,8 +213,8 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     isSeller = parameters.getBoolean(base.push(P_IS_SELLER), null, false);
 
     valuer =
-        (Valuer) parameters.getInstanceForParameter(base.push(P_VALUER), null,
-                                                     Valuer.class);
+        (ValuationPolicy) parameters.getInstanceForParameter(base.push(P_VALUER), null,
+                                                     ValuationPolicy.class);
     valuer.setup(parameters, base.push(P_VALUER));
 
     strategy =
@@ -422,11 +422,11 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     return lastShoutAccepted;
   }
 
-  public Valuer getValuer() {
+  public ValuationPolicy getValuationPolicy() {
     return valuer;
   }
 
-  public void setValuer( Valuer valuer ) {
+  public void setValuationPolicy( ValuationPolicy valuer ) {
     this.valuer = valuer;
   }
   

@@ -369,7 +369,7 @@ public class HeuristicPayoffCalculator
     Iterator i = auction.getTraderIterator();
     while (i.hasNext()) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      agent.getValuer().reset();
+      agent.getValuationPolicy().reset();
     }
   }
 
@@ -392,7 +392,7 @@ public class HeuristicPayoffCalculator
     double minValue = prng.uniform(minValueMin, minValueMax);    
     double maxValue = prng.uniform(minValue+rangeMin, minValue + rangeMax);
     for( int i=0; i<numAgents; i++ ) {
-      RandomValuer valuer = (RandomValuer) agents[i].getValuer();
+      RandomValuer valuer = (RandomValuer) agents[i].getValuationPolicy();
       valuer.setMaxValue(maxValue);
       valuer.setMinValue(minValue);
     }
