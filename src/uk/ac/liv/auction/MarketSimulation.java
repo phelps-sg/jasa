@@ -96,8 +96,10 @@ public class MarketSimulation
 
     try {
 
+      gnuMessage();
+      
       if ( args.length < 1 ) {
-        fatalError("Must specify a parameter file");
+        fatalError("You must specify a parameter file");
       }
 
       String fileName = args[0];
@@ -107,8 +109,6 @@ public class MarketSimulation
       }
 
       org.apache.log4j.PropertyConfigurator.configure(fileName);
-
-      gnuMessage();
 
       ParameterDatabase parameters = new ParameterDatabase(file);
       MarketSimulation simulation = new MarketSimulation();
@@ -189,12 +189,12 @@ public class MarketSimulation
 
 
   public static void gnuMessage() {
-    logger.info(GNU_MESSAGE);
+    System.out.println(GNU_MESSAGE);
   }
 
 
   protected static void fatalError( String message ) {
-    System.err.println(message);
+    System.err.println("ERROR: " + message);
     System.exit(1);
   }
 
