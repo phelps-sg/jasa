@@ -32,3 +32,9 @@ simulation.agenttype.1.initialtradeentitlement = 1000
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 simulation.agenttype.1.isseller = false
+
+# log4j configuration
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n

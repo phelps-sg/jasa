@@ -36,19 +36,18 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * An implementation of the fitness-landscape experiment described in
- * Technical report ULCS-02-031.  This work is based largely on the work
+ * An implementation of the fitness-landscape experiment described in the
+ * University of Liverpool Computer Science Department technical report
+ * number ULCS-02-031.  This work is based largely on the work
  * of Nicolaisen, Petrov, and Tesfatsion described in:
  * </p>
  * <br>
  * <p>
- * "Markert Power and Efficiency in a Computational Electricity Market
+ * "Market Power and Efficiency in a Computational Electricity Market
  * with Discriminatory Double-Auction Pricing"
  * <br>
  * IEEE Transactions on Evolutionary Computation, Vol. 5, No. 5. 2001
  * </p>
- *
- *
  *
  * @author Steve Phelps
  */

@@ -17,7 +17,18 @@ package uk.ac.liv.util;
 
 import ec.util.MersenneTwisterFast;
 
+import org.apache.log4j.Logger;
+
 import java.io.Serializable;
+
+/**
+ * A class representing a discrete probability distribution which
+ * can used to generate random events according to the specified
+ * distribution.  The output from a uniform PRNG is used to to select
+ * from the different possible events.
+ *
+ * @author Steve Phelps
+ */
 
 public class DiscreteProbabilityDistribution
     implements Resetable, Serializable {
@@ -25,17 +36,22 @@ public class DiscreteProbabilityDistribution
   /**
    * The probability distribution
    */
-  double p[];
+  protected double p[];
 
   /**
    * The number of possible events for this distribution.
    */
-  int k;
+  protected int k;
 
   /**
-   * Random number generator.
+   * The unform PRNG.
    */
-  MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  protected MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+
+  /**
+   * The log4j logger.
+   */
+  static Logger logger = Logger.getLogger(DiscreteProbabilityDistribution.class);
 
 
   public DiscreteProbabilityDistribution( int k ) {
@@ -60,6 +76,7 @@ public class DiscreteProbabilityDistribution
         return i;
       }
     }
+    logger.warn("generateRandomEvent(): probabilities do not sum to 1");
     reset();
     return randGenerator.nextInt(k);
   }

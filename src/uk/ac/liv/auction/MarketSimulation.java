@@ -32,6 +32,9 @@ import java.util.Iterator;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 /**
  * <p>
  * The main JASA application class.  This application takes as an argument
@@ -42,15 +45,15 @@ import java.io.File;
 
 public class MarketSimulation implements Parameterizable, Runnable {
 
-  RoundRobinAuction auction;
+  protected RoundRobinAuction auction;
 
-  Auctioneer auctioneer;
+  protected Auctioneer auctioneer;
 
-  MarketDataLogger logger;
+  protected MarketDataLogger marketData;
 
-  MarketStats stats;
+  protected MarketStats stats;
 
-  boolean gatherStats;
+  protected boolean gatherStats;
 
   static final String P_LOGGER = "logger";
   static final String P_AUCTION = "auction";
@@ -74,9 +77,11 @@ public class MarketSimulation implements Parameterizable, Runnable {
     "to redistribute it under certain conditions; see the GNU General Public\n" +
     "license for more details.\n";
 
+  static Logger logger = Logger.getLogger("JASA");
+
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    System.out.print("Setup.. ");
+    logger.info("Setup.. ");
 
     gatherStats = parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
 
@@ -94,11 +99,11 @@ public class MarketSimulation implements Parameterizable, Runnable {
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
 
-    logger =
+    marketData =
         (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
                                                                null,
                                                                MarketDataLogger.class);
-    auction.setMarketDataLogger(logger);
+    auction.setMarketDataLogger(marketData);
 
     if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
       auction.activateGUIConsole();
@@ -129,7 +134,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
       }
     }
-    System.out.println("done.");
+    logger.info("done.");
   }
 
 
@@ -139,10 +144,10 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
 
   public void report() {
-    logger.finalReport();
+    marketData.finalReport();
     if ( gatherStats ) {
       stats.calculate();
-      System.out.println(stats);
+      logger.info(stats);
     }
   }
 
@@ -163,6 +168,8 @@ public class MarketSimulation implements Parameterizable, Runnable {
         System.exit(1);
       }
 
+      org.apache.log4j.PropertyConfigurator.configure(fileName);
+
       gnuMessage();
 
       ParameterDatabase parameters = new ParameterDatabase(file);
@@ -177,6 +184,6 @@ public class MarketSimulation implements Parameterizable, Runnable {
   }
 
   public static void gnuMessage() {
-    System.out.println(GNU_MESSAGE);
+    logger.info(GNU_MESSAGE);
   }
 }

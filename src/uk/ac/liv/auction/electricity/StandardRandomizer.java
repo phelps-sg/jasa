@@ -84,14 +84,11 @@ public class StandardRandomizer implements Parameterizable, Serializable {
   }
 
   public void randomizePrivateValues( double[][] values, int iteration ) {
-    logger.debug("randomizePrivateValues(" + values + "," + iteration + ")");
     Iterator i = auction.getTraderIterator();
     int traderNumber = 0;
     while (i.hasNext()) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
       trader.setPrivateValue(values[traderNumber++][iteration]);
-      logger.debug("Private value of trader " + trader + " = " +
-             trader.getPrivateValue());
     }
   }
 

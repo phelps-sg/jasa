@@ -7,7 +7,7 @@
 #
 # Run this experiment using the command:
 #
-#  java uk.ac.liv.auction.ElectricityAuctionSimulation examples/electricity.params
+#  java uk.ac.liv.auction.electricity.ElectricityAuctionSimulation examples/electricity.params
 #
 
 # Number of auction rounds
@@ -17,14 +17,17 @@ electricity.maxrounds = 100
 electricity.iterations = 10000
 
 # Output data
-electricity.outputdir = results/electricity
+electricity.outputdir = results/electricity/fixed
 
 # Use random private values
-electricity.randomprivatevalues = true
+electricity.randomizer = uk.ac.liv.auction.electricity.StandardRandomizer
 
 # Private value range
-electricity.minprivatevalue = 30
-electricity.maxprivatevalue = 1000
+electricity.randomizer.minprivatevalue = 30
+electricity.randomizer.maxprivatevalue = 1000
+
+# PRNG seed
+electricity.randomizer.seed = 1726567842
 
 # Number of sellers
 electricity.ns = 30
@@ -62,7 +65,21 @@ electricity.strategy.seller.learner.s1 = 1
 electricity.auctioneer = uk.ac.liv.auction.core.DiscrimPriceCDAAuctioneer
 
 # Number of different k values 
-electricity.ksamples = 100
+electricity.ksamples = 10
 
 # Statistics to use
 electricity.stats = uk.ac.liv.auction.electricity.ElectricityStats
+
+# log4j configuration
+
+log4j.rootCategory=INFO, stdout, file
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n
+
+log4j.appender.file=org.apache.log4j.FileAppender
+log4j.appender.file.File=results/electricity/eas.out
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%m%n
+
