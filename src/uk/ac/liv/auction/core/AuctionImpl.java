@@ -244,4 +244,23 @@ public abstract class AuctionImpl extends Observable
   }
 
 
+  protected void updateShoutLog( int time, Shout shout ) {
+    if ( logger != null ) {
+      logger.updateShoutLog(time, shout);
+    }
+  }
+
+  protected void updateQuoteLog( int time, MarketQuote quote ) {
+    if ( logger != null ) {
+      logger.updateQuoteLog(time, getQuote());
+    }
+  }
+
+  protected void updateTransPriceLog( int time, Shout winningShout,
+                                       double price ) {
+    if ( logger != null ) {
+      logger.updateTransPriceLog(time, winningShout, price);
+    }
+  }
+
 }
