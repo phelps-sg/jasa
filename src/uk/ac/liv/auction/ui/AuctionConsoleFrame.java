@@ -16,13 +16,12 @@
 package uk.ac.liv.auction.ui;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 import uk.ac.liv.util.Resetable;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Iterator;
+
 
 import java.text.DecimalFormat;
 
@@ -31,8 +30,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import org.apache.log4j.Logger;
-
-import com.sun.media.rtsp.protocol.SetParameterMessage;
 
 
 /**
@@ -230,6 +227,14 @@ public class AuctionConsoleFrame extends JFrame
     auction.printState();
   }
 
+  public void updateCurrencyLabel( JLabel label, double price ) {
+    if ( Double.isInfinite(price) ) {
+      label.setText("      OPEN");
+    } else {
+      label.setText(currencyFormatter.format(price/100));
+    }
+  }
+  
   public void update( Observable o, Object arg ) {
     logger.debug("update(" + o + ", " + arg + ")");
 
@@ -238,6 +243,8 @@ public class AuctionConsoleFrame extends JFrame
     MarketQuote quote = auction.getQuote();
     currencyFormatter.setMaximumIntegerDigits(6);
     if ( quote != null ) {
+      updateCurrencyLabel(bidLabel, quote.getBid());
+      updateCurrencyLabel(askLabel, quote.getAsk());
       bidLabel.setText(currencyFormatter.format(((double) quote.getBid())/100));
       askLabel.setText(currencyFormatter.format(((double) quote.getAsk())/100));
     }
@@ -261,19 +268,6 @@ public class AuctionConsoleFrame extends JFrame
     logger.debug("update() complete");
   }
 
-
-  
-  public void resetAgents() {
-    new Thread() {
-      public void run() {
-        Iterator i = auction.getTraderIterator();
-        while (i.hasNext()) {
-          AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-          agent.reset();
-        }
-      }
-    }.start();
-  }
 
   /**
    *  Activate the frame by popping it up.
