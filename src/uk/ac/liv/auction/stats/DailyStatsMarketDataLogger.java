@@ -58,7 +58,7 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger {
     } catch ( CloneNotSupportedException e ) {
       e.printStackTrace();
       logger.error(e.getMessage());
-      throw new Error(e);
+      throw new Error(e.getMessage());
     }
   }
 

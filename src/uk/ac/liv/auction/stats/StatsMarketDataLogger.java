@@ -121,7 +121,7 @@ public class StatsMarketDataLogger
     } catch ( CloneNotSupportedException e ) {
       logger.error(e.getMessage());
       e.printStackTrace();
-      throw new Error(e);
+      throw new Error(e.getMessage());
     }
     return copy;
   }
