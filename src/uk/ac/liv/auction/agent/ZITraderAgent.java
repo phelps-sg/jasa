@@ -24,6 +24,13 @@ import ec.util.Parameter;
 /**
  * <p>
  * Abstract superclass for "Zero Intelligence" (ZI) trader agents.
+ * Agent sof this type drop out of the auction once their trade
+ * entitlement is used up.
+ * </p>
+ * <p>
+ * Note that this type of agent does not currently implement the ZIP
+ * strategy.  An implementation of the ZIP strategy is forthcoming.
+ * </p>
  * See:
  * </p>
  * <p>

@@ -23,6 +23,9 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.*;
 
+import uk.ac.liv.ai.learning.Learner;
+import uk.ac.liv.ai.learning.StochasticLearner;
+
 import uk.ac.liv.util.Parameterizable;
 
 import java.util.Random;
@@ -78,6 +81,8 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
   protected boolean gatherStats;
 
+  protected long prngSeed;
+
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "numagenttypes";
   public static final String P_NUM_AGENTS = "numagents";
@@ -87,9 +92,10 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String P_SIMULATION = "simulation";
   public static final String P_STATS = "stats";
   public static final String P_GATHER_STATS = "gatherstats";
+  public static final String P_SEED = "seed";
 
 
-  public static final String VERSION = "0.19";
+  public static final String VERSION = "0.20";
 
   public static final String GNU_MESSAGE =
     "JASA v" + VERSION + " - (C) 2001-2003 Steve Phelps\n" +
@@ -136,6 +142,10 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public void setup( ParameterDatabase parameters, Parameter base ) {
     logger.info("Setup.. ");
 
+    prngSeed =
+        parameters.getLongWithDefault(base.push(P_SEED), null,
+                                       System.currentTimeMillis());
+
     gatherStats =
         parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
 
@@ -179,6 +189,9 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
       }
     }
+
+    seedStrategies();
+
     logger.info("done.");
   }
 
@@ -206,4 +219,21 @@ public class MarketSimulation implements Parameterizable, Runnable,
     System.err.println(message);
     System.exit(1);
   }
+
+  protected void seedStrategies() {
+    logger.info("seed = " + prngSeed);
+    MersenneTwisterFast prng = new MersenneTwisterFast(prngSeed);
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      Strategy s = agent.getStrategy();
+      if ( s instanceof AdaptiveStrategy ) {
+        Learner l = ((AdaptiveStrategy) s).getLearner();
+        if ( l instanceof StochasticLearner ) {
+          ((StochasticLearner) l).setSeed(prng.nextLong());
+        }
+      }
+    }
+  }
+
 }
