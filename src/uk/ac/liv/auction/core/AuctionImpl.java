@@ -230,6 +230,17 @@ public abstract class AuctionImpl extends Observable
     auctioneer.printState();
   }
 
+  /**
+   * Add a new market data logger.
+   *
+   * @param newLogger  The new logger to add.
+   */
+  public void addMarketDataLogger( MarketDataLogger newLogger ) {
+    MarketDataLogger oldLogger = logger;
+    logger = new CombiMarketDataLogger();
+    ((CombiMarketDataLogger) logger).addLogger(oldLogger);
+    ((CombiMarketDataLogger) logger).addLogger(newLogger);
+  }
 
 
   public String toString() {

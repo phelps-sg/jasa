@@ -228,7 +228,6 @@ public class RoundRobinAuction extends AuctionImpl
 
 
   public void clear( Shout ask, Shout bid, double price ) {
-//    log4jLogger.info("Matching " + ask + " with " + bid + " at " + price);
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
     buyer.informOfSeller(ask, seller, price, ask.getQuantity());
@@ -465,6 +464,10 @@ public class RoundRobinAuction extends AuctionImpl
 
     if ( marketStats != null && marketStats instanceof Resetable ) {
       ((Resetable) marketStats).reset();
+    }
+
+    if ( guiConsole != null ) {
+      guiConsole.reset();
     }
 
     Iterator i = getTraderIterator();

@@ -25,6 +25,8 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
 
 import uk.ac.liv.auction.stats.GraphMarketDataLogger;
 
+import uk.ac.liv.util.Resetable;
+
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Iterator;
@@ -45,7 +47,7 @@ import org.apache.log4j.Logger;
  * @author Steve Phelps
  */
 public class AuctionConsoleFrame extends JFrame
-    implements Observer {
+    implements Observer, Resetable {
 
   protected RoundRobinAuction auction;
 
@@ -410,7 +412,7 @@ public class AuctionConsoleFrame extends JFrame
     logger.debug("rerunAuction()");
     auction.close();
     while ( !auction.closed() );
-    graphModel.clear();
+    reset();
     auction.reset();
     auctionRunner = new Thread(auction);
     auctionRunner.start();
@@ -419,4 +421,9 @@ public class AuctionConsoleFrame extends JFrame
   public void generateReport() {
     auction.generateReport();
   }
+
+  public void reset() {
+    graphModel.clear();
+  }
+
 }

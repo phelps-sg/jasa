@@ -95,6 +95,8 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
   protected MersenneTwisterFast paramPRNG = new MersenneTwisterFast();
 
+  protected boolean console = false;
+
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "n";
   public static final String P_NUM_AGENTS = "numagents";
@@ -186,8 +188,10 @@ public class ZIPExperiment implements Parameterizable, Runnable,
                                               RoundRobinAuction.class);
     auction.setup(parameters, base.push(P_AUCTION));
 
+    console = parameters.getBoolean(base.push(P_CONSOLE), null, false);
+
     marketDataLogger = new StatsMarketDataLogger();
-    auction.setMarketDataLogger(marketDataLogger);
+    auction.addMarketDataLogger(marketDataLogger);
 
     buyers = new ZITraderAgent[numBuyers];
     sellers = new ZITraderAgent[numSellers];
@@ -205,6 +209,10 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
     paramPRNG.setSeed(prngSeed);
     seedStrategies();
+
+    if ( console ) {
+      auction.activateGUIConsole();
+    }
 
     logger.info("done.");
   }

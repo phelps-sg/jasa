@@ -29,13 +29,15 @@ import java.util.ArrayList;
 import uk.ac.liv.ec.gp.func.*;
 import uk.ac.liv.util.FastNumber;
 
+import java.io.Serializable;
+
 /**
  * A temporary place to put some misc ECJ extensions.
  *
  * @author Steve Phelps
  */
 
-public class GPIndividualCtx extends GPIndividual {
+public class GPIndividualCtx extends GPIndividual implements Serializable {
 
   GPContext context = new GPContext();
 
