@@ -57,12 +57,12 @@ public class MDPStrategy extends DiscreteLearnerStrategy
 
   protected boolean firstShout = true;
 
-  static final String P_LEARNER = "learner";
-  static final String P_QUOTEBINS = "quotebins";
-  static final String P_ASKBINSTART = "askbinstart";
-  static final String P_ASKBINWIDTH = "askbinwidth";
-  static final String P_BIDBINSTART = "bidbinstart";
-  static final String P_BIDBINWIDTH = "bidbinwidth";
+  public static final String P_LEARNER = "learner";
+  public static final String P_QUOTEBINS = "quotebins";
+  public static final String P_ASKBINSTART = "askbinstart";
+  public static final String P_ASKBINWIDTH = "askbinwidth";
+  public static final String P_BIDBINSTART = "bidbinstart";
+  public static final String P_BIDBINWIDTH = "bidbinwidth";
 
   public MDPStrategy( AbstractTradingAgent agent,
                         double askBinStart, double askBinWidth,
