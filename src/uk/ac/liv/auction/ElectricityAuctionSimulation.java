@@ -409,8 +409,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   protected long[][] generatePRNGseeds( int numTraders, int numIterations ) {
     long[][] seeds = new long[numTraders][numIterations];
-    long time = System.currentTimeMillis();
-    MersenneTwisterFast metaPRNG = new MersenneTwisterFast((int) time);
+    long seed = System.currentTimeMillis();
+    System.out.println("PRNG seed = " + seed);
+    MersenneTwisterFast metaPRNG = new MersenneTwisterFast((int) seed);
     for( int t=0; t<numTraders; t++ ) {
       for( int i=0; i<numIterations; i++ ) {
         seeds[t][i] = (long) metaPRNG.nextInt();
