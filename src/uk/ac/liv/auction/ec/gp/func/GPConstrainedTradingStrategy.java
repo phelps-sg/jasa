@@ -15,23 +15,26 @@
 
 package uk.ac.liv.auction.ec.gp.func;
 
-import ec.gp.*;
-import ec.*;
+import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.agent.*;
 
-import uk.ac.liv.ec.gp.func.*;
+/**
+ * @author Steve Phelps
+ */
 
-import uk.ac.liv.util.GenericDouble;
+public class GPConstrainedTradingStrategy extends GPTradingStrategy {
 
 
-public class AskPrice extends GPNode {
+  public void modifyShout( Shout shout, Auction auction ) {
 
-  public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
-    GPAuctioneer auctioneer = (GPAuctioneer) individual;
-    ((GPGenericData) input).data =
-      GenericDouble.newGenericDouble(auctioneer.clearAsk.getPrice());
+    super.modifyShout(shout, auction);
+
+    if ( agent.isSeller() && shout.getPrice() < agent.getPrivateValue() ) {
+      misbehaved = true;
+    } else if ( agent.isBuyer() && shout.getPrice() > agent.getPrivateValue() ) {
+      misbehaved = true;
+    }
+
   }
 
-  public String toString() {
-    return "AskPrice";
-  }
 }

@@ -126,12 +126,15 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
     numSellers =
       state.parameters.getIntWithDefault(base.push(P_NUMSELLERS), null, 3);
+
     numBuyers =
       state.parameters.getIntWithDefault(base.push(P_NUMBUYERS), null, 3);
+
     numTraders = numSellers + numBuyers;
 
     sellerCapacity =
-      state.parameters.getIntWithDefault(base.push(P_SELLERCAPACITY), null, 10);
+      state.parameters.getIntWithDefault(base.push(P_SELLERCAPACITY), null,
+                                         10);
 
     buyerCapacity =
       state.parameters.getIntWithDefault(base.push(P_BUYERCAPACITY), null,
@@ -263,12 +266,12 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
       stats = new ElectricityStats(0, 200, auction);
     }
 
-    if ( randomPrivateValues && ((context.getState().generation % shockInterval)==0)) {
+    if ( randomPrivateValues &&
+          ((context.getState().generation % shockInterval)==0)) {
       randomizePrivateValues();
     }
 
     resetTraders();
-
     auction.reset();
   }
 
@@ -300,8 +303,6 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   }
 
 
-
-  protected abstract LinkedList initialiseTraders( Vector[] group );
 
 
   protected void initCSVFile() {
@@ -422,6 +423,8 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   protected abstract void setFitnesses( Vector[] group );
 
   protected abstract void computeFitnesses();
+
+  protected abstract LinkedList initialiseTraders( Vector[] group );
 
 }
 
