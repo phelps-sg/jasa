@@ -141,7 +141,7 @@ public class QLearner
       parameters.getDoubleWithDefault(base.push(P_EPSILON), null,
                                       DEFAULT_EPSILON);
 
-    numStates = parameters.getInt(base.push(P_NUM_STATES), null, 0);
+    numStates = parameters.getIntWithDefault(base.push(P_NUM_STATES), null, 1);
     numActions = parameters.getInt(base.push(P_NUM_ACTIONS), null, 0);
     setStatesAndActions(numStates, numActions);
   }
