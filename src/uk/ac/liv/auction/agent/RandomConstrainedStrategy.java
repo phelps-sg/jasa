@@ -94,6 +94,14 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
                                                   null, maxMarkup);
   }
 
+  public double getMaxMarkup() {
+    return maxMarkup;
+  }
+  
+  public void setMaxMarkup( double maxMarkup ) {
+    this.maxMarkup = maxMarkup;
+  }
+  
   public String toString() {
     return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:" +
               quantity + ")";
