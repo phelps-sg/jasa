@@ -230,8 +230,8 @@ public abstract class AbstractTradingAgent implements TradingAgent,
         (AbstractStrategy)
          parameters.getInstanceForParameter(base.push(P_STRATEGY),
                                             null, AbstractStrategy.class);
-    ((AbstractStrategy) strategy).setAgent(this);
     ((Parameterizable) strategy).setup(parameters, base.push(P_STRATEGY));
+    ((AbstractStrategy) strategy).setAgent(this);
     
     int groupNumber = parameters.getIntWithDefault(base.push(P_GROUP), null, -1);
     if ( groupNumber >= 0 ) {
