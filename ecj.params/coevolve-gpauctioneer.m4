@@ -2,10 +2,16 @@
 include(`ecj.m4')
 include(`utils.m4')
 
-define(`NUM_SELLERS', 3)
-define(`NUM_BUYERS', 6)
+
+define(`NUM_SELLERS', ifelse(esyscmd(`echo -n $GP_NS'))
+define(`NUM_BUYERS', esyscmd(`echo -n $GP_NB'))
+define(`SELLER_CAPACITY', esyscmd(`echo -n $GP_CS`))
+define(`BUYER_CAPACITY', esyscmd(`echo -n $GP_BS`))
+define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
 define(`POPULATION_SIZE', 50)
 define(`NUM_GENERATIONS', 1000)
+
+define(`CONF_RESULTS', `experimental_data/results/preliminary/gpcoevolve')
 
 parent.0 = CONF_ECJHOME/ec/simple/simple.params
 
@@ -15,10 +21,14 @@ eval.problem = uk.ac.liv.auction.ec.gp.GPCoEvolveAuctionProblem
 eval.problem.maxrounds = 10
 eval.problem.ns = NUM_SELLERS
 eval.problem.nb = NUM_BUYERS
+eval.problem.cs = SELLER_CAPACITY
+eval.problem.cb = BUYER_CAPACITY
+eval.problem.marketstatsfile = CONF_RESULTS/marketstats-PARAM_SUMMARY.csv
 
 stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
+stat.file = CONF_RESULTS/gpcoevolve-PARAM_SUMMARY.out
 stat.gather-full = true
-stat.serfilenameprefix = experimental_data/results/preliminary/gpind.data
+stat.serfilenameprefix = CONF_RESULTS/gpind.data
 
 generations = NUM_GENERATIONS
 checkpoint = false

@@ -20,4 +20,7 @@ define(`FN_NUMBER', `0')
 
 define(`FN_SET', -1)
 
-
+define(`ENV_VAR', 
+define($1,esyscmd(`echo -n $2'))
+define($1,ifelse(`$1',`',$3))
+)
