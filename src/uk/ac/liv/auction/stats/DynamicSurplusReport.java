@@ -37,7 +37,7 @@ import org.apache.log4j.Logger;
  * theoretical equilibrium. The equilibrium price is recomputed at the end of
  * each day, thus this class can be used to keep track of theoretically
  * available surplus even when supply and demand are changing over time.
- * Each agent is assumed to heoretically be able to trade the specified 
+ * Each agent is assumed to be hypothetically able to trade the specified 
  * quantity of units in each day.
  * </p>
  * 
