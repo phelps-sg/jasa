@@ -109,10 +109,11 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
   }
 
   protected float efficiencyFitness( double eA ) {
-    if ( eA > 1 && Math.abs(eA) < 2 ) {
+    float fitness = (float) eA/100;
+    if ( fitness > 1 && Math.abs(fitness) < 2 ) {
       return 1f;
     } else {
-      return (float) eA;
+      return fitness;
     }
   }
 
@@ -148,7 +149,6 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
   public Object protoClone() throws CloneNotSupportedException {
 
     GPCoEvolveAuctionProblem myobj = (GPCoEvolveAuctionProblem) super.protoClone();
-    //TODO?
     return myobj;
   }
 

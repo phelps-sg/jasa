@@ -15,29 +15,12 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.Auction;
-
 /**
- * <p>
- * Classes implementing this interface define trading strategies
- * for round-robin traders.
- * </p>
- *
  * @author Steve Phelps
  */
 
-public interface Strategy {
+public interface FixedQuantityStrategy {
 
-  /**
-   * Modify the trader's current shout according to the trading strategy
-   * being implemented.
-   *
-   * @param shout   The shout to be updated
-   * @param auction The auction in which this strategy is being employed
-   */
-  public abstract void modifyShout( Shout shout, Auction auction );
-
-  public void setAgent( AbstractTraderAgent agent );
+  public void setQuantity( int quantity );
 
 }

@@ -14,7 +14,7 @@ class GPElectricityTrader extends ElectricityTrader {
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                                double price, int quantity) {
 
-    if ( price < privateValue ) {
+    if ( price <= privateValue ) {
 
       GPElectricityTrader trader = (GPElectricityTrader) seller;
       trader.informOfBuyer(this, price, quantity);
@@ -28,7 +28,7 @@ class GPElectricityTrader extends ElectricityTrader {
 
   public void informOfBuyer( GPElectricityTrader buyer, double price, int quantity ) {
 
-    if ( price > privateValue ) {
+    if ( price >= privateValue ) {
 
       buyer.trade(price, quantity);
 

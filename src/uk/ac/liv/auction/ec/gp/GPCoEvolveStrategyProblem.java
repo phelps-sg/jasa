@@ -113,9 +113,8 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
     Iterator traders = allTraders.iterator();
     for( int i=0; traders.hasNext(); i++ ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
-      AbstractStrategy strategy = (AbstractStrategy) getStrategy(i, group);
-      strategy.reset();
-      //strategy.setGPContext(context);
+      Strategy strategy = getStrategy(i, group);
+      ((Resetable) strategy).reset();
       trader.setStrategy(strategy);
       strategy.setAgent(trader);
       ((FixedQuantityStrategy) strategy).setQuantity(trader.getCapacity());
