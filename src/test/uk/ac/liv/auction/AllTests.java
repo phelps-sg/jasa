@@ -49,7 +49,7 @@ public class AllTests {
 
     suite.addTest(test.uk.ac.liv.auction.electricity.ElectricityStatsTest.suite());
     suite.addTest(test.uk.ac.liv.auction.stats.EquilibriumSurplusLoggerTest.suite());
-    //suite.addTest(test.uk.ac.liv.auction.stats.EquilibriaStatsTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.stats.EquilibriaStatsTest.suite());
 
     suite.addTest(test.uk.ac.liv.auction.core.KDoubleAuctioneerTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.KContinuousDoubleAuctioneerTest.suite());
@@ -65,6 +65,8 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.auction.agent.RothErevEfficiencyTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.EPEfficiencyTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.GDEfficiencyTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.agent.QLearnerEfficiencyTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.agent.PriestVanTolEfficiencyTest.suite());
     
     return suite;
   }

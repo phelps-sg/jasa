@@ -18,22 +18,24 @@ package test.uk.ac.liv.auction.agent;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import uk.ac.liv.ai.learning.WidrowHoffLearner;
+
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.GDStrategy;
+import uk.ac.liv.auction.agent.PriestVanTolStrategy;
 import uk.ac.liv.auction.stats.HistoricalDataReport;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
-public class GDEfficiencyTest extends EfficiencyTest {
+public class PriestVanTolEfficiencyTest extends EfficiencyTest {
 
-  public static final double BENCHMARK_EFFICIENCY = 90.0;
+  public static final double BENCHMARK_EFFICIENCY = 85.0;
   
-  public GDEfficiencyTest( String name ) {
+  public PriestVanTolEfficiencyTest( String name ) {
     super(name);
   }
-  
+
   protected void initialiseAuction() {
     super.initialiseAuction();
     HistoricalDataReport report = new HistoricalDataReport();
@@ -42,7 +44,8 @@ public class GDEfficiencyTest extends EfficiencyTest {
   }
   
   protected void assignStrategy( AbstractTradingAgent agent ) {
-    GDStrategy strategy = new GDStrategy();
+    PriestVanTolStrategy strategy = new PriestVanTolStrategy();
+    strategy.setLearner( new WidrowHoffLearner() );
     agent.setStrategy(strategy);
     strategy.setAgent(agent);
   }
@@ -56,6 +59,6 @@ public class GDEfficiencyTest extends EfficiencyTest {
   }
 
   public static Test suite() {
-    return new TestSuite(GDEfficiencyTest.class);
+    return new TestSuite(PriestVanTolEfficiencyTest.class);
   }
 }

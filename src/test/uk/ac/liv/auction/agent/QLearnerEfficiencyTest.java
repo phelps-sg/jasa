@@ -18,31 +18,27 @@ package test.uk.ac.liv.auction.agent;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import uk.ac.liv.ai.learning.StatelessQLearner;
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.GDStrategy;
-import uk.ac.liv.auction.stats.HistoricalDataReport;
+import uk.ac.liv.auction.agent.StimuliResponseStrategy;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
-public class GDEfficiencyTest extends EfficiencyTest {
-
-  public static final double BENCHMARK_EFFICIENCY = 90.0;
+public class QLearnerEfficiencyTest extends EfficiencyTest {
   
-  public GDEfficiencyTest( String name ) {
+  public static final double BENCHMARK_EFFICIENCY = 90.0;
+
+  public QLearnerEfficiencyTest( String name ) {
     super(name);
   }
   
-  protected void initialiseAuction() {
-    super.initialiseAuction();
-    HistoricalDataReport report = new HistoricalDataReport();
-    report.setAuction(auction);
-    auction.setReport(report);    
-  }
-  
   protected void assignStrategy( AbstractTradingAgent agent ) {
-    GDStrategy strategy = new GDStrategy();
+    StimuliResponseStrategy strategy = new StimuliResponseStrategy();
+    StatelessQLearner ql = new StatelessQLearner();
+    ql.setNumberOfActions(100);
+    strategy.setLearner(ql);
     agent.setStrategy(strategy);
     strategy.setAgent(agent);
   }
@@ -56,6 +52,6 @@ public class GDEfficiencyTest extends EfficiencyTest {
   }
 
   public static Test suite() {
-    return new TestSuite(GDEfficiencyTest.class);
+    return new TestSuite(QLearnerEfficiencyTest.class);
   }
 }

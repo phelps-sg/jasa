@@ -46,7 +46,7 @@ public abstract class EfficiencyTest extends TestCase {
   static final double MIN_VALUE = 50;
   static final double MAX_VALUE = 300;
   
-  static final int MAX_DAYS = 20;
+  static final int MAX_DAYS = 100;
   static final int DAY_LENGTH = 5;
   
   
@@ -91,8 +91,10 @@ public abstract class EfficiencyTest extends TestCase {
         efficiency.newData(surplus.getEA());
       }
     }
-    efficiency.log();
-    assertTrue("mean efficiency too low", efficiency.getMean() >= getMinMeanEfficiency());
+    double meanEfficiency = efficiency.getMean();
+    System.out.println("Mean efficiency = " + meanEfficiency);
+    assertTrue("mean efficiency too low", !Double.isInfinite(meanEfficiency) &&
+        			meanEfficiency >= getMinMeanEfficiency());
   }
   
   protected void initialiseExperiment() {
