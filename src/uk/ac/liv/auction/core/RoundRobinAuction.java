@@ -28,7 +28,7 @@ import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.Distribution;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -157,11 +157,6 @@ public class RoundRobinAuction extends AuctionImpl
   protected boolean shoutsProcessed;
 
   /**
-   * Flag indicating whether the auction is currently running.
-   */
-  protected boolean isRunning;
-
-  /**
    * Optional graphical console
    */
   protected AuctionConsoleFrame guiConsole = null;
@@ -170,16 +165,6 @@ public class RoundRobinAuction extends AuctionImpl
    * The statistics to use
    */
   protected MarketStats marketStats = null;
-
-  /**
-   * True if the auction is currently paused
-   */
-  protected boolean paused;
-
-  /**
-   * True if the auction about to be paused
-   */
-  protected boolean pausePending;
 
   /**
    * The maximum length in rounds of a trading day
@@ -318,6 +303,8 @@ public class RoundRobinAuction extends AuctionImpl
     updateTransPriceLog(round, ask, bid, price, ask.getQuantity());
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
+    assert buyer.isBuyer();
+    assert seller.isSeller();
     buyer.informOfSeller(this, ask, seller, price, ask.getQuantity());
     acceptedShouts.add(ask);
     acceptedShouts.add(bid);
@@ -477,7 +464,7 @@ public class RoundRobinAuction extends AuctionImpl
    * @throws DataUnavailableException  Thrown if the auction does not have
    *                                   a DailyStatsMarketDataLogger configured.
    */
-  public CummulativeDistribution getPreviousDayTransPriceStats()
+  public Distribution getPreviousDayTransPriceStats()
       throws DataUnavailableException {
 
     if ( dailyStats == null ) {
@@ -492,7 +479,7 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   protected void checkHistoryStats() throws DataUnavailableException {
-    if (historyStats == null) {
+    if ( historyStats == null ) {
       throw new DataUnavailableException(ERROR_HISTORYSTATS);
     }
   }
@@ -545,14 +532,11 @@ public class RoundRobinAuction extends AuctionImpl
       throw new AuctionError("No auctioneer has been assigned for auction " + name);
     }
 
-    isRunning = true;
-
     begin();
 
     try {
       while (!closed()) {
         step();
-        checkPaused();
       }
 
     } catch ( AuctionClosedException e ) {
@@ -561,8 +545,6 @@ public class RoundRobinAuction extends AuctionImpl
     }
 
     end();
-
-    isRunning = false;
   }
   
   
@@ -640,12 +622,6 @@ public class RoundRobinAuction extends AuctionImpl
     return !shoutsProcessed;
   }
 
-  /**
-   * Returns true if the auction is still running
-   */
-  public boolean isRunning() {
-    return isRunning;
-  }
 
 
   /**
@@ -712,8 +688,6 @@ public class RoundRobinAuction extends AuctionImpl
       guiConsole = new AuctionConsoleFrame(this, name);
     }
     guiConsole.activate();
-    // Add the console as an observer so that it will be informed
-    // of state changes when we call notifyObservers().
     addObserver(guiConsole);
   }
 
@@ -732,32 +706,6 @@ public class RoundRobinAuction extends AuctionImpl
 
   public AuctionConsoleFrame getConsole() {
     return guiConsole;
-  }
-
-  /**
-   * Pause the running of the auction at the end of the current round.
-   *
-   * @throws AuctionPauseException
-   */
-  public void pause() throws AuctionClosedException {
-    if ( closed ) {
-      throw new AuctionClosedException("Cannot pause closed auction");
-    }
-    pausePending = true;
-  }
-
-  /**
-   * Resume running of the auction after it has been paused.
-   */
-  public void resume() {
-    pausePending = false;
-  }
-
-  /**
-   * Returns true if the auction is currently paused.
-   */
-  public boolean isPaused() {
-    return paused;
   }
 
   public void setLengthOfDay( int lengthOfDay ) {
@@ -815,26 +763,12 @@ public class RoundRobinAuction extends AuctionImpl
 
     numTraders = activeTraders.size();
     shoutsProcessed = false;
-    paused = false;
-    pausePending = false;
-    isRunning = false;
   }
 
   protected void activate( RoundRobinTrader agent ) {
     activeTraders.add(agent);
     addAuctionEventListener(agent);
     numTraders++;
-  }
-
-  /**
-   * If a pause request is pending then loop until a resume
-   * request is received.
-   */
-  protected void checkPaused() {
-    while ( pausePending ) {
-      paused = true;
-    }
-    paused = false;
   }
 
   /**
@@ -869,8 +803,5 @@ public class RoundRobinAuction extends AuctionImpl
       close();
     }
   }
-
-
-
-
+  
 }
