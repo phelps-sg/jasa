@@ -73,7 +73,7 @@ import java.io.Serializable;
  * @author Steve Phelps
  */
 
-public abstract class AbstractTraderAgent implements RoundRobinTrader,
+public abstract class AbstractTraderAgent implements PrivateValueTrader,
                                                       Serializable,
                                                       Parameterizable,
                                                       Cloneable {

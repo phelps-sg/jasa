@@ -61,12 +61,12 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
   PlatformController container;
 
   static Logger logger = Logger.getLogger(AuctionManager.class);
-  
+
   static final String AGENTNAME_AUCTIONEER = "Auctioneer";
   static final String AGENTNAME_TRADER = "Trader";
 
   static final String P_AUCTION = "auction";
-  static final String P_NUM_AGENT_TYPES = "numagenttypes";
+  static final String P_NUM_AGENT_TYPES = "n";
   static final String P_NUM_AGENTS = "numagents";
   static final String P_AGENT_TYPE = "agenttype";
   static final String P_AGENTS = "agents";
@@ -80,7 +80,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
 
   protected void setup() {
-    super.setup();    
+    super.setup();
   }
 
 
@@ -106,7 +106,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
       auctioneerAID = findAuctioneer();
 
       int numAgentTypes =
-          parameters.getInt(base.push(P_NUM_AGENT_TYPES), null, 1);
+          parameters.getInt(base.push(P_AGENT_TYPE).push("n"), null, 1);
 
       for( int t=0; t<numAgentTypes; t++ ) {
 
@@ -147,14 +147,14 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
   }
 
 
-  public void startAuction() {    
+  public void startAuction() {
     try {
       if ( auctioneerAID == null ) {
         auctioneerAID = findAuctioneer();
       }
       ACLMessage start = new ACLMessage(ACLMessage.INFORM);
       start.addReceiver(auctioneerAID);
-      StartAuctionAction startContent = new StartAuctionAction();      
+      StartAuctionAction startContent = new StartAuctionAction();
       sendMessageAsynch(start, startContent);
     } catch ( Exception e ) {
       logger.error(e.getMessage());

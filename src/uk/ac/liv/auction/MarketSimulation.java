@@ -170,27 +170,24 @@ public class MarketSimulation implements Parameterizable, Runnable,
       stats.setAuction(auction);
     }
 
-    int numAgentTypes = parameters.getInt(base.push(P_AGENT_TYPE).push("n"),
-                                           null, 1);
+    Parameter typeParam = base.push(P_AGENT_TYPE);
 
-    logger.debug("Number of agent types = " + numAgentTypes);
+    int numAgentTypes = parameters.getInt(typeParam.push("n"), null, 1);
 
     for( int t=0; t<numAgentTypes; t++ ) {
 
-      Parameter typeParam = base.push(P_AGENT_TYPE).push(""+t);
-      Parameter agentParam = typeParam.push(P_AGENTS);
+      Parameter typeParamT = typeParam.push(""+t);
+      Parameter agentParam = typeParamT.push(P_AGENTS);
 
-      int numAgents = parameters.getInt(typeParam.push(P_NUM_AGENTS), null, 0);
-
-      logger.debug("Registering " + numAgents + " agents of type " + t);
+      int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS), null, 0);
 
       for( int i=0; i<numAgents; i++ ) {
 
       	RoundRobinTrader agent =
           (RoundRobinTrader)
-            parameters.getInstanceForParameter(typeParam, null,
+            parameters.getInstanceForParameter(typeParamT, null,
                                                 RoundRobinTrader.class);
-        ((Parameterizable) agent).setup(parameters, typeParam);
+        ((Parameterizable) agent).setup(parameters, typeParamT);
         auction.register(agent);
 
       }
@@ -221,10 +218,11 @@ public class MarketSimulation implements Parameterizable, Runnable,
   }
 
 
-  public static void fatalError( String message ) {
+  protected static void fatalError( String message ) {
     System.err.println(message);
     System.exit(1);
   }
+
 
   protected void seedStrategies() {
     logger.info("seed = " + prngSeed);
