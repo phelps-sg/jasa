@@ -29,6 +29,7 @@ import ec.util.Parameter;
 import ec.util.Output;
 
 import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.Distribution;
 
 import uk.ac.liv.ec.gp.GPContext;
 import uk.ac.liv.ec.gp.GPGenericIndividual;
@@ -90,8 +91,8 @@ public class GPHeuristicTradingProblem extends GPProblem implements
 
     payoffCalculator.computePayoffMatrix();
 
-    CompressedPayoffMatrix payoffMatrix = payoffCalculator
-        .getCompressedPayoffMatrix();
+    CompressedPayoffMatrix payoffMatrix = 
+      payoffCalculator.getCompressedPayoffMatrix();
 
     int gpStrategyIndex = payoffCalculator.getGPStrategyIndex();
     CummulativeDistribution payoff = new CummulativeDistribution("gp payoff");
@@ -109,8 +110,8 @@ public class GPHeuristicTradingProblem extends GPProblem implements
     computeFitness(individual, payoff);
   }
 
-  protected void computeFitness( GPGenericIndividual individual,
-      CummulativeDistribution payoff ) {
+  protected void computeFitness( GPGenericIndividual individual, 
+      						Distribution payoff ) {
 
     float fitness = (float) payoff.getMean();
 
