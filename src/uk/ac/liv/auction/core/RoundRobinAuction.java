@@ -477,14 +477,15 @@ public class RoundRobinAuction extends AuctionImpl
     begin();
 
     try {
-      while (true) {
+      while (!closed) {
         step();
       }
 
     } catch ( AuctionClosedException e ) {
-      end();
+      throw new AuctionError(e);
     }
 
+    end();
   }
   
   
