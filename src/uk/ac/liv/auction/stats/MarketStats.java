@@ -17,6 +17,14 @@ package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
+/**
+ * Classes implementing this interface can be used to generate reports
+ * at the end of an auction.
+ *
+ * @author Steve Phelps
+ * @version $Revision$
+ */
+
 public interface MarketStats {
 
   /**

@@ -22,6 +22,10 @@ import uk.ac.liv.util.io.*;
 import org.apache.log4j.Logger;
 
 /**
+ * This logger keeps track of the mean value of each market variable
+ * over the course of each round of bidding and logs the mean value
+ * to the specified DataWriter objects.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
