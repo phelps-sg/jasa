@@ -1,7 +1,6 @@
 
 include(`ecj.m4')
-include(`utils.m4')
-
+include(`utils.m4') 
 
 define(`NUM_SELLERS', ENV_VAR(`$GP_NS', 3))
 define(`NUM_BUYERS', ENV_VAR(`$GP_NB', 3))
@@ -28,7 +27,7 @@ eval.problem.cb = BUYER_CAPACITY
 eval.problem.marketstatsfile = RESULTS/marketstats-PARAM_SUMMARY.csv
 
 stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
-stat.file = gpcoevolve-PARAM_SUMMARY.out
+stat.file = RESULTS/gpcoevolve-PARAM_SUMMARY.out
 stat.gather-full = true
 stat.serfilenameprefix = RESULTS/gpind-PARAM_SUMMARY.data
 
