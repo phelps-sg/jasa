@@ -53,7 +53,7 @@ public class EPRandomizer extends StandardRandomizer {
     for( int i=0; i<numIterations; i++ ) {
       double equilibMinPrice = randomValue(equilibPricePRNG, 0, maxPrivateValue);
       double equilibMaxPrice = randomValue(equilibPricePRNG, equilibMinPrice, maxPrivateValue);
-      int equilibQty = (int) (((double) simulation.numSellers)/2 * simulation.sellerCapacity);
+      int equilibQty = (int) (((double) experiment.numSellers)/2 * experiment.sellerCapacity);
       logger.debug("Generating values for target equilibrium range: [" + equilibMinPrice + ", " + equilibMaxPrice + "]");
       values[i] = generateValues(equilibMinPrice, equilibMaxPrice, equilibQty);
     }
@@ -65,10 +65,10 @@ public class EPRandomizer extends StandardRandomizer {
                                     double equilibPriceMax,
                                     int equilibQty ) {
 
-    int ns = simulation.numSellers;
-    int nb = simulation.numBuyers;
-    int cs = simulation.sellerCapacity;
-    int cb = simulation.buyerCapacity;
+    int ns = experiment.numSellers;
+    int nb = experiment.numBuyers;
+    int cs = experiment.sellerCapacity;
+    int cb = experiment.buyerCapacity;
     double[] values = new double[ns+nb];
 
     int b0 = (equilibQty / cb);

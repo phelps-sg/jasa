@@ -19,6 +19,7 @@ import junit.framework.*;
 
 import test.uk.ac.liv.PRNGTestSeeds;
 
+import uk.ac.liv.auction.zi.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 

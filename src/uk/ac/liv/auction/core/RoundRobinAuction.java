@@ -33,11 +33,7 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 import ec.util.ParamClassLoadException;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -159,17 +155,35 @@ public class RoundRobinAuction extends AuctionImpl
    */
   protected MarketStats marketStats = null;
 
+  /**
+   * True if the auction is currently paused
+   */
   protected boolean paused;
 
+  /**
+   * True if the auction about to be paused
+   */
   protected boolean pausePending;
 
+  /**
+   * The maximum length in rounds of a trading day
+   */
   protected int lengthOfDay = -1;
 
+  /**
+   * The current trading day
+   */
   protected int day = 0;
 
+  /**
+   * The maximum number of trading days before the auction closes
+   */
   protected int maximumDays = -1;
 
-  protected HashSet acceptedShouts = new HashSet();
+  /**
+   * The set of shouts that have been matched in the current round.
+   */
+  protected Set acceptedShouts = new HashSet();
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   public static final String P_MAXIMUM_DAYS = "maximumdays";
@@ -254,6 +268,10 @@ public class RoundRobinAuction extends AuctionImpl
     updateTransPriceLog(round, ask, price, ask.getQuantity());
   }
 
+  /**
+   * Determines whether or not the given shout was matched in
+   * the current round of trading.
+   */
   public boolean shoutAccepted( Shout shout ) {
     return acceptedShouts.contains(shout);
   }
@@ -362,6 +380,13 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   /**
+   * Return the total number of traders registered in the auction.
+   */
+  public int getNumberOfRegisteredTraders() {
+    return registeredTraders.size();
+  }
+
+  /**
    * Get the age of the auction in rounds
    */
   public int getAge() {
@@ -436,6 +461,7 @@ public class RoundRobinAuction extends AuctionImpl
     notifyObservers();
   }
 
+
   public void close() {
     super.close();
   }
@@ -463,7 +489,12 @@ public class RoundRobinAuction extends AuctionImpl
     return registeredTraders.iterator();
   }
 
+  /**
+   *
+   * @deprecated
+   */
   public List getTraderList() {
+    log4jLogger.warn("getTraderList() is not safe");
     return registeredTraders;
   }
 
@@ -474,20 +505,13 @@ public class RoundRobinAuction extends AuctionImpl
     return !shoutsProcessed;
   }
 
+  /**
+   * Returns true if the auction is still running
+   */
   public boolean isRunning() {
     return isRunning;
   }
 
-  /**
-   * Remove defunct traders.
-   */
-  protected void sweepDefunctTraders() {
-    Iterator i = defunctTraders.iterator();
-    while ( i.hasNext() ) {
-      TraderAgent defunct = (TraderAgent) i.next();
-      activeTraders.remove(defunct);
-    }
-  }
 
   /**
    * Restore the auction to its original state, ready for another run.
@@ -571,9 +595,9 @@ public class RoundRobinAuction extends AuctionImpl
    *
    * @throws AuctionPauseException
    */
-  public void pause() throws AuctionPauseException {
+  public void pause() throws AuctionClosedException {
     if ( closed ) {
-      throw new AuctionPauseException("Auction is closed");
+      throw new AuctionClosedException("Cannot pause closed auction");
     }
     pausePending = true;
   }
@@ -588,10 +612,24 @@ public class RoundRobinAuction extends AuctionImpl
     log4jLogger.debug("exiting resume()");
   }
 
+  /**
+   * Returns true if the auction is currently paused.
+   */
   public boolean isPaused() {
     return paused;
   }
 
+
+  /**
+   * Remove defunct traders.
+   */
+  protected void sweepDefunctTraders() {
+    Iterator i = defunctTraders.iterator();
+    while ( i.hasNext() ) {
+      TraderAgent defunct = (TraderAgent) i.next();
+      activeTraders.remove(defunct);
+    }
+  }
 
   protected void initialise() {
     super.initialise();

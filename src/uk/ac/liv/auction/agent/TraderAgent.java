@@ -26,6 +26,4 @@ public interface TraderAgent {
 
   public long getId();
 
-  public boolean active();
-
 }

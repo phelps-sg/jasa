@@ -249,7 +249,6 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     try {
       currentShout = strategy.modifyShout(currentShout, auction);
       if ( active() ) {
-        logger.debug(this + ": placing shout " + currentShout);
         auction.newShout(currentShout);
       } else {
         logger.debug(this + ": inactive");
@@ -434,5 +433,14 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
+
+  /**
+   * Determine whether or not this trader is active.
+   * Inactive traders do not place shouts in the auction,
+   * but do carry on learning through their strategy.
+   *
+   * @return true if the trader is active.
+   */
+  public abstract boolean active();
 
 }

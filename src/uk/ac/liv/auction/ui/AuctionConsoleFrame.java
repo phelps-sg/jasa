@@ -374,8 +374,8 @@ public class AuctionConsoleFrame extends JFrame
       pauseButton.setEnabled(false);
       resumeButton.setEnabled(true);
       logger.debug("exiting pause()");
-    } catch ( AuctionPauseException e ) {
-      logger.debug(e);
+    } catch ( AuctionClosedException e ) {
+      logger.warn(e);
     }
   }
 

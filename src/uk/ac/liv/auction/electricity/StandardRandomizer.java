@@ -42,9 +42,9 @@ public class StandardRandomizer implements Parameterizable, Serializable {
   protected double maxPrivateValue = 1000;
 
   protected MersenneTwisterFast privValuePRNG;
-   
-  
-  protected ElectricityAuctionSimulation simulation;
+
+
+  protected ElectricityExperiment experiment;
 
   static Logger logger = Logger.getLogger(StandardRandomizer.class);
 
@@ -53,9 +53,9 @@ public class StandardRandomizer implements Parameterizable, Serializable {
   static final String P_MINPRIVATEVALUE = "minprivatevalue";
 
 
-  public StandardRandomizer( ElectricityAuctionSimulation simulation ) {
+  public StandardRandomizer( ElectricityExperiment simulation ) {
     this();
-    setSimulation(simulation);    
+    setExperiment(experiment);
   }
 
   public StandardRandomizer() {
@@ -77,19 +77,19 @@ public class StandardRandomizer implements Parameterizable, Serializable {
     privValuePRNG.setSeed(seed);
   }
 
-  public void setSimulation( ElectricityAuctionSimulation simulation ) {
-    this.simulation = simulation;
-    this.auction = simulation.auction;
+  public void setExperiment( ElectricityExperiment simulation ) {
+    this.experiment = experiment;
+    this.auction = experiment.auction;
   }
 
   public double randomValue( MersenneTwisterFast prng, double min, double max ) {
     return min + (max - min) * prng.nextDouble();
   }
-  
+
   public double randomPrivateValue( double min, double max ) {
-    return randomValue(privValuePRNG, min, max);                
+    return randomValue(privValuePRNG, min, max);
   }
-  
+
   public double randomPrivateValue() {
     return randomPrivateValue(minPrivateValue, maxPrivateValue);
   }
@@ -109,13 +109,13 @@ public class StandardRandomizer implements Parameterizable, Serializable {
     double[][] values = new double[numIterations][numTraders];
     EquilibriaStats stats = new EquilibriaStats(auction);
     for( int i=0; i<numIterations; i++ ) {
-      do {        
+      do {
         Iterator traders = auction.getTraderIterator();
-        for( int t=0; t<numTraders; t++ ) {      
+        for( int t=0; t<numTraders; t++ ) {
           double value = randomPrivateValue();
           AbstractTraderAgent agent = (AbstractTraderAgent) traders.next();
           agent.setPrivateValue(value);
-          values[i][t] = value;    
+          values[i][t] = value;
         }
         stats.recalculate();
       } while ( ! stats.equilibriaExists() );
@@ -153,9 +153,9 @@ public class StandardRandomizer implements Parameterizable, Serializable {
       }
     }
   }
-  
+
   public String toString() {
-    return "(" + getClass() + " minPrivateValue:" + minPrivateValue 
+    return "(" + getClass() + " minPrivateValue:" + minPrivateValue
               + " maxPrivateValue:" + maxPrivateValue + " seed:" + seed + ")";
   }
 

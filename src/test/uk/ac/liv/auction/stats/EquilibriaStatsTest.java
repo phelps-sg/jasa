@@ -137,10 +137,10 @@ class TestEquilibriaStats implements MarketStats {
   }
 
   protected void sortTraders() {
-    List traders = auction.getTraderList();
-    buyers = new ArrayList(traders.size());
-    sellers = new ArrayList(traders.size());
-    Iterator i = traders.iterator();
+    int numTraders = auction.getNumberOfRegisteredTraders();
+    buyers = new ArrayList(numTraders);
+    sellers = new ArrayList(numTraders);
+    Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
       if ( agent.isBuyer() ) {

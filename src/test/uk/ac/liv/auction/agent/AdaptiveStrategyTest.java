@@ -17,6 +17,7 @@ package test.uk.ac.liv.auction.agent;
 
 import junit.framework.*;
 
+import uk.ac.liv.auction.zi.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 

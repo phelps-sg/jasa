@@ -18,7 +18,7 @@ simulation.stats = uk.ac.liv.auction.stats.EquilibriaStats
 simulation.agenttype.n = 2
 
 # 1st population- 5000 sellers 
-simulation.agenttype.0 = uk.ac.liv.auction.agent.ZITraderAgent
+simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.0.numagents = 5000
 simulation.agenttype.0.initialtradeentitlement = 1000
 simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
@@ -26,7 +26,7 @@ simulation.agenttype.0.strategy.maxmarkup = 100
 simulation.agenttype.0.isseller = true
 
 # 2nd population- 5000 buyers 
-simulation.agenttype.1 = uk.ac.liv.auction.agent.ZITraderAgent
+simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.1.numagents = 5000
 simulation.agenttype.1.initialtradeentitlement = 1000
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy

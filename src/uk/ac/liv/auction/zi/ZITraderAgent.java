@@ -28,9 +28,9 @@ import org.apache.log4j.Logger;
 /**
  * <p>
  * Class for "Zero Intelligence" (ZI) trader agents.
- * Agents of this type drop out of the auction once their trade
- * entitlement is used up, and do not reinitialise their strategy
- * when they are reset.
+ * Agents of this type become inactive once their intitial trade
+ * entitlement is used up, and their trade entitlement is restored
+ * at the end of each day.
  * </p>
  * See:
  * </p>
