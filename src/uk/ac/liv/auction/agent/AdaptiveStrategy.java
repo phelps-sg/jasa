@@ -70,13 +70,10 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
     } else {
       price = agent.getPrivateValue() - action*markupScale;
     }
-    /* TODO
-    if ( price < funds ) {
-      price = funds;
-    } */
     if ( price < 0 ) {
       price = 0;
     }
+
     shout.setPrice(price);
     shout.setQuantity(quantity);
   }
