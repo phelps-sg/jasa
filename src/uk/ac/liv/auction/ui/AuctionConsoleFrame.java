@@ -17,7 +17,6 @@ package uk.ac.liv.auction.ui;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
-import uk.ac.liv.auction.stats.GraphMarketDataLogger;
 
 import uk.ac.liv.util.Resetable;
 
@@ -31,8 +30,6 @@ import java.text.DecimalFormat;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-
-import uchicago.src.sim.analysis.plot.RepastPlot;
 
 import org.apache.log4j.Logger;
 
@@ -55,15 +52,13 @@ public class AuctionConsoleFrame extends JFrame
   protected JLabel dayLabel;
   protected JLabel numTradersLabel;
 
-  protected JButton closeAuctionButton;
+ 
   protected JButton supplyAndDemandButton;
-  protected JButton rerunAuctionButton;
+ 
   protected JButton reportButton;
-  protected JButton resumeButton;
-  protected JButton pauseButton;
+  
   protected JButton resetAgentsButton;
 
-  protected RepastPlot graph;
  
   protected float graphXExtrema = 0f;
  
@@ -190,34 +185,6 @@ public class AuctionConsoleFrame extends JFrame
     dayLabel.setFont(decimalFont);
     contentPane.add(dayLabel);
 
-    closeAuctionButton = new JButton("Stop");
-    closeAuctionButton.setToolTipText("Close the auction");
-    c.gridx = 1;
-    c.gridy = 5;
-    gridBag.setConstraints(closeAuctionButton, c);
-    contentPane.add(closeAuctionButton);
-    closeAuctionButton.addActionListener(new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          closeAuction();
-        }
-    });
-
-
-    rerunAuctionButton = new JButton("Rerun");
-    rerunAuctionButton.setToolTipText("Run the auction from the beginning");
-    c.gridx = 2;
-    c.gridy = 5;
-    c.ipadx = 0;
-    c.ipady = 0;
-    c.gridwidth = 1;
-    gridBag.setConstraints(rerunAuctionButton, c);
-    contentPane.add(rerunAuctionButton);
-    rerunAuctionButton.addActionListener(new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          rerunAuction();
-        }
-    });
-
 
     JButton logAuctionStatusButton = new JButton("Dump");
     logAuctionStatusButton.setToolTipText("Display the current state of the auction");
@@ -259,30 +226,6 @@ public class AuctionConsoleFrame extends JFrame
       }
     });
 
-   pauseButton = new JButton("Pause");
-    c.gridx = 1;
-    c.gridy = 7;
-    gridBag.setConstraints(pauseButton, c);
-    contentPane.add(pauseButton);
-    pauseButton.addActionListener(new ActionListener() {
-      public void actionPerformed( ActionEvent e ) {
-        pause();
-      }
-    });
-
-    resumeButton = new JButton("Resume");
-    resumeButton.setToolTipText("Resume the auction");
-    resumeButton.setEnabled(false);
-    c.gridx = 2;
-    c.gridy = 7;
-    gridBag.setConstraints(resumeButton, c);
-    contentPane.add(resumeButton);
-    resumeButton.addActionListener(new ActionListener() {
-      public void actionPerformed( ActionEvent e ) {
-        resume();
-      }
-    });
-
     JButton resetAgentsButton = new JButton("Reset");
     resetAgentsButton.setToolTipText("Reset all agents");
     c.gridx = 3;
@@ -294,14 +237,6 @@ public class AuctionConsoleFrame extends JFrame
         resetAgents();
       }
     });
-
-    if ( (graph = GraphMarketDataLogger.getGraphSingleton()) != null ) {
-      c.gridx = 0;
-      c.gridy = 0;
-      c.gridwidth = 3;
-      gridBag.setConstraints(graph, c);
-      contentPane.add(graph);
-    }
 
     setAuctionName(name);
   }
@@ -331,7 +266,7 @@ public class AuctionConsoleFrame extends JFrame
     logger.debug("update(" + o + ", " + arg + ")");
 
     Auction auction = (Auction) o;
-    logger.debug("round = " + auction.getAge());
+    logger.debug("round = " + auction.getRound());
     MarketQuote quote = auction.getQuote();
     currencyFormatter.setMaximumIntegerDigits(6);
     if ( quote != null ) {
@@ -351,25 +286,16 @@ public class AuctionConsoleFrame extends JFrame
       }
       lastShoutLabel.setText(currencyFormatter.format(((double)lastPrice)/100));
     }
-    roundLabel.setText(decimalFormatter.format(auction.getAge()));
+    roundLabel.setText(decimalFormatter.format(auction.getRound()));
     dayLabel.setText(decimalFormatter.format(auction.getDay()));
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
 
-    if ( graph != null && auction.getAge() != currentRound) {
-      currentRound = auction.getAge();
-//      if ( currentRound > 1 && currentRound % 500 == 0 ) {
-//        graphXExtrema += 500f;
-//        graph.setXExtrema(0, graphXExtrema);
-//      }
-      notifyGraphModelChanged();
-    }
     logger.debug("update() complete");
   }
 
 
   public void graphSupplyAndDemand() {
     logger.debug("graphSupplyAndDemand()");
-    pause();
     new Thread() {
       public void run() {
         SupplyAndDemandFrame graphFrame =
@@ -382,31 +308,7 @@ public class AuctionConsoleFrame extends JFrame
     logger.debug("exiting GraphSupplyAndDemand()");
   }
 
-  public void pause() {
-    logger.debug("pause()");
-    try {
-      logger.debug("Invoking auction.pause()..");
-      auction.pause();
-      while (!auction.isPaused()) {
-        //wait for auction to be paused
-//        logger.debug("waiting for auction.isPaused()");
-      }
-      pauseButton.setEnabled(false);
-      resumeButton.setEnabled(true);
-      logger.debug("exiting pause()");
-    } catch ( AuctionClosedException e ) {
-      logger.warn(e);
-    }
-  }
-
-  public void resume() {
-    auction.resume();
-    pauseButton.setEnabled(true);
-    resumeButton.setEnabled(false);
-  }
-
   public void resetAgents() {
-    pause();
     new Thread() {
       public void run() {
         Iterator i = auction.getTraderIterator();
@@ -433,29 +335,8 @@ public class AuctionConsoleFrame extends JFrame
     setVisible(false);
   }
 
-  public void rerunAuction() {
-
-    logger.debug("rerunAuction()");
-
-    // Resume the auction in case it is paused.
-    resume();
-
-    // Close the auction and wait until it has finished.
-    auction.close();
-    while ( auction.isRunning() ) {
-    }
-
-    // Reset everything
-    reset();
-    auction.reset();
-   
-    // Start a new auction thread
-    auctionRunner = new Thread(auction);
-    auctionRunner.start();
-  }
 
   public void generateReport() {
-    pause();
     new Thread() {
       public void run() {
         auction.generateReport();
@@ -467,24 +348,4 @@ public class AuctionConsoleFrame extends JFrame
     //TODO
   }
 
-  protected void notifyGraphModelChanged() {
-    logger.debug("notifyGraphModelChanged()");
-//    try {
-      SwingUtilities.invokeLater(new Runnable() {
-        public void run() {
-          graph.repaint();
-        }
-      });
-//      Thread.currentThread().sleep(1);
-//    }
-//    catch (InterruptedException e) {
-//      logger.warn(e);
-//      e.printStackTrace();
-//    }
-//    catch (java.lang.reflect.InvocationTargetException e) {
-//      logger.warn(e);
-//      e.printStackTrace();
-//    }
-    logger.debug("exiting notifyGraphModelChanged()");
-  }
 }

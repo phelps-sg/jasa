@@ -113,7 +113,7 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
 
 
   protected void update( DataWriter writer, CummulativeDistribution stats ) {
-    writer.newData(round);
+    //writer.newData(round);
     writer.newData(stats.getMean());
   }
 

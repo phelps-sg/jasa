@@ -90,7 +90,7 @@ public class SupplyAndDemandFrame extends JFrame {
 
   public void updateTitle() {
     setTitle(TITLE + " for " + auction.getName() + " at time " +
-              auction.getAge());
+              auction.getRound());
   }
 
   protected Graph2DModel constructSupplyAndDemandModel() {

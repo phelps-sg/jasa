@@ -24,15 +24,13 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 
-import uk.ac.liv.util.io.DataWriter;
-import uk.ac.liv.util.io.DataSeriesWriter;
-
 import javax.swing.event.EventListenerList;
-import java.awt.Dimension;
+
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
-import uchicago.src.sim.analysis.plot.RepastPlot;
+import uchicago.src.sim.analysis.Sequence;
 
 /**
  * <p>
@@ -49,9 +47,11 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   protected int currentSeries;
 
-  protected DataWriter[] allSeries;
+  protected RepastGraphSequence[] allSeries;
 
-  protected static RepastPlot graph;
+  protected static GraphMarketDataLogger singletonInstance;
+  
+  protected RepastGraphSequence askQuoteSeries, bidQuoteSeries, transPriceSeries;
 
   protected EventListenerList listenerList = new EventListenerList();
 //  protected GraphDataEvent event = new GraphDataEvent(this);
@@ -61,71 +61,51 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public GraphMarketDataLogger() {
     super();
-    initialise();
+    askQuoteLog = new RepastGraphSequence("ask quote");
+    bidQuoteLog = new RepastGraphSequence("bid quote log");
+    transPriceLog = new RepastGraphSequence("transaction price");
+    askLog = new RepastGraphSequence("ask");
+    bidLog = new RepastGraphSequence("bid");
+    allSeries = new RepastGraphSequence[] { (RepastGraphSequence) askQuoteLog,
+        (RepastGraphSequence) bidQuoteLog, 
+        (RepastGraphSequence) transPriceLog };
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    graph = new JASAGraph();
+    singletonInstance = this;
+  }
+  
+  public static GraphMarketDataLogger getSingletonInstance() {
+    return singletonInstance;
   }
 
-  public void initialise() {
-    askQuoteLog = new DataSeriesWriter();
-    bidQuoteLog = new DataSeriesWriter();
-    askLog = new DataSeriesWriter();
-    bidLog = new DataSeriesWriter();
-    transPriceLog = new DataSeriesWriter();
-    allSeries =
-        new DataWriter[] {
-        askLog, bidLog, transPriceLog};
-//                            askQuoteLog, bidQuoteLog };
-    currentSeries = 0;
-  }
-
+  
 
   public void reset() {
-    initialise();
+  // TODO
 //    fireGraphChanged(new GraphDataEvent(this));
   }
   
-  public void updateTransPriceLog( int time, Shout ask, Shout bid, 
-      							double price, int quantity ) {
-    super.updateTransPriceLog(time, ask, bid, price, quantity);
-    graph.addPoint(0, time, transPriceStats.getMean(), true);
-  }
   
-  public void updateQuoteLog( int time, MarketQuote quote ) {
-    super.updateQuoteLog(time, quote);
-    double bid = quote.getBid();
-    if ( ! Double.isInfinite(bid)) {
-      graph.addPoint(1, time, bid, true);
-    } else {
-      graph.addPoint(1, time, 0, false);
-    }
-    double ask = quote.getAsk();
-    if ( ! Double.isInfinite(ask)) {
-      graph.addPoint(2, time, ask, true);
-    } else {
-      graph.addPoint(2, time, 0, false);
-    }
+  public Iterator getSequenceIterator() {
+    return new Iterator() {
+      
+      int currentSequence = 0;
+      
+      public boolean hasNext() {
+        return currentSequence < allSeries.length;
+      }
+      
+      public Object next() {
+        return (Sequence) allSeries[currentSequence++];
+      }
+      
+      public void remove() {        
+      }
+      
+    };
   }
-  
-  public static RepastPlot getGraphSingleton() {
-    return graph;
-  }
-
 
 
 }
 
-
-class JASAGraph extends RepastPlot {
-  
-  public JASAGraph() {
-    super(null);
-    setColor(true);
-    addLegend(0, "Mean transaction price");
-    addLegend(1, "bid quote");
-    addLegend(2, "ask quote");
-    setPreferredSize(new Dimension(640, 480));
-  }
-}
