@@ -100,7 +100,8 @@ public class RandomValuer
   }
 
   public double determineValue( Auction auction ) {   
-    assert minValue >= 0 && maxValue >= minValue;
+    assert minValue >= 0 && maxValue >= minValue && 
+    			value >= minValue && value <= maxValue;
     return value;
   }
 
