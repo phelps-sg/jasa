@@ -21,6 +21,8 @@ import ec.*;
 
 import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.ec.gp.func.*;
+import uk.ac.liv.ec.gp.*;
+
 
 
 /**
@@ -77,17 +79,20 @@ public class CoEvolveAuctionStatistics extends CoEvolveStrategyStatistics {
       Iterator strategies = auctioneer.getStrategies().iterator();
       while ( strategies.hasNext() ) {
         Object s = strategies.next();
-        if ( s instanceof GPTradingStrategy ) {
-          GPTradingStrategy strategy = (GPTradingStrategy) s;
-          printIndividual(strategy);
-          println();
-          println("Price stats for trader: " + strategy.getPriceStats());
-          println();
-          println("Misbehaved? " + strategy.misbehaved());
-          println();
-        } //else {
-          println(s.toString());
-//        }
+        if ( s instanceof GPGenericIndividual ) {
+        	GPGenericIndividual individual = (GPGenericIndividual) s;
+        	if ( individual.getGPObject() instanceof GPTradingStrategy ) {
+	          GPTradingStrategy strategy = (GPTradingStrategy) individual.getGPObject();
+	          printIndividual(individual);
+	          println();
+	          println("Price stats for trader: " + strategy.getPriceStats());
+	          println();
+	          println("Misbehaved? " + individual.misbehaved());
+	          println();
+	        } //else {
+	          println(s.toString());
+	//        }
+        }
         println("-------------");
       }
 

@@ -19,6 +19,7 @@ import ec.gp.*;
 import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
+import uk.ac.liv.ec.gp.GPGenericIndividual;
 
 import uk.ac.liv.util.UntypedDouble;
 
@@ -30,8 +31,9 @@ public class LastAsk extends GPNode {
   public void eval( EvolutionState state, int thread, GPData input,
                       ADFStack stack, GPIndividual individual, Problem problem ) {
     try {
-      GPTradingStrategy strategy = (GPTradingStrategy) individual;
-      Shout lastAsk = strategy.getAuction().getLastAsk();
+      GPTradingStrategy strategy = 
+      	(GPTradingStrategy) ((GPGenericIndividual) individual).getGPObject();
+      Shout lastAsk = ((RoundRobinAuction) strategy.getAuction()).getLastAsk();
       double price;
       if (lastAsk == null) {
         price = -1;

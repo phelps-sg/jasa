@@ -13,29 +13,14 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.ec.gp.func;
-
-import uk.ac.liv.auction.core.*;
+package uk.ac.liv.ec.gp;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
-
-public class GPConstrainedTradingStrategy extends GPTradingStrategy {
-
-
-  public boolean modifyShout( Shout.MutableShout shout ) {
-
-    Shout newShout = super.modifyShout(shout, auction);
-
-    if ( (agent.isSeller() && newShout.getPrice() < agent.getPrivateValue(auction)) ||
-          (agent.isBuyer() && newShout.getPrice() > agent.getPrivateValue(auction)) ) {
-      gpIndividual.illegalResult();
-      return false;
-    }
-
-    return true;
-  }
-
+public interface GPObject {
+	
+	public void setGPIndividual( GPGenericIndividual individual );
+	
 }

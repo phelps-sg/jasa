@@ -15,32 +15,34 @@
 
 package uk.ac.liv.auction.ec.gp.func;
 
-import ec.gp.*;
-import ec.*;
+import ec.EvolutionState;
+import ec.Problem;
+import ec.gp.ADFStack;
+import ec.gp.GPData;
+import ec.gp.GPIndividual;
+import ec.gp.GPNode;
 
-import uk.ac.liv.ec.gp.func.*;
+import uk.ac.liv.ec.gp.func.GPGenericData;
 import uk.ac.liv.ec.gp.GPGenericIndividual;
 
-import uk.ac.liv.util.UntypedDouble;
-
-/** 
+/**
  * @author Steve Phelps
  * @version $Revision$
- *
  */
+public class LastShoutAccepted extends GPNode {
+	
+	public void eval( EvolutionState state, int thread, GPData input,
+										 ADFStack stack, GPIndividual individual, Problem problem ) {
+		
+		GPTradingStrategy strategy = 
+			(GPTradingStrategy) ((GPGenericIndividual) individual).getGPObject();
+		Boolean accepted = new Boolean(strategy.lastShoutAccepted());
+		
+		((GPGenericData) input).data = accepted;
+	}
+	
 
-public class PrivateValue extends GPNode {
-
-  public void eval( EvolutionState state, int thread, GPData input, 
-  										ADFStack stack, GPIndividual individual, 
-											Problem problem) {
-  	
-  	GPTradingStrategy strategy = 
-  		(GPTradingStrategy) ((GPGenericIndividual) individual).getGPObject();
-    ((GPGenericData) input).data = new UntypedDouble(strategy.getPrivateValue());
-  }
-
-  public String toString() {
-    return "PrivateValue";
-  }
+	public String toString() {
+		return "LastShoutAccepted";
+	}
 }

@@ -36,8 +36,6 @@ public class GPIndividualCtx extends GPIndividual implements Serializable {
 
   protected boolean misbehaved = false;
 
-  static final GPNode[] GPNODE_ARR = new GPNode[0];
-
   public void setGPContext( EvolutionState state, int thread, ADFStack stack,
                         Problem problem ) {
     context.setState(state);
@@ -77,6 +75,10 @@ public class GPIndividualCtx extends GPIndividual implements Serializable {
 
   public boolean misbehaved() {
     return misbehaved;
+  }
+  
+  public void illegalResult() {
+  	misbehaved = true;
   }
 
   public void doneEvaluating() {

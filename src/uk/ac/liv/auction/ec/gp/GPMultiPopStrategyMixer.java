@@ -19,6 +19,8 @@ import uk.ac.liv.auction.agent.Strategy;
 
 import uk.ac.liv.auction.ec.gp.func.GPTradingStrategy;
 
+import uk.ac.liv.ec.gp.GPGenericIndividual;
+
 import java.util.Vector;
 
 /**
@@ -38,10 +40,10 @@ public class GPMultiPopStrategyMixer extends StrategyMixer {
   }
 
   public Strategy getStrategy( int i, Vector[] group ) {
-    GPTradingStrategy strategy = null;
-    strategy = (GPTradingStrategy) group[subpopOffset()+i].get(0);
+    GPGenericIndividual strategy = null;
+    strategy = (GPGenericIndividual) group[subpopOffset()+i].get(0);
     strategy.setGPContext(problem.getGPContext());
-    return strategy;
+    return (GPTradingStrategy) strategy.getGPObject();
   }
 
 }

@@ -26,33 +26,26 @@ import uk.ac.liv.ec.gp.*;
 
 import uk.ac.liv.util.*;
 
-/**
- * <p>Title: JASA</p>
- * <p> </p>
- * <p>Copyright: Copyright (c) 2002</p>
- * <p> </p>
+/** 
  * @author Steve Phelps
  * @version $Revision$
  *
  */
 
-public class GPTradingStrategy extends GPIndividualCtx
-    implements Cloneable, FixedQuantityStrategy, QuoteProvider, 
-                Serializable, Resetable {
+public class GPTradingStrategy extends FixedQuantityStrategyImpl
+    implements GPObject, Cloneable, Serializable, Resetable {
 
 
-  AbstractTraderAgent agent = null;
-
-  Shout currentShout = null;
-
-  int quantity = 1;
-
-  RoundRobinAuction currentAuction = null;
-
-  CummulativeStatCounter priceStats = new CummulativeStatCounter("priceStats");
+	protected GPGenericIndividual gpIndividual;
+	
+  private CummulativeStatCounter priceStats = new CummulativeStatCounter("priceStats");
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {    
+  }
+  
+  public void setGPIndividual( GPGenericIndividual individual ) {
+  	this.gpIndividual = individual;
   }
   
   public void setAgent( AbstractTraderAgent agent ) {
@@ -63,39 +56,35 @@ public class GPTradingStrategy extends GPIndividualCtx
     return agent;
   }
 
-  public void setQuantity( int quantity ) {
-    this.quantity = quantity;
-  }
 
   protected double getPrivateValue() {
-    return agent.getPrivateValue(currentAuction);
+    return agent.getPrivateValue(auction);
   }
 
-  public RoundRobinAuction getAuction() {
-    return currentAuction;
+  public Auction getAuction() {
+    return auction;
   }
 
   public MarketQuote getQuote() {
-    return currentAuction.getQuote();
+    return auction.getQuote();
   }
 
-  public Shout modifyShout( Shout shout, Auction auction ) {
-    currentAuction = (RoundRobinAuction) auction;
-    double price = Double.NaN;
-    Number result = evaluateNumberTree(0);
-    if ( !misbehaved ) {
+  public boolean modifyShout( Shout.MutableShout shout ) {    
+    Number result = gpIndividual.evaluateNumberTree(0);
+    double price;
+    if ( !gpIndividual.misbehaved() ) {
       price = result.doubleValue();
     } else {
-      price = 0;
+      return false;
     }
-    if ( price < 0 || Double.isInfinite(price) || Double.isNaN(price)) {
-      price = 0;
-      misbehaved = true;
+    if ( price < 0 || 
+    			Double.isInfinite(price) || Double.isNaN(price)) {      
+      gpIndividual.illegalResult();
+      return false;
     }
-    currentShout = ShoutFactory.getFactory().create(agent, quantity, price,
-                                                      agent.isBuyer());
+    shout.setPrice(price);    
     priceStats.newData(price);    
-    return currentShout;
+    return true;
   }
 
   public void endOfRound( Auction auction ) {
@@ -105,6 +94,10 @@ public class GPTradingStrategy extends GPIndividualCtx
   public double getLastProfit() {
     return agent.getLastProfit();
   }
+  
+  public boolean lastShoutAccepted() {
+  	return agent.lastShoutAccepted();
+  }
 
 
   public CummulativeStatCounter getPriceStats() {
@@ -113,7 +106,15 @@ public class GPTradingStrategy extends GPIndividualCtx
 
   public void reset() {
     priceStats.reset();
-    misbehaved = false;
+    //TODO gpIndividual.reset();
+  }
+  
+  public boolean misbehaved() {
+  	return gpIndividual.misbehaved();
+  }
+  
+  public GPGenericIndividual getGPIndividual() {
+  	return gpIndividual;
   }
 
   public Object protoClone() {
@@ -126,10 +127,6 @@ public class GPTradingStrategy extends GPIndividualCtx
       throw new Error(e.getMessage());
     }
     return copy;
-  }
-
-  public int determineQuantity( Auction auction ) {
-    return quantity;
   }
 
 

@@ -20,13 +20,16 @@ import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
 
+import uk.ac.liv.ec.gp.GPGenericIndividual;
 
 public class AuctionAge extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, 
                       ADFStack stack, GPIndividual individual, Problem problem ) {
+  	GPGenericIndividual gpInd = (GPGenericIndividual) individual;
+  	GPTradingStrategy strategy = (GPTradingStrategy) gpInd.getGPObject();
     ((GPGenericData) input).data = 
-      new Long(((GPTradingStrategy) individual).getAuction().getAge());
+      new Long(strategy.getAuction().getAge());
   }
 
   public String toString() {

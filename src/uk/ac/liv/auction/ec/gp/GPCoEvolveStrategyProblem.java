@@ -26,6 +26,8 @@ import uk.ac.liv.util.*;
 
 import uk.ac.liv.auction.ec.gp.func.*;
 
+import uk.ac.liv.ec.gp.GPGenericIndividual;
+
 /**
  * Scenario in which we co-evolve trading strategies using GP.
  *
@@ -61,7 +63,7 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
 
   protected void setStrategyFitnesses( Vector[] group ) {
     for( int s=0; s<numTraders; s++ ) {
-      GPTradingStrategy strategy = (GPTradingStrategy) getStrategy(s, group);
+      GPGenericIndividual strategy = (GPGenericIndividual) getStrategy(s, group);
       KozaFitness fitness = (KozaFitness) strategy.fitness;
       fitness.setStandardizedFitness(context.getState(),
                                       (float) strategyFitnesses[s].getMean());

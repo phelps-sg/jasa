@@ -19,14 +19,21 @@ import ec.gp.*;
 import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
+import uk.ac.liv.ec.gp.GPGenericIndividual;
 
 import uk.ac.liv.util.UntypedDouble;
 
 
 public class LastProfit extends GPNode {
 
-  public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPGenericData) input).data = new UntypedDouble(((GPTradingStrategy) individual).getLastProfit());
+  public void eval( EvolutionState state, int thread, GPData input, 
+  									 ADFStack stack, GPIndividual individual, 
+										 Problem problem ) {
+  	
+  	GPGenericIndividual gpInd = (GPGenericIndividual) individual;
+  	GPTradingStrategy strategy = (GPTradingStrategy) gpInd.getGPObject();
+    ((GPGenericData) input).data = new UntypedDouble(strategy.getLastProfit());
+    
   }
 
   public String toString() {
