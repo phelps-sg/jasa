@@ -19,6 +19,7 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.ai.learning.MimicryLearner;
+import uk.ac.liv.ai.learning.Learner;
 
 import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.Parameterizable;
@@ -106,6 +107,14 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
 
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
+  }
+
+  public void setLearner( Learner learner ) {
+    this.learner = (MimicryLearner) learner;
+  }
+
+  public Learner getLearner() {
+    return learner;
   }
 
   protected void sellerStrategy( Shout lastShout ) {
