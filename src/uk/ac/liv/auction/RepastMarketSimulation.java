@@ -49,6 +49,7 @@ import uchicago.src.sim.analysis.OpenSequenceGraph;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.Object2DDisplay;
 import uchicago.src.sim.space.Discrete2DSpace;
+import uchicago.src.sim.util.ProbeUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -81,8 +82,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class RepastMarketSimulation 
-     implements SimModel, Serializable {
+public class RepastMarketSimulation extends SimModelImpl
+     implements Serializable {
 
   /**
    * The auction used in this simulation.
@@ -90,10 +91,6 @@ public class RepastMarketSimulation
   protected RoundRobinAuction auction;
   
   protected String parameterFileName;
-  
-  protected IController controller;
-  
-  protected ModelManipulator modelManipulator;
   
   protected Hashtable parameterDescriptors;
   
@@ -230,35 +227,26 @@ public class RepastMarketSimulation
     
   }
 
+  
   public void begin() {
-    
-    GraphMarketDataLogger graphLogger;
-    if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
-      graph = new RepastAuctionConsoleGraph(auction.getName() + " graph", this, graphLogger);
-      graph.display();
-    }
-    
-    displaySurface = new DisplaySurface(this, auction.getName() + " agents");
-    agentSpace = new AgentSpace(auction);
-    Object2DDisplay agentDisplay = new Object2DDisplay(agentSpace);
-    displaySurface.addDisplayableProbeable(agentDisplay, "agents");
-    displaySurface.setPreferredSize(new Dimension(640,480));
-    displaySurface.display();
-
+    buildDisplay();
     auction.begin();
   }
+  
   
   public void step() {
     try {
       auction.step();
     } catch ( AuctionClosedException e ) {
-      controller.stopSim();
+      getController().stopSim();
     }
     if ( graph != null ) {
       graph.step();
     }
     displaySurface.updateDisplay();
+    ProbeUtilities.updateProbePanels();
   }
+  
   
   public String getName() {
     return "JASA auction simulation";
@@ -294,35 +282,12 @@ public class RepastMarketSimulation
     System.err.println("ERROR: " + message);
     System.exit(1);
   }
-
-
-
-  public void clearMediaProducers () {
-    // TODO Auto-generated method stub
-
-  }
-  public void clearPropertyListeners () {
-    // TODO Auto-generated method stub
-
-  }
   
   public void generateNewSeed () {
     // TODO Auto-generated method stub
     logger.debug("Repast is changing the PRNG seed to default");
   }
   
-  public IController getController () {
-    return controller;
-  }
-  
-  public Vector getMediaProducers () {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  public ModelManipulator getModelManipulator () {
-    return modelManipulator;
-  }
   
   public Hashtable getParameterDescriptors () {
     return parameterDescriptors;
@@ -340,9 +305,6 @@ public class RepastMarketSimulation
     return auction.getAge();
   }
   
-  public void setController ( IController controller) {
-    this.controller = controller;
-  }
   
   public void setRngSeed ( long seed) {
     logger.debug("Repast is changing the PRNG seed to " + seed);
@@ -350,22 +312,23 @@ public class RepastMarketSimulation
     GlobalPRNG.initialiseWithSeed(seed);
   }
   
-  public void addSimEventListener ( SimEventListener l) {
-    // TODO Auto-generated method stub
-
+  protected void buildDisplay() {
+    GraphMarketDataLogger graphLogger;
+    if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
+      graph = new RepastAuctionConsoleGraph(auction.getName() + " graph", this, graphLogger);
+      graph.display();
+    }
+    
+    displaySurface = new DisplaySurface(this, auction.getName() + " agents");
+    agentSpace = new AgentSpace(auction);
+    Object2DDisplay agentDisplay = new Object2DDisplay(agentSpace);
+    displaySurface.addDisplayableProbeable(agentDisplay, "agents");
+    displaySurface.setPreferredSize(new Dimension(640,480));
+    displaySurface.display();
+    addSimEventListener(displaySurface);
   }
-  
-  public void fireSimEvent ( SimEvent evt) {
-    // TODO Auto-generated method stub
 
-  }
   
-  public void removeSimEventListener ( SimEventListener l) {
-    // TODO Auto-generated method stub
-
-  }
-  
-
   class AgentMatrix implements BaseMatrix {
     
     protected Vector agents;
@@ -422,6 +385,7 @@ public class RepastMarketSimulation
       // TODO Auto-generated method stub
 
     }
+    
   }
 
 
@@ -467,8 +431,7 @@ public class RepastMarketSimulation
     }
     
     public Dimension getSize() {
-      // TODO Auto-generated method stub
-      return null;
+      return new Dimension(640, 480);
     }
     
     public int getSizeX() {
@@ -480,16 +443,13 @@ public class RepastMarketSimulation
     }
     
     public double getValueAt( int x, int y ) {
-      //TODO
       return 0;
     }
     
     public void putObjectAt( int x, int y, Object object) {
-
     }
     
     public void putValueAt( int x, int y, double value) {
-      
     }
     
   }

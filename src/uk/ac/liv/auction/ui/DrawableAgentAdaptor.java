@@ -124,10 +124,6 @@ public class DrawableAgentAdaptor implements Drawable {
     }
   }
   
-  public Strategy getStrategy() {
-    return agent.getStrategy();
-  }
-  
   public Object getAgentType() {
     return agent;
   }
@@ -139,16 +135,7 @@ public class DrawableAgentAdaptor implements Drawable {
   public float getLastShoutPrice() {
     return price;
   }
-  
-  public Object getLearningAlgorithm() {
-    Strategy s = agent.getStrategy();
-    if ( s instanceof AdaptiveStrategy ) {
-      return ((AdaptiveStrategy) s).getLearner();
-    } else {
-      return null;
-    }
-  }
-  
+
   public float getLearningDelta() {
     Strategy s = agent.getStrategy();
     if ( s instanceof AdaptiveStrategy ) {
