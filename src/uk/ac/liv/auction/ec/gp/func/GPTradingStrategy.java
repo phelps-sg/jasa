@@ -50,8 +50,6 @@ public class GPTradingStrategy extends GPIndividualCtx
 
   CummulativeStatCounter priceStats = new CummulativeStatCounter("priceStats");
 
-  boolean misbehaved = false;
-
 
   public void setAgent( AbstractTraderAgent agent ) {
     this.agent = agent;
@@ -80,32 +78,22 @@ public class GPTradingStrategy extends GPIndividualCtx
   public void modifyShout( Shout shout, Auction auction ) {
     currentShout = shout;
     currentAuction = auction;
-    GPGenericData input = GPGenericData.newGPGenericData();
     double price = Double.NaN;
-    GenericNumber result = null;
-    try {
-      evaluateTree(0, input);
-      result = (GenericNumber) input.data;
+    GenericNumber result = evaluateNumberTree(0);
+    if ( !misbehaved ) {
       price = result.doubleValue();
-    } catch ( ArithmeticException e ) {
-      System.out.println("Caught: " + e);
+    } else {
       price = 0;
-      misbehaved = true;
-      //e.printStackTrace();
     }
     if ( price < 0 || Double.isInfinite(price) || Double.isNaN(price)) {
       price = 0;
       misbehaved = true;
-    }
-    if ( !misbehaved && price==0 ) {
-      //System.err.println(agent + " shouting " + result);
     }
     shout.setPrice(price);
     shout.setQuantity(quantity);
     shout.setIsBid(agent.isBuyer());
     priceStats.newData(price);
     result.release();
-    input.release();
   }
 
   public double getLastProfit() {
@@ -120,10 +108,6 @@ public class GPTradingStrategy extends GPIndividualCtx
   public void reset() {
     priceStats = new CummulativeStatCounter("priceStats");
     misbehaved = false;
-  }
-
-  public boolean misbehaved() {
-    return misbehaved;
   }
 
 

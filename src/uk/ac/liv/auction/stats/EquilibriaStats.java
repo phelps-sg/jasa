@@ -1,7 +1,7 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.util.Debug;
 
@@ -12,8 +12,146 @@ import java.util.*;
 
 import huyd.poolit.*;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 
 public class EquilibriaStats implements MarketStats {
+
+  FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
+
+  RoundRobinAuction auction;
+
+  double minPrice, maxPrice;
+  int minQty, maxQty;
+
+  boolean equilibriaFound = false;
+
+  ArrayList shouts;
+
+  public EquilibriaStats( RoundRobinAuction auction ) {
+    this();
+    this.auction = auction;
+  }
+
+  public EquilibriaStats() {
+    shouts = new ArrayList();
+  }
+
+  public void setAuction( RoundRobinAuction auction ) {
+    this.auction = auction;
+  }
+
+  public void setPriceRange( long min, long max ) {
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+  }
+
+  public void recalculate() {
+    reset();
+    calculate();
+  }
+
+  public void calculate() {
+    simulateDirectRevelation();
+    Shout hiAsk = shoutEngine.getHighestMatchedAsk();
+    Shout loBid = shoutEngine.getLowestMatchedBid();
+    if ( hiAsk == null || loBid == null ) {
+      equilibriaFound = false;
+    } else {
+      calculateEquilibriaPriceRange();
+      calculateEquilibriaQtyRange();
+      equilibriaFound = true;
+    }
+    releaseShouts();
+  }
+
+  protected void simulateDirectRevelation() {
+    try {
+      Iterator traders = auction.getTraderIterator();
+      while ( traders.hasNext() ) {
+        AbstractTraderAgent trader = (AbstractTraderAgent) traders.next();
+        int quantity = trader.determineQuantity(auction);
+        double value = trader.getPrivateValue();
+        boolean isBid = trader.isBuyer();
+        Shout shout = ShoutPool.fetch(trader, quantity, value, isBid);
+        shouts.add(shout);
+        if ( isBid ) {
+          shoutEngine.newBid(shout);
+        } else {
+          shoutEngine.newAsk(shout);
+        }
+      }
+    } catch ( DuplicateShoutException e ) {
+      e.printStackTrace();
+      throw new Error(e.getMessage());
+    }
+  }
+
+  protected void calculateEquilibriaQtyRange() {
+    minQty = Integer.MAX_VALUE;
+    maxQty = Integer.MIN_VALUE;
+    List matches = shoutEngine.getMatchedShouts();
+    Iterator i = matches.iterator();
+    while ( i.hasNext() ) {
+      Shout bid = (Shout) i.next();
+      Shout ask = (Shout) i.next();
+      if ( bid.getQuantity() < minQty ) {
+        minQty = bid.getQuantity();
+      }
+      if ( bid.getQuantity() > maxQty ) {
+        maxQty = bid.getQuantity();
+      }
+    }
+  }
+
+  protected void calculateEquilibriaPriceRange() {
+    minPrice = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine.getHighestUnmatchedBid());
+    maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
+    Debug.assertTrue(minPrice <= maxPrice);
+  }
+
+  protected void releaseShouts() {
+    Iterator i = shouts.iterator();
+    while ( i.hasNext() ) {
+      Shout s = (Shout) i.next();
+      ShoutPool.release(s);
+    }
+  }
+
+  public void reset() {
+    shouts.clear();
+    shoutEngine.reset();
+  }
+
+  public double getMinPrice() {
+    return minPrice;
+  }
+
+  public double getMaxPrice() {
+    return maxPrice;
+  }
+
+  public double getMinQuantity() {
+    return minQty;
+  }
+
+  public double getMaxQuantity() {
+    return maxQty;
+  }
+
+  public boolean equilibriaExists() {
+    return equilibriaFound;
+  }
+
+  public String toString() {
+    return "(" + getClass() + " equilibriaFound:" + equilibriaFound + " minPrice:" + minPrice + " maxPrice:" + maxPrice + " minQty: " + minQty + " maxQty:" + maxQty + ")";
+  }
+
+}
+/*
+class TestEquilibriaStats implements MarketStats {
 
   RoundRobinAuction auction = null;
 
@@ -73,9 +211,6 @@ public class EquilibriaStats implements MarketStats {
   }
 
   protected void sortTraders() {
-    /*
-    buyers = new BinaryHeap(descendingValues);
-    sellers = new BinaryHeap(ascendingValues); */
     List traders = auction.getTraderList();
     buyers = new ArrayList(traders.size());
     sellers = new ArrayList(traders.size());
@@ -90,28 +225,6 @@ public class EquilibriaStats implements MarketStats {
     }
 
   }
-/*
-  protected void buildCurve( ArrayList curve, BinaryHeap traders,
-                              double initVal, double finalVal ) {
-    boolean descending = finalVal < initVal;
-    double currentVal = initVal;
-    long quantity = 0;
-    while ( ! traders.isEmpty() ) {
-      AbstractTraderAgent trader = (AbstractTraderAgent) traders.removeFirst();
-      double val = trader.getPrivateValue();
-      quantity = trader.determineQuantity(auction);
-      while ( !traders.isEmpty() && ((AbstractTraderAgent) traders.getFirst()).getPrivateValue() == val ) {
-        quantity += ((AbstractTraderAgent) traders.removeFirst()).determineQuantity(auction);
-      }
-      if ( descending ) {
-        curve.add( new PriceQtyTuple(val, currentVal, quantity) );
-      } else {
-        curve.add( new PriceQtyTuple(currentVal, val, quantity) );
-      }
-      currentVal = val;
-    }
-  }
-*/
 
   protected static void initialiseTuplePool() {
     try {
@@ -334,3 +447,4 @@ class QuantityComparator implements Comparator {
     }
   }
 }
+*/

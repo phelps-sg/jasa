@@ -24,27 +24,7 @@ public class GPGenericData extends GPData {
 
   public Object data;
 
-  private static Pooler pooler;
-
-  static final int DEFAULT_POOL_SIZE = 1000;
-
-  static int poolSize = DEFAULT_POOL_SIZE;
-
   public GPGenericData() {
-  }
-
-  public static GPGenericData newGPGenericData() {
-    try {
-      initialisePool();
-      return (GPGenericData) pooler.fetch();
-    } catch ( FetchException e ) {
-      e.printStackTrace();
-      return new GPGenericData();
-    }
-  }
-
-  public void release() {
-    pooler.release(this);
   }
 
   public GPData copyTo( GPData other ) {
@@ -54,21 +34,6 @@ public class GPGenericData extends GPData {
 
   public String toString() {
     return "(" + getClass() + " data:" + data + ")";
-  }
-
-  public static void setPoolSize( int poolSize ) {
-    GPGenericData.poolSize = poolSize;
-  }
-
-  protected static void initialisePool() {
-    if ( pooler == null ) {
-      try {
-        pooler = new FixedPooler(GPGenericData.class, poolSize);
-      } catch ( CreateException e ) {
-        e.printStackTrace();
-        throw new Error(e.getMessage());
-      }
-    }
   }
 
 }

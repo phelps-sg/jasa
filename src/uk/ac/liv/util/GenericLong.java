@@ -29,31 +29,16 @@ public class GenericLong extends GenericNumber {
 
   long primitiveValue;
 
-  protected static Pooler pool;
-
-  static final int DEFAULT_POOL_SIZE = 10000;
-
-
   public GenericLong() {
     this(0L);
   }
 
   public static GenericLong newGenericLong( long value ) {
-    GenericLong result = null;
-    try {
-      initialisePool();
-      result = (GenericLong) pool.fetch();
-      result.setValue(value);
-    } catch ( FetchException e ) {
-      System.err.println("WARNING: " + e.getMessage());
-      e.printStackTrace();
-      result = new GenericLong(value);
-    }
-    return result;
+    return GenericLongPool.fetch(value);
   }
 
   public void release() {
-    pool.release(this);
+    GenericLongPool.release(this);
   }
 
 
@@ -73,7 +58,7 @@ public class GenericLong extends GenericNumber {
     if ( other instanceof GenericLong ) {
       return newGenericLong( primitiveValue + other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return GenericDouble.newGenericDouble(doubleValue() + other.doubleValue());
+      return GenericDoublePool.fetch(doubleValue() + other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
@@ -83,7 +68,7 @@ public class GenericLong extends GenericNumber {
     if ( other instanceof GenericLong ) {
       return newGenericLong( primitiveValue * other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return GenericDouble.newGenericDouble(doubleValue() * other.doubleValue());
+      return GenericDoublePool.fetch(doubleValue() * other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
@@ -93,7 +78,7 @@ public class GenericLong extends GenericNumber {
   if ( other instanceof GenericLong ) {
       return newGenericLong( primitiveValue - other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return GenericDouble.newGenericDouble(doubleValue() - other.doubleValue());
+      return GenericDoublePool.fetch(doubleValue() - other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
@@ -108,7 +93,7 @@ public class GenericLong extends GenericNumber {
     if ( intResult == tempResult ) {
       return newGenericLong(intResult);
     } else {
-      return GenericDouble.newGenericDouble(tempResult);
+      return GenericDoublePool.fetch(tempResult);
     }
   }
 
@@ -170,14 +155,4 @@ public class GenericLong extends GenericNumber {
     }
   }
 
-  protected static synchronized void initialisePool() {
-    try {
-      if ( pool == null ) {
-        pool = new FixedPooler(GenericLong.class, DEFAULT_POOL_SIZE);
-      }
-    } catch ( CreateException e ) {
-      e.printStackTrace();
-      throw new Error(e.getMessage());
-    }
-  }
 }

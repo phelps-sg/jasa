@@ -29,36 +29,16 @@ public class GenericDouble extends GenericNumber {
 
   double primitiveValue;
 
-  static Pooler pool;
-
-  static final int DEFAULT_POOL_SIZE = 100000;
-
-  static int poolSize = DEFAULT_POOL_SIZE;
-
   public GenericDouble() {
     this(Double.NaN);
   }
 
   public static GenericDouble newGenericDouble( double value ) {
-    GenericDouble result = null;
-    try {
-      initialisePool();
-      result = (GenericDouble) pool.fetch();
-      result.setValue(value);
-    } catch ( FetchException e ) {
-      System.err.println("WARNING: " + e.getMessage());
-      e.printStackTrace();
-      result = new GenericDouble(value);
-    }
-    return result;
-  }
-
-  public static void setPoolSize( int poolSize ) {
-    GenericDouble.poolSize = poolSize;
+    return GenericDoublePool.fetch(value);
   }
 
   public void release() {
-    pool.release(this);
+    GenericDoublePool.release(this);
   }
 
   public GenericNumber add( GenericNumber other ) {
@@ -134,16 +114,6 @@ public class GenericDouble extends GenericNumber {
     primitiveValue = value;
   }
 
-  protected static void initialisePool() {
-    try {
-      if ( pool == null ) {
-        pool = new FixedPooler(GenericDouble.class, poolSize);
-      }
-    } catch ( CreateException e ) {
-      e.printStackTrace();
-      throw new Error(e.getMessage());
-    }
-  }
 
 
 }

@@ -41,8 +41,6 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   final ShoutEngine shoutEngine = new FourHeapShoutEngine();
 
-  protected boolean misbehaved = false;
-
   protected Shout currentShout;
 
   protected Auction auction;
@@ -101,18 +99,11 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public double determineClearingPrice( Shout bid, Shout ask ) {
     clearBid = bid;
     clearAsk = ask;
-    GPGenericData input = GPGenericData.newGPGenericData();
-    try {
-      evaluateTree(0, input);
-    } catch ( ArithmeticException e ) {
-      misbehaved = true;
-      System.out.println("Caught: " + e);
-      //e.printStackTrace();
+    GenericNumber result = evaluateNumberTree(0);
+    result.release();
+    if ( misbehaved ) {
       return 0;
     }
-    GenericNumber result = (GenericNumber) input.data;
-    result.release();
-    input.release();
     if ( result.doubleValue() < 0 ) {
       misbehaved = true;
       return 0;
@@ -168,7 +159,6 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public StatsMarketDataLogger getLogStats() { return logger; }
   public LinkedList getStrategies() { return strategies; }
   public Auction getAuction() { return auction; }
-  public boolean misbehaved() { return misbehaved; }
 
 
 }

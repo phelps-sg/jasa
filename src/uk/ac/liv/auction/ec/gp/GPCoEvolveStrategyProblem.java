@@ -69,10 +69,12 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
   }
 
   protected void setStrategyFitnesses( Vector[] group ) {
-   for( int s=0; s<numTraders; s++ ) {
-      KozaFitness fitness = (KozaFitness) (getStrategy(s, group)).fitness;
+    for( int s=0; s<numTraders; s++ ) {
+      GPTradingStrategy strategy = getStrategy(s, group);
+      KozaFitness fitness = (KozaFitness) strategy.fitness;
       fitness.setStandardizedFitness(context.getState(),
                                       (float) strategyFitnesses[s].getMean());
+      strategy.evaluated = true;
     }
   }
 
@@ -125,7 +127,11 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
 
 
   protected GPTradingStrategy getStrategy( int i, Vector[] group ) {
-    return (GPTradingStrategy) group[i].get(0);
+    if ( i < numSellers ) {
+      return (GPTradingStrategy) group[0].get(i);
+    } else {
+      return (GPTradingStrategy) group[1].get(i-numSellers);
+    }
   }
 
 

@@ -77,6 +77,9 @@ public class Shout implements Comparable, Cloneable, Serializable {
     this.agent = agent;
   }
 
+  public Shout() {
+  }
+
   public int getQuantity() {  return quantity; }
   public double getPrice() {  return price; }
   public TraderAgent getAgent() { return agent; }
@@ -88,6 +91,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
   public void setSelling() { this.isBid = false; }
   public void setBuying() { this.isBid = true; }
   public void setIsBid( boolean isBid ) { this.isBid = isBid; }
+  protected void setAgent( TraderAgent agent ) { this.agent = agent; }
 
   public boolean satisfies( Shout other ) {
     if ( this.isBid() ) {

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 import uk.ac.liv.ec.gp.func.*;
+import uk.ac.liv.util.GenericNumber;
 
 /**
  * <p>Title: JASA</p>
@@ -40,6 +41,8 @@ import uk.ac.liv.ec.gp.func.*;
 public class GPIndividualCtx extends GPIndividual {
 
   GPContext context = new GPContext();
+
+  protected boolean misbehaved = false;
 
   static final GPNode[] GPNODE_ARR = new GPNode[0];
 
@@ -61,8 +64,42 @@ public class GPIndividualCtx extends GPIndividual {
     context.getStack().reset();
   }
 
+  public GenericNumber evaluateNumberTree( int treeNumber ) {
+    misbehaved = false;
+    GPGenericData input = GPGenericDataPool.fetch();
+    try {
+      evaluateTree(treeNumber, input);
+    } catch ( ArithmeticException e ) {
+      misbehaved = true;
+    }
+    GPGenericDataPool.release(input);
+    return (GenericNumber) input.data;
+  }
+
   public GPTree getTree( int treeNumber ) {
     return trees[treeNumber];
+  }
+
+  public boolean misbehaved() {
+    return misbehaved;
+  }
+
+  /**
+   * Return the given tree as a scheme list.
+   *
+   * @param treeNumber The number of the tree to convert
+   *
+   * @returns A scheme list
+   */
+  public Object treeToScheme( int treeNumber ) {
+    return nodeToSchemeList(trees[treeNumber].child);
+  }
+
+  /**
+   * Return the first tree of this individual as a scheme list.
+   */
+  public Object toScheme() {
+    return treeToScheme(0);
   }
 
   /**
@@ -106,21 +143,19 @@ public class GPIndividualCtx extends GPIndividual {
   }
 
   /**
-   * Return the given tree as a scheme list.
+   * Set the given tree number by converting a scheme s-expression.
    *
-   * @param treeNumber The number of the tree to convert
-   *
-   * @returns A scheme list
+   * @param treeNum   The index of the tree to mute
+   * @param scheme    The scheme s-expression
+   * @param map       A scheme list specififying the symbol->fn mapping
    */
-  public Object treeToScheme( int treeNumber ) {
-    return nodeToSchemeList(trees[treeNumber].child);
+  public void setTree( int treeNum, Object scheme, Cons map ) {
+    trees[treeNum].child = makeTree(scheme, map);
+    trees[treeNum].child.parent = trees[treeNum];
   }
 
-  /**
-   * Return the first tree of this individual as a scheme list.
-   */
-  public Object toScheme() {
-    return treeToScheme(0);
+  public void setTree( Object scheme, Cons map ) {
+    setTree(0, scheme, map);
   }
 
   /**
@@ -176,17 +211,6 @@ public class GPIndividualCtx extends GPIndividual {
     return buildTreeFromScheme(scheme, hashMap);
   }
 
-  /**
-   * Set the given tree number by convertng a scheme s-expression.
-   */
-  public void setTree( int treeNum, Object scheme, Cons map ) {
-    trees[treeNum].child = makeTree(scheme, map);
-    trees[treeNum].child.parent = trees[treeNum];
-  }
-
-  public void setTree( Object scheme, Cons map ) {
-    setTree(0, scheme, map);
-  }
 
   public static GPNode buildNodeFromScheme( Object scheme, HashMap map ) {
     GPNode result = new uk.ac.liv.ec.gp.func.Nil();

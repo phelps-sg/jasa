@@ -21,7 +21,7 @@ import java.util.List;
 
 import uk.ac.liv.util.Parameterizable;
 
-public interface MarketStats extends Parameterizable {
+public interface MarketStats  {
 
   public void setPriceRange( long min, long max );
 

@@ -37,6 +37,11 @@ public class TestTrader extends AbstractTraderAgent {
     this.test = test;
   }
 
+  public TestTrader( TestCase test, int stock, long funds, long privateValue, boolean isSeller ) {
+    super(stock, funds, privateValue, isSeller);
+    this.test = test;
+  }
+
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                               double price, int quantity ) {
     System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity);

@@ -87,7 +87,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
       stats =
         (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS),
                                                          null, MarketStats.class);
-      stats.setup(parameters, base.push(P_STATS));
+      ((Parameterizable) stats).setup(parameters, base.push(P_STATS));
       stats.setAuction(auction);
     }
 

@@ -48,6 +48,7 @@ public class CoEvolutionaryEvaluator extends Evaluator {
 
     for( int i=0; i<numSubpops; i++ ) {
       int temp = state.parameters.getInt(base.push(P_GROUP_SIZE).push(""+i), null, 1);
+      System.out.println(base + ":gs " + i + " = " + temp);
       groupSizes[i] = temp;
       groups[i] = new Vector(groupSizes[i]);
       groups[i].setSize(groupSizes[i]);
