@@ -41,7 +41,7 @@ public class SetRothErevS1 extends GPSchemeNode {
     RothErevLearner learner = 
       (RothErevLearner) strategy.getRlLearner();
     
-    learner.setScaling(scaling.doubleValue());
+    learner.setScaling(Math.abs(scaling.doubleValue()));
   }
   
   public String toString() {

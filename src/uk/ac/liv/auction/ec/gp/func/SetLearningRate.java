@@ -41,7 +41,7 @@ public class SetLearningRate extends GPSchemeNode {
     WidrowHoffLearner learner = 
       (WidrowHoffLearner) strategy.getMomentumLearner();
     
-    learner.setLearningRate(learningRate.doubleValue());
+    learner.setLearningRate(Math.abs(learningRate.doubleValue()));
   }
   
   public String toString() {
