@@ -20,7 +20,7 @@ package uk.ac.liv.util;
  * @version $Revision$
  */
 
-public interface Prototypeable extends Parameterizable, Resetable  {
+public interface Prototypeable extends Resetable, Cloneable {
 
   public Object protoClone();
 
