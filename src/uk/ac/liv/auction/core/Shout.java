@@ -214,7 +214,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
     id = other.getId();
     child = null;
   }
-
+/*
   public int hashCode() {
     return id;
   }
@@ -222,5 +222,5 @@ public class Shout implements Comparable, Cloneable, Serializable {
   public boolean equals( Object other ) {
     return this.id == ((Shout) other).id;
   }
-
+*/
 }
