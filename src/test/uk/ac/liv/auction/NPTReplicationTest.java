@@ -177,8 +177,8 @@ public class NPTReplicationTest extends TestCase {
   }
 
   public void generatePRNGseeds( int numAgents ) {
-    System.out.println(this + ": generating PRNG seeds.. ");
-    MersenneTwisterFast prng = new MersenneTwisterFast(System.currentTimeMillis());
+    System.out.println(this + ": generating PRNG seeds using default seed.. ");
+    MersenneTwisterFast prng = new MersenneTwisterFast();
     for( int i=0; i<ITERATIONS; i++ ) {
       for( int t=0; t<numAgents; t++ ) {
         seeds[i][t] = (long) prng.nextInt();
