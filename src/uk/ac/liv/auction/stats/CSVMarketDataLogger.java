@@ -29,6 +29,23 @@ import java.io.*;
  * A utility class for helping Auctions to write market data
  * to CSV log files.
  *
+ * <p><b>Parameters</b><br></p>
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.quotelogfile</tt><br>
+ * <font size=-1>string</font></td>
+ * <td valign=top>(the filename to store the quote data)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.shoutlogfile</tt><br>
+ * <font size=-1>string</font></td>
+ * <td valign=top>(the filename to store the shout data)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.translogfile</tt><br>
+ * <font size=-1>string</font></td>
+ * <td valign=top>(the filename to store the transaction price data)</td><tr> 
+ *
+ * </table>
+ *
  * @author Steve Phelps
  */
 

@@ -28,6 +28,15 @@ import ec.util.ParameterDatabase;
  * An Auctioneer for a uniform-price, continuous k-double-auction,
  * in which clearing takes place after every round of
  * bidding, and both buyers and sellers can make offers.
+ * 
+ * <p><b>Parameters</b><br></p>
+ * <table>
+ * <tr><td valign=top><i>base</i><tt>.k</tt><br>
+ * <font size=-1>double [0, 1]</font></td>
+ * <td valign=top>(the pricing parameter)</td><tr> 
+ * </table>
+ *
+ * @author Steve Phelps
  */
 
 public class ContinuousDoubleAuctioneer extends AbstractAuctioneer

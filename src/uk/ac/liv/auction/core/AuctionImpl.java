@@ -30,6 +30,8 @@ import java.util.Observable;
 /**
  * An abstract implementation of Auction that provides basic
  * logging facilities and an optional popup GUI console.
+ *
+ * @author Steve Phelps
  */
 
 public abstract class AuctionImpl extends Observable

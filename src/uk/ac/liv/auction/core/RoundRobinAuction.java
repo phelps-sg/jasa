@@ -70,6 +70,25 @@ import java.io.Serializable;
  * the "bidding logic".
  * </p>
  *
+ *
+ * <p><b>Parameters</b><br></p>
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.maximumrounds</tt><br>
+ * <font size=-1>int >= 0</font></td>
+ * <td valign=top>(the number of auction rounds)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.auctioneer</tt><br>
+ * <font size=-1>class</font></td>
+ * <td valign=top>(the auction protocol to use)</td><tr> 
+ *
+ * <tr><td valign=top><i>base</i><tt>.logger</tt><br>
+ * <font size=-1>class</font></td>
+ * <td valign=top>(the MarketDataLogger to use)</td><tr> 
+ *
+ * </table>
+ *
+ *
  * @see uk.ac.liv.auction.agent.RoundRobinTrader
  *
  * @author Steve Phelps

@@ -28,8 +28,18 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.util.Parameterizable;
 
 /**
+ * <p>
  * An implementation of MarketDataLogger that can be used to log
  * data to a number of different sources.
+ * </p>
+ *
+ * <p><b>Parameters</b><br></p>
+ * <table>
+ * <tr><td valign=top><i>base</i><tt>.n</tt><br>
+ * <font size=-1>int &gt;= 1</font></td>
+ * <td valign=top>(the number of different loggers to configure)</td><tr> 
+ * </table>
+ *
  *
  * @author Steve Phelps
  */
