@@ -69,11 +69,11 @@
     </target>
 
     <target name="anoncvspass">
-	    <cvspass cvsroot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" password=""/>
+	    <cvspass cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" password=""/>
 	</target>
 
    <target depends="anoncvspass" name="cvsupdate">
-	   <cvs command="update" compression="3" cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" cvsRsh="rsh"/>
+	   <cvs command="update" compression="3" cvsRoot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" cvsRsh="rsh"/>
     </target>
 
    <target depends="compile" name="test">
