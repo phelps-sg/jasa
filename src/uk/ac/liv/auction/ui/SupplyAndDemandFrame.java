@@ -15,13 +15,10 @@
 
 package uk.ac.liv.auction.ui;
 
-import JSci.swing.JLineGraph;
-import JSci.swing.JGraphLayout;
-import JSci.awt.Graph2DModel;
-import JSci.awt.DefaultGraph2DModel;
-
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.SupplyAndDemandStats;
+
+import uchicago.src.sim.analysis.plot.*;
 
 import uk.ac.liv.util.io.DataSeriesWriter;
 
@@ -39,13 +36,14 @@ import org.apache.log4j.Logger;
  * @author Steve Phelps
  * @version $Revision$
  */
+
 public class SupplyAndDemandFrame extends JFrame {
 
   protected RoundRobinAuction auction;
 
   protected JButton updateButton;
 
-  protected JLineGraph graph;
+  protected RepastPlot graph;
 
   public static final String TITLE = "Supply and Demand Graph";
 
@@ -58,16 +56,10 @@ public class SupplyAndDemandFrame extends JFrame {
     BorderLayout layout = new BorderLayout();
     contentPane.setLayout(layout);
 
-    Graph2DModel supplyAndDemand = constructSupplyAndDemandModel();
-    graph = new JLineGraph(supplyAndDemand);
-    JPanel graphPanel = new JPanel(new JGraphLayout());
-    graphPanel.add(graph, "Graph");
-    graphPanel.add(new JLabel("Quantity"), "X-axis");
-    graphPanel.add(new JLabel("Price"), "Y-axis");
-
-    graphPanel.setPreferredSize(new Dimension(400,400));
-
-    contentPane.add(graphPanel, BorderLayout.CENTER);
+    graph = new RepastPlot(null);
+    plotSupplyAndDemand();
+    
+    contentPane.add(graph, BorderLayout.CENTER);
 
     updateButton = new JButton("Update");
     updateButton.addActionListener(new ActionListener() {
@@ -84,7 +76,8 @@ public class SupplyAndDemandFrame extends JFrame {
   }
 
   public void updateGraph() {
-    graph.setModel(constructSupplyAndDemandModel());
+    graph.clearPoints();
+    plotSupplyAndDemand();
     updateTitle();
   }
 
@@ -93,17 +86,20 @@ public class SupplyAndDemandFrame extends JFrame {
               auction.getRound());
   }
 
-  protected Graph2DModel constructSupplyAndDemandModel() {
+  protected void plotSupplyAndDemand() {
     DataSeriesWriter supplyCurve = new DataSeriesWriter();
     DataSeriesWriter demandCurve = new DataSeriesWriter();
     SupplyAndDemandStats stats =
         new SupplyAndDemandStats(auction, supplyCurve, demandCurve);
     stats.calculate();
     stats.generateReport();
-    DefaultGraph2DModel model = new DefaultGraph2DModel();
-    model.addSeries(supplyCurve);
-    model.addSeries(demandCurve);
-    return model;
+    plotCurve(0, supplyCurve);
+    plotCurve(1, demandCurve);
   }
 
+  protected void plotCurve( int seriesIndex, DataSeriesWriter curve ) {
+    for( int i=0; i<curve.length(); i++ ) {
+      graph.addPoint(seriesIndex, curve.getXCoord(i), curve.getYCoord(i), true);
+    }
+  }
 }
