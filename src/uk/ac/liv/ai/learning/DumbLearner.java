@@ -21,14 +21,16 @@ import uk.ac.liv.util.io.DataWriter;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+import java.io.Serializable;
+
 /**
  * A learner that chooses the same specified action on every iteration.
  *
  * @author Steve Phelps
  */
 
-public class DumbLearner implements DiscreteLearner,
-                                    uk.ac.liv.util.Parameterizable {
+public class DumbLearner implements
+                           DiscreteLearner, Parameterizable, Serializable {
 
   protected int action;
 

@@ -15,8 +15,7 @@
 
 package uk.ac.liv.ai.learning;
 
-import ec.util.MersenneTwisterFast;  // Fast random number generator
-
+import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -27,6 +26,8 @@ import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.MathUtil;
 import uk.ac.liv.util.io.DataWriter;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -71,7 +72,8 @@ public class RothErevLearner implements
                                 Resetable,
                                 StimuliResponseLearner,
                                 StochasticLearner,
-                                Parameterizable {
+                                Parameterizable,
+                                Serializable {
 
   /**
    * The number of choices available to make at each iteration.

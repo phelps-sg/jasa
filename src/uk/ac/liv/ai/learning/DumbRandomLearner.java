@@ -20,6 +20,8 @@ import ec.util.MersenneTwisterFast;
 
 import uk.ac.liv.util.io.DataWriter;
 
+import java.io.Serializable;
+
 /**
  * A learner that simply plays a random action on each iteration
  * without any learning.  This is useful for control experiments.
@@ -27,7 +29,8 @@ import uk.ac.liv.util.io.DataWriter;
  * @author Steve Phelps
  */
 
-public class DumbRandomLearner implements DiscreteLearner, StochasticLearner {
+public class DumbRandomLearner
+    implements DiscreteLearner, StochasticLearner, Serializable {
 
   protected MersenneTwisterFast prng;
 
