@@ -8,7 +8,7 @@
 
 # Number of games to play per entry in the payoff matrix
 #  (for real experiments should be 2000+)
-heuristic.numsamples = 10
+heuristic.numsamples = 100
 
 # Total number of agents in the game
 heuristic.numagents = 6
@@ -34,7 +34,7 @@ heuristic.strategy.2.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 heuristic.agent = uk.ac.liv.auction.zi.ZITraderAgent
 heuristic.agent.initialtradeentitlement = 1
 # Dummy valuer
-heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomValuer
+heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 # Dummy strategy 
 heuristic.agent.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
@@ -53,7 +53,7 @@ heuristic.auction.auctioneer.pricing.k = 0.5
 heuristic.prng = uk.ac.liv.prng.MT
 
 # Store results in this file in CSV format
-heuristic.results = payoffs.csv
+heuristic.results = /tmp/payoffs.csv
 
 # log4j configuration - substitute DEBUG for INFO to turn on debugging output
 
@@ -66,6 +66,7 @@ log4j.appender.stdout.layout.ConversionPattern=%m%n
 
 log4j.appender.dfile=org.apache.log4j.FileAppender
 log4j.appender.dfile.file=/tmp/debug.out
+log4j.appender.dfile.append=false
 log4j.appender.dfile.layout=org.apache.log4j.PatternLayout
 log4j.appender.dfile.layout.ConversionPattern=%c: %m%n
 

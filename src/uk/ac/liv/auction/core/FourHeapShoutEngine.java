@@ -15,15 +15,13 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.util.BinaryHeap;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import java.io.Serializable;
 
-//import org.apache.commons.collections.BinaryHeap;
+import org.apache.commons.collections.buffer.PriorityBuffer;
 
 import org.apache.log4j.Logger;
 
@@ -52,22 +50,22 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   /**
    * Matched bids in ascending order
    */
-  protected BinaryHeap bIn = new BinaryHeap(greaterThan);
+  protected PriorityBuffer bIn = new PriorityBuffer(greaterThan);
 
   /**
    * Unmatched bids in descending order
    */
-  protected BinaryHeap bOut = new BinaryHeap(lessThan);
+  protected PriorityBuffer bOut = new PriorityBuffer(lessThan);
 
   /**
    * Matched asks in descending order
    */
-  protected BinaryHeap sIn = new BinaryHeap(lessThan);
+  protected PriorityBuffer sIn = new PriorityBuffer(lessThan);
 
   /**
    * Unmatched asks in ascending order
    */
-  protected BinaryHeap sOut = new BinaryHeap(greaterThan);
+  protected PriorityBuffer sOut = new PriorityBuffer(greaterThan);
 
   protected static AscendingShoutComparator greaterThan =
     new AscendingShoutComparator();
@@ -103,7 +101,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     prettyPrint("Runner-up asks", sOut);
   }
 
-  public void prettyPrint( String title, BinaryHeap shouts ) {
+  public void prettyPrint( String title, PriorityBuffer shouts ) {
     logger.info(title);
     logger.info("--------------");
     Iterator i = shouts.iterator();
@@ -174,12 +172,12 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
 
   
 
-  public int promoteShout( Shout shout, BinaryHeap from, BinaryHeap to,
-                            BinaryHeap matched ) throws DuplicateShoutException {
+  public int promoteShout( Shout shout, PriorityBuffer from, PriorityBuffer to,
+                            PriorityBuffer matched ) throws DuplicateShoutException {
 
     shout = unifyShout(shout, from);
     insertShout(matched, shout);
-    to.insert(from.pop());
+    to.add(from.get());
     return shout.getQuantity();
   }
 
@@ -290,18 +288,18 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   public List getMatchedShouts() {
     ArrayList result = new ArrayList(sIn.size() + bIn.size());
     while ( ! sIn.isEmpty() ) {
-      Shout sInTop = (Shout) sIn.pop();
-      Shout bInTop = (Shout) bIn.pop();
+      Shout sInTop = (Shout) sIn.get();
+      Shout bInTop = (Shout) bIn.get();
       int nS = sInTop.getQuantity();
       int nB = bInTop.getQuantity();
       if ( nS < nB ) {
         // split the bid
         Shout remainder = bInTop.split(nB-nS);
-        bIn.insert(remainder);
+        bIn.add(remainder);
       } else if ( nB < nS ) {
         // split the ask
         Shout remainder = sInTop.split(nS-nB);
-        sIn.insert(remainder);
+        sIn.add(remainder);
       }
       result.add(bInTop);
       result.add(sInTop);
@@ -347,14 +345,14 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * @param heap      The heap to remove shouts from.
    * @param quantity  The total quantity to remove.
    */
-  protected void reinsert( BinaryHeap heap, int quantity ) {
+  protected void reinsert( PriorityBuffer heap, int quantity ) {
 
     while ( quantity > 0 ) {
 
-      Shout top = (Shout) heap.pop();
+      Shout top = (Shout) heap.get();
 
       if ( top.getQuantity() > quantity ) {
-        heap.insert( top.split(top.getQuantity() - quantity) );
+        heap.add( top.split(top.getQuantity() - quantity) );
       }
 
       quantity -= top.getQuantity();
@@ -383,7 +381,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * @return A reference to the, possibly modified, shout.
    *
    */
-  protected static Shout unifyShout( Shout shout, BinaryHeap heap ) {
+  protected static Shout unifyShout( Shout shout, PriorityBuffer heap ) {
 
     Shout top = (Shout) heap.get();
 
@@ -392,7 +390,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     } else {
       if ( top.getQuantity() > shout.getQuantity() ) {
         Shout remainder = top.split( top.getQuantity() - shout.getQuantity() );
-        heap.insert(remainder);
+        heap.add(remainder);
       }
     }
 
@@ -408,9 +406,11 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   }
 
   
-  protected int displaceShout( Shout shout, BinaryHeap from, BinaryHeap to ) throws DuplicateShoutException {
+  protected int displaceShout( Shout shout, PriorityBuffer from, 
+                                PriorityBuffer to ) 
+                                  throws DuplicateShoutException {
     shout = unifyShout(shout, from);
-    to.insert(from.pop());
+    to.add(from.get());
     insertShout(from, shout);
     return shout.getQuantity();
   }
@@ -441,9 +441,10 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * @param shout The shout to insert
    *
    */
-  private static void insertShout( BinaryHeap heap, Shout shout ) throws DuplicateShoutException {
+  private static void insertShout( PriorityBuffer heap, Shout shout )
+                                          throws DuplicateShoutException {
     try {
-      heap.insert(shout);
+      heap.add(shout);
     } catch ( IllegalArgumentException e ) {
       logger.error(e);
       e.printStackTrace();

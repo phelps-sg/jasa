@@ -272,8 +272,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       auction.addEndOfDayListener(this);
       auction.run();
 
-//      payoffLogger.calculate();
-      payoffLogger.finalReport();
+      payoffLogger.calculate();
+//      payoffLogger.finalReport();
 
       for( int i=0; i<numStrategies; i++ ) {
         payoffs[i].newData(payoffLogger.getPayoff(strategies[i].getClass()));
