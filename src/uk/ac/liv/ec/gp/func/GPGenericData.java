@@ -19,6 +19,8 @@ import ec.gp.*;
 
 import huyd.poolit.*;
 
+import uk.ac.liv.util.Pooled;
+
 
 public class GPGenericData extends GPData {
 
@@ -29,7 +31,18 @@ public class GPGenericData extends GPData {
 
   public GPData copyTo( GPData other ) {
     ((GPGenericData) other).data = this.data;
+    //TODO What is the exact semantics of copyTo?  Is this safe for ADF calls?
     return other;
+  }
+
+  public GPGenericData safeCopy() {
+    GPGenericData copy = new GPGenericData();
+    if ( data instanceof Pooled ) {
+      copy.data = ((Pooled) data).newCopy();
+    } else {
+      copyTo(copy);
+    }
+    return copy;
   }
 
   public String toString() {

@@ -120,6 +120,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   static final String P_SELLERCAPACITY = "cs";
   static final String P_BUYERCAPACITY = "cb";
   static final String P_STRATEGYMIXER = "strategymixer";
+  static final String P_MEMORYSIZE = "memorysize";
 
   static final String DEFAULT_STATS_FILE = "coevolve-electricity-stats.csv";
 
@@ -201,6 +202,9 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     strategyMixer.setProblem(this);
     ((Parameterizable) strategyMixer).setup(state.parameters,
                                               base.push(P_STRATEGYMIXER));
+
+    GPTradingStrategy.setMemorySize(
+      state.parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null, 10));
 
 
     System.out.println("numSellers = " + numSellers);

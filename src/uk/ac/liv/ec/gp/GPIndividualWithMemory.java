@@ -15,7 +15,11 @@
 
 package uk.ac.liv.ec.gp;
 
+import uk.ac.liv.ec.gp.func.GPGenericDataPool;
 import uk.ac.liv.ec.gp.func.GPGenericData;
+
+import uk.ac.liv.util.Pooled;
+
 
 /**
  * @author Steve Phelps
@@ -31,12 +35,19 @@ public class GPIndividualWithMemory extends GPIndividualCtx  {
     this.memorySize = memorySize;
   }
 
-  public void set( long address, GPGenericData data ) {
-    memory[(int) (address % memorySize)] = data;
+  public void set( long address, GPGenericData newData ) {
+    GPGenericData existing = memory[(int) (address % memorySize)];
+    if ( existing != null ) {
+      if ( existing.data instanceof Pooled ) {
+        ((Pooled) existing.data).release();
+      }
+      GPGenericDataPool.release(existing);
+    }
+    memory[(int) (address % memorySize)] = newData.safeCopy();
   }
 
   public GPGenericData get( long address ) {
-    return memory[(int) (address % memorySize)];
+    return memory[(int) (address % memorySize)].safeCopy();
   }
 
 }

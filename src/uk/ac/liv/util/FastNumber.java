@@ -27,7 +27,8 @@ package uk.ac.liv.util;
  *
  */
 
-public abstract class FastNumber extends Number implements Comparable {
+public abstract class FastNumber extends Number
+    implements Comparable, Pooled {
 
   public abstract FastNumber multiply( FastNumber other );
 
@@ -37,6 +38,13 @@ public abstract class FastNumber extends Number implements Comparable {
 
   public abstract FastNumber divide( FastNumber other );
 
-  public abstract void release();
+  public Object newCopy() {
+    try {
+      return super.clone();
+    } catch ( CloneNotSupportedException e ) {
+      e.printStackTrace();
+      throw new Error(e.getMessage());
+    }
+  }
 
 }
