@@ -257,6 +257,10 @@ public class RothErevLearner implements Resetable, StimuliResponseLearner {
     return (new Double(value)).compareTo(new Double(0));
   }
 
+  public void setSeed( long seed ) {
+    randGenerator.setSeed(seed);
+  }
+
   public String toString() {
     StringBuffer str = new StringBuffer("(" + this.getClass() + " ");
     str.append("k:" + k + " r:" + r + " e:" + e + " ");

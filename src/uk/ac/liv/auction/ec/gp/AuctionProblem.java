@@ -3,11 +3,12 @@ package uk.ac.liv.auction.ec.gp;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
-
 import uk.ac.liv.auction.ec.gp.func.*;
 
+import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.io.CSVReader;
+import uk.ac.liv.util.*;
 
 import ec.util.*;
 import ec.*;
@@ -23,6 +24,7 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
 
   static final String P_TRADERS = "numtraders";
   static final String P_ROUNDS = "maxrounds";
+  static final String P_ITERATIONS = "iterations";
 
   static Random rand = new Random();
 
@@ -31,6 +33,7 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
 
   public int numTraders;
   public int maxRounds;
+  public int iterations;
 
   // We'll deep clone this anyway, even though we don't
   // need it by default!
@@ -55,6 +58,8 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
 
     // numTraders = state.parameters.getInt(base.push(P_TRADERS),null,1);
     maxRounds = state.parameters.getInt(base.push(P_ROUNDS),null,1);
+
+    iterations = state.parameters.getInt(base.push(P_ITERATIONS),null,100);
 
     auction = new RoundRobinAuction();
     auction.setMaximumRounds(maxRounds);
@@ -81,22 +86,36 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
     auctioneer.setGPContext(state, thread, stack, this);
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
-    auction.reset();
 
 
-    // Reset the agents
-    Iterator traders = auction.getTraderIterator();
-    while ( traders.hasNext() ) {
-      MREElectricityTrader agent = (MREElectricityTrader) traders.next();
-      //((NPTRothErevLearner) agent.getLearner()).setSeed( System.currentTimeMillis() );
-      agent.reset();
+    CummulativeStatCounter mpStats = new CummulativeStatCounter("relMarketPower");
+    CummulativeStatCounter efficiencyStats = new CummulativeStatCounter("efficiency");
+
+    for( int i=0; i<iterations; i++ ) {
+
+      // Reset the agents
+      Iterator traders = auction.getTraderIterator();
+      while ( traders.hasNext() ) {
+        MREElectricityTrader agent = (MREElectricityTrader) traders.next();
+        NPTRothErevLearner learner = (NPTRothErevLearner) agent.getLearner();
+        agent.reset();
+        learner.setSeed( System.currentTimeMillis() );
+      }
+      // Reset the auction
+      auction.reset();
+
+      // Run the market!
+      auction.run();
+
+      // Calculate and maintain stats
+      ElectricityStats stats = new ElectricityStats(0, 200, auction);
+      double relMarketPower = (double) (stats.mPB + stats.mPS) / 2.0f;
+      mpStats.newData(relMarketPower);
+      efficiencyStats.newData(stats.eA);
     }
 
-    auction.run();
-
-    ElectricityStats stats = new ElectricityStats(0, 200, auction);
-    float avMarketPower = (float) (stats.mPB + stats.mPS) / 2.0f;
-    float fitness = (Math.abs(avMarketPower) + 1-((float) stats.eA/100))/2;
+    float fitness = ((float) Math.abs(mpStats.getMean())
+                      + 1-((float) efficiencyStats.getMean()/100))/2;
     if ( Float.isNaN(fitness) ) {
       fitness = 100;
     }
@@ -108,11 +127,8 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
 
 
     System.out.println("\nFitness = " + fitness);
-    System.out.println("eA = " + stats.eA);
-    System.out.println("mPB = " + stats.mPB);
-    System.out.println("mPS = " + stats.mPS);
-    System.out.println("pBA = " + stats.pBA);
-    System.out.println("pSA = " + stats.pSA);
+    System.out.println(efficiencyStats);
+    System.out.println(mpStats);
   }
 
   public static void registerTraders( RoundRobinAuction auction, String traderConfigFile,
