@@ -53,8 +53,6 @@ import java.io.*;
 
 public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
-  String outputFileName  = "electricity-data.csv";
-
   String outputDir = "/tmp";
 
   int maxRounds = 1000;
@@ -70,7 +68,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   int K = 30;         // No. of possible different actions
   double X = 15000;
   double S1 = 9.0;
-  double auctioneerK = 0.5;
+  double auctioneerKSamples = 10;
+
+  boolean randomPrivateValues = false;
+
+  double minPrivateValue = 10;
+  double maxPrivateValue = 50;
 
   CSVWriter dataFile, distributionFile;
 
@@ -87,21 +90,23 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_OUTPUTFILENAME = "outputfile";
   static final String P_OUTPUTDIR = "outputdir";
   static final String P_ELECTRICITY = "electricity";
-
+  static final String P_AUCTIONEERKSAMPLES = "ksamples";
+  static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
+  static final String P_MINPRIVATEVALUE = "minprivatevalue";
+  static final String P_RANDOMPRIVATEVALUES = "randomprivatevalues";
 
   public ElectricityAuctionSimulation() {
   }
 
   public ElectricityAuctionSimulation( int maxRounds, double R, double E,
                                         int K, double X, double S1,
-                                        int iterations, String outputFileName ) {
+                                        int iterations ) {
     this.maxRounds = maxRounds;
     this.R = R;
     this.E = E;
     this.K = K;
     this.S1 = S1;
     this.iterations = iterations;
-    this.outputFileName = outputFileName;
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -114,15 +119,24 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     K = parameters.getIntWithDefault(base.push("k"), null, K);
     X = parameters.getDoubleWithDefault(base.push("x"), null, X);
     S1 = parameters.getDoubleWithDefault(base.push("s1"), null, S1);
-    auctioneerK =
-        parameters.getDoubleWithDefault(base.push("auctioneerk"), null, auctioneerK);
+
+    auctioneerKSamples =
+        parameters.getDoubleWithDefault(base.push(P_AUCTIONEERKSAMPLES),
+                                          null, auctioneerKSamples);
+
+    randomPrivateValues =
+        parameters.getBoolean(base.push(P_RANDOMPRIVATEVALUES), null,
+                                randomPrivateValues);
+
+    minPrivateValue =
+        parameters.getDoubleWithDefault(base.push(P_MINPRIVATEVALUE), null,
+                                            minPrivateValue);
+    maxPrivateValue =
+        parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null,
+                                            maxPrivateValue);
 
     iterations =
       parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
-
-    outputFileName =
-      parameters.getStringWithDefault(base.push(P_OUTPUTFILENAME), null,
-                                        outputFileName);
 
     outputDir =
       parameters.getStringWithDefault(base.push(P_OUTPUTDIR), null,
@@ -169,14 +183,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     System.out.println("K = " + K);
     System.out.println("X = " + X);
     System.out.println("S1 = " + S1);
-    System.out.println("Data File = " + outputFileName);
-
-    try {
-      dataFile = new CSVWriter(
-                    new FileOutputStream(outputDir + "/" + outputFileName), 6);
-    } catch ( IOException e ) {
-      e.printStackTrace();
-    }
+    System.out.println("random private values = " + randomPrivateValues);
 
     auction = new RandomRobinAuction("Electricity Auction");
     stats = new ElectricityStats(auction);
@@ -192,58 +199,72 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
   public void experiment( int ns, int nb, int cs, int cb ) {
-    System.out.println("\n*** Experiment with parameters");
-    System.out.println("ns = " + ns);
-    System.out.println("nb = " + nb);
-    System.out.println("cs = " + cs);
-    System.out.println("cb = " + cb);
 
     try {
-      String rothErevDataFileName = outputDir + "/rotherev-" + ns + "-" + nb
-                                      + "-" + cs + "-" + cb + ".csv";
+      String paramSummary = ns + "-" + nb + "-" + cs + "-" + cb;
+      String rothErevDataFileName = outputDir + "/rotherev-"
+                                      + paramSummary + ".csv";
       distributionFile = new CSVWriter(
                               new FileOutputStream(rothErevDataFileName), K);
+
+      dataFile = new CSVWriter(
+                  new FileOutputStream(outputDir + "/" + "npt-"
+                                        + paramSummary + ".csv"), 7);
+
     } catch ( IOException e ) {
       e.printStackTrace();
     }
 
-    CummulativeStatCounter efficiency = new CummulativeStatCounter("efficiency");
-    CummulativeStatCounter mPB = new CummulativeStatCounter("mPB");
-    CummulativeStatCounter mPS = new CummulativeStatCounter("mPS");
-    CummulativeStatCounter pSA = new CummulativeStatCounter("pSA");
-    CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
+    for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
 
-    for( int i=0; i<iterations; i++ ) {
-      ElectricityStats results = runExperiment(ns, nb, cs, cb);
-      efficiency.newData(results.eA);
-      mPB.newData(results.mPB);
-      mPS.newData(results.mPS);
-      pBA.newData(results.pBA);
-      pSA.newData(results.pSA);
-      //System.out.println("\nResults for iteration " + i + "\n" + results);
+      double auctioneerK = kMultiple/auctioneerKSamples;
+      System.out.println("\n*** Experiment with parameters");
+      System.out.println("ns = " + ns);
+      System.out.println("nb = " + nb);
+      System.out.println("cs = " + cs);
+      System.out.println("cb = " + cb);
+      System.out.println("k = " + auctioneerK);
+
+      CummulativeStatCounter efficiency = new CummulativeStatCounter("efficiency");
+      CummulativeStatCounter mPB = new CummulativeStatCounter("mPB");
+      CummulativeStatCounter mPS = new CummulativeStatCounter("mPS");
+      CummulativeStatCounter pSA = new CummulativeStatCounter("pSA");
+      CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
+
+      for( int i=0; i<iterations; i++ ) {
+        ElectricityStats results = runExperiment(ns, nb, cs, cb, auctioneerK);
+        efficiency.newData(results.eA);
+        mPB.newData(results.mPB);
+        mPS.newData(results.mPS);
+        pBA.newData(results.pBA);
+        pSA.newData(results.pSA);
+        //System.out.println("\nResults for iteration " + i + "\n" + results);
+      }
+      System.out.println("\n*** Summary results for ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
+      System.out.println(efficiency);
+      System.out.println(mPB);
+      System.out.println(mPS);
+      System.out.println(pSA);
+      System.out.println(pBA);
+      dataFile.newData(auctioneerK);
+      dataFile.newData(efficiency.getMean());
+      dataFile.newData(efficiency.getStdDev());
+      dataFile.newData(mPB.getMean());
+      dataFile.newData(mPB.getStdDev());
+      dataFile.newData(mPS.getMean());
+      dataFile.newData(mPS.getStdDev());
+      Iterator i = auction.getTraderIterator();
+      while ( i.hasNext() ) {
+        ElectricityTrader trader = (ElectricityTrader) i.next();
+        RothErevLearner learner = (RothErevLearner) ((StimuliResponseStrategy) trader.getStrategy()).getLearner();
+        learner.dumpDistributionToCSV(distributionFile);
+      }
     }
-    System.out.println("\n*** Summary results for ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
-    System.out.println(efficiency);
-    System.out.println(mPB);
-    System.out.println(mPS);
-    System.out.println(pSA);
-    System.out.println(pBA);
-    dataFile.newData(efficiency.getMean());
-    dataFile.newData(efficiency.getStdDev());
-    dataFile.newData(mPB.getMean());
-    dataFile.newData(mPB.getStdDev());
-    dataFile.newData(mPS.getMean());
-    dataFile.newData(mPS.getStdDev());
-    dataFile.flush();
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
-      RothErevLearner learner = (RothErevLearner) ((StimuliResponseStrategy) trader.getStrategy()).getLearner();
-      learner.dumpDistributionToCSV(distributionFile);
-    }
+    dataFile.close();
   }
 
-  public ElectricityStats runExperiment( int ns, int nb, int cs, int cb ) {
+  public ElectricityStats runExperiment( int ns, int nb, int cs, int cb,
+                                            double auctioneerK ) {
 
     StatsMarketDataLogger logger;
     ContinuousDoubleAuctioneer auctioneer;
@@ -273,6 +294,13 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
                                       int[] values ) {
     for( int i=0; i<num; i++ ) {
 
+      double value;
+      if ( randomPrivateValues ) {
+        value = minPrivateValue +
+                  (maxPrivateValue - minPrivateValue) * randGenerator.nextDouble();
+      } else {
+        value = values[i % values.length];
+      }
 
       ElectricityTrader trader =
         new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);

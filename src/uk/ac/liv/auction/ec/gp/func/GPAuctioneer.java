@@ -48,7 +48,8 @@ public class GPAuctioneer extends GPIndividualCtx
 
   protected MarketQuote currentQuote = null;
 
-  protected Shout clearBid, clearAsk;
+  protected Shout clearBid = new Shout();
+  protected Shout clearAsk = new Shout();
 
   protected Shout lastBid = new Shout();
   protected Shout lastAsk = new Shout();
@@ -92,8 +93,8 @@ public class GPAuctioneer extends GPIndividualCtx
     List shouts = shoutEngine.getMatchedShouts();
     Iterator i = shouts.iterator();
     while ( i.hasNext() ) {
-      Shout bid = (Shout) i.next();  Debug.assertTrue( bid.isBid() );
-      Shout ask = (Shout) i.next();  Debug.assertTrue( ask.isAsk() );
+      Shout bid = (Shout) i.next();
+      Shout ask = (Shout) i.next();
       double price = determineClearingPrice(bid, ask);
       auction.clear(ask, bid.getAgent(), ask.getAgent(), price, ask.getQuantity());
     }
@@ -101,8 +102,9 @@ public class GPAuctioneer extends GPIndividualCtx
 
 
   public double determineClearingPrice( Shout bid, Shout ask ) {
-    clearBid = bid;
-    clearAsk = ask;
+    clearBid.copyFrom(bid);
+    clearAsk.copyFrom(ask);
+    Debug.assertTrue( clearBid.getPrice() >= clearAsk.getPrice() );
     FastNumber result = evaluateNumberTree(0);
     result.release();
     if ( misbehaved ) {
@@ -154,7 +156,6 @@ public class GPAuctioneer extends GPIndividualCtx
 
   public void endOfRoundProcessing() {
     clear();
-    shoutEngine.reset();
   }
 
 
@@ -175,7 +176,7 @@ public class GPAuctioneer extends GPIndividualCtx
   }
 
   public synchronized void removeShout( Shout shout ) {
-    //shoutEngine.removeShout(shout);
+    shoutEngine.removeShout(shout);
   }
 
   public synchronized void printState() {

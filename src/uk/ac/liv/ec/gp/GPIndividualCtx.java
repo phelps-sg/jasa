@@ -58,6 +58,10 @@ public class GPIndividualCtx extends GPIndividual {
     this.context = context;
   }
 
+  public GPContext getGPContext() {
+    return context;
+  }
+
   public void evaluateTree( int treeNumber, GPData input ) {
     trees[treeNumber].child.eval(context.state, context.thread, input,
                                     context.stack, this, context.problem);
@@ -223,6 +227,9 @@ public class GPIndividualCtx extends GPIndividual {
     GPNode result = new uk.ac.liv.ec.gp.func.Nil();
     if ( scheme instanceof Symbol ) {
       Symbol className = (Symbol) map.get(scheme);
+      if ( className == null ) {
+        throw new Error("Symbol " + scheme + " not bound");
+      }
       try {
         Class c = Class.forName(className.toString());
         GPNode node = (GPNode) c.newInstance();

@@ -59,6 +59,8 @@ public class CoEvolveAuctionStatistics extends CoEvolveStrategyStatistics {
       println("Pricing rule:");
       printIndividual(auctioneer);
 
+      println("Misbehaved? " + auctioneer.misbehaved());
+
       println("\nMarket statistics:");
       println(auctioneer.getMarketStats().toString());
       println();
