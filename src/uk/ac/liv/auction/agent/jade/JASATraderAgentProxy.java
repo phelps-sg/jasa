@@ -32,6 +32,7 @@ import jade.content.onto.OntologyException;
  * @see uk.ac.liv.auction.agent.RoundRobinTrader
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader {

@@ -25,6 +25,7 @@ import uk.ac.liv.auction.core.Auction;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface Strategy {

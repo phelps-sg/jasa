@@ -32,6 +32,7 @@ import uk.ac.liv.ai.learning.RothErevLearner;
  *  </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class NPTRothErevLearner extends RothErevLearner {

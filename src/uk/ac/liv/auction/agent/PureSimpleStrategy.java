@@ -42,6 +42,7 @@ import java.io.Serializable;
  * </table>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class PureSimpleStrategy extends FixedQuantityStrategyImpl

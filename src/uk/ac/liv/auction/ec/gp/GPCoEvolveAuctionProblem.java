@@ -44,6 +44,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
  * using GP.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {

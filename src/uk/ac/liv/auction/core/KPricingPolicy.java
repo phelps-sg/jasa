@@ -25,6 +25,7 @@ import ec.util.ParameterDatabase;
  * k.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class KPricingPolicy implements PricingPolicy, Parameterizable {

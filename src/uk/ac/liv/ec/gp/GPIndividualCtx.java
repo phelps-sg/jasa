@@ -35,6 +35,7 @@ import java.io.Serializable;
  * A temporary place to put some misc ECJ extensions.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPIndividualCtx extends GPIndividual implements Serializable {

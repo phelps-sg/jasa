@@ -43,6 +43,7 @@ import uk.ac.liv.util.Resetable;
  *
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class CombiMarketDataLogger

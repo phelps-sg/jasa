@@ -25,6 +25,7 @@ import java.io.Serializable;
  * in ascending order.
  *
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

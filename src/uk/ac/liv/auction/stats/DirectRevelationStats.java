@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class DirectRevelationStats implements Resetable, Serializable {

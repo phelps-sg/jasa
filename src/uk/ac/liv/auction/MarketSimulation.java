@@ -65,6 +65,7 @@ import org.apache.log4j.PropertyConfigurator;
  * </table>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class MarketSimulation implements Parameterizable, Runnable,

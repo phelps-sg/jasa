@@ -22,6 +22,7 @@ package uk.ac.liv.auction.agent;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface FixedQuantityStrategy extends Strategy {

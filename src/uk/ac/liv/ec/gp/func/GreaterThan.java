@@ -20,6 +20,7 @@ import ec.*;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GreaterThan extends GPNode {

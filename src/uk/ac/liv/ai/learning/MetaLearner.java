@@ -27,6 +27,7 @@ import java.io.Serializable;
 /**
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class MetaLearner

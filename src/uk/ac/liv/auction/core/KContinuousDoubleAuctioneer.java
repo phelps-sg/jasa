@@ -31,6 +31,7 @@ import java.io.Serializable;
  * The clearing operation is performed every time a shout arrives.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class KContinuousDoubleAuctioneer extends KAuctioneer {

@@ -56,6 +56,7 @@ import org.apache.log4j.PropertyConfigurator;
  * these results.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ZIPExperiment implements Parameterizable, Runnable,

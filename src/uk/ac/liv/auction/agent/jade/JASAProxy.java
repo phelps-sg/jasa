@@ -22,6 +22,7 @@ import jade.core.AID;
  * Super-class for JASA/JADE proxies.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class JASAProxy {

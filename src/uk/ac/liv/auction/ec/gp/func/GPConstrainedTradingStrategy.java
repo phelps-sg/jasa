@@ -20,6 +20,7 @@ import uk.ac.liv.auction.agent.*;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPConstrainedTradingStrategy extends GPTradingStrategy {

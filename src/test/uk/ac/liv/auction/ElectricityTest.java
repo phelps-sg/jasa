@@ -47,6 +47,7 @@ import org.apache.log4j.*;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class ElectricityTest extends TestCase {

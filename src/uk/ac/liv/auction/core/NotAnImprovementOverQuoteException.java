@@ -21,6 +21,7 @@ package uk.ac.liv.auction.core;
  * over the current best bid.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 public class NotAnImprovementOverQuoteException extends IllegalShoutException {
 

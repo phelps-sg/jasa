@@ -29,6 +29,7 @@ import java.util.Vector;
  * agents and strategies for GPElectricityTradingProblems.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class StrategyMixer implements Parameterizable {

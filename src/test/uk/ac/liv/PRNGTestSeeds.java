@@ -22,6 +22,7 @@ package test.uk.ac.liv;
  * current system time when using the null argument constructor.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class PRNGTestSeeds {

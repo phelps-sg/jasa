@@ -44,6 +44,7 @@ import org.apache.log4j.BasicConfigurator;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class NPTReplicationTest extends ElectricityTest {

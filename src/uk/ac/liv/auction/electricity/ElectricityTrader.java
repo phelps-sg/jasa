@@ -55,6 +55,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ElectricityTrader extends AbstractTraderAgent {

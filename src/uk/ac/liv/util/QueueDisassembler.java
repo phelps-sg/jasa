@@ -22,6 +22,7 @@ import java.util.Iterator;
  * that is each item that is returned is removed from the top of the heap.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class QueueDisassembler implements Iterator {

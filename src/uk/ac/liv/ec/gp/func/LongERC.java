@@ -17,6 +17,7 @@ package uk.ac.liv.ec.gp.func;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

@@ -34,6 +34,7 @@ import uk.ac.liv.util.Parameterizable;
  * <td valign=top>(the quantity to bid for in each auction round)</td></tr>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class FixedQuantityStrategyImpl extends AbstractStrategy

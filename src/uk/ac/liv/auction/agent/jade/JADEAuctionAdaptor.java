@@ -49,6 +49,7 @@ import org.apache.log4j.Logger;
  * method invocations on the wrapped auction class.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent

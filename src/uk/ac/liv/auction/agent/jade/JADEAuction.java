@@ -22,6 +22,7 @@ import uk.ac.liv.auction.core.*;
  * ends only when all agents have submitted shouts.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class JADEAuction extends RandomRobinAuction {

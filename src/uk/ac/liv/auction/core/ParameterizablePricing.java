@@ -23,6 +23,7 @@ package uk.ac.liv.auction.core;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface ParameterizablePricing {

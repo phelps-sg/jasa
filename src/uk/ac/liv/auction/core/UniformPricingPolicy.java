@@ -23,6 +23,7 @@ import java.io.Serializable;
  * the parameter k.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class UniformPricingPolicy extends KPricingPolicy

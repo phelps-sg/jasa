@@ -21,6 +21,7 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class FinalRoundElectricityStats extends ElectricityStats {

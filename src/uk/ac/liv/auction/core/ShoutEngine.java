@@ -24,6 +24,7 @@ import java.util.List;
  * etc.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface ShoutEngine extends uk.ac.liv.util.Resetable {

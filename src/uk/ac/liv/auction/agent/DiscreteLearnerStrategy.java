@@ -42,6 +42,7 @@ import ec.util.ParameterDatabase;
  * </table>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class DiscreteLearnerStrategy extends FixedQuantityStrategyImpl

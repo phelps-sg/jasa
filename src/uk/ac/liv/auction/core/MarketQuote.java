@@ -21,6 +21,7 @@ import java.io.Serializable;
  * Encapsulation of market-quote data.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class MarketQuote implements Serializable {

@@ -36,6 +36,7 @@ import java.util.Iterator;
  * </table>
 
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class KAuctioneer extends AbstractAuctioneer

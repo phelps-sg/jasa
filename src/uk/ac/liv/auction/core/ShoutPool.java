@@ -24,6 +24,7 @@ import uk.ac.liv.util.Debug;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ShoutPool {

@@ -41,6 +41,7 @@ import java.util.Iterator;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger

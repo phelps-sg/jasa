@@ -21,6 +21,7 @@ import jade.content.Predicate;
  * A predicate stating information about a successful bid.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class BidSuccessfulPredicate implements Predicate {

@@ -21,6 +21,7 @@ import uk.ac.liv.util.io.DataWriter;
  * A learner that learns a discrete number of different actions.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface DiscreteLearner extends Learner {

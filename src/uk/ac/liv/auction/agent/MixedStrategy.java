@@ -54,6 +54,7 @@ import java.io.Serializable;
  * </table>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class MixedStrategy extends AbstractStrategy implements Parameterizable,

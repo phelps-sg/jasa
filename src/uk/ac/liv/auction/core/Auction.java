@@ -23,6 +23,7 @@ import uk.ac.liv.auction.agent.TraderAgent;
  * @see AuctionImpl
  *
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

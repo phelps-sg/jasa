@@ -27,6 +27,7 @@ import java.io.Serializable;
  * without any learning.  This is useful for control experiments.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class DumbRandomLearner

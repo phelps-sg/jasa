@@ -20,6 +20,7 @@ import huyd.poolit.*;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class FastLongPool {

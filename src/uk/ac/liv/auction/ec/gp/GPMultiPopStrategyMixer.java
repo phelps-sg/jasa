@@ -28,6 +28,7 @@ import java.util.Vector;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPMultiPopStrategyMixer extends StrategyMixer {

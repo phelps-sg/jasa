@@ -23,6 +23,7 @@ import java.io.Serializable;
  * parameter k.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class DiscriminatoryPricingPolicy extends KPricingPolicy

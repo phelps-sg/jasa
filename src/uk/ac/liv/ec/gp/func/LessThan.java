@@ -20,6 +20,7 @@ import ec.*;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

@@ -102,6 +102,7 @@ import org.apache.log4j.Logger;
  * @see uk.ac.liv.auction.agent.RoundRobinTrader
  *
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

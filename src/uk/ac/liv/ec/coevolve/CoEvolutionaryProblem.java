@@ -21,6 +21,7 @@ import java.util.Vector;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface CoEvolutionaryProblem  {

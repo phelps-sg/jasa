@@ -30,6 +30,7 @@ import uk.ac.liv.util.CummulativeStatCounter;
 /**
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ElectricityStatsTest extends ElectricityTest {

@@ -28,6 +28,7 @@ import java.io.Serializable;
  * from the different possible events.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class DiscreteProbabilityDistribution

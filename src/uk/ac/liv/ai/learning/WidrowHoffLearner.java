@@ -29,6 +29,7 @@ import java.io.Serializable;
  * for 1-dimensional training sets.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class WidrowHoffLearner implements MimicryLearner,

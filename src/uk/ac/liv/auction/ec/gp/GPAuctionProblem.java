@@ -42,6 +42,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
  * Use GP to evolve auctioneers against non-GP strategies.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPAuctionProblem extends GPCoEvolveAuctionProblem

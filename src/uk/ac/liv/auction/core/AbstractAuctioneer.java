@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
  * classes.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class AbstractAuctioneer implements Auctioneer, Resetable {

@@ -24,6 +24,7 @@ package uk.ac.liv.util;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface Resetable {

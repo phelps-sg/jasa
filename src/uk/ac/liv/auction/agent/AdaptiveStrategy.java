@@ -24,6 +24,7 @@ import uk.ac.liv.ai.learning.Learner;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface AdaptiveStrategy extends Strategy {

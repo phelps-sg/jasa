@@ -24,6 +24,7 @@ import uk.ac.liv.util.Seedable;
  * can be seeded.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface StochasticLearner extends Learner, Seedable {

@@ -37,6 +37,7 @@ import uk.ac.liv.ec.gp.GPBestStatistics;
  * <p>Copyright: Copyright (c) 2002</p>
  * <p> </p>
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

@@ -20,6 +20,7 @@ package uk.ac.liv.ai.learning;
  * signal.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface MimicryLearner extends ContinuousLearner {

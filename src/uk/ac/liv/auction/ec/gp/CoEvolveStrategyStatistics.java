@@ -17,6 +17,7 @@ import uk.ac.liv.ec.gp.GPBestStatistics;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class CoEvolveStrategyStatistics extends GPBestStatistics {

@@ -22,6 +22,7 @@ package uk.ac.liv.auction.ec.gp;
  * fitness values in the range [0,1].
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class NormalisationFunctions {

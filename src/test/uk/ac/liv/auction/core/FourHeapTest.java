@@ -27,6 +27,7 @@ import junit.framework.*;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class FourHeapTest extends TestCase {

@@ -27,6 +27,7 @@ import uk.ac.liv.auction.core.Shout;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface RoundRobinTrader extends TraderAgent, Resetable {

@@ -21,6 +21,7 @@ package uk.ac.liv.util;
  * stochastic component whose PRNG can be seeded.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface Seedable {

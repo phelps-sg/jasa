@@ -34,6 +34,7 @@ import jade.lang.acl.ACLMessage;
  * @see Auction
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 public class JASAAuctionProxy extends JASAProxy implements Auction {
 

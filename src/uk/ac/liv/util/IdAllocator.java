@@ -32,6 +32,7 @@ package uk.ac.liv.util;
  * </code>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class IdAllocator {

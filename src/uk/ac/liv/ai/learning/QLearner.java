@@ -57,6 +57,7 @@ import ec.util.Parameter;
  * </table>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 

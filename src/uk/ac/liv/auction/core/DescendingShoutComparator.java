@@ -24,6 +24,7 @@ import java.io.Serializable;
  * order; that is, highest price first.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class DescendingShoutComparator implements Comparator, Serializable {

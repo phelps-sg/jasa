@@ -20,6 +20,7 @@ package uk.ac.liv.util;
  * Miscalleneous mathematical functions.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class MathUtil {

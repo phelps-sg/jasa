@@ -37,6 +37,7 @@ import java.io.Serializable;
  * successive auction rounds.
  *
  * @author Steve Phelps
+ * @version $Revision$
  * </p>
  */
 

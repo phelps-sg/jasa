@@ -32,6 +32,7 @@ import java.awt.*;
  * interacting with a human trader.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class InteractiveTraderAgent extends AbstractTraderAgent {

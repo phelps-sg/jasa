@@ -42,6 +42,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
  * Abstract super-class for electricity-trading scenarios.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class GPElectricityTradingProblem extends GPProblem {

@@ -45,6 +45,7 @@ import org.apache.log4j.Logger;
  * A frame for monitoring and controlling the progress of an auction.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 public class AuctionConsoleFrame extends JFrame
     implements Observer, Resetable {

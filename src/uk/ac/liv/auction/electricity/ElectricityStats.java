@@ -48,6 +48,7 @@ import uk.ac.liv.auction.agent.*;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ElectricityStats implements Serializable, Cloneable, MarketStats {

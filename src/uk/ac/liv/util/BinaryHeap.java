@@ -29,6 +29,7 @@ import java.io.Serializable;
  * a way that retrieving the smallest, or largest, item can be done in O(1) time.
  *
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

@@ -21,6 +21,7 @@ package uk.ac.liv.auction.core;
  * agents to see each others shouts.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ShoutsNotVisibleException extends AuctionException {

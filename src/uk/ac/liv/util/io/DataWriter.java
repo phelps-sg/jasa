@@ -22,6 +22,7 @@ import java.util.Iterator;
  * Interface for logging data to a back-end store.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface DataWriter {

@@ -31,6 +31,7 @@ import ec.util.MersenneTwisterFast;   // Fast random number generator
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class RandomRobinAuction extends RoundRobinAuction

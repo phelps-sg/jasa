@@ -74,6 +74,7 @@ import org.apache.log4j.Logger;
  * @see TraderAgent
  * @see uk.ac.liv.auction.core.RoundRobinAuction
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class AbstractTraderAgent implements PrivateValueTrader,

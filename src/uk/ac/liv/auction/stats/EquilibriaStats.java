@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class EquilibriaStats extends DirectRevelationStats

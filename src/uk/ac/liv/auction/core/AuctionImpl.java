@@ -31,6 +31,7 @@ import java.util.Observable;
  * logging facilities.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public abstract class AuctionImpl extends Observable

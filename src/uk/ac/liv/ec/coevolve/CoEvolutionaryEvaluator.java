@@ -25,6 +25,7 @@ import uk.ac.liv.ec.gp.GPIndividualCtx;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class CoEvolutionaryEvaluator extends Evaluator {

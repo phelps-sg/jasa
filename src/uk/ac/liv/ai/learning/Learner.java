@@ -23,6 +23,7 @@ import uk.ac.liv.util.io.DataWriter;
  * a learning algorithm.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface Learner {

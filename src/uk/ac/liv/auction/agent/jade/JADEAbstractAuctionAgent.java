@@ -53,6 +53,7 @@ import org.apache.log4j.Logger;
  * Super-class for all JADE auction agents.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
 

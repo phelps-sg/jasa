@@ -27,6 +27,7 @@ import java.awt.*;
  * </p>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class InteractiveTraderDialog extends JDialog {

@@ -25,6 +25,7 @@ import ec.util.MersenneTwisterFast;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class CummulativeStatCounterTest extends TestCase {

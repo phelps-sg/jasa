@@ -20,6 +20,7 @@ package uk.ac.liv.ai.learning;
  * learning algorithms for markoff descision processes.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface MDPLearner extends DiscreteLearner {

@@ -42,6 +42,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
  * Scenario in which we co-evolve trading strategies using GP.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem

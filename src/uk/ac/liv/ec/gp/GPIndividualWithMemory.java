@@ -23,6 +23,7 @@ import uk.ac.liv.util.Pooled;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPIndividualWithMemory extends GPIndividualCtx  {

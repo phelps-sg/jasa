@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
  *  An AuctionConsoleFrame extended with a button to start the auction.
  *
  *  @author Steve Phelps
+ * @version $Revision$
  */
 public class ManagerUIFrame extends AuctionConsoleFrame {
 

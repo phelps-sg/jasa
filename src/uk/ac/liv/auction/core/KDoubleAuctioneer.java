@@ -31,6 +31,7 @@ import java.io.Serializable;
  * The clearing operation is performed at the end of every round.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class KDoubleAuctioneer extends KAuctioneer implements Serializable {

@@ -23,6 +23,7 @@ import java.util.HashMap;
  * in an electricity market.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class TransmissionGrid {

@@ -27,6 +27,7 @@ import java.io.Serializable;
  * A learner that chooses the same specified action on every iteration.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class DumbLearner implements

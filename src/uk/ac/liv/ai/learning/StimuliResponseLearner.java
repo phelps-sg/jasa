@@ -20,6 +20,7 @@ package uk.ac.liv.ai.learning;
  * reinformcement learning algorithms.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface StimuliResponseLearner extends DiscreteLearner {

@@ -37,6 +37,7 @@ import org.apache.log4j.Logger;
  * specified auction.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 public class SupplyAndDemandFrame extends JFrame {
 

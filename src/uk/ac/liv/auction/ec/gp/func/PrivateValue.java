@@ -28,6 +28,7 @@ import uk.ac.liv.util.FastDouble;
  * <p>Copyright: Copyright (c) 2002</p>
  * <p> </p>
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

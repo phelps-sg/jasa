@@ -24,6 +24,7 @@ import java.io.*;
  * A class for writing data to CSV (comma-separated variables) text files.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class CSVWriter implements Serializable, DataWriter {

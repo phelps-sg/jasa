@@ -48,6 +48,7 @@ import jade.domain.*;
  * JASA method invocations on the target JASA agent.
  *
  * @author Steve Phelps
+ * @version $Revision$
  *
  * @see AbstractTraderAgent
  */

@@ -22,6 +22,7 @@ package uk.ac.liv.ec.gp.func;
  * <p>Copyright: Copyright (c) 2002</p>
  * <p> </p>
  * @author Steve Phelps
+ * @version $Revision$
  *
  */
 

@@ -22,6 +22,7 @@ import ec.gp.*;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class GPContext implements Serializable {

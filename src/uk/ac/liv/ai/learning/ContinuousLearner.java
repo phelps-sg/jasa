@@ -19,6 +19,7 @@ package uk.ac.liv.ai.learning;
  * A learning algorithm that outputs a continuous signal.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public interface ContinuousLearner extends Learner {

@@ -30,6 +30,7 @@ import jade.core.AID;
  * @see uk.ac.liv.auction.core.Shout
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ACLShout implements Concept  {

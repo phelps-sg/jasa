@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 /**
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 public class EPRandomizer extends StandardRandomizer {
 

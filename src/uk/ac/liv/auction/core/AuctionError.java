@@ -17,6 +17,7 @@ package uk.ac.liv.auction.core;
 
 /**
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class AuctionError extends Error {

@@ -27,6 +27,7 @@ import uk.ac.liv.util.Debug;
  * collections.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class ListMarketDataLogger implements MarketDataLogger {

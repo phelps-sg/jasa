@@ -28,6 +28,7 @@ import uk.ac.liv.util.Resetable;
  * combination thereof.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 public interface MarketDataLogger {
 

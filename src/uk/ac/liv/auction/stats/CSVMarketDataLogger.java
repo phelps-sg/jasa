@@ -47,6 +47,7 @@ import java.io.*;
  * </table>
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class CSVMarketDataLogger extends DataWriterMarketDataLogger

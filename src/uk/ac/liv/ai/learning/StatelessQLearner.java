@@ -34,6 +34,7 @@ import java.io.Serializable;
  * wrapper into thinking that there is only one state.
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
 public class StatelessQLearner
