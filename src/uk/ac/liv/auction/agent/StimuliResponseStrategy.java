@@ -38,6 +38,9 @@ public class StimuliResponseStrategy extends AbstractStrategy {
     super(agent);
   }
 
+  public StimuliResponseStrategy() {
+  }
+
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 

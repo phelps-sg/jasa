@@ -90,6 +90,11 @@ public class RothErevLearner implements
    */
   int lastAction;
 
+  static final int    DEFAULT_K   = 100;
+  static final double DEFAULT_R   = 0.1;
+  static final double DEFAULT_E   = 0.2;
+  static final double DEFAULT_S1  = 1.0;
+
 
   /**
    * Construct a new learner.
@@ -112,12 +117,17 @@ public class RothErevLearner implements
     randGenerator.setSeed(seed);
   }
 
+  public RothErevLearner() {
+    this(DEFAULT_K, DEFAULT_R, DEFAULT_E, DEFAULT_S1);
+  }
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    k = parameters.getIntWithDefault(base.push("k"), null, 40);
-    r = parameters.getDoubleWithDefault(base.push("r"), null, 0.1);
-    e = parameters.getDoubleWithDefault(base.push("e"), null, 0.2);
-    s1 = parameters.getDoubleWithDefault(base.push("s1"), null, 1);
+    k = parameters.getIntWithDefault(base.push("k"), null, DEFAULT_K);
+    r = parameters.getDoubleWithDefault(base.push("r"), null, DEFAULT_R);
+    e = parameters.getDoubleWithDefault(base.push("e"), null, DEFAULT_E);
+    s1 = parameters.getDoubleWithDefault(base.push("s1"), null, DEFAULT_S1);
     validateParams();
+    initialise();
   }
 
   protected void validateParams() {
