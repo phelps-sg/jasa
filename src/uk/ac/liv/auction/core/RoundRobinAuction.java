@@ -133,6 +133,11 @@ public class RoundRobinAuction extends AuctionImpl
    */
   protected int numTraders;
 
+  /**
+   * Were any shouts received in the last round of trading?
+   */
+  protected boolean shoutsReceived;
+
 
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
@@ -210,9 +215,11 @@ public class RoundRobinAuction extends AuctionImpl
    * Remove a trader from the auction.
    */
   public void remove( RoundRobinTrader trader ) {
-    defunctTraders.add(trader);
-    if ( --numTraders == 0 ) {
-      close();
+    if ( !defunctTraders.contains(trader) ) {
+      defunctTraders.add(trader);
+      if ( --numTraders == 0 ) {
+        close();
+      }
     }
   }
 
@@ -333,12 +340,16 @@ public class RoundRobinAuction extends AuctionImpl
     if ( maximumRounds > 0 && round >= maximumRounds ) {
       close();
     } else {
+      shoutsReceived = false;
       requestShouts();
       updateQuoteLog(round, getQuote());
       round++;
       sweepDefunctTraders();
       auctioneer.endOfRoundProcessing();
       informRoundClosed();
+      if ( isQuiescent() ) {
+        close();
+      }
     }
 
     setChanged();
@@ -356,6 +367,7 @@ public class RoundRobinAuction extends AuctionImpl
     setChanged();
     notifyObservers();
     updateShoutLog(round, shout);
+    shoutsReceived = true;
   }
 
 
@@ -374,6 +386,13 @@ public class RoundRobinAuction extends AuctionImpl
 
   public List getTraderList() {
     return registeredTraders;
+  }
+
+  /**
+   * Returns true if no bidding activity occured in the latest auction round.
+   */
+  public boolean isQuiescent() {
+    return !shoutsReceived;
   }
 
   /**
@@ -428,6 +447,7 @@ public class RoundRobinAuction extends AuctionImpl
     activeTraders.clear();
     activeTraders.addAll(registeredTraders);
     numTraders = activeTraders.size();
+    shoutsReceived = false;
   }
 
   protected void activate( TraderAgent agent ) {

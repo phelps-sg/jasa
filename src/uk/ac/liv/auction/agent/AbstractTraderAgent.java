@@ -233,6 +233,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   }
 
   public void auctionClosed( Auction auction ) {
+    ((RoundRobinAuction) auction).remove(this);
   }
 
   public void roundClosed( Auction auction ) {

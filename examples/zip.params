@@ -1,5 +1,5 @@
 simulation.auction = uk.ac.liv.auction.core.RoundRobinAuction
-simulation.auction.maximumrounds = 1000
+simulation.auction.maximumrounds = 10000
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
 u
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy

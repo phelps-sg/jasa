@@ -22,6 +22,8 @@ import uk.ac.liv.auction.agent.RoundRobinTrader;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.Logger;
+
 
 public class TestTrader extends AbstractTraderAgent {
 
@@ -37,6 +39,9 @@ public class TestTrader extends AbstractTraderAgent {
   int currentShoutIndex = 0;
   TestCase test;
 
+  static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
+
+
   public TestTrader( TestCase test, int stock, long funds ) {
     super(stock, funds);
     this.test = test;
@@ -49,7 +54,7 @@ public class TestTrader extends AbstractTraderAgent {
 
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                               double price, int quantity ) {
-    System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity);
+    logger.debug(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity);
     lastWinningShout = winningShout;
     lastWinningPrice = price;
   }
@@ -60,6 +65,7 @@ public class TestTrader extends AbstractTraderAgent {
 
   public void requestShout( Auction auction ) {
     if ( currentShoutIndex >= shouts.length ) {
+      logger.debug(this + ": all shouts made - quiting from auction");
       ((RoundRobinAuction) auction).remove(this); //TODO
       return;
     }
@@ -80,6 +86,8 @@ public class TestTrader extends AbstractTraderAgent {
   }
 
   public void auctionClosed( Auction auction ) {
+    logger.debug(this + ": recieved auctionClosed()");
+    ((RoundRobinAuction) auction).remove(this);
     receivedAuctionClosed = true;
     receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
   }

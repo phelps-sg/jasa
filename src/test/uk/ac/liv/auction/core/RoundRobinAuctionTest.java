@@ -23,6 +23,8 @@ import uk.ac.liv.auction.agent.RoundRobinTrader;
 
 import test.uk.ac.liv.auction.agent.TestTrader;
 
+import org.apache.log4j.Logger;
+
 
 public class RoundRobinAuctionTest extends TestCase {
 
@@ -30,9 +32,12 @@ public class RoundRobinAuctionTest extends TestCase {
   RoundRobinAuction auction;
   TestTrader[] traders;
 
+  static Logger logger = Logger.getLogger(RoundRobinAuctionTest.class);
+
 
   public RoundRobinAuctionTest( String name ) {
     super(name);
+    org.apache.log4j.BasicConfigurator.configure();
   }
 
   public void setUpTraders() {
@@ -109,6 +114,9 @@ public class RoundRobinAuctionTest extends TestCase {
     assertTrue(!auction.closed());
 
     auction.run();
+
+    logger.debug("quiescent = " + auction.isQuiescent());
+    logger.debug("no of traders = " + auction.getNumberOfTraders());
 
     assertTrue( auction.closed() );
     assertTrue( auction.getNumberOfTraders() == 0 );
