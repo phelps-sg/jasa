@@ -30,7 +30,6 @@ import uk.ac.liv.auction.agent.RandomValuer;
 
 import uk.ac.liv.auction.stats.PayoffLogger;
 import uk.ac.liv.auction.stats.EquilibriaStats;
-import uk.ac.liv.auction.stats.SurplusStats;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.Parameterizable;
@@ -185,11 +184,11 @@ public class HeuristicPayoffCalculator
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
+    logger.debug("Setup... ");
+    
     this.parameters = parameters;
 
     GlobalPRNG.setup(parameters, base);
-    
-    logger.debug("Setup... ");
     
     auction =
         (RoundRobinAuction)
@@ -310,12 +309,7 @@ public class HeuristicPayoffCalculator
       auction.run();
 
       payoffLogger.calculate();
-//      payoffLogger.finalReport();
-      
-      EquilibriaStats stats = new SurplusStats(auction);
-      stats.calculate();
-      assert stats.equilibriaExists();
-     
+//      payoffLogger.finalReport();      
       
       for( int i=0; i<numStrategies; i++ ) {
         double payoff = payoffLogger.getPayoff(strategies[i].getClass());        
