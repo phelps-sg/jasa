@@ -173,6 +173,36 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     //currentPrice = calculatePrice(margin);
   }
   
+  
+  
+  public double getCurrentPrice() {
+    return currentPrice;
+  }
+  
+  public Shout getLastShout() {
+    return lastShout;
+  }
+  
+  public boolean isLastShoutAccepted() {
+    return lastShoutAccepted;
+  }
+  
+  public double getScaling() {
+    return scaling;
+  }
+  
+  public double getTrAskPrice() {
+    return trAskPrice;
+  }
+  
+  public double getTrBidPrice() {
+    return trBidPrice;
+  }
+  
+  public double getTrPrice() {
+    return trPrice;
+  }
+  
   protected double calculatePrice( double margin ) {
     if ( agent.isBuyer() ) {
       return agent.getValuation(auction) * (1 - margin);
