@@ -1,30 +1,30 @@
-# This example demonstrates randomly changing supply and demand schedules
+# 
 #
 # To run this example, run the following command:
 #
-#  ant run -Dparams=examples/example3.params
+#  ant run -Dparams=examples/example7.params
 #
 
 # Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 
-simulation.auction.maximumdays = 1000
-simulation.auction.lengthofday = 5
+simulation.auction.maximumdays = 10000
+simulation.auction.lengthofday = 20
 
-simulation.auction.name = Example 3: Dynamic supply and demand
+simulation.auction.name = Example 7: Dynamic supply and demand
 
 # Use a double-auction with clearing occuring at the end of each round
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 
 # Set the transaction price as a function of individual bid and ask prices
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 
 # Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
 
 # Configure a combination of four different reports
 simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
-simulation.auction.report.n = 4
+simulation.auction.report.n = 3
 
 # The first report collects stats on the auction as it progresses
 simulation.auction.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
@@ -33,60 +33,42 @@ simulation.auction.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
 simulation.auction.report.1 = uk.ac.liv.auction.stats.GraphReport
 
 # Collect data on relative profits by agent group
-simulation.auction.report.2 = uk.ac.liv.auction.stats.GroupPayoffReport
-
-# The following report is used by the Kaplan strategy
-simulation.auction.report.3 = uk.ac.liv.auction.stats.DailyStatsReport
+simulation.auction.report.2 = uk.ac.liv.auction.stats.StrategyPayoffReport
+simulation.auction.report.2.quantity = 20
 
 # Show GUI console
 simulation.auction.console = true
 
 # Two populations of agents
-simulation.auction.agenttype.n = 3
+simulation.auction.agenttype.n = 2
 
-# 1st population-
-#  40 electricity sellers with a capacity of 10MWh
-#  using the Roth-Erev strategy (with NPT modifications)
 simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.0.group = 0
-simulation.auction.agenttype.0.numagents = 40
-simulation.auction.agenttype.0.initialtradeentitlement = 10
+simulation.auction.agenttype.0.numagents = 250
+simulation.auction.agenttype.0.initialtradeentitlement = 20
 simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.DailyRandomValuer
-simulation.auction.agenttype.0.valuer.minvalue = 50
-simulation.auction.agenttype.0.valuer.maxvalue = 100
+simulation.auction.agenttype.0.valuer.minvalue = 60
+simulation.auction.agenttype.0.valuer.maxvalue = 120
 simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-simulation.auction.agenttype.0.strategy.markupscale = 10
-simulation.auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
-simulation.auction.agenttype.0.strategy.learner.k = 10
+simulation.auction.agenttype.0.strategy.markupscale = 1
+simulation.auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.StatelessQLearner
+simulation.auction.agenttype.0.strategy.learner.e = 0.2
+simulation.auction.agenttype.0.strategy.learner.k = 100
 simulation.auction.agenttype.0.isseller = true
 
-# 2nd population-
-#  50 electricity buyers with a capacity of 20MWh
-#  using a q-learning strategy
 simulation.auction.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.1.group = 1
-simulation.auction.agenttype.1.numagents = 30
-simulation.auction.agenttype.1.initialtradeentitlement = 10
+simulation.auction.agenttype.1.numagents = 250
+simulation.auction.agenttype.1.initialtradeentitlement = 20
 simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.DailyRandomValuer
 simulation.auction.agenttype.1.valuer.minvalue = 80
 simulation.auction.agenttype.1.valuer.maxvalue = 150
 simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-simulation.auction.agenttype.1.strategy.markupscale = 10
+simulation.auction.agenttype.1.strategy.markupscale = 1
 simulation.auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.StatelessQLearner
-simulation.auction.agenttype.1.strategy.learner.k = 10
+simulation.auction.agenttype.1.strategy.learner.e = 0.2
+simulation.auction.agenttype.1.strategy.learner.k = 100
 simulation.auction.agenttype.1.isseller = false
-
-#  3rd population-
-#   3 buyers using Kaplan
-simulation.auction.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.auction.agenttype.2.group = 2
-simulation.auction.agenttype.2.numagents = 30
-simulation.auction.agenttype.2.initialtradeentitlement = 10
-simulation.auction.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
-simulation.auction.agenttype.2.valuer.minvalue = 10
-simulation.auction.agenttype.2.valuer.maxvalue = 200
-simulation.auction.agenttype.2.strategy = uk.ac.liv.auction.agent.KaplanStrategy
-simulation.auction.agenttype.2.isseller = false
 
 # prng configuration
 
