@@ -41,6 +41,7 @@ public class DumbLearner extends AbstractLearner implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base) {
+    super.setup(parameters, base);
     action = parameters.getInt(base.push(P_ACTION), null, 0);
   }
 

@@ -73,6 +73,7 @@ public class WidrowHoffLearner extends AbstractLearner
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
     learningRate = parameters.getDouble(base.push(P_LEARNINGRATE), null, 0);
     momentum = parameters.getDouble(base.push(P_MOMENTUM), null, 0);
   }

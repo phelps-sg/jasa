@@ -367,10 +367,10 @@ public class AuctionConsoleFrame extends JFrame
     try {
       logger.debug("Invoking auction.pause()..");
       auction.pause();
-//      while (!auction.isPaused()) {
-//        //wait for auction to be paused
+      while (!auction.isPaused()) {
+        //wait for auction to be paused
 //        logger.debug("waiting for auction.isPaused()");
-//      }
+      }
       pauseButton.setEnabled(false);
       resumeButton.setEnabled(true);
       logger.debug("exiting pause()");

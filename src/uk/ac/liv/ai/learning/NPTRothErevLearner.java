@@ -28,7 +28,7 @@ import uk.ac.liv.ai.learning.RothErevLearner;
  * "Market Power and Efficiency in a Computational Electricity Market
  *  with Discriminatory Double-Auction Pricing"
  *  Nicolaisen, Petrov & Tesfatsion<br>
- *  in IEEE Trans. on Evol. Computation Vol. 5, No. 5, p 504.
+ *  in IEEE Transactions on Evolutionary Computation Vol. 5, No. 5, p 504.
  *  </p>
  *
  * @author Steve Phelps
@@ -60,6 +60,6 @@ public class NPTRothErevLearner extends RothErevLearner {
     } else {
       return q[i] * (e / (double) (k - 1));
     }
-  }  
+  }
 
 }

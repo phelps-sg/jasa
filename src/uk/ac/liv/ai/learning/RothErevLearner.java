@@ -154,6 +154,7 @@ public class RothErevLearner extends AbstractLearner implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
     k = parameters.getIntWithDefault(base.push("k"), null, DEFAULT_K);
     r = parameters.getDoubleWithDefault(base.push("r"), null, DEFAULT_R);
     e = parameters.getDoubleWithDefault(base.push("e"), null, DEFAULT_E);

@@ -55,6 +55,7 @@ public class StatelessQLearner extends AbstractLearner
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
     qLearner.setup(parameters, base);
   }
 

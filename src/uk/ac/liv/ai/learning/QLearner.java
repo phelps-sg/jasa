@@ -142,10 +142,12 @@ public class QLearner extends AbstractLearner
     initialise();
   }
 
+
   public QLearner() {
     this(0, 0, DEFAULT_EPSILON, DEFAULT_LEARNING_RATE,
           DEFAULT_DISCOUNT_RATE);
   }
+
 
   public void initialise() {
     for( int s=0; s<numStates; s++ ) {
@@ -159,13 +161,17 @@ public class QLearner extends AbstractLearner
     lastActionChosen = 0;
   }
 
+
   public void setStatesAndActions( int numStates, int numActions ) {
     this.numStates = numStates;
     this.numActions = numActions;
     q = new double[numStates][numActions];
   }
 
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    super.setup(parameters, base);
 
     learningRate =
       parameters.getDoubleWithDefault(base.push(P_LEARNING_RATE), null,
@@ -184,14 +190,17 @@ public class QLearner extends AbstractLearner
     setStatesAndActions(numStates, numActions);
   }
 
+
   public void setState( int newState ) {
     previousState = currentState;
     currentState = newState;
   }
 
+
   public int getState() {
     return currentState;
   }
+
 
   public int act() {
     double e = randGenerator.nextDouble();
@@ -203,16 +212,19 @@ public class QLearner extends AbstractLearner
     return lastActionChosen;
   }
 
+
   public void newState( double reward, int newState ) {
     updateQ(reward, newState);
     setState(newState);
   }
+
 
   protected void updateQ( double reward, int newState ) {
     q[currentState][lastActionChosen] =
       learningRate * (reward + discountRate * maxQ(newState))
         + (1-learningRate) * q[currentState][lastActionChosen];
   }
+
 
   public double maxQ( int newState ) {
     double max = Double.NEGATIVE_INFINITY;
@@ -225,50 +237,62 @@ public class QLearner extends AbstractLearner
     return max;
   }
 
+
   public int bestAction( int state ) {
     double payoff = maxQ(state);
     return bestAction;
   }
 
+
   public void reset() {
     initialise();
   }
+
 
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
 
+
   public void setDiscountRate( double discountRate ) {
     this.discountRate = discountRate;
   }
+
 
   public double getDiscountRate() {
     return discountRate;
   }
 
+
   public void setEpsilon( double epsilon ) {
     this.epsilon = epsilon;
   }
+
 
   public double getEpsilon() {
     return epsilon;
   }
 
+
   public int getLastActionChosen() {
     return lastActionChosen;
   }
+
 
   public double getLearningDelta() {
     return 0; //TODO
   }
 
+
   public void dumpState( DataWriter out ) {
     //TODO
   }
 
+
   public int getNumberOfActions() {
     return numActions;
   }
+
 
   public String toString() {
     return "(" + getClass() + " lastActionChosen:" + lastActionChosen
