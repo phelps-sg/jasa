@@ -59,7 +59,6 @@ public class NPTRothErevLearner extends RothErevLearner {
     } else {
       return q[i] * (e / (double) (k - 1));
     }
-  }
-
+  }  
 
 }

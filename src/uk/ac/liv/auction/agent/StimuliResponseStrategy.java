@@ -99,7 +99,7 @@ public class StimuliResponseStrategy extends AdaptiveStrategy {
 
   public String toString() {
     return "(" + getClass() + " markupscale:" + markupScale + " learner:" +
-              learner + "quantity:" + quantity + ")";      
+              learner + " quantity:" + quantity + ")";      
   }
 
 }

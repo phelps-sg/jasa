@@ -316,5 +316,9 @@ public class RothErevLearner implements
       out.newData(p.getProbability(i));
     }
   }
+    
+  public String toString() {
+    return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1 + ")";
+  }
 
 }

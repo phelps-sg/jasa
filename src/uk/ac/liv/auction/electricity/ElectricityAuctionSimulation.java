@@ -144,6 +144,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
 
   static final int DATAFILE_NUM_COLUMNS = 81;
+  static final int ITERRESULTS_NUM_COLUMNS = 9;
 
 
   public ElectricityAuctionSimulation() {
@@ -402,15 +403,15 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     logger.info("\nUsing global parameters:\n");
     logger.info("maxRounds = " + maxRounds);
     logger.info("iterations = " + iterations);
-    logger.info("auctioneer = " + auctioneer);
+    logger.info("auctioneer = " + auctioneer + "\n");
     logger.info("ns = " + numSellers);
     logger.info("nb = " + numBuyers);
     logger.info("cs = " + sellerCapacity);
-    logger.info("cb = " + buyerCapacity);
-    logger.info("stats = " + stats);
-    logger.info("randomizer = " + randomizer);
-    logger.info("buyer strategy = " + buyerStrategies[0]);
-    logger.info("seller strategy = " + sellerStrategies[0]);
+    logger.info("cb = " + buyerCapacity + "\n");
+    logger.info("stats = " + stats + "\n");
+    logger.info("randomizer = " + randomizer + "\n");
+    logger.info("buyer strategy = " + buyerStrategies[0] + "\n");
+    logger.info("seller strategy = " + sellerStrategies[0] + "\n");
   }
 
 
@@ -462,6 +463,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       iterResults.newData(stats.getEA());
       iterResults.newData(stats.getMPB());
       iterResults.newData(stats.getMPS());
+      iterResults.newData(stats.getSMPB());
+      iterResults.newData(stats.getSMPS());
       iterResults.newData(marketData.getTransPriceStats().getMean());
       iterResults.newData(marketData.getAskPriceStats().getMean());
       iterResults.newData(marketData.getBidPriceStats().getMean());
@@ -475,7 +478,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected void initIterResults( String filename ) throws FileNotFoundException {
     if ( collectIterData ) {
       FileOutputStream iterOut = new FileOutputStream(filename);
-      iterResults = new CSVWriter(iterOut, 7);
+      iterResults = new CSVWriter(iterOut, ITERRESULTS_NUM_COLUMNS);
     }
   }
 
