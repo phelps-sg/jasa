@@ -88,7 +88,7 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
     Iterator traders = auction.getTraderIterator();
     while ( traders.hasNext() ) {
       MREElectricityTrader agent = (MREElectricityTrader) traders.next();
-      ((NPTRothErevLearner) agent.getLearner()).setSeed( System.currentTimeMillis() );
+      //((NPTRothErevLearner) agent.getLearner()).setSeed( System.currentTimeMillis() );
       agent.reset();
     }
 

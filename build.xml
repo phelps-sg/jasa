@@ -45,5 +45,12 @@
 	<gzip src="jasa.tar" zipfile="jasa.tar.gz" />
     </target>
 
+    <target name="cvsupdate">
+	<cvs 
+		cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" 
+		command="update"
+	/>
+    </target>
+
 
 </project>

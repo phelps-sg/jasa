@@ -29,6 +29,8 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
 
   MarketQuote currentQuote;
 
+  protected Shout clearBid, clearAsk;
+
   // Why doesn't ECJ wrap this up in a context object?!
   EvolutionState contextState;
   int contextThread;
@@ -77,12 +79,14 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
   }
 
   public double determineClearingPrice( Shout bid, Shout ask ) {
+    clearBid = bid;
+    clearAsk = ask;
     GPNumberData input = new GPNumberData();
     try {
       trees[0].child.eval(contextState, contextThread, input, contextStack, this, contextProblem);
     } catch ( ArithmeticException e ) {
       System.out.println("Caught: " + e);
-      e.printStackTrace();
+      //e.printStackTrace();
       return 0;
     }
     return input.data.doubleValue();
