@@ -115,20 +115,16 @@ public class EquilibriaStats implements MarketStats, Resetable {
   }
 
   protected void calculateEquilibriaQtyRange() {
-    minQty = Integer.MAX_VALUE;
-    maxQty = Integer.MIN_VALUE;
+    int qty = 0;
     List matches = shoutEngine.getMatchedShouts();
     Iterator i = matches.iterator();
     while ( i.hasNext() ) {
       Shout bid = (Shout) i.next();
       Shout ask = (Shout) i.next();
-      if ( bid.getQuantity() < minQty ) {
-        minQty = bid.getQuantity();
-      }
-      if ( bid.getQuantity() > maxQty ) {
-        maxQty = bid.getQuantity();
-      }
+      qty += bid.getQuantity();      
     }
+    minQty = qty;
+    maxQty = qty;
   }
 
   protected void calculateEquilibriaPriceRange() {
