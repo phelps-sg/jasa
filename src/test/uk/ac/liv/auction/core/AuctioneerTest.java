@@ -37,11 +37,11 @@ public class AuctioneerTest extends TestCase {
     auctioneer = new KDoubleAuctioneer(auction, 0);
     auction.setAuctioneer(auctioneer);
 
-    trader1 = new TestTrader(this, 30, 1000);
-    trader2 = new TestTrader(this, 10, 10000);
-    trader3 = new TestTrader(this, 15, 10000);
-    trader4 = new TestTrader(this, 10, 10000);
-    trader5 = new TestTrader(this, 15, 10000);
+    trader1 = new TestTrader(this, 30, 1000, 400, false);
+    trader2 = new TestTrader(this, 10, 10000, 400, false);
+    trader3 = new TestTrader(this, 15, 10000, 1000, true);
+    trader4 = new TestTrader(this, 10, 10000, 1000, true);
+    trader5 = new TestTrader(this, 15, 10000, 1000, true);
   }
 
   public void testAuction1() {
