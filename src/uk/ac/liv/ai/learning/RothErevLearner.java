@@ -24,18 +24,20 @@ import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
-import uk.ac.liv.util.io.CSVWriter;
+import uk.ac.liv.util.io.DataWriter;
 
 /**
  * <p>
  * A class implementing the Roth-Erev learning algorithm.  This learning
- * algorithm is designed to produce aggregate human-like behaviour in
- * simple trading games.  See:
+ * algorithm is designed to mimic human-like behaviour in extensive form games.
+ * See:
  * </p>
  * <p>
  * A.E.Roth and I. Erev "Learning in extensive form games: experimental data
- * and simple dynamic models in the intermediate term" Games Econom. Beh., vol.8
+ * and simple dynamic models in the intermediate term"
+ * Games and Economic Behiour, Volume 8
  * </p>
+ *
  * @author Steve Phelps
  *
  */
@@ -272,7 +274,7 @@ public class RothErevLearner implements
     p.setSeed(seed);
   }
 
-  public void dumpDistributionToCSV( CSVWriter out ) {
+  public void dumpDistribution( DataWriter out ) {
     for( int i=0; i<k; i++ ) {
       out.newData(p.getProbability(i));
     }
