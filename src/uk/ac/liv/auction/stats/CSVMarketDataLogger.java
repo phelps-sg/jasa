@@ -60,6 +60,7 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
   static final String P_SHOUT_LOG_FILE = "shoutlogfile";
   static final String P_TRANS_LOG_FILE = "translogfile";
 
+  
   public void setup( ParameterDatabase parameters, Parameter base ) {
     String quoteLogFile = parameters.getString(base.push(P_QUOTE_LOG_FILE), null);
     String shoutLogFile = parameters.getString(base.push(P_SHOUT_LOG_FILE), null);

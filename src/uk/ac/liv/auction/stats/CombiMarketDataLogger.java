@@ -19,8 +19,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
+
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
+
+import uk.ac.liv.util.Parameterizable;
 
 /**
  * An implementation of MarketDataLogger that can be used to log
@@ -29,18 +34,36 @@ import uk.ac.liv.auction.core.Shout;
  * @author Steve Phelps
  */
 
-public class CombiDataLogger implements MarketDataLogger {
+public class CombiMarketDataLogger implements MarketDataLogger, Parameterizable {
 
   List loggers = null;
+  
+  static final String P_NUMLOGGERS = "n";
+  
 
-  public CombiDataLogger( List loggers ) {
+  public CombiMarketDataLogger(List loggers) {
     this.loggers = loggers;
   }
 
-  public CombiDataLogger() {
+  public CombiMarketDataLogger() {
     this.loggers = new LinkedList();
   }
 
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    
+    int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), null, 1);
+    
+    for( int i=0; i<numLoggers; i++ ) {      
+      MarketDataLogger logger = (MarketDataLogger)
+        parameters.getInstanceForParameter(base.push(i+""), null, 
+                                            MarketDataLogger.class);
+      if ( logger instanceof Parameterizable ) {
+        ((Parameterizable) logger).setup(parameters, base.push(i+""));
+      }
+      addLogger(logger);
+    }    
+  }
+  
   /**
    * Add a new logger
    */
