@@ -28,7 +28,7 @@ import java.util.Observable;
 
 /**
  * An abstract implementation of Auction that provides basic
- * logging facilities and an optional popup GUI console.
+ * logging facilities.
  *
  * @author Steve Phelps
  */
@@ -83,7 +83,7 @@ public abstract class AuctionImpl extends Observable
   protected Auctioneer auctioneer = null;
 
   /**
-   * Helper class for logging to CSV files
+   * The optional MarketDataLogger to log data to.
    */
   protected MarketDataLogger logger = null;
 

@@ -281,7 +281,7 @@ public class ZIPExperiment implements Parameterizable, Runnable,
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
-      ZIPStrategy strategy = new ZIPStrategy();
+      ZIPStrategy strategy = new ZIPStrategy(trader);
       double learningRate = 0.1 + paramPRNG.nextDouble() * 0.4;
       double momentum = 0.2 + paramPRNG.nextDouble() * 0.6;
       WidrowHoffLearner learner = new WidrowHoffLearner(learningRate, momentum);

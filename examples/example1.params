@@ -1,6 +1,6 @@
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.maximumrounds = 1000
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 u
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 simulation.auction.auctioneer.pricing.k = 0.5
@@ -21,8 +21,7 @@ simulation.auction.logger.2.translogfile = results/trprice.csv
 simulation.console = true
 
 # Gather meta-stats on market-equilibria
-simulation.gatherstats = true
-simulation.stats = uk.ac.liv.auction.stats.EquilibriaStats
+simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
 
 # Two populations of agents
 simulation.agenttype.n = 2
@@ -42,7 +41,7 @@ simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.1.numagents = 50
 simulation.agenttype.1.randomprivatevalue = true
 simulation.agenttype.1.maxprivatevalue = 100
-simulation.agenttype.1.capacity = 10
+simulation.agenttype.1.capacity = 20
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 simulation.agenttype.1.isseller = false

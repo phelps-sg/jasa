@@ -48,6 +48,7 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
   }
 
   public FixedQuantityStrategyImpl() {
+    this(null);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {

@@ -318,6 +318,7 @@ public class AuctionConsoleFrame extends JFrame
     logger.debug("rerunAuction()");
     auction.close();
     while ( !auction.closed() );
+    graphModel.clear();
     auction.reset();
     auctionRunner = new Thread(auction);
     auctionRunner.start();

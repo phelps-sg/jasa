@@ -35,6 +35,11 @@ import org.apache.log4j.Logger;
 import java.util.Iterator;
 
 /**
+ * <p>
+ * A MarketDataLogger that logs data to a graph model which can be
+ * rendered by JSCi's JLineGraph component.
+ * </p>
+ *
  * @author Steve Phelps
  */
 
@@ -143,6 +148,12 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public static GraphMarketDataLogger getSingletonInstance() {
     return singletonInstance;
+  }
+
+  public void clear() {
+    for( int i=0; i<allSeries.length; i++ ) {
+      ((MemoryResidentDataSeries) allSeries[i]).clear();
+    }
   }
 
 

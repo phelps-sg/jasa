@@ -122,7 +122,22 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    */
   public void printState() {
     //checkBalanced();
-    logger.debug(this.toString());
+    logger.info("Auction state:\n");
+    prettyPrint("Matched bids", bIn);
+    prettyPrint("Matched asks", sIn);
+    prettyPrint("Runner-up bids", bOut);
+    prettyPrint("Runner-up asks", sOut);
+  }
+
+  public void prettyPrint( String title, BinaryHeap shouts ) {
+    logger.info(title);
+    logger.info("--------------");
+    Iterator i = shouts.iterator();
+    while ( i.hasNext() ) {
+      Shout shout = (Shout) i.next();
+      logger.info(shout.toPrettyString());
+    }
+    logger.info("");
   }
 
 

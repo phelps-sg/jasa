@@ -20,6 +20,8 @@ import uk.ac.liv.auction.agent.TraderAgent;
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.IdAllocator;
 
+import java.text.DecimalFormat;
+
 import java.io.Serializable;
 
 /**
@@ -79,6 +81,9 @@ public class Shout implements Comparable, Cloneable, Serializable {
    * Used to allocate each agent with a unique id.
    */
   static IdAllocator idAllocator = new IdAllocator();
+
+  static DecimalFormat currencyFormatter =
+      new DecimalFormat("+#########0.00;-#########.00");
 
 
   public Shout( TraderAgent agent, int quantity, double price, boolean isBid ) {
@@ -178,6 +183,14 @@ public class Shout implements Comparable, Cloneable, Serializable {
     return "(" + getClass() + " id:" + id + " quantity:" + quantity +
                " price:" + price + " isBid:" + isBid + " accepted:" + accepted +
                " agent:" + agent + ")";
+  }
+
+  public String toPrettyString() {
+    double p = price;
+    if ( !isBid ) {
+      p = -p;
+    }
+    return currencyFormatter.format(p) + "/" + quantity;
   }
 
 

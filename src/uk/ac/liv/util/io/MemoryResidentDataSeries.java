@@ -66,6 +66,10 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
     isTime = !isTime;
   }
 
+  public void clear() {
+    data.clear();
+  }
+
   public float getValueAt( int datum ) {
     return (float) getDatum(datum);
   }

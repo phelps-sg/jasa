@@ -22,6 +22,7 @@ package uk.ac.liv.auction.core;
  *
  * @author Steve Phelps
  */
+
 public class ShoutsNotVisibleException extends AuctionException {
 
   public ShoutsNotVisibleException( String message ) {

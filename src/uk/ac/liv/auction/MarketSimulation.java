@@ -55,10 +55,6 @@ import org.apache.log4j.PropertyConfigurator;
  * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
  * <td valign=top>(the class of auction to use)</td></tr>
  *
- * <tr><td valign=top><i>base</i><tt>.gatherstats</tt><br>
- * <font size=-1>boolean</font></td>
- * <td valign=top>(gather market statistics at end of auction?)</td></tr>
- *
  * <tr><td valign=top><i>base</i><tt>.numagenttypes</tt><br>
  * <font size=-1>int</font></td>
  * <td valign=top>(the number of different agent types)</td></tr>
@@ -92,8 +88,6 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String P_AGENTS = "agents";
   public static final String P_CONSOLE = "console";
   public static final String P_SIMULATION = "simulation";
-  public static final String P_STATS = "stats";
-  public static final String P_GATHER_STATS = "gatherstats";
   public static final String P_SEED = "seed";
 
 
@@ -148,9 +142,6 @@ public class MarketSimulation implements Parameterizable, Runnable,
         parameters.getLongWithDefault(base.push(P_SEED), null,
                                        System.currentTimeMillis());
 
-    gatherStats =
-        parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
-
     auction =
       (RoundRobinAuction)
         parameters.getInstanceForParameterEq(base.push(P_AUCTION),
@@ -161,14 +152,6 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
     if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
       auction.activateGUIConsole();
-    }
-
-    if ( gatherStats ) {
-      stats =
-        (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS),
-                                                         null,
-                                                         MarketStats.class);
-      stats.setAuction(auction);
     }
 
     Parameter typeParam = base.push(P_AGENT_TYPE);
@@ -207,10 +190,6 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
   public void report() {
     auction.generateReport();
-    if ( gatherStats ) {
-      stats.calculate();
-      stats.generateReport();
-    }
   }
 
 

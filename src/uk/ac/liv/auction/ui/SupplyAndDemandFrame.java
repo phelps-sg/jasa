@@ -43,6 +43,10 @@ public class SupplyAndDemandFrame extends JFrame {
 
   protected GridBagLayout gridBag;
 
+  protected JButton updateButton;
+
+  protected JLineGraph graph;
+
   public static final String TITLE = "Supply and Demand Graph";
 
   static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
@@ -61,8 +65,8 @@ public class SupplyAndDemandFrame extends JFrame {
     c.ipadx = 80;
     c.insets = new Insets(40,40,40,40);
 
-    Graph2DModel supplyAndDemand = constructSupplyAndDemandModel(auction);
-    JLineGraph graph = new JLineGraph(supplyAndDemand);
+    Graph2DModel supplyAndDemand = constructSupplyAndDemandModel();
+    graph = new JLineGraph(supplyAndDemand);
     graph.setPreferredSize(new Dimension(400,400));
     c.gridx = 0;
     c.gridy = 0;
@@ -73,11 +77,27 @@ public class SupplyAndDemandFrame extends JFrame {
     gridBag.setConstraints(graph, c);
     contentPane.add(graph);
 
-    setTitle(TITLE + " for " + auction.getName() + " at time " + auction.getAge());
+    updateButton = new JButton("Update");
+    c.gridx = 0;
+    c.gridy = 1;
+    gridBag.setConstraints(updateButton, c);
+    updateButton.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        updateGraph();
+      }
+    }
+    );
+    contentPane.add(updateButton);
+
+    setTitle(TITLE + " for " + auction.getName() + " at time " +
+               auction.getAge());
   }
 
+  public void updateGraph() {
+    graph.setModel(constructSupplyAndDemandModel());
+  }
 
-  protected Graph2DModel constructSupplyAndDemandModel( RoundRobinAuction auction ) {
+  protected Graph2DModel constructSupplyAndDemandModel() {
     MemoryResidentDataSeries supplyCurve = new MemoryResidentDataSeries();
     MemoryResidentDataSeries demandCurve = new MemoryResidentDataSeries();
     SupplyAndDemandStats stats =

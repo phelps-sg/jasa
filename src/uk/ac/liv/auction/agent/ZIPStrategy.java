@@ -69,7 +69,12 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
 
   static Logger logger = Logger.getLogger(ZIPStrategy.class);
 
+  public ZIPStrategy( AbstractTraderAgent agent ) {
+    super(agent);
+  }
+
   public ZIPStrategy() {
+    this(null);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {

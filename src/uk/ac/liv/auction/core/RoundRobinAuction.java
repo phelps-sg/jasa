@@ -17,7 +17,10 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 import uk.ac.liv.auction.agent.TraderAgent;
+
 import uk.ac.liv.auction.stats.MarketDataLogger;
+import uk.ac.liv.auction.stats.MarketStats;
+
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
 import uk.ac.liv.util.io.CSVWriter;
@@ -147,12 +150,18 @@ public class RoundRobinAuction extends AuctionImpl
    */
   protected AuctionConsoleFrame guiConsole = null;
 
+  /**
+   * The statistics to use
+   */
+  protected MarketStats marketStats = null;
+
 
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   public static final String P_LOGGER = "logger";
   public static final String P_AUCTIONEER = "auctioneer";
   public static final String P_NAME = "name";
+  public static final String P_STATS = "stats";
 
   static Logger log4jLogger = Logger.getLogger(RoundRobinAuction.class);
 
@@ -188,6 +197,16 @@ public class RoundRobinAuction extends AuctionImpl
 
     } catch ( ParamClassLoadException e ) {
       logger = null;
+    }
+
+    try {
+      marketStats =
+          (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS),
+                                                            null,
+                                                            MarketStats.class);
+      marketStats.setAuction(this);
+    } catch ( ParamClassLoadException e ) {
+      marketStats = null;
     }
 
     if ( logger != null && logger instanceof Parameterizable ) {
@@ -452,6 +471,10 @@ public class RoundRobinAuction extends AuctionImpl
   public void generateReport() {
     if ( logger != null ) {
       logger.finalReport();
+    }
+    if ( marketStats != null ) {
+      marketStats.calculate();
+      marketStats.generateReport();
     }
   }
 
