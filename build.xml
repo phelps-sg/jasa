@@ -1,72 +1,62 @@
-<project name="JASA" default="compile" basedir=".">
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="compile" name="JASA">
+    <property file="build.ant.properties"/>
    <target name="init">
       <property name="sourceDir" value="src"/>
-      <property name="outputDir" value="classes" />
+      <property name="outputDir" value="classes"/>
       <property name="projectName" value="JASA"/>
-      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io" />
-      <property name="docDir" value="doc" />
-      <property name="ecjPath" value="/usr/local/java/lib/ecj8" />
-      <property name="poolitPath" value="/usr/local/java/lib/poolit/poolit.jar" />
-      <property name="junitPath" value="/usr/local/java/lib/junit3.7/junit.jar" />
-      <property name="skijPath" value="/usr/local/java/lib/skij.jar" />      
-      <property name="classPath" value="${ecjPath}:${poolitPath}:${junitPath}:${skijPath}" />
+      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io"/>
+      <property name="docDir" value="doc"/>
+      <property name="ecjPath" value="/usr/local/java/lib/ecj8"/>
+      <property name="poolitPath" value="/usr/local/java/lib/poolit/poolit.jar"/>
+      <property name="junitPath" value="/usr/local/java/lib/junit3.7/junit.jar"/>
+      <property name="skijPath" value="/usr/local/java/lib/skij.jar"/>      
+      <property name="classPath" value="${ecjPath}:${poolitPath}:${junitPath}:${skijPath}"/>
    </target>
 
-   <target name="cleanOutput" depends="init">
-      <delete dir="${outputDir}" />
+   <target depends="init" name="cleanOutput">
+      <delete dir="${outputDir}"/>
    </target>
 
-   <target name="prepareOutput" depends="cleanOutput">
-      <mkdir dir="${outputDir}" />
+   <target depends="cleanOutput" name="prepareOutput">
+      <mkdir dir="${outputDir}"/>
    </target>
 
-   <target name="cleanDoc" depends="init">
-      <delete dir="${docDir}" />
+   <target depends="init" name="cleanDoc">
+      <delete dir="${docDir}"/>
    </target>
 
-   <target name="prepareDoc" depends="cleanDoc">
-      <mkdir dir="${docDir}" />
+   <target depends="cleanDoc" name="prepareDoc">
+      <mkdir dir="${docDir}"/>
    </target>
 
-   <target name="compile" depends="prepareOutput">
-      <javac srcdir="${sourceDir}" destdir="${outputDir}" debug="on">
+   <target depends="prepareOutput" name="compile">
+      <javac debug="on" destdir="${outputDir}" srcdir="${sourceDir}">
         <classpath>
-            <pathelement path="${classPath}" />       
+            <pathelement path="${classPath}"/>       
         </classpath>
      </javac>
    </target>
 
-   <target name="doc" depends="compile,prepareDoc">
-     <javadoc packagenames="${packages}"
-		sourcepath="${sourceDir}"
-		destdir="${docDir}"
-		author="true"
-		windowtitle="${projectName}">
+   <target depends="compile,prepareDoc" name="doc">
+     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" sourcepath="${sourceDir}" windowtitle="${projectName}">
         <classpath>
-            <pathelement path="${classPath}" />       
+            <pathelement path="${classPath}"/>       
         </classpath>
      </javadoc>
    </target>
 
-   <target name="jar" depends="compile,doc">
-   	<jar jarfile="jasa.jar"
-		basedir="${outputDir}"
-	 />
+   <target depends="compile,doc" name="jar">
+   	<jar basedir="${outputDir}" jarfile="jasa.jar"/>
    </target>	
 
-   <target name="tar" depends="jar" >
-   	<tar tarfile="jasa.tar"
-		basedir="."
-      includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/**"
-	/>
-	<gzip src="jasa.tar" zipfile="jasa.tar.gz" />
+   <target depends="jar" name="tar">
+   	<tar basedir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/**" tarfile="jasa.tar"/>
+	<gzip src="jasa.tar" zipfile="jasa.tar.gz"/>
     </target>
 
     <target name="cvsupdate">
-	<cvs 
-		cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa" 
-		command="update"
-	/>
+	<cvs command="update" cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa"/>
     </target>
 
 

@@ -98,15 +98,15 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
     }
 
     fitness.multifitness[0] = efficiencyFitness(efficiency.getMean());
-    fitness.multifitness[1] = mpFitness(buyerMP.getMean(), sellerMP.getMean());
-//    fitness.multifitness[2] = mpFitness(sellerMP.getMean());
+    fitness.multifitness[1] = mpFitness(sellerMP.getMean());
+    fitness.multifitness[2] = mpFitness(buyerMP.getMean());            
 
     auctioneer.evaluated = true;
   }
 
 
-  protected float mpFitness( double bMp, double sMp ) {
-    return (float) (1 / (Math.abs(bMp-sMp) + 1));
+  protected float mpFitness( double mp ) {
+    return (float) (1 / (Math.abs(mp) + 1));
   }
 
   protected float efficiencyFitness( double eA ) {

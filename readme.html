@@ -25,8 +25,8 @@ The system implements various experiments, agents and learning agents described 
 The system currently supports parameterisable auctioneer classes for the following auction types:
 </p>
 
-<li>Continuous Double Auction</li>
-<li>Ascending Auction</li>
+<li>Multi-Unit Continuous Double Auction</li>
+<li>Multi-Unit Ascending Auction</li>
 
 <p>
 The system is designed so that introducing new classes of auctioneers should be relatively straightforward.
@@ -60,7 +60,8 @@ Required libraries
 <p>
 
 <p>
-<a href="http://www.junit.org">JUnit</a> (Optional) required for running the unit tests</a>
+<a href="http://www.junit.org">JUnit</a> (Optional) required for running 
+the unit tests</a>
 </p>
 
 <p>
@@ -72,13 +73,27 @@ Examples
 </h2>
 
 <p>
-The <code>examples/</code> directory contains several parameter files for different example experiments.  These can be run using the <code>uk.ac.liv.auction.MarketSimulation</code> application, e.g.
+The <code>examples/</code> directory contains several parameter files 
+for different example experiments.  
+These can be run using the <code>uk.ac.liv.auction.MarketSimulation</code> 
+application, e.g.
 <p>
 <code>
 java uk.ac.liv.auction.MarketSimulation examples/example1.params
 </code>
 </p>
 
+<h2>
+Compiling
+</h2>
+
+<p>
+JASA ships with a <code>build.xml</code> file that can be used with 
+<a href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> to build the
+project.  The default settings in <code>build.xml</code> expect to find
+the various third-party class libraries used by JASA in the directory
+</code>/usr/local/java/lib</code>, however alternative locations can be
+specified by creating a file <code>build.ant.properties</code>.
 <hr>
 
 <a href="http://www.csc.liv.ac.uk/~sphelps">Steve Phelps</p>
