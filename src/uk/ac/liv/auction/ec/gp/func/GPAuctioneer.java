@@ -106,7 +106,9 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
       //e.printStackTrace();
       return 0;
     }
-    return ((GenericNumber) input.data).doubleValue();
+    GenericNumber result = (GenericNumber) input.data;
+    result.release();
+    return result.doubleValue();
   }
 
   public void generateQuote() {

@@ -26,7 +26,7 @@ import uk.ac.liv.util.GenericDouble;
 public class LastProfit extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPGenericData) input).data = new GenericDouble( new Double(((GPTradingStrategy) individual).getLastProfit()) );
+    ((GPGenericData) input).data = GenericDouble.newGenericDouble(((GPTradingStrategy) individual).getLastProfit());
   }
 
   public String toString() {

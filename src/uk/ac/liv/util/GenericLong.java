@@ -2,18 +2,20 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
 package uk.ac.liv.util;
+
+import huyd.poolit.*;
 
 /**
  * This encapsulation of Long can be used in combination with the
@@ -27,15 +29,61 @@ public class GenericLong extends GenericNumber {
 
   Long value;
 
-  public GenericLong( Long value ) {
-    this.value = value;
+  long primitiveValue;
+
+  protected static Pooler pool;
+
+  static final int DEFAULT_POOL_SIZE = 10000;
+
+
+  public GenericLong() {
+    this(0L);
+  }
+
+  public static GenericLong newGenericLong( long value ) {
+    GenericLong result = null;
+    try {
+      initialisePool();
+      result = (GenericLong) pool.fetch();
+      result.setValue(value);
+    } catch ( FetchException e ) {
+      System.err.println("WARNING: " + e.getMessage());
+      e.printStackTrace();
+      result = new GenericLong(value);
+    }
+    return result;
+  }
+
+  public void release() {
+    pool.release(this);
+  }
+
+
+  protected GenericLong( Long value ) {
+    this(value.longValue());
+  }
+
+  protected GenericLong( long value ) {
+    primitiveValue = value;
+    synchFromPrimitive();
+  }
+
+  protected void setValue( long value ) {
+    primitiveValue = value;
+    synchFromPrimitive();
+  }
+
+  protected void synchFromPrimitive() {
+    if ( value == null || value.longValue() != primitiveValue ) {
+      value = new Long(primitiveValue);
+    }
   }
 
   public GenericNumber add( GenericNumber other ) {
     if ( other instanceof GenericLong ) {
-      return new GenericLong( new Long(value.longValue() + other.longValue()) );
+      return newGenericLong( primitiveValue + other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return new GenericDouble( new Double(value.doubleValue() + other.doubleValue()) );
+      return GenericDouble.newGenericDouble(value.doubleValue() + other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
@@ -43,19 +91,19 @@ public class GenericLong extends GenericNumber {
 
   public GenericNumber multiply( GenericNumber other ) {
     if ( other instanceof GenericLong ) {
-      return new GenericLong( new Long(value.longValue() * other.longValue()) );
+      return newGenericLong( primitiveValue * other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return new GenericDouble( new Double(value.doubleValue() * other.doubleValue()) );
+      return GenericDouble.newGenericDouble(value.doubleValue() * other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
   public GenericNumber subtract( GenericNumber other ) {
-    if ( other instanceof GenericLong ) {
-      return new GenericLong( new Long(value.longValue() - other.longValue()) );
+  if ( other instanceof GenericLong ) {
+      return newGenericLong( primitiveValue - other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return new GenericDouble( new Double(value.doubleValue() - other.doubleValue()) );
+      return GenericDouble.newGenericDouble(value.doubleValue() - other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
@@ -68,9 +116,9 @@ public class GenericLong extends GenericNumber {
   protected GenericNumber opResult( double tempResult ) {
     long intResult = Math.round(tempResult);
     if ( intResult == tempResult ) {
-      return new GenericLong( new Long(intResult) );
+      return newGenericLong(intResult);
     } else {
-      return new GenericDouble( new Double(tempResult) );
+      return GenericDouble.newGenericDouble(tempResult);
     }
   }
 
@@ -127,4 +175,14 @@ public class GenericLong extends GenericNumber {
     }
   }
 
+  protected static synchronized void initialisePool() {
+    try {
+      if ( pool == null ) {
+        pool = new FixedPooler(GenericLong.class, DEFAULT_POOL_SIZE);
+      }
+    } catch ( CreateException e ) {
+      e.printStackTrace();
+      throw new Error(e);
+    }
+  }
 }

@@ -37,7 +37,7 @@ public class BinaryHeap implements Collection, PriorityQueue, Serializable {
   /**
    * The default initial capacity of the underlying Vector.
    */
-  static final int DEFAULT_CAPACITY = 1000;
+  static final int DEFAULT_CAPACITY = 100;
 
   /**
    * Used to assign a unique id to each heap.

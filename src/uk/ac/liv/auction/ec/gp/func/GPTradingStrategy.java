@@ -78,7 +78,9 @@ public class GPTradingStrategy extends GPIndividualCtx
     double price = 0;
     try {
       evaluateTree(0, input);
-      price = ((GenericNumber) input.data).doubleValue();
+      GenericNumber result = (GenericNumber) input.data;
+      price = result.doubleValue();
+      result.release();
     } catch ( ArithmeticException e ) {
       System.out.println("Caught: " + e);
       price = 0;
@@ -86,7 +88,7 @@ public class GPTradingStrategy extends GPIndividualCtx
     }
     if ( price < 0 || Double.isInfinite(price) || Double.isNaN(price)) {
       price = 0;
-    } 
+    }
     shout.setPrice(price);
     shout.setQuantity(quantity);
     shout.setIsBid(agent.isBuyer());

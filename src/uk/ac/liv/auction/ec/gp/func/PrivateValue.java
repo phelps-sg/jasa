@@ -34,7 +34,7 @@ import uk.ac.liv.util.GenericDouble;
 public class PrivateValue extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPGenericData) input).data = new GenericDouble( new Double(((GPTradingStrategy) individual).getPrivateValue()) );
+    ((GPGenericData) input).data = GenericDouble.newGenericDouble(((GPTradingStrategy) individual).getPrivateValue());
   }
 
   public String toString() {

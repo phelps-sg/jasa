@@ -88,20 +88,25 @@ class IndexMap {
 
   HashMap map = new HashMap();
 
-  static final int POOL_SIZE = 500000;
-
   static Pooler intPool = null;
 
-  public IndexMap() {
+  static final int DEFAULT_POOL_SIZE = 50000;
+
+
+  public IndexMap( int poolSize ) {
     map = new HashMap();
     if ( intPool == null ) {
       try {
-        intPool = new FixedPooler(MutableIntWrapper.class, POOL_SIZE);
+        intPool = new FixedPooler(MutableIntWrapper.class, poolSize);
       } catch ( CreateException e ) {
         e.printStackTrace();
         throw new Error(e.getMessage());
       }
     }
+  }
+
+  public IndexMap() {
+    this(DEFAULT_POOL_SIZE);
   }
 
   public void associate( Object key, int index ) {

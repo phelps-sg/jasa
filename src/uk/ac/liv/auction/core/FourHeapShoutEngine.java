@@ -52,22 +52,22 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   /**
    * Matched bids in ascending order
    */
-  protected BinaryHeap bIn;
+  protected BinaryHeap bIn = new BinaryHeap(greaterThan);
 
   /**
    * Unmatched bids in descending order
    */
-  protected BinaryHeap bOut;
+  protected BinaryHeap bOut = new BinaryHeap(lessThan);
 
   /**
    * Matched asks in descending order
    */
-  protected BinaryHeap sIn;
+  protected BinaryHeap sIn = new BinaryHeap(lessThan);
 
   /**
    * Unmatched asks in ascending order
    */
-  protected BinaryHeap sOut;
+  protected BinaryHeap sOut = new BinaryHeap(greaterThan);
 
   protected static AscendingShoutComparator greaterThan =
     new AscendingShoutComparator();
@@ -365,10 +365,10 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   }
 
   protected void initialise() {
-    bIn   = new FastBinaryHeap(greaterThan);
-    bOut  = new FastBinaryHeap(lessThan);
-    sIn   = new FastBinaryHeap(lessThan);
-    sOut  = new FastBinaryHeap(greaterThan);
+    bIn.clear();
+    bOut.clear();
+    sIn.clear();
+    sOut.clear();
   }
 
   public synchronized void reset() {

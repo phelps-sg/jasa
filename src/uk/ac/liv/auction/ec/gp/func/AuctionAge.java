@@ -26,7 +26,7 @@ import uk.ac.liv.util.GenericLong;
 public class AuctionAge extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
-    ((GPGenericData) input).data = new GenericLong( new Long(((GPTradingStrategy) individual).getAuction().getAge()) );
+    ((GPGenericData) input).data = GenericLong.newGenericLong(((GPTradingStrategy) individual).getAuction().getAge());
   }
 
   public String toString() {

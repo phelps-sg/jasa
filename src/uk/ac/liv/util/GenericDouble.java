@@ -2,18 +2,20 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
 package uk.ac.liv.util;
+
+import huyd.poolit.*;
 
 /**
  * This encapsulation of Double can be used in combination with the
@@ -25,47 +27,66 @@ package uk.ac.liv.util;
 
 public class GenericDouble extends GenericNumber {
 
-  Double value;
+  double primitiveValue;
 
-  public GenericDouble( Double value ) {
-    this.value = value;
+  static Pooler pool;
+
+  static final int DEFAULT_POOL_SIZE = 1000000;
+
+  public GenericDouble() {
+    this(Double.NaN);
+  }
+
+  public static GenericDouble newGenericDouble( double value ) {
+    GenericDouble result = null;
+    try {
+      initialisePool();
+      result = (GenericDouble) pool.fetch();
+      result.setValue(value);
+    } catch ( FetchException e ) {
+      System.err.println("WARNING: " + e.getMessage());
+      e.printStackTrace();
+      result = new GenericDouble(value);
+    }
+    return result;
+  }
+
+  public void release() {
+    pool.release(this);
   }
 
   public GenericNumber add( GenericNumber other ) {
-    return new GenericDouble( new Double(value.doubleValue() + other.doubleValue()) );
+    return newGenericDouble(primitiveValue + other.doubleValue());
   }
 
   public GenericNumber multiply( GenericNumber other ) {
-    return new GenericDouble( new Double(value.doubleValue() * other.doubleValue()) );
+    return newGenericDouble(primitiveValue * other.doubleValue());
   }
 
   public GenericNumber subtract( GenericNumber other ) {
-    return new GenericDouble( new Double(value.doubleValue() - other.doubleValue()) );
+    return newGenericDouble(primitiveValue - other.doubleValue());
   }
 
   public GenericNumber divide( GenericNumber other ) {
-    return new GenericDouble( new Double(value.doubleValue() / other.doubleValue()) );
+    return newGenericDouble(primitiveValue / other.doubleValue());
   }
 
   public int intValue() {
-    return value.intValue();
+    return (int) primitiveValue;
   }
 
   public float floatValue() {
-    return value.floatValue();
+    return (float) primitiveValue;
   }
 
   public double doubleValue() {
-    return value.doubleValue();
+    return primitiveValue;
   }
 
   public long longValue() {
-    return value.longValue();
+    return (long) primitiveValue;
   }
 
-  public Double getValue() {
-    return value;
-  }
 
   public int compareTo( Object other ) {
     if ( other instanceof Number ) {
@@ -92,7 +113,31 @@ public class GenericDouble extends GenericNumber {
   }
 
   public String toString() {
-    return value.toString();
+    return primitiveValue + "";
   }
+
+  protected void setValue( double value ) {
+    primitiveValue = value;
+  }
+
+  protected GenericDouble( Double value ) {
+    this(value.doubleValue());
+  }
+
+  protected GenericDouble( double value ) {
+    primitiveValue = value;
+  }
+
+  protected static void initialisePool() {
+    try {
+      if ( pool == null ) {
+        pool = new FixedPooler(GenericDouble.class, DEFAULT_POOL_SIZE);
+      }
+    } catch ( CreateException e ) {
+      e.printStackTrace();
+      throw new Error(e);
+    }
+  }
+
 
 }
