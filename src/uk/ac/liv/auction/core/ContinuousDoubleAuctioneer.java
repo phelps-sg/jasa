@@ -88,7 +88,7 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer
   }
 
   protected double determineClearingPrice() {
-    return (k * (double) bidQuote() + (1.0 - k) * (double) askQuote());
+    return ((1-k) * (double) bidQuote() + k * (double) askQuote());
   }
 
   protected double bidQuote() {

@@ -17,6 +17,7 @@ package uk.ac.liv.auction.electricity;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.LinkedList;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -24,10 +25,9 @@ import ec.util.ParameterDatabase;
 import java.io.Serializable;
 
 import uk.ac.liv.util.Debug;
+import uk.ac.liv.util.Resetable;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
-import uk.ac.liv.auction.core.ParameterizablePricing;
-import uk.ac.liv.auction.core.Auctioneer;
+import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.auction.stats.*;
 
@@ -50,25 +50,104 @@ import uk.ac.liv.auction.agent.*;
 
 public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
+  /**
+   * The auction for which we are calculating market statistics.
+   */
   protected RoundRobinAuction auction;
 
-  protected double rCon, rCap;
+  /**
+   * The relative concentration of sellers to buyers.
+   */
+  protected double rCon;
 
-  protected double pBCE = 0, pSCE = 0;
+  /**
+   * The relative generating-capacity of buyers to sellers.
+   */
+  protected double rCap;
 
-  protected double pBA, pSA;
+  /**
+   * The profits of the buyers in competitive equilibrium.
+   */
+  protected double pBCE = 0;
 
-  protected double mPB, mPS;
+  /**
+   * The profits of the sellers in competitive equilibrium.
+   */
+  protected double pSCE = 0;
 
+  /**
+   * The profits of the buyers in the actual auction.
+   */
+  protected double pBA;
+
+  /**
+   * The profits of the sellers in the actual auction.
+   */
+  protected double pSA;
+
+  /**
+   * The market-power of buyers.
+   */
+  protected double mPB;
+
+  /**
+   * The market-power of sellers.
+   */
+  protected double mPS;
+
+  /**
+   * Global market efficiency.
+   */
   protected double eA;
 
+  /**
+   * Strategic market-power for buyers.
+   */
+  protected double sMPB = Double.NaN;
+
+  /**
+   * Strategic market-power for sellers.
+   */
+  protected double sMPS = Double.NaN;
+
+  /**
+   * Profits of the buyers in truthful bidding.
+   */
+  protected double pBT = Double.NaN;
+
+  /**
+   * Profits of the sellers in truthful bidding.
+   */
+  protected double pST = Double.NaN;
+
+  /**
+   * The number of sellers.
+   */
   protected double numSellers;
+
+  /**
+   * The number of buyers.
+   */
   protected double numBuyers;
 
-  protected int buyerCap, sellerCap;
+  /**
+   * The total generating-capacity of buyers.
+   */
+  protected int buyerCap;
 
+  /**
+   * The total generating-capacity of sellers.
+   */
+  protected int sellerCap;
+
+  /**
+   * The equilibrium calculations for this auction.
+   */
   protected EquilibriaStats standardStats = null;
 
+  /**
+   * The approximated equilibrium price.
+   */
   protected double equilibPrice;
 
 
@@ -158,15 +237,6 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     }
   }
 
-  protected void calculateTruthfulOutcomes() {
-    Iterator i = auction.getTraderIterator();
-    Auctioneer auctioneer = auction.getAuctioneer();
-    while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
-
-    }
-  }
-
 
   protected void zeroTotals() {
     sellerCap = 0;
@@ -253,26 +323,120 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       + "\n)";
   }
 
+  protected void simulateTruthfulBidding() {
+    Auctioneer auctioneer = auction.getAuctioneer();
+    ((Resetable) auctioneer).reset();
+    LinkedList shouts = new LinkedList();
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) i.next();
+      Shout truth = ShoutPool.fetch(trader, trader.getCapacity(),
+                                    trader.getPrivateValue(), trader.isBuyer());
+      shouts.add(truth);
+      try {
+        auctioneer.newShout(truth);
+      } catch ( IllegalShoutException e ) {
+        e.printStackTrace();
+        throw new Error(e.getMessage());
+      }
+    }
+    auctioneer.clear();
+    Iterator shoutIterator = shouts.iterator();
+    while ( shoutIterator.hasNext() ) {
+      Shout s = (Shout) shoutIterator.next();
+      auctioneer.removeShout(s);
+      ShoutPool.release(s);
+    }
+
+  }
+
+  public void calculateStrategicMarketPower() {
+    int auctionAge = auction.getAge();
+    simulateTruthfulBidding();
+    Iterator i = auction.getTraderIterator();
+    double buyerProfits = 0;
+    double sellerProfits = 0;
+    while ( i.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) i.next();
+      if ( trader.isBuyer() ) {
+        buyerProfits += trader.getProfits();
+      } else {
+        sellerProfits += trader.getProfits();
+      }
+    }
+    pBT = (buyerProfits - pBA)*auctionAge;
+    pST = (sellerProfits - pSA)*auctionAge;
+    sMPB = (pBA - pBT) / pBT;
+    sMPS = (pSA - pST) / pST;
+  }
+
+
+  /**
+   * Get the market-efficiency calculation.
+   */
   public double getEA() {
     return eA;
   }
 
+  /**
+   * Get the buyer market-power calculation.
+   */
   public double getMPB() {
     return mPB;
   }
 
+  /**
+   * Get the seller market-power calculation.
+   */
   public double getMPS() {
     return mPS;
   }
 
+  /**
+   * Get the profits of the buyers in the actual auction.
+   */
   public double getPBA() {
     return pBA;
   }
 
+  /**
+   * Get the profits of the sellers in the actual auction.
+   */
   public double getPSA() {
     return pSA;
   }
 
+  /**
+   * Get the strategic buyer market-power calculation.
+   */
+  public double getSMPB() {
+    return sMPB;
+  }
+
+  /**
+   * Get the strategic seller market-power calculation.
+   */
+  public double getSMPS() {
+    return sMPS;
+  }
+
+  /**
+   * Get the truthful seller profits calculation.
+   */
+  public double getPST() {
+    return pST;
+  }
+
+  /**
+   * Get the truthful buyer profits calculation.
+   */
+  public double getPBT() {
+    return pBT;
+  }
+
+  /**
+   * Get the equilibrium market statistics.
+   */
   public EquilibriaStats getEquilibriaStats() {
     return standardStats;
   }

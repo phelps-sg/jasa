@@ -236,7 +236,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       dataFile = new CSVWriter(
                   new FileOutputStream(outputDir + "/" + "npt-"
-                                        + paramSummary + ".csv"), 13);
+                                        + paramSummary + ".csv"), 17);
 
     } catch ( IOException e ) {
       e.printStackTrace();
@@ -272,15 +272,19 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       System.out.println("k = " + auctioneerK);
 
-      CummulativeStatCounter efficiency = new CummulativeStatCounter("efficiency");
-      CummulativeStatCounter mPB = new CummulativeStatCounter("mPB");
-      CummulativeStatCounter mPS = new CummulativeStatCounter("mPS");
-      CummulativeStatCounter pSA = new CummulativeStatCounter("pSA");
-      CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
+      CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
+      CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
+      CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
+      CummulativeStatCounter pSA = new CummulativeStatCounter("PSA");
+      CummulativeStatCounter pBA = new CummulativeStatCounter("PBA");
+      CummulativeStatCounter eAN = new CummulativeStatCounter("EAN");
+      CummulativeStatCounter mPBN = new CummulativeStatCounter("MPBN");
+      CummulativeStatCounter mPSN = new CummulativeStatCounter("MPSN");
+      CummulativeStatCounter sMPB = new CummulativeStatCounter("SMPB");
+      CummulativeStatCounter sMPS = new CummulativeStatCounter("SMPS");
+      CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
+      CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
       CummulativeStatCounter equilibPrice = new CummulativeStatCounter("equilibPrice");
-      CummulativeStatCounter eAN = new CummulativeStatCounter("eAN");
-      CummulativeStatCounter mPBN = new CummulativeStatCounter("mPBN");
-      CummulativeStatCounter mPSN = new CummulativeStatCounter("mPSN");
 
       initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
 
@@ -293,15 +297,20 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         auction.reset();
         auction.run();
         stats.calculate();
+        stats.calculateStrategicMarketPower();
 
         efficiency.newData(stats.getEA());
         mPB.newData(stats.getMPB());
         mPS.newData(stats.getMPS());
+        sMPB.newData(stats.getSMPB());
+        sMPS.newData(stats.getSMPS());
         pBA.newData(stats.getPBA());
         pSA.newData(stats.getPSA());
         eAN.newData(stats.getEA()/100);
-        mPBN.newData(1/(1+Math.abs(stats.getMPB())));
-        mPSN.newData(1/(1+Math.abs(stats.getMPS())));
+        mPBN.newData(mpNormalise(stats.getMPB()));
+        mPSN.newData(mpNormalise(stats.getMPS()));
+        sMPBN.newData(mpNormalise(stats.getSMPB()));
+        sMPSN.newData(mpNormalise(stats.getSMPS()));
         double ep = (stats.getEquilibriaStats().getMinPrice()
                                + stats.getEquilibriaStats().getMaxPrice()) / 2;
         equilibPrice.newData(ep);
@@ -313,6 +322,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       System.out.println(efficiency);
       System.out.println(mPB);
       System.out.println(mPS);
+      System.out.println(sMPB);
+      System.out.println(sMPS);
       System.out.println(pSA);
       System.out.println(pBA);
       System.out.println(equilibPrice);
@@ -324,12 +335,21 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       dataFile.newData(mPB.getStdDev());
       dataFile.newData(mPS.getMean());
       dataFile.newData(mPS.getStdDev());
+      dataFile.newData(sMPB.getMean());
+      dataFile.newData(sMPB.getStdDev());
+      dataFile.newData(sMPS.getMean());
+      dataFile.newData(sMPS.getStdDev());
       dataFile.newData(eAN.getMean());
       dataFile.newData(eAN.getStdDev());
       dataFile.newData(mPBN.getMean());
       dataFile.newData(mPBN.getStdDev());
       dataFile.newData(mPSN.getMean());
       dataFile.newData(mPSN.getStdDev());
+      dataFile.newData(sMPBN.getMean());
+      dataFile.newData(sMPBN.getStdDev());
+      dataFile.newData(sMPSN.getMean());
+      dataFile.newData(sMPSN.getStdDev());
+
     }
 
     dataFile.close();
@@ -447,6 +467,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       FileOutputStream iterOut = new FileOutputStream(filename);
       iterResults = new CSVWriter(iterOut, 7);
     }
+  }
+
+  public  double mpNormalise( double marketPower ) {
+    return 1/(1+Math.abs(marketPower));
   }
 
 }
