@@ -232,9 +232,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
    */
  Shout split( int excess ) {
     quantity -= excess;
-    Shout newShout = ShoutFactory.getFactory().create(agent, excess, price,
-                                                       isBid);
-//    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
+    Shout newShout = new Shout(agent, excess, price, isBid);
     child = newShout;
     assert isValid();
     assert newShout.isValid();
@@ -242,8 +240,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   Shout splat( int excess ) {
-    Shout newShout = ShoutFactory.getFactory().create(agent, quantity - excess,
-                                                       price, isBid);
+    Shout newShout = new Shout(agent, quantity - excess, price, isBid);
 //    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
     quantity = excess;
     child = newShout;
