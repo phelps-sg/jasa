@@ -229,7 +229,9 @@ public class RepastMarketSimulation
     } catch ( AuctionClosedException e ) {
       controller.stopSim();
     }
-    graph.step();
+    if ( graph != null ) {
+      graph.step();
+    }
   }
   
   public String getName() {
