@@ -52,8 +52,8 @@ public class KDoubleAuctioneer extends KAuctioneer implements Serializable {
   }
 
   public void endOfRoundProcessing() {
-    clear();
     generateQuote();
+    clear();
   }
 
   public void endOfAuctionProcessing() {
