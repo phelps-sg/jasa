@@ -19,12 +19,13 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionEventListener;
 
+import uk.ac.liv.auction.event.AuctionEvent;
+
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 
 /**
- * Classes implementing this interface determine a commodity-valuation
- * policy for RoundRobinTrader agents.
+ * A commodity valuation policy for RoundRobinTrader agents.  
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -39,8 +40,15 @@ public interface ValuationPolicy
   public double determineValue( Auction auction );
 
   /**
-   * Recalculate valuations after consumption of the commodity.
+   * Recalculate valuation after consumption of the commodity being
+   * traded in the given auction.
    */
   public void consumeUnit( Auction auction );
+  
+  /**
+   * Recalculate valuation(s) in response to an auction event.
+   */
+  public void eventOccurred( AuctionEvent event );
+
 
 }

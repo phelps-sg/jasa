@@ -45,7 +45,7 @@ import org.apache.log4j.Logger;
 /** <p>
  * An abstract class representing a simple agent trading in a round-robin auction.
  * Traders of this type deal in a single commodity for which they have a
- * well-defined private valuation.
+ * well-defined valuation.
  *
  * </p><p><b>Parameters</b><br>
  * <table>
@@ -115,7 +115,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   static IdAllocator idAllocator = new IdAllocator();
 
   /**
-   * The valuer for this agent
+   * The valuer for this agent.
    */
   protected ValuationPolicy valuer;
 
