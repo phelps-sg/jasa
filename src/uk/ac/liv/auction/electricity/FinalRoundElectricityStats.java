@@ -47,9 +47,9 @@ public class FinalRoundElectricityStats extends ElectricityStats {
     return equilibQuant(trader, equilibPrice) * surplus;
   }
 
-  protected double truthfulProfits( double singleRoundProfits,
-                                    double accumulatedProfits ) {
-    return accumulatedProfits - singleRoundProfits;
+  protected double truthfulProfits( double finalRoundProfits,
+                                    double previousProfits ) {
+    return finalRoundProfits - previousProfits;
   }
 
 }

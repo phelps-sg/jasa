@@ -369,9 +369,9 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     sMPS = (pSA - pST) / pST;
   }
 
-  protected double truthfulProfits( double singleRoundProfits,
-                                    double accumulatedProfits ) {
-    return (singleRoundProfits - accumulatedProfits) * auction.getAge();
+  protected double truthfulProfits( double finalRoundProfits,
+                                    double previousProfits ) {
+    return (finalRoundProfits - previousProfits) * auction.getAge();
   }
 
 
