@@ -245,6 +245,7 @@ public abstract class AuctionImpl extends Observable
   }
 
 
+
   public String toString() {
     return "(Auction id:" + id + ")";
   }

@@ -26,7 +26,7 @@ import uk.ac.liv.ai.learning.StochasticLearner;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.Seeder;
+import uk.ac.liv.util.AbstractSeeder;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -72,24 +72,13 @@ import org.apache.log4j.PropertyConfigurator;
  * @version $Revision$
  */
 
-public class MarketSimulation implements Parameterizable, Runnable,
-                                          Serializable, Seeder {
+public class MarketSimulation extends AbstractSeeder
+     implements Runnable, Serializable {
 
   /**
    * The auction used in this simulation.
    */
   protected RoundRobinAuction auction;
-
-  /**
-   * The meta PRNG seed used to generate all other PRNG seeds
-   * in the simulation.
-   */
-  protected long prngSeed;
-
-  /**
-   * The PRNG used to generate all PRNG seeds in the simulation.
-   */
-  protected RandomElement seeds;
 
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "n";
@@ -98,8 +87,6 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String P_AGENTS = "agents";
   public static final String P_CONSOLE = "console";
   public static final String P_SIMULATION = "simulation";
-  public static final String P_SEED = "seed";
-  public static final String P_PRNG = "prng";
 
 
   public static final String VERSION = "0.26";
@@ -152,11 +139,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
     logger.debug("Setup... ");
 
-    PRNGFactory.setup(parameters, base.push(P_PRNG));
-
-    prngSeed =
-        parameters.getLongWithDefault(base.push(P_SEED), null,
-                                       System.currentTimeMillis());
+    super.setup(parameters, base);
 
     auction =
       (RoundRobinAuction)
@@ -249,15 +232,9 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
   protected void seedObjects() {
     logger.info("Seeding objects...");
-    seeds = PRNGFactory.getFactory().create(prngSeed);
     seedAgents();
     seedAuction();
     logger.info("Seeding done.\n");
-  }
-
-
-  public long nextSeed() {
-    return seeds.choose(0, Integer.MAX_VALUE);
   }
 
 }

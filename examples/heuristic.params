@@ -4,18 +4,36 @@ heuristic.numagents = 20
 heuristic.strategy.n = 3
 heuristic.strategy.0 = uk.ac.liv.auction.agent.KaplanStrategy
 heuristic.strategy.1 = uk.ac.liv.auction.agent.StimuliResponseStrategy
-heuristic.strategy.2 = uk.ac.liv.auction.agent.zi.ZIPStrategy
+heuristic.strategy.1.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
+heuristic.strategy.2 = uk.ac.liv.auction.zi.ZIPStrategy
+heuristic.strategy.2.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 
-heuristic.buyer = uk.ac.liv.auction.agent.electricity.ElectricityTrader
+heuristic.buyer = uk.ac.liv.auction.electricity.ElectricityTrader
 heuristic.buyer.capacity = 1
 heuristic.buyer.valuer = uk.ac.liv.auction.agent.RandomValuer
 heuristic.buyer.valuer.minvalue = 30
 heuristic.buyer.valuer.maxvalue = 100
+heuristic.buyer.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
-heuristic.seller = uk.ac.liv.auction.agent.electricity.ElectricityTrader
+heuristic.seller = uk.ac.liv.auction.electricity.ElectricityTrader
 heuristic.seller.capacity = 1
 heuristic.seller.valuer = uk.ac.liv.auction.agent.RandomValuer
 heuristic.seller.valuer.minvalue = 40
 heuristic.seller.valuer.maxvalue = 100
+heuristic.seller.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
+heuristic.auction = uk.ac.liv.auction.core.RoundRobinAuction
+heuristic.auction.maximumrounds = 100
+heuristic.auction.logger = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 
+heuristic.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+heuristic.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+heuristic.auction.auctioneer.pricing.k = 0.5
+
+heuristic.prng = uk.ac.liv.prng.MT
+
+# log4j configuration - substitute DEBUG for INFO to turn on debugging output
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n

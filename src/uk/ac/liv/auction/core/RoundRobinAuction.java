@@ -22,6 +22,7 @@ import uk.ac.liv.auction.stats.MarketDataLogger;
 import uk.ac.liv.auction.stats.MarketStats;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.CombiMarketStats;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
@@ -650,6 +651,15 @@ public class RoundRobinAuction extends AuctionImpl
       marketStats.calculate();
       marketStats.generateReport();
     }
+  }
+
+  public void addMarketStats( MarketStats newStats ) {
+    MarketStats oldStats = marketStats;
+    marketStats = new CombiMarketStats();
+    if ( oldStats != null ) {
+      ( (CombiMarketStats) marketStats).addStats(oldStats);
+    }
+    ((CombiMarketStats) marketStats).addStats(newStats);
   }
 
   /**

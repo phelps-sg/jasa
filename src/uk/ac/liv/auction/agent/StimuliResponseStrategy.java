@@ -19,6 +19,7 @@ import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.ai.learning.*;
 
+import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
@@ -51,7 +52,7 @@ import java.io.Serializable;
  */
 
 public class StimuliResponseStrategy extends DiscreteLearnerStrategy
-                                       implements Serializable {
+                                       implements Prototypeable {
 
   /**
    * The learning algorithm to use.
@@ -79,6 +80,13 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy
                                           StimuliResponseLearner.class);
 
     ((Parameterizable) learner).setup(parameters, learnerParameter);
+  }
+
+  public Object protoClone() {
+    StimuliResponseStrategy clone = new StimuliResponseStrategy();
+    Prototypeable prototypeLearner = (Prototypeable) this.learner;
+    clone.learner = (StimuliResponseLearner) prototypeLearner.protoClone();
+    return clone;
   }
 
   public int act() {

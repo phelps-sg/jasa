@@ -20,6 +20,7 @@ import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Prototypeable;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -39,7 +40,7 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
  */
 
 public class WidrowHoffLearner extends AbstractLearner
-    implements MimicryLearner, Resetable, Serializable {
+    implements MimicryLearner, Prototypeable, Serializable {
 
   /**
    * The learning rate.
@@ -88,6 +89,11 @@ public class WidrowHoffLearner extends AbstractLearner
     super.setup(parameters, base);
     learningRate = parameters.getDouble(base.push(P_LEARNINGRATE), null, 0);
     momentum = parameters.getDouble(base.push(P_MOMENTUM), null, 0);
+  }
+
+  public Object protoClone() {
+    WidrowHoffLearner clone = new WidrowHoffLearner(learningRate, momentum);
+    return clone;
   }
 
   public double act() {

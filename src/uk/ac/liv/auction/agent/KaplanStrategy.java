@@ -18,7 +18,7 @@ package uk.ac.liv.auction.agent;
 
 import java.io.Serializable;
 
-import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.CummulativeStatCounter;
 
 import ec.util.ParameterDatabase;
@@ -51,7 +51,7 @@ import org.apache.log4j.Logger;
  */
 
 public class KaplanStrategy extends FixedQuantityStrategyImpl
-    implements Serializable, Parameterizable {
+    implements Serializable, Prototypeable {
 
   protected double t = 4;
 
@@ -70,6 +70,13 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   public void setup( ParameterDatabase parameters, Parameter base ) {
     t = parameters.getDoubleWithDefault(base.push(P_T), null, t);
     s = parameters.getDoubleWithDefault(base.push(P_S), null, s);
+  }
+
+  public Object protoClone() {
+    KaplanStrategy clone = new KaplanStrategy();
+    clone.t = this.t;
+    clone.s = this.s;
+    return clone;
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {

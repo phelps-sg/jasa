@@ -23,6 +23,7 @@ import uk.ac.liv.prng.PRNGFactory;
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.MathUtil;
@@ -74,7 +75,7 @@ import java.io.Serializable;
  */
 
 public class RothErevLearner extends AbstractLearner implements
-                                Resetable,
+                                Prototypeable,
                                 StimuliResponseLearner,
                                 StochasticLearner,
                                 Serializable {
@@ -169,6 +170,11 @@ public class RothErevLearner extends AbstractLearner implements
     q = new double[k];
     p = new DiscreteProbabilityDistribution(k);
     initialise();
+  }
+
+  public Object protoClone() {
+    RothErevLearner clone = new RothErevLearner(k, r, e, s1);
+    return clone;
   }
 
   protected void validateParams() {

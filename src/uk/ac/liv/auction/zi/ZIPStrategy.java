@@ -25,6 +25,7 @@ import uk.ac.liv.ai.learning.Learner;
 import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Prototypeable;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -53,7 +54,7 @@ import org.apache.log4j.Logger;
  */
 
 public class ZIPStrategy extends AdaptiveStrategyImpl
-    implements Seedable, Serializable, Parameterizable {
+    implements Seedable, Serializable, Prototypeable {
 
   protected double currentMargin;
 
@@ -109,6 +110,14 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     logger.debug("Initialised with scaling = " + scaling + " and learner = " +
                   learner);
 
+  }
+
+  public Object protoClone() {
+    ZIPStrategy clone = new ZIPStrategy();
+    clone.scaling = this.scaling;
+    clone.learner = (MimicryLearner) ((Prototypeable) this.learner).protoClone();
+    clone.reset();
+    return clone;
   }
 
 

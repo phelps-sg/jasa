@@ -18,6 +18,10 @@ package uk.ac.liv.util;
 import java.util.*;
 
 /**
+ * A class that iterates over all numerical partitions of n into k
+ * distinct parts including commutative duplications and parts
+ * containing zero.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
