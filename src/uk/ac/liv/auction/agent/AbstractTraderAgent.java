@@ -281,9 +281,11 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   }
 
   public void roundClosed( Auction auction ) {
-    auction.removeShout(currentShout);
-    strategy.endOfRound(auction);
-    ShoutPool.release(currentShout);
+	if ( currentShout != null ) {
+		auction.removeShout(currentShout);
+		ShoutPool.release(currentShout);
+	}
+	strategy.endOfRound(auction);    
   }
 
   public Shout getCurrentShout() {
