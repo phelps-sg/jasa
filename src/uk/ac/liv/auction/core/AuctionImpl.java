@@ -20,7 +20,9 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
 
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
+import java.io.Serializable;
 
 import java.util.Map;
 import java.util.Observable;
@@ -37,7 +39,9 @@ import java.util.Iterator;
  */
 
 public abstract class AuctionImpl extends Observable
-                                    implements Auction, Resetable {
+                                    implements Auction, 
+                                    			Serializable,
+                                    			Resetable {
 
   /**
    * The name of this auction.
@@ -53,11 +57,6 @@ public abstract class AuctionImpl extends Observable
    * A unique id for this auction.  It's main use is in debugging.
    */
   protected long id;
-
-  /**
-   * PrintStream for log output.
-   */
-  protected PrintStream logOut = System.out;
 
   /**
    * The last shout placed in the auction.
@@ -101,19 +100,19 @@ public abstract class AuctionImpl extends Observable
       roundClosedListeners, endOfDayListeners, auctionClosedListeners };
 
 
-  public AuctionImpl( String name, MarketDataLogger logger ) {
+  public AuctionImpl( String name ) {
     id = idAllocator.nextId();
     if ( name != null ) {
       this.name = name;
     } else {
       this.name = "Auction " + id;
-    }
-    this.logger = logger;
+    }    
     //initialise();
   }
 
-  public AuctionImpl( String name ) {
-    this(name, new CSVMarketDataLogger());
+  public AuctionImpl( String name, MarketDataLogger logger ) {
+    this(name);
+    this.logger = logger;
   }
 
   public AuctionImpl() {
@@ -174,13 +173,6 @@ public abstract class AuctionImpl extends Observable
    */
   public MarketDataLogger getMarketDataLogger() {
     return logger;
-  }
-
-  /**
-   * Assign a PrintStream for generic logging
-   */
-  public void setLogOutput( PrintStream logOut ) {
-    this.logOut = logOut;
   }
 
   /**
@@ -346,5 +338,6 @@ public abstract class AuctionImpl extends Observable
       logger.updateTransPriceLog(time, ask, bid, price, quantity);
     }
   }
+  
 
 }
