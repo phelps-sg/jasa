@@ -309,8 +309,13 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       payoffLogger.calculate();
 //      payoffLogger.finalReport();
       
+      EquilibriaStats stats = new EquilibriaStats(auction);
+      stats.calculate();
+      assert stats.equilibriaExists();
+      
       for( int i=0; i<numStrategies; i++ ) {
-        payoffs[i].newData(payoffLogger.getPayoff(strategies[i].getClass()));
+        double payoff = payoffLogger.getPayoff(strategies[i].getClass());        
+        payoffs[i].newData(payoff);        
       }
 
     }
@@ -371,9 +376,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   }
 
   protected void randomlyAssignValuers() {
-    double minValue = prng.uniform(minValueMin, minValueMax);
-    double range = prng.uniform(rangeMin, rangeMax);
-    double maxValue = prng.uniform(minValue, minValue + range);
+    double minValue = prng.uniform(minValueMin, minValueMax);    
+    double maxValue = prng.uniform(minValue+rangeMin, minValue + rangeMax);
     for( int i=0; i<numAgents; i++ ) {
       RandomValuer valuer = (RandomValuer) agents[i].getValuer();
       valuer.setMaxValue(maxValue);
