@@ -21,7 +21,7 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 
-/*
+/**
  * Classes implementing this interface determine a commodity-valuation
  * policy for RoundRobinTrader agents.
  *
