@@ -256,9 +256,11 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
       logger.warn(e.getMessage());
       e.printStackTrace();
     }
+    lastShoutAccepted = false;
   }
 
   public void auctionOpen( Auction auction ) {
+    lastShoutAccepted = false;
   }
 
   public void auctionClosed( Auction auction ) {
