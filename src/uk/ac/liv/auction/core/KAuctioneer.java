@@ -21,6 +21,7 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Iterator;
 
@@ -40,7 +41,7 @@ import java.util.Iterator;
  */
 
 public abstract class KAuctioneer extends AbstractAuctioneer
-    implements ParameterizablePricing, Parameterizable {
+    implements Serializable, ParameterizablePricing, Parameterizable {
 
   protected MarketQuote clearingQuote;
 
