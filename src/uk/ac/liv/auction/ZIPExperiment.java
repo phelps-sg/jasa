@@ -82,6 +82,8 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
   protected CummulativeStatCounter[] transPriceStats;
 
+  protected MersenneTwisterFast paramPRNG = new MersenneTwisterFast();
+
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "n";
   public static final String P_NUM_AGENTS = "numagents";
@@ -182,6 +184,15 @@ public class ZIPExperiment implements Parameterizable, Runnable,
     registerTraders(buyers, false);
     registerTraders(sellers, true);
 
+    logger.info("seed = " + prngSeed);
+    logger.info("privValueRangeMin = " + privValueRangeMin);
+    logger.info("privValueIncrement = " + privValueIncrement);
+    logger.info("numDays = " + numDays);
+    logger.info("numSamples = " + numSamples);
+    logger.info("numBuyers = " + numBuyers);
+    logger.info("numSellers = " + numSellers);
+
+    paramPRNG.setSeed(prngSeed);
     seedStrategies();
 
     logger.info("done.");
@@ -197,13 +208,14 @@ public class ZIPExperiment implements Parameterizable, Runnable,
       logger.info("Sample " + sample + "... ");
       selectRandomLearnerParameters();
       for( int day=0; day<numDays; day++ ) {
-        logger.debug("Day " + day + "... ");
+        logger.info("Day " + day + "... ");
         auction.run();
         double meanTransPrice = marketDataLogger.getTransPriceStats().getMean();
         transPriceStats[day].newData(meanTransPrice);
+        logger.info("Auction terminated at round " + auction.getAge());
         logger.info(marketDataLogger.getTransPriceStats());
         auction.reset();
-        logger.debug("Day " + day + " done.");
+        logger.info("Day " + day + " done.");
       }
       logger.info("Sample " + sample + " done.");
     }
@@ -224,7 +236,6 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
 
   protected void seedStrategies() {
-    logger.info("seed = " + prngSeed);
     MersenneTwisterFast prng = new MersenneTwisterFast(prngSeed);
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
@@ -256,7 +267,6 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
 
   protected void selectRandomLearnerParameters() {
-    MersenneTwisterFast paramPRNG = new MersenneTwisterFast(prngSeed);
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();

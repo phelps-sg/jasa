@@ -1,11 +1,11 @@
+
+simulation.days=10
 simulation.auction = uk.ac.liv.auction.core.RoundRobinAuction
-simulation.auction.maximumrounds = 10000
+simulation.auction.maximumrounds = 1000
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
 u
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 simulation.auction.auctioneer.pricing.k = 0.5
-
-simulation.numdays=20
 
 # log4j configuration
 log4j.rootCategory=INFO, stdout

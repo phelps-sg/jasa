@@ -30,6 +30,8 @@ import ec.util.ParameterDatabase;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 /**
  * <p>
  * An implementation of the Zero-Intelligence-Plus (ZIP) strategy.
@@ -59,10 +61,12 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
 
   protected MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
-  protected double scaling;
+  protected double scaling = 0.1;
 
   public static final String P_SCALING = "scaling";
   public static final String P_LEARNER = "learner";
+
+  static Logger logger = Logger.getLogger(ZIPStrategy.class);
 
   public ZIPStrategy() {
   }
@@ -71,7 +75,7 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
 
     super.setup(parameters, base);
 
-    scaling = parameters.getDouble(base.push(P_SCALING), null, 0);
+    scaling = parameters.getDouble(base.push(P_SCALING), null, scaling);
 
     learner = (MimicryLearner)
         parameters.getInstanceForParameter(base.push(P_LEARNER), null,
@@ -79,6 +83,9 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
     if ( learner instanceof Parameterizable ) {
       ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
     }
+
+    logger.debug("Initialised with scaling = " + scaling + " and learner = " +
+                  learner);
 
   }
 
@@ -91,11 +98,14 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
       buyerStrategy(lastShout);
     }
     currentMargin = learner.act();
+    logger.debug("Bidding with margin " + currentMargin);
+    logger.debug("Agent's private value = " + agent.getPrivateValue());
     if ( agent.isBuyer() ) {
       currentPrice = agent.getPrivateValue() * (1 - currentMargin);
     } else {
       currentPrice = agent.getPrivateValue() * (1 + currentMargin);
     }
+    logger.debug("Bidding at " + currentPrice);
     if ( currentPrice > 0 ) {
       shout.setPrice(currentPrice);
     }
@@ -118,9 +128,10 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
   }
 
   protected void sellerStrategy( Shout lastShout ) {
+    logger.debug("sellerStrategy()");
     double lastPrice = lastShout.getPrice();
     if ( lastShout.accepted() ) {
-      if ( currentPrice <= lastPrice ) {
+      if ( agent.active() && currentPrice <= lastPrice ) {
         raiseMargin(lastPrice);
       } else if ( lastShout.isBid() ) {
         if ( currentPrice >= lastPrice ) {
@@ -137,9 +148,10 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
   }
 
   protected void buyerStrategy( Shout lastShout ) {
+    logger.debug("buyerStrategy()");
     double lastPrice = lastShout.getPrice();
     if ( lastShout.accepted() ) {
-      if ( currentPrice >= lastPrice ) {
+      if ( agent.active() && currentPrice >= lastPrice ) {
         raiseMargin(lastPrice);
       } else if ( lastShout.isAsk() ) {
         if ( currentPrice <= lastPrice ) {
@@ -153,23 +165,28 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
     }
   }
 
-  protected double targetPrice( double price, double absolute, double relative ) {
-    return relative * price + absolute;
+  protected double targetMargin( double price, double absolute, double relative ) {
+    logger.debug("targetMargin(" + price + ", " + absolute + ", " + relative);
+    double targetPrice = relative * price + absolute;
+    logger.debug("targetPrice = " + targetPrice);
+    double privValue = agent.getPrivateValue();
+    double targetMargin = (targetPrice - privValue) / privValue;
+    logger.debug("targetMargin = " + targetMargin);
+    return targetMargin;
   }
 
   protected void raiseMargin( double price ) {
-    if ( agent.active() ) {
-      // Only active agents raise margins
-      double relative = randGenerator.nextDouble() + 1;
-      double absolute = randGenerator.nextDouble() * scaling;
-      learner.train(targetPrice(price, absolute, relative));
-    }
+    logger.debug("Raising margin towards " + price);
+    double relative = randGenerator.nextDouble() + 1;
+    double absolute = randGenerator.nextDouble() * scaling;
+    learner.train(targetMargin(price, absolute, relative));
   }
 
   protected void lowerMargin( double price ) {
+    logger.debug("Lowering margin towards " + price);
     double relative = randGenerator.nextDouble();
     double absolute = randGenerator.nextDouble() * -scaling;
-    learner.train(targetPrice(price, absolute, relative));
+    learner.train(targetMargin(price, absolute, relative));
   }
 
 }
