@@ -93,9 +93,12 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   }
 
   public Object protoClone() {
-    KaplanStrategy clone = new KaplanStrategy();
-    clone.t = this.t;
-    clone.s = this.s;
+  	Object clone;
+  	try {
+  		clone = clone();
+  	} catch ( CloneNotSupportedException e ) {
+  		throw new Error(e);
+  	}
     return clone;
   }
 
