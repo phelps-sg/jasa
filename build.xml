@@ -13,13 +13,15 @@
    <property name="poolitLoc" value="${javaLibPath}/poolit/poolit.jar"/>
    <property name="junitLoc" value="${javaLibPath}/junit3.7/junit.jar"/>
    <property name="skijLoc" value="${javaLibPath}/skij.jar"/>
-   <property name="jadeLoc" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
+   <property name="log4jLoc" value="${javaLibPath}/log4j.jar"/>
+   <property name="jadePath" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
 
    <path id="project.classpath">
      <pathelement location="${ecjLoc}" />
      <pathelement location="${poolitLoc}" />
      <pathelement location="${junitLoc}" />
      <pathelement location="${skijLoc}" />
+     <pathelement location="${log4jLoc}" />
      <pathelement location="${jasaLoc}" />
      <pathelement path="${jadePath}" />
      <pathelement location="./classes" />
