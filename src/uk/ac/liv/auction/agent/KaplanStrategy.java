@@ -68,7 +68,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
   /**
    * The time factor.  Kaplan will bid if the remaining time in
-   * the current period is less than t
+   * the current period is less than t.
    */
   protected double t = 4;
 
