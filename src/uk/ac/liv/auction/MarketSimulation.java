@@ -119,7 +119,7 @@ public class MarketSimulation implements Serializable, Runnable {
 
       org.apache.log4j.PropertyConfigurator.configure(fileName);
 
-      ParameterDatabase parameters = new ParameterDatabase(file);
+      ParameterDatabase parameters = new ParameterDatabase(file, args);
       MarketSimulation simulation = new MarketSimulation();
       simulation.setup(parameters, new Parameter(P_SIMULATION));
       simulation.run();

@@ -157,7 +157,7 @@ public class HeuristicPayoffCalculator
 
       MarketSimulation.gnuMessage();
 
-      ParameterDatabase parameters = new ParameterDatabase(file);
+      ParameterDatabase parameters = new ParameterDatabase(file, args);
       HeuristicPayoffCalculator calculator = new HeuristicPayoffCalculator();
       calculator.setup(parameters, new Parameter(P_HEURISTIC));
       calculator.computePayoffMatrix();
