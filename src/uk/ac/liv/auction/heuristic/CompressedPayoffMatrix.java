@@ -25,6 +25,8 @@ import uk.ac.liv.util.BaseNIterator;
 
 import uk.ac.liv.util.io.DataWriter;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -38,7 +40,9 @@ public class CompressedPayoffMatrix {
   protected int numStrategies;
 
   protected Vector matrix;
-
+  
+  static Logger logger = Logger.getLogger(CompressedPayoffMatrix.class);
+  
   public CompressedPayoffMatrix( int numPlayers, int numStrategies ) {
     this.numPlayers = numPlayers;
     this.numStrategies = numStrategies;
@@ -99,7 +103,85 @@ public class CompressedPayoffMatrix {
     }
     return fullOutcome;
   }
-
+  
+  public double[] mixedStrategyPayoffs( double[] mixedStrategy ) {
+    double totalProbability = 0;
+    double[] payoffs = new double[numStrategies];
+    double[] totalPayoffs = new double[numStrategies];
+    int[] strategyCounts = new int[numStrategies];
+    Iterator entries = fullEntryIterator();
+    while ( entries.hasNext() ) {
+      int[] entry = (int[]) entries.next();
+      double[] outcome = getFullOutcome(entry);      
+      double probability = 1;
+      for( int i=0; i<entry.length; i++ ) {
+        probability *= mixedStrategy[entry[i]];        
+      }            
+      for( int s=0; s<numStrategies; s++ ) {
+        strategyCounts[s] = 0;
+        totalPayoffs[s] = 0;
+      }
+      for( int p=0; p<outcome.length; p++ ) {
+        int strategy = entry[p];
+        totalPayoffs[strategy] += outcome[p];
+        strategyCounts[strategy]++;
+      }
+      for( int i=0; i<payoffs.length; i++ ) {
+        if ( strategyCounts[i] > 0 ) {
+          payoffs[i] += (totalPayoffs[i] * probability) / strategyCounts[i];
+        }
+      }
+      totalProbability += probability;
+    } 
+    System.out.println("Probability = " + totalProbability);   
+    return payoffs;
+  }
+  
+  public double[] evolveMixedStrategy( double[] population ) {    
+    double[] population1 = new double[population.length];
+    double[] payoffs = mixedStrategyPayoffs(population);
+    double totalPayoff = 0;
+    for( int i=0; i<numStrategies; i++ ) {
+      totalPayoff += payoffs[i] * population[i];
+    }
+    double averagePayoff = totalPayoff; // / numStrategies;    
+    double totalDifference = 0;
+    for( int s=0; s<numStrategies; s++ ) {      
+      double difference = payoffs[s] - averagePayoff;      
+      totalDifference += difference;
+      population1[s] = population[s] + 0.001 * population[s] * (difference);
+    }    
+    return population1;
+  }
+  
+  public double size( double[] population ) {
+    double size = 0;
+    for( int i=0; i<population.length; i++ ) {
+      size += population[i];
+    }
+    return size;
+  }
+  
+  public void plotRDflow( DataWriter out, double[] initialPopulation, 
+                            double error, int maxIterations ) {
+    double[] population = initialPopulation;
+    double diff = 0;
+    int iteration = 0;
+    do {
+      for( int i=0; i<population.length; i++ ) {
+        out.newData(population[i]);
+      }
+      double[] population1 = evolveMixedStrategy(population);      
+      diff = 0;
+      for( int i=0; i<population.length; i++ ) {
+        diff += Math.abs(population1[i]*population1[i] - population[i]*population[i]);        
+      }      
+      System.out.println("delta = " + diff);
+      population = population1;
+      iteration++;      
+    } while (  iteration < maxIterations );
+  }
+  
   public void export( DataWriter out ) {
     Iterator entries = compressedEntryIterator();
     while ( entries.hasNext() ) {
