@@ -62,12 +62,12 @@ public class EquilibriaStats extends DirectRevelationStats
   protected boolean equilibriaFound = false;
 
   /**
-   * The profits of the buyers in equilibrium.
+   * The profits of the buyers in theoretical equilibrium.
    */
   protected double pBCE = 0;
 
   /**
-   * The profits of the sellers in equilibrium.
+   * The profits of the sellers in theoretical equilibrium.
    */
   protected double pSCE = 0;
 
@@ -148,29 +148,22 @@ public class EquilibriaStats extends DirectRevelationStats
   }
 
   public double equilibriumProfits( int quantity, AbstractTraderAgent trader ) {
-    double surplus = 0;
-    double ep = calculateMidEquilibriumPrice();
-    if ( trader.isSeller() ) {
-      surplus = ep - trader.getPrivateValue(auction);
-    } else {
-      surplus = trader.getPrivateValue(auction) - ep;
-    }
-    //TODO
-    if ( surplus < 0 ) {
-      surplus = 0;
-    }
-    return auction.getAge() * quantity * surplus;
+    return trader.equilibriumProfits(auction, calculateMidEquilibriumPrice(),
+                                       quantity);
   }
 
+
   protected void calculateEquilibriaPriceRange() {
-//    shoutEngine.printState();
-    minPrice = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine.getHighestUnmatchedBid());
-    maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
-    if ( ! (minPrice <= maxPrice) ) {
-      shoutEngine.printState();
-      assert minPrice <= maxPrice;
-    }
+
+    minPrice = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(),
+                               shoutEngine.getHighestUnmatchedBid());
+
+    maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
+                               shoutEngine.getLowestMatchedBid());
+
+    assert minPrice <= maxPrice;
   }
+
 
   public void initialise() {
     super.initialise();

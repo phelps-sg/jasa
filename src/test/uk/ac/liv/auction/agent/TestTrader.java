@@ -104,6 +104,12 @@ public class TestTrader extends AbstractTraderAgent {
     return true;
   }
 
+  public double equilibriumProfits( Auction auction, double equilibriumPrice,
+                                     int quantity ) {
+      //TODO
+      return -1;
+  }
+
   public String toString() {
     return "(" + getClass() + " id:" + id + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
   }

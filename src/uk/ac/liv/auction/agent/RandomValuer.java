@@ -56,6 +56,11 @@ public class RandomValuer extends AbstractSeedable
   public RandomValuer() {
   }
 
+  public RandomValuer( double minValue, double maxValue ) {
+    this.minValue = minValue;
+    this.maxValue = maxValue;
+  }
+
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     minValue = parameters.getDouble(base.push(P_MINVALUE), null, 0);

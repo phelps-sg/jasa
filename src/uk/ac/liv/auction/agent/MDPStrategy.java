@@ -33,7 +33,7 @@ import java.io.Serializable;
  * <p>
  * A trading strategy that uses an MDP learning algorithm,
  * such as the Q-learning algorithm, to adapt its trading behaviour in
- * successive auction rounds.  The current market-quote is hashed produce
+ * successive auction rounds.  The current market-quote is hashed to produce
  * an integer state value.
  *
  * @author Steve Phelps
@@ -106,7 +106,10 @@ public class MDPStrategy extends DiscreteLearnerStrategy
     learner.newState(agent.getLastProfit(), auctionState(auction));
   }
 
-  public int auctionState(Auction auction) {
+  /**
+   * Hash the market quote to produce a state value for the learning algorithm.
+   */
+  public int auctionState( Auction auction ) {
     MarketQuote quote = auction.getQuote();
     double bid = quote.getBid();
     double ask = quote.getAsk();

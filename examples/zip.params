@@ -10,17 +10,12 @@
 #
 #  java uk.ac.liv.auction.zi.ZIPExperiment examples/zip.params
 
-simulation.days=10
 simulation.console = false
 simulation.auction = uk.ac.liv.auction.core.RandomShoutAuction
+simulation.auction.shoutprobability = 0.9
 simulation.auction.name = ZIP Experiment
-simulation.auction.shoutprobability = 1.0
 simulation.auction.maximumrounds = 3000
-simulation.auction.lengthofday = 100
-simulation.auction.maximumdays = 20
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
-simulation.auction.auctioneer.pricing.k = 0.5
+simulation.auction.auctioneer = uk.ac.liv.auction.zi.ZIPAuctioneer
 
 simulation.console = true
 
@@ -29,10 +24,11 @@ simulation.agenttype.n = 2
 simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.0.numagents = 11
 simulation.agenttype.0.isseller = true
-simulation.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
+simulation.agenttype.0.strategy.maxmarkup = 100
 simulation.agenttype.0.strategy.scaling = 0.001
 simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
-simulation.agenttype.0.initialtradeentitlement = 1
+simulation.agenttype.0.initialtradeentitlement = 100000
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.FixedValuer
 
 simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
@@ -41,7 +37,7 @@ simulation.agenttype.1.isseller = false
 simulation.agenttype.1.strategy = uk.ac.liv.auction.zi.ZIPStrategy
 simulation.agenttype.1.strategy.scaling = 0.001
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
-simulation.agenttype.1.initialtradeentitlement = 1
+simulation.agenttype.1.initialtradeentitlement = 1000000
 simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.FixedValuer
 
 # prng configuration
@@ -50,6 +46,14 @@ simulation.seed = 3465
 
 # log4j configuration
 log4j.rootCategory=INFO, stdout
+#log4j.rootCategory=DEBUG, dfile
+
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m%n
+
+log4j.appender.dfile=org.apache.log4j.FileAppender
+log4j.appender.dfile.file=/tmp/debug.out
+log4j.appender.dfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.dfile.layout.ConversionPattern=%c: %m%n
+

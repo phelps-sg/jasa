@@ -30,8 +30,9 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * An implementation of Kaplan's sniping strategy.  Agents using this strategy
- * wait until the last minute before attempting to "steal the bid".  See
+ * An implementation of Todd Kaplan's sniping strategy.  Agents using
+ * this strategy wait until the last minute before attempting to
+ * "steal the bid".  See
  * </p>
  * <p>
  * "Behaviour of trading automata in a computerized double auction market"
@@ -53,8 +54,15 @@ import org.apache.log4j.Logger;
 public class KaplanStrategy extends FixedQuantityStrategyImpl
     implements Serializable, Prototypeable {
 
+  /**
+   * The time factor.  Kaplan will bid if the remaining time in
+   * the current period is less than t then
+   */
   protected double t = 4;
 
+  /**
+   * The spread factor.
+   */
   protected double s = 0.5;
 
   protected MarketQuote quote;

@@ -33,26 +33,16 @@ heuristic.strategy.2 = uk.ac.liv.auction.zi.ZIPStrategy
 heuristic.strategy.2.scaling = 0.0001
 heuristic.strategy.2.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 
-# Buyers have valuations in the range (80, 150)
-heuristic.buyer = uk.ac.liv.auction.electricity.ElectricityTrader
-heuristic.buyer.capacity = 1
-heuristic.buyer.valuer = uk.ac.liv.auction.agent.RandomValuer
-heuristic.buyer.valuer.minvalue = 80
-heuristic.buyer.valuer.maxvalue = 150
+heuristic.agent = uk.ac.liv.auction.zi.ZITraderAgent
+heuristic.agent.initialtradeentitlement = 10000
+# Dummy valuer
+heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Dummy strategy 
-heuristic.buyer.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
-
-# Sellers have valuations in the range (50, 100)
-heuristic.seller = uk.ac.liv.auction.electricity.ElectricityTrader
-heuristic.seller.capacity = 1
-heuristic.seller.valuer = uk.ac.liv.auction.agent.RandomValuer
-heuristic.seller.valuer.minvalue = 50
-heuristic.seller.valuer.maxvalue = 100
-# Dummy strategy
-heuristic.seller.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
+heuristic.agent.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
 heuristic.auction = uk.ac.liv.auction.core.RoundRobinAuction
-heuristic.auction.maximumrounds = 200
+heuristic.auction.maximumrounds = 1000
+
 heuristic.auction.logger = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 
 # Use a k-CDA (clearing after every new shout) with k=0.5
@@ -67,7 +57,16 @@ heuristic.prng = uk.ac.liv.prng.MT
 heuristic.results = payoffs.csv
 
 # log4j configuration - substitute DEBUG for INFO to turn on debugging output
+
 log4j.rootCategory=INFO, stdout
+#log4j.rootCategory=DEBUG, dfile
+
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m%n
+
+log4j.appender.dfile=org.apache.log4j.FileAppender
+log4j.appender.dfile.file=/tmp/debug.out
+log4j.appender.dfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.dfile.layout.ConversionPattern=%c: %m%n
+

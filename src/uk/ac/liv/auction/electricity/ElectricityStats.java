@@ -201,7 +201,6 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
 
   protected void calculate( boolean equilibrium ) {
-
     zeroTotals();
     if ( equilibrium ) {
       calculateEquilibria();

@@ -127,6 +127,22 @@ public class ElectricityTrader extends AbstractTraderAgent {
     return lastProfit;
   }
 
+  public double equilibriumProfits( Auction auction, double equilibriumPrice,
+                                     int quantity ) {
+    double surplus = 0;
+    if ( isSeller ) {
+      surplus = equilibriumPrice - getPrivateValue(auction);
+    } else {
+      surplus = getPrivateValue(auction) - equilibriumPrice;
+    }
+    //TODO
+    if (surplus < 0) {
+      surplus = 0;
+    }
+    return auction.getAge() * quantity * surplus;
+  }
+
+
   public boolean active() {
     return true;
   }

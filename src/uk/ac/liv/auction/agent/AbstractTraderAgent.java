@@ -241,6 +241,10 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
    */
   public void requestShout( Auction auction ) {
     try {
+      if ( currentShout != null ) {
+        auction.removeShout(currentShout);
+        ShoutPool.release(currentShout);
+      }
       currentShout = strategy.modifyShout(currentShout, auction);
       if ( active() && currentShout != null ) {
         auction.newShout(currentShout);
@@ -267,11 +271,11 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   }
 
   public void roundClosed( Auction auction ) {
-    if ( currentShout != null ) {
-      auction.removeShout(currentShout);
-      ShoutPool.release(currentShout);
-      currentShout = null;
-    }
+//    if ( currentShout != null ) {
+//      auction.removeShout(currentShout);
+//      ShoutPool.release(currentShout);
+//      currentShout = null;
+//    }
     strategy.endOfRound(auction);
   }
 
@@ -446,6 +450,10 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
       }
     }
   }
+
+  public abstract double equilibriumProfits( Auction auction,
+                                              double equilibriumPrice,
+                                              int quantity );
 
   /**
    * Determine whether or not this trader is active.

@@ -274,7 +274,6 @@ public class Shout implements Comparable, Cloneable, Serializable {
    * A Shout that is publically mutable.
    *
    * @author Steve Phelps
-   * @version $Revision$
    */
   public static class MutableShout extends Shout {
 

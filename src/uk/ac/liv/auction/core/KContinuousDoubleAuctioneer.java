@@ -35,7 +35,7 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
   }
 
   public KContinuousDoubleAuctioneer( Auction auction, double k ) {
-    this(auction, new UniformPricingPolicy(k));
+    this(auction, new DiscriminatoryPricingPolicy(k));
   }
 
   public KContinuousDoubleAuctioneer( Auction auction, KPricingPolicy policy ) {

@@ -67,6 +67,14 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
   protected int numSamples = 10;
 
+  protected double minValueMin = 61;
+
+  protected double minValueMax = 160;
+
+  protected double rangeMin = 60;
+
+  protected double rangeMax = 209;
+
   protected AbstractTraderAgent[] agents;
 
   protected int numStrategies;
@@ -75,14 +83,17 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
   protected ParameterDatabase parameters;
 
-  protected RandomElement orderingPrng = PRNGFactory.getFactory().create();
+  protected RandomElement prng = PRNGFactory.getFactory().create();
 
   public static final String P_NUMAGENTS = "numagents";
   public static final String P_STRATEGY = "strategy";
   public static final String P_HEURISTIC = "heuristic";
   public static final String P_AUCTION = "auction";
-  public static final String P_BUYER = "buyer";
-  public static final String P_SELLER = "seller";
+  public static final String P_AGENT = "agent";
+  public static final String P_MINVALUEMIN = "minvaluemin";
+  public static final String P_MINVALUEMAX = "minvaluemax";
+  public static final String P_VALUERANGEMIN = "valuerangemin";
+  public static final String P_VALUERANGEMAX = "valuerangemax";
   public static final String P_N = "n";
   public static final String P_RESULTS = "results";
   public static final String P_NUMSAMPLES = "numsamples";
@@ -141,7 +152,6 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     strategyStats.setAuction(auction);
     auction.addMarketStats(strategyStats);
 
-
     numAgents = parameters.getInt(base.push(P_NUMAGENTS));
     numSamples = parameters.getInt(base.push(P_NUMSAMPLES));
 
@@ -162,30 +172,23 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       logger.debug("Strategy " + s + " = " + strategy);
     }
 
+    minValueMin = parameters.getDoubleWithDefault(base.push(P_MINVALUEMIN), null, minValueMin);
+    minValueMax = parameters.getDoubleWithDefault(base.push(P_MINVALUEMAX), null, minValueMax);
+    rangeMin = parameters.getDoubleWithDefault(base.push(P_VALUERANGEMIN), null, rangeMin);
+    rangeMax = parameters.getDoubleWithDefault(base.push(P_VALUERANGEMAX), null, rangeMax);
+
     numBuyers = numAgents / 2;
     numSellers = numBuyers;
 
     agents = new AbstractTraderAgent[numAgents];
 
-    for( int i=0; i<numBuyers; i++ ) {
-      agents[i] =  (AbstractTraderAgent)
-            parameters.getInstanceForParameter(base.push(P_BUYER), null,
-                                                AbstractTraderAgent.class);
-      agents[i].setup(parameters, base.push(P_BUYER));
-      agents[i].setIsSeller(false);
-      logger.debug("Configured buyer " + agents[i]);
-    }
-
-    for( int i=numBuyers; i<numAgents; i++ ) {
-      agents[i] = (AbstractTraderAgent)
-         parameters.getInstanceForParameter(base.push(P_SELLER), null,
-                                             AbstractTraderAgent.class);
-      agents[i].setup(parameters, base.push(P_SELLER));
-      agents[i].setIsSeller(true);
-      logger.debug("Configured seller " + agents[i]);
-    }
-
     for( int i=0; i<numAgents; i++ ) {
+      agents[i] =  (AbstractTraderAgent)
+            parameters.getInstanceForParameter(base.push(P_AGENT), null,
+                                                AbstractTraderAgent.class);
+      agents[i].setup(parameters, base.push(P_AGENT));
+      agents[i].setIsSeller(false);
+      logger.debug("Configured agent " + agents[i]);
       auction.register(agents[i]);
     }
 
@@ -199,6 +202,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     seedObjects();
 
     logger.debug("Setup complete.");
+
+    auction.activateGUIConsole();
   }
 
 
@@ -228,17 +233,22 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     }
     logger.info("");
 
-    CummulativeStatCounter[] payoffs = new CummulativeStatCounter[numStrategies];
+    CummulativeStatCounter[] payoffs =
+        new CummulativeStatCounter[numStrategies];
     for( int i=0; i<numStrategies; i++ ) {
-      payoffs[i] = new CummulativeStatCounter("Payoff for strategy " + strategies[i].getClass().getName());
+      payoffs[i] =
+          new CummulativeStatCounter("Payoff for strategy " +
+                                       strategies[i].getClass().getName());
     }
+
+    assignStrategies(entry);
 
     for( int sample=0; sample<numSamples; sample++ ) {
 
       logger.debug("Taking Sample " + sample + ".....\n");
 
-      randomlySortAgents();
-      assignStrategies(entry);
+      randomlyAssignRoles();
+      randomlyAssignValuers();
 
       do {
         auction.reset();
@@ -247,6 +257,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
       auction.run();
       strategyStats.calculate();
+      strategyStats.generateReport();
 
       for( int i=0; i<numStrategies; i++ ) {
         payoffs[i].newData(strategyStats.getPayoff(strategies[i].getClass()));
@@ -263,16 +274,34 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     results.flush();
   }
 
-  protected void randomlySortAgents() {
+
+  protected void randomlyAssignRoles() {
+    for( int i = 0; i < numAgents; i++ ) {
+      agents[i].setIsSeller(true);
+    }
     int numCandidates = numAgents;
-    for (int i = 0; i < numAgents; i++) {
-      int choice = orderingPrng.choose(numCandidates - 1);
-      AbstractTraderAgent agent = agents[choice];
-      agents[choice] = agents[numCandidates - 1];
-      agents[numCandidates - 1] = agent;
+    for( int i=0; i<numBuyers; i++ ) {
+      int choice = prng.choose(numCandidates)-1;
+      agents[choice].setIsSeller(false);
+      AbstractTraderAgent lastAgent = agents[numCandidates-1];
+      agents[numCandidates-1] = agents[choice];
+      agents[choice] = lastAgent;
       numCandidates--;
     }
+    for( int i=0; i<numAgents; i++ ) {
+      logger.debug("Agent " + agents[i] + " isBuyer = " + agents[i].isBuyer());
+    }
+  }
 
+  protected void randomlyAssignValuers() {
+    double minValue = prng.uniform(minValueMin, minValueMax);
+    double range = prng.uniform(rangeMin, rangeMax);
+    double maxValue = prng.uniform(minValue, minValue + range);
+    for( int i=0; i<numAgents; i++ ) {
+      RandomValuer valuer = (RandomValuer) agents[i].getValuer();
+      valuer.setMaxValue(maxValue);
+      valuer.setMinValue(minValue);
+    }
   }
 
   protected void assignStrategies( int[] entry ) {
@@ -309,7 +338,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
   public void seed( Seeder seeder ) {
     super.seed(seeder);
-    orderingPrng = PRNGFactory.getFactory().create(seeder.nextSeed());
+    prng = PRNGFactory.getFactory().create(seeder.nextSeed());
   }
 
 
@@ -317,8 +346,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     logger.info("Seeding objects...");
     seedAgents();
     seedAuction();
-    logger.info("Seeding done.\n");
     seed(this);
+    logger.info("Seeding done.\n");
   }
 
 

@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 
 /**
  * A class representing a strategy in which we adapt our bids
- * using some a discrete learning algorithm.
+ * using a discrete learning algorithm.
  *
  * </p><p><b>Parameters</b><br>
  *

@@ -145,6 +145,24 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     return super.deliver(auction, quantity, price);
   }
 
+
+  public double equilibriumProfits( Auction auction, double equilibriumPrice,
+                                      int quantity ) {
+    double surplus = 0;
+    if ( isSeller ) {
+      surplus = equilibriumPrice - getPrivateValue(auction);
+    }
+    else {
+      surplus = getPrivateValue(auction) - equilibriumPrice;
+    }
+    //TODO
+    if (surplus < 0) {
+      surplus = 0;
+    }
+    return auction.getDay() * initialTradeEntitlement * surplus;
+  }
+
+
   public void sellUnits( Auction auction, int numUnits ) {
     stock -= numUnits;
     funds += numUnits * valuer.determineValue(auction);
