@@ -425,6 +425,10 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     return valuer;
   }
 
+  public void setValuer( Valuer valuer ) {
+    this.valuer = valuer;
+  }
+
   public void seed( Seeder seeder ) {
     if ( this instanceof Seedable ) {
       ((Seedable) this).setSeed(seeder.nextSeed());

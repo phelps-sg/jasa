@@ -77,9 +77,29 @@ public class RandomValuer extends AbstractSeedable
     drawRandomValue();
   }
 
+  public void setMaxValue( double maxValue ) {
+    this.maxValue = maxValue;
+  }
+
+  public double getMaxValue() {
+    return maxValue;
+  }
+
+  public void setMinValue( double minValue ) {
+    this.minValue = minValue;
+  }
+
+  public double getMinValue() {
+    return minValue;
+  }
 
   protected void drawRandomValue() {
     value = minValue + prng.raw()*(maxValue-minValue);
+  }
+
+  public String toString() {
+    return "(" + getClass() + " minValue:" + minValue + " maxValue:" +
+             maxValue + " value:" + value + ")";
   }
 
 }

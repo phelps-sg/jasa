@@ -44,7 +44,7 @@ simulation.agenttype.1.valuer.maxvalue = 150
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.1.strategy.markupscale = 1
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
-simulation.agenttype.1.strategy.k = 100
+simulation.agenttype.1.strategy.learner.k = 100
 
 
 simulation.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent

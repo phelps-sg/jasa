@@ -51,6 +51,7 @@ public class PerStrategyStats implements MarketStats, Serializable, Resetable {
   }
 
   public void calculate() {
+    reset();
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
