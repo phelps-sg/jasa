@@ -1,0 +1,9 @@
+electricity.r = 0.10
+electricity.e = 0.20
+electricity.k = 30
+electricity.x = 1
+electricity.s1 = 1
+electricity.maxrounds = 50
+electricity.iterations = 100
+electricity.outputfile = electricity-data.csv
+electricity.outputdir = results/electricity/50-rounds
