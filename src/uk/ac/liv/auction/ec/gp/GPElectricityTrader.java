@@ -22,8 +22,8 @@ class GPElectricityTrader extends ElectricityTrader {
   }
 
   public void trade( double price, int quantity ) {
-    double profit = quantity * (privateValue - price);
-    profits += profit;
+    lastProfit = quantity * (privateValue - price);
+    profits += lastProfit;
   }
 
   public void informOfBuyer( GPElectricityTrader buyer, double price, int quantity ) {
@@ -32,8 +32,8 @@ class GPElectricityTrader extends ElectricityTrader {
 
       buyer.trade(price, quantity);
 
-      double profit = quantity * (price - privateValue);
-      profits += profit;
+      lastProfit = quantity * (price - privateValue);
+      profits += lastProfit;
     }
   }
 

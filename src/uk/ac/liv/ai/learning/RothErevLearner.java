@@ -307,6 +307,7 @@ public class RothErevLearner implements
     }
   }
 
+  /*
   public String toString() {
     StringBuffer str = new StringBuffer("(" + this.getClass() + " ");
     str.append("k:" + k + " r:" + r + " e:" + e + " ");
@@ -319,7 +320,7 @@ public class RothErevLearner implements
     }
     str.append("\n)");
     return str.toString();
-  }
+  } */
 
 
 }
