@@ -50,7 +50,13 @@ public class EquilibriaDistribution extends AbstractSeedable {
   
   protected int numRDSamples;
   
-  protected String RDPrefix;
+  protected String fileRDPrefix;
+  
+  protected int maxIterations = 200000;
+  
+  protected double minimumVelocity = 0.000001;
+  
+  protected double resolution = 0.1;
    
   static Logger logger = Logger.getLogger(EquilibriaDistribution.class);
   
@@ -60,6 +66,9 @@ public class EquilibriaDistribution extends AbstractSeedable {
   public static final String P_NUMRDSAMPLES = "numrdsamples";
   public static final String P_RDPREFIX = "rdprefix";
   public static final String P_EQUILIBRIA = "equilibria";
+  public static final String P_MAXITERATIONS = "maxiterations";
+  public static final String P_MINVELOCITY = "minvelocity";
+  public static final String P_RESOLUTION = "resolution";
 
   public EquilibriaDistribution() {
     equilibria = new HashMap();
@@ -94,7 +103,10 @@ public class EquilibriaDistribution extends AbstractSeedable {
     numAgents = parameters.getInt(base.push(P_NUMAGENTS), null, 1);
     numStrategies = parameters.getInt(base.push(P_NUMSTRATEGIES), null, 1);
     numRDSamples = parameters.getInt(base.push(P_NUMRDSAMPLES), null, 1);
-    RDPrefix = parameters.getString(base.push(P_RDPREFIX), null);
+    fileRDPrefix = parameters.getString(base.push(P_RDPREFIX), null);
+    resolution = parameters.getDoubleWithDefault(base.push(P_RESOLUTION), null, resolution);
+    maxIterations = parameters.getIntWithDefault(base.push(P_MAXITERATIONS), null, maxIterations);
+    minimumVelocity = parameters.getDoubleWithDefault(base.push(P_MINVELOCITY), null, minimumVelocity);
     try {
       FileInputStream file = new FileInputStream(payoffMatrixFileName);
       CSVReader csvIn = new CSVReader(file, new Class[] {Integer.class, Integer.class, Integer.class, Double.class, Double.class, Double.class} );      
@@ -108,20 +120,27 @@ public class EquilibriaDistribution extends AbstractSeedable {
   public void sampleRDTrajectories() throws FileNotFoundException {
 
     for( int i=0; i<numRDSamples; i++ ) {
-      double x, y;
+      
+      double x, y, z;
+      
       do {
         x = prng.uniform(0, 1);
         y = prng.uniform(0, 1);
       } while ( x+y > 1 );
+      z = 1 - x - y;
 
-      double z = 1 - x - y;
-
-      CSVWriter rdPlot = new CSVWriter( new FileOutputStream(RDPrefix + i + ".csv"), 3);
+      CSVWriter rdPlot = 
+        new CSVWriter( new FileOutputStream(fileRDPrefix + i + ".csv"), 
+                        numStrategies);
+      
       double[] equilibrium =
-        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.000001, 200000);
-      rdPlot.close();
-
+        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z},
+                                  minimumVelocity, maxIterations);  
+        
       newEquilibrium(equilibrium);
+      
+      rdPlot.close();
+      
     }
 
 
