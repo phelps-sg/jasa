@@ -89,7 +89,7 @@ public class MarketSimulation extends AbstractSeeder
   public static final String P_SIMULATION = "simulation";
 
 
-  public static final String VERSION = "0.27";
+  public static final String VERSION = "0.28";
 
   public static final String GNU_MESSAGE =
     "\n" +
