@@ -25,13 +25,13 @@ public class QLearnerTest extends TestCase {
 
   QLearner learner1;
 
-  static final double EPSILON = 0.4;
-  static final double LEARNING_RATE = 0.5;
-  static final double DISCOUNT_RATE = 0.8;
+  static final double EPSILON = 0.05;
+  static final double LEARNING_RATE = 0.8;
+  static final double DISCOUNT_RATE = 0.9;
 
   static final int NUM_ACTIONS = 10;
   static final int CORRECT_ACTION = 2;
-  static final int NUM_TRIALS = 100;
+  static final int NUM_TRIALS = 1000;
 
 
   public QLearnerTest( String name ) {
@@ -69,6 +69,7 @@ public class QLearnerTest extends TestCase {
     int correctActions = 0;
     for( int i=0; i<NUM_TRIALS; i++ ) {
       int action = learner1.act();
+      assertTrue(action == learner1.getLastActionChosen());
       stats.newData(action);
       if ( action == CORRECT_ACTION ) {
         learner1.newState(1.0, 0);
@@ -79,9 +80,9 @@ public class QLearnerTest extends TestCase {
     }
     System.out.println("final state of learner1 = " + learner1);
     double score = score(correctActions);
-    System.out.println("learner1 score = " + ((double) correctActions/ (double)NUM_TRIALS)*100 + "%");
+    System.out.println("learner1 score = " + score + "%");
     System.out.println(stats);
-    assertTrue(score > 50);
+    assertTrue(score > 80);
   }
 
   public double score( int numCorrect ) {

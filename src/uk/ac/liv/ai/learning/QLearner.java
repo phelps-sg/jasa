@@ -218,5 +218,15 @@ public class QLearner
     return epsilon;
   }
 
+  public int getLastActionChosen() {
+    return lastActionChosen;
+  }
+
+  public String toString() {
+    return "(" + getClass() + " lastActionChosen:" + lastActionChosen
+              + " epsilon:" + epsilon + " learningRate:"
+              + learningRate + " discountRate:" + discountRate + ")";
+  }
+
 
 }
