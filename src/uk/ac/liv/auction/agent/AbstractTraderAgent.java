@@ -243,6 +243,8 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
         auction.removeShout(currentShout);        
       }
       currentShout = strategy.modifyShout(currentShout, auction);
+      lastProfit = 0;
+      lastShoutAccepted = false;
       if ( active() && currentShout != null ) {
         auction.newShout(currentShout);
       } 
@@ -256,7 +258,6 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
       logger.warn(e.getMessage());
       e.printStackTrace();
     }
-    lastShoutAccepted = false;
   }
 
   public void auctionOpen( Auction auction ) {
