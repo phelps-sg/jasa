@@ -190,6 +190,7 @@ public class SurplusStats extends EquilibriaStats {
     vars.put("profit.psce", new Double(pSCE));
     vars.put("profit.pba", new Double(pBA));
     vars.put("profit.psa", new Double(pSA));
+    vars.put("profit.ea", new Double(eA));
     return vars;
   }
 
