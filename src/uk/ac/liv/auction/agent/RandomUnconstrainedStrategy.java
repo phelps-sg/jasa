@@ -54,31 +54,30 @@ import cern.jet.random.Uniform;
  */
 
 public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
-                                        implements Serializable {
+    implements Serializable {
 
-    public static final String P_MAXPRICE = "maxprice";
+  public static final String P_MAXPRICE = "maxprice";
 
-    public static double MAX_PRICE = 200;
-
-    protected AbstractContinousDistribution distribution;
-
+  public static final double DEFAULT_MAX_PRICE = 200;
+  
+  protected double maxPrice;
+    
+  protected AbstractContinousDistribution distribution;
 
   public RandomUnconstrainedStrategy() {
     super(null);
   }
 
-  public RandomUnconstrainedStrategy( AbstractTradingAgent agent) {
+  public RandomUnconstrainedStrategy( AbstractTradingAgent agent ) {
     super(agent);
   }
-  
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-      super.setup(parameters, base);
-      MAX_PRICE = parameters.getDoubleWithDefault(base.push(P_MAXPRICE),
-                                                    null, MAX_PRICE);
-      
-      distribution = new Uniform(0, MAX_PRICE, GlobalPRNG.getInstance());      
-  }
 
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
+    maxPrice = parameters.getDoubleWithDefault(base.push(P_MAXPRICE), null,
+        DEFAULT_MAX_PRICE);
+    initialise();
+  }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
 
@@ -92,7 +91,22 @@ public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
   public void endOfRound( Auction auction ) {
     // Do nothing
   }
+  
+  public void initialise() {
+    super.initialise();
+    distribution = new Uniform(0, maxPrice, GlobalPRNG.getInstance()); 
+  }
 
+  
+  public double getMaxPrice() {
+    return maxPrice;
+  }
+  
+  public void setMaxPrice( double maxPrice ) {
+    this.maxPrice = maxPrice;
+    initialise();
+  }
+  
   public String toString() {
     return "(" + getClass() + " quantity:" + quantity + ")";
   }
