@@ -317,16 +317,17 @@ class EquilibriaDistribution {
 
   protected HashMap equilibria;
   
-  protected double precision = 100;
+  protected int totalInstances;
   
   static Logger logger = Logger.getLogger(EquilibriaDistribution.class);
   
   public EquilibriaDistribution() {
     equilibria = new HashMap();  
+    totalInstances = 0;
   }
   
-  public void newEquilibrium( double[] mixedStrategy ) {
-    double[] equilibrium = round(mixedStrategy);
+  public void newEquilibrium( double[] probabilities ) {
+    MixedStrategy equilibrium = new MixedStrategy(probabilities);
     MutableIntWrapper instances;
     instances = (MutableIntWrapper) equilibria.get(equilibrium);
     if ( instances == null ) {
@@ -335,28 +336,66 @@ class EquilibriaDistribution {
     } else {
       instances.value++;
     }    
-  }
-  
-  public double[] round( double[] mixedStrategy ) {
-    double[] result = new double[mixedStrategy.length];
-    for( int i=0; i<mixedStrategy.length; i++ ) {
-      result[i] = Math.round(mixedStrategy[i]*precision) / precision;
-    }
-    return result;
-  }
+    totalInstances++;
+  }  
   
   public void generateReport() {
     Iterator i = equilibria.keySet().iterator();
     while ( i.hasNext() ) {
-      double[] profile = (double[]) i.next();
-      MutableIntWrapper instanceCount = (MutableIntWrapper) equilibria.get(profile);
-      StringBuffer s = new StringBuffer();
-      for( int j=0; j<profile.length; j++ ) {
-        s.append(profile[j] + " ");
-      }
-      s.append(": " + instanceCount.value);
-      logger.info(s.toString());
+      MixedStrategy strategy = (MixedStrategy) i.next();
+      MutableIntWrapper instanceCount = 
+        (MutableIntWrapper) equilibria.get(strategy);
+      System.out.println(strategy + ": " + instanceCount.value / (double) totalInstances);
     }
+  }
+  
+}
+
+class MixedStrategy {
+ 
+  protected double[] probabilities;
+  
+  protected static double precision = 10;
+  
+  public MixedStrategy( double[] mixedStrategy ) {
+    this.probabilities = new double[mixedStrategy.length];
+    for( int i=0; i<mixedStrategy.length; i++ ) {
+      probabilities[i] = mixedStrategy[i];
+    }
+    round();
+  }
+  
+  public void round() {    
+    for( int i=0; i<probabilities.length; i++ ) {
+      probabilities[i] = Math.round(probabilities[i]*precision) / precision;
+    }   
+  }
+  
+  public boolean equals( Object other ) {
+    for( int i=0; i<probabilities.length; i++ ) {
+      if ( probabilities[i] != ((MixedStrategy) other).probabilities[i] ) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  public int hashCode() {
+    int hash = 0;
+    int base = 1;
+    for( int i=0; i<probabilities.length; i++ ) {
+      hash += probabilities[i] * base;
+      base *= 2;
+    }
+    return hash;
+  }
+  
+  public String toString() {
+    StringBuffer result = new StringBuffer();
+    for( int i=0; i<probabilities.length; i++ ) {
+      result.append(probabilities[i] + " ");
+    }
+    return result.toString();
   }
   
 }
