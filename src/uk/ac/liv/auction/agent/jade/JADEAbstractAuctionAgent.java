@@ -48,11 +48,13 @@ import uk.ac.liv.util.Parameterizable;
 
 public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
 
-
   /**
-   * Setup the agent.  Registers with the DF, and adds a behaviour to
-   * process incoming messages.
+   * The time in ms. to sleep in between attempts to contact
+   * the auctioneer.
    */
+  static final int REGISTER_RETRY_PERIOD = 1000;
+
+
   protected void setup() {
     try {
       System.out.println( getLocalName() + " setting up");
@@ -97,7 +99,6 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
     msg.setLanguage(FIPANames.ContentLanguage.FIPA_SL0);
     msg.setOntology(AuctionOntology.NAME);
     agent.getContentManager().fillContent(msg, content);
-    System.out.println("Sending: " + msg);
     agent.send(msg);
   }
 
@@ -108,7 +109,6 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
     sd.setType(JADEAuctionAdaptor.SERVICE_AUCTIONEER);
     dfd.addServices(sd);
     while (true) {
-      System.out.println(getLocalName()+ " waiting for a JASAAuctioneer registering with the DF");
       SearchConstraints c = new SearchConstraints();
       c.setMaxDepth(new Long(3));
       DFAgentDescription[] result = DFService.search(this,dfd,c);
@@ -117,9 +117,8 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
         auctioneerAID = dfd.getName();
         break;
       }
-      Thread.sleep(10000);
+      Thread.sleep(REGISTER_RETRY_PERIOD);
     }
-    System.out.println("found auctioneer with aid = " + auctioneerAID);
     return auctioneerAID;
   }
 

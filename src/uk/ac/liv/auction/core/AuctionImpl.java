@@ -48,7 +48,7 @@ public abstract class AuctionImpl extends Observable
   /**
    * A unique id for this auction.  It's main use is in debugging.
    */
-  protected int id;
+  protected long id;
 
   /**
    * PrintStream for log output.

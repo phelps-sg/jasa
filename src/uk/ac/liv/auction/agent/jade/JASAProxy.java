@@ -37,6 +37,9 @@ public class JASAProxy {
   protected Agent sender;
 
   public JASAProxy( AID targetJadeID, Agent sender ) {
+//    if ( targetJadeID == null || sender == null ) {
+//      throw new IllegalArgumentException("Must specify a sender and a tagetJadeID when constructing a JASAProxy");
+//    }
     this.targetJadeID = targetJadeID;
     this.sender = sender;
   }

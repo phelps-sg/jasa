@@ -40,7 +40,8 @@ import jade.domain.*;
 
 /**
  * An adaptor that lets a JASA round-robin trader pretend to be
- * a JADE agent.
+ * a JADE agent.  This adaptor translates incoming ACL messages into
+ * JASA method invocations on the target JASA agent.
  *
  * @author Steve Phelps
  *
@@ -78,9 +79,10 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
                     new JASAAuctionProxy(msg.getSender(), myAgent));
               } else if ( content instanceof BidSuccessfulPredicate ) {
                 BidSuccessfulPredicate p = (BidSuccessfulPredicate) content;
-                jasaTraderAgent.informOfSeller(p.getShout().jasaShout(),
-                    new JASATraderAgentProxy(new AID(p.getSeller(), true), myAgent),
-                    p.getPrice(), p.getQuantity());
+                //TODO
+                //jasaTraderAgent.informOfSeller(p.getShout().jasaShout(),
+                //    new JASATraderAgentProxy(new AID(p.getSeller(), true), myAgent),
+                //    p.getPrice(), p.getQuantity());
 
               }
             }

@@ -83,7 +83,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   /**
    * Unique id for this trader.  Its used mainly for debugging purposes.
    */
-  protected int id;
+  protected long id;
 
   /**
    * Flag indicating whether this trader is a seller or buyer.
@@ -233,7 +233,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     return quantity;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 

@@ -43,6 +43,8 @@ import ec.util.Parameter;
 
 /**
  * An adaptor that lets a JASA auction pretend to be a JADE agent.
+ * This adaptor translates incoming ACL messages into JASA
+ * method invocations on the wrapped auction class.
  *
  * @author Steve Phelps
  */
@@ -76,24 +78,23 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
         ACLMessage msg = receive();
         if ( msg != null ) {
           if ( msg.getPerformative() == msg.INFORM ) {
-            System.out.println("Message content = " + msg.getContent());
             ContentElement content = getContentManager().extractContent(msg);
             if ( content instanceof RegisterAction ) {
               RegisterAction action = (RegisterAction) content;
               AID traderAID = new AID(action.getAgent(), true);
-              System.out.println("Registering trader " + traderAID);
               auction.register(new JASATraderAgentProxy(traderAID, myAgent));
             } else if ( content instanceof StartAuctionAction ) {
               System.out.println("Starting auction");
               finished = true;
             }
           } else {
-            System.out.println("Received non-understood message: " + msg);
+            //TODO
           }
         }
       } catch ( Exception e ) {
         e.printStackTrace();
         //TODO
+        throw new Error(e.getMessage());
       }
     }
 
@@ -120,7 +121,6 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
 
     public void action() {
       try {
-        System.out.println("Initiating auction round..");
         auction.initiateRound();
       } catch ( AuctionClosedException e ) {
         auctionClosed = true;
@@ -148,21 +148,17 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
 
     public void action() {
       try {
-        System.out.println("auctioneer: processing shouts");
         ACLMessage msg = receive();
-        System.out.println("auctioneer: got msg " + msg);
         if ( msg != null ) {
           ContentElement content = getContentManager().extractContent(msg);
-          System.out.println("auctioneer: msg content = " + content);
           if ( content instanceof NewShoutAction ) {
-            System.out.println("Recieved new shout " + msg);
             ACLShout shout = ((NewShoutAction) content).getShout();
-            System.out.println("JASA shout = " + shout.jasaShout());
+            shout.assignJADEAuctioneer(myAgent);
             auction.newShout(shout.jasaShout());
           } else if ( content instanceof RemoveShoutAction ) {
-            System.out.println("Removing shout " + msg);
             ACLShout shout = ((RemoveShoutAction) content).getShout();
-            //auction.removeShout(shout.jasaShout());
+            shout.assignJADEAuctioneer(myAgent);
+            auction.removeShout(shout.jasaShout());
           }
         }
       } catch ( Exception e ) {
@@ -173,8 +169,6 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
     }
 
     public boolean done() {
-      System.out.println("auctioneer: checking end of auction");
-      System.out.println("finished = " + auction.roundFinished());
       return auction.roundFinished();
     }
 
@@ -188,9 +182,8 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
     }
 
     public void action() {
-      System.out.println("Finalising auction round");
       auction.finaliseRound();
-      System.out.println("Auction age = " + auction.getAge());
+      System.out.println("End of round " + auction.getAge());
     }
 
   }
@@ -225,6 +218,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
     auctionFSM.registerState(finaliseRoundBehaviour, STATE_FINALISE_ROUND);
     OneShotBehaviour end = new OneShotBehaviour(this) {
       public void action() {
+        auction.generateReport();
       }
     };
     auctionFSM.registerLastState(end, STATE_END);

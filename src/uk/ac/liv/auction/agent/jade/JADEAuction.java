@@ -41,7 +41,7 @@ public class JADEAuction extends RandomRobinAuction {
   }
 
   public void finaliseRound() {
-    logger.updateQuoteLog(round++, getQuote());
+    updateQuoteLog(round++, getQuote());
     sweepDefunctTraders();
     auctioneer.endOfRoundProcessing();
     setChanged();
@@ -54,9 +54,6 @@ public class JADEAuction extends RandomRobinAuction {
   }
 
   public boolean roundFinished() {
-    System.out.println("Checking round finished");
-    System.out.println("numShoutsReceived = " + numShoutsReceived);
-    System.out.println("numberOfTraders = " + getNumberOfTraders());
     return numShoutsReceived == getNumberOfTraders();
   }
 

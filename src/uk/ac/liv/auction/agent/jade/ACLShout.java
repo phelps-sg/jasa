@@ -35,7 +35,10 @@ import jade.core.AID;
 public class ACLShout implements Concept  {
 
   String agentName;
+
   Shout jasaShout;
+
+  Agent auctioneer;
 
   public ACLShout() {
     jasaShout = new Shout();
@@ -45,12 +48,19 @@ public class ACLShout implements Concept  {
     this.jasaShout = jasaShout;
   }
 
+  public void assignJADEAuctioneer( Agent auctioneer ) {
+    this.auctioneer = auctioneer;
+    if ( jasaShout instanceof ShoutWithMutableId ) {
+      ((ShoutWithMutableId) jasaShout).setJADEAgent(new AID((agentName), true), auctioneer);
+    }
+  }
+
 
   public void setAgentName( String agentName ) {
     this.agentName = agentName;
     muteJasaShout();
-    ((ShoutWithMutableId) jasaShout).setJADEAgent(new AID(agentName, true), null);
-
+    ShoutWithMutableId shout = (ShoutWithMutableId) jasaShout;
+    shout.setJADEAgent(new AID(agentName, true), auctioneer);
   }
 
   public String getAgentName() {
@@ -69,7 +79,7 @@ public class ACLShout implements Concept  {
     return jasaShout.isBid();
   }
 
-  public int getId() {
+  public long getId() {
     return jasaShout.getId();
   }
 
@@ -86,7 +96,7 @@ public class ACLShout implements Concept  {
   }
 
 
-  public void setId(int id) {
+  public void setId( long id ) {
     muteJasaShout();
     ((ShoutWithMutableId) jasaShout).setId(id);
   }
@@ -107,12 +117,12 @@ public class ACLShout implements Concept  {
 
 class ShoutWithMutableId extends Shout {
 
-  public void setId( int id ) {
+  public void setId( long id ) {
     this.id = id;
   }
 
-  public void setJADEAgent( AID aid, Agent sender ) {
-    setAgent( new JASATraderAgentProxy(aid, sender) );
+  public void setJADEAgent( AID aid, Agent auctioneer ) {
+    setAgent( new JASATraderAgentProxy(aid, auctioneer) );
   }
 
 }

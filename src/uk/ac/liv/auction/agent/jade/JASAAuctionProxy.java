@@ -28,8 +28,7 @@ import jade.lang.acl.ACLMessage;
 
 /**
  * An implementation of the JASA Auction interface that translates
- * JASA method invocations into ACL messages for a JADE auction agent;
- * that is, a JADEAuctionAdaptor.
+ * JASA method invocations into ACL messages for a JADE auctioneer agent.
  *
  * @see JADEAuctionAdaptor
  * @see Auction

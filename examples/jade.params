@@ -1,5 +1,6 @@
 # Maximum number of rounds
 auction.auctioneer.maximumrounds = 10
+auction.auctioneer.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
 
 # Two populations of trader agents
 auction.numagenttypes = 2

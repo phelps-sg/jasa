@@ -26,8 +26,7 @@ import jade.content.onto.OntologyException;
 
 /**
  * An implementation of the JASA RoundRobinTrader interface that translates
- * JASA method invocations into ACL messages to a JADE trader agent;
- * that is, a JADETraderAgentAdaptor.
+ * JASA method invocations into ACL messages for a JADE trader agent.
  *
  * @see JADETraderAgentAdaptor
  * @see uk.ac.liv.auction.agent.RoundRobinTrader
@@ -60,7 +59,12 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
       BidSuccessfulPredicate content = new BidSuccessfulPredicate();
       content.setPrice(price);
       content.setQuantity(quantity);
+      ACLShout aclWinningShout = new ACLShout(winningShout);
+      JASATraderAgentProxy winningShoutAgent = (JASATraderAgentProxy) winningShout.getAgent();
+      aclWinningShout.setAgentName(winningShoutAgent.getTargetAID().getName());
+      content.setShout(aclWinningShout);
       content.setSeller(((JASATraderAgentProxy) seller).getTargetAID().getName());
+      msg.addReceiver(targetJadeID);
       JADEAbstractAuctionAgent.sendMessage(sender, msg, content);
     } catch ( Exception e ) {
       e.printStackTrace();
@@ -72,7 +76,7 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
     return sender.getAID();
   }
 
-  public int getId() {
+  public long getId() {
     //TODO
     return -1;
   }
