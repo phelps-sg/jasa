@@ -17,8 +17,7 @@ package uk.ac.liv.auction;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.stats.StatsMarketDataLogger;
-import uk.ac.liv.auction.stats.MetaMarketStats;
+import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.electricity.*;
 import uk.ac.liv.util.*;
 import uk.ac.liv.util.io.*;
@@ -80,6 +79,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   ElectricityStats stats;
 
   RandomRobinAuction auction;
+
+  ContinuousDoubleAuctioneer auctioneer;
 
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
@@ -185,8 +186,6 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     System.out.println("S1 = " + S1);
     System.out.println("random private values = " + randomPrivateValues);
 
-    auction = new RandomRobinAuction("Electricity Auction");
-    stats = new ElectricityStats(auction);
 
     experiment( 3, 3, 10, 10 );
     experiment( 6, 3, 10, 20 );
@@ -215,9 +214,20 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       e.printStackTrace();
     }
 
+    auction = new RandomRobinAuction("Electricity Auction");
+    auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+    auction.setAuctioneer(auctioneer);
+
+    registerTraders(auction, true, ns, cs, sellerValues);
+    registerTraders(auction, false, nb, cb, buyerValues);
+
+    auction.setMaximumRounds(maxRounds);
+
     for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
 
       double auctioneerK = kMultiple/auctioneerKSamples;
+      auctioneer.setK(auctioneerK);
+      auction.reset();
 
       System.out.println("\n*** Experiment with parameters");
       System.out.println("ns = " + ns);
@@ -233,13 +243,24 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
 
       for( int i=0; i<iterations; i++ ) {
-        ElectricityStats results = runExperiment(ns, nb, cs, cb, auctioneerK);
+        if ( randomPrivateValues ) {
+          randomizePrivateValues();
+        }
+        ElectricityStats results = runExperiment();
         efficiency.newData(results.eA);
         mPB.newData(results.mPB);
         mPS.newData(results.mPS);
         pBA.newData(results.pBA);
         pSA.newData(results.pSA);
-        //System.out.println("\nResults for iteration " + i + "\n" + results);
+//        System.out.println("\nResults for iteration " + i + "\n" + results);
+//        if ( results.mPB > 10 || results.mPS > 10 ) {
+//          System.out.println("outlying MP data!!");
+//          System.out.println(results);
+//          Iterator it = auction.getTraderIterator();
+//          while ( it.hasNext() ) {
+//            System.out.println(it.next().toString());
+//          }
+//        }
       }
       System.out.println("\n*** Summary results for ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
       System.out.println(efficiency);
@@ -264,29 +285,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     dataFile.close();
   }
 
-  public ElectricityStats runExperiment( int ns, int nb, int cs, int cb,
-                                            double auctioneerK ) {
-
-    StatsMarketDataLogger logger;
-    ContinuousDoubleAuctioneer auctioneer;
-
-    auction = new RandomRobinAuction("Electricity Auction");
-    auctioneer = new DiscrimPriceCDAAuctioneer(auction, auctioneerK);
-
-    auction.setAuctioneer(auctioneer);
-
-    registerTraders(auction, true, ns, cs, sellerValues);
-    registerTraders(auction, false, nb, cb, buyerValues);
-
-    logger = new StatsMarketDataLogger();
-    auction.setMarketDataLogger(logger);
-
-    auction.setMaximumRounds(maxRounds);
-
+  public ElectricityStats runExperiment() {
+    auction.reset();
     auction.run();
-
     stats = new ElectricityStats(auction);
-
     return stats;
   }
 
@@ -298,8 +300,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       double value;
       if ( randomPrivateValues ) {
-        value = minPrivateValue +
-                  (maxPrivateValue - minPrivateValue) * randGenerator.nextDouble();
+        value = randomPrivateValue();
       } else {
         value = values[i % values.length];
       }
@@ -320,6 +321,24 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       auction.register(trader);
     }
   }
+
+  public double randomPrivateValue() {
+    return minPrivateValue +
+              (maxPrivateValue - minPrivateValue) * randGenerator.nextDouble();
+  }
+
+  protected void randomizePrivateValues() {
+    EquilibriaStats stats = new EquilibriaStats(auction);
+    do {
+      Iterator i = auction.getTraderIterator();
+      while ( i.hasNext() ) {
+        ElectricityTrader trader = (ElectricityTrader) i.next();
+        trader.setPrivateValue(randomPrivateValue());
+      }
+      stats.recalculate();
+    } while ( ! stats.equilibriaExists() );
+  }
+
 
 }
 

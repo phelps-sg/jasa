@@ -34,7 +34,7 @@ import uk.ac.liv.auction.agent.*;
 
 /**
  * <p>
- * Calculate the market-power and efficiency variables described in
+ * Calculate the market-power and efficiency variables described in:
  * </p>
  * <p>
  * "Markert Power and Efficiency in a Computational Electricity Market

@@ -19,6 +19,7 @@ package uk.ac.liv.auction.core;
 import uk.ac.liv.auction.stats.*;
 
 import uk.ac.liv.util.IdAllocator;
+import uk.ac.liv.util.Resetable;
 
 import java.io.PrintStream;
 import java.io.OutputStream;
@@ -31,7 +32,8 @@ import java.util.Observable;
  * logging facilities and an optional popup GUI console.
  */
 
-public abstract class AuctionImpl extends Observable implements Auction {
+public abstract class AuctionImpl extends Observable 
+                                    implements Auction, Resetable {
 
   /**
    * The name of this auction.

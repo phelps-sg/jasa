@@ -20,6 +20,7 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.util.Debug;
+import uk.ac.liv.util.Resetable;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -40,7 +41,7 @@ import ec.util.ParameterDatabase;
  * @author Steve Phelps
  */
 
-public class EquilibriaStats implements MarketStats {
+public class EquilibriaStats implements MarketStats, Resetable {
 
   FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
 
@@ -133,7 +134,10 @@ public class EquilibriaStats implements MarketStats {
   protected void calculateEquilibriaPriceRange() {
     minPrice = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine.getHighestUnmatchedBid());
     maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
-    Debug.assertTrue(minPrice <= maxPrice);
+    if ( ! (minPrice <= maxPrice) ) {
+      shoutEngine.printState();
+      Debug.assertTrue("equilibria price range invalid; minPrice="+minPrice + " maxPrice="+maxPrice,minPrice <= maxPrice);
+    }
   }
 
   protected void releaseShouts() {
