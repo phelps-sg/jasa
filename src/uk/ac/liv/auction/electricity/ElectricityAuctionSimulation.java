@@ -476,8 +476,6 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 
-
-
   protected void initIterResults( String filename ) throws FileNotFoundException {
     if ( collectIterData ) {
       FileOutputStream iterOut = new FileOutputStream(filename);
