@@ -138,15 +138,19 @@ public class CompressedPayoffMatrix {
     return payoffs;
   }
   
-  public void evolveMixedStrategy( double[] population ) {        
+  public double evolveMixedStrategy( double[] population ) {        
     double[] payoffs = mixedStrategyPayoffs(population);
     double averagePayoff = 0;
+    double totalDelta = 0;
     for( int i=0; i<numStrategies; i++ ) {
       averagePayoff += payoffs[i] * population[i];
     }       
     for( int s=0; s<numStrategies; s++ ) {      
-      population[s] += population[s] * (payoffs[s] - averagePayoff);
+      double delta = population[s] * (payoffs[s] - averagePayoff);
+      population[s] += delta;
+      totalDelta += delta*delta;
     }        
+    return totalDelta;
   }
   
   public double size( double[] population ) {
@@ -164,9 +168,10 @@ public class CompressedPayoffMatrix {
     int iteration = 0;
     double oldPopSize;
     do {
-      oldPopSize = size(population);      
-      evolveMixedStrategy(population);                 
-      diff = size(population)- oldPopSize; 
+      for( int i=0; i<population.length; i++ ) {
+        out.newData(population[i]);
+      }
+      diff = evolveMixedStrategy(population);                 
       iteration++;      
     } while (  diff > error && iteration < maxIterations );
   }
@@ -264,7 +269,7 @@ public class CompressedPayoffMatrix {
     
     CompressedPayoffMatrix payoffMatrix = new CompressedPayoffMatrix(6, 3);
     
-    edu.cornell.lassp.houle.RngPack.RandomElement prng = new edu.cornell.lassp.houle.RngPack.RanMT();
+    edu.cornell.lassp.houle.RngPack.RandomElement prng = new edu.cornell.lassp.houle.RngPack.RanMT(1234);
     
     String filename = args[0];
     
@@ -276,7 +281,7 @@ public class CompressedPayoffMatrix {
 
       payoffMatrix.importFromCSV(csvIn);
 
-      for( int i=0; i<100; i++ ) {
+      for( int i=0; i<200; i++ ) {
         
         double x, y;
         do {
@@ -287,7 +292,7 @@ public class CompressedPayoffMatrix {
         double z = 1 - x - y;
 
         uk.ac.liv.util.io.CSVWriter rdPlot = new uk.ac.liv.util.io.CSVWriter( new FileOutputStream("/tmp/rdplot" + i + ".csv"), 3);
-        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.00001, 100000);
+        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.00001, 20000);
         rdPlot.close();
       }
       

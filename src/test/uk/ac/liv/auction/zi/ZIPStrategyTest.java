@@ -97,9 +97,8 @@ public class ZIPStrategyTest extends TestCase {
     for( int i=0; i<traders.length; i++ ) {
       traders[i] = new ZITraderAgent(privValue, TRADE_ENTITLEMENT, areSellers);
       ZIPStrategy strategy = new ZIPStrategy();
-      double learningRate = 0.1 + prng.nextDouble() * 0.4;
-      double momentum = 0.2 + prng.nextDouble() * 0.6;
-      WidrowHoffLearner learner = new WidrowHoffLearner(learningRate, momentum);
+      double learningRate = 0.1 + prng.nextDouble() * 0.4;   
+      WidrowHoffLearner learner = new WidrowHoffLearner(learningRate);
       strategy.setLearner(learner);
       traders[i].setStrategy(strategy);
       auction.register(traders[i]);

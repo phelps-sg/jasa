@@ -229,7 +229,7 @@ public class ZIPExperiment extends MarketSimulation {
 
 
   protected void initialiseAgents() {
-    double momentum = 0.1 + paramPRNG.raw() * 0.4;
+    //double momentum = 0.1 + paramPRNG.raw() * 0.4;
     double learningRate = 0.2 + paramPRNG.raw() * 0.6;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
@@ -237,8 +237,7 @@ public class ZIPExperiment extends MarketSimulation {
       WidrowHoffLearner l =
           (WidrowHoffLearner)
             ((AdaptiveStrategy) trader.getStrategy()).getLearner();
-      l.setLearningRate(learningRate);
-      l.setMomentum(momentum);
+      l.setLearningRate(learningRate);      
 //      l.randomInitialise();
       trader.reset();
     }

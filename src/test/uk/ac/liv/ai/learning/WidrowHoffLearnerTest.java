@@ -27,9 +27,7 @@ public class WidrowHoffLearnerTest extends TestCase {
 
   double score;
 
-  static final double LEARNING_RATE = 0.1;
-
-  static final double MOMENTUM = 0.01;
+  static final double LEARNING_RATE = 0.8;
 
   static final double TARGET_VALUE = 0.12;
 
@@ -40,7 +38,7 @@ public class WidrowHoffLearnerTest extends TestCase {
   }
 
   public void setUp() {
-    learner1 = new WidrowHoffLearner(LEARNING_RATE, MOMENTUM);
+    learner1 = new WidrowHoffLearner(LEARNING_RATE);
   }
 
   public void testConvergence() {
@@ -57,9 +55,10 @@ public class WidrowHoffLearnerTest extends TestCase {
   }
 
   protected void train( int iterations ) {
-    for( int i=0; i<iterations; i++ ) {
-      System.out.println("Learning delta = " + learner1.getLearningDelta());
+    for( int i=0; i<iterations; i++ ) {      
       learner1.train(TARGET_VALUE);
+      System.out.println("Learning delta = " + learner1.getLearningDelta());
+      System.out.println("Current output = " + learner1.act());
     }
   }
 

@@ -32,7 +32,7 @@ import java.io.Serializable;
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 /**
- * An implementation of the Widrow-Hoff learning algorithm with momentum
+ * An implementation of the Widrow-Hoff learning algorithm 
  * for 1-dimensional training sets.
  *
  * @author Steve Phelps
@@ -58,11 +58,6 @@ public class WidrowHoffLearner extends AbstractLearner
   protected double delta;
 
   /**
-   * The momentum of the learner.
-   */
-  protected double momentum;
-
-  /**
    * A PRNG for initialising the learning algorithm with randomly chosen
    * values for the momentum and learningRate parameters.
    */
@@ -72,27 +67,24 @@ public class WidrowHoffLearner extends AbstractLearner
 
   public static final double DEFAULT_MOMENTUM = 0.1;
 
-  public static final String P_MOMENTUM = "momentum";
   public static final String P_LEARNINGRATE = "learningrate";
 
-  public WidrowHoffLearner( double learningRate, double momentum ) {
+  public WidrowHoffLearner( double learningRate ) {
     this.learningRate = learningRate;
-    this.momentum = momentum;
     initialise();
   }
 
   public WidrowHoffLearner() {
-    this(DEFAULT_LEARNING_RATE, DEFAULT_MOMENTUM);
+    this(DEFAULT_LEARNING_RATE);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    learningRate = parameters.getDouble(base.push(P_LEARNINGRATE), null, 0);
-    momentum = parameters.getDouble(base.push(P_MOMENTUM), null, 0);
+    learningRate = parameters.getDouble(base.push(P_LEARNINGRATE), null, 0); 
   }
 
   public Object protoClone() {
-    WidrowHoffLearner clone = new WidrowHoffLearner(learningRate, momentum);
+    WidrowHoffLearner clone = new WidrowHoffLearner(learningRate);
     return clone;
   }
 
@@ -101,7 +93,7 @@ public class WidrowHoffLearner extends AbstractLearner
   }
 
   public void train( double target ) {
-    currentOutput = currentOutput + (1-momentum) * delta(target);
+    currentOutput += delta(target);
   }
 
   public double delta( double target ) {
@@ -146,23 +138,14 @@ public class WidrowHoffLearner extends AbstractLearner
     return learningRate;
   }
 
-  public void setMomentum( double momentum ) {
-    this.momentum = momentum;
-  }
-
-  public double getMomentum() {
-    return momentum;
-  }
 
   public void randomInitialise() {
-    learningRate = 0.1 + paramPRNG.raw() * 0.4;
-    momentum = 0.2 + paramPRNG.raw() * 0.6;
+    learningRate = paramPRNG.uniform(0.1, 0.4);       
   }
 
   public String toString() {
     return ("(" + getClass() + " learningRate:" + learningRate +
-             " momentum:" + momentum + " delta:" + delta + " currentOutput:" +
-             currentOutput + ")");
+             " delta:" + delta + " currentOutput:" + currentOutput + ")");
   }
 
 }
