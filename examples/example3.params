@@ -2,26 +2,35 @@
 #
 # To run this example, run the following command:
 #
-#  java uk.ac.liv.auction.MarketSimulation jasa/examples/example1.params
+#  java uk.ac.liv.auction.RepastMarketSimulation jasa/examples/example1.params
 #
 
 # Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
+
+# The auction will close after 1000 rounds (or "ticks")
 simulation.auction.maximumrounds = 1000
+
+# The length of each trading day (period) is 20 rounds.
 simulation.auction.lengthofday = 20
-simulation.auction.maximumdays = 50
+
+# Close the auction after 30 days
+simulation.auction.maximumdays = 30
+
 simulation.auction.name = Example 3: Dynamic supply and demand
 
 # Use a double-auction with clearing occuring at the end of each round
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+
 # Set the transaction price as a function of individual bid and ask prices
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+
 # Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
 
-# Configure a combination of two different loggers
+# Configure a combination of four different loggers
 simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
-simulation.auction.logger.n = 3
+simulation.auction.logger.n = 4
 
 # The first logger collects stats on the auction as it progresses
 simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
@@ -29,8 +38,11 @@ simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 # The second logger logs data to a graph on the console
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
-# Collect per-day statistics for agent strategies
-simulation.auction.logger.2 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
+# Collect data on relative profits by agent group
+simulation.auction.logger.2 = uk.ac.liv.auction.stats.GroupPayoffLogger
+
+# The following logger is used by the Kaplan strategy
+simulation.auction.logger.3 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 
 # Show GUI console
 simulation.auction.console = true
@@ -39,10 +51,11 @@ simulation.auction.console = true
 simulation.auction.agenttype.n = 3
 
 # 1st population-
-#  50 electricity sellers with a capacity of 10MWh
-#  using the Roth-Erev strategy
+#  40 electricity sellers with a capacity of 10MWh
+#  using the Roth-Erev strategy (with NPT modifications)
 simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.auction.agenttype.0.numagents = 70
+simulation.auction.agenttype.0.group = 0
+simulation.auction.agenttype.0.numagents = 40
 simulation.auction.agenttype.0.initialtradeentitlement = 10
 simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.auction.agenttype.0.valuer.minvalue = 50
@@ -55,9 +68,10 @@ simulation.auction.agenttype.0.isseller = true
 
 # 2nd population-
 #  50 electricity buyers with a capacity of 20MWh
-#  using the modified Roth-Erev strategy
+#  using a q-learning strategy
 simulation.auction.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.auction.agenttype.1.numagents = 20
+simulation.auction.agenttype.1.group = 1
+simulation.auction.agenttype.1.numagents = 30
 simulation.auction.agenttype.1.initialtradeentitlement = 10
 simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.auction.agenttype.1.valuer.minvalue = 80
@@ -71,7 +85,8 @@ simulation.auction.agenttype.1.isseller = false
 #  3rd population-
 #   3 buyers using Kaplan
 simulation.auction.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.auction.agenttype.2.numagents = 50
+simulation.auction.agenttype.2.group = 2
+simulation.auction.agenttype.2.numagents = 30
 simulation.auction.agenttype.2.initialtradeentitlement = 10
 simulation.auction.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.auction.agenttype.2.valuer.minvalue = 10
@@ -80,7 +95,11 @@ simulation.auction.agenttype.2.strategy = uk.ac.liv.auction.agent.KaplanStrategy
 simulation.auction.agenttype.2.isseller = false
 
 # prng configuration
+
+# Use the Mersenne Twister PRNG
 simulation.prng = uk.ac.liv.prng.MT
+
+#  ..configured with the following seed
 simulation.seed = 7842
 
 # log4j configuration

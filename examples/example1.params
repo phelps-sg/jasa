@@ -1,24 +1,34 @@
-# This example demonstrates a discriminatory-price k-DA
+#
+# This example demonstrates a non-interactive batch experiment 
+# involving ten iterations of a discriminatory-price k-DA 
+# electricity market.
 #
 # To run this example, run the following command:
 #
 #  java uk.ac.liv.auction.MarketSimulation jasa/examples/example1.params
 #
 
+# Perform ten iterations of the experiment
 simulation.iterations = 10
+
+# Write the results of each iteration to the following 
+#  comma-separated-variables (CSV) file
 simulation.writer = uk.ac.liv.util.io.CSVWriter
 simulation.writer.filename = results.csv
 
 # Use a random-robin auction which will randomise the order in which agents bid
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.name = Example 1: electricity k-DA
+simulation.auction.name = Example 1: discriminatory-price electricity k-DA
+
+# The auction will close after 100 rounds (or "ticks")
 simulation.auction.maximumrounds = 100
 
-# Use a k-DA auctioneer 
+# Use a k-DA auctioneer- clearing will occur at the end of each
+#  round after every agent has had a chance to place a shout
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 
-# Set the transaction price as a function of individual bid and ask prices
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+# Set the transaction price as a function of the market quote
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 
 # Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
@@ -30,14 +40,15 @@ simulation.auction.logger.n = 2
 # The first logger collects stats on the auction as it progresses
 simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 
-# The second logger logs data to a graph on the console
-simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+# The second logger collects data on profit distribution
+simulation.auction.logger.1 = uk.ac.liv.auction.stats.EquilibriumSurplusLogger
 
-# Show GUI console
-simulation.auction.console = true
-
-# Generate a report on market equilibria
+# In addition, generate a report on the relative concentration 
+#  and capacity of the electricity traders
 simulation.auction.stats = uk.ac.liv.auction.electricity.ElectricityStats
+
+# Do not show the GUI console, as this is a batch experiment
+simulation.auction.console = false
 
 # Two populations of agents
 simulation.auction.agenttype.n = 2
@@ -92,7 +103,7 @@ simulation.prng = uk.ac.liv.prng.MT
 #  with the following PRNG seed
 simulation.seed = 1298
 
-# log4j configuration - substitute DEBUG for INFO to turn on debugging output
+# log4j configuration - substitute INFO for DEBUGO to turn on debugging output
 log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout

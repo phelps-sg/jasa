@@ -1,16 +1,20 @@
 # This example demonstrates a uniform-price k-DA with a large number
 # of agents.
 #
-# To run this example, run the following command:
+# To run this example in RePast, run the following command:
 #
-#  java uk.ac.liv.auction.MarketSimulation jasa/examples/example2.params
+#  java uk.ac.liv.auction.RepastMarketSimulation jasa/examples/example2.params
 #
 
+# Use a random-robin auction which will randomise the order in which agents bid
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.shoutprobability = 0.9
-
 simulation.auction.name = Example 2: Uniform-price k-DA
+
+# The auction will close after 1000 rounds (or "ticks")
 simulation.auction.maximumrounds = 10000
+
+# Show GUI console
+simulation.auction.console = true
 
 # Use a k-DA auctioneer which will clear the auction after each round
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
@@ -29,9 +33,7 @@ simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 # 2nd logger logs data to a graph on the console
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
-# Show GUI console
-simulation.auction.console = true
-
+# Produce a report on the equilibrium price and quantity
 simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
 
 # Two populations of agents
@@ -44,9 +46,9 @@ simulation.auction.agenttype.0.initialtradeentitlement = 1000
 simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.auction.agenttype.0.strategy.maxmarkup = 100
 simulation.auction.agenttype.0.isseller = true
-# Private values will be randomly drawn for each unit that we trade
+# Valuations (limit prices) will be drawn randomly when agents are initialised
 simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
-# Range for private values is (10, 100)
+# Range for valuations is (110, 200)
 simulation.auction.agenttype.0.valuer.minvalue = 110
 simulation.auction.agenttype.0.valuer.maxvalue = 200
 
@@ -57,9 +59,9 @@ simulation.auction.agenttype.1.initialtradeentitlement = 1000
 simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.auction.agenttype.1.strategy.maxmarkup = 100
 simulation.auction.agenttype.1.isseller = false
-# Private values will be randomly drawn for each unit that we trade
+# Valuations (limit prices) will be drawn randomly when agents are initialised
 simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
-# Range for private values is (20, 150)
+# Range for valuations is (120, 250)
 simulation.auction.agenttype.1.valuer.minvalue = 120
 simulation.auction.agenttype.1.valuer.maxvalue = 250
 

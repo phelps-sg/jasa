@@ -3,7 +3,7 @@
 #
 # Run using:
 #
-#  java uk.ac.liv.auction.HeuristicPayoffCalculator examples/heuristic.params
+#  java uk.ac.liv.auction.heuristic.HeuristicPayoffCalculator examples/heuristic.params
 #
 
 # Number of games to play per entry in the payoff matrix
