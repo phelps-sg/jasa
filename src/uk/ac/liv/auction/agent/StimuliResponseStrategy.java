@@ -43,7 +43,7 @@ import ec.util.Parameter;
  *
  * </table>
  *
- * @author Steve Phelps 
+ * @author Steve Phelps
  */
 
 public class StimuliResponseStrategy extends AdaptiveStrategy {
@@ -93,13 +93,13 @@ public class StimuliResponseStrategy extends AdaptiveStrategy {
     return learner;
   }
 
-  public void setLearner( StimuliResponseLearner learner ) {
-    this.learner = learner;
+  public void setLearner( Learner learner ) {
+    this.learner = (StimuliResponseLearner) learner;
   }
 
   public String toString() {
     return "(" + getClass() + " markupscale:" + markupScale + " learner:" +
-              learner + " quantity:" + quantity + ")";      
+              learner + " quantity:" + quantity + ")";
   }
 
 }

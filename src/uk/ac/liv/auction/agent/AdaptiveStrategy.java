@@ -122,6 +122,6 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
    * Get the learning algorithm currently being used by this strategy.
    */
   public abstract Learner getLearner();
-  
 
+  public abstract void setLearner( Learner learner );
 }

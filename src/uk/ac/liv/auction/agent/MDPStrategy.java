@@ -129,8 +129,8 @@ public class MDPStrategy extends AdaptiveStrategy {
     return learner;
   }
 
-  public void setLearner( MDPLearner learner ) {
-    this.learner = learner;
+  public void setLearner( Learner learner ) {
+    this.learner = (MDPLearner) learner;
   }
 
   public String toString() {
