@@ -11,7 +11,7 @@
 simulation.auction = uk.ac.liv.auction.core.RandomShoutAuction
 simulation.auction.shoutprobability = 0.9
 
-simulation.auction.name = Example2
+simulation.auction.name = Example 2: Uniform-price k-DA
 simulation.auction.maximumrounds = 200
 
 # Use a k-DA auctioneer which will clear the auction after each round

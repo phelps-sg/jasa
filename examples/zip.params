@@ -1,7 +1,19 @@
+# The experiment as described in
+# "Minimal Intelligence Agents for Bargaining Behaviours in
+# Market-based Environments" Dave Cliff 1997
+#
+# Work is currently in progress to attempt a full replication of the
+# results in the above paper.  Currently JASA is not able to replicate
+# these results.
+#
+# To run this experiment use the command:
+#
+#  java uk.ac.liv.auction.zi.ZIPExperiment examples/zip.params
 
 simulation.days=10
 simulation.console = false
 simulation.auction = uk.ac.liv.auction.core.RandomShoutAuction
+simulation.auction.name = ZIP Experiment
 simulation.auction.shoutprobability = 1.0
 simulation.auction.maximumrounds = 3000
 simulation.auction.lengthofday = 100

@@ -790,7 +790,9 @@ public class RoundRobinAuction extends AuctionImpl
   protected void endOfDay() {
     log4jLogger.debug("endOfDay()");
     informEndOfDay();
-    logger.endOfDay();
+    if ( logger != null ) {
+      logger.endOfDay();
+    }
     day++;
     log4jLogger.debug("new day = " + day + " of " + maximumDays);
     round = 0;

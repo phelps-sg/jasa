@@ -7,7 +7,7 @@
 
 # Use a random-robin auction which will randomise the order in which agents bid
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.name = Example1
+simulation.auction.name = Example 1: k-CDA
 simulation.auction.maximumrounds = 10000
 
 # Use a k-CDA auctioneer with clearing occuring every time a new shout arrives

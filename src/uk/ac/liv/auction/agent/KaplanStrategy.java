@@ -144,17 +144,13 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
       error(e);
     }
 
-    if ( transPrice == null ) {
-      return false;
-    }
-
     if (agent.isBuyer()) {
       smallSpread =
-          quote.getAsk() < transPrice.getMax() &&
+//          quote.getAsk() < transPrice.getMax() &&
           ( (quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
     } else {
       smallSpread =
-          quote.getBid() > transPrice.getMin() &&
+//          quote.getBid() > transPrice.getMin() &&
           ( (quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
     }
 

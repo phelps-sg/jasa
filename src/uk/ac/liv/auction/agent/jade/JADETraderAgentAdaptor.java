@@ -18,6 +18,8 @@ package uk.ac.liv.auction.agent.jade;
 import uk.ac.liv.auction.agent.*;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Seeder;
+import uk.ac.liv.util.Seedable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -41,6 +43,10 @@ import jade.content.lang.sl.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.*;
 
+import uk.ac.liv.prng.PRNGFactory;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+
 /**
  * An adaptor that lets a JASA round-robin trader pretend to be
  * a JADE agent.  This adaptor translates incoming ACL messages into
@@ -52,39 +58,47 @@ import jade.domain.*;
  * @see AbstractTraderAgent
  */
 
-public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent 
-                                     implements Parameterizable {
+public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent
+                                     implements Parameterizable, Seeder {
 
-  AbstractTraderAgent jasaTraderAgent;
+  protected AbstractTraderAgent jasaTraderAgent;
 
   public static final String SERVICE_TRADER = "JASATrader";
+
+  static RandomElement prng = PRNGFactory.getFactory().create();
 
 
   public JADETraderAgentAdaptor( AbstractTraderAgent jasaTraderAgent ) {
     this();
     this.jasaTraderAgent = jasaTraderAgent;
   }
-  
-  public JADETraderAgentAdaptor() {    
+
+  public JADETraderAgentAdaptor() {
   }
 
- 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    jasaTraderAgent = 
-      (AbstractTraderAgent) parameters.getInstanceForParameterEq(base, null,
-                                                                  AbstractTraderAgent.class);    
-    jasaTraderAgent.setup(parameters, base);
-  }  
 
-  
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    jasaTraderAgent =
+      (AbstractTraderAgent) parameters.getInstanceForParameterEq(base, null,
+                                                                  AbstractTraderAgent.class);
+    jasaTraderAgent.setup(parameters, base);
+    jasaTraderAgent.seed(this);
+    jasaTraderAgent.reset();
+  }
+
+  public long nextSeed() {
+    return prng.choose(0, Integer.MAX_VALUE);
+  }
+
+
   public String getServiceName() {
     return SERVICE_TRADER;
   }
 
   public void addBehaviours() {
-    
+
     // add a Behaviour to handle messages from auctioneers
-    
+
     addBehaviour( new CyclicBehaviour( this ) {
       public void action() {
         ACLMessage msg = receive();
@@ -117,7 +131,7 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent
         block();
       }
     } );
-    
+
     // add initialisation behaviour to find and register with an auctioneer
 
     addBehaviour( new OneShotBehaviour(this) {

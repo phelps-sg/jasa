@@ -1,4 +1,4 @@
-# This example demonstrates a discriminatory-price k-CDA
+# This example demonstrates randomly changing supply and demand schedules
 #
 # To run this example, run the following command:
 #
@@ -8,9 +8,9 @@
 # Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.maximumrounds = 1000
-simulation.auction.lengthofday = 10
+simulation.auction.lengthofday = 20
 simulation.auction.maximumdays = 50
-simulation.auction.name = Example3
+simulation.auction.name = Example 3: Dynamic supply and demand
 
 # Use a double-auction with clearing occuring at the end of each round
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
@@ -43,6 +43,7 @@ simulation.agenttype.n = 3
 #  using the Roth-Erev strategy
 simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.0.numagents = 70
+simulation.agenttype.0.initialtradeentitlement = 10
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.agenttype.0.valuer.minvalue = 50
 simulation.agenttype.0.valuer.maxvalue = 100
@@ -57,6 +58,7 @@ simulation.agenttype.0.isseller = true
 #  using the modified Roth-Erev strategy
 simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.1.numagents = 20
+simulation.agenttype.1.initialtradeentitlement = 10
 simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.agenttype.1.valuer.minvalue = 80
 simulation.agenttype.1.valuer.maxvalue = 150
@@ -70,6 +72,7 @@ simulation.agenttype.1.isseller = false
 #   3 buyers using Kaplan
 simulation.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.2.numagents = 50
+simulation.agenttype.2.initialtradeentitlement = 10
 simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.agenttype.2.valuer.minvalue = 10
 simulation.agenttype.2.valuer.maxvalue = 200

@@ -1,0 +1,76 @@
+
+simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
+simulation.auction.maximumrounds = 200
+simulation.auction.name = Example 4: Zip/RothErev/Kaplan
+simulation.console = true
+
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+simulation.auction.auctioneer.pricing.k = 0.5
+
+simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
+simulation.auction.logger.n = 3
+simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+simulation.auction.logger.2 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
+
+simulation.auction.stats = uk.ac.liv.auction.stats.CombiMarketStats
+simulation.auction.stats.n = 2
+simulation.auction.stats.0 = uk.ac.liv.auction.stats.PerStrategyStats
+simulation.auction.stats.1 = uk.ac.liv.auction.stats.EquilibriaStats
+
+
+simulation.agenttype.n = 3
+
+simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.agenttype.0.numagents = 20
+simulation.agenttype.0.isseller = true
+simulation.agenttype.0.initialtradeentitlement = 200
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.0.valuer.minvalue = 50
+simulation.agenttype.0.valuer.maxvalue = 100
+simulation.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.agenttype.0.strategy.scaling = 0.0001
+simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
+
+
+simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.agenttype.1.numagents = 20
+simulation.agenttype.1.isseller = false
+simulation.agenttype.1.initialtradeentitlement = 100
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.1.valuer.minvalue = 80
+simulation.agenttype.1.valuer.maxvalue = 150
+simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+simulation.agenttype.1.strategy.markupscale = 1
+simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+simulation.agenttype.1.strategy.k = 100
+
+
+simulation.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.agenttype.2.numagents = 20
+simulation.agenttype.2.isseller = false
+simulation.agenttype.2.initialtradeentitlement = 100
+simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+simulation.agenttype.2.valuer.minvalue = 100
+simulation.agenttype.2.valuer.maxvalue = 200
+simulation.agenttype.2.strategy = uk.ac.liv.auction.agent.KaplanStrategy
+simulation.agenttype.2.strategy.t = 10
+simulation.agenttype.2.strategy.s = 0.1
+
+# prng configuration - use Mersenne Twister algorithm with seed based on clock
+simulation.prng = uk.ac.liv.prng.MT
+
+# log4j configuration
+
+log4j.rootCategory=INFO, stdout
+#log4j.rootCategory=DEBUG, debugfile
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n
+
+log4j.appender.debugfile=org.apache.log4j.FileAppender
+log4j.appender.debugfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.debugfile.layout.ConversionPattern=[%t] %c: %m%n
+log4j.appender.debugfile.file=/tmp/debug.out

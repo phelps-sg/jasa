@@ -33,7 +33,7 @@ auction.agenttype.n = 2
 auction.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.0.numagents = 50
 auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
-auction.agenttype.0.valuer.minvalue = 10
+auction.agenttype.0.valuer.minvalue = 40
 auction.agenttype.0.valuer.maxvalue = 100
 auction.agenttype.0.capacity = 10
 auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
@@ -45,10 +45,10 @@ auction.agenttype.0.isseller = true
 # 2nd population- 50 buyers using the the original
 #  Roth-Erev learning algorithm
 auction.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
-auction.agenttype.1.numagents = 50
+auction.agenttype.1.numagents = 40
 auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
-auction.agenttype.1.valuer.minvalue = 10
-auction.agenttype.1.valuer.maxvalue = 150
+auction.agenttype.1.valuer.minvalue = 70
+auction.agenttype.1.valuer.maxvalue = 120
 auction.agenttype.1.capacity = 10
 auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 auction.agenttype.1.strategy.markupscale = 1

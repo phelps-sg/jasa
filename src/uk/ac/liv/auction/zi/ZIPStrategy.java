@@ -69,12 +69,17 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
   protected static RandomElement randGenerator =
       PRNGFactory.getFactory().create();
 
+  /**
+   * A parameter used to scale the randomly drawn price adjustment
+   * perturbation values.
+   */
   protected double scaling = 0.01;
 
   public static final String P_SCALING = "scaling";
   public static final String P_LEARNER = "learner";
 
   static Logger logger = Logger.getLogger(ZIPStrategy.class);
+
 
   public ZIPStrategy( AbstractTraderAgent agent ) {
     super(agent);
@@ -97,40 +102,48 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     if ( learner instanceof Parameterizable ) {
       ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
     }
+
     initialise();
+    setMargin(0.5 + randGenerator.raw()/2);
 
     logger.debug("Initialised with scaling = " + scaling + " and learner = " +
                   learner);
 
   }
 
+
   public void initialise() {
     super.initialise();
-    currentMargin = 0.5 + randGenerator.raw()/2;
   }
+
 
   public boolean modifyShout( Shout.MutableShout shout ) {
     try {
+
+      currentMargin = learner.act();
+      if ( currentMargin < 0 ) {
+        logger.debug(this + ": clipping negative margin at 0");
+        setMargin(currentMargin = 0);
+      }
       Shout lastShout = auction.getLastShout();
-      if (agent.isSeller()) {
+      if ( agent.isSeller() ) {
         sellerStrategy(lastShout);
       } else {
         buyerStrategy(lastShout);
       }
       logger.debug(this + ": Bidding with margin " + currentMargin);
       logger.debug(this + ": Agent's private value = " + agent.getPrivateValue(auction));
-      if (agent.isBuyer()) {
+      if ( agent.isBuyer() ) {
         currentPrice = agent.getPrivateValue(auction) * (1 - currentMargin);
-      }
-      else {
+      } else {
         currentPrice = agent.getPrivateValue(auction) * (1 + currentMargin);
       }
       logger.debug(this + ": Bidding at " + currentPrice);
-      if (currentPrice > 0) {
+      if ( currentPrice > 0 ) {
         shout.setPrice(currentPrice);
       }
-      currentMargin = learner.act();
       return super.modifyShout(shout);
+
     } catch ( ShoutsNotVisibleException e ) {
       logger.error(e.getMessage());
       throw new AuctionError("ZIPStrategy can only be used with auctioneers who permit shout visibility");
@@ -148,7 +161,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
   public void seed( Seeder s ) {
     logger.debug("seed(" + s + ")");
     setSeed(s.nextSeed());
-    ((Seedable) learner).seed(s);
+    learner.seed(s);
 //    learner.randomInitialise();
     logger.debug("learner = " + learner);
   }
@@ -162,7 +175,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
   }
 
   public void setMargin( double margin ) {
-    ((MimicryLearner) learner).setOutputLevel(margin);
+    learner.setOutputLevel(margin);
   }
 
   protected void sellerStrategy( Shout lastShout ) {

@@ -190,7 +190,7 @@ public class ZIPExperiment extends MarketSimulation {
     for( int sample=0; sample<numSamples; sample++ ) {
 
       logger.info("\nSample " + sample + "... ");
-      resetAgents();
+      initialiseAgents();
       auction.run();
       logger.debug("Auction terminated at round " + auction.getAge());
 
@@ -228,13 +228,17 @@ public class ZIPExperiment extends MarketSimulation {
   }
 
 
-  protected void resetAgents() {
+  protected void initialiseAgents() {
+    double momentum = 0.1 + paramPRNG.raw() * 0.4;
+    double learningRate = 0.2 + paramPRNG.raw() * 0.6;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
-      MimicryLearner l =
-          (MimicryLearner)
+      WidrowHoffLearner l =
+          (WidrowHoffLearner)
             ((AdaptiveStrategy) trader.getStrategy()).getLearner();
+      l.setLearningRate(learningRate);
+      l.setMomentum(momentum);
 //      l.randomInitialise();
       trader.reset();
     }
