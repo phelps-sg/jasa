@@ -18,6 +18,7 @@ package test.uk.ac.liv.auction.zi;
 import junit.framework.*;
 
 import uk.ac.liv.auction.zi.*;
+import uk.ac.liv.auction.agent.TruthTellingStrategy;
 import uk.ac.liv.auction.core.*;
 
 import java.util.Observer;
@@ -52,6 +53,8 @@ public class ZITraderAgentTest extends TestCase implements Observer {
   public void setUp() {
     buyer = new ZITraderAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT, false);
     seller = new ZITraderAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true);
+    buyer.setStrategy( new TruthTellingStrategy(buyer) );
+    seller.setStrategy( new TruthTellingStrategy(seller) );
     auction = new RoundRobinAuction("ZIPStrategyTest auction");
     auction.register(buyer);
     auction.register(seller);
