@@ -151,5 +151,10 @@ public class StandardRandomizer implements Parameterizable, Serializable {
       }
     }
   }
+  
+  public String toString() {
+    return "(" + getClass() + " minPrivateValue:" + minPrivateValue 
+              + " maxPrivateValue:" + maxPrivateValue + " seed:" + seed + ")";
+  }
 
 }

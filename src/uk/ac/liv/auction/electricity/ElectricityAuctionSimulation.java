@@ -273,16 +273,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   public void experiment() throws IOException {
 
-    logger.info("\nUsing global parameters:\n");
-    logger.info("maxRounds = " + maxRounds);
-    logger.info("iterations = " + iterations);
-    logger.info("auctioneer = " + auctioneer);
-    logger.info("ns = " + numSellers);
-    logger.info("nb = " + numBuyers);
-    logger.info("cs = " + sellerCapacity);
-    logger.info("cb = " + buyerCapacity);
-    logger.info("stats = " + stats + "\n");
-
+    summariseParameters();
+    
     int numTraders = numBuyers + numSellers;
 
     paramSummary = numSellers + "-" + numBuyers + "-" +
@@ -405,10 +397,20 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     }
   }
 
-  protected void initStats() {
-
-
-
+  
+  protected void summariseParameters() {
+    logger.info("\nUsing global parameters:\n");
+    logger.info("maxRounds = " + maxRounds);
+    logger.info("iterations = " + iterations);
+    logger.info("auctioneer = " + auctioneer);
+    logger.info("ns = " + numSellers);
+    logger.info("nb = " + numBuyers);
+    logger.info("cs = " + sellerCapacity);
+    logger.info("cb = " + buyerCapacity);
+    logger.info("stats = " + stats);
+    logger.info("randomizer = " + randomizer);
+    logger.info("buyer strategy = " + buyerStrategies[0]);
+    logger.info("seller strategy = " + sellerStrategies[0]);
   }
 
 
