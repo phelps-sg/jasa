@@ -2,9 +2,7 @@
 #
 # To run this example, run the following commands:
 #
-#  cd <directory where jasa installed>
-#  mkdir results
-#  java uk.ac.liv.auction.MarketSimulation examples/example1.params
+#  java uk.ac.liv.auction.MarketSimulation jasa/examples/example1.params
 #
 
 # Use a random-robin auction which will randomise the shouting order
@@ -18,23 +16,15 @@ simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPri
 # Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
 
-# Configure 3 different loggers
+# Configure a combination of two different loggers
 simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
-simulation.auction.logger.n = 3
+simulation.auction.logger.n = 2
 
 # The first logger collects stats on the auction as it progresses
 simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 
 # The second logger logs data to a graph on the console
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
-
-# The third logger dumps data to CSV files
-simulation.auction.logger.2 = uk.ac.liv.auction.stats.CSVMarketDataLogger
-simulation.auction.logger.2.askquotelogfile = results/askquote.csv
-simulation.auction.logger.2.bidquotelogfile = results/bidquote.csv
-simulation.auction.logger.2.asklogfile = results/ask.csv
-simulation.auction.logger.2.bidlogfile = results/bid.csv
-simulation.auction.logger.2.translogfile = results/trprice.csv
 
 # Show GUI console
 simulation.console = true
