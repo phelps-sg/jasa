@@ -16,16 +16,28 @@
 
 package uk.ac.liv.util.io;
 
+import JSci.awt.DataSeries;
+
 import java.util.Iterator;
 import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 /**
  * @author Steve Phelps
  */
 
-public class MemoryResidentDataSeries implements DataWriter {
+public class MemoryResidentDataSeries implements DataWriter, DataSeries {
 
   Vector data;
+
+  protected boolean isVisible;
+
+  protected boolean isTime = true;
+
+  protected double time;
+
+  static Logger logger = Logger.getLogger(MemoryResidentDataSeries.class);
 
   public MemoryResidentDataSeries( int initialCapacity ) {
     data = new Vector(initialCapacity);
@@ -44,11 +56,46 @@ public class MemoryResidentDataSeries implements DataWriter {
   }
 
   public void newData( double datum ) {
-    data.add(new Double(datum));
+    if ( isTime ) {
+      time = datum;
+    } else {
+      TimeSeriesDatum d = new TimeSeriesDatum(time, datum);
+      logger.debug("Adding " + d);
+      data.add(d);
+    }
+    isTime = !isTime;
+  }
+
+  public float getValueAt( int datum ) {
+    return (float) getDatum(datum);
+  }
+
+  public float getCoord( int datum, int dimension ) {
+    switch( dimension ) {
+      case 0:
+        return getXCoord(datum);
+      case 1:
+        return getYCoord(datum);
+      default:
+        throw new Error("Invalid dimension- " + dimension);
+    }
+  }
+
+  public float getXCoord( int datum ) {
+    return (float) ((TimeSeriesDatum) data.get(datum)).getTime();
+  }
+
+  public float getYCoord( int datum ) {
+    return (float) getDatum(datum);
   }
 
   public double getDatum( int i ) {
-    return ((Double) data.get(i)).doubleValue();
+    double value = ((TimeSeriesDatum) data.get(i)).getValue();
+    if ( Double.isInfinite(value) ) {
+      return 0;
+    } else {
+      return value;
+    }
   }
 
   public void newData(Iterator i) {
@@ -77,8 +124,40 @@ public class MemoryResidentDataSeries implements DataWriter {
   public void close() {
   }
 
-  public int size() {
+  public int length() {
     return data.size();
+  }
+
+  public void setVisible( boolean isVisible ) {
+    this.isVisible = isVisible;
+  }
+
+  public boolean isVisible() {
+    return isVisible;
+  }
+
+
+}
+
+class TimeSeriesDatum {
+
+  double time;
+
+  double value;
+
+  public TimeSeriesDatum( double time, double value ) {
+    this.time = time;
+    this.value = value;
+  }
+
+  public void setTime( double time ) { this.time = time; }
+  public void setValue( double value ) { this.value = value; }
+
+  public double getTime() { return time; }
+  public double getValue() { return value; }
+
+  public String toString() {
+    return "(" + getClass() + " time:" + time + " value:" + value + ")";
   }
 
 }

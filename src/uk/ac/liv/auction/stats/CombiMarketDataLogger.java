@@ -26,6 +26,7 @@ import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
 
 /**
  * <p>
@@ -44,7 +45,8 @@ import uk.ac.liv.util.Parameterizable;
  * @author Steve Phelps
  */
 
-public class CombiMarketDataLogger implements MarketDataLogger, Parameterizable {
+public class CombiMarketDataLogger
+    implements MarketDataLogger, Parameterizable, Resetable {
 
   List loggers = null;
 
@@ -110,7 +112,9 @@ public class CombiMarketDataLogger implements MarketDataLogger, Parameterizable 
     Iterator i = loggers.iterator();
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.reset();
+      if ( logger instanceof Resetable ) {
+        ((Resetable) logger).reset();
+      }
     }
   }
 
@@ -119,6 +123,14 @@ public class CombiMarketDataLogger implements MarketDataLogger, Parameterizable 
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
       logger.finalReport();
+    }
+  }
+
+  public void endOfRound() {
+    Iterator i = loggers.iterator();
+    while ( i.hasNext() ) {
+      MarketDataLogger logger = (MarketDataLogger) i.next();
+      logger.endOfRound();
     }
   }
 }

@@ -9,7 +9,12 @@
 
 auction = uk.ac.liv.auction.agent.jade.JADEAuction
 auction.maximumrounds = 50
-auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
+
+auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
+auction.logger.n = 2
+auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+
 auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 auction.auctioneer.pricing.k = 0.5

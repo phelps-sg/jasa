@@ -93,4 +93,8 @@ public class ListMarketDataLogger implements MarketDataLogger {
   public void finalReport() {
   }
 
+  public void endOfRound() {
+    // Do nothing
+  }
+
 }

@@ -29,7 +29,7 @@ import uk.ac.liv.util.Resetable;
  *
  * @author Steve Phelps
  */
-public interface MarketDataLogger extends Resetable {
+public interface MarketDataLogger {
 
   /**
    * Record the market quote.
@@ -56,6 +56,8 @@ public interface MarketDataLogger extends Resetable {
    * @param shout The shout that was placed in the auction.
    */
   public void updateShoutLog( int time, Shout shout );
+
+  public void endOfRound();
 
   /**
    * Generate a report on the market data.  Implementing classes

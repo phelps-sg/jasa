@@ -32,11 +32,13 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
+import java.util.Iterator;
+
 /**
  * @author Steve Phelps
  */
 
-public class GraphMarketDataLogger extends DataWriterMarketDataLogger
+public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
     implements Graph2DModel, Parameterizable {
 
   protected int currentSeries;
@@ -50,13 +52,17 @@ public class GraphMarketDataLogger extends DataWriterMarketDataLogger
 
   static Logger logger = Logger.getLogger(GraphMarketDataLogger.class);
 
+
   public GraphMarketDataLogger() {
     super();
     askQuoteLog = new MemoryResidentDataSeries();
     bidQuoteLog = new MemoryResidentDataSeries();
-    shoutLog = new MemoryResidentDataSeries();
+    askLog = new MemoryResidentDataSeries();
+    bidLog = new MemoryResidentDataSeries();
     transPriceLog = new MemoryResidentDataSeries();
-    allSeries = new DataWriter[] { askQuoteLog, bidQuoteLog, shoutLog, transPriceLog };
+    allSeries =
+        new DataWriter[] { askLog, bidLog, transPriceLog,
+                            askQuoteLog, bidQuoteLog };
     currentSeries = 0;
   }
 
@@ -64,8 +70,12 @@ public class GraphMarketDataLogger extends DataWriterMarketDataLogger
     singletonInstance = this;
   }
 
+  public Iterator seriesIterator() {
+    return new SeriesIterator();
+  }
+
   public float getXCoord( int i ) {
-    return (float) (i+1);
+    return (float) getCurrentSeries().getXCoord(i);
   }
 
   public MemoryResidentDataSeries getCurrentSeries() {
@@ -77,15 +87,15 @@ public class GraphMarketDataLogger extends DataWriterMarketDataLogger
 
   public float getYCoord( int i ) {
     logger.debug("Getting y coordinate for " + i);
-    if ( i < getCurrentSeries().size() ) {
-      return (float) getCurrentSeries().getDatum(i);
+    if ( i < getCurrentSeries().length() ) {
+      return (float) getCurrentSeries().getYCoord(i);
     } else {
       return 0f;
     }
   }
 
   public int seriesLength() {
-    int size = getCurrentSeries().size();
+    int size = getCurrentSeries().length();
     if ( size < 2 ) {
       size = 2;
     }
@@ -133,6 +143,26 @@ public class GraphMarketDataLogger extends DataWriterMarketDataLogger
 
   public static GraphMarketDataLogger getSingletonInstance() {
     return singletonInstance;
+  }
+
+
+  class SeriesIterator implements Iterator {
+
+    int currentSeries = 0;
+
+    SeriesIterator() {
+    }
+
+    public boolean hasNext() {
+      return currentSeries < allSeries.length;
+    }
+
+    public Object next() {
+      return allSeries[currentSeries++];
+    }
+
+    public void remove() {
+    }
   }
 
 }

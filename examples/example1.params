@@ -23,21 +23,19 @@ simulation.agenttype.n = 2
 
 # 1st population- 5000 sellers bidding random markups
 simulation.agenttype.0 = uk.ac.liv.auction.agent.ZITraderAgent
-simulation.agenttype.0.numagents = 50
+simulation.agenttype.0.numagents = 5
 simulation.agenttype.0.randomprivatevalue = true
 simulation.agenttype.0.maxprivatevalue = 1000
 simulation.agenttype.0.initialtradeentitlement = 100000
-simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.ZIPStrategy
+simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.0.strategy.scaling = 1
 simulation.agenttype.0.strategy.quantity = 1
-simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
-simulation.agenttype.0.strategy.learner.momentum = 0.2
-simulation.agenttype.0.strategy.learner.learningrate = 0.5
+simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 simulation.agenttype.0.isseller = true
 
 # 2nd population- 5000 buyers using the Roth-Erev learning algorithm
 simulation.agenttype.1 = uk.ac.liv.auction.agent.ZITraderAgent
-simulation.agenttype.1.numagents = 50
+simulation.agenttype.1.numagents = 5
 simulation.agenttype.1.randomprivatevalue = true
 simulation.agenttype.1.maxprivatevalue = 1000
 simulation.agenttype.1.initialtradeentitlement = 100000
@@ -50,7 +48,7 @@ simulation.agenttype.1.strategy.learner.learningrate = 0.5
 simulation.agenttype.1.isseller = false
 
 # log4j configuration
-log4j.rootCategory=DEBUG, stdout
+log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-log4j.appender.stdout.layout.ConversionPattern=%m%n
+log4j.appender.stdout.layout.ConversionPattern=[%p] %c: %m%n

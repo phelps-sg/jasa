@@ -54,24 +54,28 @@ public class CSVMarketDataLogger extends DataWriterMarketDataLogger
 
   static final String P_ASK_QUOTE_LOG_FILE = "askquotelogfile";
   static final String P_BID_QUOTE_LOG_FILE = "bidquotelogfile";
-  static final String P_SHOUT_LOG_FILE = "shoutlogfile";
+  static final String P_ASK_LOG_FILE = "asklogfile";
+  static final String P_BID_LOG_FILE = "bidlogfile";
   static final String P_TRANS_LOG_FILE = "translogfile";
 
-  static final int CSV_COLS = 1;
+  static final int CSV_COLS = 2;
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     String askQuoteLogFile =
         parameters.getString(base.push(P_ASK_QUOTE_LOG_FILE), null);
     String bidQuoteLogFile =
         parameters.getString(base.push(P_BID_QUOTE_LOG_FILE), null);
-    String shoutLogFile =
-        parameters.getString(base.push(P_SHOUT_LOG_FILE), null);
+    String askLogFile =
+        parameters.getString(base.push(P_ASK_LOG_FILE), null);
+    String bidLogFile =
+        parameters.getString(base.push(P_BID_LOG_FILE), null);
     String transLogFile =
         parameters.getString(base.push(P_TRANS_LOG_FILE), null);
     try {
       setCSVAskQuoteLog( new FileOutputStream(new File(askQuoteLogFile)) );
       setCSVBidQuoteLog( new FileOutputStream(new File(bidQuoteLogFile)) );
-      setCSVShoutLog( new FileOutputStream(new File(shoutLogFile)) );
+      setCSVAskLog( new FileOutputStream(new File(askLogFile)) );
+      setCSVBidLog( new FileOutputStream(new File(bidLogFile)) );
       setCSVTransPriceLog( new FileOutputStream(new File(transLogFile)) );
     } catch ( java.io.IOException e ) {
       e.printStackTrace();
@@ -101,8 +105,12 @@ public class CSVMarketDataLogger extends DataWriterMarketDataLogger
    * This can significantly impact the performance
    * of an auction.
    */
-  public void setCSVShoutLog( OutputStream stream ) {
-    shoutLog = new CSVWriter(stream, CSV_COLS);
+  public void setCSVAskLog( OutputStream stream ) {
+    askLog = new CSVWriter(stream, CSV_COLS);
+  }
+
+  public void setCSVBidLog( OutputStream stream ) {
+    bidLog = new CSVWriter(stream, CSV_COLS);
   }
 
   /**
@@ -113,6 +121,8 @@ public class CSVMarketDataLogger extends DataWriterMarketDataLogger
     transPriceLog = new CSVWriter(stream, CSV_COLS);
   }
 
-
+  public void endOfRound() {
+    // Do nothing
+  }
 
 }

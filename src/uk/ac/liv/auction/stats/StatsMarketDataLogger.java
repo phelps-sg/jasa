@@ -148,11 +148,18 @@ public class StatsMarketDataLogger
   }
 
   public void finalReport() {
-    System.out.println(transPriceStats);
-    System.out.println(bidPriceStats);
-    System.out.println(askPriceStats);
-    System.out.println(bidQuoteStats);
-    System.out.println(askQuoteStats);
+    printStats(transPriceStats);
+    printStats(bidPriceStats);
+    printStats(askPriceStats);
+    printStats(bidQuoteStats);
+    printStats(askQuoteStats);
   }
 
+  public void endOfRound() {
+    // Do nothing
+  }
+
+  protected void printStats( CummulativeStatCounter stats ) {
+    System.out.println(stats + "\n");
+  }
 }

@@ -37,20 +37,20 @@ public class ManagerUIFrame extends AuctionConsoleFrame {
   protected AuctionManager manager;
 
   protected JButton startButton;
-  
+
   static Logger logger = Logger.getLogger(ManagerUIFrame.class);
-  
+
 
   public ManagerUIFrame( AuctionManager manager, AuctionImpl auction )  {
     super(auction, "JADE auction");
-    this.manager = manager;   
-        
+    this.manager = manager;
+
     GridBagConstraints c = new GridBagConstraints();
-    Container contentPane = getContentPane();    
-    
+    Container contentPane = getContentPane();
+
     startButton = new JButton("Start");
     c.gridx = 0;
-    c.gridy = 4;
+    c.gridy = 5;
     c.fill = GridBagConstraints.NONE;
     c.anchor = GridBagConstraints.EAST;
     c.ipadx = 0;
@@ -58,10 +58,10 @@ public class ManagerUIFrame extends AuctionConsoleFrame {
     c.gridwidth = 1;
     c.insets = new Insets(20,20,20,20);
     gridBag.setConstraints(startButton, c);
-    
+
     contentPane.add(startButton);
     startButton.addActionListener(new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {          
+        public void actionPerformed( ActionEvent e ) {
           startAuction();
         }
     });

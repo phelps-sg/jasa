@@ -263,6 +263,9 @@ public class RoundRobinAuction extends AuctionImpl
       RoundRobinTrader trader = (RoundRobinTrader) i.next();
       trader.roundClosed(this);
     }
+    if ( logger != null ) {
+      logger.endOfRound();
+    }
   }
 
 
@@ -425,8 +428,8 @@ public class RoundRobinAuction extends AuctionImpl
       ((Resetable) auctioneer).reset();
     }
 
-    if ( logger != null ) {
-      logger.reset();
+    if ( logger != null && logger instanceof Resetable ) {
+      ((Resetable) logger).reset();
     }
 
     Iterator i = getTraderIterator();
