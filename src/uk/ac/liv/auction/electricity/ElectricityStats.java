@@ -142,24 +142,16 @@ public class ElectricityStats extends EquilibriaStats implements Serializable, C
   }
 
 
-  public void recalculate() {
-    calculate(false);
-  }
-
 
   public void calculate() {
-    calculate(true);
-  }
 
+    initialise();
 
-  protected void calculate( boolean equilibrium ) {
-    zeroTotals();
-    if ( equilibrium ) {
-      calculateEquilibria();
-      equilibPrice = calculateEquilibriumPrice();
-    }
+    super.calculate();
 
     auctionAge = calculateAuctionAge();
+
+    equilibPrice = calculateEquilibriumPrice();
 
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
@@ -179,45 +171,39 @@ public class ElectricityStats extends EquilibriaStats implements Serializable, C
     mPS = (pSA - pSCE) / pSCE;
     eA = (pBA + pSA) / (pBCE + pSCE) * 100;
 
-    calculateStrategicMarketPower();
+//    calculateStrategicMarketPower();
   }
 
-
-  protected void calculateEquilibria() {
-    super.calculate();
-  }
 
   protected double calculateEquilibriumPrice() {
     return calculateMidEquilibriumPrice();
   }
 
 
-  protected void zeroTotals() {
+  public void initialise() {
     sellerCap = 0;
     buyerCap = 0;
     pBA = 0;
     pSA = 0;
     numBuyers = 0;
     numSellers = 0;
+    super.initialise();
   }
 
-
-
-
-  public double equilibriumProfits( AbstractTraderAgent trader ) {
+/*
+  public double equilibriumProfits( int quantity, AbstractTraderAgent trader ) {
     double surplus = 0;
     if ( trader.isSeller() ) {
       surplus = equilibPrice - trader.getPrivateValue(auction);
     } else {
       surplus = trader.getPrivateValue(auction) - equilibPrice;
     }
-    //TODO
     if ( surplus < 0 ) {
       surplus = 0;
     }
     return auctionAge * equilibQuant(trader, equilibPrice) * surplus;
   }
-
+*/
 
   protected double getProfits( AbstractTraderAgent trader ) {
     return ((ElectricityTrader) trader).getProfits();
@@ -315,6 +301,7 @@ public class ElectricityStats extends EquilibriaStats implements Serializable, C
     sMPB = (pBA - pBT) / pBCE;
     sMPS = (pSA - pST) / pSCE;
   }
+
 
   protected double truthProfits( double singleRoundProfits ) {
     return singleRoundProfits * auctionAge;

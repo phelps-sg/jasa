@@ -8,14 +8,14 @@
 
 # Use a RandomShoutAuction giving each agent a 90% probability of being
 # able to bid in each round.
-simulation.auction = uk.ac.liv.auction.core.RandomShoutAuction
+simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.shoutprobability = 0.9
 
 simulation.auction.name = Example 2: Uniform-price k-DA
 simulation.auction.maximumrounds = 200
 
 # Use a k-DA auctioneer which will clear the auction after each round
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
 # Set a uniform transaction-price based on current market quote.
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 # Set the transaction price halfway between the bid-ask spread.

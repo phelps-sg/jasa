@@ -65,6 +65,12 @@ public abstract class AbstractStrategy implements
                                              currentShout.isBid());
   }
 
+  /**
+   * Modify the price and quantity of the given shout according to this
+   * strategy.
+   *
+   * @return  false if no shout is to be placed at this time
+   */
   public boolean modifyShout( Shout.MutableShout shout ) {
     shout.setIsBid(agent.isBuyer());
     shout.setAgent(agent);

@@ -149,7 +149,6 @@ public abstract class AuctionImpl extends Observable
    */
   public void close() {
     closed = true;
-    auctioneer.endOfAuctionProcessing();
   }
 
 
@@ -257,13 +256,28 @@ public abstract class AuctionImpl extends Observable
     ((CombiMarketDataLogger) logger).addLogger(newLogger);
   }
 
+  public void addListener( LinkedList listeners, AuctionEventListener listener ) {
+    assert listener != null;
+    if ( !listeners.contains(listener) ) {
+      listeners.add(listener);
+    }
+  }
+
   public void addEndOfDayListener( EndOfDayListener listener ) {
-    endOfDayListeners.add(listener);
+    addListener(endOfDayListeners, listener);
+  }
+
+  public void addRoundClosedListener( RoundClosedListener listener ) {
+    addListener(roundClosedListeners, listener);
+  }
+
+  public void addAuctionClosedListener( AuctionClosedListener listener ) {
+    addListener(auctionClosedListeners, listener);
   }
 
   public void addAuctionEventListener( AuctionEventListener listener ) {
     for( int i=0; i<auctionEventListeners.length; i++ ) {
-      auctionEventListeners[i].add(listener);
+      addListener(auctionEventListeners[i], listener);
     }
   }
 

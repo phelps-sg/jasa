@@ -52,7 +52,7 @@ import org.apache.log4j.*;
 
 public abstract class ElectricityTest extends TestCase {
 
-  protected KDoubleAuctioneer auctioneer;
+  protected Auctioneer auctioneer;
 
   protected RandomRobinAuction auction;
 
@@ -84,7 +84,6 @@ public abstract class ElectricityTest extends TestCase {
 
   public ElectricityTest( String name ) {
     super(name);
-    org.apache.log4j.BasicConfigurator.configure();
     generatePRNGseeds();
   }
 
@@ -96,11 +95,13 @@ public abstract class ElectricityTest extends TestCase {
                        + " auction rounds.");
     initStats();
     for( int i=0; i<ITERATIONS; i++ ) {
+      System.out.println("Iteration " + i);
       auction.reset();
       setPRNGseeds(i);
       auction.run();
       stats.calculate();
       updateStats();
+      System.out.println("EA = " + stats.getEA());
     }
     System.out.println(eA);
     System.out.println(mPS);

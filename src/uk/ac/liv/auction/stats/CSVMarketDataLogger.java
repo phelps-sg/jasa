@@ -24,8 +24,7 @@ import ec.util.Parameter;
 import java.io.*;
 
 /**
- * A utility class for helping Auctions to write market data
- * to CSV log files.
+ * A MarketDataLogger that records data in CSV (comma-separated values) files.
  *
  * <p><b>Parameters</b><br></p>
  * <table>
@@ -130,11 +129,5 @@ public class CSVMarketDataLogger extends DataWriterMarketDataLogger
     transPriceLog = new CSVWriter(stream, CSV_COLS);
   }
 
-  public void endOfRound() {
-    // Do nothing
-  }
-
-  public void endOfDay() {
-  }
 
 }

@@ -279,7 +279,7 @@ public class RoundRobinAuction extends AuctionImpl
                                                       null, Auctioneer.class);
     ((Parameterizable) auctioneer).setup(parameters, base.push(P_AUCTIONEER));
     setAuctioneer(auctioneer);
-    auctioneer.setAuction(this);
+
     initialise();
   }
 
@@ -718,7 +718,9 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   protected void initialise() {
+
     super.initialise();
+
     numTraders = 0;
     round = 0;
     day = 0;
@@ -733,8 +735,9 @@ public class RoundRobinAuction extends AuctionImpl
     activeTraders.addAll(registeredTraders);
     for( int i=0; i<auctionEventListeners.length; i++ ) {
       auctionEventListeners[i].addAll(registeredTraders);
-      auctionEventListeners[i].add(logger);
     }
+
+    addAuctionEventListener(logger);
 
     numTraders = activeTraders.size();
     shoutsProcessed = false;
@@ -778,7 +781,7 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   /**
-   * End the current trading period (day)
+   * Terminate the current trading period (day)
    */
   protected void endOfDay() {
     log4jLogger.debug("endOfDay()");

@@ -44,7 +44,6 @@ public class JADEAuction extends RandomRobinAuction {
   public void finaliseRound() {
     updateQuoteLog(round++, getQuote());
     sweepDefunctTraders();
-    auctioneer.endOfRoundProcessing();
     setChanged();
     notifyObservers();
     informRoundClosed();

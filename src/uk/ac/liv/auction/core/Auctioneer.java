@@ -26,17 +26,8 @@ package uk.ac.liv.auction.core;
  * @version $Revision$
  */
 
-public interface Auctioneer extends QuoteProvider {
-
-  /**
-   * Perform any end-of-round auction functions.
-   */
-  public void endOfRoundProcessing();
-
-  /**
-   * Perform any end-of-auction functions.
-   */
-  public void endOfAuctionProcessing();
+public interface Auctioneer
+    extends QuoteProvider {
 
   /**
    * Perform the clearing operation for the auction;
@@ -80,5 +71,9 @@ public interface Auctioneer extends QuoteProvider {
    * Return true if the shouts of others are visible.
    */
   public boolean shoutsVisible();
+
+  public void endOfRoundProcessing();
+
+  public void endOfAuctionProcessing();
 
 }
