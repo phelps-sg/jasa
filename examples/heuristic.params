@@ -14,7 +14,7 @@ heuristic.numsamples = 10
 heuristic.numagents = 6
 
 # Total number of different strategies
-heuristic.strategy.n = 2
+heuristic.strategy.n = 3
 
 # Kaplan
 heuristic.strategy.0 = uk.ac.liv.auction.agent.KaplanStrategy

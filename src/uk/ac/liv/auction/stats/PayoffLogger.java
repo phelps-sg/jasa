@@ -134,6 +134,7 @@ public class PayoffLogger extends EquilibriumProfitLogger {
 
 
   public void initialise() {
+    super.initialise();
     totalProfits = 0;
     table.clear();
   }

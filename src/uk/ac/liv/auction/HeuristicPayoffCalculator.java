@@ -210,8 +210,6 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     seedObjects();
 
     logger.debug("Setup complete.");
-
-    auction.activateGUIConsole();
   }
 
 
