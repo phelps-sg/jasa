@@ -20,8 +20,6 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
 
-import java.io.ObjectOutputStream;
-import java.io.PrintStream;
 import java.io.Serializable;
 
 import java.util.Map;
