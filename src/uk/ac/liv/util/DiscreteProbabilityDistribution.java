@@ -31,7 +31,7 @@ import java.io.Serializable;
  */
 
 public class DiscreteProbabilityDistribution
-    implements Resetable, Serializable {
+    implements Resetable, Serializable, Seedable {
 
   /**
    * The probability distribution.
