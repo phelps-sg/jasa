@@ -45,19 +45,19 @@ import uk.ac.liv.util.io.DataWriter;
  *
  * <tr><td valign=top><i>base</i><tt>.k</tt><br>
  * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of a possible actions)</td><tr> 
+ * <td valign=top>(the number of a possible actions)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.r</tt><br>
  * <font size=-1>double [0,1]</font></td>
- * <td valign=top>(the recency parameter)</td><tr> 
+ * <td valign=top>(the recency parameter)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.e</tt><br>
  * <font size=-1>double [0,1]</font></td>
- * <td valign=top>(the experimentation parameter)</td><tr> 
+ * <td valign=top>(the experimentation parameter)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.s1</tt><br>
  * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the scaling parameter)</td><tr> 
+ * <td valign=top>(the scaling parameter)</td><tr>
  *
  * </table>
  *
@@ -111,7 +111,7 @@ public class RothErevLearner implements
    * The last action chosen.
    */
   protected int lastAction;
-  
+
   /**
    * The total amount of update to the probability vector on the last iteration.
    */
@@ -211,8 +211,8 @@ public class RothErevLearner implements
    *
    * @param action The last action chosen by the learner
    */
-  protected void updatePropensities( int action, double reward ) {    
-    for( int i=0; i<k; i++ ) {      
+  protected void updatePropensities( int action, double reward ) {
+    for( int i=0; i<k; i++ ) {
       double q1 = (1-r) * q[i] + experience(i,action,reward);
       q[i] = q1;
     }
@@ -301,10 +301,10 @@ public class RothErevLearner implements
       }
       lastDelta = delta;
       lastValue = q[i];
-    }    
+    }
     return peaks;
   }
-  
+
   /**
    *  Compute modes of the probability distribution p.
    */
@@ -325,25 +325,25 @@ public class RothErevLearner implements
       out.newData(p.getProbability(i));
     }
   }
-  
+
   public int getK() {
     return k;
   }
-  
+
   public int getNumberOfActions() {
     return getK();
   }
-  
+
   public double getLearningDelta() {
     return deltaP;
   }
-  
+
   public double getProbability( int i ) {
     return p.getProbability(i);
   }
-    
+
   public String toString() {
-    return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1 + " learningDelta:" + deltaP + " p:" + p + ")";
+    return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1 + " learningDelta:" + deltaP + ")";
   }
 
 }

@@ -36,23 +36,23 @@ import ec.util.Parameter;
  *
  * <tr><td valign=top><i>base</i><tt>.k</tt><br>
  * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of a possible actions)</td><tr> 
+ * <td valign=top>(the number of a possible actions)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.s</tt><br>
  * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of states)</td><tr> 
+ * <td valign=top>(the number of states)</td><tr>
  *
  * <tr><td valign=top><i>e</i><tt>.e</tt><br>
  * <font size=-1>double [0,1]</font></td>
- * <td valign=top>(the epsilon parameter)</td><tr> 
+ * <td valign=top>(the epsilon parameter)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.p</tt><br>
  * <font size=-1>double [0,1]</font></td>
- * <td valign=top>(the learning rate)</td><tr> 
+ * <td valign=top>(the learning rate)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.g</tt><br>
  * <font size=-1>double [0,1]</font></td>
- * <td valign=top>(the discount rate)</td><tr> 
+ * <td valign=top>(the discount rate)</td><tr>
  *
  * </table>
  *
@@ -256,15 +256,15 @@ public class QLearner
   public int getLastActionChosen() {
     return lastActionChosen;
   }
-  
+
   public double getLearningDelta() {
     return 0; //TODO
   }
-  
+
   public void dumpState( DataWriter out ) {
     //TODO
   }
-  
+
   public int getNumberOfActions() {
     return numActions;
   }

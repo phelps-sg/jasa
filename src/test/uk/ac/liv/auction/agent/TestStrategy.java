@@ -40,9 +40,8 @@ class TestStrategy extends AdaptiveStrategy {
     return null;
   }
 
-  public void setLearner( Learner learner ) {
+  public void setLearner( Learner l ) {
   }
-
 
 }
 

@@ -52,7 +52,7 @@ import java.io.Serializable;
  *
  * <tr><td valign=top><i>base</i><tt>.initialstock</tt><br>
  * <font size=-1>int &gt;= 0</font></td>
- * <td valign=top>(the initial quantity of the commoditiy possessed by this agent)</td><tr> 
+ * <td valign=top>(the initial quantity of the commoditiy possessed by this agent)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.initialfunds</tt><br>
  * <font size=-1>double</font></td>
@@ -60,11 +60,11 @@ import java.io.Serializable;
  *
  * <tr><td valign=top><i>base</i><tt>.randomprivatevalue</tt><br>
  * <font size=-1>boolean</font></td>
- * <td valign=top>(use a random private value?)</td><tr> 
+ * <td valign=top>(use a random private value?)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.maxprivatevalue</tt><br>
  * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(the maximum private value if we are drawing randomly)</td><tr> 
+ * <td valign=top>(the maximum private value if we are drawing randomly)</td><tr>
  *
  * </table>
  *
@@ -139,15 +139,15 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   /**
    * Parameter names used when initialising from parameter db
    */
-  static final String P_PRIVATE_VALUE = "privatevalue";
-  static final String P_IS_SELLER = "isseller";
-  static final String P_STRATEGY = "strategy";
-  static final String P_INITIAL_STOCK = "initialstock";
-  static final String P_INITIAL_FUNDS = "initialfunds";
-  static final String P_RANDOM_PRIVATE_VALUE = "randomprivatevalue";
-  static final String P_MAX_PRIVATE_VALUE = "maxprivatevalue";
+  public static final String P_PRIVATE_VALUE = "privatevalue";
+  public static final String P_IS_SELLER = "isseller";
+  public static final String P_STRATEGY = "strategy";
+  public static final String P_INITIAL_STOCK = "initialstock";
+  public static final String P_INITIAL_FUNDS = "initialfunds";
+  public static final String P_RANDOM_PRIVATE_VALUE = "randomprivatevalue";
+  public static final String P_MAX_PRIVATE_VALUE = "maxprivatevalue";
 
-  static final String P_DEFAULT_STRATEGY = "uk.ac.liv.auction.core.PureSimpleStrategy";
+  public static final String P_DEFAULT_STRATEGY = "uk.ac.liv.auction.core.PureSimpleStrategy";
 
   /**
    * Construct a trader with given stock level and funds.
@@ -206,7 +206,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * Default trading behaviour for agents.
    */
   public void requestShout( Auction auction ) {
-    try {      
+    try {
       strategy.modifyShout(currentShout, auction);
       auction.newShout(currentShout);
     } catch ( AuctionClosedException e ) {
@@ -300,6 +300,14 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     this.privateValue = privateValue;
   }
 
+  public void setMaxPrivateValue( double maxPrivateValue ) {
+    this.maxPrivateValue = maxPrivateValue;
+  }
+
+  public double getMaxPrivateValue() {
+    return maxPrivateValue;
+  }
+
   public boolean isSeller() {
     return isSeller;
   }
@@ -312,7 +320,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     this.strategy = strategy;
     strategy.setAgent(this);
   }
-  
+
   public void setIsSeller( boolean isSeller ) {
     this.isSeller = isSeller;
   }
