@@ -47,9 +47,9 @@ auction.agenttype.1.numagents = 50
 auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
 auction.agenttype.1.valuer.minvalue = 10
 auction.agenttype.1.valuer.maxvalue = 150
-auction.agenttype.1.capacity = 20
+auction.agenttype.1.capacity = 10
 auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 auction.agenttype.1.isseller = false
 
 # log4j configuration

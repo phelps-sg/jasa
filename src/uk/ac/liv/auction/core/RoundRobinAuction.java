@@ -453,7 +453,11 @@ public class RoundRobinAuction extends AuctionImpl
                                "to retrieve previous day's statistics");
     }
 
-    return dailyStats.getTransPriceStats(day-1);
+    if ( day == 0 ) {
+      return null;
+    } else {
+      return dailyStats.getTransPriceStats(day - 1);
+    }
   }
 
   protected void checkHistoryStats() throws DataUnavailableException {

@@ -50,9 +50,11 @@ import uk.ac.liv.util.Resetable;
 public class CombiMarketDataLogger
     implements MarketDataLogger, Parameterizable, Resetable {
 
-  List loggers = null;
+  protected List loggers = null;
 
-  static final String P_NUMLOGGERS = "n";
+  protected RoundRobinAuction auction;
+
+  public static final String P_NUMLOGGERS = "n";
 
 
   public CombiMarketDataLogger(List loggers) {
@@ -71,6 +73,7 @@ public class CombiMarketDataLogger
       MarketDataLogger logger = (MarketDataLogger)
         parameters.getInstanceForParameter(base.push(i+""), null,
                                             MarketDataLogger.class);
+      logger.setAuction(auction);
       if ( logger instanceof Parameterizable ) {
         ((Parameterizable) logger).setup(parameters, base.push(i+""));
       }
@@ -146,6 +149,7 @@ public class CombiMarketDataLogger
   }
 
   public void setAuction( RoundRobinAuction auction ) {
+    this.auction = auction;
     Iterator i = loggers.iterator();
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
