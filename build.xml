@@ -61,7 +61,9 @@
    </target>
 
    <target depends="jar" name="tar">
-   	<tar basedir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/*.params" compression="gzip" tarfile="jasa.tar.gz"/>
+   	<tar  compression="gzip" tarfile="jasa.tar.gz">
+		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/*.params" prefix="jasa" />
+	</tar>
     </target>
 
    <target name="cvsupdate">
