@@ -20,9 +20,12 @@ import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Seedable;
 
+import uk.ac.liv.prng.PRNGFactory;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
-import ec.util.MersenneTwisterFast;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.io.Serializable;
 
@@ -51,15 +54,19 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 
   protected double maxMarkup = 50;
 
-  static MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  protected RandomElement randGenerator;
 
-  static final String P_MAX_MARKUP = "maxmarkup";
+  public static final String P_MAX_MARKUP = "maxmarkup";
+
+  public static final double DEFAULT_MARKUP = 50;
 
   public RandomConstrainedStrategy() {
+    this(null, DEFAULT_MARKUP);
   }
 
   public RandomConstrainedStrategy( AbstractTraderAgent agent, double maxMarkup ) {
     super(agent);
+    randGenerator = PRNGFactory.getFactory().create();
     this.maxMarkup = maxMarkup;
   }
 
@@ -67,7 +74,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 
     super.modifyShout(shout);
 
-    double markup = randGenerator.nextDouble() * maxMarkup;
+    double markup = randGenerator.raw() * maxMarkup;
     double price = 0;
     if ( agent.isBuyer() ) {
       price = agent.getPrivateValue(auction) - markup;
@@ -92,7 +99,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
   }
 
   public void setSeed( long seed ) {
-    randGenerator.setSeed(seed);
+    randGenerator = PRNGFactory.getFactory().create(seed);
   }
 
   public String toString() {

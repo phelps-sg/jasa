@@ -61,6 +61,10 @@ simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrateg
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 simulation.agenttype.1.isseller = false
 
+# PRNG configuration
+simulation.prng = uk.ac.liv.prng.MT
+simulation.seed = 1298
+
 # log4j configuration
 log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender

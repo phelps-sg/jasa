@@ -19,9 +19,16 @@ import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Seedable;
 
+import uk.ac.liv.prng.PRNGFactory;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
-import ec.util.MersenneTwisterFast;
+
+import java.io.Serializable;
+
+import org.apache.log4j.Logger;
 
 /**
  * A valuation policy in which we randomly determine our valuation
@@ -32,7 +39,7 @@ import ec.util.MersenneTwisterFast;
  */
 
 
-public class RandomValuer implements Valuer, Seedable {
+public class RandomValuer implements Valuer, Seedable, Serializable {
 
   protected double value;
 
@@ -40,10 +47,12 @@ public class RandomValuer implements Valuer, Seedable {
 
   protected double maxValue;
 
-  protected MersenneTwisterFast valuesPRNG = new MersenneTwisterFast();
+  protected RandomElement valuesPRNG = PRNGFactory.getFactory().create();
 
   public static final String P_MINVALUE = "minvalue";
   public static final String P_MAXVALUE = "maxvalue";
+
+  static Logger logger = Logger.getLogger(RandomValuer.class);
 
   public RandomValuer() {
   }
@@ -70,11 +79,11 @@ public class RandomValuer implements Valuer, Seedable {
   }
 
   public void setSeed( long prngSeed ) {
-    valuesPRNG.setSeed(prngSeed);
+    valuesPRNG = PRNGFactory.getFactory().create(prngSeed);
   }
 
   protected void drawRandomValue() {
-    value = minValue + valuesPRNG.nextDouble()*(maxValue-minValue);
+    value = minValue + valuesPRNG.raw()*(maxValue-minValue);
   }
 
 }

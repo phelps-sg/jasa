@@ -15,7 +15,6 @@
 
 package uk.ac.liv.auction;
 
-import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -28,6 +27,8 @@ import uk.ac.liv.ai.learning.StochasticLearner;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Seedable;
 
+import uk.ac.liv.prng.PRNGFactory;
+
 import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,8 @@ import java.util.Iterator;
 
 import java.io.File;
 import java.io.Serializable;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -85,7 +88,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
   /**
    * The PRNG used to generate all PRNG seeds in the simulation.
    */
-  protected MersenneTwisterFast seeds;
+  protected RandomElement seeds;
 
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "n";
@@ -95,6 +98,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String P_CONSOLE = "console";
   public static final String P_SIMULATION = "simulation";
   public static final String P_SEED = "seed";
+  public static final String P_PRNG = "prng";
 
 
   public static final String VERSION = "0.24";
@@ -146,6 +150,8 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public void setup( ParameterDatabase parameters, Parameter base ) {
     logger.info("Setup.. ");
 
+    PRNGFactory.setup(parameters, base.push(P_PRNG));
+
     prngSeed =
         parameters.getLongWithDefault(base.push(P_SEED), null,
                                        System.currentTimeMillis());
@@ -185,6 +191,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
       }
     }
 
+    logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + prngSeed);
     seedObjects();
 
@@ -219,16 +226,16 @@ public class MarketSimulation implements Parameterizable, Runnable,
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
       Strategy s = agent.getStrategy();
       if ( s instanceof Seedable ) {
-        ((Seedable) s).setSeed(seeds.nextLong());
+        ((Seedable) s).setSeed(nextSeed());
       } else if ( s instanceof AdaptiveStrategy ) {
         Learner l = ((AdaptiveStrategy) s).getLearner();
         if ( l instanceof StochasticLearner ) {
-          ((StochasticLearner) l).setSeed(seeds.nextLong());
+          ((StochasticLearner) l).setSeed(nextSeed());
         }
       }
       Valuer v = agent.getValuer();
       if ( v instanceof Seedable ) {
-        ((Seedable) v).setSeed(seeds.nextLong());
+        ((Seedable) v).setSeed(nextSeed());
       }
       agent.reset();
     }
@@ -237,15 +244,19 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
   protected void seedAuction() {
     if ( auction instanceof Seedable ) {
-      ((Seedable) auction).setSeed(seeds.nextLong());
+      ((Seedable) auction).setSeed(nextSeed());
     }
   }
 
 
   protected void seedObjects() {
-    seeds = new MersenneTwisterFast(prngSeed);
+    seeds = PRNGFactory.getFactory().create(prngSeed);
     seedAgents();
     seedAuction();
+  }
+
+  protected long nextSeed() {
+    return seeds.choose(0, Integer.MAX_VALUE);
   }
 
 }

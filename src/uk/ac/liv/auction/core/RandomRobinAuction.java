@@ -19,8 +19,9 @@ import uk.ac.liv.auction.agent.RoundRobinTrader;
 
 import uk.ac.liv.util.Seedable;
 
+import uk.ac.liv.prng.PRNGFactory;
 
-import ec.util.MersenneTwisterFast;   // Fast random number generator
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 /**
  * <p>
@@ -35,7 +36,7 @@ import ec.util.MersenneTwisterFast;   // Fast random number generator
 public class RandomRobinAuction extends RoundRobinAuction
                                   implements Seedable {
 
-  MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  RandomElement randGenerator = PRNGFactory.getFactory().create();
 
   public RandomRobinAuction() {
     super();
@@ -49,16 +50,16 @@ public class RandomRobinAuction extends RoundRobinAuction
     Object[] candidates = activeTraders.toArray();
     int numCandidates = candidates.length;
     for( int i=0; i<numTraders; i++ ) {
-      int choice = randGenerator.nextInt(numCandidates);
+      int choice = randGenerator.choose(numCandidates);
       RoundRobinTrader trader = (RoundRobinTrader) candidates[choice];
       candidates[choice] = candidates[numCandidates-1];
       numCandidates--;
       trader.requestShout(this);
     }
   }
-  
+
   public void setSeed( long seed ) {
-    randGenerator.setSeed(seed);
+    randGenerator = PRNGFactory.getFactory().create(seed);
   }
 
 }

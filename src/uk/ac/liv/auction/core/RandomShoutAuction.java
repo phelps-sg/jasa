@@ -17,11 +17,14 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 
-import ec.util.MersenneTwisterFast;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import uk.ac.liv.util.Seedable;
+
+import uk.ac.liv.prng.PRNGFactory;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.util.Iterator;
 
@@ -40,7 +43,7 @@ public class RandomShoutAuction extends RoundRobinAuction implements Seedable {
   /**
    * The PRNG used to draw the probability of each shout.
    */
-  protected MersenneTwisterFast prng = new MersenneTwisterFast();
+  protected RandomElement prng = PRNGFactory.getFactory().create();
 
   /**
    * The probability of each trader being given a chance to place a shout.
@@ -60,7 +63,7 @@ public class RandomShoutAuction extends RoundRobinAuction implements Seedable {
     Iterator i = activeTraders.iterator();
     while (i.hasNext()) {
       RoundRobinTrader trader = (RoundRobinTrader) i.next();
-      double probability = prng.nextDouble();
+      double probability = prng.raw();
       if (probability <= shoutProbability) {
         trader.requestShout(this);
       }
@@ -68,7 +71,7 @@ public class RandomShoutAuction extends RoundRobinAuction implements Seedable {
   }
 
   public void setSeed( long seed ) {
-    prng.setSeed(seed);
+    prng = PRNGFactory.getFactory().create(seed);
   }
 
   public void setShoutProbability( double shoutProbability ) {

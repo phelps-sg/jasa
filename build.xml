@@ -11,6 +11,7 @@
    <property name="javaLibPath" value="./lib"/>
    <property name="jsciPath" value="${javaLibPath}/jsci/classes"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj"/>
+   <property name="rngpackLoc" value="${javaLibPath}/rngpack/rngpack.jar"/>
    <property name="poolitLoc" value="${javaLibPath}/poolit/poolit.jar"/>
    <property name="junitLoc" value="${javaLibPath}/junit/junit.jar"/>
    <property name="skijLoc" value="${javaLibPath}/skij.jar"/>
@@ -23,6 +24,7 @@
      <pathelement location="${poolitLoc}" />
      <pathelement location="${junitLoc}" />
      <pathelement location="${skijLoc}" />
+     <pathelement location="${rngpackLoc}" />
      <pathelement location="${log4jLoc}" />
      <pathelement location="${jasaLoc}" />
      <pathelement path="${jadePath}" /> 

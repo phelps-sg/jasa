@@ -20,6 +20,8 @@ import uk.ac.liv.auction.core.Auction;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+import java.io.Serializable;
+
 /**
  * A valuation policy in which we maintain a fixed private valuation
  * independent of time or auction.
@@ -28,8 +30,7 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 
-
-public class FixedValuer implements Valuer {
+public class FixedValuer implements Valuer, Serializable {
 
   protected double value;
 

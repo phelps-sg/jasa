@@ -15,7 +15,9 @@
 
 package uk.ac.liv.util;
 
-import ec.util.MersenneTwisterFast;
+import uk.ac.liv.prng.PRNGFactory;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
 
@@ -47,7 +49,7 @@ public class DiscreteProbabilityDistribution
   /**
    * The uniform-distribution PRNG.
    */
-  protected MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  protected RandomElement randGenerator;
 
   /**
    * The log4j logger.
@@ -64,12 +66,13 @@ public class DiscreteProbabilityDistribution
   public DiscreteProbabilityDistribution( int k ) {
     this.k = k;
     p = new double[k];
+    randGenerator = PRNGFactory.getFactory().create();
   }
 
   /**
    *  Set the probability of the ith event.
    *
-   *  @param i The event 
+   *  @param i The event
    *  @param probability The probability of event i occuring
    */
   public void setProbability( int i, double probability ) {
@@ -91,15 +94,15 @@ public class DiscreteProbabilityDistribution
    *  @return An integer value representing one of the possible events.
    */
   public int generateRandomEvent() {
-    double rand = randGenerator.nextDouble();
+    double rand = randGenerator.raw();
     double cummProb = 0;
     for( int i=0; i<k; i++ ) {
-      cummProb += p[i];      
+      cummProb += p[i];
       if ( rand < cummProb ) {
         return i;
       }
     }
-    throw new ProbabilityError(this);      
+    throw new ProbabilityError(this);
   }
 
   public void reset() {
@@ -109,24 +112,24 @@ public class DiscreteProbabilityDistribution
   }
 
   public void setSeed( long seed ) {
-    randGenerator.setSeed(seed);
+    randGenerator = PRNGFactory.getFactory().create(seed);
   }
-  
-  
+
+
   /**
    *  Compute the expected value of the random variable
    *  defined by this distribution.
    *
-   *  @return The expected value of the distribution 
-   */  
+   *  @return The expected value of the distribution
+   */
   public double computeMean() {
     double total = 0;
     for( int i=0; i<k; i++ ) {
       total += i*p[i];
     }
-    return total;      
+    return total;
   }
-  
+
   /**
    *  Compute the minimum value of the random variable
    *  defined by this distribution.
@@ -139,27 +142,27 @@ public class DiscreteProbabilityDistribution
         return i;
       }
     }
-    throw new ProbabilityError(this);    
+    throw new ProbabilityError(this);
   }
-  
+
   /**
    *  Compute the maximum value of the random variable
    *  defined by this distribution.
    *
-   *  @return The maximum integer value 
-   */  
+   *  @return The maximum integer value
+   */
   public int computeMax() {
     for( int i=k-1; i>=0; i-- ) {
       if ( p[i] > 0 ) {
         return i;
       }
     }
-    throw new ProbabilityError(this);    
+    throw new ProbabilityError(this);
   }
-  
-  public void computeStats( CummulativeStatCounter stats ) {  
+
+  public void computeStats( CummulativeStatCounter stats ) {
   }
-  
+
   public String toString() {
     StringBuffer s = new StringBuffer("(" + getClass());
     for( int i=0; i<p.length; i++ ) {
@@ -168,14 +171,14 @@ public class DiscreteProbabilityDistribution
     s.append(")");
     return s.toString();
   }
-  
+
 
   public class ProbabilityError extends Error {
 
     public ProbabilityError( DiscreteProbabilityDistribution p ) {
       super("Probabilities do not sum to 1: " + p);
     }
-    
+
   }
 
 }

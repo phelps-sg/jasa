@@ -44,6 +44,10 @@ simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
 simulation.agenttype.1.valuer.minvalue = 20
 simulation.agenttype.1.valuer.maxvalue = 150
 
+# prng configuration
+simulation.prng = uk.ac.liv.prng.Mar
+simulation.seed = 4523
+
 
 # log4j configuration
 log4j.rootCategory=INFO, stdout
