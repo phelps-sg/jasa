@@ -47,6 +47,9 @@ public class DirectRevelationTest extends ElectricityTest {
   }
 
 
+  /*
+   * Test that truth-telling in a DA always results in 100% efficiency
+   */
   public void testTruthTelling() {
     experimentSetup(3, 3, 10, 10);
     runExperiment();
