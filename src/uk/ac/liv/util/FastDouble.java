@@ -18,9 +18,10 @@ package uk.ac.liv.util;
 import huyd.poolit.*;
 
 /**
- * This encapsulation of Double can be used in combination with the
- * FastNumber and FastLong classes, for performing weakly-typed
- * arithmetic operations.
+ * <p>
+ * Faster version of <code>java.lang.Double</code>.
+ * </p>
+ *
  * @author Steve Phelps
  *
  */

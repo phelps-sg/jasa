@@ -20,10 +20,6 @@ import ec.*;
 
 
 /**
- * <p>Title: JASA</p>
- * <p> </p>
- * <p>Copyright: Copyright (c) 2002</p>
- * <p> </p>
  * @author Steve Phelps
  *
  */
@@ -41,6 +37,8 @@ public class Equals extends GPNode {
     // 2nd argument
     children[1].eval(state, thread, input, stack, individual, problem);
     Object op2 = ((GPGenericData) tmpArg).data;
+
+    GPGenericDataPool.release(tmpArg);
 
     // return value
     ((GPGenericData) input).data = new Boolean(op1.equals(op2));

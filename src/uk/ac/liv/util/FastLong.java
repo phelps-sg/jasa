@@ -18,9 +18,9 @@ package uk.ac.liv.util;
 import huyd.poolit.*;
 
 /**
- * This encapsulation of Long can be used in combination with the
- * FastNumber and FastDouble classes, for performing weakly-typed
- * arithmetic operations.
+ * <p>
+ * Faster version of <code>java.lang.Long</code>.
+ * </p>
  *
  * @author Steve Phelps
  *
