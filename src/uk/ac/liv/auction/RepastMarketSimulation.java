@@ -30,14 +30,23 @@ import uk.ac.liv.auction.ui.RepastAuctionConsoleGraph;
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.Serializable;
+
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Vector;
 
-import uchicago.src.sim.engine.*;
 
+import uchicago.src.collection.BaseMatrix;
+import uchicago.src.collection.DoubleMatrix;
+import uchicago.src.sim.engine.*;
 import uchicago.src.sim.analysis.OpenSequenceGraph;
+import uchicago.src.sim.gui.ColorMap;
+import uchicago.src.sim.gui.DisplaySurface;
+import uchicago.src.sim.gui.Value2DDisplay;
+import uchicago.src.sim.space.Discrete2DSpace;
 
 import org.apache.log4j.Logger;
 
@@ -89,6 +98,10 @@ public class RepastMarketSimulation
   protected Schedule schedule;
   
   protected OpenSequenceGraph graph;
+  
+  protected DisplaySurface displaySurface;
+  
+  protected AgentSpace agentSpace;
 
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "n";
@@ -129,6 +142,7 @@ public class RepastMarketSimulation
     this.parameterFileName = parameterFileName;
     modelManipulator = new ModelManipulator();
     parameterDescriptors = new Hashtable();
+    displaySurface = new DisplaySurface(this, getName());
     schedule = new Schedule();
     schedule.scheduleActionBeginning(1, this, "step");
     schedule.scheduleActionAtEnd(this, "report");
@@ -212,6 +226,14 @@ public class RepastMarketSimulation
     logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
     
     logger.debug("Setup complete.");
+    
+    agentSpace = new AgentSpace(auction);
+    ColorMap map = new ColorMap();
+    for( int i=0; i<1000; i++ ) {
+      map.mapColor(i, 0, ((double)i / 1000.0), 0);
+    }
+    Value2DDisplay agentDisplay = new Value2DDisplay(agentSpace, map);
+    displaySurface.addDisplayableProbeable(agentDisplay, "agents");
   }
 
   public void begin() {
@@ -220,6 +242,7 @@ public class RepastMarketSimulation
       graph = new RepastAuctionConsoleGraph(getName(), this, graphLogger);
       graph.display();
     }
+    displaySurface.display();
     auction.begin();
   }
   
@@ -232,6 +255,8 @@ public class RepastMarketSimulation
     if ( graph != null ) {
       graph.step();
     }
+    agentSpace.step();
+    displaySurface.updateDisplay();
   }
   
   public String getName() {
@@ -339,3 +364,81 @@ public class RepastMarketSimulation
 
   }
 }
+
+
+class AgentSpace implements Discrete2DSpace {
+
+  protected RoundRobinAuction auction;
+  
+  protected int width;
+  
+  protected int height;
+  
+  protected Vector agents;
+  
+  protected DoubleMatrix matrix;
+  
+  public AgentSpace( RoundRobinAuction auction, int width ) {
+    this.width = width;
+    this.auction = auction;
+    height = auction.getNumberOfRegisteredTraders() / width;
+    agents = new Vector();
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      agents.add(agent);
+    }
+    matrix = new DoubleMatrix(width, height);
+  }
+  
+  public AgentSpace( RoundRobinAuction auction ) {
+    this(auction, (int) Math.sqrt(auction.getNumberOfRegisteredTraders()));
+  }
+  
+  public void step () {
+    for ( int x = 0; x < width; x++ ) {
+      for ( int y = 0; y < height; y++ ) {
+        matrix.putDoubleAt(x, y, getValueAt(x, y));
+      }
+    }
+  }
+  
+  public BaseMatrix getMatrix() {
+    return matrix;
+  }
+  
+  public Object getObjectAt( int x, int y ) {
+    return agents.get( y * width + x );
+  }
+  
+  public Dimension getSize() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  
+  public int getSizeX() {
+    return width;
+  }
+  
+  public int getSizeY() {
+    return height;
+  }
+  
+  public double getValueAt( int x, int y ) {
+    AbstractTraderAgent agent = (AbstractTraderAgent) getObjectAt(x, y);
+    if ( agent == null ) return 0;
+    Shout currentShout = agent.getCurrentShout();
+    if ( currentShout == null ) return 0;
+    return currentShout.getPrice();
+  }
+  
+  public void putObjectAt( int x, int y, Object object) {
+
+  }
+  
+  public void putValueAt( int x, int y, double value) {
+    
+  }
+  
+}
+
