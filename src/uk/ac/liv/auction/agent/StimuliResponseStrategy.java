@@ -57,11 +57,12 @@ public class StimuliResponseStrategy extends FixedQuantityStrategyImpl {
 
     super.setup(parameters, base);
 
+    Parameter learnerParameter = base.push(P_LEARNER);
     learner = (StimuliResponseLearner)
-      parameters.getInstanceForParameter(base.push(P_LEARNER),
-                                          null, StimuliResponseLearner.class);
+      parameters.getInstanceForParameter(learnerParameter, null,
+                                          StimuliResponseLearner.class);
 
-    ((Parameterizable) learner).setup(parameters, base);
+    ((Parameterizable) learner).setup(parameters, learnerParameter);
   }
 
 
