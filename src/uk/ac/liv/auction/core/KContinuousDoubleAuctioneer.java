@@ -25,6 +25,12 @@ package uk.ac.liv.auction.core;
 
 public class KContinuousDoubleAuctioneer extends KAuctioneer {
 
+  /**
+   * Reusable exceptions for performance
+   */
+  private static NotAnImprovementOverQuoteException askException = null;
+  private static NotAnImprovementOverQuoteException bidException = null;
+
   public KContinuousDoubleAuctioneer() {
     this(null, 0);
   }
@@ -72,16 +78,32 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
     if ( shout.isBid() ) {
       quote = bidQuote();
       if ( shout.getPrice() < quote ) {
-        logger.debug("not an improvement: " + shout.toPrettyString() + " vs quote of " + quote);
-        throw new NotAnImprovementOverQuoteException();
+        bidNotAnImprovementException();
       }
     } else {
       quote = askQuote();
       if ( shout.getPrice() > quote ) {
-        logger.debug("not an improvement: " + shout.toPrettyString() + " vs quote of " + quote);
-        throw  new NotAnImprovementOverQuoteException();
+        askNotAnImprovementException();
       }
     }
+  }
+
+  private void askNotAnImprovementException()
+      throws NotAnImprovementOverQuoteException {
+    if ( askException == null ) {
+      // Only construct a new exception the once for improved performance
+      askException = new NotAnImprovementOverQuoteException();
+    }
+    throw askException;
+  }
+
+  private void bidNotAnImprovementException()
+      throws NotAnImprovementOverQuoteException {
+    if ( bidException == null ) {
+      // Only construct a new exception the once for improved performance
+      bidException = new NotAnImprovementOverQuoteException();
+    }
+    throw bidException;
   }
 
 }

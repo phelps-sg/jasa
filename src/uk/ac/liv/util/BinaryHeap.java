@@ -221,6 +221,18 @@ public class BinaryHeap implements Collection, PriorityQueue, Serializable {
     return -1;
   }
 
+  public Object pop() {
+    return removeFirst();
+  }
+
+  public Object get() {
+    return getFirst();
+  }
+
+  public Object peek() {
+    return getFirst();
+  }
+
   public boolean contains( Object key ) {
     return indexOf(key) > 0;
   }
