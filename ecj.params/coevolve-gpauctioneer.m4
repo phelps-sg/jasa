@@ -9,9 +9,9 @@ define(`SELLER_CAPACITY', ENV_VAR(`$GP_CS', 10))
 define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
 
 define(`POPULATION_SIZE', 50)
-define(`NUM_GENERATIONS', 1000)
+define(`NUM_GENERATIONS', 10)
 
-define(`CONF_RESULTS', `../experimental_data/results/preliminary/gpcoevolve')
+define(`RESULTS', `CONF_OUTHOME/gpcoevolve')
 
 define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
 
@@ -25,12 +25,12 @@ eval.problem.ns = NUM_SELLERS
 eval.problem.nb = NUM_BUYERS
 eval.problem.cs = SELLER_CAPACITY
 eval.problem.cb = BUYER_CAPACITY
-eval.problem.marketstatsfile = CONF_RESULTS/marketstats-PARAM_SUMMARY.csv
+eval.problem.marketstatsfile = RESULTS/marketstats-PARAM_SUMMARY.csv
 
 stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
-stat.file = CONF_RESULTS/gpcoevolve-PARAM_SUMMARY.out
+stat.file = gpcoevolve-PARAM_SUMMARY.out
 stat.gather-full = true
-stat.serfilenameprefix = CONF_RESULTS/gpind-PARAM_SUMMARY.data
+stat.serfilenameprefix = RESULTS/gpind-PARAM_SUMMARY.data
 
 generations = NUM_GENERATIONS
 checkpoint = false

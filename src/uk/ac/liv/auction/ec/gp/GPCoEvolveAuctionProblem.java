@@ -91,7 +91,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     System.out.println("CB = " + CB);
     System.out.println("MAX_ROUNDS = " + MAX_ROUNDS);
 
-    String statsFileName = state.parameters.getStringWithDefault(base.push("statsfile"), "coevolve-electricity-stats.csv");
+    String statsFileName = state.parameters.getStringWithDefault(base.push("marketstatsfile"), "coevolve-electricity-stats.csv");
 
     auction = new RandomRobinAuction();
     auction.setMaximumRounds(MAX_ROUNDS);
@@ -179,6 +179,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     } else {
       stats.recalculate();
     }
+    auctioneer.setStats(stats);
 
     // Calculate auctioneer fitness based on market stats
     float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;

@@ -121,6 +121,13 @@ public abstract class AuctionImpl extends Observable implements Auction {
   }
 
   /**
+   * Get the current data logger
+   */
+  public MarketDataLogger getMarketDataLogger() {
+    return logger;
+  }
+
+  /**
    * Assign a PrintStream for generic logging
    */
   public void setLogOutput( PrintStream logOut ) {

@@ -25,15 +25,15 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   final ShoutEngine shoutEngine = new FourHeapShoutEngine();
 
-  Shout currentShout;
+  protected Shout currentShout;
 
-  Auction auction;
+  protected Auction auction;
 
-  MarketQuote currentQuote;
+  protected MarketQuote currentQuote;
 
   protected Shout clearBid, clearAsk;
 
-  public ElectricityStats stats;
+  protected ElectricityStats stats;
 
   public GPAuctioneer() {
     super();
@@ -114,6 +114,17 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     shoutEngine.printState();
   }
 
+  public void setStats( ElectricityStats stats ) {
+    this.stats = stats;
+  }
+
+  public ElectricityStats getStats() {
+    return stats;
+  }
+
+  public Auction getAuction() {
+    return auction;
+  }
 
 
 }
