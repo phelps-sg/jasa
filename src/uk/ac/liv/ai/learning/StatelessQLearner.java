@@ -39,6 +39,9 @@ public class StatelessQLearner
 
   QLearner qLearner;
 
+  public StatelessQLearner() {
+    qLearner = new QLearner();
+  }
 
   public StatelessQLearner( int numActions, double epsilon,
                               double learningRate, double discountRate  ) {
