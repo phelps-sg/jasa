@@ -51,21 +51,21 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
   static final int sellerValues[] = { 35, 16, 11 };
 
-  RoundRobinAuction auction;
+  protected RoundRobinAuction auction;
 
-  List buyers, sellers;
+  protected List buyers, sellers;
 
-  CSVWriter statsOut;
+  protected CSVWriter statsOut;
 
-  ArrayList allTraders;
+  protected ArrayList allTraders;
 
-  MarketDataLogger logger;
+  protected MarketDataLogger logger;
 
 
   public Object protoClone() throws CloneNotSupportedException {
 
-    AuctionProblem myobj = (AuctionProblem) super.protoClone();
-    //TODO
+    GPCoEvolveAuctionProblem myobj = (GPCoEvolveAuctionProblem) super.protoClone();
+    //TODO?
     return myobj;
   }
 
