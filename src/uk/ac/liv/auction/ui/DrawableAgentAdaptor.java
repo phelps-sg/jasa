@@ -43,6 +43,10 @@ public class DrawableAgentAdaptor implements Drawable {
   
   protected ColorMap colorMap;
   
+  protected static float minProfit = Float.POSITIVE_INFINITY;
+  
+  protected static float maxProfit = Float.NEGATIVE_INFINITY;
+  
   public float scale = 1000;
   
   public DrawableAgentAdaptor( Auction auction ) {
@@ -51,12 +55,6 @@ public class DrawableAgentAdaptor implements Drawable {
   
   public DrawableAgentAdaptor( Auction auction, AbstractTraderAgent agent ) {
     this(auction, agent, null);
-    colorMap = new ColorMap();
-    double scale2 = scale * 0.75;
-    for( int i=0; i<scale; i++ ) {
-      double intensity = 0.25 + i/scale2;
-      colorMap.mapColor(i, intensity, 0, intensity);
-    }
   }
   
   public DrawableAgentAdaptor( Auction auction, AbstractTraderAgent agent, 
@@ -75,13 +73,27 @@ public class DrawableAgentAdaptor implements Drawable {
     int cellHeight = g.getCurHeight();
     int cellWidth = g.getCurWidth();
     float price = getLastShoutPrice();
+    float profit = getTotalProfits();
+    if ( profit < DrawableAgentAdaptor.minProfit ) {
+      DrawableAgentAdaptor.minProfit = profit;
+    }
+    if ( profit > DrawableAgentAdaptor.maxProfit ) {
+      DrawableAgentAdaptor.maxProfit = profit;
+    }
+    float relProfit = profit / DrawableAgentAdaptor.maxProfit;
     int y =  (int) ((price / scale) * 5);
     g.setDrawingParameters(5, y, 1);
+    Color color = Color.BLACK;
     if ( colorMap == null ) {
-      g.drawRect(Color.RED); 
+      if ( relProfit > 0.01 ) {
+        color = new Color(relProfit, 0, 0);
+      } else {
+        color = Color.WHITE;
+      }
     } else {
-      g.drawRect(colorMap.getColor((int) price));
+      color = colorMap.getColor((int) profit);
     }
+    g.drawRect(color);
     g.setDrawingParameters(5, 5, 5);
     g.drawHollowRect(Color.WHITE);
   }
@@ -97,7 +109,19 @@ public class DrawableAgentAdaptor implements Drawable {
   }
   
   public float getLastProfit() {
-    return (float) agent.getLastProfit();
+    float profit = 0;
+    if ( agent != null ) {
+      profit = (float) agent.getLastProfit();
+    }
+    return profit;
+  }
+  
+  public float getTotalProfits() {
+    float profit = 0;
+    if ( agent != null ) {
+      profit = (float) agent.getProfits();
+    }
+    return profit;
   }
   
   public float getCurrentValuation() {

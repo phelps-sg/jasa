@@ -315,11 +315,11 @@ public class RepastMarketSimulation extends SimModelImpl
   protected void buildDisplay() {
     GraphMarketDataLogger graphLogger;
     if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
-      graph = new RepastAuctionConsoleGraph(auction.getName() + " graph", this, graphLogger);
+      graph = new RepastAuctionConsoleGraph("JASA graph for " + auction.getName(), this, graphLogger);
       graph.display();
     }
     
-    displaySurface = new DisplaySurface(this, auction.getName() + " agents");
+    displaySurface = new DisplaySurface(this, "JASA agents for " + auction.getName());
     agentSpace = new AgentSpace(auction);
     Object2DDisplay agentDisplay = new Object2DDisplay(agentSpace);
     displaySurface.addDisplayableProbeable(agentDisplay, "agents");
