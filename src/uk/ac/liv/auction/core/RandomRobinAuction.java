@@ -42,7 +42,8 @@ public class RandomRobinAuction extends RoundRobinAuction {
   public void requestShouts() {
     Object[] randomlySortedTraders = activeTraders.toArray();
     GlobalPRNG.randomPermutation(randomlySortedTraders);    
-    for( int i=0; i<numTraders; i++ ) {      
+    int n = activeTraders.size();
+    for( int i=0; i<n; i++ ) {      
       TradingAgent trader = (TradingAgent) randomlySortedTraders[i];      
       requestShout(trader);
     }

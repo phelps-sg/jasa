@@ -152,11 +152,6 @@ public class RoundRobinAuction extends AuctionImpl
   protected int maximumRounds = -1;
 
   /**
-   * The current number of traders in the auction.
-   */
-  protected int numTraders;
-
-  /**
    * Were any shouts processed (received & accepted) in the last round of
    * trading?
    */
@@ -360,10 +355,7 @@ public class RoundRobinAuction extends AuctionImpl
    */
   public void remove( TradingAgent trader ) {
     if ( !defunctTraders.contains(trader) ) {
-      defunctTraders.add(trader);
-      if ( --numTraders == 0 ) {
-        close();
-      }
+      defunctTraders.add(trader);      
     }
   }
 
@@ -415,7 +407,7 @@ public class RoundRobinAuction extends AuctionImpl
    * Return the number of traders currently active in the auction.
    */
   public int getNumberOfTraders() {
-    return numTraders;
+    return activeTraders.size();
   }
 
   /**
@@ -496,6 +488,7 @@ public class RoundRobinAuction extends AuctionImpl
   
   public void end() {
     informAuctionClosed();
+    sweepDefunctTraders();
   }
   
   
@@ -555,12 +548,16 @@ public class RoundRobinAuction extends AuctionImpl
   public Iterator getTraderIterator() {
     return registeredTraders.iterator();
   }
+  
+  public Iterator getActiveTraderIterator() {
+    return activeTraders.iterator();
+  }
 
   /**
    * Returns true if no bidding activity occured in the latest auction round.
    */
   public boolean isQuiescent() {
-    return !shoutsProcessed;
+    return !shoutsProcessed || activeTraders.size() == 0;
   }
 
 
@@ -578,7 +575,7 @@ public class RoundRobinAuction extends AuctionImpl
     defunctTraders.clear();
     activeTraders.clear();
 
-    activeTraders.addAll(registeredTraders);
+    activeTraders.addAll(registeredTraders);    
     
     if ( auctioneer != null ) {
       ((Resetable) auctioneer).reset();
@@ -597,8 +594,9 @@ public class RoundRobinAuction extends AuctionImpl
     }
 
     Iterator i = getTraderIterator();
-    while ( i.hasNext() ) {
+    while ( i.hasNext() ) {      
       TradingAgent t = (TradingAgent) i.next();
+      addAuctionEventListener(t);
       t.reset();
     }
   }
@@ -667,20 +665,16 @@ public class RoundRobinAuction extends AuctionImpl
 
     super.initialise();
 
-    numTraders = 0;
     round = 0;
     day = 0;
     age = 0;
 
-
-    numTraders = activeTraders.size();
     shoutsProcessed = false;
   }
 
   protected void activate( TradingAgent agent ) {
     activeTraders.add(agent);
     addAuctionEventListener(agent);
-    numTraders++;
   }
 
   /**
