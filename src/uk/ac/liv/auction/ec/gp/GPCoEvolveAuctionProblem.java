@@ -43,9 +43,15 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
   static int MAX_ROUNDS = 1000;
 
+  static boolean randomPrivateValues = false;
+
+  static double maxPrivateValue = 100;
+
   static final String P_TRADERS = "numtraders";
   static final String P_ROUNDS = "maxrounds";
   static final String P_ITERATIONS = "iterations";
+  static final String P_RANDOMPRIVATEVALUES = "randomprivatevalues";
+  static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
 
   static final int buyerValues[] = { 36, 17, 12 };
   //static final int buyerValues[] = { 100, 17, 12 };
@@ -63,6 +69,9 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   protected StatsMarketDataLogger logger;
 
   protected ElectricityStats stats;
+
+  protected MersenneTwisterFast randGenerator;
+
 
 
   public Object protoClone() throws CloneNotSupportedException {
@@ -83,15 +92,22 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     CS = state.parameters.getIntWithDefault(base.push("cs"), null, 10);
     CB = state.parameters.getIntWithDefault(base.push("cb"), null, 10);
 
-    MAX_ROUNDS = state.parameters.getIntWithDefault(base.push("maxrounds"), null, 1000);
+    MAX_ROUNDS = state.parameters.getIntWithDefault(base.push(P_ROUNDS), null, 1000);
+
+    randomPrivateValues = state.parameters.getBoolean(base.push(P_RANDOMPRIVATEVALUES), null, false);
+    maxPrivateValue = state.parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null, 100.0);
 
     System.out.println("NS = " + NS);
     System.out.println("NB = " + NB);
     System.out.println("CS = " + CS);
     System.out.println("CB = " + CB);
     System.out.println("MAX_ROUNDS = " + MAX_ROUNDS);
+    System.out.println("randomPrivateValues = " + randomPrivateValues);
+    System.out.println("maxPrivateValue = " + maxPrivateValue);
 
     String statsFileName = state.parameters.getStringWithDefault(base.push("marketstatsfile"), "coevolve-electricity-stats.csv");
+
+    randGenerator = new MersenneTwisterFast();
 
     auction = new RandomRobinAuction();
     auction.setMaximumRounds(MAX_ROUNDS);
@@ -126,7 +142,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
                                       "fitness" });
   }
 
-  protected void assignStrategies( GPAuctioneer auctioneer,
+  protected void initialiseTraders( GPAuctioneer auctioneer,
                                     EvolutionState state, Vector[] group,
                                     int thread ) {
 
@@ -140,6 +156,9 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       trader.setStrategy(strategy);
       strategy.setAgent(trader);
       strategy.setQuantity(trader.getCapacity());
+      if ( randomPrivateValues ) {
+        trader.setPrivateValue(randGenerator.nextDouble() * maxPrivateValue);
+      }
       trader.reset();
       strategies.add(strategy);
     }
@@ -163,7 +182,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     auction.setAuctioneer(auctioneer);
 
     // Assign the GP-evolved strategies to each trader
-    assignStrategies(auctioneer, state, group, thread);
+    initialiseTraders(auctioneer, state, group, thread);
 
     // Run the auction
     auction.run();
@@ -226,17 +245,22 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   }
 
 
-  public static List registerTraders( ArrayList allTraders,
-                                      RoundRobinAuction auction,
-                                      boolean areSellers, int num, int capacity,
-                                      int[] values ) {
+  public List registerTraders( ArrayList allTraders,
+                                RoundRobinAuction auction,
+                                boolean areSellers, int num, int capacity,
+                                int[] values ) {
     ArrayList result = new ArrayList();
     for( int i=0; i<num; i++ ) {
 
-      // Construct a trader for this record
+      double value;
+      if ( randomPrivateValues ) {
+        value = randGenerator.nextDouble() * maxPrivateValue;
+      } else {
+        value = values[i % values.length];
+      }
+
       GPElectricityTrader trader =
-        new GPElectricityTrader(capacity, values[i % values.length], 0,
-                                areSellers);
+        new GPElectricityTrader(capacity, value, 0, areSellers);
 
       result.add(trader);
       allTraders.add(trader);

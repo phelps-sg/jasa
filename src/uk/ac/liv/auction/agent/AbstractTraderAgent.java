@@ -190,6 +190,10 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     return privateValue;
   }
 
+  public void setPrivateValue( double privateValue ) {
+    this.privateValue = privateValue;
+  }
+
   public boolean isSeller() {
     return isSeller;
   }

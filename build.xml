@@ -3,7 +3,7 @@
       <property name="sourceDir" value="src"/>
       <property name="outputDir" value="classes" />
       <property name="projectName" value="JASA"/>
-      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io" />
+      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io" />
       <property name="docDir" value="doc" />
    </target>
 

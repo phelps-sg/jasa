@@ -8,7 +8,7 @@ define(`SELLER_CAPACITY', ENV_VAR(`$GP_CS', 10))
 define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
 
 define(`POPULATION_SIZE', 50)
-define(`NUM_GENERATIONS', 200)
+define(`NUM_GENERATIONS', 1000)
 
 define(`RESULTS', `CONF_OUTHOME/gpcoevolve')
 
@@ -24,6 +24,7 @@ eval.problem.ns = NUM_SELLERS
 eval.problem.nb = NUM_BUYERS
 eval.problem.cs = SELLER_CAPACITY
 eval.problem.cb = BUYER_CAPACITY
+eval.problem.randomprivatevalues = true
 eval.problem.marketstatsfile = RESULTS/marketstats-PARAM_SUMMARY.csv
 
 stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
