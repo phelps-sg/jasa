@@ -88,6 +88,10 @@ public class TestTrader extends AbstractTraderAgent {
     receivedRoundClosed++;
   }
 
+  public boolean active() {
+    return true;
+  }
+
   public String toString() {
     return "(" + getClass() + " id:" + id + " privateValue:" + privateValue + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
   }

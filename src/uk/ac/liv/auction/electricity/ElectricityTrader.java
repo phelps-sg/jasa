@@ -156,6 +156,10 @@ public class ElectricityTrader extends AbstractTraderAgent {
     return lastProfit;
   }
 
+  public boolean active() {
+    return true;
+  }
+
   public String toString() {
     return "(" + getClass() + " id:" + id + " capacity:" + capacity + " privateValue:" + privateValue + " fixedCosts:" + fixedCosts + " profits:" + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit + " strategy:" + strategy + ")";
   }

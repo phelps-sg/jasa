@@ -99,5 +99,9 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
   public void roundClosed( Auction auction ) {
   }
 
+  public boolean active() {
+    return true;
+  }
+
 
 }

@@ -158,9 +158,12 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
   }
 
   protected void raiseMargin( double price ) {
-    double relative = randGenerator.nextDouble() + 1;
-    double absolute = randGenerator.nextDouble() * scaling;
-    learner.train(targetPrice(price, absolute, relative));
+    if ( agent.active() ) {
+      // Only active agents raise margins
+      double relative = randGenerator.nextDouble() + 1;
+      double absolute = randGenerator.nextDouble() * scaling;
+      learner.train(targetPrice(price, absolute, relative));
+    }
   }
 
   protected void lowerMargin( double price ) {

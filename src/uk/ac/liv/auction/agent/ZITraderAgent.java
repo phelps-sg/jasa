@@ -22,6 +22,8 @@ import ec.util.Parameter;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 /**
  * <p>
  * Abstract superclass for "Zero Intelligence" (ZI) trader agents.
@@ -68,9 +70,13 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
    */
   protected int quantityTraded = 0;
 
+  protected Shout dummyShout;
+
   static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
 
   static final double DEFAULT_MAX_MARKUP = 100;
+
+  static Logger logger = Logger.getLogger(ZITraderAgent.class);
 
   public ZITraderAgent() {
     super();
@@ -98,19 +104,22 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     lastShoutSuccessful = false;
     tradeEntitlement = initialTradeEntitlement;
     quantityTraded = 0;
+    dummyShout = new Shout(this);
   }
 
-  public void requestShout( RoundRobinAuction auction ) {
+  public void requestShout( Auction auction ) {
 
-    if ( tradeEntitlement == 0 ) {
-      // Drop out of trading once my entitlement is out.
-      auction.remove(this);
-      return;
+    if ( active() ) {
+      super.requestShout(auction);
+    } else {
+      strategy.modifyShout(dummyShout, auction);
     }
 
-    super.requestShout(auction);
-
     lastShoutSuccessful = false;
+  }
+
+  public boolean active() {
+    return tradeEntitlement > 0;
   }
 
   /**

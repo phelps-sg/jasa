@@ -98,6 +98,10 @@ public class InteractiveTraderAgent extends AbstractTraderAgent {
   public void roundClosed( Auction auction ) {
   }
 
+  public boolean active() {
+    return true;
+  }
+
   public String toString() {
     return "(InteractiveTraderAgent stock: " + stock + " funds: " + funds + " id:" + id + ")";
   }
