@@ -21,9 +21,6 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.io.DataSeriesWriter;
 
-import JSci.awt.*;
-import JSci.swing.*;
-
 import javax.swing.*;
 
 /**
@@ -34,11 +31,10 @@ import javax.swing.*;
 public class GraphLearnerMonitor extends DataSeriesWriter
     implements LearnerMonitor {
 
-  GraphFrame graph;
 
   public GraphLearnerMonitor() {
     super();
-    graph = new GraphFrame(this);
+    
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -50,31 +46,7 @@ public class GraphLearnerMonitor extends DataSeriesWriter
   }
 
   public void finishRecording() {
-    graph.update();
+    //TODO
   }
 
-}
-
-class GraphFrame extends JFrame {
-
-  JLineGraph graph;
-
-  DefaultGraph2DModel model;
-
-  public GraphFrame( DataSeriesWriter series ) {
-    model = new DefaultGraph2DModel();
-    model.addSeries(series);
-    graph = new JLineGraph(model);
-    getContentPane().add(graph);
-    pack();
-    setVisible(true);
-  }
-
-  public void update() {
-//    SwingUtilities.invokeAndWait(new Runnable() {
-//      public void run() {
-        //TODO
-//        model.fireDataChanged()
-//      }});
-  }
 }
