@@ -78,10 +78,10 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger {
     while ( i.hasNext() ) {
       Object key = i.next();
       StrategyStats stats = (StrategyStats) table.get(key);
-      if ( averageSurplus != 0 ) {        
-        stats.payoff = ((stats.profits / stats.numAgents)  ) / averageSurplus;
-      } else {        
-        stats.payoff = 0;
+      if ( averageSurplus != 0 ) {
+        stats.payoff = ((stats.profits / stats.numAgents)  ) / averageSurplus;      
+      } else {
+        stats.payoff = 1;        
       }
     }
   }
