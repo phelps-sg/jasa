@@ -61,6 +61,10 @@ public class WidrowHoffLearner extends AbstractLearner
    */
   protected double momentum;
 
+  /**
+   * A PRNG for initialising the learning algorithm with randomly chosen
+   * values for the momentum and learningRate parameters.
+   */
   protected RandomElement paramPRNG = PRNGFactory.getFactory().create();
 
   public static final double DEFAULT_LEARNING_RATE = 0.1;
@@ -111,8 +115,9 @@ public class WidrowHoffLearner extends AbstractLearner
     return delta;
   }
 
-  public void reset() {
-    initialise();
+  public void initialise() {
+    delta = 0;
+    currentOutput = 0;
   }
 
   public void setSeed( long seed ) {
@@ -123,9 +128,11 @@ public class WidrowHoffLearner extends AbstractLearner
     setSeed(s.nextSeed());
   }
 
-  protected void initialise() {
+  public void reset() {
     learningRate = 0.1 + paramPRNG.raw() * 0.4;
     momentum = 0.2 + paramPRNG.raw() * 0.6;
+    delta = 0;
+    currentOutput = 0;
   }
 
 

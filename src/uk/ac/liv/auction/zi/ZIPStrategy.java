@@ -88,7 +88,8 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
     super.setup(parameters, base);
 
-    scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), null, scaling);
+    scaling =
+        parameters.getDoubleWithDefault(base.push(P_SCALING), null, scaling);
 
     learner = (MimicryLearner)
         parameters.getInstanceForParameter(base.push(P_LEARNER), null,
