@@ -22,6 +22,18 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+/**
+ * A memory-less version of the Q-Learning algorithm.
+ *
+ * This class implements StimuliResponseLearner instead of
+ * MDPLearner, and so can be used in place of, e.g. a RothErevLearner.
+ *
+ * We use the standard MDP QLearner class, but fool it with this
+ * wrapper into thinking that there is only one state.
+ *
+ * @author Steve Phelps
+ */
+
 public class StatelessQLearner
     implements StimuliResponseLearner, Parameterizable, Resetable {
 

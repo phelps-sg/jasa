@@ -25,38 +25,69 @@ import ec.util.MersenneTwisterFast;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+/**
+ * An implementation of the Q-learning algorithm,
+ * with epsilon-greedy exploration.
+ *
+ * @author Steve Phelps
+ */
 
 
 public class QLearner
     implements MDPLearner, Resetable, Serializable,
                 Parameterizable {
 
+
+  /**
+   * The number of possible states
+   */
   int numStates;
 
+  /**
+   * The number of possible actions
+   */
   int numActions;
+
+  /**
+   * The matrix representing the estimated payoff of each
+   * possible action in each possible state.
+   */
+  double q[][];
+
+  /**
+   * The learning rate.
+   */
+  double learningRate;
+
+  /**
+   * The discountRate for future payoffs.
+   */
+  double discountRate;
+
+  /**
+   * The parameter representing the probability of choosing
+   * a random action on any given iteration.
+   */
+  double epsilon;
+
+  /**
+   * The previous state
+   */
+  int previousState;
+
+  /**
+   * The current state
+   */
+  int currentState;
+
+  /**
+   * The last action that was chosen.
+   */
+  int lastActionChosen;
 
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
-  double q[][];
-
-  double learningRate;
-
-  double discountRate;
-
-  double epsilon;
-
-  int previousState;
-
-  int currentState;
-
-  int lastActionChosen;
-
   int bestAction;
-
-  /**
-   * The last action chosen.
-   */
-  int lastAction;
 
   static final double DEFAULT_EPSILON = 0.2;
   static final double DEFAULT_LEARNING_RATE = 0.5;
