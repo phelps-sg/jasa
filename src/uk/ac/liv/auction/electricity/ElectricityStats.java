@@ -145,7 +145,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   /**
    * The equilibrium calculations for this auction.
    */
-  protected EquilibriaStats standardStats = null;
+  protected EquilibriaStats equilibStats = null;
 
   /**
    * The approximated equilibrium price.
@@ -205,6 +205,8 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       calculateEquilibria();
       zeroEquilibriumTotals();
       equilibPrice = calculateEquilibriumPrice();
+      pBCE = equilibStats.getPBCE();
+      pSCE = equilibStats.getPSCE();
     }
 
     auctionAge = calculateAuctionAge();
@@ -216,16 +218,10 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
         numSellers++;
         sellerCap += getCapacity(trader);
         pSA += getProfits(trader);
-        if ( equilibrium ) {
-          pSCE += equilibriumProfits(trader);
-        }
       } else {
         numBuyers++;
         buyerCap += getCapacity(trader);
         pBA += getProfits(trader);
-        if ( equilibrium ) {
-          pBCE += equilibriumProfits(trader);
-        }
       }
     }
 
@@ -240,11 +236,11 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
 
   protected void calculateEquilibria() {
-    if ( standardStats == null ) {
-      standardStats = new EquilibriaStats(auction);
-      standardStats.calculate();
+    if ( equilibStats == null ) {
+      equilibStats = new EquilibriaStats(auction);
+      equilibStats.calculate();
     } else {
-      standardStats.recalculate();
+      equilibStats.recalculate();
     }
   }
 
@@ -266,7 +262,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
 
   public double calculateEquilibriumPrice() {
-    return (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2;
+    return equilibStats.calculateMidEquilibriumPrice();
   }
 
 
@@ -332,7 +328,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       + "\n\tpSA:" + pSA + "\n\tpBCE:" + pBCE + "\n\tpSCE:" + pSCE
       + "\n\tpST:" + pST + "\n\tpBT:" + pBT
       + "\n\teA:" + eA
-      + "\n\tstandardStats:" + standardStats
+      + "\n\tequilibStats:" + equilibStats
       + "\n)";
   }
 
@@ -471,7 +467,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
    * Get the equilibrium market statistics.
    */
   public EquilibriaStats getEquilibriaStats() {
-    return standardStats;
+    return equilibStats;
   }
 
 }

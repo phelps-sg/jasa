@@ -26,7 +26,7 @@ public class ParameterizedElectricityStats extends ElectricityStats {
 
   public double calculateEquilibriumPrice() {
     double k = ((ParameterizablePricing) auction.getAuctioneer()).getK();
-    return standardStats.getMinPrice()*k + standardStats.getMaxPrice()*(1-k);
+    return equilibStats.getMinPrice()*k + equilibStats.getMaxPrice()*(1-k);
   }
 
 }
