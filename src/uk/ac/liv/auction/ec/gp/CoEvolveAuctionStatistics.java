@@ -23,8 +23,6 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.ec.gp.func.*;
 import uk.ac.liv.ec.gp.*;
 
-
-
 /**
  * <p>Title: JASA</p>
  * <p> </p>

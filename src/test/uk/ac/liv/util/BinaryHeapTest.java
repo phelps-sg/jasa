@@ -26,10 +26,11 @@ import uk.ac.liv.util.*;
 import java.util.Random;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 public class BinaryHeapTest extends TestCase {
 
-  BinaryHeap h1;
+  PriorityQueue h1;
 
   public BinaryHeapTest( String name ) {
     super(name);
@@ -37,14 +38,14 @@ public class BinaryHeapTest extends TestCase {
 
   public void setUp() {
 
-    h1 = new BinaryHeap();
+    h1 = new PriorityQueue();
 
-    h1.insert(new Integer(1));
-    h1.insert(new Integer(3));
-    h1.insert(new Integer(9));
-    h1.insert(new Integer(3));
-    h1.insert(new Integer(5));
-    h1.insert(new Integer(7));
+    h1.add(new Integer(1));
+    h1.add(new Integer(3));
+    h1.add(new Integer(9));
+    h1.add(new Integer(3));
+    h1.add(new Integer(5));
+    h1.add(new Integer(7));
   }
 
   public void test() {
@@ -55,7 +56,7 @@ public class BinaryHeapTest extends TestCase {
     assertTrue( h1.contains(new Integer(5)) );
     assertTrue( !h1.contains(new Integer(10)) );
     assertTrue( !h1.contains(new Integer(-1)) );
-    Object x = h1.pop();
+    Object x = h1.remove();
     System.out.println("h1 after removing first = " + h1);
     checkOrder(h1);
     assertTrue( ((Integer) x).equals(new Integer(1)));
@@ -70,9 +71,9 @@ public class BinaryHeapTest extends TestCase {
     assertTrue( h1.remove( new Integer(3) ) );
     System.out.println("h1 after removing 3 = " + h1);
     // assertTrue( ! h1.contains(new Integer(3)) );
-    x = h1.pop();
+    x = h1.remove();
     System.out.println("h1 after removing first = " + h1);
-    h1.pop();
+    h1.remove();
     System.out.println("h1 after removing first = " + h1);
     assertTrue( h1.remove( new Integer(7) ) );
     System.out.println("h1 after removing 7 = " + h1);
@@ -88,11 +89,11 @@ public class BinaryHeapTest extends TestCase {
   }
 
 
-  public void checkOrder( BinaryHeap h ) {
+  public void checkOrder( PriorityQueue h ) {
     Integer lastNum = null;
     LinkedList l = new LinkedList();
     while ( !h.isEmpty() ) {
-      Integer num = (Integer) h.pop();
+      Integer num = (Integer) h.remove();
       assertTrue( lastNum == null || num.intValue() >= lastNum.intValue() );
       lastNum = num;
       l.add(num);
@@ -106,7 +107,7 @@ public class BinaryHeapTest extends TestCase {
   public void testRandom() {
     Random randGenerator = new Random(PRNGTestSeeds.UNIT_TEST_SEED);
     for( int i=0; i<1000; i++ ) {
-      BinaryHeap h = new BinaryHeap();
+      PriorityQueue h = new PriorityQueue();
       for( int r=0; r<100; r++ ) {
         h.add( new Integer( randGenerator.nextInt(100)) );
       }

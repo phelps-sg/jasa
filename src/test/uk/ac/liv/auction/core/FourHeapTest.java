@@ -19,13 +19,11 @@ import java.util.*;
 
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.BinaryHeap;
-
 import test.uk.ac.liv.auction.agent.TestTrader;
 
 import junit.framework.*;
 
-//import org.apache.commons.collections.BinaryHeap;
+import org.apache.commons.collections.buffer.PriorityBuffer;
 
 /**
  * @author Steve Phelps
@@ -162,7 +160,7 @@ class TestShoutEngine extends FourHeapShoutEngine {
     }
   }
 
-  public static int countQty( BinaryHeap heap ) {
+  public static int countQty( PriorityBuffer heap ) {
     Iterator i = heap.iterator();
     int qty = 0;
     while ( i.hasNext() ) {

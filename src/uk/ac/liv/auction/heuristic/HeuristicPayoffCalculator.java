@@ -418,4 +418,7 @@ public class HeuristicPayoffCalculator
     System.exit(1);
   }
 
+  public void reset() {
+    payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
+  }
 }
