@@ -330,6 +330,8 @@ public class RoundRobinAuction extends AuctionImpl
         ((Parameterizable) agent).setup(parameters, typeParamT);
         register(agent);
       }
+      
+      log4jLogger.info("done.\n");
     }
 
     initialise();
