@@ -17,10 +17,12 @@ package uk.ac.liv.auction.ui;
 
 import java.awt.Color;
 
+import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
 
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AdaptiveStrategy;
 import uk.ac.liv.auction.agent.RandomValuer;
 import uk.ac.liv.auction.agent.Valuer;
 import uk.ac.liv.auction.agent.Strategy;
@@ -39,18 +41,34 @@ public class DrawableAgentAdaptor implements Drawable {
   
   protected Auction auction;
   
-  public float scale = 200;
+  protected ColorMap colorMap;
+  
+  protected float price;
+  
+  public float scale = 1000;
   
   public DrawableAgentAdaptor( Auction auction ) {
     this(auction, null);
   }
   
   public DrawableAgentAdaptor( Auction auction, AbstractTraderAgent agent ) {
+    this(auction, agent, null);
+    colorMap = new ColorMap();
+    double scale2 = scale * 0.75;
+    for( int i=0; i<scale; i++ ) {
+      double intensity = 0.25 + i/scale2;
+      colorMap.mapColor(i, intensity, 0, intensity);
+    }
+  }
+  
+  public DrawableAgentAdaptor( Auction auction, AbstractTraderAgent agent, 
+      						ColorMap colorMap ) {
     this.agent = agent;
+    this.colorMap = colorMap;
     if ( agent != null ) {
       Valuer valuer = agent.getValuer();
       if ( valuer instanceof RandomValuer ) {
-        scale = (float) ((RandomValuer) valuer).getMaxValue();
+        scale = (float) ((RandomValuer) valuer).getMaxValue() * 2;
       }
     }
   }
@@ -58,7 +76,7 @@ public class DrawableAgentAdaptor implements Drawable {
   public void draw( SimGraphics g ) {
     int cellHeight = g.getCurHeight();
     int cellWidth = g.getCurWidth();
-    float price = 0;
+    price = 0;
     if ( agent != null ) {
       Shout shout = agent.getCurrentShout();
       if ( shout != null ) {
@@ -67,9 +85,13 @@ public class DrawableAgentAdaptor implements Drawable {
     }
     int y =  (int) ((price / scale) * 5);
     g.setDrawingParameters(5, y, 1);
-    g.drawRect(Color.RED);
-   // g.setDrawingParameters(5, 5, 5);
-    //g.drawRect(Color.WHITE);
+    if ( colorMap == null ) {
+      g.drawRect(Color.RED); 
+    } else {
+      g.drawRect(colorMap.getColor((int) price));
+    }
+    g.setDrawingParameters(5, 5, 5);
+    g.drawHollowRect(Color.WHITE);
   }
   
   public int getX() {
@@ -82,12 +104,12 @@ public class DrawableAgentAdaptor implements Drawable {
     return 0;
   }
   
-  public double getLastProfit() {
-    return agent.getLastProfit();
+  public float getLastProfit() {
+    return (float) agent.getLastProfit();
   }
   
-  public double getCurrentValuation() {
-    return agent.getValuation(auction);
+  public float getCurrentValuation() {
+    return (float) agent.getValuation(auction);
   }
   
   public long getId() {
@@ -96,9 +118,9 @@ public class DrawableAgentAdaptor implements Drawable {
   
   public String getRole() {
     if ( agent.isSeller() ) {
-      return "seller";
+      return "Seller";
     } else {
-      return "buyer";
+      return "Buyer";
     }
   }
   
@@ -106,9 +128,36 @@ public class DrawableAgentAdaptor implements Drawable {
     return agent.getStrategy();
   }
   
+  public Object getAgentType() {
+    return agent;
+  }
+  
   public boolean getLastShoutAccepted() {
     return agent.lastShoutAccepted();
   }
+  
+  public float getLastShoutPrice() {
+    return price;
+  }
+  
+  public Object getLearningAlgorithm() {
+    Strategy s = agent.getStrategy();
+    if ( s instanceof AdaptiveStrategy ) {
+      return ((AdaptiveStrategy) s).getLearner();
+    } else {
+      return null;
+    }
+  }
+  
+  public float getLearningDelta() {
+    Strategy s = agent.getStrategy();
+    if ( s instanceof AdaptiveStrategy ) {
+      return (float) ((AdaptiveStrategy) s).getLearner().getLearningDelta();
+    } else {
+      return -1;
+    }
+  }
+  
 }
 
 

@@ -58,9 +58,9 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public GraphMarketDataLogger() {
     super();
-    askQuoteLog = new RepastGraphSequence("ask quote");
-    bidQuoteLog = new RepastGraphSequence("bid quote log");
-    transPriceLog = new RepastGraphSequence("transaction price");
+    askQuoteLog = new RepastGraphSequence("mean ask quote per round");
+    bidQuoteLog = new RepastGraphSequence("mean bid quote per round");
+    transPriceLog = new RepastGraphSequence("mean transaction price per round");
     askLog = new RepastGraphSequence("ask");
     bidLog = new RepastGraphSequence("bid");
     allSeries = new RepastGraphSequence[] { (RepastGraphSequence) askQuoteLog,

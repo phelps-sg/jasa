@@ -31,7 +31,6 @@ import uk.ac.liv.auction.ui.DrawableAgentAdaptor;
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.Serializable;
@@ -41,17 +40,14 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-
 import uchicago.src.collection.BaseMatrix;
-import uchicago.src.collection.DoubleMatrix;
+
 import uchicago.src.sim.engine.*;
+
 import uchicago.src.sim.analysis.OpenSequenceGraph;
-import uchicago.src.sim.gui.ColorMap;
+
 import uchicago.src.sim.gui.DisplaySurface;
-import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.Object2DDisplay;
-import uchicago.src.sim.gui.SimGraphics;
-import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.space.Discrete2DSpace;
 
 import org.apache.log4j.Logger;
@@ -148,7 +144,6 @@ public class RepastMarketSimulation
     this.parameterFileName = parameterFileName;
     modelManipulator = new ModelManipulator();
     parameterDescriptors = new Hashtable();
-    displaySurface = new DisplaySurface(this, getName());
     schedule = new Schedule();
     schedule.scheduleActionBeginning(1, this, "step");
     schedule.scheduleActionAtEnd(this, "report");
@@ -239,13 +234,15 @@ public class RepastMarketSimulation
     
     GraphMarketDataLogger graphLogger;
     if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
-      graph = new RepastAuctionConsoleGraph(getName(), this, graphLogger);
+      graph = new RepastAuctionConsoleGraph(auction.getName() + " graph", this, graphLogger);
       graph.display();
     }
     
+    displaySurface = new DisplaySurface(this, auction.getName() + " agents");
     agentSpace = new AgentSpace(auction);
     Object2DDisplay agentDisplay = new Object2DDisplay(agentSpace);
     displaySurface.addDisplayableProbeable(agentDisplay, "agents");
+    displaySurface.setPreferredSize(new Dimension(640,480));
     displaySurface.display();
 
     auction.begin();
