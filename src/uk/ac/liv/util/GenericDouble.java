@@ -1,12 +1,11 @@
 package uk.ac.liv.util;
 
 /**
- * Title:
- * Description:
- * Copyright:
- * Company:
+ * This encapsulation of Double can be used in combination with the
+ * GenericNumber and GenericInteger classes, for performing weakly-typed
+ * arithmetic operations.
  * @author Steve Phelps
- * @version
+ *
  */
 
 public class GenericDouble extends GenericNumber {

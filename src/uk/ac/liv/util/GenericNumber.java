@@ -1,7 +1,11 @@
 package uk.ac.liv.util;
 
 /**
+ * An abstract class encapsulating numbers for weakly-typed
+ * arithmetic operations.
+ *
  * @author Steve Phelps
+ *
  */
 
 public abstract class GenericNumber extends Number {

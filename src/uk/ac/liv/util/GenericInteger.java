@@ -1,12 +1,11 @@
 package uk.ac.liv.util;
 
 /**
- * Title:
- * Description:
- * Copyright:
- * Company:
+ * This encapsulation of Integer can be used in combination with the
+ * GenericNumber and GenericDouble classes, for performing weakly-typed
+ * arithmetic operations.
  * @author Steve Phelps
- * @version
+ *
  */
 
 public class GenericInteger extends GenericNumber {
