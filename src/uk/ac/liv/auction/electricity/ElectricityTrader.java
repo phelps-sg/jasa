@@ -37,17 +37,17 @@ public class ElectricityTrader extends AbstractTraderAgent {
   /**
    * The capacity of this trader in MWh
    */
-  int capacity;
+  protected int capacity;
 
   /**
    * The fixed costs for this trader.
    */
-  double fixedCosts;
+  protected double fixedCosts;
 
   /**
    * The total profits of this trader to date.
    */
-  double profits;
+  protected double profits;
 
 
   public ElectricityTrader( int capacity, double privateValue,

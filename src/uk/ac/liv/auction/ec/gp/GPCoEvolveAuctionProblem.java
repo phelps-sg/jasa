@@ -47,7 +47,8 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   static final String P_ROUNDS = "maxrounds";
   static final String P_ITERATIONS = "iterations";
 
-  static final int buyerValues[] = { 36, 17, 12 };
+//  static final int buyerValues[] = { 36, 17, 12 };
+  static final int buyerValues[] = { 100, 17, 12 };
 
   static final int sellerValues[] = { 35, 16, 11 };
 
@@ -59,7 +60,9 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
   protected ArrayList allTraders;
 
-  protected MarketDataLogger logger;
+  protected StatsMarketDataLogger logger;
+
+  protected ElectricityStats stats;
 
 
   public Object protoClone() throws CloneNotSupportedException {
@@ -74,13 +77,13 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
     super.setup(state,base);
 
-    boolean uniPrice = state.parameters.getBoolean(base.push("uniprice"),null,false);
-
     NS = state.parameters.getIntWithDefault(base.push("ns"), null, 3);
     NB = state.parameters.getIntWithDefault(base.push("nb"), null, 3);
 
     CS = state.parameters.getIntWithDefault(base.push("cs"), null, 10);
     CB = state.parameters.getIntWithDefault(base.push("cb"), null, 10);
+
+    MAX_ROUNDS = state.parameters.getIntWithDefault(base.push("maxrounds"), new Parameter("1000"), 1);
 
     String statsFileName = state.parameters.getStringWithDefault(base.push("statsfile"), "coevolve-electricity-stats.csv");
 
@@ -95,69 +98,96 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     auction.setMarketDataLogger(logger);
 
     try {
-      statsOut = new CSVWriter(new FileOutputStream(statsFileName), 7 + NS + NB);//13);
+      statsOut = new CSVWriter(new FileOutputStream(statsFileName), 9 + NS + NB);//13);
     } catch ( IOException e ) {
       e.printStackTrace();
     }
 
+    statsOut.newData( new String[] { "generation", "s1", "s2", "s3", "b1", "b2", "b3", "eA",
+                                      "mPB", "mPS", "transPrice", "bidPrice",
+                                      "askPrice", "quoteBidPrice",
+                                      "quoteAskPrice" });
   }
 
   public void evaluate( EvolutionState state, Vector[] group, int thread ) {
 
-    Iterator traders = allTraders.iterator();
+    // Log the generation number to the CSV file
+    statsOut.newData(state.generation);
 
+    // Reset the auction
     auction.reset();
 
+    // Assign the appropriate GP-evolved strategy to each trading agent
+    Iterator traders = allTraders.iterator();
     for( int i=0; traders.hasNext(); i++ ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
       GPTradingStrategy strategy = (GPTradingStrategy) group[i+1].get(0);
       strategy.setGPContext(state, thread, stack, this);
       trader.setStrategy(strategy);
       strategy.setAgent(trader);
+      strategy.setQuantity(trader.getCapacity());
       trader.reset();
     }
 
+    // Initialise the GP-evolved auctioneer
     GPAuctioneer auctioneer = (GPAuctioneer) group[0].get(0);
     auctioneer.setGPContext(state, thread, stack, this);
     auctioneer.setAuction(auction);
     auction.setAuctioneer(auctioneer);
 
+    // Run the auction
     auction.run();
 
-    traders = allTraders.iterator();
-
     // Set the fitness for the strategy population according to profits made
+    traders = allTraders.iterator();
     for( int i=0; traders.hasNext(); i++ ) {
-      ElectricityTrader trader = (ElectricityTrader) traders.next();
+      GPElectricityTrader trader = (GPElectricityTrader) traders.next();
       double profits = trader.getProfits();
       float fitness = Float.MAX_VALUE;
       if ( (!Double.isNaN(profits)) ) {
-        fitness = 10000000f - (float) profits;
+        fitness = 10000f - (float) profits;
       }
       if ( fitness < 0 ) {
+        System.err.println("WARNING: trader " + trader + " had negative fitness!");
         fitness = 0;
       }
-      System.out.println("Fitness for " + trader);
-      System.out.println("profits = " + profits);
-      System.out.println("fitness = " + fitness);
       GPTradingStrategy individual = (GPTradingStrategy) group[i+1].get(0);
       ((KozaFitness) individual.fitness).setStandardizedFitness(state, fitness);
       individual.evaluated = true;
+      statsOut.newData(profits);
     }
 
-    ElectricityStats stats = new ElectricityStats(0, 200, auction);
-    System.out.println("Market stats = " + stats);
-    float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;
-    float fitness = 1000000;
-    if ( !Float.isInfinite(relMarketPower) && !Double.isNaN(stats.eA) ) {
-      fitness = relMarketPower + 1-((float) stats.eA/100);  //TODO!
+    // Calculate market statistics for this run
+    if ( stats == null ) {
+      stats = new ElectricityStats(0, 200, auction);
+    } else {
+      stats.recalculate();
     }
-    System.out.println("Auctioneer fitness = " + fitness);
+
+    // Calculate auctioneer fitness based on market stats
+    float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;
+    if ( stats.eA > 100 ) {
+      System.err.println("eA > 100% !!");
+      System.err.println(stats);
+    }
+    float fitness = Float.MAX_VALUE;
+    if ( !Float.isNaN(relMarketPower) && !Float.isInfinite(relMarketPower)
+           && !Double.isNaN(stats.eA) ) {
+      fitness = 1-((float) stats.eA/100) + relMarketPower;
+    }
     GPIndividual individual = (GPIndividual) group[0].get(0);
     ((KozaFitness) individual.fitness).setStandardizedFitness(state, fitness);
     individual.evaluated = true;
 
-
+    // Log market stats to CSV file
+    statsOut.newData(stats.eA);
+    statsOut.newData(stats.mPB);
+    statsOut.newData(stats.mPS);
+    statsOut.newData(logger.getTransPriceStats().getMean());
+    statsOut.newData(logger.getAskPriceStats().getMean());
+    statsOut.newData(logger.getBidPriceStats().getMean());
+    statsOut.newData(logger.getAskQuoteStats().getMean());
+    statsOut.newData(logger.getBidQuoteStats().getMean());
   }
 
 
@@ -165,14 +195,13 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
                                       RoundRobinAuction auction,
                                       boolean areSellers, int num, int capacity,
                                       int[] values ) {
-    System.out.println("num = " + num);
     ArrayList result = new ArrayList();
     for( int i=0; i<num; i++ ) {
 
       // Construct a trader for this record
-      ElectricityTrader trader =
-        new ElectricityTrader(capacity, values[i % values.length], 0,
-                            areSellers);
+      GPElectricityTrader trader =
+        new GPElectricityTrader(capacity, values[i % values.length], 0,
+                                areSellers);
 
       result.add(trader);
       allTraders.add(trader);
@@ -185,6 +214,44 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
   public static void main( String[] args ) {
     ec.Evolve.main(new String[] { "-file", "ecj.params/coevolve-gpauctioneer.params"} );
+  }
+
+}
+
+/**
+ * GPElectricityTrader only makes deals that result in +ve profits.
+ */
+class GPElectricityTrader extends ElectricityTrader {
+
+  public GPElectricityTrader( int capacity, double privateValue,
+                              double fixedCosts, boolean isSeller ) {
+    super(capacity, privateValue, fixedCosts, isSeller);
+  }
+
+  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
+                               double price, int quantity) {
+
+    if ( price < privateValue ) {
+
+      GPElectricityTrader trader = (GPElectricityTrader) seller;
+      trader.informOfBuyer(this, price, quantity);
+    }
+  }
+
+  public void trade( double price, int quantity ) {
+    double profit = quantity * (privateValue - price);
+    profits += profit;
+  }
+
+  public void informOfBuyer( GPElectricityTrader buyer, double price, int quantity ) {
+
+    if ( price > privateValue ) {
+
+      buyer.trade(price, quantity);
+
+      double profit = quantity * (price - privateValue);
+      profits += profit;
+    }
   }
 
 }

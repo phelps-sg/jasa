@@ -37,6 +37,12 @@ public class CSVWriter  {
     }
   }
 
+  public void newData( Object[] data ) {
+    for( int i=0; i<data.length; i++ ) {
+      newData(data[i]);
+    }
+  }
+
   public void newData( Object data ) {
     out.print(data);
     currentColumn++;
