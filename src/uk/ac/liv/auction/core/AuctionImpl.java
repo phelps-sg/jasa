@@ -327,14 +327,16 @@ public abstract class AuctionImpl extends Observable
   }
   
   public AuctionReport getReport( Class reportClass ) {
-    if ( report.getClass().equals(reportClass) ) {
-      return report;
-    } else if ( report instanceof CombiAuctionReport ) {
-      Iterator i = ((CombiAuctionReport) report).reportIterator();
-      while ( i.hasNext() ) {
-        AuctionReport report = (AuctionReport) i.next();
-        if ( report.getClass().equals(reportClass) ) {
-          return report;
+    if ( report != null ) {
+      if ( report.getClass().equals(reportClass) ) {
+        return report;
+      } else if ( report instanceof CombiAuctionReport ) {
+        Iterator i = ((CombiAuctionReport) report).reportIterator();
+        while ( i.hasNext() ) {
+          AuctionReport report = (AuctionReport) i.next();
+          if ( report.getClass().equals(reportClass) ) {
+            return report;
+          }
         }
       }
     }
