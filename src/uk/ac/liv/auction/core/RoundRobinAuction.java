@@ -654,11 +654,11 @@ public class RoundRobinAuction extends AuctionImpl
       guiConsole.reset();
     }
 
-//    Iterator i = getTraderIterator();
-//    while ( i.hasNext() ) {
-//      RoundRobinTrader t = (RoundRobinTrader) i.next();
-//      t.reset();
-//    }
+    Iterator i = getTraderIterator();
+    while ( i.hasNext() ) {
+      RoundRobinTrader t = (RoundRobinTrader) i.next();
+      t.reset();
+    }
   }
 
   /**
