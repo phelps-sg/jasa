@@ -23,6 +23,10 @@ import uk.ac.liv.ai.learning.MimicryLearner;
 
 import uk.ac.liv.util.Prototypeable;
 
+import uk.ac.liv.prng.GlobalPRNG;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -143,15 +147,17 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     return targetMargin;
   }
 
-  protected void raiseMargin( double price ) {    
-    double relative = 1 + randGenerator.raw() * scaling;
-    double absolute = randGenerator.raw() * scaling;
+  protected void raiseMargin( double price ) {
+  	RandomElement prng = GlobalPRNG.getInstance();
+    double relative = prng.uniform(1, 1 + scaling);     
+    double absolute = prng.uniform(0, scaling); 
     learner.train(targetMargin(price, absolute, relative));
   }
 
-  protected void lowerMargin( double price ) {    
-    double relative = 1 - randGenerator.raw() * scaling;
-    double absolute = randGenerator.raw() * -scaling;
+  protected void lowerMargin( double price ) { 
+  	RandomElement prng = GlobalPRNG.getInstance();
+    double relative = 1 - prng.uniform(0, scaling);
+    double absolute = -1 * prng.uniform(0, scaling); 
     learner.train(targetMargin(price, absolute, relative));
   }
 

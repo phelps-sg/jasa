@@ -23,8 +23,6 @@ import uk.ac.liv.prng.GlobalPRNG;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-
 import java.io.Serializable;
 
 /**
