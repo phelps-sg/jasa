@@ -33,27 +33,41 @@ public class GPIndividualWithMemory extends GPIndividualCtx  {
 
   public GPIndividualWithMemory( int memorySize ) {
     this.memorySize = memorySize;
-    memory = new GPGenericData[memorySize];
   }
 
   public void set( long address, GPGenericData newData ) {
-    GPGenericData existing = memory[(int) (address % memorySize)];
+    int mapped = mapAddress(address);
+    GPGenericData existing = memory[mapped];
     if ( existing != null ) {
       if ( existing.data instanceof Pooled ) {
         ((Pooled) existing.data).release();
       }
       GPGenericDataPool.release(existing);
     }
-    memory[(int) (address % memorySize)] = newData.safeCopy();
+    memory[mapped] = newData.safeCopy();
   }
 
   public GPGenericData get( long address ) {
-    GPGenericData result = memory[(int) (address % memorySize)];
+    GPGenericData result = memory[mapAddress(address)];
     if ( result != null ) {
       return result.safeCopy();
     } else {
       return null;
     }
+  }
+
+  public int mapAddress( long address ) {
+    return Math.abs((int) address % memorySize);
+  }
+
+  public void prepareForEvaluating() {
+    super.prepareForEvaluating();
+    memory = new GPGenericData[memorySize];
+  }
+
+  public void doneEvaluating() {
+    super.doneEvaluating();
+    memory = null;
   }
 
 }

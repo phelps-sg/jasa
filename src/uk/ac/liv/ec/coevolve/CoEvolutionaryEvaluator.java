@@ -21,6 +21,8 @@ import ec.util.*;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import uk.ac.liv.ec.gp.GPIndividualCtx;
+
 /**
  * @author Steve Phelps
  */
@@ -107,7 +109,8 @@ public class CoEvolutionaryEvaluator extends Evaluator {
           if ( p[subpop] >= individuals.length ) {
             break group;
           }
-          groups[subpop].set(ind, individuals[p[subpop]++]);
+          Individual individual = individuals[p[subpop]++];
+          groups[subpop].set(ind, individual);
         }
       }
 

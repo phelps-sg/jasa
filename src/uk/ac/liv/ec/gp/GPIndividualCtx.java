@@ -84,6 +84,13 @@ public class GPIndividualCtx extends GPIndividual {
     return misbehaved;
   }
 
+  public void doneEvaluating() {
+    evaluated = true;
+  }
+
+  public void prepareForEvaluating() {
+  }
+
   /**
    * Return the given tree as a scheme list.
    *

@@ -57,30 +57,26 @@ public class ElectricityStats
   int buyerCap, sellerCap;
 
   public EquilibriaStats standardStats = null;
-
-  protected long minPrice, maxPrice;
-
-  static final String P_MIN_PRICE = "minprice";
-  static final String P_MAX_PRICE = "maxprice";
-
-  public ElectricityStats( long minPrice, long maxPrice, RoundRobinAuction auction ) {
+  
+  public ElectricityStats( RoundRobinAuction auction ) {
     this.auction = auction;
-    this.minPrice = minPrice;
-    this.maxPrice = maxPrice;
     calculate();
   }
-
-  public ElectricityStats() {
+  
+  /**
+   * @deprecated
+   */
+  public ElectricityStats( long minPrice, long maxPrice, RoundRobinAuction auction ) {
+    this(auction);
   }
 
-  public void setPriceRange( long minPrice, long maxPrice ) {
-    this.minPrice = minPrice;
-    this.maxPrice = maxPrice;
+  /**
+   * @deprecated
+   */
+  public void setPriceRange( long minPrice, long maxPrice ) {    
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    minPrice = parameters.getLongWithDefault(base.push(P_MIN_PRICE), null, 0);
-    maxPrice = parameters.getLongWithDefault(base.push(P_MAX_PRICE), null, 200);
   }
 
   public void setAuction( RoundRobinAuction auction ) {

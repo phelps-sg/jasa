@@ -49,63 +49,86 @@ import java.io.*;
  * </p>
  */
 
-public class ElectricityAuctionSimulation  {
+public class ElectricityAuctionSimulation implements Runnable {
 
-  static final String OUTPUT_FILE   = "electricity-data.csv";
+  String outputFileName  = "electricity-data.csv";
 
-  static int MAX_ROUNDS = 1000;
+  int maxRounds = 1000;
 
-  static final int ITERATIONS = 100;
+  int iterations = 100;
 
   static final int buyerValues[] = { 37, 17, 12 };
 
   static final int sellerValues[] = { 35, 16, 11 };
 
-  static double R = 0.10;    // Recency
-  static double E = 0.20;    // Experimentation
-  static int K = 30;         // No. of possible different actions
-  static double X = 15000;
-  static double S1 = 9.0;
+  double R = 0.10;    // Recency
+  double E = 0.20;    // Experimentation
+  int K = 30;         // No. of possible different actions
+  double X = 15000;
+  double S1 = 9.0;
+  
+  CSVWriter dataFile, distributionFile;
 
-  static String dataFileName  = "electricity-data.csv";
+  ElectricityStats stats;
 
-  static CSVWriter dataFile;
+  RandomRobinAuction auction;
 
-  static ElectricityStats stats;
-
-  static RandomRobinAuction auction;
-
-  static ec.util.MersenneTwisterFast randGenerator = new ec.util.MersenneTwisterFast();
-
-  public static void main( String[] args ) {
-
+  MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  
+  public ElectricityAuctionSimulation() {
+  }
+  
+  public ElectricityAuctionSimulation( int maxRounds, double R, double E,
+                                        int K, double X, double S1, 
+                                        int iterations, String outputFileName ) {
+    this.maxRounds = maxRounds;
+    this.R = R;
+    this.E = E;
+    this.K = K;
+    this.S1 = S1;
+    this.iterations = iterations;
+    this.outputFileName = outputFileName;
+  }
+  
+  public static void main( String[] args ) {    
+    ElectricityAuctionSimulation simulation = null;
     if ( args.length > 0 && "-set".equals(args[0]) ) {
-      MAX_ROUNDS = Integer.valueOf(args[1]).intValue();
-      R = Double.valueOf(args[2]).doubleValue();
-      E = Double.valueOf(args[3]).doubleValue();
-      K = Integer.valueOf(args[4]).intValue();
-      X = Double.valueOf(args[5]).doubleValue();
-      S1 = Double.valueOf(args[6]).doubleValue();
-      dataFileName = args[7];
+      int maxRounds = Integer.valueOf(args[1]).intValue();
+      double R = Double.valueOf(args[2]).doubleValue();
+      double E = Double.valueOf(args[3]).doubleValue();
+      int K = Integer.valueOf(args[4]).intValue();
+      double X = Double.valueOf(args[5]).doubleValue();
+      double S1 = Double.valueOf(args[6]).doubleValue();
+      int iterations = Integer.valueOf(args[7]).intValue();
+      String outputFileName = args[8];
+      simulation = 
+        new ElectricityAuctionSimulation(maxRounds, R, E, K, X, S1, iterations, outputFileName);      
+    } else {
+      simulation = new ElectricityAuctionSimulation();
     }
+    simulation.run();
+  }
+  
+  public void run() {
+
 
     System.out.println("Using global parameters:");
-    System.out.println("MAX_ROUNDS = " + MAX_ROUNDS);
+    System.out.println("maxRounds = " + maxRounds);
     System.out.println("R = " + R);
     System.out.println("E = " + E);
     System.out.println("K = " + K);
     System.out.println("X = " + X);
     System.out.println("S1 = " + S1);
-    System.out.println("Data File = " + dataFileName);
+    System.out.println("Data File = " + outputFileName);
 
     try {
-      dataFile = new CSVWriter(new FileOutputStream(dataFileName), 6);
+      dataFile = new CSVWriter(new FileOutputStream(outputFileName), 6);
     } catch ( IOException e ) {
       e.printStackTrace();
     }
 
     auction = new RandomRobinAuction("Electricity Auction");
-    stats = new ElectricityStats(0, 200, auction);
+    stats = new ElectricityStats(auction);
 
     experiment( 6, 3, 10, 20 );
     experiment( 6, 3, 10, 40 );
@@ -117,20 +140,30 @@ public class ElectricityAuctionSimulation  {
     experiment( 3, 6, 10, 10 );
   }
 
-  public static void experiment( int ns, int nb, int cs, int cb ) {
+  public void experiment( int ns, int nb, int cs, int cb ) {
     System.out.println("\n*** Experiment with parameters");
     System.out.println("ns = " + ns);
     System.out.println("nb = " + nb);
     System.out.println("cs = " + cs);
     System.out.println("cb = " + cb);
+    
+    try {
+      String rothErevDataFileName = "rotherev-" + ns + "-" + nb 
+                                      + "-" + cs + "-" + cb + ".csv";
+      distributionFile = new CSVWriter(
+                              new FileOutputStream(rothErevDataFileName), K); 
+    } catch ( IOException e ) {
+      e.printStackTrace();
+    }
+    
     CummulativeStatCounter efficiency = new CummulativeStatCounter("efficiency");
     CummulativeStatCounter mPB = new CummulativeStatCounter("mPB");
     CummulativeStatCounter mPS = new CummulativeStatCounter("mPS");
     CummulativeStatCounter pSA = new CummulativeStatCounter("pSA");
     CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
 
-    for( int i=0; i<ITERATIONS; i++ ) {
-      ElectricityStats results = runSimulation(ns, nb, cs, cb);
+    for( int i=0; i<iterations; i++ ) {
+      ElectricityStats results = runExperiment(ns, nb, cs, cb);
       efficiency.newData(results.eA);
       mPB.newData(results.mPB);
       mPS.newData(results.mPS);
@@ -151,12 +184,16 @@ public class ElectricityAuctionSimulation  {
     dataFile.newData(mPS.getMean());
     dataFile.newData(mPS.getStdDev());
     dataFile.flush();
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) i.next();
+      RothErevLearner learner = (RothErevLearner) ((StimuliResponseStrategy) trader.getStrategy()).getLearner();
+      learner.dumpDistributionToCSV(distributionFile);
+    }
   }
 
-  public static ElectricityStats runSimulation( int ns, int nb, int cs, int cb ) {
-
-
-    HashMap gridGraph;
+  public ElectricityStats runExperiment( int ns, int nb, int cs, int cb ) {
+  
     StatsMarketDataLogger logger;
     ContinuousDoubleAuctioneer auctioneer;
 
@@ -170,17 +207,17 @@ public class ElectricityAuctionSimulation  {
     logger = new StatsMarketDataLogger();
     auction.setMarketDataLogger(logger);
 
-    auction.setMaximumRounds(MAX_ROUNDS);
+    auction.setMaximumRounds(maxRounds);
 
     auction.run();
 
-    stats = new ElectricityStats(0, 200, auction);
+    stats = new ElectricityStats(auction);
 
     return stats;
   }
 
 
-  public static void registerTraders( RoundRobinAuction auction,
+  public void registerTraders( RoundRobinAuction auction,
                                       boolean areSellers, int num, int capacity,
                                       int[] values ) {
     for( int i=0; i<num; i++ ) {
@@ -205,26 +242,3 @@ public class ElectricityAuctionSimulation  {
 
 }
 
-
-class RandomLearner implements StimuliResponseLearner {
-
-  MersenneTwisterFast randGenerator;
-
-  int k;
-
-
-  public RandomLearner( int k, int seed ) {
-    this.k = k;
-    randGenerator = new MersenneTwisterFast(seed);
-  }
-
-
-  public int act() {
-    return randGenerator.nextInt(k);
-  }
-
-  public void reward( double r ) {
-  }
-
-
-}

@@ -31,8 +31,9 @@ public class Fetch extends GPNode {
     children[0].eval(state, thread, input, stack, individual, problem);
     long address = ((FastLong) ((GPGenericData) input).data).longValue();
 
-    ((GPGenericData) input).data =
-      ((GPIndividualWithMemory) individual).get(address);
+    GPGenericData result = ((GPIndividualWithMemory) individual).get(address);
+
+    result.copyTo(input);
   }
 
   public String toString() {

@@ -23,6 +23,7 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.io.CSVWriter;
 
 /**
  * <p>
@@ -299,6 +300,12 @@ public class RothErevLearner implements
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
+  
+  public void dumpDistributionToCSV( CSVWriter out ) {
+    for( int i=0; i<k; i++ ) {
+      out.newData(p[i]);
+    }
+  }               
 
   public String toString() {
     StringBuffer str = new StringBuffer("(" + this.getClass() + " ");
@@ -313,5 +320,6 @@ public class RothErevLearner implements
     str.append("\n)");
     return str.toString();
   }
+   
 
 }
