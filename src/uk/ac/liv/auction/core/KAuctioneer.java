@@ -80,6 +80,10 @@ public abstract class KAuctioneer extends AbstractAuctioneer
   public double getK() {
     return pricingPolicy.getK();
   }
+  
+  public void setPricingPolicy( KPricingPolicy pricingPolicy ) {
+    this.pricingPolicy = pricingPolicy;
+  }
 
   public void clear() {
     clearingQuote = new MarketQuote(askQuote(), bidQuote());
