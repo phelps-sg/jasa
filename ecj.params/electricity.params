@@ -11,16 +11,16 @@
 #
 
 # Number of auction rounds
-electricity.maxrounds = 100
+electricity.maxrounds = 1000
 
 # Number of samples per value of k
-electricity.iterations = 1000
+electricity.iterations = 10000
 
 # Output data
 electricity.outputdir = results/electricity/test
 
 # Use random private values
-electricity.randomizer = uk.ac.liv.auction.electricity.EPRandomizer
+electricity.randomizer = uk.ac.liv.auction.electricity.StandardRandomizer
 
 # Private value range
 electricity.randomizer.minprivatevalue = 3
@@ -30,10 +30,10 @@ electricity.randomizer.maxprivatevalue = 10
 electricity.randomizer.seed = 1726567842
 
 # Number of sellers
-electricity.ns = 3
+electricity.ns = 30
 
 # Number of buyers
-electricity.nb = 3
+electricity.nb = 30
 
 # Buyer capacity
 electricity.cs = 10
@@ -65,12 +65,12 @@ electricity.strategy.seller.learner.s1 = 1
 electricity.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
 
 # Number of different k values 
-electricity.kmin = 0.0
-electricity.kmax = 1.0
+electricity.k0 = 0.0
+electricity.k1 = 1.0
 electricity.kdelta = 0.5
 
 # Statistics to use
-electricity.stats = uk.ac.liv.auction.electricity.FinalRoundElectricityStats
+electricity.stats = uk.ac.liv.auction.electricity.ElectricityStats
 
 # log4j configuration
 
@@ -80,7 +80,7 @@ log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m%n
 
-log4j.appender.file=org.apache.log4j.RollingFileAppender
+log4j.appender.file=org.apache.log4j.FileAppender
 log4j.appender.file.File=results/electricity/eas.out
 log4j.appender.file.layout=org.apache.log4j.PatternLayout
 log4j.appender.file.layout.ConversionPattern=%m%n

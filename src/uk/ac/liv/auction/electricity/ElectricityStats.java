@@ -34,6 +34,7 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.agent.*;
 
 
+
 /**
  * <p>
  * Calculate the market-power and efficiency variables described in:
@@ -153,7 +154,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   /**
    * The age of the auction in rounds.
    */
-  protected int auctionAge;
+  protected int auctionAge;    
 
 
   public ElectricityStats( RoundRobinAuction auction ) {
@@ -331,7 +332,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   }
 
   protected void simulateTruthfulBidding() {
-    Auctioneer auctioneer = auction.getAuctioneer();
+    Auctioneer auctioneer = auction.getAuctioneer();   
     ((Resetable) auctioneer).reset();
     LinkedList shouts = new LinkedList();
     Iterator i = auction.getTraderIterator();
