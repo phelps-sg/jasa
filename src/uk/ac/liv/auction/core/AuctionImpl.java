@@ -217,9 +217,9 @@ public abstract class AuctionImpl extends Observable
     if ( shout == null ) {
       throw new IllegalShoutException("null shout");
     }
-    auctioneer.newShout(shout);
     recordShout(shout);
-
+    auctioneer.newShout(shout);
+   
     notifyObservers();
   }
 
@@ -290,7 +290,7 @@ public abstract class AuctionImpl extends Observable
   }
   
   
-  public void fireEvent( AuctionEvent event ) {
+  protected void fireEvent( AuctionEvent event ) {
     List listeners = (List) eventListeners.get(event.getClass());
     if ( listeners != null ) {
       Iterator i = listeners.iterator();

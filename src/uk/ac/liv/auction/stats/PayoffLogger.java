@@ -39,7 +39,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger
 								implements Serializable {
 
   private HashMap table = new HashMap();
-
+  
   protected double totalProfits;
 
   static Logger logger = Logger.getLogger(PayoffLogger.class);
@@ -142,6 +142,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger
     }
     super.generateReport();
   }
+  
 
 
   public void initialise() {

@@ -76,7 +76,7 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
     
     equilibriaStats.recalculate();
     double ep = equilibriaStats.calculateMidEquilibriumPrice();
-    
+   
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTradingAgent agent = (AbstractTradingAgent) i.next();

@@ -86,7 +86,7 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
 
   protected Shout dummyShout;
   
-  protected double activationProbability = 1.0;
+  protected boolean isActive = true;
 
   public static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
   public static final String P_ACTIVATION_PROBABILITY = "activationprobability";
@@ -113,10 +113,6 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     initialTradeEntitlement =
         parameters.getInt(base.push(P_INITIAL_TRADE_ENTITLEMENT));
     
-    activationProbability =
-        parameters.getDoubleWithDefault(base.push(P_ACTIVATION_PROBABILITY), 
-                                         null, activationProbability);
-    
     super.setup(parameters, base);
   }
   
@@ -130,12 +126,20 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
       throw new Error(e);
     }
   }
+  
+  public void requestShout( Auction auction ) {
+    if ( tradeEntitlement <= 0 ) {
+      isActive = false;
+    } 
+    super.requestShout(auction);
+  }
 
   protected void initialise() {
     super.initialise();
     lastShoutSuccessful = false;
     tradeEntitlement = initialTradeEntitlement;
     quantityTraded = 0;
+    isActive = true;
     dummyShout = new Shout(this);
     logger.debug(this + ": initialised.");
   }
@@ -144,22 +148,16 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     logger.debug("Performing end-of-day processing..");
     super.endOfDay(event);
     tradeEntitlement = initialTradeEntitlement;
+    isActive = true;
     //quantityTraded = 0;
     lastShoutSuccessful = false;
     logger.debug("done.");
   }
 
   public boolean active() {
-    return tradeEntitlement > 0 && determineRandomActivation();
+    return isActive;
   }
   
-  public boolean determineRandomActivation() {
-    if ( activationProbability < 1.0 ) {
-      return GlobalPRNG.getInstance().uniform(0, 1) <= activationProbability;
-    } else {
-      return true;
-    }
-  }
 
   /**
    * Default behaviour for winning ZI bidders is to purchase unconditionally.
@@ -203,7 +201,7 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     if (surplus < 0) {
       surplus = 0;
     }
-    return quantityTraded * surplus;
+    return auction.getDay() * initialTradeEntitlement * surplus;
   }
 
 

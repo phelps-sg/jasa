@@ -34,6 +34,7 @@ public class RandomRobinAuctionTest extends RoundRobinAuctionTest {
     auction = new RandomRobinAuction("RandomRobin Test Auction");
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
+    auction.setMaximumRounds(3);
     for( int i=0; i<traders.length; i++ ) {
       auction.register(traders[i]);
     }

@@ -23,10 +23,6 @@ import uk.ac.liv.ai.learning.MimicryLearner;
 
 import uk.ac.liv.util.Prototypeable;
 
-import uk.ac.liv.prng.GlobalPRNG;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -91,13 +87,7 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     }
     
     double lastPrice = lastShout.getPrice();
-    if ( auction.shoutAccepted(lastShout) && lastPrice > currentPrice ) {
-      adjustMargin(targetMargin(lastPrice + perterb(lastPrice)));
-    } else if ( agent.active() ) {
-      adjustMargin(targetMargin(lastPrice - perterb(lastPrice)));
-    }
-    
-    
+    adjustMargin(targetMargin(lastPrice - perterb(lastPrice)));
   }
 
   
@@ -109,42 +99,11 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     }
     
     double lastPrice = lastShout.getPrice();
-    if ( auction.shoutAccepted(lastShout) && lastPrice < currentPrice ) {
-      adjustMargin(targetMargin(lastPrice - perterb(lastPrice)));
-    } else if ( agent.active() ) {
-      adjustMargin(targetMargin(lastPrice + perterb(lastPrice)));
-    }
+    adjustMargin(targetMargin(lastPrice + perterb(lastPrice)));
+    
     
     
   }
 
-  protected double targetMargin( double price, double absolute, double relative ) {    
-    double targetPrice = relative * price + absolute;    
-    double privValue = agent.getValuation(auction);
-    double targetMargin = 0;
-    if ( agent.isBuyer() ) {
-      targetMargin = (targetPrice - privValue) / privValue;
-    } else {
-      targetMargin = (privValue - targetPrice) / privValue;
-    }
-    if ( targetMargin < 0 ) {      
-      targetMargin = 0;
-    }    
-    return targetMargin;
-  }
-
-  protected void raiseMargin( double price ) {
-    RandomElement prng = GlobalPRNG.getInstance();
-    double relative = prng.uniform(1, 1 + scaling);     
-    double absolute = prng.uniform(0, scaling); 
-    learner.train(targetMargin(price, absolute, relative));
-  }
-
-  protected void lowerMargin( double price ) { 
-    RandomElement prng = GlobalPRNG.getInstance();
-    double relative = 1 - prng.uniform(0, scaling);
-    double absolute = -1 * prng.uniform(0, scaling); 
-    learner.train(targetMargin(price, absolute, relative));
-  }
 
 }

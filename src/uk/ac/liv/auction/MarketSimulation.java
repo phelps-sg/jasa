@@ -227,15 +227,17 @@ public class MarketSimulation implements Serializable, Runnable {
     while ( i.hasNext() ) {
       ReportVariable var = (ReportVariable) i.next();
       Object value = results.get(var);
-      if ( value instanceof Number ) {
+      if ( value instanceof Number) {
         double v = ((Number) value).doubleValue();
-        CummulativeDistribution varStats = 
-          (CummulativeDistribution) resultsStats.get(var);
-        if ( varStats == null ) {
-          varStats = new CummulativeDistribution(var.toString());
-          resultsStats.put(var, varStats);
+        if ( !Double.isNaN(v) ) {
+          CummulativeDistribution varStats = 
+            (CummulativeDistribution) resultsStats.get(var);
+          if ( varStats == null ) {
+            varStats = new CummulativeDistribution(var.toString());
+            resultsStats.put(var, varStats);
+          }
+          varStats.newData(v);
         }
-        varStats.newData(v);
       }
       if ( resultsFile != null ) {
         resultsFile.newData(value);

@@ -65,7 +65,18 @@ public class SurplusStats extends EquilibriaStats {
    * Global market efficiency.
    */
   protected double eA;
+  
+  protected double mPB;
+  
+  protected double mPS;
 
+  public static final ReportVariable VAR_MPB =
+    new ReportVariable("surplus.mpb", "The market-power of buyers");
+  
+  public static final ReportVariable VAR_MPS =
+    new ReportVariable("surplus.mps", "The market-power of sellers");
+  
+  
   private DecimalFormat percentageFormatter =
       new DecimalFormat("#00.00");
   
@@ -119,6 +130,10 @@ public class SurplusStats extends EquilibriaStats {
     calculateActualProfits();
     
     eA = (pBA + pSA) / (pBCE + pSCE) * 100;
+    
+    mPB = (pBA - pBCE) / pBCE;
+    mPS = (pSA - pSCE) / pSCE;
+    
   }
 
 
@@ -179,6 +194,20 @@ public class SurplusStats extends EquilibriaStats {
   }
 
 
+  /**
+   * Get the buyer market-power calculation.
+   */
+  public double getMPB() {
+    return mPB;
+  }
+
+  /**
+   * Get the seller market-power calculation.
+   */
+  public double getMPS() {
+    return mPS;
+  }
+  
   public String toString() {
     return "(" + getClass() + " equilibriaFound:" + equilibriaFound +
            " minPrice:" + minPrice + " maxPrice:" + maxPrice +          
@@ -197,6 +226,9 @@ public class SurplusStats extends EquilibriaStats {
     logger.info("\tbuyers' actual profits:\t" + pBA);
     logger.info("\tsellers' actual profits:\t" + pSA);
     logger.info("");
+    logger.info("\tBuyer market-power:\t" + mPB);
+    logger.info("\tSeller market-power:\t" + mPS);
+    logger.info("");
     logger.info("\tAllocative efficiency:\t" + 
                   percentageFormatter.format(eA) + "%");
     logger.info("");
@@ -210,6 +242,8 @@ public class SurplusStats extends EquilibriaStats {
     vars.put(VAR_PBA, new Double(pBA));
     vars.put(VAR_PSA, new Double(pSA));
     vars.put(VAR_EA, new Double(eA));
+    vars.put(VAR_MPB, new Double(getMPB()));
+    vars.put(VAR_MPS, new Double(getMPS()));
     return vars;
   }
 

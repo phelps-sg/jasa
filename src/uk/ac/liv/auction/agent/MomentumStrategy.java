@@ -140,9 +140,9 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     double privValue = agent.getValuation(auction);
     double targetMargin = 0;
     if ( agent.isBuyer() ) {
-      targetMargin = (privValue - targetPrice) / privValue;
-    } else {
       targetMargin = (targetPrice - privValue) / privValue;
+    } else {
+      targetMargin = (privValue - targetPrice) / privValue;
     }
     if ( targetMargin < 0 ) {      
       targetMargin = 0;

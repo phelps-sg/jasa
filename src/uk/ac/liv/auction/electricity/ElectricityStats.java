@@ -61,16 +61,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
   protected double rCap;
 
   /**
-   * The market-power of buyers.
-   */
-  protected double mPB;
-
-  /**
-   * The market-power of sellers.
-   */
-  protected double mPS;
-
-  /**
    * Strategic market-power for buyers.
    */
   protected double sMPB = Double.NaN;
@@ -120,12 +110,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
    */
   protected int auctionAge;
   
-  public static final ReportVariable VAR_MPB =
-    new ReportVariable("electricity.mpb", "The market-power of buyers");
-  
-  public static final ReportVariable VAR_MPS =
-    new ReportVariable("electricity.mps", "The market-power of sellers");
-  
   public static final ReportVariable VAR_RCAP =
     new ReportVariable("electricity.rcap", 
         				"The relative generating capacity of buyers to sellers");
@@ -174,9 +158,7 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
 
     rCon = numSellers / numBuyers;
     rCap = (double) buyerCap / (double) sellerCap;
-    mPB = (pBA - pBCE) / pBCE;
-    mPS = (pSA - pSCE) / pSCE;
-    
+   
 //    calculateStrategicMarketPower();
   }
 
@@ -324,19 +306,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     return eA;
   }
 
-  /**
-   * Get the buyer market-power calculation.
-   */
-  public double getMPB() {
-    return mPB;
-  }
-
-  /**
-   * Get the seller market-power calculation.
-   */
-  public double getMPS() {
-    return mPS;
-  }
 
   /**
    * Get the profits of the buyers in the actual auction.
@@ -407,8 +376,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     super.generateReport();
     logger.info("NPT Auction statistics");
     logger.info("----------------------");
-    logger.info("Buyer market-power (MPB) =\t" + getMPB());
-    logger.info("Seller market-power (MPS) =\t" + getMPS());
     logger.info("Relative generating capacity (RCAP) =\t" + getRCAP());
     logger.info("Relative concentration (RCON) =\t" + getRCON());
     logger.info("Strategic buyer market-power (SMPB) =\t" + getSMPB());
@@ -418,8 +385,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
   public Map getVariables() {
     HashMap vars = new HashMap();
     vars.putAll(super.getVariables());
-    vars.put(VAR_MPB, new Double(getMPB()));
-    vars.put(VAR_MPS, new Double(getMPS()));
     vars.put(VAR_RCAP, new Double(getRCAP()));
     vars.put(VAR_RCON, new Double(getRCON()));
     return vars;
