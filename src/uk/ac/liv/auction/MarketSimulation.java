@@ -72,8 +72,6 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
   protected RoundRobinAuction auction;
 
-  protected Auctioneer auctioneer;
-
   protected MarketDataLogger marketData;
 
   protected MarketStats stats;
@@ -167,14 +165,14 @@ public class MarketSimulation implements Parameterizable, Runnable,
     try {
 
       if ( args.length < 1 ) {
-        System.err.println("Must specify a parameter file");
+        logger.error("Must specify a parameter file");
         System.exit(1);
       }
 
       String fileName = args[0];
       File file = new File(fileName);
       if ( ! file.canRead() ) {
-        System.err.println("Cannot read parameter file " + fileName);
+        logger.error("Cannot read parameter file " + fileName);
         System.exit(1);
       }
 

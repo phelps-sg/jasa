@@ -185,6 +185,9 @@ public abstract class AuctionImpl extends Observable
    */
   public void setName( String name ) {
     this.name = name;
+    if ( guiConsole != null ) {
+      guiConsole.setAuctionName(name);
+    }
   }
 
   /**
