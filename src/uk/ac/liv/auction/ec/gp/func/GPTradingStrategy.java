@@ -55,6 +55,9 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   public static final String P_MLEARNER = "mlearner";
   public static final String P_RLLEARNER = "rllearner";
   public static final String P_RLSCALE = "rlscale";
+  
+  public static final int TREE_STRATEGY = 0;
+  public static final int TREE_GPINIT = 1;
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -104,7 +107,7 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
 
   public boolean modifyShout( Shout.MutableShout shout ) { 
   	super.modifyShout(shout);
-    Number result = gpIndividual.evaluateNumberTree(0);
+    Number result = gpIndividual.evaluateNumberTree(TREE_STRATEGY);
     double price;
     if ( !gpIndividual.misbehaved() ) {
       price = result.doubleValue();
@@ -138,7 +141,6 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   	return agent.lastShoutAccepted();
   }
 
-
   public CummulativeStatCounter getPriceStats() {
     return priceStats;
   }
@@ -149,7 +151,7 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     rlLearner.reset();
     gpIndividual.reset();
     momentumLearner.setOutputLevel(currentMargin=0.5);
-    super.reset();    
+    super.reset();        
   }
   
   public boolean misbehaved() {
@@ -214,5 +216,10 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     return momentumLearner;
   }
   
+  public void gpInitialise() {
+    if ( gpIndividual.getGPContext() != null ) {
+      gpIndividual.evaluateNumberTree(TREE_GPINIT);
+    }
+  }
 }
 

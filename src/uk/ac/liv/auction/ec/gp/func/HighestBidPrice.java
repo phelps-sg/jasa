@@ -15,37 +15,32 @@
 
 package uk.ac.liv.auction.ec.gp.func;
 
-import uk.ac.liv.ai.learning.WidrowHoffLearner;
-
-import uk.ac.liv.ec.gp.GPSchemeNode;
-import uk.ac.liv.ec.gp.GPGenericIndividual;
+import uk.ac.liv.ec.gp.*;
 import uk.ac.liv.ec.gp.func.GPGenericData;
 
-import uk.ac.liv.util.UntypedNumber;
+import uk.ac.liv.util.UntypedDouble;
+
+import uk.ac.liv.auction.core.DataUnavailableException;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class SetLearningRate extends GPSchemeNode {
+public class HighestBidPrice extends GPSchemeNode {
 
   public void eval( GPGenericData input ) {
-    
-    evaluateChild(0, input);
-    UntypedNumber learningRate = (UntypedNumber) input.data;
-    
-    GPTradingStrategy strategy = (GPTradingStrategy)
+    try {
+      GPTradingStrategy strategy = (GPTradingStrategy)
         ((GPGenericIndividual) currentIndividual).getGPObject();
-    
-    WidrowHoffLearner learner = 
-      (WidrowHoffLearner) strategy.getMomentumLearner();
-    
-    learner.setLearningRate(learningRate.doubleValue());
+      input.data = new UntypedDouble(strategy.getAuction().getHighestBidPrice());
+    } catch ( DataUnavailableException e ) {
+      throw new Error(e);
+    }
   }
-  
+
   public String toString() {
-    return "SetLearningRate";
+    return "HighestBidPrice";
   }
-  
+
 }

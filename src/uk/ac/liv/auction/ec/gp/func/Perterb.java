@@ -15,37 +15,39 @@
 
 package uk.ac.liv.auction.ec.gp.func;
 
-import uk.ac.liv.ai.learning.WidrowHoffLearner;
-
 import uk.ac.liv.ec.gp.GPSchemeNode;
-import uk.ac.liv.ec.gp.GPGenericIndividual;
 import uk.ac.liv.ec.gp.func.GPGenericData;
 
+import uk.ac.liv.prng.GlobalPRNG;
+
 import uk.ac.liv.util.UntypedNumber;
+import uk.ac.liv.util.UntypedDouble;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class SetLearningRate extends GPSchemeNode {
+public class Perterb extends GPSchemeNode {
 
-  public void eval( GPGenericData input ) {
+  public void eval( GPGenericData input ) { 
     
     evaluateChild(0, input);
-    UntypedNumber learningRate = (UntypedNumber) input.data;
+    double price = ((UntypedNumber) input.data).doubleValue();
     
-    GPTradingStrategy strategy = (GPTradingStrategy)
-        ((GPGenericIndividual) currentIndividual).getGPObject();
+    evaluateChild(1, input);
+    double scaling = ((UntypedNumber) input.data).doubleValue();
     
-    WidrowHoffLearner learner = 
-      (WidrowHoffLearner) strategy.getMomentumLearner();
-    
-    learner.setLearningRate(learningRate.doubleValue());
+    RandomElement prng = GlobalPRNG.getInstance();
+    double relative = prng.uniform(0, scaling);
+    double absolute = prng.uniform(0, scaling);
+    input.data = new UntypedDouble(relative*price + absolute);    
   }
-  
+
   public String toString() {
-    return "SetLearningRate";
+    return "Perterb";
   }
-  
+
 }

@@ -84,7 +84,7 @@ public class GPHeuristicTradingProblem extends GPProblem
 		individual.printIndividualForHumans(context.getState(), 0, Output.V_NO_GENERAL);
 		
 		GPTradingStrategy gpStrategy = (GPTradingStrategy) individual.getGPObject();
-		    
+		        
     payoffCalculator.reset();
 		payoffCalculator.setGPStrategy(gpStrategy);
 		
