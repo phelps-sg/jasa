@@ -9,6 +9,7 @@
    <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event"/>
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
+   <property name="troveLoc" value="${javaLibPath}/trove-1.1b3/lib/trove.jar"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj12"/>
    <property name="repastLoc" value="${javaLibPath}/RePast-3.0/repastj"/>
    <property name="junitLoc" value="${repastLoc}/lib/junit.jar"/>
@@ -22,6 +23,7 @@
      <pathelement location="${ecjLoc}"/>
      <pathelement location="${junitLoc}"/>
      <pathelement location="${log4jLoc}"/>     
+     <pathelement location="${troveLoc}"/>
      <pathelement location="${schemeLoc}"/>     
      <pathelement location="${collectionsLoc}"/>     
      <pathelement path="${repastPath}"/>
@@ -47,6 +49,10 @@
       <mkdir dir="${docDir}"/>
    </target>
 
+   <target name="cleanTar">
+      <delete file="jasa.tar.gz"/>
+   </target>
+
    <target depends="prepareOutput" name="compile">
       <javac debug="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${sourceDir}">
         <classpath refid="project.classpath"/>
@@ -63,12 +69,15 @@
    	<jar basedir="${outputDir}" jarfile="jasa.jar"/>
    </target>
 
-   <target depends="jar,doc" name="tar">
+   <target depends="jar,doc,cleanTar" name="tar">
    	<tar compression="gzip" tarfile="jasa.tar.gz">
 		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params,lib/**" prefix="jasa">
                   <exclude name="src/uk/ac/liv/ec/**"/>
+                  <exclude name="src/test/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
-				  <exclude name="src/uk/ac/liv/auction/heuristic/**"/>
+                  <exclude name="src/test/uk/ac/liv/auction/ec/**"/>
+		  <exclude name="src/uk/ac/liv/auction/heuristic/**"/>
+		  <exclude name="src/test/uk/ac/liv/auction/heuristic/**"/>
 		 </tarfileset>
 	</tar>
     </target>
