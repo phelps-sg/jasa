@@ -15,14 +15,27 @@ import java.util.*;
 
 import java.io.*;
 
+/**
+ * <p>
+ * An implementation of the experiment described in:
+ * </p>
+ * <p>
+ * "Markert Power and Efficiency in a Computational Electricity Market
+ * with Discriminatory Double-Auction Pricing"
+ * Nicolaisen, J.; Petrov, V.; and Tesfatsion, L.
+ * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
+ * </p>
+ *
+ * <p>
+ * This code was written by Steve Phelps in an attempt to replicate
+ * the results in the above paper.  Any corrections to this code are
+ * welcome.
+ * </p>
+ */
 
 public class ElectricityAuctionSimulation  {
 
   static final String OUTPUT_FILE   = "electricity-data.csv";
-
-
-  //static final int ATC = 1000;
-
 
   static int MAX_ROUNDS = 1000;
 
@@ -68,9 +81,6 @@ public class ElectricityAuctionSimulation  {
     } catch ( IOException e ) {
       e.printStackTrace();
     }
-
-    //TODO remove this one
-    //experiment( 24, 24, 10, 10);
 
     experiment( 6, 3, 10, 10 );
     experiment( 6, 3, 10, 20 );
@@ -127,11 +137,7 @@ public class ElectricityAuctionSimulation  {
     ContinuousDoubleAuctioneer auctioneer;
 
     auction = new RandomRobinAuction("Electricity Auction ns:" + ns + " nb:" + nb + " cs:" + cs + " cb:" + cb);
-    //auctioneer = new ElectricityAuctioneer(new SimpleGrid(ATC), auction);
-    auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
-    //auctioneer.setK(0);
-    //auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
-    //auctioneer = new AdaptiveElectricityAuctioneer(auction);
+    auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
     auction.setAuctioneer(auctioneer);
 
     registerTraders(auction, true, ns, cs, sellerValues);
@@ -173,14 +179,6 @@ public class ElectricityAuctionSimulation  {
       int seed = Math.abs((int) System.currentTimeMillis());
       trader.setLearner( new NPTRothErevLearner(K, R, E, S1*X,
                                                   seed) );
-      //trader.setLearner( new RandomLearner(K, seed) );
-
-
-      //if ( areSellers ) {
-        //trader.setStrategy(new PureSimpleStrategy(trader, 35-values[i], capacity));
-      //}
-      //trader.setStrategy(new PureSimpleStrategy(trader, 0, capacity));
-
 
       // Register it in the auction
       auction.register(trader);
@@ -188,6 +186,7 @@ public class ElectricityAuctionSimulation  {
   }
 
 }
+
 
 class RandomLearner implements StimuliResponseLearner {
 

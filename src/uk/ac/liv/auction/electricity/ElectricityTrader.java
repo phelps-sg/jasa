@@ -22,11 +22,17 @@ import java.io.Serializable;
  * An adaptive trader, trading in a simulated Elecitricty market, as described
  * in:
  * </p>
- * <br>
  * <p>
  * "Markert Power and Efficiency in a Computational Electricity Market
  * with Discriminatory Double-Auction Pricing"
- * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5.
+ * Nicolaisen, J.; Petrov, V.; and Tesfatsion, L.
+ * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
+ * </p>
+ *
+ * <p>
+ * This code was written by Steve Phelps in an attempt to replicate
+ * the results in the above paper.  Any corrections to this code are
+ * welcome.
  * </p>
  *
  * @author Steve Phelps

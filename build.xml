@@ -27,7 +27,6 @@
 		destdir="${docDir}"
 		author="true"
 		windowtitle="${projectName}"
-		bottom="Copyright (c) Steve Phelps 2002."
 	/>
    </target>
 
