@@ -241,7 +241,9 @@ public abstract class AuctionImpl extends Observable
   public void addMarketDataLogger( MarketDataLogger newLogger ) {
     MarketDataLogger oldLogger = logger;
     logger = new CombiMarketDataLogger();
-    ((CombiMarketDataLogger) logger).addLogger(oldLogger);
+    if ( oldLogger != null ) {
+      ( (CombiMarketDataLogger) logger).addLogger(oldLogger);
+    }
     ((CombiMarketDataLogger) logger).addLogger(newLogger);
   }
 

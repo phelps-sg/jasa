@@ -277,24 +277,30 @@ public class AuctionConsoleFrame extends JFrame
     });
 
     if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
-      graphPanel = new JPanel(graphLayout = new JGraphLayout());
-      graph = new JLineGraph(graphModel);
-      graphPanel.add(graph, "Graph");
-      c.gridx = 0;
-      c.gridy = 0;
-      c.gridwidth = 8;
-      c.gridheight = 1;
-      c.weightx = 1;
-      c.weighty = 1;
-      c.fill = c.BOTH;
-      graphPanel.setPreferredSize(new Dimension(600,200));
-      gridBag.setConstraints(graphPanel, c);
-      contentPane.add(graphPanel);
-      graph.setYExtrema(0f, 0f, 0f);
-      graph.setXExtrema(0f, 500f, 500f);
+      createGraphPanel();
     }
 
     setAuctionName(name);
+  }
+
+
+  protected void createGraphPanel() {
+    graphPanel = new JPanel(graphLayout = new JGraphLayout());
+    graph = new JLineGraph(graphModel);
+    graphPanel.add(graph, "Graph");
+    GridBagConstraints c = new GridBagConstraints();
+    c.gridx = 0;
+    c.gridy = 0;
+    c.gridwidth = 8;
+    c.gridheight = 1;
+    c.weightx = 1;
+    c.weighty = 1;
+    c.fill = c.BOTH;
+    graphPanel.setPreferredSize(new Dimension(600, 200));
+    gridBag.setConstraints(graphPanel, c);
+    getContentPane().add(graphPanel);
+    graph.setYExtrema(0f, 0f, 0f);
+    graph.setXExtrema(0f, 500f, 500f);
   }
 
   public void setAuctionName( String name ) {
@@ -470,7 +476,9 @@ public class AuctionConsoleFrame extends JFrame
 
   public void reset() {
     if ( graphModel != null ) {
-      graphModel.clear();
+      graphModel.reset();
+      getContentPane().remove(graphPanel);
+      createGraphPanel();
     }
   }
 

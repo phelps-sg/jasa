@@ -179,6 +179,9 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
       int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS), null, 0);
 
+      logger.info("\nConfiguring agent population " + t + ":\n\t" + numAgents +
+                   " agents of type " + parameters.getString(typeParamT, null));
+
       for( int i=0; i<numAgents; i++ ) {
 
       	RoundRobinTrader agent =
@@ -189,13 +192,15 @@ public class MarketSimulation implements Parameterizable, Runnable,
         auction.register(agent);
 
       }
+
+      logger.info("done.\n");
     }
 
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + prngSeed);
+    logger.info("");
     seedObjects();
 
-    logger.info("done.");
   }
 
 
@@ -250,9 +255,11 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
 
   protected void seedObjects() {
+    logger.info("Seeding objects...");
     seeds = PRNGFactory.getFactory().create(prngSeed);
     seedAgents();
     seedAuction();
+    logger.info("Seeding done.\n");
   }
 
   protected long nextSeed() {

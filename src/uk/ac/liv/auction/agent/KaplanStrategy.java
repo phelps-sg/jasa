@@ -38,9 +38,9 @@ import org.apache.log4j.Logger;
 public class KaplanStrategy extends FixedQuantityStrategyImpl
     implements Serializable, Parameterizable {
 
-  protected double t = 10;
+  protected double t = 4;
 
-  protected double s = 0.1;
+  protected double s = 0.5;
 
   protected MarketQuote quote;
 
@@ -61,6 +61,9 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     super.modifyShout(shout);
     quote = auction.getAuctioneer().getQuote();
     if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
+      logger.debug("quote = " + quote);
+      logger.debug("my priv value = " + agent.getPrivateValue(auction));
+      logger.debug("seller = " + agent.isSeller());
       if ( agent.isBuyer() ) {
         if ( quote.getAsk() > agent.getPrivateValue(auction) ) {
           shout.setPrice(quote.getAsk());
@@ -79,6 +82,10 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   }
 
   public void endOfRound( Auction auction ) {
+  }
+
+  public String toString() {
+    return "(" + getClass() + " s:" + s + " t:" + t + ")";
   }
 
 

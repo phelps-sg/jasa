@@ -97,7 +97,7 @@ public interface Auction extends QuoteProvider {
   public int getAge();
 
   /**
-   * Get the remaining time before the auction closes.
+   * Get the remaining time in the current trading day (period).
    */
   public int getRemainingTime();
 

@@ -8,6 +8,8 @@
 # Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.maximumrounds = 1000
+simulation.auction.lengthofday = 10
+simulation.auction.maximumdays = 50
 simulation.auction.name = Example3
 
 # Use a double-auction with clearing occuring every time a new shout arrives
@@ -43,9 +45,9 @@ simulation.agenttype.n = 3
 #  50 electricity sellers with a capacity of 10MWh
 #  using the Roth-Erev strategy
 simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
-simulation.agenttype.0.numagents = 50
+simulation.agenttype.0.numagents = 70
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
-simulation.agenttype.0.valuer.minvalue = 10
+simulation.agenttype.0.valuer.minvalue = 50
 simulation.agenttype.0.valuer.maxvalue = 100
 simulation.agenttype.0.capacity = 10
 simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
@@ -68,10 +70,10 @@ simulation.agenttype.1.isseller = false
 #  3rd population-
 #   3 buyers using Kaplan
 simulation.agenttype.2 = uk.ac.liv.auction.electricity.ElectricityTrader
-simulation.agenttype.2.numagents = 30
+simulation.agenttype.2.numagents = 50
 simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomValuer
-simulation.agenttype.2.valuer.minvalue = 80
-simulation.agenttype.2.valuer.maxvalue = 150
+simulation.agenttype.2.valuer.minvalue = 10
+simulation.agenttype.2.valuer.maxvalue = 200
 simulation.agenttype.2.capacity = 10
 simulation.agenttype.2.strategy = uk.ac.liv.auction.agent.KaplanStrategy
 simulation.agenttype.2.isseller = false
@@ -81,7 +83,7 @@ simulation.prng = uk.ac.liv.prng.MT
 simulation.seed = 7842
 
 # log4j configuration
-log4j.rootCategory=INFO, stdout
+log4j.rootCategory=DEBUG, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m%n

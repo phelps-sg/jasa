@@ -30,4 +30,9 @@ public interface MimicryLearner extends ContinuousLearner {
    */
   public void train( double target );
 
+  /**
+   * Initialise the learning algorithm to output the supplied value.
+   */
+  public void setOutputLevel( double currentOutput );
+
 }

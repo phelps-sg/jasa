@@ -91,6 +91,10 @@ public class WidrowHoffLearner extends AbstractLearner
     return delta;
   }
 
+  public void setOutputLevel( double currentOutput ) {
+    this.currentOutput = currentOutput;
+  }
+
   public void dumpState( DataWriter out ) {
     // TODO
   }
@@ -99,13 +103,14 @@ public class WidrowHoffLearner extends AbstractLearner
     return delta;
   }
 
+  public void reset() {
+    initialise();
+  }
+
   protected void initialise() {
     delta = 0;
     currentOutput = 0;
   }
 
-  public void reset() {
-    initialise();
-  }
 
 }

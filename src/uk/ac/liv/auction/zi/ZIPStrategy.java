@@ -25,9 +25,12 @@ import uk.ac.liv.ai.learning.Learner;
 import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.Parameterizable;
 
-import ec.util.MersenneTwisterFast;
+import uk.ac.liv.prng.PRNGFactory;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.io.Serializable;
 
@@ -62,7 +65,8 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
   /**
    * The PRNG used to draw perturbation values
    */
-  protected static MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  protected static RandomElement randGenerator =
+      PRNGFactory.getFactory().create();
 
   protected double scaling = 0.01;
 
@@ -130,7 +134,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
   }
 
   public void setSeed( long seed ) {
-    randGenerator.setSeed(seed);
+    randGenerator = PRNGFactory.getFactory().create(seed);
   }
 
   public void setLearner( Learner learner ) {
@@ -139,6 +143,10 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
   public Learner getLearner() {
     return learner;
+  }
+
+  public void setMargin( double margin ) {
+    ((MimicryLearner) learner).setOutputLevel(margin);
   }
 
   protected void sellerStrategy( Shout lastShout ) {
@@ -177,10 +185,10 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
       logger.debug("last shout was accepted");
       if ( agent.active() && currentPrice >= lastPrice ) {
         logger.debug("agent is active - raising");
-        raiseMargin(lastPrice);
+        lowerMargin(lastPrice);
       } else if ( lastShout.isAsk() ) {
         if ( currentPrice <= lastPrice ) {
-          lowerMargin(lastPrice);
+          raiseMargin(lastPrice);
         }
       }
     } else if ( lastShout.isBid() ) {
@@ -202,15 +210,15 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
   protected void raiseMargin( double price ) {
     logger.debug("Raising margin towards " + price);
-    double relative = randGenerator.nextDouble() + 1;
-    double absolute = randGenerator.nextDouble() * scaling;
+    double relative = randGenerator.raw() + 1;
+    double absolute = randGenerator.raw() * scaling;
     learner.train(targetMargin(price, absolute, relative));
   }
 
   protected void lowerMargin( double price ) {
     logger.debug("Lowering margin towards " + price);
-    double relative = randGenerator.nextDouble();
-    double absolute = randGenerator.nextDouble() * -scaling;
+    double relative = randGenerator.raw();
+    double absolute = randGenerator.raw() * -scaling;
     learner.train(targetMargin(price, absolute, relative));
   }
 
