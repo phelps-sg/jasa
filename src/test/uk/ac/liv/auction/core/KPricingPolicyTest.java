@@ -81,10 +81,8 @@ public class KPricingPolicyTest extends TestCase {
     eqStats.calculate();
     double ep = eqStats.calculateMidEquilibriumPrice();
     
-    for( int i=0; i<agents.length; i++ ) {
-      if ( agents[i].isBuyer() ) {
-        assertTrue(MathUtil.approxEqual(ep, agents[i].lastWinningPrice));
-      }
+    for ( int i = 0; i < agents.length; i++ ) {
+      assertTrue(MathUtil.approxEqual(ep, agents[i].lastWinningPrice));
     }
   }
   
