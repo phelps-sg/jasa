@@ -52,7 +52,6 @@ public class ShoutPool {
     s.setAgent(agent);
     s.setPrice(price);
     s.setQuantity(quantity);
-    s.accepted = false;
     return s;
   }
 

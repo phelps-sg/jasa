@@ -16,17 +16,20 @@
 
 package uk.ac.liv.util.io;
 
-import JSci.awt.DataSeries;
+import JSci.awt.DefaultGraph2DModel;
 
 import java.util.Iterator;
 import java.util.Vector;
+
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
 /**
  * <p>
  * A data writer that stores data in a memory-resident data structure
- * that can also be used as a data series for a JSci graph.
+ * that can also be used as a data series model for a JSci graph,
+ * or a table model for a swing JTable component.
  * </p>
  *
  * <p>
@@ -39,20 +42,20 @@ import org.apache.log4j.Logger;
  * </p>
  *
  * <code>
- * MemoryResidentDataSeries timeSeries = new MemoryResidentDataSeries();
- * for( int t=0; t<1000; t++ ) {
- *   timeSeries.newData(t);
- *   timeSeries.newData(getValue(t));
- * }
+ * DataSeriesWriter timeSeries = new DataSeriesWriter();<br>
+ * for( int t=0; t&lt1000; t++ ) {<br>
+ *   timeSeries.newData(t);<br>
+ *   timeSeries.newData(getValue(t));<br>
+ * }<br>
  * </code>
  *
  *
  * @author Steve Phelps
+ * @version $Revision$
  */
 
-public class MemoryResidentDataSeries implements DataWriter, DataSeries {
-
-  Vector data;
+public class DataSeriesWriter extends DefaultGraph2DModel.DataSeries
+    implements DataWriter, Serializable {
 
   protected boolean isVisible = true;
 
@@ -60,13 +63,12 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
 
   protected double xCoord;
 
-  static Logger logger = Logger.getLogger(MemoryResidentDataSeries.class);
+  protected Vector data;
 
-  public MemoryResidentDataSeries( int initialCapacity ) {
-    data = new Vector(initialCapacity);
-  }
+  static Logger logger = Logger.getLogger(DataSeriesWriter.class);
 
-  public MemoryResidentDataSeries() {
+  public DataSeriesWriter() {
+    super( new double[] {}, new double[] {} );
     data = new Vector();
   }
 
@@ -90,11 +92,15 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
     isXCoordinate = !isXCoordinate;
   }
 
+  public void newData( float datum ) {
+    newData((double) datum);
+  }
+
   public void clear() {
     data.clear();
   }
 
-  public float getValueAt( int datum ) {
+  public float getValue( int datum ) {
     return (float) getDatum(datum);
   }
 
@@ -110,7 +116,11 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
   }
 
   public float getXCoord( int datum ) {
-    return (float) ((SeriesDatum) data.get(datum)).getX();
+    if ( datum > data.size()-1 ) {
+      return 0f;
+    } else {
+      return (float) ( (SeriesDatum) data.get(datum)).getX();
+    }
   }
 
   public float getYCoord( int datum ) {
@@ -118,7 +128,11 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
   }
 
   public double getDatum( int i ) {
-    double value = ((SeriesDatum) data.get(i)).getY();
+    SeriesDatum datum = (SeriesDatum) data.get(i);
+    double value = 0;
+    if ( datum != null ) {
+      value = ( (SeriesDatum) data.get(i)).getY();
+    }
     if ( Double.isNaN(value) || Double.isInfinite(value) ) {
       return 0;
     } else {
@@ -136,13 +150,6 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
     return data.size();
   }
 
-  public void setVisible( boolean isVisible ) {
-    this.isVisible = isVisible;
-  }
-
-  public boolean isVisible() {
-    return isVisible;
-  }
 
   public void newData(Iterator i) {
     /**@todo Implement this uk.ac.liv.util.io.DataWriter method*/
@@ -162,6 +169,17 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
   public void newData(boolean data) {
     /**@todo Implement this uk.ac.liv.util.io.DataWriter method*/
     throw new java.lang.UnsupportedOperationException("Method newData() not yet implemented.");
+  }
+
+  public String toString() {
+    StringBuffer out = new StringBuffer("( " + getClass() + " ");
+    Iterator i = data.iterator();
+    while ( i.hasNext() ) {
+      Object datum = i.next();
+      out.append(datum.toString());
+    }
+    out.append(")");
+    return out.toString();
   }
 
 }

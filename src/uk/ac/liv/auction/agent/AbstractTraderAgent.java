@@ -17,6 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.ShoutPool;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.AuctionClosedException;
@@ -246,7 +247,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
    */
   public void requestShout( Auction auction ) {
     try {
-      strategy.modifyShout(currentShout, auction);
+      currentShout = strategy.modifyShout(currentShout, auction);
       auction.newShout(currentShout);
     } catch ( AuctionClosedException e ) {
       logger.debug("requestShout(): Received AuctionClosedException");
@@ -270,6 +271,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   public void roundClosed( Auction auction ) {
     auction.removeShout(currentShout);
     strategy.endOfRound(auction);
+    ShoutPool.release(currentShout);
   }
 
   public Shout getCurrentShout() {
@@ -329,10 +331,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     lastProfit = 0;
     profits = 0;
     lastShoutAccepted = false;
-    if ( currentShout == null ) {
-      currentShout = new Shout(this);
-    }
-    currentShout.setIsBid(!isSeller);
+    currentShout = null;
     if ( randomPrivateValue ) {
       privateValue = randGenerator.nextDouble() * maxPrivateValue;
     }

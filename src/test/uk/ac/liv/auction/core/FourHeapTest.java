@@ -75,7 +75,10 @@ public class FourHeapTest extends TestCase {
 
         shoutEngine.newShout(testRemoveShout = randomShout());
         testRemoveShout2 = (Shout) testRemoveShout.clone();
-        testRemoveShout2.setIsBid(! testRemoveShout2.isBid());
+        testRemoveShout2 = ShoutFactory.getFactory().create(testRemoveShout.getAgent(),
+                                                             testRemoveShout.getQuantity(),
+                                                             testRemoveShout.getPrice(),
+                                                             !testRemoveShout.isBid());
         shoutEngine.newShout(testRemoveShout2);
 
         if ( (round & 0x01) > 0 ) {

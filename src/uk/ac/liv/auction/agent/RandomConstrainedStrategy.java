@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.MutableShout;
 import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Seedable;
@@ -63,9 +63,9 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     this.maxMarkup = maxMarkup;
   }
 
-  public void modifyShout( Shout shout, Auction auction ) {
+  public void modifyShout( MutableShout shout ) {
 
-    super.modifyShout(shout, auction);
+    super.modifyShout(shout);
 
     double markup = randGenerator.nextDouble() * maxMarkup;
     double price = 0;

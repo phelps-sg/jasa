@@ -30,6 +30,8 @@ import java.util.*;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 /**
  * A class representing a mixed strategy.
  * A mixed strategy is a strategy in which we play a number of pure strategies
@@ -70,19 +72,21 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
   /**
    *  The pure strategy components
    */
-  protected Strategy pureStrategies[];
+  protected AbstractStrategy pureStrategies[];
 
   /**
    *  The strategy currently being played
     */
-  protected Strategy currentStrategy;
+  protected AbstractStrategy currentStrategy;
 
   static final String P_N = "n";
   static final String P_PROBABILITY = "prob";
 
+  static Logger logger = Logger.getLogger(MixedStrategy.class);
+
 
   public MixedStrategy( DiscreteProbabilityDistribution probabilities,
-                          Strategy[] pureStrategies ) {
+                          AbstractStrategy[] pureStrategies ) {
     this();
     this.pureStrategies = pureStrategies;
     this.probabilities = probabilities;
@@ -95,12 +99,12 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     int numStrategies = parameters.getInt(base.push(P_N), null, 1);
-    pureStrategies = new Strategy[numStrategies];
+    pureStrategies = new AbstractStrategy[numStrategies];
 
     probabilities = new DiscreteProbabilityDistribution(numStrategies);
 
     for( int i=0; i<numStrategies; i++ ) {
-      Strategy s = (Strategy)
+      AbstractStrategy s = (AbstractStrategy)
         parameters.getInstanceForParameter(base.push(i+""), null,
                                             Strategy.class);
       if ( s instanceof Parameterizable ) {
@@ -125,11 +129,11 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
   }
 
 
-  public void modifyShout( Shout shout, Auction auction ) {
+  public void modifyShout( MutableShout shout ) {
 
     currentStrategy = pureStrategies[probabilities.generateRandomEvent()];
 
-    currentStrategy.modifyShout(shout, auction);
+    currentStrategy.modifyShout(shout);
   }
 
 

@@ -13,29 +13,21 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.ec.gp.func;
-
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
+package uk.ac.liv.auction.core;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class GPConstrainedTradingStrategy extends GPTradingStrategy {
+public class AuctionPauseException extends AuctionException {
 
+  public AuctionPauseException( String message ) {
+    super(message);
+  }
 
-  public Shout modifyShout( Shout shout, Auction auction ) {
-
-    Shout newShout = super.modifyShout(shout, auction);
-
-    if ( (agent.isSeller() && newShout.getPrice() < agent.getPrivateValue()) ||
-          (agent.isBuyer() && newShout.getPrice() > agent.getPrivateValue()) ) {
-      misbehaved = true;
-    }
-
-    return newShout;
+  public AuctionPauseException() {
+    super();
   }
 
 }

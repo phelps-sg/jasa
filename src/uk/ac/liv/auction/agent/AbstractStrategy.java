@@ -16,6 +16,8 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.MutableShout;
+import uk.ac.liv.auction.core.ShoutFactory;
 import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Parameterizable;
@@ -35,12 +37,17 @@ public abstract class AbstractStrategy implements
 
   protected AbstractTraderAgent agent;
 
+  protected MutableShout currentShout;
+
+  protected Auction auction;
+
   public AbstractStrategy() {
+    initialise();
   }
 
   public AbstractStrategy( AbstractTraderAgent agent ) {
+    this();
     this.agent = agent;
-    initialise();
   }
 
   public void setAgent( AbstractTraderAgent agent ) {
@@ -51,11 +58,25 @@ public abstract class AbstractStrategy implements
     initialise();
   }
 
-  public void modifyShout( Shout shout, Auction auction ) {
+  public Shout modifyShout( Shout shout, Auction auction ) {
+    this.auction = auction;
+    if ( shout != null ) {
+      currentShout.copyFrom(shout);
+    }
+    modifyShout(currentShout);
+    return ShoutFactory.getFactory().create(currentShout.getAgent(),
+                                             currentShout.getQuantity(),
+                                             currentShout.getPrice(),
+                                             currentShout.isBid());
+  }
+
+  public void modifyShout( MutableShout shout ) {
     shout.setIsBid(agent.isBuyer());
+    shout.setAgent(agent);
   }
 
   public void initialise() {
+    currentShout = new MutableShout();
   }
 
 }

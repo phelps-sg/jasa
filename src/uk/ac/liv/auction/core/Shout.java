@@ -74,11 +74,6 @@ public class Shout implements Comparable, Cloneable, Serializable {
   protected Shout child = null;
 
   /**
-   * Indicates whether or not this shout has resulted in a transaction.
-   */
-  protected boolean accepted = false;
-
-  /**
    * Used to allocate each agent with a unique id.
    */
   static IdAllocator idAllocator = new IdAllocator();
@@ -92,6 +87,11 @@ public class Shout implements Comparable, Cloneable, Serializable {
     this.quantity = quantity;
     this.price = price;
     this.isBid = isBid;
+  }
+
+  public Shout( Shout existing ) {
+    this(existing.getAgent(), existing.getQuantity(), existing.getPrice(),
+          existing.isBid());
   }
 
   public Shout( TraderAgent agent ) {
@@ -108,15 +108,6 @@ public class Shout implements Comparable, Cloneable, Serializable {
   public TraderAgent getAgent() { return agent; }
   public boolean isBid() { return isBid; }
   public boolean isAsk() { return ! isBid; }
-  public boolean accepted() { return accepted; }
-
-  public void setQuantity( int quantity ) { this.quantity = quantity; }
-  public void setPrice( double price ) { this.price = price; }
-  public void setSelling() { this.isBid = false; }
-  public void setBuying() { this.isBid = true; }
-  public void setIsBid( boolean isBid ) { this.isBid = isBid; }
-  public void setAccepted( boolean accepted ) { this.accepted = accepted; }
-  protected void setAgent( TraderAgent agent ) { this.agent = agent; }
 
   public boolean satisfies( Shout other ) {
     if ( this.isBid() ) {
@@ -148,33 +139,6 @@ public class Shout implements Comparable, Cloneable, Serializable {
     return true;
   }
 
-  /**
-   * Reduce the quantity of this shout by excess and return a new
-   * child shout containing the excess quantity.  After a split,
-   * parent shouts keep a reference to their children.
-   *
-   * @param excess The excess quantity
-   *
-   */
-  public Shout split( int excess ) {
-    quantity -= excess;
-    Shout newShout = new Shout(agent, excess, price, isBid);
-//    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
-    child = newShout;
-    Debug.assertTrue(isValid());
-    Debug.assertTrue(newShout.isValid());
-    return newShout;
-  }
-
-  public Shout splat( int excess ) {
-    Shout newShout = new Shout(agent, quantity - excess, price, isBid);
-//    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
-    quantity = excess;
-    child = newShout;
-    Debug.assertTrue(this.isValid());
-    Debug.assertTrue(newShout.isValid());
-    return newShout;
-  }
 
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
@@ -182,7 +146,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
   public String toString() {
     return "(" + getClass() + " id:" + id + " quantity:" + quantity +
-               " price:" + price + " isBid:" + isBid + " accepted:" + accepted +
+               " price:" + price + " isBid:" + isBid +
                " agent:" + agent + ")";
   }
 
@@ -196,11 +160,13 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
 
   public static double maxPrice( Shout s1, Shout s2 ) {
-    return Math.max(price(s1,Double.NEGATIVE_INFINITY), price(s2,Double.NEGATIVE_INFINITY));
+    return Math.max(price(s1, Double.NEGATIVE_INFINITY),
+                     price(s2, Double.NEGATIVE_INFINITY));
   }
 
   public static double minPrice( Shout s1, Shout s2 ) {
-    return Math.min(price(s1,Double.POSITIVE_INFINITY), price(s2,Double.POSITIVE_INFINITY));
+    return Math.min(price(s1, Double.POSITIVE_INFINITY),
+                     price(s2, Double.POSITIVE_INFINITY));
   }
 
 
@@ -230,12 +196,11 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   public void copyFrom( Shout other ) {
-    setPrice(other.getPrice());
-    setAgent(other.getAgent());
-    setQuantity(other.getQuantity());
-    setIsBid(other.isBid());
-    setAccepted(other.accepted());
-    id = other.getId();
+    this.price = other.getPrice();
+    this.agent = other.getAgent();
+    this.quantity = other.getQuantity();
+    this.isBid = other.isBid();
+    this.id = other.getId();
     child = null;
   }
 
@@ -246,6 +211,50 @@ public class Shout implements Comparable, Cloneable, Serializable {
   public boolean equals( Object other ) {
     return id == ((Shout) other).id &&
                     getAgent().equals(((Shout) other).getAgent());
+  }
+
+  /**
+   * Reduce the quantity of this shout by excess and return a new
+   * child shout containing the excess quantity.  After a split,
+   * parent shouts keep a reference to their children.
+   *
+   * @param excess The excess quantity
+   *
+   */
+ Shout split( int excess ) {
+    quantity -= excess;
+    Shout newShout = new Shout(agent, excess, price, isBid);
+//    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
+    child = newShout;
+    Debug.assertTrue(isValid());
+    Debug.assertTrue(newShout.isValid());
+    return newShout;
+  }
+
+  Shout splat( int excess ) {
+    Shout newShout = new Shout(agent, quantity - excess, price, isBid);
+//    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
+    quantity = excess;
+    child = newShout;
+    Debug.assertTrue(this.isValid());
+    Debug.assertTrue(newShout.isValid());
+    return newShout;
+  }
+
+  void setIsBid( boolean isBid ) {
+    this.isBid = isBid;
+  }
+
+  void setAgent( TraderAgent agent ) {
+    this.agent = agent;
+  }
+
+  void setPrice( double price ) {
+    this.price = price;
+  }
+
+  void setQuantity( int quantity ) {
+    this.quantity = quantity;
   }
 
 }

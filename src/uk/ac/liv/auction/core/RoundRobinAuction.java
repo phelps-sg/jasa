@@ -236,8 +236,6 @@ public class RoundRobinAuction extends AuctionImpl
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
     buyer.informOfSeller(ask, seller, price, ask.getQuantity());
-    ask.setAccepted(true);
-    bid.setAccepted(true);
     updateTransPriceLog(round, ask, price, ask.getQuantity());
   }
 

@@ -210,7 +210,6 @@ public abstract class AuctionImpl extends Observable
     if ( shout == null ) {
       throw new IllegalShoutException("null shout");
     }
-    shout.setAccepted(false);
     auctioneer.newShout(shout);
     recordShout(shout);
 

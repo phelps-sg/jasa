@@ -43,6 +43,7 @@ public class MixedStrategyTest extends TestCase {
 
   public MixedStrategyTest(String name) {
     super(name);
+    org.apache.log4j.BasicConfigurator.configure();
   }
 
   public void setUp() {
@@ -60,7 +61,7 @@ public class MixedStrategyTest extends TestCase {
 
     mixedStrategy =
       new MixedStrategy(probabilities,
-                          new Strategy[] { pureStrategy1, pureStrategy2 });
+                          new AbstractStrategy[] { pureStrategy1, pureStrategy2 });
 
   }
 

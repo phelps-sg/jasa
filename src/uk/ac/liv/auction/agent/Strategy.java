@@ -37,7 +37,7 @@ public interface Strategy {
    * @param shout   The shout to be updated
    * @param auction The auction in which this strategy is being employed
    */
-  public void modifyShout( Shout shout, Auction auction );
+  public Shout modifyShout( Shout shout, Auction auction );
 
   /**
    * Perform any end-of-round processing.
