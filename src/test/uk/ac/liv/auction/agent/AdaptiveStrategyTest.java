@@ -73,24 +73,3 @@ public class AdaptiveStrategyTest extends TestCase {
   }
 
 }
-
-class TestStrategy extends AdaptiveStrategy {
-
-  public int actions = 0;
-
-  public int rewards = 0;
-
-  public int act() {
-    return actions++;
-  }
-
-  public void calculateReward( Auction auction ) {
-    rewards++;
-  }
-
-  public Learner getLearner() {
-    return null;
-  }
-
-
-}

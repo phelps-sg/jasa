@@ -41,6 +41,7 @@ public class AllTests {
     
     suite.addTest(test.uk.ac.liv.auction.agent.RoundRobinTraderTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.AdaptiveStrategyTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.agent.MixedStrategyTest.suite());
     
     suite.addTest(test.uk.ac.liv.auction.core.AuctioneerTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.RoundRobinAuctionTest.suite());

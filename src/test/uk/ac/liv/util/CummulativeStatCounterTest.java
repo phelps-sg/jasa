@@ -64,6 +64,20 @@ public class CummulativeStatCounterTest extends TestCase {
       System.out.println(testSeries);
       System.out.println("target stdev = " + series[j][0]);
       assertTrue(approxEqual(testSeries.getStdDev(), series[j][0]));
+      
+      int n = testSeries.getN();
+      double total = 0;
+      for( int i=1; i<series[j].length; i++ ) {
+        total += series[j][i];
+      }
+      double mean = total/n;
+      double variance = 0;
+      for( int i=1; i<series[j].length; i++ ) {
+        double t = series[j][i] - mean;
+        variance += t * t;
+      }
+      variance = variance / (n-1);
+      System.out.println("recalc stdev = " + Math.sqrt(variance));
     }
   }
   
