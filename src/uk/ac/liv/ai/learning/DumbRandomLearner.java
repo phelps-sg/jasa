@@ -16,9 +16,8 @@
 
 package uk.ac.liv.ai.learning;
 
-import ec.util.MersenneTwisterFast;
+import uk.ac.liv.prng.GlobalPRNG;
 
-import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.io.DataWriter;
 
 import java.io.Serializable;
@@ -32,27 +31,17 @@ import java.io.Serializable;
  */
 
 public class DumbRandomLearner extends AbstractLearner
-    implements DiscreteLearner, StochasticLearner, Serializable {
-
-  protected MersenneTwisterFast prng;
+    implements DiscreteLearner, Serializable {
 
   protected int numActions;
 
-  public DumbRandomLearner( int numActions ) {
-    prng = new MersenneTwisterFast();
+  public DumbRandomLearner( int numActions ) {    
     this.numActions = numActions;
   }
 
-  public void setSeed( long seed ) {
-    prng.setSeed(seed);
-  }
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
-  }
 
   public int act() {
-    return prng.nextInt(numActions);
+    return GlobalPRNG.getInstance().choose(numActions);
   }
 
   public double getLearningDelta() {

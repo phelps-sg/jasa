@@ -21,18 +21,12 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 
-import uk.ac.liv.ai.learning.Learner;
-import uk.ac.liv.ai.learning.StochasticLearner;
-
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Seedable;
 
-import uk.ac.liv.prng.AbstractSeeder;
+import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
 
 import java.io.File;
@@ -41,7 +35,6 @@ import java.io.Serializable;
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  * <p>
@@ -72,7 +65,7 @@ import org.apache.log4j.PropertyConfigurator;
  * @version $Revision$
  */
 
-public class MarketSimulation extends AbstractSeeder
+public class MarketSimulation 
      implements Runnable, Serializable {
 
   /**
@@ -139,7 +132,7 @@ public class MarketSimulation extends AbstractSeeder
 
     logger.debug("Setup... ");
 
-    super.setup(parameters, base);
+    GlobalPRNG.setup(parameters, base);
 
     auction =
       (RoundRobinAuction)
@@ -182,10 +175,8 @@ public class MarketSimulation extends AbstractSeeder
     }
 
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
-    logger.info("seed = " + prngSeed + "\n");
-
-    seedObjects();
-
+    logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
+    
     logger.debug("Setup complete.");
   }
 
@@ -213,28 +204,5 @@ public class MarketSimulation extends AbstractSeeder
   }
 
 
-  protected void seedAgents() {
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      agent.seed(this);
-      agent.reset();
-    }
-  }
-
-
-  protected void seedAuction() {
-    if ( auction instanceof Seedable ) {
-      ((Seedable) auction).seed(this);
-    }
-  }
-
-
-  protected void seedObjects() {
-    logger.info("Seeding objects...");
-    seedAgents();
-    seedAuction();
-    logger.info("Seeding done.\n");
-  }
 
 }

@@ -35,7 +35,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class DiscreteProbabilityDistribution extends AbstractSeedable
+public class DiscreteProbabilityDistribution 
     implements Resetable, Serializable {
 
   /**
@@ -90,7 +90,7 @@ public class DiscreteProbabilityDistribution extends AbstractSeedable
    *  @return An integer value representing one of the possible events.
    */
   public int generateRandomEvent() {
-    double rand = prng.raw();
+    double rand = GlobalPRNG.getInstance().uniform(0, 1);
     double cummProb = 0;
     for( int i=0; i<k; i++ ) {
       cummProb += p[i];

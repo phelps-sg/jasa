@@ -19,6 +19,8 @@ import junit.framework.*;
 
 import test.uk.ac.liv.PRNGTestSeeds;
 
+import uk.ac.liv.prng.GlobalPRNG;
+	
 import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.CummulativeStatCounter;
@@ -47,9 +49,9 @@ public class QLearnerTest extends TestCase {
   }
 
   public void setUp() {
+  	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     learner1 = new QLearner(1, NUM_ACTIONS, EPSILON, LEARNING_RATE,
-                              DISCOUNT_RATE);
-    learner1.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+                              DISCOUNT_RATE);    
     score = 0;
     org.apache.log4j.BasicConfigurator.configure();
   }
@@ -133,10 +135,10 @@ public class QLearnerTest extends TestCase {
   public void testReset() {
     logger.info("testReset()");
     logger.info("virgin learner1 = " + learner1);
-    learner1.setSeed(1);
+    GlobalPRNG.initialiseWithSeed(1);
     testStates();
     double score1 = score;
-    learner1.setSeed(1);
+    GlobalPRNG.initialiseWithSeed(1);
     learner1.reset();
     logger.info("reseted learner1 = " + learner1);
     testStates();

@@ -19,6 +19,8 @@ import junit.framework.*;
 
 import test.uk.ac.liv.PRNGTestSeeds;
 
+import uk.ac.liv.prng.GlobalPRNG;
+
 import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.CummulativeStatCounter;
@@ -34,8 +36,8 @@ public class RothErevLearnerTest extends TestCase {
   }
 
   public void setUp() {
+  	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 100.0);
-    learner1.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
   }
 
   public void testBasic() {
@@ -75,7 +77,7 @@ public class RothErevLearnerTest extends TestCase {
     double q[] = { 55, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
     CummulativeStatCounter action1Data = new CummulativeStatCounter("action1");
     for( int r=0; r<10000; r++ ) {
-      learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 1, System.currentTimeMillis());
+      learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 1);
       learner1.setPropensities(q);
       CummulativeStatCounter choiceData = new CummulativeStatCounter("choice");
       int action1Chosen = 0;

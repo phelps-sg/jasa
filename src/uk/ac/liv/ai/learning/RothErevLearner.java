@@ -75,8 +75,7 @@ import java.io.Serializable;
 
 public class RothErevLearner extends AbstractLearner implements
                                 Prototypeable,
-                                StimuliResponseLearner,
-                                StochasticLearner,
+                                StimuliResponseLearner,                                
                                 Serializable {
 
   /**
@@ -150,10 +149,6 @@ public class RothErevLearner extends AbstractLearner implements
     initialise();
   }
 
-  public RothErevLearner( int k, double r, double e, double s1, long seed ) {
-    this(k, r, e, s1);
-    p.setSeed(seed);
-  }
 
   public RothErevLearner() {
     this(DEFAULT_K, DEFAULT_R, DEFAULT_E, DEFAULT_S1);
@@ -329,15 +324,6 @@ public class RothErevLearner extends AbstractLearner implements
 
   private static int sign( double value ) {
     return (new Double(value)).compareTo(new Double(0));
-  }
-
-  public void setSeed( long seed ) {
-    prng = PRNGFactory.getFactory().create(seed);
-  }
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
-    p.seed(s);
   }
 
   public void dumpState( DataWriter out ) {

@@ -15,42 +15,51 @@
 
 package uk.ac.liv.prng;
 
-import uk.ac.liv.prng.*;
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Seeder;
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+import edu.cornell.lassp.houle.RngPack.RandomSeedable;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
+
+import uk.ac.liv.util.Parameterizable;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class AbstractSeeder extends AbstractSeedable
-    implements  Parameterizable, Seeder {
-
-  protected long prngSeed;
-  
-  protected long currentSeed;
-
-  public static final String P_PRNG = "prng";
-  public static final String P_SEED = "seed";
-
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+public class GlobalPRNG {
+	
+	protected static RandomElement prng;
+	
+	protected static long seed;
+	
+	public static final String P_SEED = "seed";
+	public static final String P_PRNG = "prng";
+	
+  public static void setup( ParameterDatabase parameters, Parameter base ) {
 
     uk.ac.liv.prng.PRNGFactory.setup(parameters, base.push(P_PRNG));
 
-    long defaultSeed = PRNGFactory.getFactory().create().ClockSeed();
+    long defaultSeed = RandomSeedable.ClockSeed();
     
-    prngSeed =
+    seed =
         parameters.getLongWithDefault(base.push(P_SEED), null, defaultSeed);
                                       
-    setSeed(prngSeed);
+    prng = PRNGFactory.getFactory().create(seed);
   }
-
-  public long nextSeed() {
-    return currentSeed += prng.choose(7, 1000);
-  }
-
-
+  
+	public static RandomElement getInstance() {
+		return prng;	
+	}
+	
+	public static long getSeed() {
+		return seed;
+	}
+	
+	public static void initialiseWithSeed( long seed ) {
+		GlobalPRNG.seed = seed;
+		prng = PRNGFactory.getFactory().create(seed);
+	}
+	
 }

@@ -22,13 +22,12 @@ import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.DataWriter;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
-import ec.util.MersenneTwisterFast;
 
 import org.apache.log4j.Logger;
 
@@ -71,7 +70,7 @@ import org.apache.log4j.Logger;
 
 
 public class QLearner extends AbstractLearner
-    implements MDPLearner, StochasticLearner, Resetable, Serializable,
+    implements MDPLearner,  Resetable, Serializable,
                 Parameterizable {
 
 
@@ -121,11 +120,6 @@ public class QLearner extends AbstractLearner
    * The last action that was chosen.
    */
   protected int lastActionChosen;
-
-  /**
-   * The PRNG
-   */
-  RandomElement prng = PRNGFactory.getFactory().create();
 
   /**
    * The best action for the current state
@@ -215,8 +209,8 @@ public class QLearner extends AbstractLearner
 
 
   public int act() {
-    double e = prng.raw();
-    if ( e <= epsilon ) {
+  	RandomElement prng = GlobalPRNG.getInstance();    
+    if ( prng.coin(epsilon) ) {
       lastActionChosen = prng.choose(0, numActions);
     } else {
       lastActionChosen = bestAction(currentState);
@@ -258,16 +252,6 @@ public class QLearner extends AbstractLearner
 
   public void reset() {
     initialise();
-  }
-
-
-  public void setSeed( long seed ) {
-    prng = PRNGFactory.getFactory().create(seed);
-  }
-
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
   }
 
 

@@ -24,12 +24,12 @@ import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
 
 import uk.ac.liv.ai.learning.NPTRothErevLearner;
-import uk.ac.liv.ai.learning.Learner;
-import uk.ac.liv.ai.learning.StochasticLearner;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 
-import ec.util.MersenneTwisterFast;
+import uk.ac.liv.prng.*;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.util.*;
 
@@ -62,13 +62,11 @@ public abstract class ElectricityTest extends TestCase {
 
   protected static double sellerValues[] = { 35, 16, 11 };
 
-  protected static long seeds[][] = null;
+  protected static long seeds[] = null;
 
   protected CummulativeStatCounter mPB, mPS, eA;
 
   protected int ns, nb, cs, cb;
-
-  protected MersenneTwisterFast prng = new MersenneTwisterFast();
 
   static final int ITERATIONS = 100;
   static final int MAX_ROUNDS = 1000;
@@ -97,7 +95,7 @@ public abstract class ElectricityTest extends TestCase {
     for( int i=0; i<ITERATIONS; i++ ) {
       System.out.println("Iteration " + i);
       auction.reset();
-      setPRNGseeds(i);
+      GlobalPRNG.initialiseWithSeed(seeds[i]);
       auction.run();
       stats.calculate();
       updateStats();
@@ -150,39 +148,21 @@ public abstract class ElectricityTest extends TestCase {
   }
 
   public void generatePRNGseeds() {
+
     if ( seeds != null ) {
       return;
     }
-    seeds = new long[ITERATIONS][6];
-    generatePRNGseeds(6);
-  }
 
-  public void generatePRNGseeds( int numAgents ) {
-
-    prng.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     logger.info(this + ": generating PRNG seeds using default seed.. ");
 
-    for( int i=0; i<ITERATIONS; i++ ) {
-      for( int t=0; t<numAgents; t++ ) {
-        seeds[i][t] = (long) prng.nextInt();
-      }
+    seeds = new long[ITERATIONS];
+    
+    RandomElement prng = GlobalPRNG.getInstance();
+    for( int i=0; i<ITERATIONS; i++ ) {      
+    	seeds[i] = (long) prng.choose(0, Integer.MAX_VALUE);      
     }
     logger.info("done.");
-  }
-
-  public void setPRNGseeds( int iteration ) {
-    int agentNumber = 0;
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      ElectricityTrader agent = (ElectricityTrader) i.next();
-      Strategy s = agent.getStrategy();
-      if ( s instanceof AdaptiveStrategy ) {
-        Learner learner = ((AdaptiveStrategy) s).getLearner();
-        if ( learner instanceof StochasticLearner ) {
-          ((StochasticLearner) learner).setSeed(seeds[iteration][agentNumber++]);
-        }
-      }
-    }
   }
 
   public void assignStrategy( ElectricityTrader agent ) {
@@ -206,8 +186,7 @@ public abstract class ElectricityTest extends TestCase {
   }
 
   public double generateRandomPrivateValue() {
-    return MIN_PRIVATE_VALUE +
-                prng.nextDouble() * (MAX_PRIVATE_VALUE-MIN_PRIVATE_VALUE);
+    return GlobalPRNG.getInstance().uniform(MIN_PRIVATE_VALUE, MAX_PRIVATE_VALUE);
   }
 
   public void traderReport() {

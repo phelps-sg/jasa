@@ -17,11 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
 
-
-import uk.ac.liv.prng.AbstractSeedable;
-import uk.ac.liv.prng.PRNGFactory;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -50,8 +46,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-
-public class RandomValuer extends AbstractSeedable
+public class RandomValuer 
     implements Valuer, Serializable {
 
   /**
@@ -120,7 +115,7 @@ public class RandomValuer extends AbstractSeedable
   }
 
   protected void drawRandomValue() {
-    value = prng.uniform(minValue, maxValue);
+    value = GlobalPRNG.getInstance().uniform(minValue, maxValue);
   }
 
   public String toString() {

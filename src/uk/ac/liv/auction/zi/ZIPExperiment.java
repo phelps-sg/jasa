@@ -27,25 +27,13 @@ import uk.ac.liv.auction.MarketSimulation;
 
 import uk.ac.liv.prng.PRNGFactory;
 
-import uk.ac.liv.ai.learning.Learner;
-import uk.ac.liv.ai.learning.MimicryLearner;
-import uk.ac.liv.ai.learning.StochasticLearner;
 import uk.ac.liv.ai.learning.WidrowHoffLearner;
-
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.CummulativeStatCounter;
-
-import java.util.Random;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
 
 import java.io.File;
-import java.io.Serializable;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  * An implementation of Cliff's symetric supply and demand ZIP experiment.

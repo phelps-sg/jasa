@@ -21,10 +21,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import uk.ac.liv.util.MutableIntWrapper;
-import uk.ac.liv.util.MutableDoubleWrapper;
-import uk.ac.liv.util.Parameterizable;
 
-import uk.ac.liv.prng.AbstractSeedable;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import uk.ac.liv.util.io.CSVReader;
 import uk.ac.liv.util.io.CSVWriter;
@@ -34,8 +32,10 @@ import ec.util.ParameterDatabase;
 
 import org.apache.log4j.Logger;
 
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
-public class EquilibriaDistribution extends AbstractSeedable {
+
+public class EquilibriaDistribution  {
 
   protected HashMap equilibria;
 
@@ -124,7 +124,8 @@ public class EquilibriaDistribution extends AbstractSeedable {
   public void sampleRDTrajectories() throws FileNotFoundException {
 
     for( int i=0; i<numRDSamples; i++ ) {
-      
+            
+      RandomElement prng = GlobalPRNG.getInstance();
       double x, y, z;
       
       do {

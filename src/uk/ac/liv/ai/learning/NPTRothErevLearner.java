@@ -42,10 +42,6 @@ public class NPTRothErevLearner extends RothErevLearner {
     super(k, r, e, s1);
   }
 
-  public NPTRothErevLearner( int k, double r, double e, double s1, long seed ) {
-    super(k, r, e, s1, seed);
-  }
-
   public NPTRothErevLearner() {
     super();
   }

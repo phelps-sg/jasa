@@ -56,7 +56,7 @@ public class MixedStrategyTest extends TestCase {
     pureStrategy2.setQuantity(1);
 
     probabilities = new DiscreteProbabilityDistribution(2);
-    probabilities.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    //probabilities.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     probabilities.setProbability(0, STRATEGY1_PROBABILITY);
     probabilities.setProbability(1, STRATEGY2_PROBABILITY);
 

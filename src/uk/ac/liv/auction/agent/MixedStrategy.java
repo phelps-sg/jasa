@@ -61,8 +61,7 @@ import org.apache.log4j.Logger;
  */
 
 public class MixedStrategy extends AbstractStrategy implements Parameterizable,
-                                                                Resetable,
-                                                                Seedable,
+                                                                Resetable,                                                                
                                                                 Serializable {
 
   /**
@@ -151,14 +150,6 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
     for( int i=0; i<pureStrategies.length; i++ ) {
       ((Resetable) pureStrategies[i]).reset();
     }
-  }
-
-  public void setSeed( long seed ) {
-    probabilities.setSeed(seed);
-  }
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
   }
 
   public int determineQuantity( Auction auction ) {

@@ -23,11 +23,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.PayoffLogger;
 import uk.ac.liv.auction.stats.EquilibriaStats;
-import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 import uk.ac.liv.auction.stats.SurplusStats;
-
-import uk.ac.liv.ai.learning.Learner;
-import uk.ac.liv.ai.learning.StochasticLearner;
 
 import uk.ac.liv.util.*;
 import uk.ac.liv.util.io.CSVWriter;
@@ -35,8 +31,6 @@ import uk.ac.liv.util.io.CSVWriter;
 import uk.ac.liv.prng.*;
 import uk.ac.liv.prng.PRNGFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
 
 import java.io.*;
@@ -44,7 +38,7 @@ import java.io.*;
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+
 
 /**
  * <p>
@@ -68,7 +62,7 @@ import org.apache.log4j.PropertyConfigurator;
  * @version $Revision$
  */
 
-public class HeuristicPayoffCalculator extends AbstractSeeder
+public class HeuristicPayoffCalculator  
     implements  Runnable, Serializable, EndOfDayListener {
 
   protected String resultsFileName = "/tmp/payoffs.csv";
@@ -105,8 +99,6 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
   protected ParameterDatabase parameters;
 
-  protected RandomElement prng = PRNGFactory.getFactory().create();
-  
   protected CompressedPayoffMatrix payoffMatrix;
 
   public static final String P_NUMAGENTS = "numagents";
@@ -185,10 +177,10 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
     this.parameters = parameters;
 
+    GlobalPRNG.setup(parameters, base);
+    
     logger.debug("Setup... ");
-
-    super.setup(parameters, base);
-
+    
     auction =
         (RoundRobinAuction)
         parameters.getInstanceForParameterEq(base.push(P_AUCTION),
@@ -254,9 +246,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     logger.info("numAgents = " + numAgents);
     logger.info("numStrategies = " + numStrategies);
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
-    logger.info("seed = " + prngSeed + "\n");
+    logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
 
-    seedObjects();
 
     logger.debug("Setup complete.");
   }
@@ -366,7 +357,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     }
     int numCandidates = numAgents;
     for( int i=0; i<numBuyers; i++ ) {
-      int choice = prng.choose(numCandidates)-1;
+      int choice = GlobalPRNG.getInstance().choose(numCandidates)-1;
       agents[choice].setIsSeller(false);
       AbstractTraderAgent lastAgent = agents[numCandidates-1];
       agents[numCandidates-1] = agents[choice];
@@ -379,6 +370,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   }
 
   protected void randomlyAssignValuers() {
+  	RandomElement prng = GlobalPRNG.getInstance();
     double minValue = prng.uniform(minValueMin, minValueMax);    
     double maxValue = prng.uniform(minValue+rangeMin, minValue + rangeMax);
     for( int i=0; i<numAgents; i++ ) {
@@ -405,35 +397,5 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     System.err.println(message);
     System.exit(1);
   }
-
-
-  protected void seedAgents() {
-    for( int i=0; i<numAgents; i++ ) {
-      agents[i].seed(this);
-    }
-  }
-
-
-  protected void seedAuction() {
-    if ( auction instanceof Seedable ) {
-      ((Seedable) auction).seed(this);
-    }
-  }
-
-  public void seed( Seeder seeder ) {
-    super.seed(seeder);
-    prng = PRNGFactory.getFactory().create(seeder.nextSeed());
-  }
-
-
-  protected void seedObjects() {
-    logger.info("Seeding objects...");
-    seedAgents();
-    seedAuction();
-    seed(this);
-    logger.info("Seeding done.\n");
-  }
-
-
 
 }
