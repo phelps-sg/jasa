@@ -150,6 +150,11 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
    */
   protected double equilibPrice;
 
+  /**
+   * The age of the auction in rounds.
+   */
+  protected int auctionAge;
+
 
   public ElectricityStats( RoundRobinAuction auction ) {
     this.auction = auction;
@@ -199,6 +204,8 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       zeroEquilibriumTotals();
       equilibPrice = calculateEquilibriumPrice();
     }
+
+    auctionAge = calculateAuctionAge();
 
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
@@ -270,7 +277,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     if ( surplus < 0 ) {
       surplus = 0;
     }
-    return auction.getAge() * equilibQuant(trader, equilibPrice) * surplus;
+    return auctionAge * equilibQuant(trader, equilibPrice) * surplus;
   }
 
 
@@ -357,7 +364,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     pST = 0;
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
-      double truthProfits = trader.getLastProfit();
+      double truthProfits = truthProfits(trader.getLastProfit());
       if ( trader.isBuyer() ) {
         pBT += truthProfits;
       } else {
@@ -366,6 +373,14 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     }
     sMPB = (pBA - pBT) / pBT;
     sMPS = (pSA - pST) / pST;
+  }
+
+  protected double truthProfits( double singleRoundProfits ) {
+    return singleRoundProfits * auctionAge;
+  }
+
+  protected int calculateAuctionAge() {
+    return auction.getAge();
   }
 
 

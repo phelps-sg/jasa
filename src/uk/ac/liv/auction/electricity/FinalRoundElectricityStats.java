@@ -38,6 +38,7 @@ public class FinalRoundElectricityStats extends ElectricityStats {
     return ((ElectricityTrader) trader).getLastProfit();
   }
 
+/*
   public double equilibriumProfits( AbstractTraderAgent trader ) {
     double surplus = 0;
     if ( trader.isSeller() ) {
@@ -46,6 +47,11 @@ public class FinalRoundElectricityStats extends ElectricityStats {
       surplus = trader.getPrivateValue() - equilibPrice;
     }
     return equilibQuant(trader, equilibPrice) * surplus;
+  }
+  */
+
+  protected int calculateAuctionAge() {
+    return 1;
   }
 
 
