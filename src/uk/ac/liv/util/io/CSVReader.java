@@ -30,32 +30,30 @@ public class CSVReader  {
 
   BufferedReader in;
   char seperator; 
-  List types;
+  Class[] types;
   static final char DEFAULT_SEPERATOR = '\t';
 
 
-  public CSVReader( InputStream in, List types, char seperator ) {
+  public CSVReader( InputStream in, Class[] types, char seperator ) {
     this.in = new BufferedReader(new InputStreamReader(in));    
     this.seperator = seperator;
     this.types = types;
   }
 
-  public CSVReader( InputStream in, List types ) {
+  public CSVReader( InputStream in, Class[] types ) {
     this(in, types, DEFAULT_SEPERATOR);
   }
 
   public List nextRecord() throws IOException {
     String line = in.readLine();
-    List record = new ArrayList(types.size());
+    List record = new ArrayList(types.length);
     if ( line == null ) {
       return null;
     }
     StringTokenizer tokens = new StringTokenizer(line,seperator+"");
-    Iterator typeIt = types.iterator();
-    while ( typeIt.hasNext() ) {
-      String fieldStr = tokens.nextToken();
-      Class type = (Class) typeIt.next();
-      record.add(convert(fieldStr,type));
+    for( int i=0; i<types.length; i++ ) {    
+      String fieldStr = tokens.nextToken();      
+      record.add(convert(fieldStr, types[i]));
     }
     return (List) record;
   }
