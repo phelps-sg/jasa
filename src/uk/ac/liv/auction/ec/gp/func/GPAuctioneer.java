@@ -1,6 +1,7 @@
 package uk.ac.liv.auction.ec.gp.func;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.electricity.ElectricityStats;
 
 import uk.ac.liv.util.Debug;
 
@@ -31,6 +32,8 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   MarketQuote currentQuote;
 
   protected Shout clearBid, clearAsk;
+
+  public ElectricityStats stats;
 
   public GPAuctioneer() {
     super();
@@ -110,6 +113,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public synchronized void printState() {
     shoutEngine.printState();
   }
+
 
 
 }

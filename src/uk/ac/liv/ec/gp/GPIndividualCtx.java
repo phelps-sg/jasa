@@ -31,4 +31,8 @@ public class GPIndividualCtx extends GPIndividual {
     context.getStack().reset();
   }
 
+  public GPTree getTree( int treeNumber ) {
+    return trees[treeNumber];
+  }
+
 }

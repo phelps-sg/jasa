@@ -3,15 +3,17 @@ include(`ecj.m4')
 include(`utils.m4')
 
 
-define(`NUM_SELLERS', ifelse(esyscmd(`echo -n $GP_NS'))
-define(`NUM_BUYERS', esyscmd(`echo -n $GP_NB'))
-define(`SELLER_CAPACITY', esyscmd(`echo -n $GP_CS`))
-define(`BUYER_CAPACITY', esyscmd(`echo -n $GP_BS`))
-define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
+define(`NUM_SELLERS', ENV_VAR(`$GP_NS', 3))
+define(`NUM_BUYERS', ENV_VAR(`$GP_NB', 3))
+define(`SELLER_CAPACITY', ENV_VAR(`$GP_CS', 10))
+define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
+
 define(`POPULATION_SIZE', 50)
 define(`NUM_GENERATIONS', 1000)
 
 define(`CONF_RESULTS', `experimental_data/results/preliminary/gpcoevolve')
+
+define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
 
 parent.0 = CONF_ECJHOME/ec/simple/simple.params
 
@@ -28,7 +30,7 @@ eval.problem.marketstatsfile = CONF_RESULTS/marketstats-PARAM_SUMMARY.csv
 stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
 stat.file = CONF_RESULTS/gpcoevolve-PARAM_SUMMARY.out
 stat.gather-full = true
-stat.serfilenameprefix = CONF_RESULTS/gpind.data
+stat.serfilenameprefix = CONF_RESULTS/gpind-PARAM_SUMMARY.data
 
 generations = NUM_GENERATIONS
 checkpoint = false
@@ -41,12 +43,6 @@ gp.type.a.0.name = number
 gp.type.a.1.name = bool
 
 gp.type.s.size = 0
-## Define a single set type "nil", which contains all atomic types
-#gp.type.s.size = 1
-#gp.type.s.0.name = nil
-#gp.type.s.0.size = 2
-#gp.type.s.0.member.0 = number
-#gp.type.s.0.member.1 = bool
 
 ## Two tree constraints, one for each method we are trying to evolve
 
