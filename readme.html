@@ -186,23 +186,15 @@ are available under open-source licenses:
 </li>
 
 <li>
-<a href="http://logging.apache.org/log4j">Log4j<a> version 1.2.8
-</li>
-
-<li>
-<a href="http://www.junit.org">JUnit</a> version 3.81
-</li>
-
-<li>
-<a href="http://koala.ilog.fr/shillion/sp/">Scheme package</a> version 1.1
-</li>
-
-<li>
 <a href="http://repast.sourceforge.net">RePast</a> version 3.0
 </li>
 
 <li>
 <a href="http://jakarta.apache.org/commons/collections/">Commons Collections</a> version 3.1
+</li>
+
+<li>
+<a href="http://trove4j.sourceforge.net/">GNU Trove</a> version 1.1b3
 </li>
 
 
@@ -248,13 +240,42 @@ ant run -Dparams=examples/example2.params
 </code>
 </p>
 
+<p>
+To run a batch experiment, use the 'batchrun' command, eg:
+</p>
+<code>
+ant batchrun -Dparams=examples/example1.params
+</code>
+</p>
+
+<p>
+Alternatively, for maximum performance, set your CLASSPATH environment to include all the libraries used by JASA, and then execute the following command:
+</p>
+
+<code>
+java -server uk.ac.liv.auction.MarketSimulation examples/example1.params
+</code>
+
+<p>
+The <code>-server</code> option tells the JVM to use the server version of the
+just-in-time (JIT) compiler, which will perform many more optimizations than
+the standard JIT. 
+ </p>
+
 <A name="acknowledgements"></A>
 <h3>
 Acknowledgements
 </h3>
 
 <p>
-This work was partially supported by the EU IST Programme through the SLIE Project.
+Additional contributors: Jinzhong Niu and Marek Marcinkiewicz.
+</p>
+
+<p>
+This work is currently supported by EPSRC grant GR/T10671/01 - "Market Based
+Control of Complex Computational Systems." and NSF grant number IIS-9820657 -
+"Tools and Techniques for Automated Mechanism Design". It was originally
+supported by the EU IST Programme through the SLIE project.  
 </p>
 
 <p>
