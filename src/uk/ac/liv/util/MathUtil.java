@@ -45,5 +45,13 @@ public class MathUtil {
   public static boolean approxEqual( double x, double y, double error ) {
     return Math.abs(x-y) <= error;
   }
+  
+  public static long factorial( int n ) {
+  	long result = 1;
+  	for( int i=0; i<n-1; i++ ) {
+  		result *= n-i;
+  	}
+  	return result;
+  }
 
 }
