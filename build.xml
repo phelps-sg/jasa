@@ -9,12 +9,12 @@
    <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng"/>
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
-   <property name="ecjLoc" value="${javaLibPath}/ecj"/>
+   <property name="ecjLoc" value="${javaLibPath}/ecj12"/>
    <property name="repastLoc" value="${javaLibPath}/RePast-2.2"/>
-   <property name="junitLoc" value="${javaLibPath}/junit/junit.jar"/>
+   <property name="junitLoc" value="${javaLibPath}/junit3.8.1/junit.jar"/>
    <property name="log4jLoc" value="${javaLibPath}/log4j.jar"/>
    <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
-   <property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.0/commons-collections-3.0.jar"/>
+   <property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.1/commons-collections-3.1.jar"/>
    <property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/getools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/repast.jar:${repastLoc}/lib/repast.jar:${repastLoc}/lib/trove.jar"/>
  
 
@@ -26,11 +26,13 @@
      <pathelement location="${collectionsLoc}"/>     
      <pathelement path="${repastPath}"/>
      <pathelement location="./classes"/>
+     <pathelement location="./jasa.jar"/>
      <pathelement path="${java.class.path}"/>
    </path>
 
    <target name="cleanOutput">
       <delete dir="${outputDir}"/>
+      <delete file="jasa.jar"/>
    </target>
 
    <target depends="cleanOutput" name="prepareOutput">
@@ -63,7 +65,7 @@
 
    <target depends="jar,doc" name="tar">
    	<tar compression="gzip" tarfile="jasa.tar.gz">
-		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params" prefix="jasa">
+		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params,lib/**" prefix="jasa">
                   <exclude name="src/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
 				  <exclude name="src/uk/ac/liv/auction/heuristic/**/"/>
