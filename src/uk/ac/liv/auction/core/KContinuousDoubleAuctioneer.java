@@ -26,10 +26,6 @@ package uk.ac.liv.auction.core;
  */
 
 public class KContinuousDoubleAuctioneer extends KAuctioneer {
-  
-  protected double lowestAsk;
-  
-  protected double highestBid;
 
   public KContinuousDoubleAuctioneer() {
     this(null, 0);
@@ -56,9 +52,7 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
     currentQuote = new MarketQuote(askQuote(), bidQuote());
   }
 
-  public void endOfRoundProcessing() {
-    lowestAsk = Double.POSITIVE_INFINITY;
-    highestBid = Double.NEGATIVE_INFINITY;    
+  public void endOfRoundProcessing() {    
   }
 
   public void endOfAuctionProcessing() {
@@ -82,30 +76,18 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
       quote = bidQuote();
       if ( shout.getPrice() < quote ) {
         bidNotAnImprovementException();
-      }
-      highestBid = shout.getPrice();
+      }  
     } else {
       quote = askQuote();
       if ( shout.getPrice() > quote ) {
         askNotAnImprovementException();
-      }
-      lowestAsk = shout.getPrice();
+      }      
     }
   }
   
   protected void initialise() {
-    super.initialise();
-    lowestAsk = Double.POSITIVE_INFINITY;
-    highestBid = Double.NEGATIVE_INFINITY;
-  }
-  
-  protected double bidQuote() {
-    return highestBid;
-  }
-  
-  protected double askQuote() {
-    return lowestAsk;
-  }
+    super.initialise();    
+  }  
 
   private void askNotAnImprovementException()
       throws NotAnImprovementOverQuoteException {

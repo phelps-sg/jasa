@@ -198,15 +198,15 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {      
-      if ( currentPrice <= lastPrice ) {        
+      if ( agent.active() && currentPrice <= lastPrice ) {        
         raiseMargin(lastPrice);
-      } else if ( agent.active() && lastShout.isBid() ) {
+      } else if ( lastShout.isBid() ) {
         if ( currentPrice >= lastPrice ) {
           lowerMargin(lastPrice);
         }
       }
     } else {      
-      if ( agent.active() && lastShout.isAsk() ) {
+      if ( lastShout.isAsk() ) {
         if ( currentPrice >= lastPrice ) {
           lowerMargin(lastPrice);
         }
@@ -224,14 +224,14 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {      
-      if ( currentPrice >= lastPrice ) {        
+      if ( agent.active() && currentPrice >= lastPrice ) {        
         raiseMargin(lastPrice);
-      } else if ( agent.active() && lastShout.isAsk() ) {
+      } else if ( lastShout.isAsk() ) {
         if ( currentPrice <= lastPrice ) {
           lowerMargin(lastPrice);
         }
       }
-    } else if ( agent.active() && lastShout.isBid() ) {
+    } else if ( lastShout.isBid() ) {
       if ( currentPrice <= lastPrice ) {
         lowerMargin(lastPrice);
       }
