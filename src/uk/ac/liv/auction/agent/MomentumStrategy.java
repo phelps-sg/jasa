@@ -105,11 +105,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
       setMargin(currentMargin = 1.0);
     }
     adjustMargin();    
-    if ( agent.isBuyer() ) {
-      currentPrice = agent.getValuation(auction) * (1 - currentMargin);
-    } else {
-      currentPrice = agent.getValuation(auction) * (1 + currentMargin);
-    }      
+    currentPrice = calculatePrice(currentMargin);
     shout.setPrice(currentPrice);
     return super.modifyShout(shout);
   }
@@ -128,6 +124,15 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
 
   public void setMargin( double margin ) {
     learner.setOutputLevel(margin);
+    //currentPrice = calculatePrice(margin);
+  }
+  
+  protected double calculatePrice( double margin ) {
+    if ( agent.isBuyer() ) {
+      return agent.getValuation(auction) * (1 - margin);
+    } else {
+      return agent.getValuation(auction) * (1 + margin);
+    }      
   }
 
   
@@ -135,9 +140,9 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     double privValue = agent.getValuation(auction);
     double targetMargin = 0;
     if ( agent.isBuyer() ) {
-      targetMargin = (targetPrice - privValue) / privValue;
-    } else {
       targetMargin = (privValue - targetPrice) / privValue;
+    } else {
+      targetMargin = (targetPrice - privValue) / privValue;
     }
     if ( targetMargin < 0 ) {      
       targetMargin = 0;

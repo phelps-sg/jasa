@@ -91,21 +91,13 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     }
     
     double lastPrice = lastShout.getPrice();
-    if ( auction.shoutAccepted(lastShout) ) {      
-      if ( agent.active() && currentPrice <= lastPrice ) {        
-        adjustMargin(targetMargin(lastPrice+perterb(lastPrice)));
-      } else if ( lastShout.isBid() ) {
-        if ( currentPrice >= lastPrice ) {
-          adjustMargin(targetMargin(lastPrice-perterb(lastPrice)));
-        }
-      }
-    } else {      
-      if ( lastShout.isAsk() ) {
-        if ( currentPrice >= lastPrice ) {
-          adjustMargin(targetMargin(lastPrice-perterb(lastPrice)));
-        }
-      }
+    if ( auction.shoutAccepted(lastShout) && lastPrice > currentPrice ) {
+      adjustMargin(targetMargin(lastPrice + perterb(lastPrice)));
+    } else if ( agent.active() ) {
+      adjustMargin(targetMargin(lastPrice - perterb(lastPrice)));
     }
+    
+    
   }
 
   
@@ -117,19 +109,13 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     }
     
     double lastPrice = lastShout.getPrice();
-    if ( auction.shoutAccepted(lastShout) ) {      
-      if ( agent.active() && currentPrice >= lastPrice ) {        
-        adjustMargin(targetMargin(lastPrice+perterb(lastPrice)));
-      } else if ( lastShout.isAsk() ) {
-        if ( currentPrice <= lastPrice ) {
-          adjustMargin(targetMargin(lastPrice-perterb(lastPrice)));
-        }
-      }
-    } else if ( lastShout.isBid() ) {
-      if ( currentPrice <= lastPrice ) {
-        adjustMargin(targetMargin(lastPrice+perterb(lastPrice)));
-      }
+    if ( auction.shoutAccepted(lastShout) && lastPrice < currentPrice ) {
+      adjustMargin(targetMargin(lastPrice - perterb(lastPrice)));
+    } else if ( agent.active() ) {
+      adjustMargin(targetMargin(lastPrice + perterb(lastPrice)));
     }
+    
+    
   }
 
   protected double targetMargin( double price, double absolute, double relative ) {    

@@ -16,6 +16,7 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 import java.io.Serializable;
@@ -35,6 +36,10 @@ public class PriestVanTolStrategy extends MomentumStrategy
   protected void adjustMargin() {
     
     HistoryStatsMarketDataLogger historyStats = auction.getHistoryStats();
+    
+    if ( historyStats == null ) {
+      throw new AuctionError("The auction must be configured with a HistoryStatsMarketDataLogger in order to use strategy " + getClass());
+    }
 
     double highestBid = historyStats.getHighestBidPrice();
     double lowestAsk = historyStats.getLowestAskPrice();
