@@ -49,7 +49,6 @@ import uchicago.src.sim.analysis.OpenSequenceGraph;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.Object2DDisplay;
 import uchicago.src.sim.space.Discrete2DSpace;
-import uchicago.src.sim.util.ProbeUtilities;
 
 import org.apache.log4j.Logger;
 
@@ -139,7 +138,6 @@ public class RepastMarketSimulation extends SimModelImpl
   
   public RepastMarketSimulation( String parameterFileName ) {
     this.parameterFileName = parameterFileName;
-    modelManipulator = new ModelManipulator();
     parameterDescriptors = new Hashtable();
     schedule = new Schedule();
     schedule.scheduleActionBeginning(1, this, "step");
@@ -244,7 +242,7 @@ public class RepastMarketSimulation extends SimModelImpl
       graph.step();
     }
     displaySurface.updateDisplay();
-    ProbeUtilities.updateProbePanels();
+    //ProbeUtilities.updateProbePanels();
   }
   
   
@@ -326,6 +324,8 @@ public class RepastMarketSimulation extends SimModelImpl
     displaySurface.setPreferredSize(new Dimension(640,480));
     displaySurface.display();
     addSimEventListener(displaySurface);
+    
+    ((Controller) getController()).UPDATE_PROBES = true;
   }
 
   
