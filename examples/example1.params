@@ -1,6 +1,6 @@
 # This example demonstrates a discriminatory-price k-CDA
 #
-# To run this example, run the following commands:
+# To run this example, run the following command:
 #
 #  java uk.ac.liv.auction.MarketSimulation jasa/examples/example1.params
 #
@@ -40,8 +40,9 @@ simulation.agenttype.n = 2
 #  using the Roth-Erev strategy
 simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.0.numagents = 50
-simulation.agenttype.0.randomprivatevalue = true
-simulation.agenttype.0.maxprivatevalue = 100
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.0.valuer.minvalue = 10
+simulation.agenttype.0.valuer.maxvalue = 100
 simulation.agenttype.0.capacity = 10
 simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
@@ -52,8 +53,9 @@ simulation.agenttype.0.isseller = true
 #  using the modified Roth-Erev strategy
 simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.1.numagents = 50
-simulation.agenttype.1.randomprivatevalue = true
-simulation.agenttype.1.maxprivatevalue = 100
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.1.valuer.minvalue = 10
+simulation.agenttype.1.valuer.maxvalue = 100
 simulation.agenttype.1.capacity = 20
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner

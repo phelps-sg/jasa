@@ -122,30 +122,31 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   /**
    * Default behaviour for winning ZI bidders is to purchase unconditionally.
    */
-  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
+  public void informOfSeller( Auction auction, Shout winningShout,
+                                  RoundRobinTrader seller,
                                   double price, int quantity) {
-    super.informOfSeller(winningShout, seller, price, quantity);
+    super.informOfSeller(auction, winningShout, seller, price, quantity);
     AbstractTraderAgent agent = (AbstractTraderAgent) seller;
-    purchaseFrom(agent, quantity, price);
+    purchaseFrom(auction, agent, quantity, price);
   }
 
-  public void purchaseFrom( AbstractTraderAgent seller, int quantity, double price ) {
+  public void purchaseFrom( Auction auction, AbstractTraderAgent seller,
+                             int quantity, double price ) {
     tradeEntitlement--;
     quantityTraded += quantity;
-    super.purchaseFrom(seller, quantity, price);
-    //sellUnits(quantity);
+    super.purchaseFrom(auction, seller, quantity, price);
   }
 
-  public int deliver( int quantity, double price ) {
+  public int deliver( Auction auction, int quantity, double price ) {
     lastShoutSuccessful = true;
     tradeEntitlement--;
     quantityTraded += quantity;
-    return super.deliver(quantity, price);
+    return super.deliver(auction, quantity, price);
   }
 
-  public void sellUnits( int numUnits ) {
+  public void sellUnits( Auction auction, int numUnits ) {
     stock -= numUnits;
-    funds += numUnits * privateValue;
+    funds += numUnits * valuer.determineValue(auction);
   }
 
   public int getQuantityTraded() {
@@ -157,7 +158,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " privateValue:" + privateValue + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
+    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " valuer:" + valuer + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
   }
 
 

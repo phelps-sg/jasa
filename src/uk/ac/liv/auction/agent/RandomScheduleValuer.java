@@ -13,29 +13,21 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.ec.gp.func;
 
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
+package uk.ac.liv.auction.agent;
 
 /**
+ * A valuation policy which specifies a randomly-generated series
+ * of valuations for each unit of commodity.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class GPConstrainedTradingStrategy extends GPTradingStrategy {
+public class RandomScheduleValuer extends RandomValuer {
 
-
-  public Shout modifyShout( Shout shout, Auction auction ) {
-
-    Shout newShout = super.modifyShout(shout, auction);
-
-    if ( (agent.isSeller() && newShout.getPrice() < agent.getPrivateValue(currentAuction)) ||
-          (agent.isBuyer() && newShout.getPrice() > agent.getPrivateValue(currentAuction)) ) {
-      misbehaved = true;
-    }
-
-    return newShout;
+  public void consumeUnit() {
+    drawRandomValue();
   }
 
 }

@@ -76,14 +76,15 @@ public interface RoundRobinTrader extends TraderAgent, Resetable {
    * @param seller  The seller whose ask has been matched
    * @param price   The price of the goods as determined by the auction
    */
-  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
-                                        double price, int quantity );
+  public void informOfSeller( Auction auction, Shout winningShout,
+                                RoundRobinTrader seller,
+                                double price, int quantity );
 
   /**
    * This method is used by a buyer to notify a seller that one of its bids
    * has been successful.
    */
-  public void informOfBuyer( RoundRobinTrader buyer,
-                             double price, int quantity );
+  public void informOfBuyer( Auction auction, RoundRobinTrader buyer,
+                              double price, int quantity );
 
 }

@@ -326,7 +326,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
         trader.setPrivateValue(value);
 
         if ( verbose ) {
-          System.out.println("pv " +  i + " = " + trader.getPrivateValue());
+          System.out.println("pv " +  i + " = " + trader.getPrivateValue(auction));
         }
       }
       stats.calculate();

@@ -280,7 +280,7 @@ public class RoundRobinAuction extends AuctionImpl
   public void clear( Shout ask, Shout bid, double price ) {
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
-    buyer.informOfSeller(ask, seller, price, ask.getQuantity());
+    buyer.informOfSeller(this, ask, seller, price, ask.getQuantity());
     acceptedShouts.add(ask);
     acceptedShouts.add(bid);
     updateTransPriceLog(round, ask, price, ask.getQuantity());

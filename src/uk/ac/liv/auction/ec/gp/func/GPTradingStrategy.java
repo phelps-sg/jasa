@@ -66,7 +66,7 @@ public class GPTradingStrategy extends GPIndividualCtx
   }
 
   protected double getPrivateValue() {
-    return agent.getPrivateValue();
+    return agent.getPrivateValue(currentAuction);
   }
 
   public RoundRobinAuction getAuction() {

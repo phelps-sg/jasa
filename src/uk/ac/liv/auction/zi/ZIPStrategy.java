@@ -108,12 +108,12 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
       }
       currentMargin = learner.act();
       logger.debug("Bidding with margin " + currentMargin);
-      logger.debug("Agent's private value = " + agent.getPrivateValue());
+      logger.debug("Agent's private value = " + agent.getPrivateValue(auction));
       if (agent.isBuyer()) {
-        currentPrice = agent.getPrivateValue() * (1 - currentMargin);
+        currentPrice = agent.getPrivateValue(auction) * (1 - currentMargin);
       }
       else {
-        currentPrice = agent.getPrivateValue() * (1 + currentMargin);
+        currentPrice = agent.getPrivateValue(auction) * (1 + currentMargin);
       }
       logger.debug("Bidding at " + currentPrice);
       if (currentPrice > 0) {
@@ -194,7 +194,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     logger.debug("targetMargin(" + price + ", " + absolute + ", " + relative);
     double targetPrice = relative * price + absolute;
     logger.debug("targetPrice = " + targetPrice);
-    double privValue = agent.getPrivateValue();
+    double privValue = agent.getPrivateValue(auction);
     double targetMargin = (targetPrice - privValue) / privValue;
     logger.debug("targetMargin = " + targetMargin);
     return targetMargin;

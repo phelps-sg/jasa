@@ -165,7 +165,7 @@ class TestEquilibriaStats implements MarketStats {
     long quantity = 0;
     for( int i=0; i<traders.size(); i++ ) {
       AbstractTraderAgent trader = (AbstractTraderAgent) traders.get(i);
-      double val = trader.getPrivateValue();
+      double val = trader.getPrivateValue(auction);
       PriceQtyTuple priceQty = null;
       if ( ascending ) {
         priceQty = newTuple(currentVal, val, quantity);
@@ -174,7 +174,7 @@ class TestEquilibriaStats implements MarketStats {
       }
       curve.add(priceQty);
       while ( i<traders.size() &&
-              ((AbstractTraderAgent) traders.get(i)).getPrivateValue() == val ) {
+              ((AbstractTraderAgent) traders.get(i)).getPrivateValue(auction) == val ) {
         quantity += ((AbstractTraderAgent) traders.get(i)).determineQuantity(auction);
         i++;
       }
@@ -310,12 +310,14 @@ class TestEquilibriaStats implements MarketStats {
 
 class AscendingTraderComparator implements Comparator {
 
+  static Auction auction = new RoundRobinAuction();
+
   public int compare( Object a, Object b ) {
     AbstractTraderAgent x = (AbstractTraderAgent) a;
     AbstractTraderAgent y = (AbstractTraderAgent) b;
-    if ( x.getPrivateValue() > y.getPrivateValue() ) {
+    if ( x.getPrivateValue(auction) > y.getPrivateValue(auction) ) {
       return 1;
-    } else if ( x.getPrivateValue() == y.getPrivateValue() ) {
+    } else if ( x.getPrivateValue(auction) == y.getPrivateValue(auction) ) {
       return 0;
     } else {
       return -1;
@@ -325,12 +327,14 @@ class AscendingTraderComparator implements Comparator {
 
 class DescendingTraderComparator implements Comparator {
 
+  static Auction auction = new RoundRobinAuction();
+
   public int compare( Object a, Object b ) {
     AbstractTraderAgent x = (AbstractTraderAgent) a;
     AbstractTraderAgent y = (AbstractTraderAgent) b;
-    if ( x.getPrivateValue() > y.getPrivateValue() ) {
+    if ( x.getPrivateValue(auction) > y.getPrivateValue(auction) ) {
       return -1;
-    } else if ( x.getPrivateValue() == y.getPrivateValue() ) {
+    } else if ( x.getPrivateValue(auction) == y.getPrivateValue(auction) ) {
       return 0;
     } else {
       return 1;

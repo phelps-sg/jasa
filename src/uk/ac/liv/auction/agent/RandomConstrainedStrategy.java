@@ -70,9 +70,9 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     double markup = randGenerator.nextDouble() * maxMarkup;
     double price = 0;
     if ( agent.isBuyer() ) {
-      price = agent.getPrivateValue() - markup;
+      price = agent.getPrivateValue(auction) - markup;
     } else {
-      price = agent.getPrivateValue() + markup;
+      price = agent.getPrivateValue(auction) + markup;
     }
     if ( price > 0 ) {
       shout.setPrice(price);

@@ -85,7 +85,7 @@ public class MetaMarketStats implements MarketStats, Serializable {
       Iterator i = auction.getTraderIterator();
       while ( i.hasNext() ) {
         AbstractTraderAgent trader = (AbstractTraderAgent) i.next();
-        double privateValue = trader.getPrivateValue();
+        double privateValue = trader.getPrivateValue(auction);
         if ( trader.isSeller() ) {
           if ( privateValue <= price ) {
             incrementAtPrice(supplyCurve, price, quantity(trader));

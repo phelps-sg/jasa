@@ -52,7 +52,7 @@ public class TestTrader extends AbstractTraderAgent {
     this.test = test;
   }
 
-  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
+  public void informOfSeller( Auction auction, Shout winningShout, RoundRobinTrader seller,
                               double price, int quantity ) {
     logger.debug(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity);
     lastWinningShout = winningShout;
@@ -105,7 +105,7 @@ public class TestTrader extends AbstractTraderAgent {
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " privateValue:" + privateValue + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
+    return "(" + getClass() + " id:" + id + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
   }
 
 

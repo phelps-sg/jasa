@@ -15,12 +15,18 @@
 
 package test.uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.RoundRobinAuction;
+
+
 import junit.framework.*;
 
 
 public class AbstractTraderAgentTest extends TestCase {
 
   TestTrader trader1, trader2;
+
+  Auction auction;
 
   public static final int TRADER1_STOCK = 0;
   public static final int TRADER2_STOCK = 5;
@@ -40,12 +46,13 @@ public class AbstractTraderAgentTest extends TestCase {
                               false);
     trader2 = new TestTrader(this, TRADER2_STOCK, TRADER2_FUNDS, TRADER2_VALUE,
                               true);
+    auction = new RoundRobinAuction();
   }
 
   public void testPurchase() {
     System.out.println("trader1 = " + trader1);
     System.out.println("trader2 = " + trader2);
-    trader1.purchaseFrom(trader2, 5, 1000);
+    trader1.purchaseFrom(auction, trader2, 5, 1000);
     System.out.println("after purchase");
     System.out.println("trader1 = " + trader1);
     System.out.println("trader2 = " + trader2);

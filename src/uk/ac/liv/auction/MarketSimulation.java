@@ -226,6 +226,10 @@ public class MarketSimulation implements Parameterizable, Runnable,
           ((StochasticLearner) l).setSeed(seeds.nextLong());
         }
       }
+      Valuer v = agent.getValuer();
+      if ( v instanceof Seedable ) {
+        ((Seedable) v).setSeed(seeds.nextLong());
+      }
       agent.reset();
     }
   }

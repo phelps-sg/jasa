@@ -13,29 +13,32 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.ec.gp.func;
 
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
+package uk.ac.liv.auction.agent;
 
-/**
+import uk.ac.liv.auction.core.Auction;
+
+import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Parameterizable;
+
+/*
+ * Classes implementing this interface determine a commodity-valuation
+ * policy for RoundRobinTrader agents.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class GPConstrainedTradingStrategy extends GPTradingStrategy {
+public interface Valuer extends Resetable, Parameterizable {
 
+  /**
+   * Determine the current valuation of commodity in the given auction.
+   */
+  public double determineValue( Auction auction );
 
-  public Shout modifyShout( Shout shout, Auction auction ) {
-
-    Shout newShout = super.modifyShout(shout, auction);
-
-    if ( (agent.isSeller() && newShout.getPrice() < agent.getPrivateValue(currentAuction)) ||
-          (agent.isBuyer() && newShout.getPrice() > agent.getPrivateValue(currentAuction)) ) {
-      misbehaved = true;
-    }
-
-    return newShout;
-  }
+  /**
+   * Recalculate valuations after consumption of the commodity.
+   */
+  public void consumeUnit( Auction auction );
 
 }

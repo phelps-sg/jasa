@@ -109,9 +109,9 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   static IdAllocator idAllocator = new IdAllocator();
 
   /**
-   * The private value of the commodity for this trader
+   * The valuer for this agent
    */
-  protected double privateValue = 0;
+  protected Valuer valuer;
 
   /**
    * Unique id for this trader.  Its used mainly for debugging purposes.
@@ -139,17 +139,6 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
    */
   protected double profits = 0;
 
-  /**
-   * If true then on initialisation this agent's private value
-   * is drawn from a uniform distribution in the range (0, maxPrivateValue).
-   */
-  protected boolean randomPrivateValue;
-
-  /**
-   * The maximum valuation to use for our private value if drawing randomly.
-   */
-  protected double maxPrivateValue;
-
   protected boolean lastShoutAccepted = false;
 
   /**
@@ -174,6 +163,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   public static final String P_INITIAL_FUNDS = "initialfunds";
   public static final String P_RANDOM_PRIVATE_VALUE = "randomprivatevalue";
   public static final String P_MAX_PRIVATE_VALUE = "maxprivatevalue";
+  public static final String P_VALUER = "valuer";
   public static final String P_DEFAULT_STRATEGY =
                                    "uk.ac.liv.auction.core.PureSimpleStrategy";
 
@@ -190,7 +180,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     this();
     initialStock = stock;
     initialFunds = funds;
-    this.privateValue = privateValue;
+    this.valuer = new FixedValuer(privateValue);
     this.isSeller = isSeller;
     this.strategy = strategy;
     initialise();
@@ -225,19 +215,10 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
 
     isSeller = parameters.getBoolean(base.push(P_IS_SELLER), null, false);
 
-    randomPrivateValue =
-        parameters.getBoolean(base.push(P_RANDOM_PRIVATE_VALUE),
-                                               null, true);
-
-    if ( randomPrivateValue ) {
-      maxPrivateValue =
-          parameters.getDoubleWithDefault(base.push(P_MAX_PRIVATE_VALUE),
-                                          null, 100);
-    } else {
-      privateValue =
-          parameters.getDoubleWithDefault(base.push(P_PRIVATE_VALUE),
-                                          null, 100);
-    }
+    valuer =
+        (Valuer) parameters.getInstanceForParameter(base.push(P_VALUER), null,
+                                                     Valuer.class);
+    valuer.setup(parameters, base.push(P_VALUER));
 
     strategy =
         (AbstractStrategy)
@@ -293,12 +274,14 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     return currentShout;
   }
 
-  public synchronized void purchaseFrom(AbstractTraderAgent  seller, int quantity, double price) {
-    seller.informOfBuyer(this, price, quantity);
+  public void purchaseFrom( Auction auction, AbstractTraderAgent  seller,
+                                          int quantity, double price) {
+    seller.informOfBuyer(auction, this, price, quantity);
     giveFunds(seller, price*quantity);
-    stock += seller.deliver(quantity, price);
-    lastProfit = quantity * (privateValue-price);
+    stock += seller.deliver(auction, quantity, price);
+    lastProfit = quantity * (valuer.determineValue(auction)-price);
     profits += lastProfit;
+    valuer.consumeUnit(auction);
   }
 
   public synchronized void giveFunds( AbstractTraderAgent seller, double amount ) {
@@ -320,10 +303,9 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
    *
    * @param quantity The number of items of stock to transfer
    */
-
-  public synchronized int deliver( int quantity, double price ) {
+  public int deliver( Auction auction, int quantity, double price ) {
     stock -= quantity;
-    lastProfit = quantity * (price-privateValue);
+    lastProfit = quantity * (price-valuer.determineValue(auction));
     profits += lastProfit;
     return quantity;
   }
@@ -347,9 +329,6 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     profits = 0;
     lastShoutAccepted = false;
     currentShout = null;
-    if ( randomPrivateValue ) {
-      privateValue = randGenerator.nextDouble() * maxPrivateValue;
-    }
   }
 
   public void reset() {
@@ -357,23 +336,19 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     if ( strategy != null ) {
       ((Resetable) strategy).reset();
     }
+    if ( valuer != null ) {
+      valuer.reset();
+    }
   }
 
-  public double getPrivateValue() {
-    return privateValue;
+  public double getPrivateValue( Auction auction ) {
+    return valuer.determineValue(auction);
   }
 
   public void setPrivateValue( double privateValue ) {
-    this.privateValue = privateValue;
+    ((FixedValuer) valuer).setValue(privateValue);
   }
 
-  public void setMaxPrivateValue( double maxPrivateValue ) {
-    this.maxPrivateValue = maxPrivateValue;
-  }
-
-  public double getMaxPrivateValue() {
-    return maxPrivateValue;
-  }
 
   public boolean isSeller() {
     return isSeller;
@@ -425,13 +400,13 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     return copy;
   }
 
-  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
+  public void informOfSeller( Auction auction, Shout winningShout,
+                               RoundRobinTrader seller,
                                double price,  int quantity ) {
-
      lastShoutAccepted = true;
   }
 
-  public void informOfBuyer( RoundRobinTrader buyer,
+  public void informOfBuyer( Auction auction, RoundRobinTrader buyer,
                              double price, int quantity ) {
     lastShoutAccepted = true;
   }
@@ -440,9 +415,10 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     return lastShoutAccepted;
   }
 
-  public void setSeed( long seed ) {
-    randGenerator.setSeed(seed);
+  public Valuer getValuer() {
+    return valuer;
   }
+
 
   /**
    * Determine whether or not this trader is active.

@@ -269,9 +269,9 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   public double equilibriumProfits( AbstractTraderAgent trader ) {
     double surplus = 0;
     if ( trader.isSeller() ) {
-      surplus = equilibPrice - trader.getPrivateValue();
+      surplus = equilibPrice - trader.getPrivateValue(auction);
     } else {
-      surplus = trader.getPrivateValue() - equilibPrice;
+      surplus = trader.getPrivateValue(auction) - equilibPrice;
     }
     //TODO
     if ( surplus < 0 ) {
@@ -292,7 +292,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
 
   public double equilibQuant( AbstractTraderAgent t, double price ) {
-    double privateValue = t.getPrivateValue();
+    double privateValue = t.getPrivateValue(auction);
     if ( t.isBuyer() ) {
       if ( price > privateValue ) {
         return 0;
@@ -340,7 +340,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
       Shout truth = ShoutPool.fetch(trader, trader.getCapacity(),
-                                    trader.getPrivateValue(), trader.isBuyer());
+                                    trader.getPrivateValue(auction), trader.isBuyer());
       shouts.add(truth);
       try {
         auctioneer.newShout(truth);

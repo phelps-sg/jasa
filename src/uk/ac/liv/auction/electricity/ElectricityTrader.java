@@ -106,13 +106,13 @@ public class ElectricityTrader extends AbstractTraderAgent {
     lastProfit = 0;
   }
 
-  public void informOfBuyer( RoundRobinTrader seller, double price,
+  public void informOfBuyer( Auction auction, RoundRobinTrader seller, double price,
                                int quantity ) {
 
-    super.informOfBuyer(seller, price, quantity);
+    super.informOfBuyer(auction, seller, price, quantity);
 
     // Reward the learning algorithm according to profits made.
-    lastProfit = quantity * (price - privateValue);
+    lastProfit = quantity * (price - valuer.determineValue(auction));
 
     //Relax this constraint for GP experiments!
     //Debug.assert(profit >= 0);
@@ -120,28 +120,31 @@ public class ElectricityTrader extends AbstractTraderAgent {
     profits += lastProfit;
   }
 
-  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
+  public void informOfSeller( Auction auction, Shout winningShout,
+                               RoundRobinTrader seller,
                                double price, int quantity) {
 
-     super.informOfSeller(winningShout, seller, price, quantity);
+     super.informOfSeller(auction, winningShout, seller, price, quantity);
 
     // Reward the learning algorithm according to profits made
-    lastProfit = quantity * (privateValue - price);
+    lastProfit = quantity * (valuer.determineValue(auction) - price);
+
+    valuer.consumeUnit(auction);
 
     if ( lastProfit < 0 ) {
       return;
     }
 
     ElectricityTrader sellerAgent = (ElectricityTrader) seller;
-    if ( sellerAgent.acceptDeal(price, quantity) ) {
+    if ( sellerAgent.acceptDeal(auction, price, quantity) ) {
       profits += lastProfit;
-      sellerAgent.informOfBuyer(this, price, quantity);
+      sellerAgent.informOfBuyer(auction, this, price, quantity);
     }
   }
 
-  public boolean acceptDeal( double price, int quantity ) {
+  public boolean acceptDeal( Auction auction, double price, int quantity ) {
     Debug.assertTrue(isSeller);
-    return price >= privateValue;
+    return price >= valuer.determineValue(auction);
   }
 
   public int getCapacity() {
@@ -161,7 +164,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " capacity:" + capacity + " privateValue:" + privateValue + " fixedCosts:" + fixedCosts + " profits:" + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit + " strategy:" + strategy + ")";
+    return "(" + getClass() + " id:" + id + " capacity:" + capacity + " valuer:" + valuer + " fixedCosts:" + fixedCosts + " profits:" + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit + " strategy:" + strategy + ")";
   }
 
 }

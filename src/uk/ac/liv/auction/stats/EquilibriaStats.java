@@ -153,9 +153,9 @@ public class EquilibriaStats extends DirectRevelationStats
     double surplus = 0;
     double ep = calculateMidEquilibriumPrice();
     if ( trader.isSeller() ) {
-      surplus = ep - trader.getPrivateValue();
+      surplus = ep - trader.getPrivateValue(auction);
     } else {
-      surplus = trader.getPrivateValue() - ep;
+      surplus = trader.getPrivateValue(auction) - ep;
     }
     //TODO
     if ( surplus < 0 ) {

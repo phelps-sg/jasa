@@ -53,8 +53,9 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
     }
   }
 
-  public void informOfSeller(Shout winningShout, RoundRobinTrader seller,
-                             double price, int quantity) {
+  public void informOfSeller( Auction auction, Shout winningShout,
+                              RoundRobinTrader seller,
+                               double price, int quantity) {
     try {
       ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
       BidSuccessfulPredicate content = new BidSuccessfulPredicate();
@@ -73,8 +74,8 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
     }
   }
 
-  public void informOfBuyer( RoundRobinTrader buyer, double price,
-                               int quantity ) {
+  public void informOfBuyer( Auction auction, RoundRobinTrader buyer,
+                              double price, int quantity ) {
       throw new IllegalArgumentException("method not implemented");
   }
 

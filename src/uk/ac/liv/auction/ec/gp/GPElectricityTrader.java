@@ -11,28 +11,31 @@ class GPElectricityTrader extends ElectricityTrader {
     super(capacity, privateValue, fixedCosts, isSeller);
   }
 
-  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
+  public void informOfSeller( Auction auction, Shout winningShout, RoundRobinTrader seller,
                                double price, int quantity) {
 
-    if ( price <= privateValue ) {
+    if ( price <= valuer.determineValue(auction) ) {
 
       GPElectricityTrader trader = (GPElectricityTrader) seller;
-      trader.informOfBuyer(this, price, quantity);
+      trader.informOfBuyer(auction, this, price, quantity);
     }
   }
 
-  public void trade( double price, int quantity ) {
-    lastProfit = quantity * (privateValue - price);
+  public void trade( Auction auction, double price, int quantity ) {
+    lastProfit = quantity * (valuer.determineValue(auction) - price);
     profits += lastProfit;
   }
 
-  public void informOfBuyer( GPElectricityTrader buyer, double price, int quantity ) {
+  public void informOfBuyer( Auction auction, GPElectricityTrader buyer,
+                              double price, int quantity ) {
 
-    if ( price >= privateValue ) {
+    double privValue = valuer.determineValue(auction);
 
-      buyer.trade(price, quantity);
+    if ( price >= privValue ) {
 
-      lastProfit = quantity * (price - privateValue);
+      buyer.trade(auction, price, quantity);
+
+      lastProfit = quantity * (price - privValue);
       profits += lastProfit;
     }
   }
