@@ -36,6 +36,7 @@ import java.io.Serializable;
  * Note that equality is determined by reference equivalence, hence this
  * class's natural ordering is not consistent with equals.
  * </p>
+ *
  * @author Steve Phelps
  *
  */

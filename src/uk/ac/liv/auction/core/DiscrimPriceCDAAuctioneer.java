@@ -21,6 +21,10 @@ import java.util.Iterator;
 import uk.ac.liv.util.Debug;
 
 /**
+ * <p>
+ * A discriminatory-price version of the k-double-auction.
+ * </p>
+ *
  * @author Steve Phelps
  */
 

@@ -30,7 +30,6 @@ import uk.ac.liv.util.Parameterizable;
  * algorithm is designed to produce aggregate human-like behaviour in
  * simple trading games.  See:
  * </p>
- * <br>
  * <p>
  * A.E.Roth and I. Erev "Learning in extensive form games: experimental data
  * and simple dynamic models in the intermediate term" Games Econom. Beh., vol.8

@@ -21,6 +21,11 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 
 /**
+ * <p>
+ * Classes implementing this interface can trade in
+ * round-robin auctions, as implemented by the RoundRobinAuction class.
+ * </p>
+ *
  * @author Steve Phelps
  */
 

@@ -27,7 +27,7 @@ public interface StimuliResponseLearner {
   /**
    * Specify the next action to take.
    *
-   * @returns An integer representing the action to be taken.
+   * @return An integer representing the action to be taken.
    */
   public int act();
 

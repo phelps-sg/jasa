@@ -45,6 +45,8 @@ import java.io.Serializable;
  * All state is maintained in memory resident data structures and no crash recovery
  * is provided.
  * </p>
+ *
+ * @author Steve Phelps
  */
 
 public class FourHeapShoutEngine implements ShoutEngine, Serializable {

@@ -21,6 +21,13 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 
+/**
+ * <p>
+ * An abstract implementation of the Strategy interface
+ * that provides skeleton functionality for making trading
+ * decisions.
+ * </p>
+ */
 public abstract class AbstractStrategy implements
                                         Strategy,
                                         Parameterizable,

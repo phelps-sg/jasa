@@ -16,11 +16,19 @@
 package uk.ac.liv.auction.agent;
 
 /**
+ * <p>
+ * Strategies implementing this interface indicate that
+ * they bid a constant quantity in each auction round.
+ * </p>
+ *
  * @author Steve Phelps
  */
 
 public interface FixedQuantityStrategy {
 
+  /**
+   * Specify the quantity to bid for.
+   */
   public void setQuantity( int quantity );
 
 }

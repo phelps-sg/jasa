@@ -20,9 +20,9 @@ import java.io.Serializable;
 /**
  * <p>
  * A utility class for cummulative tracking of stats for a series
- * of doubles.
+ * of doubles.  Modes are incremented dynamically, rather than keeping
+ * the actual cases in memory.
  * </p>
- *
  * <p>
  * Example usage:
  * </p>
@@ -30,14 +30,16 @@ import java.io.Serializable;
  * <code>
  * CummulativeStatCounter series1 = new CummulativeStatCounter("series1");<br>
  * series1.newData(4.5);<br>
- * series2.newData(5.6);<br>
- * series3.newData(9.0);<br>
+ * series1.newData(5.6);<br>
+ * series1.newData(9.0);<br>
  * System.out.println("Standard deviation of series1 = " + series1.getStdDev());<br>
+ * series1.newData(5.56);<br>
+ * series1.newData(12);<br>
+ * System.out.println("And now the standard deviation = " + series1.getStdDev());<br>
  * </code>
  * </p>
- * @author Steve Phelps
- * @version 1.0
  *
+ * @author Steve Phelps
  */
 
 public class CummulativeStatCounter implements Serializable, Cloneable, Resetable {

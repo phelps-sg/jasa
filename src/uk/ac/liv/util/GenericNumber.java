@@ -16,8 +16,12 @@
 package uk.ac.liv.util;
 
 /**
+ * <p>
  * An abstract class encapsulating numbers for weakly-typed
- * arithmetic operations.
+ * arithmetic operations.  This is an extension of Java's
+ * Number class that actually provides methods for performing
+ * arithemetic.
+ * </p>
  *
  * @author Steve Phelps
  *

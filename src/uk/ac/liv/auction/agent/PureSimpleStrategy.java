@@ -24,8 +24,12 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
+ * <p>
+ * A trading strategy in which we bid a constant mark-up on the agent's
+ * private value.
+ * </p>
+ *
  * @author Steve Phelps
- * @version 1.0
  */
 
 public class PureSimpleStrategy extends AbstractStrategy
