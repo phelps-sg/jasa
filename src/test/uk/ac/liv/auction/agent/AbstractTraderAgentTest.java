@@ -26,7 +26,7 @@ import junit.framework.*;
 
 public class AbstractTraderAgentTest extends TestCase {
 
-  TestTrader trader1, trader2;
+  MockTrader trader1, trader2;
 
   RoundRobinAuction auction;
 
@@ -45,13 +45,13 @@ public class AbstractTraderAgentTest extends TestCase {
 
   public void setUp() {
     
-    trader1 = new TestTrader(this, TRADER1_STOCK, TRADER1_FUNDS, TRADER1_VALUE,
+    trader1 = new MockTrader(this, TRADER1_STOCK, TRADER1_FUNDS, TRADER1_VALUE,
                               false);
     
-    trader2 = new TestTrader(this, TRADER2_STOCK, TRADER2_FUNDS, TRADER2_VALUE,
+    trader2 = new MockTrader(this, TRADER2_STOCK, TRADER2_FUNDS, TRADER2_VALUE,
                               true);
 
-    trader1.setStrategy( new TestStrategy( new Shout[] { 
+    trader1.setStrategy( new MockStrategy( new Shout[] { 
         						new Shout(trader1, 1, TRADER1_VALUE-100, true),
         						new Shout(trader1, 1, TRADER1_VALUE-50, true), 
         						new Shout(trader1, 1, TRADER1_VALUE, true),
@@ -60,7 +60,7 @@ public class AbstractTraderAgentTest extends TestCase {
     ));
 
     
-    trader2.setStrategy( new TestStrategy( new Shout[] { 
+    trader2.setStrategy( new MockStrategy( new Shout[] { 
 							new Shout(trader1, 1, TRADER1_VALUE+100, true),
 							new Shout(trader1, 1, TRADER1_VALUE+50, true), 
 							new Shout(trader1, 1, TRADER1_VALUE, true),
@@ -103,6 +103,7 @@ public class AbstractTraderAgentTest extends TestCase {
 
   }
   
+  
   public void testLastShoutAccepted() {
     
     assertTrue(!trader1.lastShoutAccepted());
@@ -117,8 +118,8 @@ public class AbstractTraderAgentTest extends TestCase {
       assertTrue(!trader2.lastShoutAccepted());
       
       auction.step();
-      assertTrue(!((TestStrategy) trader1.getStrategy()).lastShoutAccepted);
-      assertTrue(!((TestStrategy) trader2.getStrategy()).lastShoutAccepted);
+      assertTrue(!((MockStrategy) trader1.getStrategy()).lastShoutAccepted);
+      assertTrue(!((MockStrategy) trader2.getStrategy()).lastShoutAccepted);
       assertTrue(!trader1.lastShoutAccepted());
       assertTrue(!trader2.lastShoutAccepted());
       
@@ -128,10 +129,41 @@ public class AbstractTraderAgentTest extends TestCase {
       assertTrue(trader2.lastShoutAccepted());
       
       auction.step();
-      assertTrue(((TestStrategy) trader1.getStrategy()).lastShoutAccepted);
-      assertTrue(((TestStrategy) trader2.getStrategy()).lastShoutAccepted);
+      assertTrue(((MockStrategy) trader1.getStrategy()).lastShoutAccepted);
+      assertTrue(((MockStrategy) trader2.getStrategy()).lastShoutAccepted);
       assertTrue(!trader1.lastShoutAccepted());
       assertTrue(!trader2.lastShoutAccepted());
+      
+    } catch ( AuctionClosedException e ) {
+      fail("we tried to step through a closed auction.");
+    }
+    
+  }
+
+  public void testLastProfit() {
+    
+    assertTrue(trader1.getLastProfit() == 0);
+    assertTrue(trader2.getLastProfit() == 0);
+   
+    auction.begin();
+    
+    try {
+      
+      auction.step();
+      assertTrue(trader1.getLastProfit() == 0);
+      assertTrue(trader2.getLastProfit() == 0);
+      
+      auction.step();
+      assertTrue(trader1.getLastProfit() == 0);
+      assertTrue(trader2.getLastProfit() == 0);
+      
+      auction.step();
+      trader1.purchaseFrom(auction, trader2, 1, TRADER1_VALUE - 100);
+      assertTrue(trader1.getLastProfit() > 0);
+      
+      auction.step();
+      assertTrue(trader1.getLastProfit() == 0);
+      assertTrue(trader2.getLastProfit() == 0);
       
     } catch ( AuctionClosedException e ) {
       fail("we tried to step through a closed auction.");
