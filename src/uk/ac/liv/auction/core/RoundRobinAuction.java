@@ -581,6 +581,7 @@ public class RoundRobinAuction extends AuctionImpl
       sweepDefunctTraders();
       auctioneer.endOfRoundProcessing();
       informRoundClosed();
+      lastShout = null;
     }
 
     setChanged();
