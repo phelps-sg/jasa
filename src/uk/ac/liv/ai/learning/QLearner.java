@@ -17,6 +17,7 @@ package uk.ac.liv.ai.learning;
 
 import java.io.Serializable;
 
+import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.DataWriter;
@@ -70,7 +71,7 @@ import org.apache.log4j.Logger;
 
 public class QLearner extends AbstractLearner
     implements MDPLearner,  Resetable, Serializable,
-                Parameterizable {
+                Parameterizable, Prototypeable {
 
 
   /**
@@ -154,6 +155,16 @@ public class QLearner extends AbstractLearner
   }
 
 
+  public Object protoClone() {
+    try {
+      QLearner cloned = (QLearner) clone();
+      return cloned;
+    } catch ( CloneNotSupportedException e ) {
+      logger.error(e.getMessage());
+      throw new Error(e);
+    }
+  }
+  
   public void initialise() {
     for( int s=0; s<numStates; s++ ) {
       for( int a=0; a<numActions; a++ ) {

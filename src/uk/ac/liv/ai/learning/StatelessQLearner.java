@@ -17,6 +17,7 @@
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.Resetable;
 
 import ec.util.ParameterDatabase;
@@ -39,7 +40,7 @@ import java.io.Serializable;
 
 public class StatelessQLearner extends AbstractLearner
     implements StimuliResponseLearner, Parameterizable,
-                Resetable, Serializable {
+                Resetable, Serializable, Prototypeable {
 
   QLearner qLearner;
 
@@ -79,6 +80,8 @@ public class StatelessQLearner extends AbstractLearner
     qLearner.setDiscountRate(discountRate);
   }
 
+  
+  
   public int act() {
     return qLearner.act();
   }
@@ -107,4 +110,14 @@ public class StatelessQLearner extends AbstractLearner
     qLearner.dumpState(out);
   }
 
+  public Object protoClone() {
+    try {
+      StatelessQLearner cloned = (StatelessQLearner) this.clone();
+      cloned.qLearner = (QLearner) this.qLearner.protoClone();
+      return cloned;
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
+  }
+  
 }

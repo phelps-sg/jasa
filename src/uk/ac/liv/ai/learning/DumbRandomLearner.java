@@ -31,7 +31,7 @@ import java.io.Serializable;
  */
 
 public class DumbRandomLearner extends AbstractLearner
-    implements DiscreteLearner, Serializable {
+    implements StimuliResponseLearner, Serializable {
 
   protected int numActions;
 
@@ -55,5 +55,8 @@ public class DumbRandomLearner extends AbstractLearner
   public int getNumberOfActions() {
     return numActions;
   }
-
+  
+  public void reward( double reward ) {
+    // No action
+  }
 }
