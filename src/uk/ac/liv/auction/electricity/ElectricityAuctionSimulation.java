@@ -108,9 +108,11 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   static final int DATAFILE_NUM_COLUMNS = 39;
 
+  
   public ElectricityAuctionSimulation() {
   }
 
+  
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     maxRounds =
@@ -228,7 +230,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       logger.info("cb = " + buyerCapacity);
       logger.info("stats = " + stats + "\n");
 
-      experiment(numSellers, numBuyers, sellerCapacity, buyerCapacity);
+      experiment();
 
     } catch ( FileNotFoundException e ) {
       e.printStackTrace();
@@ -236,11 +238,13 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 
-  public void experiment( int ns, int nb, int cs, int cb )
-        throws FileNotFoundException {
+  public void experiment() throws FileNotFoundException {
 
+    int numTraders = numBuyers + numSellers;
+    
     try {
-      paramSummary = ns + "-" + nb + "-" + cs + "-" + cb;
+      paramSummary = numSellers + "-" + numBuyers + "-" +
+                      sellerCapacity + "-" + buyerCapacity;
 
       dataFile = new CSVWriter(
                   new FileOutputStream(outputDir + "/" + "npt-"
@@ -258,17 +262,17 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     auction.setMarketDataLogger(marketData);
     stats.setAuction(auction);
 
-    registerTraders(auction, true, ns, cs);
-    registerTraders(auction, false, nb, cb);
+    registerTraders(auction, true, numSellers, sellerCapacity);
+    registerTraders(auction, false, numBuyers, buyerCapacity);
 
     auction.setMaximumRounds(maxRounds);
 
-    long[][] prngSeeds = randomizer.generatePRNGseeds(ns+nb, iterations);
+    long[][] prngSeeds = randomizer.generatePRNGseeds(numTraders, iterations);
 
     double[][] randomizedPrivateValues = null;
 
     randomizedPrivateValues =
-        randomizer.generateRandomizedPrivateValues(ns+nb, iterations);
+        randomizer.generateRandomizedPrivateValues(numTraders, iterations);
 
     for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
 
@@ -365,7 +369,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         dumpIterResults();
       }
 
-      reportSummary(auctioneerK, ns, nb, cs, cb, variables);      
+      reportSummary(auctioneerK, variables);      
       recordVariables(auctioneerK, variables);
     }
 
@@ -410,9 +414,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
   
   
-  protected void reportSummary( double auctioneerK, int ns, int nb, 
-                                  int cs, int cb, List variables ) {
-   logger.info("\n*** Summary results for: k = " + auctioneerK + " ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
+  protected void reportSummary( double auctioneerK, List variables ) {
+   logger.info("\n*** Summary results for: k = " + auctioneerK +"\n");
     Iterator i = variables.iterator();
     while ( i.hasNext() ) {
       logger.info(i.next());
