@@ -101,7 +101,7 @@ public class WidrowHoffLearner extends AbstractLearner
   }
 
   public void train( double target ) {
-    currentOutput = currentOutput*momentum + delta(target);
+    currentOutput = currentOutput + (1-momentum) * delta(target);
   }
 
   public double delta( double target ) {

@@ -29,7 +29,7 @@ public class WidrowHoffLearnerTest extends TestCase {
 
   static final double LEARNING_RATE = 0.1;
 
-  static final double MOMENTUM = 1.0;
+  static final double MOMENTUM = 0.01;
 
   static final double TARGET_VALUE = 0.12;
 
@@ -65,5 +65,9 @@ public class WidrowHoffLearnerTest extends TestCase {
 
   public static Test suite() {
     return new TestSuite(WidrowHoffLearnerTest.class);
+  }
+  
+  public static void main( String[] args ) {
+    junit.textui.TestRunner.run(suite());
   }
 }
