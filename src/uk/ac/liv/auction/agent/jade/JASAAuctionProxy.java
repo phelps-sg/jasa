@@ -153,6 +153,9 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
   public int getNumberOfBids( double price, boolean accepted ) {
     throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
   }
-
+  
+  public boolean transactionsOccured() {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
 
 }

@@ -19,6 +19,8 @@ import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.ShoutsNotVisibleException;
 
 import java.util.*;
 
@@ -161,12 +163,16 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
 
 
   protected void markMatched( List shouts ) {
-    Iterator i = shouts.iterator();
-    while ( i.hasNext() ) {
-      Shout s = (Shout) i.next();
-      if ( auction.shoutAccepted(s) ) {
-        acceptedShouts.add(s);
+    try {
+      Iterator i = shouts.iterator();
+      while ( i.hasNext() ) {
+        Shout s = (Shout) i.next();
+        if ( auction.shoutAccepted(s) ) {
+          acceptedShouts.add(s);
+        }
       }
+    } catch ( ShoutsNotVisibleException e ) {
+      throw new AuctionError(e);
     }
   }
 

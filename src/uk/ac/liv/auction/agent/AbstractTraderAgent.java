@@ -215,9 +215,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
         (AbstractStrategy)
          parameters.getInstanceForParameter(base.push(P_STRATEGY),
                                             null, AbstractStrategy.class);
-    ((Parameterizable) strategy).setup(parameters, base.push(P_STRATEGY));
     ((AbstractStrategy) strategy).setAgent(this);
-
+    ((Parameterizable) strategy).setup(parameters, base.push(P_STRATEGY));
+    
     initialise();
   }
 

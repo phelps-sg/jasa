@@ -26,6 +26,10 @@ package uk.ac.liv.auction.core;
  */
 
 public class KContinuousDoubleAuctioneer extends KAuctioneer {
+  
+  protected double lowestAsk = Double.POSITIVE_INFINITY;
+  
+  protected double highestBid = Double.NEGATIVE_INFINITY;
 
   public KContinuousDoubleAuctioneer() {
     this(null, 0);
@@ -78,12 +82,22 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
       if ( shout.getPrice() < quote ) {
         bidNotAnImprovementException();
       }
+      highestBid = shout.getPrice();
     } else {
       quote = askQuote();
       if ( shout.getPrice() > quote ) {
         askNotAnImprovementException();
       }
+      lowestAsk = shout.getPrice();
     }
+  }
+  
+  protected double bidQuote() {
+    return highestBid;
+  }
+  
+  protected double askQuote() {
+    return lowestAsk;
   }
 
   private void askNotAnImprovementException()

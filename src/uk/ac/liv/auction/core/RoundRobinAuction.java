@@ -226,6 +226,19 @@ public class RoundRobinAuction extends AuctionImpl
   public static final String P_NAME = "name";
   public static final String P_STATS = "stats";
   public static final String P_LENGTH_OF_DAY = "lengthofday";
+  
+  public static final String ERROR_DAILYSTATS = 
+      "The auction must be configured " +
+        "with a DailyStatsMarketDataLogger in order " +
+        "to retrieve previous day's statistics";
+  
+  public static final String ERROR_HISTORYSTATS = 
+      "The auction must be configured " +
+          "with a HistoryStatsMarketDataLogger " +
+          "in order to retrieve historical stats";
+  
+  public static final String ERROR_SHOUTSVISIBLE =
+    "Auctioneer does not permit shout inspection";
 
   static Logger log4jLogger = Logger.getLogger(RoundRobinAuction.class);
 
@@ -314,8 +327,24 @@ public class RoundRobinAuction extends AuctionImpl
    * Determines whether or not the given shout was matched in
    * the current round of trading.
    */
-  public boolean shoutAccepted( Shout shout ) {
-    return acceptedShouts.contains(shout);
+  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException {
+    if ( auctioneer.shoutsVisible() ) {
+      return acceptedShouts.contains(shout);
+    } else {
+      throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
+    }
+  }
+  
+  /**
+   * Determines whether or not any transactions have occured in the
+   * current round of trading.
+   */
+  public boolean transactionsOccured() throws ShoutsNotVisibleException {
+    if ( auctioneer.shoutsVisible() ) {
+      return !acceptedShouts.isEmpty();
+    } else {
+      throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
+    }
   }
 
   /**
@@ -448,9 +477,7 @@ public class RoundRobinAuction extends AuctionImpl
       throws DataUnavailableException {
 
     if ( dailyStats == null ) {
-      throw new DataUnavailableException("The auction must be configured " +
-                               "with a DailyStatsMarketDataLogger in order " +
-                               "to retrieve previous day's statistics");
+      throw new DataUnavailableException(ERROR_DAILYSTATS);
     }
 
     if ( day == 0 ) {
@@ -462,9 +489,7 @@ public class RoundRobinAuction extends AuctionImpl
 
   protected void checkHistoryStats() throws DataUnavailableException {
     if (historyStats == null) {
-      throw new DataUnavailableException("The auction must be configured " +
-                                         "with a HistoryStatsMarketDataLogger " +
-          "in order to retrieve historical stats");
+      throw new DataUnavailableException(ERROR_HISTORYSTATS);
     }
   }
 

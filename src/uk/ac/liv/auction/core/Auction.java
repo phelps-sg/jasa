@@ -111,6 +111,12 @@ public interface Auction extends QuoteProvider {
    * Find out whether the given shout has resulted in a transaction
    * in the current round of trading.
    */
-  public boolean shoutAccepted( Shout shout );
+  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException;
+  
+  /**
+   * Determine whether or not any transactions have occured in the
+   * current round of trading.
+   */
+  public boolean transactionsOccured() throws ShoutsNotVisibleException;
 
 }

@@ -63,6 +63,9 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
   protected double lastPrice;
 
   protected MimicryLearner learner;
+  
+  public static final String ERROR_SHOUTVISIBILITY = 
+    "ZIPStrategy can only be used with auctioneers who permit shout visibility";
 
   /**
    * The PRNG used to draw perturbation values
@@ -105,8 +108,9 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     }
 
     initialise();
+    
     setMargin(0.5 + randGenerator.raw()/2);
-
+    
     logger.debug("Initialised with scaling = " + scaling + " and learner = " +
                   learner);
 
@@ -152,7 +156,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
     } catch ( ShoutsNotVisibleException e ) {
       logger.error(e.getMessage());
-      throw new AuctionError("ZIPStrategy can only be used with auctioneers who permit shout visibility");
+      throw new AuctionError(ERROR_SHOUTVISIBILITY);
     }
   }
 
@@ -184,21 +188,25 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     learner.setOutputLevel(margin);
   }
 
-  protected void sellerStrategy( Shout lastShout ) {    
+  
+  protected void sellerStrategy( Shout lastShout ) 
+      throws ShoutsNotVisibleException {   
+        
     if ( lastShout == null ) {
       return;
     }
+    
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {      
-      if ( agent.active() && currentPrice <= lastPrice ) {        
+      if ( currentPrice <= lastPrice ) {        
         raiseMargin(lastPrice);
-      } else if ( lastShout.isBid() ) {
+      } else if ( agent.active() && lastShout.isBid() ) {
         if ( currentPrice >= lastPrice ) {
           lowerMargin(lastPrice);
         }
       }
     } else {      
-      if ( lastShout.isAsk() ) {
+      if ( agent.active() && lastShout.isAsk() ) {
         if ( currentPrice >= lastPrice ) {
           lowerMargin(lastPrice);
         }
@@ -206,20 +214,24 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     }
   }
 
-  protected void buyerStrategy( Shout lastShout ) {    
+  
+  protected void buyerStrategy( Shout lastShout ) 
+      throws ShoutsNotVisibleException {    
+        
     if ( lastShout == null ) {
       return;
     }
+    
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {      
-      if ( agent.active() && currentPrice >= lastPrice ) {        
+      if ( currentPrice >= lastPrice ) {        
         raiseMargin(lastPrice);
-      } else if ( lastShout.isAsk() ) {
+      } else if ( agent.active() && lastShout.isAsk() ) {
         if ( currentPrice <= lastPrice ) {
           lowerMargin(lastPrice);
         }
       }
-    } else if ( lastShout.isBid() ) {
+    } else if ( agent.active() && lastShout.isBid() ) {
       if ( currentPrice <= lastPrice ) {
         lowerMargin(lastPrice);
       }
