@@ -100,26 +100,30 @@ public class EquilibriaDistribution  {
     }
   }
   
-  public void setup( ParameterDatabase parameters, Parameter base ) {  	
-  	GlobalPRNG.setup(parameters, base);  	
-    payoffMatrixFileName = parameters.getString(base.push(P_PAYOFFMATRIX), null);
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    GlobalPRNG.setup(parameters, base);
+    payoffMatrixFileName = parameters
+        .getString(base.push(P_PAYOFFMATRIX), null);
     numAgents = parameters.getInt(base.push(P_NUMAGENTS), null, 1);
     numStrategies = parameters.getInt(base.push(P_NUMSTRATEGIES), null, 1);
     numRDSamples = parameters.getInt(base.push(P_NUMRDSAMPLES), null, 1);
     fileRDPrefix = parameters.getString(base.push(P_RDPREFIX), null);
-    resolution = parameters.getDoubleWithDefault(base.push(P_RESOLUTION), null, resolution);
-    maxIterations = parameters.getIntWithDefault(base.push(P_MAXITERATIONS), null, maxIterations);
-    minimumVelocity = parameters.getDoubleWithDefault(base.push(P_MINVELOCITY), null, minimumVelocity);
-    MixedStrategy.precision = 
-      parameters.getDoubleWithDefault(base.push(P_PRECISION), null, MixedStrategy.precision);
+    resolution = parameters.getDoubleWithDefault(base.push(P_RESOLUTION), null,
+        resolution);
+    maxIterations = parameters.getIntWithDefault(base.push(P_MAXITERATIONS),
+        null, maxIterations);
+    minimumVelocity = parameters.getDoubleWithDefault(base.push(P_MINVELOCITY),
+        null, minimumVelocity);
+    MixedStrategy.precision = parameters.getDoubleWithDefault(base
+        .push(P_PRECISION), null, MixedStrategy.precision);
     try {
       FileInputStream file = new FileInputStream(payoffMatrixFileName);
-      Class[] columns = new Class[numStrategies*2];
-      for( int i=0; i<numStrategies; i++ ) {
-      	columns[i] = Integer.class;
-      	columns[numStrategies+i] = Double.class;
+      Class[] columns = new Class[numStrategies * 2];
+      for ( int i = 0; i < numStrategies; i++ ) {
+        columns[i] = Integer.class;
+        columns[numStrategies + i] = Double.class;
       }
-      CSVReader csvIn = new CSVReader(file, columns);      
+      CSVReader csvIn = new CSVReader(file, columns);
       payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
       payoffMatrix.importFromCSV(csvIn);
     } catch ( IOException e ) {
