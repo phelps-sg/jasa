@@ -45,8 +45,18 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
 
 
   public void removeShout(Shout shout) {
-    /**@todo Implement this uk.ac.liv.auction.core.Auction method*/
-    //throw new java.lang.UnsupportedOperationException("Method removeShout() not yet implemented.");
+    try {
+      ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+      RemoveShoutAction content = new RemoveShoutAction();
+      ACLShout aclShout = new ACLShout();
+      aclShout.copyFrom(shout);
+      aclShout.setAgentName(sender.getAID().getName());
+      content.setShout(aclShout);
+      JADEAbstractAuctionAgent.sendMessage(sender, msg, content);
+    } catch ( Exception e ) {
+      e.printStackTrace();
+      throw new Error(e.getMessage());
+    }
   }
 
   public Shout getLastShout() {
