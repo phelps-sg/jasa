@@ -101,6 +101,7 @@ public class ElectricityStats
     if ( equilibrium ) {
       if ( standardStats == null ) {
         standardStats = new EquilibriaStats(auction);
+        standardStats.calculate();
       } else {
         standardStats.recalculate();
       }

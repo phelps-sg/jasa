@@ -43,7 +43,7 @@ public class FixedQuantityStrategyImpl extends AbstractStrategy
   }
 
   public void setQuantity( int quantity ) {
-    this.quantity = 1;
+    this.quantity = quantity;
   }
 
 }

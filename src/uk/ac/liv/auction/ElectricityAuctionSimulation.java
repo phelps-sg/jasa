@@ -189,10 +189,12 @@ public class ElectricityAuctionSimulation  {
       ElectricityTrader trader =
         new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);
 
-      StimuliResponseStrategy strategy =
-        new StimuliResponseStrategy(trader);
+      StimuliResponseStrategy strategy = new StimuliResponseStrategy(trader);
 
-      strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X, System.currentTimeMillis()) );
+      strategy.setQuantity(trader.getCapacity());
+      strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X, 
+                                System.currentTimeMillis()) );
+                                
 
       trader.setStrategy(strategy);
 
