@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -52,6 +53,11 @@ public class FixedValuer implements ValuationPolicy, Serializable {
   }
 
   public void consumeUnit( Auction auction ) {
+    // Do nothing
+  }
+  
+  public void eventOccurred( AuctionEvent event ) {
+    // Do nothing
   }
 
   public void reset() {

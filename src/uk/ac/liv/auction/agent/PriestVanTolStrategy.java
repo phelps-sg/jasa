@@ -16,20 +16,14 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.MarketQuote;
+import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
 /**
- * A strategy based on the Priest-VanTol strategy described in the following
- * paper.
- * 
- * "Adaptive agents in a persistent shout double auction" by C. Priest and M.
- * Van Tol. in "Proceedings of the first international conference on Information
- * and computation economies" 1998.
- * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -41,22 +35,25 @@ public class PriestVanTolStrategy extends MomentumStrategy
 
   protected void adjustMargin() {
     
-    MarketQuote quote = auction.getQuote();
+    HistoryStatsMarketDataLogger historyStats = auction.getHistoryStats();
     
-    double bidQuote = quote.getBid();
-    double askQuote = quote.getAsk();
-    
+    if ( historyStats == null ) {
+      throw new AuctionError("The auction must be configured with a HistoryStatsMarketDataLogger in order to use strategy " + getClass());
+    }
+
+    double highestBid = historyStats.getHighestBidPrice();
+    double lowestAsk = historyStats.getLowestAskPrice();
     if ( agent.isBuyer() ) {
-      if ( askQuote < agent.getValuation(auction) ) {
-        adjustMargin(targetMargin(askQuote - perterb(askQuote)));
-      } else if ( agent.active() ) {
-        adjustMargin(targetMargin(askQuote));
+      if ( lowestAsk > highestBid && highestBid > 0 ) {
+        adjustMargin(targetMargin(highestBid + perterb(highestBid)));
+      } else if ( agent.active() && lowestAsk < Double.POSITIVE_INFINITY ) {
+        adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
       }
     } else {
-      if ( bidQuote > agent.getValuation(auction) ) {
-        adjustMargin(targetMargin(bidQuote + perterb(bidQuote)));       
-      } else if ( agent.active()  ) {
-        adjustMargin(targetMargin(bidQuote));
+      if ( lowestAsk > highestBid && lowestAsk < Double.POSITIVE_INFINITY ) {
+        adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
+      } else if ( agent.active() && highestBid > 0 ) {
+        adjustMargin(targetMargin(highestBid + perterb(highestBid)));
       }
     }
    

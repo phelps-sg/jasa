@@ -22,6 +22,7 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.event.AuctionEvent;
 
 import uk.ac.liv.util.Parameterizable;
 
@@ -55,8 +56,8 @@ public class FactoryStrategy implements Parameterizable, Strategy {
     return strategy.modifyShout(shout, auction);
   }
 
-  public void endOfRound( Auction auction ) {
-    strategy.endOfRound(auction);
+  public void eventOccurred( AuctionEvent event ) {
+    strategy.eventOccurred(event);
   }
 
   public void setAgent( AbstractTradingAgent agent ) {

@@ -18,6 +18,11 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
 
+import uk.ac.liv.auction.event.AgentPolledEvent;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
+
 import uk.ac.liv.ai.learning.MimicryLearner;
 import uk.ac.liv.ai.learning.Learner;
 
@@ -46,11 +51,17 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
   
   protected double currentPrice;
   
+  protected Shout lastShout;
+  
   /**
    * A parameter used to scale the randomly drawn price adjustment
    * perturbation values.
    */
   protected double scaling = 0.01;
+
+  protected boolean lastShoutAccepted;
+  
+  protected double trPrice, trBidPrice, trAskPrice;
 
   public static final String P_SCALING = "scaling";
   public static final String P_LEARNER = "learner";
@@ -103,16 +114,51 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     } else if ( currentMargin > 1 ) {
       logger.debug(this + ": clipping margin at 1.0");
       setMargin(currentMargin = 1.0);
-    }
-    adjustMargin();    
+    }  
     currentPrice = calculatePrice(currentMargin);
     shout.setPrice(currentPrice);
     return super.modifyShout(shout);
   }
+  
+  
+  public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
+    if ( event instanceof TransactionExecutedEvent ) {
+      transactionExecuted((TransactionExecutedEvent) event);
+    } else if ( event instanceof ShoutPlacedEvent  ) {
+      shoutPlaced((ShoutPlacedEvent) event);
+    } else if ( event instanceof AgentPolledEvent ) {
+      agentPolled((AgentPolledEvent) event);
+    }
+  }
+  
+  protected void agentPolled( AgentPolledEvent event ) {
+    auction = event.getAuction();
+    if ( event.getAgent() != agent ) {
+      adjustMargin();
+    }
+  }
+  
+  protected void shoutPlaced( ShoutPlacedEvent event ) {
+    lastShout = event.getShout();
+    lastShoutAccepted = false;
+  }
+  
+  protected void transactionExecuted( TransactionExecutedEvent event ) {    
+    lastShoutAccepted = 
+      	lastShout.isAsk() && event.getAsk().equals(lastShout) ||
+      	lastShout.isBid() && event.getBid().equals(lastShout);
+    if ( lastShoutAccepted ) {
+      trPrice = event.getPrice();
+      trBidPrice = event.getBid().getPrice();
+      trAskPrice = event.getAsk().getPrice();
+    }
+  }
 
   public void endOfRound( Auction auction ) {
-    // Do nothing
+ 
   }
+      
 
   public void setLearner( Learner learner ) {
     this.learner = (MimicryLearner) learner;

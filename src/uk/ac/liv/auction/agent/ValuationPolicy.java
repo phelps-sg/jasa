@@ -17,6 +17,7 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.AuctionEventListener;
 
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
@@ -29,7 +30,8 @@ import uk.ac.liv.util.Parameterizable;
  * @version $Revision$
  */
 
-public interface ValuationPolicy extends Resetable, Parameterizable {
+public interface ValuationPolicy 
+	extends Resetable, Parameterizable, AuctionEventListener {
 
   /**
    * Determine the current valuation of commodity in the given auction.

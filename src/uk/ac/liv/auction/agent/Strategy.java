@@ -17,6 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.util.Prototypeable;
 
+import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
@@ -30,7 +31,7 @@ import uk.ac.liv.auction.core.Auction;
  * @version $Revision$
  */
 
-public interface Strategy extends Prototypeable {
+public interface Strategy extends Prototypeable, AuctionEventListener {
 
   /**
    * Modify the trader's current shout according to the trading strategy
@@ -41,11 +42,6 @@ public interface Strategy extends Prototypeable {
    * @return The new shout, or null if no shout is to be placed.
    */
   public Shout modifyShout( Shout shout, Auction auction );
-
-  /**
-   * Perform any end-of-round processing.
-   */
-  public void endOfRound( Auction auction );
 
   public void setAgent( AbstractTradingAgent agent );
 

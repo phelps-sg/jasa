@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
@@ -75,6 +76,7 @@ public class RandomValuer
   public RandomValuer( double minValue, double maxValue ) {
     this.minValue = minValue;
     this.maxValue = maxValue;
+    initialise();
   }
 
 
@@ -89,6 +91,11 @@ public class RandomValuer
   }
 
   public void consumeUnit( Auction auction ) {
+    // Do nothing
+  }
+  
+  public void eventOccurred( AuctionEvent event ) {
+    // Do nothing
   }
 
   public void reset() {
