@@ -25,7 +25,7 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 /**
- * A MarketDataLogger that keeps track of the ratio of actual
+ * A report that keeps track of the ratio of actual
  * verses theoretical profits for each strategy being played in the
  * auction.
  *

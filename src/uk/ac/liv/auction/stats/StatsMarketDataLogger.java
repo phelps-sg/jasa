@@ -45,9 +45,7 @@ import org.apache.log4j.Logger;
 public class StatsMarketDataLogger extends AbstractMarketDataLogger
    implements Serializable, Cloneable, Resetable {
 
-
   protected CummulativeDistribution[] stats;
-
 
   static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
 

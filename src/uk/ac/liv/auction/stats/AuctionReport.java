@@ -14,17 +14,33 @@
  */
 package uk.ac.liv.auction.stats;
 
+import java.util.Map;
+
+import uk.ac.liv.auction.core.RoundRobinAuction;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-import java.util.Map;
-
 public interface AuctionReport {
   
+  /**
+   *  Produce the final report.  Implementors can do whatever they see
+   *  fit, including doing nothing.
+   */
   public void generateReport();
   
+  /**
+   *  Returns a Map of all of the variables, such as market efficiency,
+   *  that are produced in the report.  The Map maps variables names
+   *  onto values.
+   */
   public Map getVariables();
+  
+  /**
+   *  Specify the auction to be used when generating the report.
+   */
+  public void setAuction( RoundRobinAuction auction );
 
 }

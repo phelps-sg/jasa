@@ -26,7 +26,7 @@ import java.text.DecimalFormat;
 import org.apache.log4j.Logger;
 
 /**
- * A MarketStats report that calculates the actual surplus of buyers
+ * A report that calculates the actual surplus of buyers
  * and sellers in the auction verses the theoretical surplus when
  * trades occur at the equilibrium price.  Note that this report
  * assumes that the equilibrium price is constant.  To calculate
