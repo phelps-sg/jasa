@@ -71,6 +71,10 @@ public class ElectricityAuctionSimulation  {
 
   static CSVWriter dataFile;
 
+  static ElectricityStats stats;
+
+  static RandomRobinAuction auction;
+
   static ec.util.MersenneTwisterFast randGenerator = new ec.util.MersenneTwisterFast();
 
   public static void main( String[] args ) {
@@ -99,6 +103,9 @@ public class ElectricityAuctionSimulation  {
     } catch ( IOException e ) {
       e.printStackTrace();
     }
+
+    auction = new RandomRobinAuction("Electricity Auction");
+    stats = new ElectricityStats(0, 200, auction);
 
     experiment( 6, 3, 10, 20 );
     experiment( 6, 3, 10, 40 );
@@ -148,12 +155,12 @@ public class ElectricityAuctionSimulation  {
 
   public static ElectricityStats runSimulation( int ns, int nb, int cs, int cb ) {
 
-    RandomRobinAuction auction;
+
     HashMap gridGraph;
     StatsMarketDataLogger logger;
     ContinuousDoubleAuctioneer auctioneer;
 
-    auction = new RandomRobinAuction("Electricity Auction ns:" + ns + " nb:" + nb + " cs:" + cs + " cb:" + cb);
+    auction = new RandomRobinAuction("Electricity Auction");
     auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
     auction.setAuctioneer(auctioneer);
 
@@ -167,7 +174,7 @@ public class ElectricityAuctionSimulation  {
 
     auction.run();
 
-    ElectricityStats stats = new ElectricityStats(0, 200, auction);
+    stats = new ElectricityStats(0, 200, auction);
 
     return stats;
   }

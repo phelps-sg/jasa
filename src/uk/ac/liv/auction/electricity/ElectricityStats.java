@@ -56,7 +56,7 @@ public class ElectricityStats
 
   int buyerCap, sellerCap;
 
-  public EquilibriaStats standardStats;
+  public EquilibriaStats standardStats = null;
 
   protected long minPrice, maxPrice;
 
@@ -85,23 +85,26 @@ public class ElectricityStats
 
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
+    standardStats.setAuction(auction);
   }
 
-  /**
-   * Recalculate market statistics based without recomputing equilibirium data.
-   */
+
   public void recalculate() {
     calculate(false);
   }
 
   public void calculate() {
-//    standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction);
-    standardStats = new EquilibriaStats(auction);
-    standardStats.calculate();
     calculate(true);
   }
 
   protected void calculate( boolean equilibrium ) {
+    if ( equilibrium ) {
+      if ( standardStats == null ) {
+        standardStats = new EquilibriaStats(auction);
+      } else {
+        standardStats.recalculate();
+      }
+    }
     Iterator i = auction.getTraderIterator();
     sellerCap = 0;
     buyerCap = 0;

@@ -11,26 +11,34 @@ import uk.ac.liv.util.Debug;
 
 import java.util.*;
 
+import huyd.poolit.*;
+
 public class EquilibriaStats implements MarketStats {
 
   RoundRobinAuction auction;
 
-  BinaryHeap buyers;
-  BinaryHeap sellers;
+  List buyers = null;
+  List sellers = null;
 
-  ArrayList demandCurve;
-  ArrayList supplyCurve;
+  ArrayList demandCurve = null;
+  ArrayList supplyCurve = null;
 
   double equilibriaMinPrice, equilibriaMaxPrice;
   long equilibriaMinQty, equilibriaMaxQty;
 
   boolean equilibriaFound;
 
+  static Pooler tuplePool = null;
+
   static Comparator ascendingValues = new AscendingTraderComparator();
   static Comparator descendingValues = new DescendingTraderComparator();
+  static Comparator quantityComparator = new QuantityComparator();
+
+  static final int TUPLE_POOL_SIZE = 1000;
 
   public EquilibriaStats( RoundRobinAuction auction ) {
     this.auction = auction;
+    calculate();
   }
 
   public void setAuction( RoundRobinAuction auction ) {
@@ -43,16 +51,32 @@ public class EquilibriaStats implements MarketStats {
   public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
-  public void calculate() {
+  public void initialise() {
     sortTraders();
+  }
+
+  public void reset() {
+    sortTraders();
+  }
+
+  public void calculate() {
+    reset();
+    recalculate();
+  }
+
+  public void recalculate() {
     buildCurves();
     calculateEquilibria();
   }
 
   protected void sortTraders() {
+    /*
     buyers = new BinaryHeap(descendingValues);
-    sellers = new BinaryHeap(ascendingValues);
-    Iterator i = auction.getTraderIterator();
+    sellers = new BinaryHeap(ascendingValues); */
+    List traders = auction.getTraderList();
+    buyers = new ArrayList(traders.size());
+    sellers = new ArrayList(traders.size());
+    Iterator i = traders.iterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
       if ( agent.isBuyer() ) {
@@ -61,8 +85,10 @@ public class EquilibriaStats implements MarketStats {
         sellers.add(agent);
       }
     }
+    Collections.sort(buyers, descendingValues);
+    Collections.sort(sellers, ascendingValues);
   }
-
+/*
   protected void buildCurve( ArrayList curve, BinaryHeap traders,
                               double initVal, double finalVal ) {
     boolean descending = finalVal < initVal;
@@ -83,37 +109,80 @@ public class EquilibriaStats implements MarketStats {
       currentVal = val;
     }
   }
+*/
+
+  protected synchronized static void initialiseTuplePool() {
+    try {
+      if ( tuplePool == null ) {
+        tuplePool = new FixedPooler(PriceQtyTuple.class, TUPLE_POOL_SIZE);
+      }
+    } catch ( CreateException e ) {
+      e.printStackTrace();
+      throw new Error(e);
+    }
+  }
+
+  protected static PriceQtyTuple newTuple( double minPrice, double maxPrice, long quantity ) {
+    initialiseTuplePool();
+    try {
+      PriceQtyTuple result = (PriceQtyTuple) tuplePool.fetch();
+      result.maxPrice = maxPrice;
+      result.minPrice = minPrice;
+      result.quantity = quantity;
+      return result;
+    } catch ( FetchException e ) {
+      e.printStackTrace();
+      return new PriceQtyTuple(minPrice, maxPrice, quantity);
+    }
+  }
+
+  protected void buildCurve( ArrayList curve, List traders, double initVal, boolean ascending ) {
+    double currentVal = initVal;
+    long quantity = 0;
+    for( int i=0; i<traders.size(); i++ ) {
+      AbstractTraderAgent trader = (AbstractTraderAgent) traders.get(i);
+      double val = trader.getPrivateValue();
+      PriceQtyTuple priceQty = null;
+      if ( ascending ) {
+        priceQty = newTuple(currentVal, val, quantity);
+      } else {
+        priceQty = newTuple(val, currentVal, quantity);
+      }
+      curve.add(priceQty);
+      while ( i<traders.size() &&
+              ((AbstractTraderAgent) traders.get(i)).getPrivateValue() == val ) {
+        quantity += ((AbstractTraderAgent) traders.get(i)).determineQuantity(auction);
+        i++;
+      }
+      currentVal = val;
+    }
+  }
+
+  protected void cleanCurve( ArrayList curve ) {
+    Iterator i = curve.iterator();
+    while ( i.hasNext() ) {
+      PriceQtyTuple tuple = (PriceQtyTuple) i.next();
+      tuplePool.release(tuple);
+    }
+    curve.clear();
+  }
 
   protected void buildCurves() {
-    supplyCurve = new ArrayList();
-    demandCurve = new ArrayList();
 
-    double currentVal = 0;
-    long quantity = 0;
-    while ( ! sellers.isEmpty() ) {
-      AbstractTraderAgent seller = (AbstractTraderAgent) sellers.removeFirst();
-      double val = seller.getPrivateValue();
-      supplyCurve.add( new PriceQtyTuple(currentVal, val, quantity) );
-      quantity += seller.determineQuantity(auction);
-      while ( !sellers.isEmpty() && ((AbstractTraderAgent) sellers.getFirst()).getPrivateValue() == val ) {
-        quantity += ((AbstractTraderAgent) sellers.removeFirst()).determineQuantity(auction);
-      }
-      currentVal = val;
+    if ( supplyCurve == null ) {
+      supplyCurve = new ArrayList(sellers.size());
+    } else {
+      cleanCurve(supplyCurve);
     }
 
-    currentVal = Double.POSITIVE_INFINITY;
-    quantity = 0;
-    while ( ! buyers.isEmpty() ) {
-      AbstractTraderAgent buyer = (AbstractTraderAgent) buyers.removeFirst();
-      double val = buyer.getPrivateValue();
-      demandCurve.add( new PriceQtyTuple(val, currentVal, quantity) );
-      quantity += buyer.determineQuantity(auction);
-      while ( !buyers.isEmpty() && ((AbstractTraderAgent) buyers.getFirst()).getPrivateValue() == val ) {
-        quantity += ((AbstractTraderAgent) buyers.removeFirst()).determineQuantity(auction);
-      }
-      currentVal = val;
+    if ( demandCurve == null ) {
+      demandCurve = new ArrayList(buyers.size());
+    } else {
+      cleanCurve(demandCurve);
     }
 
+    buildCurve(supplyCurve, sellers, 0D, true);
+    buildCurve(demandCurve, buyers, Double.POSITIVE_INFINITY, false);
   }
 
   protected void searchSameQuantity() {
@@ -163,7 +232,7 @@ public class EquilibriaStats implements MarketStats {
   }
 
   protected PriceQtyTuple findQty( ArrayList curve, PriceQtyTuple tuple ) {
-    int i = Collections.binarySearch(curve, tuple, new QuantityComparator());
+    int i = Collections.binarySearch(curve, tuple, quantityComparator);
     if ( i >= 0 ) {
       return (PriceQtyTuple) curve.get(i);
     } else {
@@ -214,22 +283,6 @@ public class EquilibriaStats implements MarketStats {
 
 }
 
-
-class PriceQtyTuple {
-
-  public double minPrice, maxPrice;
-  long quantity;
-
-  public PriceQtyTuple( double minPrice, double maxPrice, long quantity ) {
-    this.minPrice = minPrice;
-    this.maxPrice = maxPrice;
-    this.quantity = quantity;
-  }
-
-  public String toString() {
-    return "(" + getClass() + " minPrice:" + minPrice + " maxPrice:" + maxPrice + " quantity:" + quantity + ")";
-  }
-}
 
 class AscendingTraderComparator implements Comparator {
 
