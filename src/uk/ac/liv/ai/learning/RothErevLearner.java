@@ -19,7 +19,6 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
-import uk.ac.liv.prng.GlobalPRNG;
 
 import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.CummulativeDistribution;
@@ -273,8 +272,9 @@ public class RothErevLearner extends AbstractLearner implements
   }
   
   public void resetDistributions() {
+    double initialPropensity = s1 / k;
     for( int i=0; i<k; i++ ) {
-      q[i] = GlobalPRNG.getInstance().raw();
+      q[i] = initialPropensity;
     }
     updateProbabilities();
   }
