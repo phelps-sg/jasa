@@ -202,7 +202,12 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
       a2 = MAX_PRICE;
     }
     
-    assert p1 >=0 && p1 <= (1 + 10E-6) && p2 >=0 && p2 <= (1 + 10E-6);
+    if ( p1 < 0 || p1 > 1 || p2 < 0 || p2 > 1 ) {
+      System.out.println("p1 = " + p1);
+      System.out.println("p2 = " + p2);
+      assert p1 >=0 && p1 <= (1 + 10E-6) && p2 >=0 && p2 <= (1 + 10E-6);      
+    }
+    
     
     double pvalue = agent.getValuation(auction);
 
