@@ -102,6 +102,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     tradeEntitlement = initialTradeEntitlement;
     quantityTraded = 0;
     dummyShout = new Shout(this);
+    logger.debug("Initialised with tradeEntitlement = " + tradeEntitlement);
   }
 
   public void reset() {

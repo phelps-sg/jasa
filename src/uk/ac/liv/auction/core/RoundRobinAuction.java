@@ -331,11 +331,13 @@ public class RoundRobinAuction extends AuctionImpl
       while (!closed()) {
         runSingleRound();
       }
+
     } catch ( AuctionClosedException e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());
     }
 
+    informAuctionClosed();
   }
 
 
@@ -367,7 +369,6 @@ public class RoundRobinAuction extends AuctionImpl
 
   public void close() {
     super.close();
-    informAuctionClosed();
   }
 
 

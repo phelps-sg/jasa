@@ -219,7 +219,7 @@ public class AuctionConsoleFrame extends JFrame
     }
     Shout lastShout = null;
     try {
-      auction.getLastShout();
+      lastShout = auction.getLastShout();
     } catch ( ShoutsNotVisibleException e ) {
       lastShout = null;
     }
