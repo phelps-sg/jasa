@@ -53,9 +53,12 @@ public class MDPStrategy extends AdaptiveStrategy {
 
   double askBinWidth;
 
+  int quoteBins;
+
   boolean firstShout = true;
 
   static final String P_LEARNER = "learner";
+  static final String P_QUOTEBINS = "quotebins";
   static final String P_ASKBINSTART = "askbinstart";
   static final String P_ASKBINWIDTH = "askbinwidth";
   static final String P_BIDBINSTART = "bidbinstart";
@@ -90,6 +93,7 @@ public class MDPStrategy extends AdaptiveStrategy {
     askBinWidth = parameters.getDouble(base.push(P_ASKBINWIDTH), null, 0);
     bidBinStart = parameters.getDouble(base.push(P_BIDBINSTART), null, 0);
     bidBinWidth = parameters.getDouble(base.push(P_BIDBINWIDTH), null, 0);
+    quoteBins = parameters.getInt(base.push(P_QUOTEBINS), null, 1);
   }
 
 
@@ -105,8 +109,15 @@ public class MDPStrategy extends AdaptiveStrategy {
     MarketQuote quote = auction.getQuote();
     double bid = quote.getBid();
     double ask = quote.getAsk();
-    return (int) ((bid-bidBinStart)/bidBinWidth)
-                  + (int) ((ask-askBinStart)/askBinWidth);
+    int bidBin = 0;
+    int askBin = 0;
+    if ( ! Double.isInfinite(bid) ) {
+      bidBin = ((int) ( (bid - bidBinStart) / bidBinWidth)) + 1;
+    }
+    if ( ! Double.isInfinite(ask) ) {
+      askBin = ((int) ( (ask - askBinStart) / askBinWidth)) + 1;
+    }
+    return bidBin*quoteBins + askBin;
   }
 
   public void reset() {
