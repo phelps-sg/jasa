@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.util.io.*;
 
 import ec.util.Parameter;
@@ -87,7 +91,20 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
   }
 
 
-  public void updateQuoteLog( int time, MarketQuote quote ) {
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof TransactionExecutedEvent ) {
+      updateTransPriceLog( (TransactionExecutedEvent) event );
+    } else if ( event instanceof ShoutPlacedEvent ) {
+      updateShoutLog( (ShoutPlacedEvent) event);
+    } else if ( event instanceof RoundClosedEvent ) {
+      updateQuoteLog( (RoundClosedEvent) event);
+    }
+  }
+  
+  
+  public void updateQuoteLog( RoundClosedEvent event ) {
+    int time = event.getTime();
+    MarketQuote quote = event.getAuction().getQuote();
     if ( askQuoteLog != null ) {
       askQuoteLog.newData(time);
       askQuoteLog.newData(quote.getAsk());
@@ -99,16 +116,17 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
     dataUpdated();
   }
 
-  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
-                                    int quantity ) {
+  public void updateTransPriceLog( TransactionExecutedEvent event ) {
     if ( transPriceLog != null ) {
-      transPriceLog.newData(time);
-      transPriceLog.newData(price);
+      transPriceLog.newData(event.getTime());
+      transPriceLog.newData(event.getPrice());
     }
     dataUpdated();
   }
 
-  public void updateShoutLog( int time, Shout shout ) {
+  public void updateShoutLog( ShoutPlacedEvent event ) {
+    Shout shout = event.getShout();
+    int time = event.getTime();
     if (shout.isBid()) {
       if ( bidLog != null ) {
         bidLog.newData(time);
@@ -123,17 +141,6 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
     dataUpdated();
   }
 
-  public void auctionClosed( Auction auction ) {
-    // Do nothing
-  }
-
-  public void endOfDay( Auction auction ) {
-    // Do nothing
-  }
-
-  public void roundClosed( Auction auction ) {
-    // Do nothing
-  }
 
   public void dataUpdated() {
   }

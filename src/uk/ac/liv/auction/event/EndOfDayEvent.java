@@ -13,23 +13,18 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.core;
+package uk.ac.liv.auction.event;
 
+import uk.ac.liv.auction.core.Auction;
 
 /**
- * Classes implementing this interface can subscribe to an auction
- * to receive notification that the current trading period has
- * terminated.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
-public interface EndOfDayListener extends AuctionEventListener {
 
-  /**
-   * Notify us that a period has ended in the specified auction.
-   */
-  public void endOfDay( Auction auction );
+public class EndOfDayEvent extends AuctionEvent {
 
-
+  public EndOfDayEvent( Auction auction ) {
+    super(auction);
+  }
 }

@@ -24,10 +24,8 @@ import java.util.Map;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import uk.ac.liv.auction.core.MarketQuote;
-import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.RoundRobinAuction;
-import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
@@ -91,30 +89,6 @@ public class CombiMarketDataLogger
     loggers.add(logger);
   }
 
-  public void updateQuoteLog(int time, MarketQuote quote) {
-    Iterator i = loggers.iterator();
-    while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.updateQuoteLog(time, quote);
-    }
-  }
-
-  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
-                                    int quantity ) {
-    Iterator i = loggers.iterator();
-    while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.updateTransPriceLog(time, ask, bid, price, quantity);
-    }
-  }
-
-  public void updateShoutLog(int time, Shout shout) {
-    Iterator i = loggers.iterator();
-    while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.updateShoutLog(time, shout);
-    }
-  }
 
   public void reset() {
     Iterator i = loggers.iterator();
@@ -144,30 +118,14 @@ public class CombiMarketDataLogger
     return variableMap;
   }
   
-  public void auctionClosed( Auction auction ) {
+  public void eventOccurred( AuctionEvent event ) {
     Iterator i = loggers.iterator();
     while (  i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.auctionClosed(auction);
+      logger.eventOccurred(event);
     }
   }
 
-  public void roundClosed( Auction auction ) {
-    Iterator i = loggers.iterator();
-    while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.roundClosed(auction);
-    }
-  }
-
-
-  public void endOfDay( Auction auction ) {
-    Iterator i = loggers.iterator();
-    while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.endOfDay(auction);
-    }
-  }
 
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;

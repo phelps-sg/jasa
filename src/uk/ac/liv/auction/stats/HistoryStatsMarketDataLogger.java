@@ -15,11 +15,13 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.ShoutsNotVisibleException;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import java.io.Serializable;
 import java.util.*;
@@ -81,11 +83,8 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
     auction.setHistoryStats(this);
   }
 
-  public void updateQuoteLog( int time, MarketQuote quote ) {
-  }
 
-  public void updateTransPriceLog( int time, Shout ask, Shout bid,
-      double price, int quantity ) {
+  public void updateTransPriceLog( TransactionExecutedEvent event ) {
     currentMemoryCell = (currentMemoryCell + 1) % memorySize;
     if ( memoryAsks[currentMemoryCell] > 0
         || memoryBids[currentMemoryCell] > 0 ) {
@@ -120,7 +119,8 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   }
 
   
-  public void updateShoutLog( int time, Shout shout ) {
+  public void updateShoutLog( ShoutPlacedEvent event ) {
+    Shout shout = event.getShout();
     addToSortedShouts(shout);
     if ( shout.isAsk() ) {
       asks.add(shout);
@@ -137,7 +137,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
     }
   }
 
-  public void roundClosed( Auction auction ) {
+  public void roundClosed( AuctionEvent event ) {
     markMatched(asks);
     markMatched(bids);
     //    if ( getNumberOfTrades() > memorySize ) {
@@ -146,12 +146,14 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
     initialisePriceRanges();
   }
 
-  public void auctionClosed( Auction auction ) {
-    // Do nothing
-  }
-
-  public void endOfDay( Auction auction ) {
-    // Do nothing
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof RoundClosedEvent ) {
+      roundClosed(event);
+    } else if ( event instanceof ShoutPlacedEvent ) {
+      updateShoutLog((ShoutPlacedEvent) event);
+    } else if ( event instanceof TransactionExecutedEvent ) {
+      updateTransPriceLog((TransactionExecutedEvent) event);
+    }
   }
 
   public int getNumberOfTrades() {

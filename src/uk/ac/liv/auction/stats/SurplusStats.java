@@ -16,7 +16,7 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.core.*;
 
 import java.util.*;
@@ -108,10 +108,10 @@ public class SurplusStats extends EquilibriaStats {
         Shout ask = (Shout) i.next();      
 
         pBCE += equilibriumProfits(bid.getQuantity(),
-                                    (AbstractTraderAgent) bid.getAgent());
+                                    (AbstractTradingAgent) bid.getAgent());
 
         pSCE += equilibriumProfits(ask.getQuantity(),
-                                    (AbstractTraderAgent) ask.getAgent());
+                                    (AbstractTradingAgent) ask.getAgent());
 
       }
     }
@@ -127,7 +127,7 @@ public class SurplusStats extends EquilibriaStats {
     pBA = 0;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
       if ( agent.isSeller() ) {
         pSA += agent.getProfits();
       } else {
@@ -136,7 +136,7 @@ public class SurplusStats extends EquilibriaStats {
     }
   }
 
-  public double equilibriumProfits( int quantity, AbstractTraderAgent trader ) {
+  public double equilibriumProfits( int quantity, AbstractTradingAgent trader ) {
     return trader.equilibriumProfits(auction, calculateMidEquilibriumPrice(),
                                        quantity);
   }

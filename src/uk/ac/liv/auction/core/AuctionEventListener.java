@@ -15,11 +15,15 @@
 
 package uk.ac.liv.auction.core;
 
+import uk.ac.liv.auction.event.AuctionEvent;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
+
 public interface AuctionEventListener {
+  
+  public void eventOccurred( AuctionEvent event );
 
 }

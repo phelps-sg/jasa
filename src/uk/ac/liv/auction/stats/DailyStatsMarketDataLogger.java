@@ -16,7 +16,8 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.EndOfDayEvent;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -50,6 +51,13 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
   public void setup( ParameterDatabase params, Parameter base ) {
     auction.setDailyStats(this);
   }
+  
+  public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
+    if ( event instanceof EndOfDayEvent ) {
+      endOfDay( (EndOfDayEvent) event);
+    }    
+  }
 
   public CummulativeDistribution getTransPriceStats( int day ) {
     if ( day > dailyStats.size()-1 ) {
@@ -65,7 +73,7 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
     return getTransPriceStats( auction.getDay() - 1 );
   }
 
-  public void endOfDay( Auction auction ) {
+  public void endOfDay( EndOfDayEvent event ) {
     // Make a copy of the current stats, reset them and record
     try {
       CummulativeDistribution[] currentStats =

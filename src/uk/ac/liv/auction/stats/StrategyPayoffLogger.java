@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 
 /**
@@ -24,7 +24,7 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
  */
 public class StrategyPayoffLogger extends PayoffLogger {
 
-  public Object getKey( AbstractTraderAgent agent ) {
+  public Object getKey( AbstractTradingAgent agent ) {
     return agent.getStrategy().getClass();
   }
   

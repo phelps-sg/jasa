@@ -16,7 +16,7 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.util.Resetable;
@@ -88,7 +88,7 @@ public class DirectRevelationStats implements Resetable, Serializable {
   protected void simulateDirectRevelation() {
     Iterator traders = auction.getTraderIterator();
     while ( traders.hasNext() ) {
-      AbstractTraderAgent trader = (AbstractTraderAgent) traders.next();
+      AbstractTradingAgent trader = (AbstractTradingAgent) traders.next();
       int quantity = trader.determineQuantity(auction);
       double value = trader.getValuation(auction);
       boolean isBid = trader.isBuyer();

@@ -15,13 +15,20 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.stats.*;
+import uk.ac.liv.auction.event.*;
+
+import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.MarketDataLogger;
+import uk.ac.liv.auction.stats.CombiMarketDataLogger;
 
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
 
 import java.io.Serializable;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.LinkedList;
@@ -88,18 +95,16 @@ public abstract class AuctionImpl extends Observable
    */
   protected MarketDataLogger logger = null;
 
-  protected LinkedList roundClosedListeners = new LinkedList();
-
-  protected LinkedList endOfDayListeners = new LinkedList();
-
-  protected LinkedList auctionClosedListeners = new LinkedList();
-
-  protected LinkedList[] auctionEventListeners = {
-      roundClosedListeners, endOfDayListeners, auctionClosedListeners };
-
+  protected HashMap eventListeners = new HashMap();
+  
   protected HistoryStatsMarketDataLogger historyStats;
   
   protected DailyStatsMarketDataLogger dailyStats;
+  
+  private static final Class[] allEvents = 
+  	{ RoundClosedEvent.class, AuctionOpenEvent.class, AuctionClosedEvent.class,
+        EndOfDayEvent.class, TransactionExecutedEvent.class, 
+        ShoutPlacedEvent.class }; 
   
   
   public AuctionImpl( String name ) {
@@ -110,11 +115,6 @@ public abstract class AuctionImpl extends Observable
       this.name = "Auction " + id;
     }    
     //initialise();
-  }
-
-  public AuctionImpl( String name, MarketDataLogger logger ) {
-    this(name);
-    this.logger = logger;
   }
 
   public AuctionImpl() {
@@ -128,7 +128,7 @@ public abstract class AuctionImpl extends Observable
     closed = false;
   }
 
-  public void reset() {
+  public void reset() {    
     initialise();
   }
 
@@ -258,52 +258,60 @@ public abstract class AuctionImpl extends Observable
     }
   }
 
-  public void addEndOfDayListener( EndOfDayListener listener ) {
-    addListener(endOfDayListeners, listener);
-  }
-
-  public void addRoundClosedListener( RoundClosedListener listener ) {
-    addListener(roundClosedListeners, listener);
-  }
-
-  public void addAuctionClosedListener( AuctionClosedListener listener ) {
-    addListener(auctionClosedListeners, listener);
-  }
-
   public void addAuctionEventListener( AuctionEventListener listener ) {
-    for( int i=0; i<auctionEventListeners.length; i++ ) {
-      addListener(auctionEventListeners[i], listener);
+    for( int i=0; i<allEvents.length; i++ ) {
+      addAuctionEventListener(allEvents[i], listener);
+    }
+  }
+  
+  public void removeAuctionEventListener( AuctionEventListener listener ) {
+    for( int i=0; i<allEvents.length; i++ ) {
+      removeAuctionEventListener(allEvents[i], listener);
     }
   }
 
-  public void removeAuctionEventListener( AuctionEventListener listener ) {
-    for( int i=0; i<auctionEventListeners.length; i++ ) {
-     auctionEventListeners[i].remove(listener);
+  public void addAuctionEventListener( Class eventClass,
+      								AuctionEventListener listener ) {
+    LinkedList listenerList = (LinkedList) eventListeners.get(eventClass);
+    if ( listenerList == null ) {
+      listenerList = new LinkedList();
+      eventListeners.put(eventClass, listenerList);
+    }
+    listenerList.add(listener);
+  }
+
+  
+  public void removeAuctionEventListener( Class eventClass,
+      								AuctionEventListener listener ) {
+    LinkedList listenerList = (LinkedList) eventListeners.get(eventClass);
+    if ( listenerList != null ) {
+      listenerList.remove(listener);
+    }
+  }
+  
+  
+  public void fireEvent( AuctionEvent event ) {
+    List listeners = (List) eventListeners.get(event.getClass());
+    if ( listeners != null ) {
+      Iterator i = listeners.iterator();
+      while ( i.hasNext() ) {
+        AuctionEventListener listener = (AuctionEventListener) i.next();
+        listener.eventOccurred(event);
+      }
     }
   }
 
   public void informAuctionClosed() {
-    Iterator i = auctionClosedListeners.iterator();
-    while (i.hasNext()) {
-      AuctionClosedListener listener = (AuctionClosedListener) i.next();
-      listener.auctionClosed(this);
-    }
+    fireEvent( new AuctionClosedEvent(this) );
   }
 
   public void informEndOfDay() {
-    Iterator i = endOfDayListeners.iterator();
-    while (i.hasNext()) {
-      EndOfDayListener listener = (EndOfDayListener) i.next();
-      listener.endOfDay(this);
-    }
+    fireEvent( new EndOfDayEvent(this) );
   }
 
-  public void informRoundClosed() {
-    Iterator i = roundClosedListeners.iterator();
-    while (i.hasNext()) {
-      RoundClosedListener listener = (RoundClosedListener) i.next();
-      listener.roundClosed(this);
-    }
+
+  public void informAuctionOpen() {
+    fireEvent( new AuctionOpenEvent(this) );
   }
 
   /**
@@ -338,24 +346,6 @@ public abstract class AuctionImpl extends Observable
   }
 
 
-  protected void updateShoutLog( int time, Shout shout ) {
-    if ( logger != null ) {
-      logger.updateShoutLog(time, shout);
-    }
-  }
-
-  protected void updateQuoteLog( int time, MarketQuote quote ) {
-    if ( logger != null ) {
-      logger.updateQuoteLog(time, getQuote());
-    }
-  }
-
-  protected void updateTransPriceLog( int time, Shout ask, Shout bid,
-                                       double price, int quantity ) {
-    if ( logger != null ) {
-      logger.updateTransPriceLog(time, ask, bid, price, quantity);
-    }
-  }
   
 
 }

@@ -12,25 +12,33 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+package uk.ac.liv.auction.event;
 
-package uk.ac.liv.auction.core;
-
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.Shout;
 
 /**
- * Classes implementing this interface can subscribe to an auction
- * to receive notification when the auction is closed.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
-public interface AuctionClosedListener extends AuctionEventListener {
 
-  /**
-   * Notify us that the specified auction is closed.
-   *
-   * @param auction The auction in which has closed.
-   */
-  public void auctionClosed( Auction auction );
+public class ShoutPlacedEvent extends AuctionEvent {
+  
+  protected int time;
+  
+  protected Shout shout;
 
-
+  public ShoutPlacedEvent( Auction auction, int time, Shout shout ) {
+    super(auction);
+    this.time = time;
+    this.shout = shout;
+  }
+  
+  public Shout getShout() {
+    return shout;
+  }
+  
+  public int getTime() {
+    return time;
+  }
 }

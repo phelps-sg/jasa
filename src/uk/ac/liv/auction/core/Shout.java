@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.agent.TraderAgent;
+import uk.ac.liv.auction.agent.TradingAgent;
 
 import uk.ac.liv.util.IdAllocator;
 
@@ -54,7 +54,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
   /**
    * The agent placing this offer
    */
-  protected TraderAgent agent;
+  protected TradingAgent agent;
 
   /**
    * True if this shout is a bid.
@@ -81,7 +81,8 @@ public class Shout implements Comparable, Cloneable, Serializable {
       new DecimalFormat("+#########0.00;-#########.00");
 
 
-  public Shout( TraderAgent agent, int quantity, double price, boolean isBid ) {
+  public Shout( TradingAgent agent, int quantity, double price, 
+      			boolean isBid ) {
     this(agent);
     this.quantity = quantity;
     this.price = price;
@@ -93,7 +94,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
           existing.isBid());
   }
 
-  public Shout( TraderAgent agent ) {
+  public Shout( TradingAgent agent ) {
     this();
     this.agent = agent;
   }
@@ -104,7 +105,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
   public int getQuantity() {  return quantity; }
   public double getPrice() {  return price; }
-  public TraderAgent getAgent() { return agent; }
+  public TradingAgent getAgent() { return agent; }
   public boolean isBid() { return isBid; }
   public boolean isAsk() { return ! isBid; }
 
@@ -253,7 +254,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
     this.isBid = isBid;
   }
 
-  void setAgent( TraderAgent agent ) {
+  void setAgent( TradingAgent agent ) {
     this.agent = agent;
   }
 
@@ -285,7 +286,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
       super.setPrice(price);
     }
 
-    public void setAgent( TraderAgent agent ) {
+    public void setAgent( TradingAgent agent ) {
       super.setAgent(agent);
     }
 

@@ -13,25 +13,19 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.core;
+package uk.ac.liv.auction.event;
 
+import uk.ac.liv.auction.core.Auction;
 
 /**
- * Classes implementing this interface can subscribe to an auction
- * to receive notification when the current trading round is
- * terminated.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
-public interface RoundClosedListener extends AuctionEventListener {
 
-  /**
-   * Notify us that the current auction round is closed.
-   *
-   * @param auction The auction in which a round has closed.
-   */
-  public void roundClosed( Auction auction );
-
+public class AuctionOpenEvent extends AuctionEvent {
+  
+  public AuctionOpenEvent( Auction auction ) {
+    super(auction);
+  }
 
 }

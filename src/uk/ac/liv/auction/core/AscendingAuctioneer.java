@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.agent.TraderAgent;
+import uk.ac.liv.auction.agent.TradingAgent;
 
 import uk.ac.liv.util.Parameterizable;
 
@@ -40,7 +40,7 @@ public class AscendingAuctioneer extends KAuctioneer implements Serializable {
   /**
    * The seller.
    */
-  protected TraderAgent seller;
+  protected TradingAgent seller;
 
   /**
    * The number of items for sale.
@@ -54,7 +54,7 @@ public class AscendingAuctioneer extends KAuctioneer implements Serializable {
   static Logger logger = Logger.getLogger(AscendingAuctioneer.class);
 
 
-  public AscendingAuctioneer( Auction auction, TraderAgent seller,
+  public AscendingAuctioneer( Auction auction, TradingAgent seller,
                                   int quantity, double reservePrice ) {
     super(auction, new UniformPricingPolicy(0));
 
@@ -87,9 +87,9 @@ public class AscendingAuctioneer extends KAuctioneer implements Serializable {
 
     reservePrice = parameters.getDouble(base.push(P_RESERVEPRICE), null, 0);
 
-    seller = (TraderAgent)
+    seller = (TradingAgent)
         parameters.getInstanceForParameterEq(base.push(P_SELLER), null,
-                                             TraderAgent.class);
+                                             TradingAgent.class);
 
     if ( seller instanceof Parameterizable ) {
       ((Parameterizable) seller).setup(parameters, base.push(P_SELLER));

@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.stats;
 
 import java.util.Map;
@@ -28,15 +29,17 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
 public interface AuctionReport {
   
   /**
-   *  Produce the final report.  Implementors can do whatever they see
-   *  fit, including doing nothing.
+   * Produce the final report for the user. Implementors can do whatever they
+   * see fit, for example by writing a report on stdout, or they may choose to
+   * do nothing.
    */
   public void generateReport();
   
   /**
    * Returns a Map of all of the variables, such as market efficiency, that are
    * produced in the report. The Map maps variables, represented by objects of
-   * type ReportVariable, onto values, which may be of any class.  
+   * type ReportVariable, onto values, which may be of any class. If no
+   * variables are produced by this report then an empty Map is returned.
    * 
    * @see ReportVariable
    */

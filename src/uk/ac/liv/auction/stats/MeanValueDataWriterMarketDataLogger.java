@@ -16,6 +16,10 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.io.*;
 
@@ -71,19 +75,27 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
   }
 
 
-  public void updateQuoteLog( int time, MarketQuote quote ) {
+  public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
+    if ( event instanceof RoundClosedEvent ) {
+      roundClosed((RoundClosedEvent) event);
+    }
+  }
+  
+  public void updateQuoteLog( RoundClosedEvent event ) {
+    MarketQuote quote = event.getAuction().getQuote();
     askQuoteStats.newData(quote.getAsk());
     bidQuoteStats.newData(quote.getBid());
   }
 
 
-  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
-                                    int quantity ) {
-     transPriceStats.newData(price);
+  public void updateTransPriceLog( TransactionExecutedEvent event ) {
+     transPriceStats.newData(event.getPrice());
   }
 
 
-  public void updateShoutLog( int time, Shout shout ) {
+  public void updateShoutLog( ShoutPlacedEvent event ) {
+    Shout shout = event.getShout();
     if (shout.isBid()) {
       bidStats.newData(shout.getPrice());
     } else {
@@ -92,7 +104,7 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
   }
 
 
-  public void roundClosed( Auction auction ) {
+  public void roundClosed( RoundClosedEvent event  ) {
 
     logger.debug("roundClosed(" + auction + ")");
 

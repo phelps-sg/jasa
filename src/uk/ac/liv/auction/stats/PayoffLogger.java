@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -55,7 +55,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger
     totalProfits = 0;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
       double profits = agent.getProfits();
       //assert profits >= 0;
       Object key = getKey(agent);
@@ -150,7 +150,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger
     table.clear();
   }
   
-  public abstract Object getKey( AbstractTraderAgent agent );
+  public abstract Object getKey( AbstractTradingAgent agent );
 
   public abstract String getKeyName();
   

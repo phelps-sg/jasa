@@ -15,12 +15,11 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.MarketQuote;
-import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.RoundRobinAuction;
-import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.event.*;
+
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 import java.util.*;
 
@@ -34,16 +33,12 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A MarketDataLogger that keeps track of the surplus
- * available to each agent in theoretical equilibrium.  Each time
- * a transaction occurs in the market, the equilibrium price is recomputed
- * and the theoretical profits available to the agents involved in the
- * transaction are tallied.  Because the equilibrium price is recomputed
- * at transaction time, this class can be used to keep track
- * of theoretically available surplus even when supply and demand are
- * changing over time.
+ * A MarketDataLogger that keeps track of the surplus available to each agent in
+ * theoretical equilibrium. The equilibrium price is recomputed at the end of
+ * each day, thus this class can be used to keep track of theoretically
+ * available surplus even when supply and demand are changing over time.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -54,10 +49,16 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   protected EquilibriaStats equilibriaStats;
 
   private HashMap surplusTable = new HashMap();
+  
+  protected int quantity = 1;
+  
+  public static final String P_QUANTITY = "quantity";
 
   static Logger logger = Logger.getLogger(EquilibriumSurplusLogger.class);
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    quantity = 
+      parameters.getIntWithDefault(base.push(P_QUANTITY), null, quantity);
   }
 
   public void setAuction( RoundRobinAuction auction ) {
@@ -65,22 +66,27 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
     equilibriaStats = new EquilibriaStats(auction);
   }
 
-  public void updateQuoteLog( int time, MarketQuote quote ) {
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof EndOfDayEvent ) {
+      recalculate(event);
+    }
   }
 
-  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
-                                   int quantity ) {
+  public void recalculate( AuctionEvent event  ) {
+    
     equilibriaStats.recalculate();
-    AbstractTraderAgent buyer = (AbstractTraderAgent) bid.getAgent();
-    AbstractTraderAgent seller = (AbstractTraderAgent) ask.getAgent();
     double ep = equilibriaStats.calculateMidEquilibriumPrice();
-    double buyerSurplus = equilibriumSurplus(buyer, ep, quantity);
-    double sellerSurplus = equilibriumSurplus(seller, ep, quantity);   
-    updateStats(buyer, buyerSurplus);
-    updateStats(seller, sellerSurplus);   
+    
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
+      double surplus = equilibriumSurplus(agent, ep, quantity);
+      updateStats(agent, surplus);
+    }
+    
   }
 
-  public double getEquilibriumProfits( AbstractTraderAgent agent ) {
+  public double getEquilibriumProfits( AbstractTradingAgent agent ) {
     MutableDoubleWrapper stats = (MutableDoubleWrapper) surplusTable.get(agent);
     if ( stats == null ) {
       return 0;
@@ -93,13 +99,13 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
     double totalSurplus = 0;
     Iterator i = surplusTable.keySet().iterator();
     while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
       totalSurplus += getEquilibriumProfits(agent);
     }
     return totalSurplus;
   }
 
-  protected void updateStats( AbstractTraderAgent agent, double lastSurplus ) {   
+  protected void updateStats( AbstractTradingAgent agent, double lastSurplus ) {   
     MutableDoubleWrapper stats = (MutableDoubleWrapper) surplusTable.get(agent);
     if ( stats == null ) {
       stats = new MutableDoubleWrapper(lastSurplus);
@@ -109,7 +115,7 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
     }
   }
 
-  protected double equilibriumSurplus( AbstractTraderAgent agent, double ep, int quantity ) {
+  protected double equilibriumSurplus( AbstractTradingAgent agent, double ep, int quantity ) {
     double surplus;
     if ( agent.isSeller() ) {
       surplus = (ep - agent.getValuation(auction)) * quantity;
@@ -131,18 +137,6 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
     initialise();
   }
 
-  public void updateShoutLog( int time, Shout shout ) {
-  }
-
-  public void roundClosed( Auction auction ) {
-  }
-
-  public void auctionClosed( Auction auction ) {
-    // Do nothing
-  }
-
-  public void endOfDay( Auction auction ) {
-  }
   
   public void generateReport() {
   }

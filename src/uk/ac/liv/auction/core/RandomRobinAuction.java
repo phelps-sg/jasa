@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.agent.RoundRobinTrader;
+import uk.ac.liv.auction.agent.TradingAgent;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
@@ -43,7 +43,7 @@ public class RandomRobinAuction extends RoundRobinAuction {
     Object[] randomlySortedTraders = activeTraders.toArray();
     GlobalPRNG.randomPermutation(randomlySortedTraders);    
     for( int i=0; i<numTraders; i++ ) {      
-      RoundRobinTrader trader = (RoundRobinTrader) randomlySortedTraders[i];      
+      TradingAgent trader = (TradingAgent) randomlySortedTraders[i];      
       trader.requestShout(this);
     }
   }

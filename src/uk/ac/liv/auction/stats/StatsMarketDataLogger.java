@@ -21,7 +21,10 @@ import java.util.Map;
 
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.Distribution;
@@ -62,17 +65,28 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
   public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
-  public void updateQuoteLog( int time, MarketQuote quote ) {
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof RoundClosedEvent ) {
+      roundClosed((RoundClosedEvent) event);      
+    } else if ( event instanceof TransactionExecutedEvent ) {
+      updateTransPriceLog((TransactionExecutedEvent) event);
+    } else if ( event instanceof ShoutPlacedEvent ) {
+      updateShoutLog((ShoutPlacedEvent) event);
+    }
+  }
+  
+  public void roundClosed( RoundClosedEvent event ) { 
+    MarketQuote quote = event.getAuction().getQuote();
     stats[BID_QUOTE].newData((double) quote.getBid());
     stats[ASK_QUOTE].newData((double) quote.getAsk());
   }
 
-  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
-                                    int quantity ) {
-    stats[TRANS_PRICE].newData(price);
+  public void updateTransPriceLog( TransactionExecutedEvent event ) {
+    stats[TRANS_PRICE].newData(event.getPrice());
   }
 
-  public void updateShoutLog( int time, Shout shout ) {
+  public void updateShoutLog( ShoutPlacedEvent event ) {
+    Shout shout = event.getShout();
     if ( shout.isBid() ) {
       stats[BID_PRICE].newData(shout.getPrice());
     } else {
@@ -153,17 +167,6 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
   }
 
 
-  public void auctionClosed( Auction auction ) {
-    // Do nothing
-  }
-
-  public void endOfDay( Auction auction ) {
-    // Do nothing
-  }
-
-  public void roundClosed( Auction auction ) {
-    // Do nothing
-  }
 
   protected void reportHeader() {
     logger.info("");
