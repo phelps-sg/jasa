@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.ShoutFactory;
 import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Resetable;
@@ -69,10 +68,8 @@ public abstract class AbstractStrategy implements
   public Shout modifyShout( Shout shout, Auction auction ) {
     this.auction = auction;
     if ( modifyShout(currentShout) ) {
-      return ShoutFactory.getFactory().create(currentShout.getAgent(),
-                                               currentShout.getQuantity(),
-                                               currentShout.getPrice(),
-                                               currentShout.isBid());
+      return new Shout(currentShout.getAgent(), currentShout.getQuantity(),
+          				currentShout.getPrice(), currentShout.isBid());
     } else {
       return null;
     }
@@ -81,8 +78,8 @@ public abstract class AbstractStrategy implements
   /**
    * Modify the price and quantity of the given shout according to this
    * strategy.
-   *
-   * @return  false if no shout is to be placed at this time
+   * 
+   * @return false if no shout is to be placed at this time
    */
   public boolean modifyShout( Shout.MutableShout shout ) {
     shout.setIsBid(agent.isBuyer());
