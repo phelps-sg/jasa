@@ -13,28 +13,25 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
+import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.util.io.DataWriter;
 
-import java.util.*;
-
-import org.apache.log4j.Logger;
-
 /**
- * A class to calculate the supply and demand curves and write them
- * to the specified <code>DataWriter</code>s.  This can be used to log
- * data to <code>DataSeriesWriter</code>s, which can then be viewed
- * in a JSci graph or a swing table.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class SupplyAndDemandStats extends DirectRevelationReport {
+public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 
   /**
    * The DataWriter to write the supply curve to.
@@ -45,20 +42,6 @@ public class SupplyAndDemandStats extends DirectRevelationReport {
    * The DataWriter to write the demand curve to.
    */
   protected DataWriter demandStats;
-
-  /**
-   * The sorted list of agent's truthful bids (ie buyers' private values).
-   */
-  protected ArrayList bids = new ArrayList();
-
-  /**
-   * The sorted list of agents' truthful asks (ie sellers' private values).
-   */
-  protected ArrayList asks = new ArrayList();
-
-
-  static Logger logger = Logger.getLogger(SupplyAndDemandStats.class);
-
 
   /**
    * Constructor.
@@ -75,22 +58,18 @@ public class SupplyAndDemandStats extends DirectRevelationReport {
     this.demandStats = demandStats;
   }
 
+
   public void produceUserOutput() {
     writeSupplyStats();
     writeDemandStats();    
   }
 
-  public void calculate() {
-    super.calculate();
+  public Map getVariables() {
+    return new HashMap();
   }
-
-  public void writeSupplyStats() {
-    writeStats(supplyStats, asks, new AscendingShoutComparator());
-  }
-
-  public void writeDemandStats() {
-    writeStats(demandStats, bids, new DescendingShoutComparator());
-  }
+  
+  public abstract void writeSupplyStats();
+  public abstract void writeDemandStats();
 
   public void writeStats( DataWriter stats, List shouts,
                            Comparator comparator ) {
@@ -111,27 +90,4 @@ public class SupplyAndDemandStats extends DirectRevelationReport {
       qty = qty1;
     }
   }
-
-  protected void enumerateTruthfulShout( Shout shout ) {
-    Shout.MutableShout copyOfShout = new Shout.MutableShout();
-    copyOfShout.copyFrom(shout);
-    if ( shout.isBid() ) {
-      bids.add(copyOfShout);
-    } else {
-      asks.add(copyOfShout);
-    }
-    super.enumerateTruthfulShout(shout);
-  }
-
-  public void initialise() {
-    super.initialise();
-    asks.clear();
-    bids.clear();
-  }
-  
-  public Map getVariables() {
-    return new HashMap();
-  }
-
-
 }

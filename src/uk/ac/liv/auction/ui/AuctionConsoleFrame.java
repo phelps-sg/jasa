@@ -50,9 +50,9 @@ public class AuctionConsoleFrame extends JFrame
   protected JLabel roundLabel;
   protected JLabel dayLabel;
   protected JLabel numTradersLabel;
-
+  
+  protected JMenuBar menuBar;
  
-  protected JButton supplyAndDemandButton;
   protected JButton reportButton; 
   protected JButton resetAgentsButton;
   protected JButton closeAuctionButton;
@@ -177,7 +177,7 @@ public class AuctionConsoleFrame extends JFrame
 
     JButton logAuctionStatusButton = new JButton("Dump");
     logAuctionStatusButton.setToolTipText("Display the current state of the auction");
-    c.gridx = 0;
+    c.gridx = 1;
     c.gridy = 6;
     c.weightx = 0;
     gridBag.setConstraints(logAuctionStatusButton, c);
@@ -190,7 +190,7 @@ public class AuctionConsoleFrame extends JFrame
 
     JButton reportButton = new JButton("Report");
     reportButton.setToolTipText("Generate a report on the auction");
-    c.gridx = 1;
+    c.gridx = 2;
     c.gridy = 6;
     c.weightx = 0;
     gridBag.setConstraints(reportButton, c);
@@ -201,19 +201,6 @@ public class AuctionConsoleFrame extends JFrame
         }
     });
 
-
-    JButton supplyAndDemandButton = new JButton("S/D");
-    supplyAndDemandButton.setToolTipText("Draw a graph of supply and demand");
-    c.gridx = 2;
-    c.gridy = 6;
-    c.weightx = 0;
-    gridBag.setConstraints(supplyAndDemandButton, c);
-    contentPane.add(supplyAndDemandButton);
-    supplyAndDemandButton.addActionListener(new ActionListener() {
-      public void actionPerformed( ActionEvent e ) {
-        graphSupplyAndDemand();
-      }
-    });
 
     JButton resetAgentsButton = new JButton("Reset");
     resetAgentsButton.setToolTipText("Reset all agents");
@@ -240,6 +227,7 @@ public class AuctionConsoleFrame extends JFrame
     });
     
     setAuctionName(name);
+    setJMenuBar(menuBar = new AuctionConsoleMenu());
   }
 
 
@@ -295,19 +283,7 @@ public class AuctionConsoleFrame extends JFrame
   }
 
 
-  public void graphSupplyAndDemand() {
-    logger.debug("graphSupplyAndDemand()");
-    new Thread() {
-      public void run() {
-        SupplyAndDemandFrame graphFrame =
-            new SupplyAndDemandFrame((RoundRobinAuction) auction);
-        graphFrame.pack();
-        graphFrame.setVisible(true);
-      }
-    }.start();
-    logger.debug("exiting GraphSupplyAndDemand()");
-  }
-
+  
   public void resetAgents() {
     new Thread() {
       public void run() {
@@ -348,4 +324,102 @@ public class AuctionConsoleFrame extends JFrame
     //TODO
   }
 
+  
+  class AuctionConsoleMenu extends JMenuBar {
+    
+    protected JCheckBoxMenuItem viewSupplyAndDemand;
+    
+    protected JCheckBoxMenuItem viewAuctionState;
+    
+    protected TrueSupplyAndDemandFrame supplyAndDemandGraph = null;
+    
+    protected ReportedSupplyAndDemandFrame auctionStateGraph = null;
+    
+    public AuctionConsoleMenu() {
+      JMenu viewMenu = new JMenu("View");
+      
+      viewSupplyAndDemand = new JCheckBoxMenuItem("Supply and Demand");
+      ActionListener viewListener = new ActionListener() {
+        public void actionPerformed( ActionEvent event ) {
+          toggleSupplyAndDemand();
+        }
+      };
+      viewSupplyAndDemand.addActionListener(viewListener);
+      viewMenu.add(viewSupplyAndDemand);
+      
+      viewAuctionState = new JCheckBoxMenuItem("Auction State");
+      viewListener = new ActionListener() {
+        public void actionPerformed( ActionEvent event ) {
+          toggleAuctionState();
+        }
+      };
+      viewAuctionState.addActionListener(viewListener);
+      viewMenu.add(viewAuctionState);
+      
+      add(viewMenu);
+    }
+    
+    
+    
+    public void toggleSupplyAndDemand() {
+      if ( supplyAndDemandGraph == null ) {
+        supplyAndDemandGraph = new TrueSupplyAndDemandFrame(
+            (RoundRobinAuction) auction);
+        
+        ComponentListener listener = new ComponentListener() {
+
+          public void componentHidden( ComponentEvent e ) {
+            viewSupplyAndDemand.setSelected(false);
+            supplyAndDemandGraph = null;
+          }
+          
+          public void componentMoved( ComponentEvent e ) {
+          }
+          
+          public void componentResized( ComponentEvent e ) {
+          }
+          
+          public void componentShown( ComponentEvent e ) {
+          }
+        };
+        supplyAndDemandGraph.addComponentListener(listener);
+        supplyAndDemandGraph.open();
+        viewSupplyAndDemand.setSelected(true);
+      } else {
+        supplyAndDemandGraph.close();
+      }
+    }
+    
+    public void toggleAuctionState() {
+      if ( auctionStateGraph == null ) {
+        auctionStateGraph = new ReportedSupplyAndDemandFrame(
+            (RoundRobinAuction) auction);
+        
+        ComponentListener listener = new ComponentListener() {
+
+          public void componentHidden( ComponentEvent e ) {
+            viewAuctionState.setSelected(false);
+            auctionStateGraph = null;
+          }
+          
+          public void componentMoved( ComponentEvent e ) {
+          }
+          
+          public void componentResized( ComponentEvent e ) {
+          }
+          
+          public void componentShown( ComponentEvent e ) {
+          }
+        };
+        
+        auctionStateGraph.addComponentListener(listener);
+        auctionStateGraph.open();
+        viewAuctionState.setSelected(true);
+      } else {
+        auctionStateGraph.close();
+      }
+    }
+    
+    
+  }
 }

@@ -24,7 +24,8 @@ import uk.ac.liv.util.io.DataSeriesWriter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import org.apache.log4j.Logger;
 
@@ -37,15 +38,17 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class SupplyAndDemandFrame extends JFrame {
+public abstract class SupplyAndDemandFrame extends JFrame implements AuctionEventListener {
 
   protected RoundRobinAuction auction;
 
-  protected JButton updateButton;
-
   protected RepastPlot graph;
-
-  public static final String TITLE = "Supply and Demand Graph";
+  
+  protected DataSeriesWriter supplyCurve;
+  
+  protected DataSeriesWriter demandCurve;
+  
+  protected JButton updateButton;
 
   static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
@@ -60,20 +63,20 @@ public class SupplyAndDemandFrame extends JFrame {
     plotSupplyAndDemand();
     
     contentPane.add(graph, BorderLayout.CENTER);
-
+    
     updateButton = new JButton("Update");
-    updateButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
+    updateButton.addActionListener( new ActionListener() {
+      public void actionPerformed( ActionEvent event ) {
         updateGraph();
       }
-    }
-    );
+    });
     contentPane.add(updateButton, BorderLayout.SOUTH);
 
     updateTitle();
 
     pack();
   }
+  
 
   public void updateGraph() {
     graph.clear(0);
@@ -83,15 +86,39 @@ public class SupplyAndDemandFrame extends JFrame {
   }
 
   public void updateTitle() {
-    setTitle(TITLE + " for " + auction.getName() + " at time " +
+    setTitle(getGraphName() + " for " + auction.getName() + " at time " +
               auction.getRound());
   }
+  
+  public void open() {
+    final SupplyAndDemandFrame thisFrame = this;
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        //auction.addAuctionEventListener(thisFrame);
+        pack();
+        setVisible(true);
+      }
+    });
+  }
+  
+  public void close() {
+    final SupplyAndDemandFrame thisFrame = this;
+    SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
+        //auction.removeAuctionEventListener(thisFrame);
+        setVisible(false);
+      }
+    });
+  }
+  
+  public abstract String getGraphName();
+  
+  public abstract SupplyAndDemandStats getSupplyAndDemandStats();
 
   protected void plotSupplyAndDemand() {
-    DataSeriesWriter supplyCurve = new DataSeriesWriter();
-    DataSeriesWriter demandCurve = new DataSeriesWriter();
-    SupplyAndDemandStats stats =
-        new SupplyAndDemandStats(auction, supplyCurve, demandCurve);
+    supplyCurve = new DataSeriesWriter();
+    demandCurve = new DataSeriesWriter();
+    SupplyAndDemandStats stats = getSupplyAndDemandStats();
     stats.calculate();
     stats.produceUserOutput();
     plotCurve(0, supplyCurve);
