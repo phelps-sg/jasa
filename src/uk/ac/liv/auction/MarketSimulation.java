@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Iterator;
 
 import java.io.File;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -50,12 +51,24 @@ import org.apache.log4j.PropertyConfigurator;
  * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
  * <td valign=top>(the class of auction to use)</td></tr>
  *
+ * <tr><td valign=top><i>base</i><tt>.gatherstats</tt><br>
+ * <font size=-1>boolean</font></td>
+ * <td valign=top>(gather market statistics at end of auction?)</td></tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.numagenttypes</tt><br>
+ * <font size=-1>int</font></td>
+ * <td valign=top>(the number of different agent types)</td></tr>
+ *
+ * <tr><td valign=top><i>base.i</i><br>
+ * <font size=-1>classname, inherits uk.ac.liv.auction.agent.RoundRobinTrader</font></td>
+ * <td valign=top>(the class for agent type #<i>i</i>)</td></tr>
  *
  * </table>
  *
  */
 
-public class MarketSimulation implements Parameterizable, Runnable {
+public class MarketSimulation implements Parameterizable, Runnable, 
+                                          Serializable {
 
   protected RoundRobinAuction auction;
 
@@ -126,7 +139,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
       	RoundRobinTrader agent =
           (RoundRobinTrader) parameters.getInstanceForParameter(typeParam, null,
                                                                 RoundRobinTrader.class);
-	((Parameterizable) agent).setup(parameters, typeParam);
+        ((Parameterizable) agent).setup(parameters, typeParam);
         auction.register(agent);
 
       }
@@ -141,7 +154,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
 
   public void report() {
-    marketData.finalReport();
+    auction.generateReport();    
     if ( gatherStats ) {
       stats.calculate();
       logger.info(stats);

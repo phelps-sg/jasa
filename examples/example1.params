@@ -4,7 +4,7 @@ simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctionee
 simulation.auction.auctioneer.k = 0.5
 
 # Get cummulative stats
-simulation.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
+simulation.auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
 
 # Show GUI console
 simulation.console = true
