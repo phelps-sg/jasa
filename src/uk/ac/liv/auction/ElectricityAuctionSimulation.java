@@ -107,6 +107,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_STATS = "stats";
   static final String P_ITER_DATA = "iterdata";
 
+  static final int DATAFILE_NUM_COLUMNS = 29;
 
   public ElectricityAuctionSimulation() {
   }
@@ -236,7 +237,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       dataFile = new CSVWriter(
                   new FileOutputStream(outputDir + "/" + "npt-"
-                                        + paramSummary + ".csv"), 21);
+                                        + paramSummary + ".csv"), DATAFILE_NUM_COLUMNS);
 
     } catch ( IOException e ) {
       e.printStackTrace();
@@ -304,6 +305,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       variables.add(sMPS);
       variables.add(sMPBN);
       variables.add(sMPSN);
+
+      Debug.assertTrue("CSV file not configured with correct number of columns",
+                         variables.size()*2 == DATAFILE_NUM_COLUMNS-1);
 
       initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
 
