@@ -1,4 +1,4 @@
-# This example demonstrates a discriminatory-price k-CDA
+# This example demonstrates a discriminatory-price k-DA
 #
 # To run this example, run the following command:
 #
@@ -7,11 +7,11 @@
 
 # Use a random-robin auction which will randomise the order in which agents bid
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.name = Example 1: k-CDA
+simulation.auction.name = Example 1: electricity k-DA
 simulation.auction.maximumrounds = 10000
 
 # Use a k-CDA auctioneer with clearing occuring every time a new shout arrives
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 
 # Set the transaction price as a function of individual bid and ask prices
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
@@ -33,7 +33,7 @@ simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 simulation.console = true
 
 # Generate a report on market equilibria
-simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
+simulation.auction.stats = uk.ac.liv.auction.electricity.ElectricityStats
 
 # Two populations of agents
 simulation.agenttype.n = 2
@@ -45,7 +45,7 @@ simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.0.numagents = 50
 simulation.agenttype.0.isseller = true
 # Valuations will be drawn randomly for each unit that we trade
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Valuations will be in the range (10, 100)
 simulation.agenttype.0.valuer.minvalue = 10
 simulation.agenttype.0.valuer.maxvalue = 100
@@ -56,7 +56,7 @@ simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrateg
 # Multiply the discrete output from the learning algorithm by $1
 simulation.agenttype.0.strategy.markupscale = 1
 # Use the Roth-Erev learning algorithm
-simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 # ..configured with 100 different actions, ie markups
 simulation.agenttype.0.strategy.learner.k = 100
 
@@ -67,12 +67,12 @@ simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.1.numagents = 50
 simulation.agenttype.1.isseller = false
 # Valuations will be drawn randomly for each unit that we trade
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Valuations will be in the range (80, 150)
 simulation.agenttype.1.valuer.minvalue = 80
 simulation.agenttype.1.valuer.maxvalue = 150
-# Generating capacity is 15MWh
-simulation.agenttype.1.capacity = 15
+# Generating capacity is 10MWh
+simulation.agenttype.1.capacity = 10
 # Use a myopic stimuli-response algorithm
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 # Multiply the discrete output from the learning algorithm by $1
