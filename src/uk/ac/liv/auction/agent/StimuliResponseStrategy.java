@@ -90,4 +90,8 @@ public class StimuliResponseStrategy extends AbstractStrategy {
     this.learner = learner;
   }
 
+  public String toString() {
+    return "(" + getClass() + " learner:" + learner + ")";
+  }
+
 }

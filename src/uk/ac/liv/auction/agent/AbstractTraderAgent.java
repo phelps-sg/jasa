@@ -281,12 +281,8 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
 
   /**
    * Return the amount of commodity to trade in the current round.
-   * The default quantity is 1.  Sub-classes should override this
-   * method if they wish to trade different quantities.
    */
-  public int determineQuantity( Auction auction ) {
-    return 1;
-  }
+  public abstract int determineQuantity( Auction auction );
 
   public AbstractTraderAgent protoClone() {
     AbstractTraderAgent copy = null;

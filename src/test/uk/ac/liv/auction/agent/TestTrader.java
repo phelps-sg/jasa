@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -42,6 +42,10 @@ public class TestTrader extends AbstractTraderAgent {
     System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity);
     lastWinningShout = winningShout;
     lastWinningPrice = price;
+  }
+
+  public int determineQuantity( Auction auction ) {
+    return 1;
   }
 
   public void requestShout( RoundRobinAuction auction ) {

@@ -169,16 +169,6 @@ public class ElectricityAuctionSimulation  {
 
     ElectricityStats stats = new ElectricityStats(0, 200, auction);
 
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
-//      int numPeaks = ((RothErevLearner) trader.getLearner()).countPeaks();
-//      if ( numPeaks > 1 ) {
-//        System.out.println("WARNING: No. of peaks for trader " + trader + "\n=" + numPeaks);
-//      }
-    }
-
-
     return stats;
   }
 
@@ -188,7 +178,7 @@ public class ElectricityAuctionSimulation  {
                                       int[] values ) {
     for( int i=0; i<num; i++ ) {
 
-/*
+
       ElectricityTrader trader =
         new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);
 
@@ -198,16 +188,6 @@ public class ElectricityAuctionSimulation  {
       strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X, System.currentTimeMillis()) );
 
       trader.setStrategy(strategy);
-*/
-      // Construct a trader for this record
-
-      MREElectricityTrader trader =
-        new MREElectricityTrader(capacity, values[i % values.length], 0, areSellers);
-
-      // Configure the MRE algorithm
-      int seed = Math.abs((int) System.currentTimeMillis());
-      trader.setLearner( new NPTRothErevLearner(K, R, E, S1*X,
-                                                  seed) );
 
       // Register it in the auction
       auction.register(trader);
