@@ -300,7 +300,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
         ElectricityTrader trader = (ElectricityTrader) traders.next();
 
         double value;
-        if ( trader.isBuyer() ) {  //TODO!
+        if ( trader.isBuyer() ) {
           value =
             nextRandomDouble(minBuyerPrivateValue, maxBuyerPrivateValue);
         } else {
@@ -321,9 +321,11 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     } while ( ! stats.standardStats.equilibriaExists() );
   }
 
+
   protected double nextRandomDouble( double min, double max ) {
     return min + randGenerator.nextDouble() * (max - min);
   }
+
 
   protected void preAuctionProcessing() {
 
@@ -423,6 +425,23 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   }
 
 
+  protected LinkedList initialiseTraders( Vector[] group ) {
+    Auctioneer auctioneer = auction.getAuctioneer();
+    LinkedList strategies = new LinkedList();
+    Iterator traders = allTraders.iterator();
+    for( int i=0; traders.hasNext(); i++ ) {
+      ElectricityTrader trader = (ElectricityTrader) traders.next();
+      Strategy strategy = getStrategy(i, group);
+      ((Resetable) strategy).reset();
+      trader.setStrategy(strategy);
+      strategy.setAgent(trader);
+      ((FixedQuantityStrategy) strategy).setQuantity(trader.getCapacity());
+      trader.reset();
+      strategies.add(strategy);
+    }
+    return strategies;
+  }
+
 
   protected void registerTraders() {
 
@@ -486,8 +505,6 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   protected abstract void setFitnesses( Vector[] group );
 
   protected abstract void computeFitnesses();
-
-  protected abstract LinkedList initialiseTraders( Vector[] group );
 
   public abstract int getFirstStrategySubpop();
 

@@ -107,23 +107,6 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
   }
 
 
-  protected LinkedList initialiseTraders( Vector[] group ) {
-    Auctioneer auctioneer = auction.getAuctioneer();
-    LinkedList strategies = new LinkedList();
-    Iterator traders = allTraders.iterator();
-    for( int i=0; traders.hasNext(); i++ ) {
-      ElectricityTrader trader = (ElectricityTrader) traders.next();
-      Strategy strategy = getStrategy(i, group);
-      ((Resetable) strategy).reset();
-      trader.setStrategy(strategy);
-      strategy.setAgent(trader);
-      ((FixedQuantityStrategy) strategy).setQuantity(trader.getCapacity());
-      trader.reset();
-      strategies.add(strategy);
-    }
-    return strategies;
-  }
-
 
   public Object protoClone() throws CloneNotSupportedException {
 
