@@ -11,7 +11,7 @@ simulation.console = true
 
 # Gather meta-stats on market-equilibria
 simulation.gatherstats = true
-simulation.stats = uk.ac.liv.auction.stats.MetaMarketStats
+simulation.stats = uk.ac.liv.auction.stats.EquilibriaStats
 
 # Two populations of agents
 simulation.numagenttypes = 2

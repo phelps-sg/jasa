@@ -11,10 +11,10 @@
 #
 
 # Number of auction rounds
-electricity.maxrounds = 1000
+electricity.maxrounds = 100
 
 # Number of samples per value of k
-electricity.iterations = 10000
+electricity.iterations = 1000
 
 # Output data
 electricity.outputdir = results/electricity/test

@@ -8,6 +8,10 @@
 #
 
 auction = uk.ac.liv.auction.agent.jade.JADEAuction
+auction.maximumrounds = 50
+auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
+auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+auction.auctioneer.k = 0.5
 
 # Maximum number of rounds
 auction.maximumrounds = 10
@@ -28,7 +32,7 @@ auction.numagenttypes = 2
 # 1st population- 30 sellers bidding using the modified Roth-Erev 
 # learning algorithm
 auction.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
-auction.agenttype.0.numagents = 30
+auction.agenttype.0.numagents = 50
 auction.agenttype.0.randomprivatevalue = true
 auction.agenttype.0.strategy.quantity = 10
 auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
@@ -38,7 +42,7 @@ auction.agenttype.0.isseller = true
 # 2nd population- 30 buyers using the the modified
 #  Roth-Erev learning algorithm
 auction.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
-auction.agenttype.1.numagents = 30
+auction.agenttype.1.numagents = 50
 auction.agenttype.1.randomprivatevalue = true
 auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 auction.agenttype.1.strategy.quantity = 20
@@ -46,8 +50,7 @@ auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 auction.agenttype.1.isseller = false
 
 # log4j configuration
-log4j.rootCategory=DEBUG, stdout
+log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=[%p] - %m%n
-
