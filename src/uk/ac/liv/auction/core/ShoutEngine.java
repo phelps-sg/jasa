@@ -33,22 +33,12 @@ public interface ShoutEngine extends uk.ac.liv.util.Resetable {
 
   public void newAsk( Shout ask ) throws DuplicateShoutException;
 
-  void removeShout( Shout shout );
+  public void removeShout( Shout shout );
 
   /**
    * Log the current state of the auction.
    */
   public void printState();
-
-  /**
-   * Insert an unmatched ask into the approriate heap.
-   */
-  void insertUnmatchedAsk( Shout ask ) throws DuplicateShoutException;
-
-  /**
-   * Insert an unmatched bid into the approriate heap.
-   */
-  void insertUnmatchedBid( Shout bid ) throws DuplicateShoutException;
 
   /**
    * <p>
@@ -66,21 +56,21 @@ public interface ShoutEngine extends uk.ac.liv.util.Resetable {
   /**
    * Get the highest unmatched bid in the auction.
    */
-  Shout getHighestUnmatchedBid();
+  public Shout getHighestUnmatchedBid();
 
   /**
    * Get the lowest matched bid in the auction.
    */
-  Shout getLowestMatchedBid();
+  public Shout getLowestMatchedBid();
 
   /**
    * Get the lowest unmatched ask.
    */
-  Shout getLowestUnmatchedAsk();
+  public Shout getLowestUnmatchedAsk();
 
   /**
    * Get the highest matched ask.
    */
-  Shout getHighestMatchedAsk();
+  public Shout getHighestMatchedAsk();
 
 }

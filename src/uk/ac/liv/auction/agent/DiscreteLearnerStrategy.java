@@ -26,6 +26,8 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import org.apache.log4j.Logger;
+
 
 /**
  * A class representing a strategy in which we adapt our bids
@@ -53,8 +55,10 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
    */
   protected double markupScale = 1;
 
-
   static final String P_MARKUPSCALE = "markupscale";
+
+  static Logger logger = Logger.getLogger(DiscreteLearnerStrategy.class);
+
 
   public DiscreteLearnerStrategy( AbstractTraderAgent agent ) {
     super(agent);
@@ -95,6 +99,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
       price = agent.getPrivateValue() - action*markupScale;
     }
     if ( price < 0 ) {
+      logger.debug(this + ": set negative price- clipping at 0");
       price = 0;
     }
 

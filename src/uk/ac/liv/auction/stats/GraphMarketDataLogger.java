@@ -30,6 +30,8 @@ import uk.ac.liv.util.io.DataSeriesWriter;
 
 import java.util.Vector;
 
+import javax.swing.event.EventListenerList;
+
 import org.apache.log4j.Logger;
 
 import java.util.Iterator;
@@ -53,8 +55,8 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   protected static GraphMarketDataLogger singletonInstance;
 
-  private final Vector listenerList = new Vector();
-  private final GraphDataEvent event = new GraphDataEvent(this);
+  protected EventListenerList listenerList = new EventListenerList();
+//  protected GraphDataEvent event = new GraphDataEvent(this);
 
   static Logger logger = Logger.getLogger(GraphMarketDataLogger.class);
 
@@ -124,25 +126,26 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public void dataUpdated() {
     logger.debug("dataUpdated()");
-//    fireDataChanged();
+    for( int i=0; i<allSeries.length; i++ ) {
+      fireGraphChanged(new GraphDataEvent(this, i, true));
+    }
   }
 
-  public void fireDataChanged() {
-    logger.debug("fireDataChanged()");
-    for ( int i = 0; i < listenerList.size(); i++ ) {
-      logger.debug("Notifying listener " + listenerList.elementAt(i) + ".. ");
-      ( (GraphDataListener) listenerList.elementAt(i)).dataChanged(event);
-      logger.debug("Notification done.");
+  protected final void fireGraphChanged( GraphDataEvent event ) {
+    final Object listeners[] = listenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+      if (listeners[i] == GraphDataListener.class)
+        ( (GraphDataListener) listeners[i + 1]).dataChanged(event);
     }
-    logger.debug("fireDataChanged() done");
   }
+
 
   public final void addGraphDataListener( GraphDataListener l ) {
-    listenerList.addElement(l);
+    listenerList.add(GraphDataListener.class, l);
   }
 
   public final void removeGraphDataListener( GraphDataListener l ) {
-    listenerList.removeElement(l);
+    listenerList.remove(GraphDataListener.class, l);
   }
 
   public static GraphMarketDataLogger getSingletonInstance() {

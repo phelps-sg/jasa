@@ -22,19 +22,19 @@ package uk.ac.liv.util;
  * mutable.
  * </p>
  */
-public class MutableIntWrapper {
+public class MutableDoubleWrapper {
 
-  public int value;
+  public double value;
 
-  public MutableIntWrapper() {
+  public MutableDoubleWrapper() {
     this(0);
   }
 
-  public MutableIntWrapper( int value ) {
+  public MutableDoubleWrapper( double value ) {
     this.value = value;
   }
 
-  public int intValue() {
+  public double doubleValue() {
     return value;
   }
 

@@ -11,9 +11,9 @@ auction = uk.ac.liv.auction.agent.jade.JADEAuction
 auction.maximumrounds = 50
 
 auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
-auction.logger.n = 2
+auction.logger.n = 1
 auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
-auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+#auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
 auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
@@ -55,4 +55,4 @@ auction.agenttype.1.isseller = false
 log4j.rootCategory=DEBUG, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-log4j.appender.stdout.layout.ConversionPattern=[%p] - %m%n
+log4j.appender.stdout.layout.ConversionPattern=[%p] %m%n

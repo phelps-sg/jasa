@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.electricity;
 
 import uk.ac.liv.auction.core.*;
+
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.agent.Strategy;

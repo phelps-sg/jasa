@@ -67,8 +67,10 @@ public class AuctionConsoleFrame extends JFrame
   protected JButton resetAgentsButton;
 
   protected JGraphLayout graphLayout;
-
+  protected JLineGraph graph;
   protected JPanel graphPanel;
+  protected float graphXExtrema = 0f;
+  protected GraphMarketDataLogger graphModel;
 
   protected DecimalFormat currencyFormatter =
       new DecimalFormat("+000000.00;-000000.00");
@@ -80,7 +82,6 @@ public class AuctionConsoleFrame extends JFrame
 
   protected int currentRound = 0;
 
-  protected GraphMarketDataLogger graphModel;
 
   protected LinkedList graphs = new LinkedList();
 
@@ -279,7 +280,7 @@ public class AuctionConsoleFrame extends JFrame
 
     if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
       graphPanel = new JPanel(graphLayout = new JGraphLayout());
-      JLineGraph graph = new JLineGraph(graphModel);
+      graph = new JLineGraph(graphModel);
       graphPanel.add(graph, "Graph");
       c.gridx = 0;
       c.gridy = 0;
@@ -291,7 +292,9 @@ public class AuctionConsoleFrame extends JFrame
       graphPanel.setPreferredSize(new Dimension(600,200));
       gridBag.setConstraints(graphPanel, c);
       contentPane.add(graphPanel);
-
+      graphXExtrema = 500f;
+      graph.setYExtrema(0f, 0f);
+      graph.setXExtrema(0f, graphXExtrema);
     }
 
     setAuctionName(name);
@@ -343,12 +346,14 @@ public class AuctionConsoleFrame extends JFrame
     roundLabel.setText(decimalFormatter.format(auction.getAge()));
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
 
-//    if ( graphModel != null && auction.getAge() != currentRound) {
-//      currentRound = auction.getAge();
-//      if ( currentRound > 1 && currentRound % 10 == 0 ) {
-//        notifyGraphModelChanged();
-//      }
-//    }
+    if ( graphModel != null && auction.getAge() != currentRound) {
+      currentRound = auction.getAge();
+      if ( currentRound > 1 && currentRound % 500 == 0 ) {
+        graphXExtrema += 500f;
+        graph.setXExtrema(0, graphXExtrema);
+      }
+      notifyGraphModelChanged();
+    }
     logger.debug("update() complete");
   }
 
@@ -410,14 +415,14 @@ public class AuctionConsoleFrame extends JFrame
     pack();
     setVisible(true);
     if ( graphModel != null ) {
-      startGraphUpdateTimer();
+//      startGraphUpdateTimer();
     }
   }
 
-  public void startGraphUpdateTimer() {
+  protected void startGraphUpdateTimer() {
     ActionListener graphUpdateListener = new ActionListener() {
       public void actionPerformed( ActionEvent e ) {
-        graphModel.fireDataChanged();
+        graphModel.dataUpdated();
       }
     };
     graphUpdateTimer = new Timer(1000, graphUpdateListener);
@@ -430,12 +435,13 @@ public class AuctionConsoleFrame extends JFrame
   public void deactivate() {
     setVisible(false);
     if ( graphUpdateTimer != null ) {
-      graphUpdateTimer.stop();
+//      graphUpdateTimer.stop();
     }
   }
 
   public void rerunAuction() {
     logger.debug("rerunAuction()");
+    resume();
     auction.close();
     while ( auction.isRunning() ) {
       // Wait until the auction has finished running
@@ -458,22 +464,22 @@ public class AuctionConsoleFrame extends JFrame
 
   protected void notifyGraphModelChanged() {
     logger.debug("notifyGraphModelChanged()");
-//    try {
-      SwingUtilities.invokeLater(new Runnable() {
+    try {
+      SwingUtilities.invokeAndWait(new Runnable() {
         public void run() {
-          graphModel.fireDataChanged();
+          graphModel.dataUpdated();
         }
       });
-//      Thread.currentThread().sleep(1);
-//    }
-//    catch (InterruptedException e) {
-//      logger.warn(e);
-//      e.printStackTrace();
-//    }
-//    catch (java.lang.reflect.InvocationTargetException e) {
-//      logger.warn(e);
-//      e.printStackTrace();
-//    }
+      Thread.currentThread().sleep(1);
+    }
+    catch (InterruptedException e) {
+      logger.warn(e);
+      e.printStackTrace();
+    }
+    catch (java.lang.reflect.InvocationTargetException e) {
+      logger.warn(e);
+      e.printStackTrace();
+    }
     logger.debug("exiting notifyGraphModelChanged()");
   }
 }

@@ -120,6 +120,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
         shout.setPrice(currentPrice);
       }
     } catch ( ShoutsNotVisibleException e ) {
+      logger.error(e.getMessage());
       throw new AuctionError("ZIPStrategy can only be used with auctioneers who permit shout visibility");
     }
   }
