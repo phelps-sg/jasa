@@ -59,7 +59,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   public void updateQuoteLog( int time, MarketQuote quote ) {
   }
 
-  public void updateTransPriceLog( int time, Shout ask, double price,
+  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
                                    int quantity ) {
   }
 

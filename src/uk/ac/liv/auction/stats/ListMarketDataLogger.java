@@ -63,7 +63,7 @@ public class ListMarketDataLogger extends AbstractMarketDataLogger {
     }
   }
 
-  public void updateTransPriceLog( int time, Shout ask, double price,
+  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
                                     int quantity ) {
     try {
       if ( transPriceLog != null ) {

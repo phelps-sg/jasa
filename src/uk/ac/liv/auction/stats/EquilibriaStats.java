@@ -47,42 +47,12 @@ public class EquilibriaStats extends DirectRevelationStats
   protected double  maxPrice;
 
   /**
-   * The minimum equilibrium quantity.
-   */
-  protected int minQty;
-
-  /**
-   * The maximum equilibrium quantity.
-   */
-  protected int maxQty;
-
-  /**
    * Do any equilbria exist?
    */
   protected boolean equilibriaFound = false;
 
-  /**
-   * The profits of the buyers in theoretical equilibrium.
-   */
-  protected double pBCE = 0;
-
-  /**
-   * The profits of the sellers in theoretical equilibrium.
-   */
-  protected double pSCE = 0;
-
-  /**
-   * The actual profits of the buyers.
-   */
-  protected double pBA = 0;
-
-  /**
-   * The actual profits of the sellers.
-   */
-  protected double pSA = 0;
-
-
   static Logger logger = Logger.getLogger(EquilibriaStats.class);
+
 
   public EquilibriaStats( RoundRobinAuction auction ) {
     super(auction);
@@ -91,6 +61,7 @@ public class EquilibriaStats extends DirectRevelationStats
   public EquilibriaStats() {
     super();
   }
+
 
   public void recalculate() {
     reset();
@@ -105,54 +76,10 @@ public class EquilibriaStats extends DirectRevelationStats
       equilibriaFound = false;
     } else {
       calculateEquilibriaPriceRange();
-      calculateQuantitiesAndProfits();
       equilibriaFound = true;
     }
     releaseShouts();
   }
-
-  protected void calculateQuantitiesAndProfits() {
-    int qty = 0;
-    List matches = shoutEngine.getMatchedShouts();
-    Iterator i = matches.iterator();
-    while ( i.hasNext() ) {
-      Shout bid = (Shout) i.next();
-      Shout ask = (Shout) i.next();
-      qty += bid.getQuantity();
-
-      pBCE += equilibriumProfits(bid.getQuantity(),
-                                  (AbstractTraderAgent) bid.getAgent());
-
-      pSCE += equilibriumProfits(ask.getQuantity(),
-                                  (AbstractTraderAgent) ask.getAgent());
-
-    }
-
-    minQty = qty;
-    maxQty = qty;
-
-    calculateActualProfits();
-  }
-
-  protected void calculateActualProfits() {
-    pSA = 0;
-    pBA = 0;
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      if ( agent.isSeller() ) {
-        pSA += agent.getProfits();
-      } else {
-        pBA += agent.getProfits();
-      }
-    }
-  }
-
-  public double equilibriumProfits( int quantity, AbstractTraderAgent trader ) {
-    return trader.equilibriumProfits(auction, calculateMidEquilibriumPrice(),
-                                       quantity);
-  }
-
 
   protected void calculateEquilibriaPriceRange() {
 
@@ -168,8 +95,6 @@ public class EquilibriaStats extends DirectRevelationStats
 
   public void initialise() {
     super.initialise();
-    pBCE = 0;
-    pSCE = 0;
   }
 
   public double getMinPrice() {
@@ -180,21 +105,6 @@ public class EquilibriaStats extends DirectRevelationStats
     return maxPrice;
   }
 
-  public double getMinQuantity() {
-    return minQty;
-  }
-
-  public double getMaxQuantity() {
-    return maxQty;
-  }
-
-  public double getPBCE() {
-    return pBCE;
-  }
-
-  public double getPSCE() {
-    return pSCE;
-  }
 
   public boolean equilibriaExists() {
     return equilibriaFound;
@@ -206,9 +116,7 @@ public class EquilibriaStats extends DirectRevelationStats
 
   public String toString() {
     return "(" + getClass() + " equilibriaFound:" + equilibriaFound +
-           " minPrice:" + minPrice + " maxPrice:" + maxPrice +
-           " minQty: " + minQty + " maxQty:" + maxQty +
-           " pBCE:" + pBCE + " pSCE:" + pSCE + ")";
+           " minPrice:" + minPrice + " maxPrice:" + maxPrice + ")";
   }
 
   public void generateReport() {
@@ -218,12 +126,6 @@ public class EquilibriaStats extends DirectRevelationStats
     logger.info("");
     logger.info("\tEquilibria Found?\t" + equilibriaFound);
     logger.info("\n\tprice:\n\t\tmin:\t" + minPrice + "\tmax:\t" + maxPrice);
-    logger.info("\n\tquantity\n\t\tmin:\t" + minQty + "\tmax:\t" + maxQty + "\n");
-    logger.info("\tbuyers' profits in equilibrium:\t" + pBCE);
-    logger.info("\tsellers' profits in equilibrium:\t" + pSCE);
-    logger.info("");
-    logger.info("\tbuyers' actual profits:\t" + pBA);
-    logger.info("\tsellers' actual profits:\t" + pSA);
     logger.info("");
   }
 

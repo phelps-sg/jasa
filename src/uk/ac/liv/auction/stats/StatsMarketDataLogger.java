@@ -32,7 +32,8 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A market data logger that keeps cummulative statistics on a number of variables.
+ * A market data logger that keeps cummulative statistics on a number of
+ * market variables.
  * </p>
  *
  * @author Steve Phelps
@@ -66,7 +67,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     stats[ASK_QUOTE].newData((double) quote.getAsk());
   }
 
-  public void updateTransPriceLog( int time, Shout ask, double price,
+  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
                                     int quantity ) {
     stats[TRANS_PRICE].newData(price);
   }

@@ -73,7 +73,7 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
   }
 
 
-  public void updateTransPriceLog( int time, Shout shout, double price,
+  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
                                     int quantity ) {
      transPriceStats.newData(price);
   }

@@ -49,7 +49,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class ElectricityStats extends EquilibriaStats implements Serializable, Cloneable {
+public class ElectricityStats extends ProfitStats implements Cloneable {
 
   /**
    * The relative concentration of sellers to buyers.

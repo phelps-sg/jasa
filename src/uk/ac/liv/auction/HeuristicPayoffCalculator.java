@@ -20,7 +20,7 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.stats.PerStrategyStats;
+import uk.ac.liv.auction.stats.PayoffLogger;
 import uk.ac.liv.auction.stats.EquilibriaStats;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 
@@ -58,7 +58,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
   protected RoundRobinAuction auction;
 
-  protected PerStrategyStats strategyStats;
+  protected PayoffLogger payoffLogger;
 
   protected int numAgents;
 
@@ -149,9 +149,9 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
     auction.setup(parameters, base.push(P_AUCTION));
 
-    strategyStats = new PerStrategyStats();
-    strategyStats.setAuction(auction);
-    auction.addMarketStats(strategyStats);
+    payoffLogger = new PayoffLogger();
+    payoffLogger.setAuction(auction);
+    auction.addMarketDataLogger(payoffLogger);
 
     numAgents = parameters.getInt(base.push(P_NUMAGENTS));
     numSamples = parameters.getInt(base.push(P_NUMSAMPLES));
@@ -256,10 +256,10 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       auction.addEndOfDayListener(this);
       auction.run();
 
-      strategyStats.calculate();
+      payoffLogger.calculate();
 
       for( int i=0; i<numStrategies; i++ ) {
-        payoffs[i].newData(strategyStats.getPayoff(strategies[i].getClass()));
+        payoffs[i].newData(payoffLogger.getPayoff(strategies[i].getClass()));
       }
 
     }

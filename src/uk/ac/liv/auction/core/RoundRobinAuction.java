@@ -290,7 +290,7 @@ public class RoundRobinAuction extends AuctionImpl
     buyer.informOfSeller(this, ask, seller, price, ask.getQuantity());
     acceptedShouts.add(ask);
     acceptedShouts.add(bid);
-    updateTransPriceLog(round, ask, price, ask.getQuantity());
+    updateTransPriceLog(round, ask, bid, price, ask.getQuantity());
   }
 
   /**

@@ -92,7 +92,7 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
     dataUpdated();
   }
 
-  public void updateTransPriceLog( int time, Shout shout, double price,
+  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
                                     int quantity ) {
     if ( transPriceLog != null ) {
       transPriceLog.newData(time);

@@ -31,8 +31,8 @@ import java.io.Serializable;
 /**
  * <p>
  * An adaptive trader, trading in a simulated Elecitricty market.  Agents
- * of this type have a fixed generating capacity, and they will place
- * bids with a quantity equal to their capacity.
+ * of this type have a fixed generating capacity, and they trade units
+ * equal to their capacity in each round of the auction.
  * </p>
  *
  * <p>

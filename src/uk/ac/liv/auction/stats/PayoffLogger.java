@@ -33,13 +33,13 @@ import org.apache.log4j.Logger;
 
 
 
-public class PerStrategyStats extends EquilibriaStats {
+public class PayoffLogger extends EquilibriumProfitLogger {
 
-  protected HashMap table  = new HashMap();
+  private HashMap table  = new HashMap();
 
   protected double totalProfits;
 
-  static Logger logger = Logger.getLogger(PerStrategyStats.class);
+  static Logger logger = Logger.getLogger(PayoffLogger.class);
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -48,8 +48,6 @@ public class PerStrategyStats extends EquilibriaStats {
 
 
   public void calculate() {
-    reset();
-    super.calculate();
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
@@ -67,9 +65,10 @@ public class PerStrategyStats extends EquilibriaStats {
     calculatePayoffs();
   }
 
+
   protected void calculatePayoffs() {
     int totalAgents = auction.getNumberOfRegisteredTraders();
-    double averageSurplus = (getPBCE() + getPSCE()) / totalAgents;
+    double averageSurplus = calculateTotalEquilibriumSurplus() / totalAgents;
     double totalPayoff = 0;
     Iterator i = table.keySet().iterator();
     while ( i.hasNext() ) {
@@ -115,7 +114,9 @@ public class PerStrategyStats extends EquilibriaStats {
 
   }
 
-  public void generateReport() {
+
+  public void finalReport() {
+    calculate();
     logger.info("\nProfits per strategy");
     logger.info("-----------------------");
     logger.info("");
@@ -128,8 +129,9 @@ public class PerStrategyStats extends EquilibriaStats {
                                         "\n\tpayoff: " + stats.payoff +
                    "\n");
     }
-    super.generateReport();
+    super.finalReport();
   }
+
 
   public void initialise() {
     totalProfits = 0;

@@ -452,8 +452,8 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   }
 
   /**
-   * Calculate the hypothetical surplus this agent will receive when the
-   * market is cleareded uniformly at the specified equilibrium price
+   * Calculate the hypothetical surplus this agent will receive if the
+   * market had cleared uniformly at the specified equilibrium price
    * and quantity.
    */
   public abstract double equilibriumProfits( Auction auction,

@@ -97,12 +97,12 @@ public class CombiMarketDataLogger
     }
   }
 
-  public void updateTransPriceLog( int time, Shout ask, double price,
+  public void updateTransPriceLog( int time, Shout ask, Shout bid, double price,
                                     int quantity ) {
     Iterator i = loggers.iterator();
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.updateTransPriceLog(time, ask, price, quantity);
+      logger.updateTransPriceLog(time, ask, bid, price, quantity);
     }
   }
 
