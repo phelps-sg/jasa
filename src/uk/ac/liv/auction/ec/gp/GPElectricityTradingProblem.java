@@ -101,6 +101,8 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
   protected Auctioneer auctioneer;
 
+  protected StrategyMixer strategyMixer;
+
 
   static final String P_TRADERS = "numtraders";
   static final String P_ROUNDS = "maxrounds";
@@ -117,6 +119,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   static final String P_NUMBUYERS = "nb";
   static final String P_SELLERCAPACITY = "cs";
   static final String P_BUYERCAPACITY = "cb";
+  static final String P_STRATEGYMIXER = "strategymixer";
 
   static final String DEFAULT_STATS_FILE = "coevolve-electricity-stats.csv";
 
@@ -192,6 +195,14 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
       state.parameters.getStringWithDefault(base.push("marketstatsfile"),
                                               DEFAULT_STATS_FILE);
 
+    strategyMixer = (StrategyMixer)
+      state.parameters.getInstanceForParameter(base.push(P_STRATEGYMIXER), null,
+                                                StrategyMixer.class);
+    strategyMixer.setProblem(this);
+    ((Parameterizable) strategyMixer).setup(state.parameters,
+                                              base.push(P_STRATEGYMIXER));
+
+
     System.out.println("numSellers = " + numSellers);
     System.out.println("numBuyers = " + numBuyers);
     System.out.println("sellerCapacity = " + sellerCapacity);
@@ -251,6 +262,20 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     postEvaluationStats();
   }
 
+
+  public int getNumBuyers() {
+    return numBuyers;
+  }
+
+
+  public int getNumSellers() {
+    return numSellers;
+  }
+
+
+  public GPContext getGPContext() {
+    return context;
+  }
 
 
   protected void postEvaluationStats() {
@@ -435,6 +460,9 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     return result;
   }
 
+  protected Strategy getStrategy( int i, Vector[] group ) {
+    return strategyMixer.getStrategy(i, group);
+  }
 
   public static void main( String[] args ) {
     ec.Evolve.main(new String[] {"-file", DEFAULT_PARAM_FILE});
@@ -460,6 +488,8 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   protected abstract void computeFitnesses();
 
   protected abstract LinkedList initialiseTraders( Vector[] group );
+
+  public abstract int getFirstStrategySubpop();
 
 }
 

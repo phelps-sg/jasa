@@ -90,22 +90,22 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
     MultiObjectiveFitness fitness = (MultiObjectiveFitness) auctioneer.fitness;
 
     if ( auctioneerMisbehaved ) {
-      for( int i=0; i<3; i++ ) {
+      for( int i=0; i<fitness.multifitness.length; i++ ) {
         fitness.multifitness[i] = 0;
       }
       return;
     }
 
     fitness.multifitness[0] = efficiencyFitness(efficiency.getMean());
-    fitness.multifitness[1] = mpFitness(buyerMP.getMean());
-    fitness.multifitness[2] = mpFitness(sellerMP.getMean());
+    fitness.multifitness[1] = (float) efficiency.getMin() / 100;
+//    fitness.multifitness[2] = mpFitness(sellerMP.getMean());
 
     auctioneer.evaluated = true;
   }
 
 
-  protected float mpFitness( double mp ) {
-    return (float) (1 / (Math.abs(mp) + 1));
+  protected float mpFitness( double bMp, double sMp ) {
+    return (float) (1 / (Math.abs(bMp-sMp) + 1));
   }
 
   protected float efficiencyFitness( double eA ) {
@@ -136,23 +136,14 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
   }
 
 
-  protected Strategy getStrategy( int i, Vector[] group ) {
-    GPTradingStrategy strategy = null;
-    if ( i < numSellers ) {
-      strategy = (GPTradingStrategy) group[1].get(i);
-    } else {
-      strategy = (GPTradingStrategy) group[2].get(i-numSellers);
-    }
-    strategy.setGPContext(context);
-    return strategy;
-  }
-
-
-
   public Object protoClone() throws CloneNotSupportedException {
 
     GPCoEvolveAuctionProblem myobj = (GPCoEvolveAuctionProblem) super.protoClone();
     return myobj;
+  }
+
+  public int getFirstStrategySubpop() {
+    return 1;
   }
 
 }

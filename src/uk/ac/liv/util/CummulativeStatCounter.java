@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * <p>
  * A utility class for cummulative tracking of stats for a series
- * of doubles.  Modes are incremented dynamically, rather than keeping
+ * of doubles.  Moments are incremented dynamically, rather than keeping
  * the actual cases in memory.
  * </p>
  * <p>

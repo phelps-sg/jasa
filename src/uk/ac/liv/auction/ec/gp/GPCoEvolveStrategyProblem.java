@@ -125,24 +125,15 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
   }
 
 
-  protected Strategy getStrategy( int i, Vector[] group ) {
-    GPTradingStrategy strategy = null;
-    if ( i < numSellers ) {
-      strategy = (GPTradingStrategy) group[0].get(i);
-    } else {
-      strategy = (GPTradingStrategy) group[1].get(i-numSellers);
-    }
-    strategy.setGPContext(context);
-    return strategy;
-  }
-
-
-
   public Object protoClone() throws CloneNotSupportedException {
 
     GPCoEvolveStrategyProblem myobj = (GPCoEvolveStrategyProblem) super.protoClone();
     //TODO?
     return myobj;
+  }
+
+  public int getFirstStrategySubpop() {
+    return 0;
   }
 
 }
