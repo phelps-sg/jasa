@@ -22,7 +22,9 @@ import ec.util.ParameterDatabase;
  * <p>
  * Agents configured with this valuation policy will receive a unique private
  * value from a common set of values starting at <code>minValue</code> and 
- * incrementing by <code>step</code> as each agent is assigned a valuation.
+ * incrementing by <code>step</code> as each agent is assigned a valuation
+ * at agent setup time.  This is useful for quickly specifying supply or
+ * demand curves with a constant "slope" (step).
  * </p>
  *
  * @version $Revision$
