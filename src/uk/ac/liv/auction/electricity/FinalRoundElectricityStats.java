@@ -35,7 +35,7 @@ public class FinalRoundElectricityStats extends ElectricityStats {
   }
 
 
-  protected double getProfits( AbstractTraderAgent trader ) {
+  protected double getProfits( AbstractTradingAgent trader ) {
     return ((ElectricityTrader) trader).getLastProfit();
   }
 

@@ -26,7 +26,7 @@ import uk.ac.liv.auction.core.*;
 public abstract class AdaptiveStrategyImpl extends FixedQuantityStrategyImpl
     implements  AdaptiveStrategy {
 
-  public AdaptiveStrategyImpl( AbstractTraderAgent agent ) {
+  public AdaptiveStrategyImpl( AbstractTradingAgent agent ) {
     super(agent);
   }
 

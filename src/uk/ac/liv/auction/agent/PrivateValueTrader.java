@@ -22,7 +22,7 @@ import uk.ac.liv.auction.core.Auction;
  * @author Steve Phelps
  */
 
-public interface PrivateValueTrader extends RoundRobinTrader {
+public interface PrivateValueTrader extends TradingAgent {
 
   public double getPrivateValue( Auction auction );
 

@@ -58,7 +58,7 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy {
 
   public static final String P_LEARNER = "learner";
 
-  public StimuliResponseStrategy( AbstractTraderAgent agent ) {
+  public StimuliResponseStrategy( AbstractTradingAgent agent ) {
     super(agent);
   }
 

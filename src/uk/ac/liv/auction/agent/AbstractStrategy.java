@@ -32,7 +32,7 @@ public abstract class AbstractStrategy implements
                                         Resetable,
                                         Cloneable {
 
-  protected AbstractTraderAgent agent;
+  protected AbstractTradingAgent agent;
 
   protected Shout.MutableShout currentShout;
 
@@ -42,12 +42,12 @@ public abstract class AbstractStrategy implements
     initialise();
   }
 
-  public AbstractStrategy( AbstractTraderAgent agent ) {
+  public AbstractStrategy( AbstractTradingAgent agent ) {
     this();
     this.agent = agent;
   }
 
-  public void setAgent( AbstractTraderAgent agent ) {
+  public void setAgent( AbstractTradingAgent agent ) {
     this.agent = agent;
   }
 

@@ -64,7 +64,7 @@ public class MDPStrategy extends DiscreteLearnerStrategy
   static final String P_BIDBINSTART = "bidbinstart";
   static final String P_BIDBINWIDTH = "bidbinwidth";
 
-  public MDPStrategy( AbstractTraderAgent agent,
+  public MDPStrategy( AbstractTradingAgent agent,
                         double askBinStart, double askBinWidth,
                         double bidBinStart, double bidBinWidth ) {
     super(agent);

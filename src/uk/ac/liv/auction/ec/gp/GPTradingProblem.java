@@ -59,7 +59,7 @@ public abstract class GPTradingProblem extends GPProblem {
   
   protected int numSellers;  
   
-  protected AbstractTraderAgent[] agents;
+  protected AbstractTradingAgent[] agents;
 
   protected double minValueMin = 61;
 
@@ -111,12 +111,12 @@ public abstract class GPTradingProblem extends GPProblem {
     numBuyers = numAgents / 2;
     numSellers = numBuyers;
 
-    agents = new AbstractTraderAgent[numAgents];
+    agents = new AbstractTradingAgent[numAgents];
 
     for( int i=0; i<numAgents; i++ ) {
-      agents[i] =  (AbstractTraderAgent)
+      agents[i] =  (AbstractTradingAgent)
             parameters.getInstanceForParameter(base.push(P_AGENT), null,
-                                                AbstractTraderAgent.class);
+                                                AbstractTradingAgent.class);
       agents[i].setup(parameters, base.push(P_AGENT));
       agents[i].setIsSeller(false);
       auction.register(agents[i]);      
@@ -183,7 +183,7 @@ public abstract class GPTradingProblem extends GPProblem {
     for( int i=0; i<numBuyers; i++ ) {
       int choice = GlobalPRNG.getInstance().choose(numCandidates)-1;
       agents[choice].setIsSeller(false);
-      AbstractTraderAgent lastAgent = agents[numCandidates-1];
+      AbstractTradingAgent lastAgent = agents[numCandidates-1];
       agents[numCandidates-1] = agents[choice];
       agents[choice] = lastAgent;
       numCandidates--;
@@ -244,7 +244,7 @@ public abstract class GPTradingProblem extends GPProblem {
     Auctioneer auctioneer = auction.getAuctioneer();
     LinkedList strategies = new LinkedList();    
     for( int i=0; i<agents.length; i++ ) {
-      AbstractTraderAgent trader = agents[i];
+      AbstractTradingAgent trader = agents[i];
       Strategy strategy = getStrategy(i, group);
       ((Resetable) strategy).reset();
       trader.setStrategy(strategy);

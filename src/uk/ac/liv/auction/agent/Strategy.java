@@ -47,7 +47,7 @@ public interface Strategy extends Prototypeable {
    */
   public void endOfRound( Auction auction );
 
-  public void setAgent( AbstractTraderAgent agent );
+  public void setAgent( AbstractTradingAgent agent );
 
   public int determineQuantity( Auction auction );
 

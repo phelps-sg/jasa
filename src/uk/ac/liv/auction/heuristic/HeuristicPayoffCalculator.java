@@ -20,12 +20,13 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.MarketSimulation;
 
+import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.RoundRobinAuction;
-import uk.ac.liv.auction.core.EndOfDayListener;
-import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.EndOfDayEvent;
 
 import uk.ac.liv.auction.agent.Strategy;
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.RandomValuer;
 import uk.ac.liv.auction.agent.AgentGroup;
 
@@ -77,7 +78,7 @@ import org.apache.log4j.Logger;
  */
 
 public class HeuristicPayoffCalculator  
-    implements  Runnable, Serializable, EndOfDayListener {
+    implements  Runnable, Serializable, AuctionEventListener {
 
   protected String resultsFileName = "/tmp/payoffs.csv";
   
@@ -105,7 +106,7 @@ public class HeuristicPayoffCalculator
 
   protected double rangeMax = 209;
 
-  protected AbstractTraderAgent[] agents;
+  protected AbstractTradingAgent[] agents;
 
   protected int numStrategies;
 
@@ -247,12 +248,12 @@ public class HeuristicPayoffCalculator
     numBuyers = numAgents / 2;
     numSellers = numBuyers;
 
-    agents = new AbstractTraderAgent[numAgents];
+    agents = new AbstractTradingAgent[numAgents];
 
     for( int i=0; i<numAgents; i++ ) {
-      agents[i] =  (AbstractTraderAgent)
+      agents[i] =  (AbstractTradingAgent)
             parameters.getInstanceForParameter(base.push(P_AGENT), null,
-                                                AbstractTraderAgent.class);
+                                                AbstractTradingAgent.class);
       agents[i].setup(parameters, base.push(P_AGENT));
       agents[i].setIsSeller(false);
       auction.register(agents[i]);
@@ -317,7 +318,7 @@ public class HeuristicPayoffCalculator
       randomlyAssignRoles();
       randomlyAssignValuers();
       auction.reset();
-      auction.addEndOfDayListener(this);
+      auction.addAuctionEventListener(EndOfDayEvent.class, this);
       
       ensureEquilibriaExists();
 
@@ -346,8 +347,10 @@ public class HeuristicPayoffCalculator
     return payoffMatrix;
   }
 
-  public void endOfDay( Auction a ) {
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof EndOfDayEvent ) {
     //ensureEquilibriaExists();
+    }
   }
 
   public void setStrategy( int i, Strategy s ) {
@@ -368,7 +371,7 @@ public class HeuristicPayoffCalculator
   protected void resetValuations() {
     Iterator i = auction.getTraderIterator();
     while (i.hasNext()) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
       agent.getValuationPolicy().reset();
     }
   }
@@ -404,7 +407,7 @@ public class HeuristicPayoffCalculator
       for( int s=0; s<entry.getNumAgents(i); s++ ) {
         Prototypeable prototypeStrategy = (Prototypeable) strategies[i];
         Strategy clonedStrategy = (Strategy) prototypeStrategy.protoClone();
-        AbstractTraderAgent agent = agents[agentIndex++];
+        AbstractTradingAgent agent = agents[agentIndex++];
         agent.setStrategy(clonedStrategy);
         agent.setGroup(groups[i]);
         agent.reset();

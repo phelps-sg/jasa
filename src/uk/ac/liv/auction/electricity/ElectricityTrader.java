@@ -16,9 +16,10 @@
 package uk.ac.liv.auction.electricity;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.event.AuctionEvent;
 
-import uk.ac.liv.auction.agent.RoundRobinTrader;
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.TradingAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.agent.FixedQuantityStrategy;
 
@@ -62,7 +63,7 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public class ElectricityTrader extends AbstractTraderAgent {
+public class ElectricityTrader extends AbstractTradingAgent {
 
   /**
    * The capacity of this trader in MWh
@@ -120,7 +121,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
 
   public void informOfSeller( Auction auction, Shout winningShout,
-                                   RoundRobinTrader seller,
+                                   TradingAgent seller,
                                    double price, int quantity) {
      super.informOfSeller(auction, winningShout, seller, price, quantity);
      if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) ) {
@@ -161,8 +162,8 @@ public class ElectricityTrader extends AbstractTraderAgent {
     return true;
   }
 
-  public void endOfDay( Auction auction ) {
-    reset();
+  public void endOfDay( AuctionEvent event ) {
+    //reset();
   }
 
   public String toString() {

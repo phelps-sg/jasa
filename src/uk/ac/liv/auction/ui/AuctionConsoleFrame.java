@@ -16,7 +16,7 @@
 package uk.ac.liv.auction.ui;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 import uk.ac.liv.util.Resetable;
 
@@ -313,7 +313,7 @@ public class AuctionConsoleFrame extends JFrame
       public void run() {
         Iterator i = auction.getTraderIterator();
         while (i.hasNext()) {
-          AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+          AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
           agent.reset();
         }
       }

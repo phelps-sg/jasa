@@ -28,7 +28,7 @@ import java.io.Serializable;
 public class TruthTellingStrategy extends FixedQuantityStrategyImpl
 							implements Serializable {
 
-  public TruthTellingStrategy ( AbstractTraderAgent agent) {
+  public TruthTellingStrategy ( AbstractTradingAgent agent) {
     super(agent);
   }
 

@@ -59,7 +59,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     this(null, DEFAULT_MARKUP);
   }
 
-  public RandomConstrainedStrategy( AbstractTraderAgent agent,
+  public RandomConstrainedStrategy( AbstractTradingAgent agent,
                                       double maxMarkup ) {
     super(agent);
     this.maxMarkup = maxMarkup;

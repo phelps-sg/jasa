@@ -17,6 +17,7 @@ package uk.ac.liv.auction.zi;
 
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.event.AuctionEvent;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
@@ -61,7 +62,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
+public class ZITraderAgent extends AbstractTradingAgent implements Serializable {
 
   /**
    * The number of units this agent is entitlted to trade in this trading period.
@@ -139,8 +140,9 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     logger.debug(this + ": initialised.");
   }
 
-  public void endOfDay( Auction auction ) {
+  public void endOfDay( AuctionEvent event ) {
     logger.debug("Performing end-of-day processing..");
+    super.endOfDay(event);
     tradeEntitlement = initialTradeEntitlement;
     //quantityTraded = 0;
     lastShoutSuccessful = false;
@@ -163,17 +165,17 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
    * Default behaviour for winning ZI bidders is to purchase unconditionally.
    */
   public void informOfSeller( Auction auction, Shout winningShout,
-                                  RoundRobinTrader seller,
+                                  TradingAgent seller,
                                   double price, int quantity) {
     super.informOfSeller(auction, winningShout, seller, price, quantity);
-    AbstractTraderAgent agent = (AbstractTraderAgent) seller;
+    AbstractTradingAgent agent = (AbstractTradingAgent) seller;
     if ( price > valuer.determineValue(auction) ) {
       logger.debug("Unprofitable transaction, price=" + price + ", shout=" + winningShout);
     }
     purchaseFrom(auction, agent, quantity, price);
   }
 
-  public void purchaseFrom( Auction auction, AbstractTraderAgent seller,
+  public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
                              int quantity, double price ) {
     tradeEntitlement--;
     quantityTraded += quantity;

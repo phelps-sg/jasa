@@ -111,7 +111,7 @@ public class StandardRandomizer
         Iterator traders = auction.getTraderIterator();
         for( int t=0; t<numTraders; t++ ) {
           double value = randomPrivateValue();
-          AbstractTraderAgent agent = (AbstractTraderAgent) traders.next();
+          AbstractTradingAgent agent = (AbstractTradingAgent) traders.next();
           agent.setPrivateValue(value);
           values[i][t] = value;
         }

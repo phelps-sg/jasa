@@ -25,7 +25,7 @@ import ec.simple.SimpleFitness;
 import uk.ac.liv.ec.coevolve.*;
 
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 import uk.ac.liv.auction.ec.gp.func.*;
 
@@ -49,7 +49,7 @@ public class GPCoEvolveStrategyProblem extends GPTradingProblem
 
     for( int i=0; i<numAgents; i++ ) {
 
-      AbstractTraderAgent trader = agents[i];
+      AbstractTradingAgent trader = agents[i];
       double profits = trader.getProfits();
       double equilibriumProfits = surplusLogger.getEquilibriumProfits(trader);
       double payoff = profits / equilibriumProfits;

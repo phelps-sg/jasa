@@ -21,7 +21,7 @@ import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.AdaptiveStrategy;
 import uk.ac.liv.auction.agent.RandomValuer;
 import uk.ac.liv.auction.agent.ValuationPolicy;
@@ -46,7 +46,7 @@ import uk.ac.liv.auction.core.Shout;
 
 public class DrawableAgentAdaptor implements Drawable {
   
-  protected AbstractTraderAgent agent;
+  protected AbstractTradingAgent agent;
   
   protected Auction auction;
   
@@ -64,11 +64,11 @@ public class DrawableAgentAdaptor implements Drawable {
     this(auction, null);
   }
   
-  public DrawableAgentAdaptor( Auction auction, AbstractTraderAgent agent ) {
+  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent ) {
     this(auction, agent, null);
   }
   
-  public DrawableAgentAdaptor( Auction auction, AbstractTraderAgent agent, 
+  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent, 
       						ColorMap colorMap ) {
     this.agent = agent;
     this.colorMap = colorMap;

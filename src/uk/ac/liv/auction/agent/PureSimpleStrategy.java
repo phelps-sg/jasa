@@ -53,7 +53,7 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
 
   static final double DEFAULT_DELTA = 0;
 
-  public PureSimpleStrategy( AbstractTraderAgent agent, double margin, int quantity ) {
+  public PureSimpleStrategy( AbstractTradingAgent agent, double margin, int quantity ) {
     super(agent);
     this.margin = margin;
     this.quantity = quantity;

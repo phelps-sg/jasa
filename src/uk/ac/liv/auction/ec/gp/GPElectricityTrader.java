@@ -11,7 +11,7 @@ class GPElectricityTrader extends ElectricityTrader {
     super(capacity, privateValue, fixedCosts, isSeller);
   }
 
-  public void informOfSeller( Auction auction, Shout winningShout, RoundRobinTrader seller,
+  public void informOfSeller( Auction auction, Shout winningShout, TradingAgent seller,
                                double price, int quantity) {
 
     if ( price <= valuer.determineValue(auction) ) {

@@ -18,10 +18,8 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.util.Resetable;
 
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.RoundClosedListener;
-import uk.ac.liv.auction.core.AuctionClosedListener;
-import uk.ac.liv.auction.core.EndOfDayListener;
 
 /**
  * <p>
@@ -33,9 +31,8 @@ import uk.ac.liv.auction.core.EndOfDayListener;
  * @version $Revision$
  */
 
-public interface RoundRobinTrader
-    extends TraderAgent, Resetable,
-     RoundClosedListener,  AuctionClosedListener, EndOfDayListener {
+public interface TradingAgent
+    extends Resetable, AuctionEventListener {
 
  /**
    * Request a shout from this trader.  The trader will perform any bidding activity
@@ -46,8 +43,6 @@ public interface RoundRobinTrader
    */
   public void requestShout( Auction auction );
 
-  public void auctionOpen( Auction auction );
-  
   public boolean isBuyer();
   
   public boolean isSeller();
@@ -60,14 +55,14 @@ public interface RoundRobinTrader
    * @param price   The price of the goods as determined by the auction
    */
   public void informOfSeller( Auction auction, Shout winningShout,
-                                RoundRobinTrader seller,
+                                TradingAgent seller,
                                 double price, int quantity );
 
   /**
    * This method is used by a buyer to notify a seller that one of its bids
    * has been successful.
    */
-  public void informOfBuyer( Auction auction, RoundRobinTrader buyer,
+  public void informOfBuyer( Auction auction, TradingAgent buyer,
                               double price, int quantity );
 
 }

@@ -16,12 +16,19 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
+
+import uk.ac.liv.auction.event.AuctionClosedEvent;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionOpenEvent;
+import uk.ac.liv.auction.event.EndOfDayEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
 
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
@@ -75,7 +82,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class AbstractTraderAgent implements RoundRobinTrader,
+public abstract class AbstractTradingAgent implements TradingAgent,
+										    AuctionEventListener,
                                                       Serializable,
                                                       Parameterizable,
                                                       Prototypeable,
@@ -153,7 +161,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   protected AgentGroup group = null;
 
   
-  static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
+  static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
   /**
    * Parameter names used when initialising from parameter db
@@ -175,7 +183,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * @param privateValue  The private value of the commodity traded by this trader.
    * @param isSeller      Whether or not this trader is a seller.
    */
-  public AbstractTraderAgent( int stock, double funds, double privateValue,
+  public AbstractTradingAgent( int stock, double funds, double privateValue,
                                 boolean isSeller ) {
     id = idAllocator.nextId();
     initialStock = stock;
@@ -185,20 +193,20 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     initialise();
   }
 
-  public AbstractTraderAgent( int stock, double funds, double privateValue,
+  public AbstractTradingAgent( int stock, double funds, double privateValue,
                                 boolean isSeller, Strategy strategy ) {
     this(stock, funds, privateValue, isSeller);
     this.strategy = strategy;
   }
 
-  public AbstractTraderAgent( int stock, double funds ) {
+  public AbstractTradingAgent( int stock, double funds ) {
     this(stock, funds, 0, false);
   }
 
   /**
    * Construct a truthful buyer with no money and no funds.
    */
-  public AbstractTraderAgent() {
+  public AbstractTradingAgent() {
     this(0, 0, 0, false);
   }
 
@@ -260,27 +268,43 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
       e.printStackTrace();
     }
   }
+  
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof AuctionOpenEvent ) {
+      auctionOpen(event);
+    } else if ( event instanceof AuctionClosedEvent ) {
+      auctionClosed(event);
+    } else if ( event instanceof RoundClosedEvent ) {
+      roundClosed(event);
+    } else if ( event instanceof EndOfDayEvent ) {
+      endOfDay(event);
+    }
+  }
+  
+  public void endOfDay( AuctionEvent event ) {
+    // Do nothing
+  }
 
-  public void auctionOpen( Auction auction ) {
+  public void auctionOpen( AuctionEvent event ) {
     lastShoutAccepted = false;
     if ( strategy == null ) {
       throw new AuctionError("No strategy configured for agent " + this);
     }
   }
 
-  public void auctionClosed( Auction auction ) {
-    ((RoundRobinAuction) auction).remove(this);
+  public void auctionClosed( AuctionEvent event ) {
+    ((RoundRobinAuction) event.getAuction()).remove(this);
   }
 
-  public void roundClosed( Auction auction ) {
-    strategy.endOfRound(auction);
+  public void roundClosed( AuctionEvent event ) {
+    strategy.endOfRound(event.getAuction());
   }
 
   public Shout getCurrentShout() {
     return currentShout;
   }
 
-  public void purchaseFrom( Auction auction, AbstractTraderAgent  seller,
+  public void purchaseFrom( Auction auction, AbstractTradingAgent  seller,
                                           int quantity, double price) {
     seller.informOfBuyer(auction, this, price, quantity);
     giveFunds(seller, price*quantity);
@@ -290,7 +314,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     valuer.consumeUnit(auction);
   }
 
-  public synchronized void giveFunds( AbstractTraderAgent seller, double amount ) {
+  public synchronized void giveFunds( AbstractTradingAgent seller, double amount ) {
     funds -= amount;
     seller.pay(amount);
   }
@@ -399,9 +423,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   }
 
   public Object protoClone() {
-    AbstractTraderAgent copy = null;
+    AbstractTradingAgent copy = null;
     try {
-      copy = (AbstractTraderAgent) clone();      
+      copy = (AbstractTradingAgent) clone();      
       copy.id = idAllocator.nextId();     
       copy.strategy = (Strategy) ((Prototypeable) strategy).protoClone();
       copy.reset();
@@ -412,12 +436,12 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   
 
   public void informOfSeller( Auction auction, Shout winningShout,
-                               RoundRobinTrader seller,
+                               TradingAgent seller,
                                double price,  int quantity ) {
      lastShoutAccepted = true;
   }
 
-  public void informOfBuyer( Auction auction, RoundRobinTrader buyer,
+  public void informOfBuyer( Auction auction, TradingAgent buyer,
                              double price, int quantity ) {
     lastShoutAccepted = true;
   }

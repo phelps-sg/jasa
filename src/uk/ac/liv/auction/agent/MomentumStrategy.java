@@ -58,7 +58,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
   static Logger logger = Logger.getLogger(MomentumStrategy.class);
 
 
-  public MomentumStrategy( AbstractTraderAgent agent ) {
+  public MomentumStrategy( AbstractTradingAgent agent ) {
     super(agent);
   }
   

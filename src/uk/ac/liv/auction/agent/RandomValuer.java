@@ -119,7 +119,7 @@ public class RandomValuer
     return value;
   }
 
-  protected void drawRandomValue() {
+  public void drawRandomValue() {
     value = GlobalPRNG.getInstance().uniform(minValue, maxValue);
   }
 

@@ -18,7 +18,7 @@ package uk.ac.liv.auction.heuristic;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
@@ -59,7 +59,7 @@ public class FactoryStrategy implements Parameterizable, Strategy {
     strategy.endOfRound(auction);
   }
 
-  public void setAgent( AbstractTraderAgent agent ) {
+  public void setAgent( AbstractTradingAgent agent ) {
     strategy.setAgent(agent);
   }
 

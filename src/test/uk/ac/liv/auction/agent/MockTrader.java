@@ -16,16 +16,17 @@
 package test.uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.event.AuctionEvent;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
-import uk.ac.liv.auction.agent.RoundRobinTrader;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
+import uk.ac.liv.auction.agent.TradingAgent;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 
 
-public class MockTrader extends AbstractTraderAgent  {
+public class MockTrader extends AbstractTradingAgent  {
 
   public Shout lastWinningShout = null;
   public double lastWinningPrice = 0;
@@ -37,7 +38,7 @@ public class MockTrader extends AbstractTraderAgent  {
   public int receivedRequestShout = 0;
   TestCase test;
 
-  static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
+  static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
 
   public MockTrader( TestCase test, int stock, long funds ) {
@@ -50,21 +51,21 @@ public class MockTrader extends AbstractTraderAgent  {
     this.test = test;
   }
 
-  public void informOfSeller( Auction auction, Shout winningShout, RoundRobinTrader seller,
+  public void informOfSeller( Auction auction, Shout winningShout, TradingAgent seller,
                               double price, int quantity ) {
     super.informOfSeller(auction, winningShout, seller, price, quantity);
-    test.assertTrue(((AbstractTraderAgent) seller).isSeller());
+    test.assertTrue(((AbstractTradingAgent) seller).isSeller());
     System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity + " and seller: " + seller);
     lastWinningShout = winningShout;
     lastWinningPrice = price;
-    purchaseFrom(auction, (AbstractTraderAgent) seller, quantity, price);
+    purchaseFrom(auction, (AbstractTradingAgent) seller, quantity, price);
   }
   
   
-  public void informOfBuyer( Auction auction, RoundRobinTrader buyer,
+  public void informOfBuyer( Auction auction, TradingAgent buyer,
       double price, int quantity ) {
     super.informOfBuyer(auction, buyer, price, quantity);
-    test.assertTrue(((AbstractTraderAgent) buyer).isBuyer());
+    test.assertTrue(((AbstractTradingAgent) buyer).isBuyer());
     lastWinningPrice = price;
     lastWinningShout = getCurrentShout();
   }
@@ -78,25 +79,25 @@ public class MockTrader extends AbstractTraderAgent  {
     receivedRequestShout++;
   }
 
-  public void auctionOpen( Auction auction ) {
-    super.auctionOpen(auction);
+  public void auctionOpen( AuctionEvent event ) {
+    super.auctionOpen(event);
     receivedAuctionOpen = true;
   }
 
-  public void auctionClosed( Auction auction ) {
-    super.auctionClosed(auction);
+  public void auctionClosed( AuctionEvent event ) {
+    super.auctionClosed(event);
     logger.debug(this + ": recieved auctionClosed()");
-    ((RoundRobinAuction) auction).remove(this);
+    ((RoundRobinAuction) event.getAuction()).remove(this);
     receivedAuctionClosed = true;
     receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
   }
 
-  public void roundClosed( Auction auction ) {
-    super.roundClosed(auction);
+  public void roundClosed( AuctionEvent event ) {
+    super.roundClosed(event);
     receivedRoundClosed++;
   }
 
-  public void endOfDay( Auction auction ) {
+  public void endOfDay( AuctionEvent event ) {
     //TODO
   }
 

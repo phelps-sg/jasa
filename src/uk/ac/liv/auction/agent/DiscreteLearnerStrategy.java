@@ -55,7 +55,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
   static Logger logger = Logger.getLogger(DiscreteLearnerStrategy.class);
 
 
-  public DiscreteLearnerStrategy( AbstractTraderAgent agent ) {
+  public DiscreteLearnerStrategy( AbstractTradingAgent agent ) {
     super(agent);
     initialise();
   }

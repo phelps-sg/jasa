@@ -84,11 +84,11 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   	this.gpIndividual = individual;
   }
   
-  public void setAgent( AbstractTraderAgent agent ) {
+  public void setAgent( AbstractTradingAgent agent ) {
     this.agent = agent;
   }
 
-  public AbstractTraderAgent getAgent() {
+  public AbstractTradingAgent getAgent() {
     return agent;
   }
 
