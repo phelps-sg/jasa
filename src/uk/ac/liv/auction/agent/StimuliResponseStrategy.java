@@ -86,7 +86,7 @@ public class StimuliResponseStrategy extends AdaptiveStrategy {
   }
 
   public String toString() {
-    return "(" + getClass() + " learner:" + learner + ")";
+    return "(" + getClass() + " learner:" + learner + " markupScale:" + markupScale + ")";
   }
 
 }

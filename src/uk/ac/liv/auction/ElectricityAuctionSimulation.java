@@ -271,6 +271,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter mPS = new CummulativeStatCounter("mPS");
       CummulativeStatCounter pSA = new CummulativeStatCounter("pSA");
       CummulativeStatCounter pBA = new CummulativeStatCounter("pBA");
+      CummulativeStatCounter equilibPrice = new CummulativeStatCounter("equilibPrice");
 
       String iterResultsDataFileName = outputDir + "/iter-"
                                       + paramSummary + "-"+auctioneerK+".csv";
@@ -291,6 +292,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         mPS.newData(results.mPS);
         pBA.newData(results.pBA);
         pSA.newData(results.pSA);
+        equilibPrice.newData( (results.standardStats.getMinPrice()
+                               + results.standardStats.getMaxPrice()) / 2);
+
 
         iterResults.newData(results.eA);
         iterResults.newData(results.mPB);
@@ -303,6 +307,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       System.out.println(mPS);
       System.out.println(pSA);
       System.out.println(pBA);
+      System.out.println(equilibPrice);
 
       dataFile.newData(auctioneerK);
       dataFile.newData(efficiency.getMean());
@@ -346,6 +351,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);
 
       StimuliResponseStrategy strategy = new StimuliResponseStrategy(trader);
+      strategy.setMarkupScale(100);
 
       strategy.setQuantity(trader.getCapacity());
       strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X) );

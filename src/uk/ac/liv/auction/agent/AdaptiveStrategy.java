@@ -18,10 +18,19 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 
 public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
 
   boolean firstShout;
+
+  static final String P_MARKUPSCALE = "markupscale";
+
+  double markupScale = 1;
 
   public AdaptiveStrategy( AbstractTraderAgent agent ) {
     super(agent);
@@ -36,6 +45,12 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
   public void initialise() {
     firstShout = true;
     super.initialise();
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
+    markupScale = parameters.getDoubleWithDefault(base.push(P_MARKUPSCALE),
+                                                   null,1);
   }
 
   public void modifyShout( Shout shout, Auction auction ) {
@@ -54,9 +69,9 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
     // Now turn the action into a price
     double price;
     if ( agent.isSeller() ) {
-      price = agent.getPrivateValue() + action;
+      price = agent.getPrivateValue() + action*markupScale;
     } else {
-      price = agent.getPrivateValue() - action;
+      price = agent.getPrivateValue() - action*markupScale;
     }
     /* TODO
     if ( price < funds ) {
@@ -67,6 +82,14 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
     }
     shout.setPrice(price);
     shout.setQuantity(quantity);
+  }
+
+  public double getMarkupScale() {
+    return markupScale;
+  }
+
+  public void setMarkupScale( double markupScale ) {
+    this.markupScale = markupScale;
   }
 
   public abstract int act();
