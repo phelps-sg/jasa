@@ -33,7 +33,7 @@ import ec.util.MersenneTwisterFast;
 
 import java.util.*;
 
-import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.*;
 
 /**
  *
@@ -78,6 +78,7 @@ public abstract class ElectricityTest extends TestCase {
   static final double MIN_PRIVATE_VALUE = 30;
   static final double MAX_PRIVATE_VALUE = 100;
 
+  static Logger logger = Logger.getLogger(ElectricityTest.class);
 
 
   public ElectricityTest( String name ) {
@@ -157,14 +158,14 @@ public abstract class ElectricityTest extends TestCase {
   public void generatePRNGseeds( int numAgents ) {
 
     prng.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-    System.out.println(this + ": generating PRNG seeds using default seed.. ");
+    logger.info(this + ": generating PRNG seeds using default seed.. ");
 
     for( int i=0; i<ITERATIONS; i++ ) {
       for( int t=0; t<numAgents; t++ ) {
         seeds[i][t] = (long) prng.nextInt();
       }
     }
-    System.out.println("done.");
+    logger.info("done.");
   }
 
   public void setPRNGseeds( int iteration ) {

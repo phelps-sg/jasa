@@ -62,7 +62,10 @@
 
    <target depends="jar" name="tar">
    	<tar  compression="gzip" tarfile="jasa.tar.gz">
-		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/*.params" prefix="jasa" />
+		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/*.params" prefix="jasa">
+                  <exclude name="src/uk/ac/liv/ec/**"/>
+                  <exclude name="src/uk/ac/liv/auction/ec/**"/>
+		 </tarfileset>
 	</tar>
     </target>
 
