@@ -17,9 +17,7 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 
-import uk.ac.liv.prng.PRNGFactory;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import uk.ac.liv.prng.GlobalPRNG;
 
 /**
  * <p>
@@ -33,8 +31,6 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 public class RandomRobinAuction extends RoundRobinAuction {
 
-  RandomElement randGenerator = PRNGFactory.getFactory().create();
-
   public RandomRobinAuction() {
     super();
   }
@@ -47,7 +43,7 @@ public class RandomRobinAuction extends RoundRobinAuction {
     Object[] candidates = activeTraders.toArray();
     int numCandidates = candidates.length;
     for( int i=0; i<numTraders; i++ ) {
-      int choice = randGenerator.choose(numCandidates-1);
+      int choice = GlobalPRNG.getInstance().choose(numCandidates-1);
       RoundRobinTrader trader = (RoundRobinTrader) candidates[choice];
       candidates[choice] = candidates[numCandidates-1];
       numCandidates--;
