@@ -29,16 +29,15 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import uk.ac.liv.auction.stats.*;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.*;
+
 
 /**
  * @author Steve Phelps
  */
 
-public class ElectricityStats
-    implements Serializable, Cloneable, MarketStats {
+public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
-//  RoundRobinAuction auction;
   RoundRobinAuction auction;
 
   public double rCon, rCap;
@@ -57,12 +56,15 @@ public class ElectricityStats
   int buyerCap, sellerCap;
 
   public EquilibriaStats standardStats = null;
-  
+
+  double equilibPrice;
+
+
   public ElectricityStats( RoundRobinAuction auction ) {
     this.auction = auction;
     calculate();
   }
-  
+
   /**
    * @deprecated
    */
@@ -73,7 +75,7 @@ public class ElectricityStats
   /**
    * @deprecated
    */
-  public void setPriceRange( long minPrice, long maxPrice ) {    
+  public void setPriceRange( long minPrice, long maxPrice ) {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -93,56 +95,74 @@ public class ElectricityStats
     calculate(true);
   }
 
-  protected void calculate( boolean equilibrium ) {
-    if ( equilibrium ) {
-      if ( standardStats == null ) {
-        standardStats = new EquilibriaStats(auction);
-        standardStats.calculate();
-      } else {
-        standardStats.recalculate();
-      }
+  protected void calculateEquilibria() {
+    if ( standardStats == null ) {
+      standardStats = new EquilibriaStats(auction);
+      standardStats.calculate();
+    } else {
+      standardStats.recalculate();
     }
-    Iterator i = auction.getTraderIterator();
+  }
+
+  protected void zeroTotals() {
     sellerCap = 0;
     buyerCap = 0;
     pBA = 0;
     pSA = 0;
     numBuyers = 0;
     numSellers = 0;
-    if ( equilibrium ) {
-      pSCE = 0;
-      pBCE = 0;
+  }
+
+  protected void zeroEquilibriumTotals() {
+    pSCE = 0;
+    pBCE = 0;
+  }
+
+  public double calculateEquilibriumPrice() {
+    return (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2;
+  }
+
+  public double equilibriumProfits( AbstractTraderAgent trader ) {
+    double surplus = 0;
+    if ( trader.isSeller() ) {
+      surplus = equilibPrice - trader.getPrivateValue();
+    } else {
+      surplus = trader.getPrivateValue() - equilibPrice;
     }
-    double equilibPrice = (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2;
-    //Debug.println("equilibPrice = " + equilibPrice);
+    return auction.getAge() * equilibQuant(trader, equilibPrice) * surplus;
+  }
+
+  protected double getProfits( AbstractTraderAgent trader ) {
+    return ((ElectricityTrader) trader).getProfits();
+  }
+
+  protected double getCapacity( AbstractTraderAgent trader ) {
+    return ((ElectricityTrader) trader).getCapacity();
+  }
+
+  protected void calculate( boolean equilibrium ) {
+    zeroTotals();
+    if ( equilibrium ) {
+      calculateEquilibria();
+      zeroEquilibriumTotals();
+    }
+    equilibPrice = calculateEquilibriumPrice();
+    Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
+      AbstractTraderAgent trader = (AbstractTraderAgent) i.next();
       if ( trader.isSeller() ) {
-        //Debug.println("seller: " + trader);
         numSellers++;
-        sellerCap += trader.getCapacity();
-        pSA += trader.getProfits();
-        /*
-        Debug.println("age = " + auction.getAge());
-        Debug.println("equilibQuant() = " + equilibQuant(trader, equilibPrice));
-        Debug.println("privValue = " + trader.getPrivateValue());
-        */
+        sellerCap += getCapacity(trader);
+        pSA += getProfits(trader);
         if ( equilibrium ) {
-          double ep = auction.getAge() * (
-                    equilibQuant(trader, equilibPrice)
-                      * (equilibPrice - trader.getPrivateValue()));
-          pSCE += ep;
+          pSCE += equilibriumProfits(trader);
         }
       } else {
-        //Debug.println("buyer: " + trader);
         numBuyers++;
-        buyerCap += trader.getCapacity();
-        pBA += trader.getProfits();
+        buyerCap += getCapacity(trader);
+        pBA += getProfits(trader);
         if ( equilibrium ) {
-          double ep = auction.getAge() * (
-                    equilibQuant(trader, equilibPrice)
-                      * (trader.getPrivateValue() - equilibPrice));
-          pBCE += ep;
+          pBCE += equilibriumProfits(trader);
         }
       }
     }
@@ -153,17 +173,17 @@ public class ElectricityStats
     eA = (pBA + pSA) / (pBCE + pSCE) * 100;
   }
 
-  public double equilibQuant( ElectricityTrader t, double price ) {
+  public double equilibQuant( AbstractTraderAgent t, double price ) {
     double privateValue = t.getPrivateValue();
     if ( t.isBuyer() ) {
       if ( price > privateValue ) {
         return 0;
       } else {
-        return t.getCapacity();
+        return ((ElectricityTrader) t).getCapacity();
       }
     } else {
       if ( price > privateValue ) {
-        return t.getCapacity();
+        return ((ElectricityTrader) t).getCapacity();
       } else {
         return 0;
       }

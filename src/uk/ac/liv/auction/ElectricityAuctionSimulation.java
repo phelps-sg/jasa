@@ -53,6 +53,8 @@ public class ElectricityAuctionSimulation implements Runnable {
 
   String outputFileName  = "electricity-data.csv";
 
+  String outputDir = "/tmp";
+
   int maxRounds = 1000;
 
   int iterations = 100;
@@ -66,7 +68,7 @@ public class ElectricityAuctionSimulation implements Runnable {
   int K = 30;         // No. of possible different actions
   double X = 15000;
   double S1 = 9.0;
-  
+
   CSVWriter dataFile, distributionFile;
 
   ElectricityStats stats;
@@ -74,12 +76,12 @@ public class ElectricityAuctionSimulation implements Runnable {
   RandomRobinAuction auction;
 
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
-  
+
   public ElectricityAuctionSimulation() {
   }
-  
+
   public ElectricityAuctionSimulation( int maxRounds, double R, double E,
-                                        int K, double X, double S1, 
+                                        int K, double X, double S1,
                                         int iterations, String outputFileName ) {
     this.maxRounds = maxRounds;
     this.R = R;
@@ -89,8 +91,8 @@ public class ElectricityAuctionSimulation implements Runnable {
     this.iterations = iterations;
     this.outputFileName = outputFileName;
   }
-  
-  public static void main( String[] args ) {    
+
+  public static void main( String[] args ) {
     ElectricityAuctionSimulation simulation = null;
     if ( args.length > 0 && "-set".equals(args[0]) ) {
       int maxRounds = Integer.valueOf(args[1]).intValue();
@@ -101,14 +103,14 @@ public class ElectricityAuctionSimulation implements Runnable {
       double S1 = Double.valueOf(args[6]).doubleValue();
       int iterations = Integer.valueOf(args[7]).intValue();
       String outputFileName = args[8];
-      simulation = 
-        new ElectricityAuctionSimulation(maxRounds, R, E, K, X, S1, iterations, outputFileName);      
+      simulation =
+        new ElectricityAuctionSimulation(maxRounds, R, E, K, X, S1, iterations, outputFileName);
     } else {
       simulation = new ElectricityAuctionSimulation();
     }
     simulation.run();
   }
-  
+
   public void run() {
 
 
@@ -122,7 +124,8 @@ public class ElectricityAuctionSimulation implements Runnable {
     System.out.println("Data File = " + outputFileName);
 
     try {
-      dataFile = new CSVWriter(new FileOutputStream(outputFileName), 6);
+      dataFile = new CSVWriter(
+                    new FileOutputStream(outputDir + "/" + outputFileName), 6);
     } catch ( IOException e ) {
       e.printStackTrace();
     }
@@ -146,16 +149,16 @@ public class ElectricityAuctionSimulation implements Runnable {
     System.out.println("nb = " + nb);
     System.out.println("cs = " + cs);
     System.out.println("cb = " + cb);
-    
+
     try {
-      String rothErevDataFileName = "rotherev-" + ns + "-" + nb 
+      String rothErevDataFileName = outputDir + "/rotherev-" + ns + "-" + nb
                                       + "-" + cs + "-" + cb + ".csv";
       distributionFile = new CSVWriter(
-                              new FileOutputStream(rothErevDataFileName), K); 
+                              new FileOutputStream(rothErevDataFileName), K);
     } catch ( IOException e ) {
       e.printStackTrace();
     }
-    
+
     CummulativeStatCounter efficiency = new CummulativeStatCounter("efficiency");
     CummulativeStatCounter mPB = new CummulativeStatCounter("mPB");
     CummulativeStatCounter mPS = new CummulativeStatCounter("mPS");
@@ -193,7 +196,7 @@ public class ElectricityAuctionSimulation implements Runnable {
   }
 
   public ElectricityStats runExperiment( int ns, int nb, int cs, int cb ) {
-  
+
     StatsMarketDataLogger logger;
     ContinuousDoubleAuctioneer auctioneer;
 
