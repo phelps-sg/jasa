@@ -59,12 +59,9 @@ public class PerStrategyStats implements MarketStats, Serializable, Resetable {
       StrategyStats stats = (StrategyStats) table.get(strategyClass);
       if ( stats == null ) {
         stats = new StrategyStats();
-        stats.profits = profits;
-        stats.numAgents = 1;
-      } else {
-        stats.profits += profits;
-        stats.numAgents++;
       }
+      stats.profits += profits;
+      stats.numAgents++;
       table.put(strategyClass, stats);
     }
   }
