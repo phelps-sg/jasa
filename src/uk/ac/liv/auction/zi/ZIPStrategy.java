@@ -16,7 +16,6 @@
 
 package uk.ac.liv.auction.zi;
 
-import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 
 import uk.ac.liv.ai.learning.MimicryLearner;
@@ -42,9 +41,6 @@ import org.apache.log4j.Logger;
 
 public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 
-  public static final String ERROR_SHOUTVISIBILITY = 
-    "ZIPStrategy can only be used with auctioneers who permit shout visibility";
-
   static Logger logger = Logger.getLogger(ZIPStrategy.class);
 
 
@@ -65,42 +61,57 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     return clone;
   }
 
+  
   protected void adjustMargin() {
-    try {
-      Shout lastShout = auction.getLastShout();      
-      if ( agent.isSeller() ) {
-        sellerStrategy(lastShout);
-      } else {
-        buyerStrategy(lastShout);
-      }      
-    } catch ( ShoutsNotVisibleException e ) {
-      throw new AuctionError(ERROR_SHOUTVISIBILITY);
+    if ( agent.isSeller() ) {
+      sellerStrategy();
+    } else {
+      buyerStrategy();
     }
   }
   
   
-  protected void sellerStrategy( Shout lastShout ) 
-      throws ShoutsNotVisibleException {   
-        
+  protected void sellerStrategy() {
+
     if ( lastShout == null ) {
       return;
     }
-    
-    double lastPrice = lastShout.getPrice();
-    adjustMargin(targetMargin(lastPrice - perterb(lastPrice)));
+
+    if ( lastShoutAccepted ) {
+      if ( trPrice > agent.getValuation(auction) ) {
+        adjustMargin(targetMargin(trAskPrice + perterb(trAskPrice)));
+      } else if (  agent.active() ) {
+        //adjustMargin(0);
+        adjustMargin(targetMargin(trAskPrice - perterb(trAskPrice)));
+      }
+    } else {
+      if (  agent.active()  ) {
+        adjustMargin(targetMargin(lastShout.getPrice() - perterb(lastShout.getPrice())));
+        //adjustMargin(0);
+      }
+    }
   }
 
   
-  protected void buyerStrategy( Shout lastShout ) 
-      throws ShoutsNotVisibleException {    
-        
+  protected void buyerStrategy() {
+
     if ( lastShout == null ) {
       return;
     }
-    
-    double lastPrice = lastShout.getPrice();
-    adjustMargin(targetMargin(lastPrice + perterb(lastPrice)));
-    
+
+    if ( lastShoutAccepted ) {
+      if ( trPrice < agent.getValuation(auction) ) {
+        adjustMargin(targetMargin(trBidPrice - perterb(trBidPrice)));
+      } else if ( agent.active() ) {
+        adjustMargin(targetMargin(trBidPrice + perterb(trBidPrice)));
+        //adjustMargin(0);
+      }
+    } else {
+      if (  agent.active()  ) {
+        adjustMargin(targetMargin(lastShout.getPrice() + perterb(lastShout.getPrice())));
+        //adjustMargin(0);
+      }
+    }
     
     
   }

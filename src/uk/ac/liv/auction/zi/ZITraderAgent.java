@@ -19,8 +19,6 @@ import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.event.AuctionEvent;
 
-import uk.ac.liv.prng.GlobalPRNG;
-
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
@@ -83,8 +81,6 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
    * The number of units traded to date
    */
   protected int quantityTraded = 0;
-
-  protected Shout dummyShout;
   
   protected boolean isActive = true;
 
@@ -140,7 +136,6 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     tradeEntitlement = initialTradeEntitlement;
     quantityTraded = 0;
     isActive = true;
-    dummyShout = new Shout(this);
     logger.debug(this + ": initialised.");
   }
 
@@ -219,6 +214,22 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
   }
   
 
+  public int getTradeEntitlement() {
+    return tradeEntitlement;
+  }
+  
+  public void setTradeEntitlement( int tradeEntitlement ) {
+    this.tradeEntitlement = tradeEntitlement;
+  }
+  
+  public int getInitialTradeEntitlement() {
+    return initialTradeEntitlement;
+  }
+  
+  public void setInitialTradeEntitlement( int initialTradeEntitlement ) {
+    this.initialTradeEntitlement = initialTradeEntitlement;
+  }
+  
   public String toString() {
     return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " valuer:" + valuer + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
   }
