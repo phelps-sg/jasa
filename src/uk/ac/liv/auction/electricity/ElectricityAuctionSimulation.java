@@ -110,12 +110,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       new CummulativeStatCounter("EquilibPrice");
   protected CummulativeStatCounter equilibQty =
       new CummulativeStatCounter("EquilibQty");
-  protected CummulativeStatCounter reMean = new CummulativeStatCounter("REmean");
-  protected CummulativeStatCounter reStdev = new CummulativeStatCounter("REstdev");
-
+  
   protected CummulativeStatCounter[] variables = new CummulativeStatCounter[] {
     efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
-    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, reMean, reStdev
+    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty
   };
 
   static Logger logger = Logger.getLogger(ElectricityAuctionSimulation.class);
@@ -143,7 +141,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_RANDOMIZER = "randomizer";
 
 
-  static final int DATAFILE_NUM_COLUMNS = 81;
+  static final int DATAFILE_NUM_COLUMNS = 73;
   static final int ITERRESULTS_NUM_COLUMNS = 9;
 
 
@@ -336,44 +334,19 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     for( int i=0; i<iterations; i++ ) {
 
       randomizer.randomizePrivateValues(randomizedPrivateValues, i);
-
       randomizer.setStrategyPRNGseeds(prngSeeds, i);
 
       auction.reset();
       auction.run();
-      stats.calculate();
-      stats.calculateStrategicMarketPower();
-
-      efficiency.newData(stats.getEA());
-      mPB.newData(stats.getMPB());
-      mPS.newData(stats.getMPS());
-      sMPB.newData(stats.getSMPB());
-      sMPS.newData(stats.getSMPS());
-      pBA.newData(stats.getPBA());
-      pSA.newData(stats.getPSA());
-      eAN.newData(stats.getEA()/100);
-      mPBN.newData(mpNormalise(stats.getMPB()));
-      mPSN.newData(mpNormalise(stats.getMPS()));
-      sMPBN.newData(mpNormalise(stats.getSMPB()));
-      sMPSN.newData(mpNormalise(stats.getSMPS()));
-      pBT.newData(stats.getPBT());
-      pST.newData(stats.getPST());
-      pBCE.newData(stats.getPBCE());
-      pSCE.newData(stats.getPSCE());
-
-      EquilibriaStats equilibria = stats.getEquilibriaStats();
-      double ep = (equilibria.getMinPrice() + equilibria.getMaxPrice()) / 2;
-      double eq = (equilibria.getMinQuantity() + equilibria.getMaxQuantity()) / 2;
-      equilibPrice.newData(ep);
-      equilibQty.newData(eq);
-
+      
+      calculateStatistics();
       dumpIterResults();
     }
 
   }
 
 
-  public void registerTraders( RoundRobinAuction auction,
+  protected void registerTraders( RoundRobinAuction auction,
                                       boolean areSellers, int num,
                                       int capacity ) {
 
@@ -396,6 +369,36 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       // Register it in the auction
       auction.register(trader);
     }
+  }
+  
+  
+  protected void calculateStatistics() {
+    
+    stats.calculate();
+    stats.calculateStrategicMarketPower();
+
+    efficiency.newData(stats.getEA());
+    mPB.newData(stats.getMPB());
+    mPS.newData(stats.getMPS());
+    sMPB.newData(stats.getSMPB());
+    sMPS.newData(stats.getSMPS());
+    pBA.newData(stats.getPBA());
+    pSA.newData(stats.getPSA());
+    eAN.newData(stats.getEA()/100);
+    mPBN.newData(mpNormalise(stats.getMPB()));
+    mPSN.newData(mpNormalise(stats.getMPS()));
+    sMPBN.newData(mpNormalise(stats.getSMPB()));
+    sMPSN.newData(mpNormalise(stats.getSMPS()));
+    pBT.newData(stats.getPBT());
+    pST.newData(stats.getPST());
+    pBCE.newData(stats.getPBCE());
+    pSCE.newData(stats.getPSCE());
+
+    EquilibriaStats equilibria = stats.getEquilibriaStats();
+    double ep = (equilibria.getMinPrice() + equilibria.getMaxPrice()) / 2;
+    double eq = (equilibria.getMinQuantity() + equilibria.getMaxQuantity()) / 2;
+    equilibPrice.newData(ep);
+    equilibQty.newData(eq);
   }
 
   
