@@ -45,6 +45,18 @@ import org.apache.log4j.Logger;
  * in order to use this strategy.
  * </p>
  *
+ * </p><p><b>Parameters</b><br>
+ * <table>
+ * <tr><td valign=top><i>base</i><tt>.s</tt><br>
+ * <font size=-1>double &gt;= 0</font></td>
+ * <td valign=top>(the spread factor)</td></tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.t</tt><br>
+ * <font size=-1>double &gt;= 0</font></td>
+ * <td valign=top>(the time factor)</td><tr>
+ *
+ * </table>
+ *
  * @see uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
  *
  * @author Steve Phelps
@@ -56,7 +68,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
   /**
    * The time factor.  Kaplan will bid if the remaining time in
-   * the current period is less than t then
+   * the current period is less than t
    */
   protected double t = 4;
 
