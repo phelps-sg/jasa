@@ -275,7 +275,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
         ElectricityTrader trader = (ElectricityTrader) traders.next();
 
         double value;
-        if ( randGenerator.nextBoolean() ) {  //TODO!
+        if ( trader.isBuyer() ) {  //TODO!
           value =
             nextRandomDouble(minBuyerPrivateValue, maxBuyerPrivateValue);
         } else {

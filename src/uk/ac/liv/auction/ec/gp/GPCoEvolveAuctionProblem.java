@@ -135,11 +135,11 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
   }
 
 
-  protected GPTradingStrategy getStrategy( int i, Vector[] group ) {
+  protected Strategy getStrategy( int i, Vector[] group ) {
     if ( i < numSellers ) {
-      return (GPTradingStrategy) group[1].get(i);
+      return (Strategy) group[1].get(i);
     } else {
-      return (GPTradingStrategy) group[2].get(i-numSellers);
+      return (Strategy) group[2].get(i-numSellers);
     }
   }
 

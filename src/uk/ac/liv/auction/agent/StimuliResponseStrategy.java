@@ -36,12 +36,15 @@ import ec.util.Parameter;
  * </p>
  */
 
-public class StimuliResponseStrategy extends AbstractStrategy {
+public class StimuliResponseStrategy extends AbstractStrategy
+                                        implements FixedQuantityStrategy {
 
   /**
    * The learning algorithm to use.
    */
   StimuliResponseLearner learner;
+
+  int quantity;
 
   static final String P_LEARNER = "learner";
 
@@ -89,6 +92,7 @@ public class StimuliResponseStrategy extends AbstractStrategy {
       price = 0;
     }
     shout.setPrice(price);
+    shout.setQuantity(quantity);
   }
 
   public void reset() {
@@ -102,6 +106,10 @@ public class StimuliResponseStrategy extends AbstractStrategy {
 
   public void setLearner( StimuliResponseLearner learner ) {
     this.learner = learner;
+  }
+
+  public void setQuantity( int quantity ) {
+    this.quantity = quantity;
   }
 
   public String toString() {

@@ -38,7 +38,8 @@ import uk.ac.liv.util.*;
  */
 
 public class GPTradingStrategy extends GPIndividualCtx
-    implements Strategy, QuoteProvider, Serializable, Resetable {
+    implements Strategy, QuoteProvider, Serializable, Resetable,
+                FixedQuantityStrategy {
 
   AbstractTraderAgent agent = null;
 

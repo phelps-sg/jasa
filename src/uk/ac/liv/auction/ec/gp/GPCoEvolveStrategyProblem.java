@@ -70,7 +70,7 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
 
   protected void setStrategyFitnesses( Vector[] group ) {
     for( int s=0; s<numTraders; s++ ) {
-      GPTradingStrategy strategy = getStrategy(s, group);
+      GPTradingStrategy strategy = (GPTradingStrategy) getStrategy(s, group);
       KozaFitness fitness = (KozaFitness) strategy.fitness;
       fitness.setStandardizedFitness(context.getState(),
                                       (float) strategyFitnesses[s].getMean());
@@ -113,12 +113,12 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
     Iterator traders = allTraders.iterator();
     for( int i=0; traders.hasNext(); i++ ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
-      GPTradingStrategy strategy = getStrategy(i, group);
+      AbstractStrategy strategy = (AbstractStrategy) getStrategy(i, group);
       strategy.reset();
-      strategy.setGPContext(context);
+      //strategy.setGPContext(context);
       trader.setStrategy(strategy);
       strategy.setAgent(trader);
-      strategy.setQuantity(trader.getCapacity());
+      ((FixedQuantityStrategy) strategy).setQuantity(trader.getCapacity());
       trader.reset();
       strategies.add(strategy);
     }
@@ -126,12 +126,15 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
   }
 
 
-  protected GPTradingStrategy getStrategy( int i, Vector[] group ) {
+  protected Strategy getStrategy( int i, Vector[] group ) {
+    GPTradingStrategy strategy = null;
     if ( i < numSellers ) {
-      return (GPTradingStrategy) group[0].get(i);
+      strategy = (GPTradingStrategy) group[0].get(i);
     } else {
-      return (GPTradingStrategy) group[1].get(i-numSellers);
+      strategy = (GPTradingStrategy) group[1].get(i-numSellers);
     }
+    strategy.setGPContext(context);
+    return strategy;
   }
 
 

@@ -28,7 +28,8 @@ import ec.util.ParameterDatabase;
  * @version 1.0
  */
 
-public class PureSimpleStrategy extends AbstractStrategy {
+public class PureSimpleStrategy extends AbstractStrategy
+                                 implements FixedQuantityStrategy {
 
   double delta;
 
@@ -68,6 +69,10 @@ public class PureSimpleStrategy extends AbstractStrategy {
     if ( shout.getPrice() < 0 ) {
       shout.setPrice(0);
     }
+  }
+
+  public void setQuantity( int quantity ) {
+    this.quantity = quantity;
   }
 
 }
