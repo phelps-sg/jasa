@@ -332,7 +332,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
       if ( verbose ) {
         System.out.println("Post randomization stats = " + stats);
       }
-    } while ( ! stats.standardStats.equilibriaExists() );
+    } while ( ! stats.getEquilibriaStats().equilibriaExists() );
   }
 
 
@@ -370,9 +370,9 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
     stats.calculate();
 
-    efficiency.newData(stats.eA);
-    buyerMP.newData(stats.mPB);
-    sellerMP.newData(stats.mPS);
+    efficiency.newData(stats.getEA());
+    buyerMP.newData(stats.getMPB());
+    sellerMP.newData(stats.getMPS());
   }
 
 

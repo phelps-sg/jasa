@@ -27,6 +27,7 @@ import uk.ac.liv.util.Debug;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.ParameterizablePricing;
+import uk.ac.liv.auction.core.Auctioneer;
 
 import uk.ac.liv.auction.stats.*;
 
@@ -49,26 +50,26 @@ import uk.ac.liv.auction.agent.*;
 
 public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
-  RoundRobinAuction auction;
+  protected RoundRobinAuction auction;
 
-  public double rCon, rCap;
+  protected double rCon, rCap;
 
-  public double pBCE = 0, pSCE = 0;
+  protected double pBCE = 0, pSCE = 0;
 
-  public double pBA, pSA;
+  protected double pBA, pSA;
 
-  public double mPB, mPS;
+  protected double mPB, mPS;
 
-  public double eA;
+  protected double eA;
 
-  public double numSellers;
-  public double numBuyers;
+  protected double numSellers;
+  protected double numBuyers;
 
-  int buyerCap, sellerCap;
+  protected int buyerCap, sellerCap;
 
-  public EquilibriaStats standardStats = null;
+  protected EquilibriaStats standardStats = null;
 
-  double equilibPrice;
+  protected double equilibPrice;
 
 
   public ElectricityStats( RoundRobinAuction auction ) {
@@ -157,6 +158,15 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     }
   }
 
+  protected void calculateTruthfulOutcomes() {
+    Iterator i = auction.getTraderIterator();
+    Auctioneer auctioneer = auction.getAuctioneer();
+    while ( i.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) i.next();
+
+    }
+  }
+
 
   protected void zeroTotals() {
     sellerCap = 0;
@@ -241,6 +251,30 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       + "\n\teA:" + eA
       + "\n\tstandardStats:" + standardStats
       + "\n)";
+  }
+
+  public double getEA() {
+    return eA;
+  }
+
+  public double getMPB() {
+    return mPB;
+  }
+
+  public double getMPS() {
+    return mPS;
+  }
+
+  public double getPBA() {
+    return pBA;
+  }
+
+  public double getPSA() {
+    return pSA;
+  }
+
+  public EquilibriaStats getEquilibriaStats() {
+    return standardStats;
   }
 
 }

@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2003 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -107,15 +107,15 @@ public class GAElectricityProblem extends Problem implements SimpleProblemForm {
   //  setFitness(individual);
     SimpleFitness fitness = (SimpleFitness) individual.fitness;
     // Try to maximise market efficiency EA
-    fitness.setFitness(state, (float) (marketStats.eA), false);
+    fitness.setFitness(state, (float) (marketStats.getEA()), false);
     individual.evaluated = true;
 
     statsOut.newData(state.generation);
-    statsOut.newData(marketStats.pBA);
-    statsOut.newData(marketStats.pSA);
-    statsOut.newData(marketStats.mPB);
-    statsOut.newData(marketStats.mPS);
-    statsOut.newData(marketStats.eA);
+    statsOut.newData(marketStats.getPBA());
+    statsOut.newData(marketStats.getPSA());
+    statsOut.newData(marketStats.getMPB());
+    statsOut.newData(marketStats.getMPS());
+    statsOut.newData(marketStats.getEA());
 
   }
 

@@ -306,20 +306,20 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         auction.run();
         stats.calculate();
 
-        efficiency.newData(stats.eA);
-        mPB.newData(stats.mPB);
-        mPS.newData(stats.mPS);
-        pBA.newData(stats.pBA);
-        pSA.newData(stats.pSA);
-        eAN.newData(stats.eA/100);
-        mPBN.newData(1/(1+Math.abs(stats.mPB)));
-        mPSN.newData(1/(1+Math.abs(stats.mPS)));
-        double ep = (stats.standardStats.getMinPrice()
-                               + stats.standardStats.getMaxPrice()) / 2;
+        efficiency.newData(stats.getEA());
+        mPB.newData(stats.getMPB());
+        mPS.newData(stats.getMPS());
+        pBA.newData(stats.getPBA());
+        pSA.newData(stats.getPSA());
+        eAN.newData(stats.getEA()/100);
+        mPBN.newData(1/(1+Math.abs(stats.getMPB())));
+        mPSN.newData(1/(1+Math.abs(stats.getMPS())));
+        double ep = (stats.getEquilibriaStats().getMinPrice()
+                               + stats.getEquilibriaStats().getMaxPrice()) / 2;
         equilibPrice.newData(ep);
-        iterResults.newData(stats.eA);
-        iterResults.newData(stats.mPB);
-        iterResults.newData(stats.mPS);
+        iterResults.newData(stats.getEA());
+        iterResults.newData(stats.getMPB());
+        iterResults.newData(stats.getMPS());
         iterResults.newData(marketData.getTransPriceStats().getMean());
         iterResults.newData(marketData.getAskPriceStats().getMean());
         iterResults.newData(marketData.getBidPriceStats().getMean());

@@ -12,7 +12,6 @@ electricity.maxrounds = 100
 electricity.iterations = 10000
 
 # Output data
-electricity.outputfile = electricity-data.csv
 electricity.outputdir = results/electricity
 
 # Use random private values
