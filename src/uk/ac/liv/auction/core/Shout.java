@@ -193,14 +193,14 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
 
   public int hashCode() {
-    return (int) id * getAgent().hashCode();
+    return (int) id; // * getAgent().hashCode();
   }
 
 
-  public boolean equals( Object other ) {
-    return id == ((Shout) other).id &&
-                    getAgent().equals(((Shout) other).getAgent());
-  }
+//  public boolean equals( Object other ) {
+//    return id == ((Shout) other).id &&
+//                    getAgent().equals(((Shout) other).getAgent());
+//  }
 
   //
   // The following methods allow muting of shouts, but only by classes
