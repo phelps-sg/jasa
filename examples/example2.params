@@ -72,7 +72,7 @@ simulation.prng = uk.ac.liv.prng.Mar
 #  with the following PRNG seed
 simulation.seed = 4523
 
-# log4j configuration - substitute INFO for DEBUG to turn on debugging output
+# log4j configuration - substitute DEBUG for INFO to turn on debugging output
 log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout

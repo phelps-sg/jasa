@@ -24,7 +24,8 @@ import uk.ac.liv.ai.learning.*;
 import uk.ac.liv.util.*;
 import uk.ac.liv.util.io.*;
 
-import ec.util.MersenneTwisterFast;
+import uk.ac.liv.prng.PRNGFactory;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -125,29 +126,30 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
   static final String DEFAULT_PARAMETER_FILE = "examples/electricity.params";
 
-  static final String P_MAXROUNDS = "maxrounds";
-  static final String P_ITERATIONS = "iterations";
-  static final String P_OUTPUTDIR = "outputdir";
-  static final String P_ELECTRICITY = "electricity";
-  static final String P_AUCTIONEERKSAMPLES = "ksamples";
-  static final String P_KMIN = "k0";
-  static final String P_KMAX = "k1";
-  static final String P_KDELTA = "kdelta";
-  static final String P_AUCTIONEER = "auctioneer";
-  static final String P_CB = "cb";
-  static final String P_CS = "cs";
-  static final String P_NS = "ns";
-  static final String P_NB = "nb";
-  static final String P_SELLER_STRATEGY = "seller";
-  static final String P_BUYER_STRATEGY = "buyer";
-  static final String P_STRATEGY = "strategy";
-  static final String P_STATS = "stats";
-  static final String P_ITER_DATA = "iterdata";
-  static final String P_STRATEGY_DATA = "strategydata";
-  static final String P_RANDOMIZER = "randomizer";
+  public static final String P_MAXROUNDS = "maxrounds";
+  public static final String P_ITERATIONS = "iterations";
+  public static final String P_OUTPUTDIR = "outputdir";
+  public static final String P_ELECTRICITY = "electricity";
+  public static final String P_AUCTIONEERKSAMPLES = "ksamples";
+  public static final String P_KMIN = "k0";
+  public static final String P_KMAX = "k1";
+  public static final String P_KDELTA = "kdelta";
+  public static final String P_AUCTIONEER = "auctioneer";
+  public static final String P_CB = "cb";
+  public static final String P_CS = "cs";
+  public static final String P_NS = "ns";
+  public static final String P_NB = "nb";
+  public static final String P_SELLER_STRATEGY = "seller";
+  public static final String P_BUYER_STRATEGY = "buyer";
+  public static final String P_STRATEGY = "strategy";
+  public static final String P_STATS = "stats";
+  public static final String P_ITER_DATA = "iterdata";
+  public static final String P_STRATEGY_DATA = "strategydata";
+  public static final String P_RANDOMIZER = "randomizer";
+  public static final String P_PRNG = "prng";
 
 
-  static final int DATAFILE_NUM_COLUMNS = 77;
+  static int DATAFILE_NUM_COLUMNS;
   static final int ITERRESULTS_NUM_COLUMNS = 9;
 
 
@@ -157,8 +159,9 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    Debug.assertTrue("CSV file not configured with correct number of columns",
-                       variables.length*4 == DATAFILE_NUM_COLUMNS-1);
+    PRNGFactory.setup(parameters, base.push(P_PRNG));
+
+    DATAFILE_NUM_COLUMNS = variables.length*4 + 1;
 
     maxRounds =
       parameters.getIntWithDefault(base.push(P_MAXROUNDS), null, maxRounds);

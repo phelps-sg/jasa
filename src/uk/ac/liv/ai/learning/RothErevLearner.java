@@ -15,9 +15,10 @@
 
 package uk.ac.liv.ai.learning;
 
-import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
+
+import uk.ac.liv.prng.PRNGFactory;
 
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
@@ -27,6 +28,8 @@ import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.MathUtil;
 import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.io.DataWriter;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.io.Serializable;
 
@@ -120,6 +123,8 @@ public class RothErevLearner extends AbstractLearner implements
    * The total amount of update to the probability vector on the last iteration.
    */
   protected double deltaP;
+
+  protected RandomElement prng = PRNGFactory.getFactory().create();
 
   static final int    DEFAULT_K   = 100;
   static final double DEFAULT_R   = 0.1;
@@ -266,9 +271,9 @@ public class RothErevLearner extends AbstractLearner implements
 
   public void initialise() {
     for( int i=0; i<k; i++ ) {
-      p.setProbability(i, 1.0/k);
-      q[i] = s1/k;
+      q[i] = prng.raw();
     }
+    updateProbabilities();
     iteration = 0;
   }
 
@@ -322,10 +327,11 @@ public class RothErevLearner extends AbstractLearner implements
   }
 
   public void setSeed( long seed ) {
-    p.setSeed(seed);
+    prng = PRNGFactory.getFactory().create(seed);
   }
 
   public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
     p.seed(s);
   }
 

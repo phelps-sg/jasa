@@ -21,17 +21,20 @@ import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.ai.learning.*;
 import uk.ac.liv.util.*;
+import uk.ac.liv.prng.PRNGFactory;
 
 import java.util.*;
 import java.io.Serializable;
 
-import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+
 import org.apache.log4j.Logger;
 
-public class StandardRandomizer implements Parameterizable, Serializable {
+public class StandardRandomizer
+    implements Parameterizable, Serializable, Seedable, Seeder {
 
   protected RoundRobinAuction auction;
 
@@ -41,8 +44,9 @@ public class StandardRandomizer implements Parameterizable, Serializable {
 
   protected double maxPrivateValue = 1000;
 
-  protected MersenneTwisterFast privValuePRNG;
+  protected RandomElement privValuePRNG;
 
+  protected RandomElement metaPRNG;
 
   protected ElectricityExperiment experiment;
 
@@ -59,7 +63,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
   }
 
   public StandardRandomizer() {
-    privValuePRNG = new MersenneTwisterFast(seed);
+    metaPRNG = PRNGFactory.getFactory().create(seed);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -74,16 +78,17 @@ public class StandardRandomizer implements Parameterizable, Serializable {
         parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null,
                                         maxPrivateValue);
 
-    privValuePRNG.setSeed(seed);
+    metaPRNG = PRNGFactory.getFactory().create(seed);
+    privValuePRNG = PRNGFactory.getFactory().create(nextSeed());
   }
 
-  public void setExperiment( ElectricityExperiment simulation ) {
+  public void setExperiment( ElectricityExperiment experiment ) {
     this.experiment = experiment;
     this.auction = experiment.auction;
   }
 
-  public double randomValue( MersenneTwisterFast prng, double min, double max ) {
-    return min + (max - min) * prng.nextDouble();
+  public double randomValue( RandomElement prng, double min, double max ) {
+    return min + (max - min) * prng.raw();
   }
 
   public double randomPrivateValue( double min, double max ) {
@@ -102,6 +107,20 @@ public class StandardRandomizer implements Parameterizable, Serializable {
       trader.setPrivateValue(values[iteration][traderNumber++]);
     }
   }
+
+  public void setSeed( long seed ) {
+    metaPRNG = PRNGFactory.getFactory().create(seed);
+    privValuePRNG = PRNGFactory.getFactory().create(nextSeed());
+  }
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
+  }
+
+  public long nextSeed() {
+    return metaPRNG.choose(0, Integer.MAX_VALUE);
+  }
+
 
 
   protected double[][] generateRandomizedPrivateValues( int numTraders,
@@ -127,10 +146,9 @@ public class StandardRandomizer implements Parameterizable, Serializable {
   protected long[][] generatePRNGseeds( int numTraders, int numIterations ) {
     long[][] seeds = new long[numTraders][numIterations];
     logger.info("PRNG seed = " + seed);
-    MersenneTwisterFast metaPRNG = new MersenneTwisterFast((int) seed);
     for( int t=0; t<numTraders; t++ ) {
       for( int i=0; i<numIterations; i++ ) {
-        seeds[t][i] = (long) metaPRNG.nextInt();
+        seeds[t][i] = nextSeed();
       }
     }
     return seeds;
@@ -141,16 +159,9 @@ public class StandardRandomizer implements Parameterizable, Serializable {
     Iterator i = auction.getTraderIterator();
     int traderNumber = 0;
     while ( i.hasNext() ) {
+      setSeed(seeds[traderNumber++][iteration]);
       ElectricityTrader t = (ElectricityTrader) i.next();
-      Strategy strategy = t.getStrategy();
-      if ( strategy instanceof AdaptiveStrategy ) {
-        Learner learner = ((AdaptiveStrategy) strategy).getLearner();
-        if ( learner instanceof StochasticLearner ) {
-          ((StochasticLearner) learner).setSeed(seeds[traderNumber++][iteration]);
-        }
-      } else if ( strategy instanceof Seedable ) {
-        ((Seedable) strategy).setSeed(seeds[traderNumber++][iteration]);
-      }
+      t.seed(this);
     }
   }
 

@@ -39,6 +39,13 @@ import org.apache.log4j.Logger;
  * Institutions, Theories and Evidence" 1992, Addison-Wesley
  * </p>
  *
+ * <p>
+ * Note that you must configure a logger of type DailyStatsMarketDataLogger
+ * in order to use this strategy.
+ * </p>
+ *
+ * @see uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -132,26 +139,25 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     CummulativeStatCounter transPrice = null;
 
     try {
-
       transPrice = auction.getPreviousDayTransPriceStats();
-
-      if (transPrice == null) {
-        return false;
-      }
-
-      if (agent.isBuyer()) {
-        smallSpread =
-            quote.getAsk() < transPrice.getMax() &&
-            ( (quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
-      } else {
-        smallSpread =
-            quote.getBid() > transPrice.getMin() &&
-            ( (quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
-      }
-
     } catch ( DataUnavailableException e ) {
       error(e);
     }
+
+    if ( transPrice == null ) {
+      return false;
+    }
+
+    if (agent.isBuyer()) {
+      smallSpread =
+          quote.getAsk() < transPrice.getMax() &&
+          ( (quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
+    } else {
+      smallSpread =
+          quote.getBid() > transPrice.getMin() &&
+          ( (quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
+    }
+
 
     if ( smallSpread ) {
       logger.debug(this + ": small spread detected");

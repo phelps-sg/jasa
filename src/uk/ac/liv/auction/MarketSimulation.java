@@ -102,7 +102,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String P_PRNG = "prng";
 
 
-  public static final String VERSION = "0.24";
+  public static final String VERSION = "0.25";
 
   public static final String GNU_MESSAGE =
     "\n" +
