@@ -292,9 +292,8 @@ public class AuctionConsoleFrame extends JFrame
       graphPanel.setPreferredSize(new Dimension(600,200));
       gridBag.setConstraints(graphPanel, c);
       contentPane.add(graphPanel);
-      graphXExtrema = 500f;
-      graph.setYExtrema(0f, 0f);
-      graph.setXExtrema(0f, graphXExtrema);
+      graph.setYExtrema(0f, 0f, 0f);
+      graph.setXExtrema(0f, 500f, 500f);
     }
 
     setAuctionName(name);
@@ -348,10 +347,10 @@ public class AuctionConsoleFrame extends JFrame
 
     if ( graphModel != null && auction.getAge() != currentRound) {
       currentRound = auction.getAge();
-      if ( currentRound > 1 && currentRound % 500 == 0 ) {
-        graphXExtrema += 500f;
-        graph.setXExtrema(0, graphXExtrema);
-      }
+//      if ( currentRound > 1 && currentRound % 500 == 0 ) {
+//        graphXExtrema += 500f;
+//        graph.setXExtrema(0, graphXExtrema);
+//      }
       notifyGraphModelChanged();
     }
     logger.debug("update() complete");
@@ -470,7 +469,7 @@ public class AuctionConsoleFrame extends JFrame
           graphModel.dataUpdated();
         }
       });
-      Thread.currentThread().sleep(1);
+//      Thread.currentThread().sleep(1);
     }
     catch (InterruptedException e) {
       logger.warn(e);

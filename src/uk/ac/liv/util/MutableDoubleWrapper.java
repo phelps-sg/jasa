@@ -18,7 +18,7 @@ package uk.ac.liv.util;
 
 /**
  * <p>
- * A simple wrapper for a primitive <code>int</code> value which is publically
+ * A simple wrapper for a primitive <code>double</code> value which is publically
  * mutable.
  * </p>
  */
