@@ -91,7 +91,7 @@ public abstract class ElectricityTest extends TestCase {
     for( int i=0; i<ITERATIONS; i++ ) {
       auction.reset();
       setPRNGseeds(i);
-      auction.run();
+      auction.run();      
       stats.calculate();      
       updateStats();      
     }
@@ -197,5 +197,5 @@ public abstract class ElectricityTest extends TestCase {
     return MIN_PRIVATE_VALUE + 
                 prng.nextDouble() * (MAX_PRIVATE_VALUE-MIN_PRIVATE_VALUE);
   }
-
+  
 }

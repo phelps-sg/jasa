@@ -15,6 +15,8 @@
 
 package test.uk.ac.liv.auction;
 
+import test.uk.ac.liv.ai.learning.RothErevLearnerTest;
+
 import junit.framework.*;
 
 import uk.ac.liv.auction.core.*;
@@ -79,6 +81,20 @@ public class NPTReplicationTest extends ElectricityTest {
     assertTrue(mPS.getStdDev() <= 1);
     assertTrue(eA.getMean() >= 87.0);
     assertTrue(eA.getStdDev() <= 20);
+  }
+
+  public void runExperiment() {
+    super.runExperiment();
+    checkRothErevProbabilities();    
+  }
+  
+  public void checkRothErevProbabilities() {
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      ElectricityTrader t = (ElectricityTrader) i.next();
+      NPTRothErevLearner l = (NPTRothErevLearner) ((AdaptiveStrategy) t.getStrategy()).getLearner();
+      RothErevLearnerTest.checkProbabilities(l);
+    }
   }
 
   public static void main( String[] args ) {

@@ -49,7 +49,8 @@ public class RothErevLearnerTest extends TestCase {
       } else {
         learner1.reward(0);
       }
-    }
+      checkProbabilities(learner1);
+    }    
     System.out.println("final state of learner1 = " + learner1);
     System.out.println("learner1 score = " + correctActions + "%");
     System.out.println("learner1 peaks = " + learner1.countPeaks());
@@ -87,6 +88,16 @@ public class RothErevLearnerTest extends TestCase {
     }
     System.out.println(action1Data);
     assertTrue( action1Data.getMean() <= 0.57 && action1Data.getMean() >= 0.53 );
+  }
+  
+  public static void checkProbabilities( RothErevLearner l ) {
+    double prob=0;
+    for( int i=0; i<l.getK(); i++ ) {
+      prob += l.getProbability(i);
+    }    
+    if ( prob > 1.001 ) {
+      throw new Error("Probabilities should sum to 1");
+    }
   }
 
 
