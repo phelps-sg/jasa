@@ -138,6 +138,8 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
       logger.info("done.");
 
+      ManagerUIFrame.getSingletonInstance().enableStartButton();
+
     } catch ( Exception e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());
@@ -158,6 +160,7 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
       ACLMessage start = new ACLMessage(ACLMessage.INFORM);
       start.addReceiver(auctioneerAID);
       StartAuctionAction startContent = new StartAuctionAction();
+      logger.debug("Sending " + start + " with content " + startContent + " to start auction.");
       sendMessageAsynch(start, startContent);
     } catch ( Exception e ) {
       logger.error(e.getMessage());

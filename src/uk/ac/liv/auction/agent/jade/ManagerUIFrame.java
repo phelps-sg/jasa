@@ -39,6 +39,8 @@ public class ManagerUIFrame extends AuctionConsoleFrame {
 
   protected JButton startButton;
 
+  protected static ManagerUIFrame singleton = null;
+
   static Logger logger = Logger.getLogger(ManagerUIFrame.class);
 
 
@@ -67,11 +69,27 @@ public class ManagerUIFrame extends AuctionConsoleFrame {
         }
     });
 
+    startButton.setEnabled(false);
+
+    singleton = this;
   }
 
   void startAuction() {
     logger.debug("Starting auction..");
+    disableStartButton();
     manager.startAuction();
+  }
+
+  static ManagerUIFrame getSingletonInstance() {
+    return singleton;
+  }
+
+  void enableStartButton() {
+    startButton.setEnabled(true);
+  }
+
+  void disableStartButton() {
+    startButton.setEnabled(false);
   }
 
 }

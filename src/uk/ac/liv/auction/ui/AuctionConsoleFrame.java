@@ -463,22 +463,22 @@ public class AuctionConsoleFrame extends JFrame
 
   protected void notifyGraphModelChanged() {
     logger.debug("notifyGraphModelChanged()");
-    try {
-      SwingUtilities.invokeAndWait(new Runnable() {
+//    try {
+      SwingUtilities.invokeLater(new Runnable() {
         public void run() {
           graphModel.dataUpdated();
         }
       });
 //      Thread.currentThread().sleep(1);
-    }
-    catch (InterruptedException e) {
-      logger.warn(e);
-      e.printStackTrace();
-    }
-    catch (java.lang.reflect.InvocationTargetException e) {
-      logger.warn(e);
-      e.printStackTrace();
-    }
+//    }
+//    catch (InterruptedException e) {
+//      logger.warn(e);
+//      e.printStackTrace();
+//    }
+//    catch (java.lang.reflect.InvocationTargetException e) {
+//      logger.warn(e);
+//      e.printStackTrace();
+//    }
     logger.debug("exiting notifyGraphModelChanged()");
   }
 }
