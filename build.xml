@@ -56,7 +56,7 @@
      </javadoc>
    </target>
 
-   <target depends="compile,doc" name="jar">
+   <target depends="compile" name="jar">
    	<jar basedir="${outputDir}" jarfile="jasa.jar"/>
    </target>
 

@@ -325,7 +325,8 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
   public String toString() {
     return "(" + getClass() + "\n\trCon:" + rCon + "\n\trCap:" + rCap
-      + "\n\tmPB:" + mPB + "\n\tmPS:" + mPS + "\n\tpBA:" + pBA
+      + "\n\tmPB:" + mPB + "\n\tmPS:" + mPS 
+      + "\n\tsMPB:" + sMPB + "\n\tsMPS: " + sMPS + "\n\tpBA:" + pBA
       + "\n\tpSA:" + pSA + "\n\tpBCE:" + pBCE + "\n\tpSCE:" + pSCE
       + "\n\teA:" + eA
       + "\n\tstandardStats:" + standardStats

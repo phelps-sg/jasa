@@ -43,16 +43,16 @@ import ec.util.ParameterDatabase;
 
 public class EquilibriaStats implements MarketStats, Resetable {
 
-  FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
+  protected FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
 
-  RoundRobinAuction auction;
+  protected RoundRobinAuction auction;
 
-  double minPrice, maxPrice;
-  int minQty, maxQty;
+  protected double minPrice, maxPrice;
+  protected int minQty, maxQty;
 
-  boolean equilibriaFound = false;
+  protected boolean equilibriaFound = false;
 
-  ArrayList shouts;
+  protected ArrayList shouts;
 
   public EquilibriaStats( RoundRobinAuction auction ) {
     this();
@@ -121,7 +121,7 @@ public class EquilibriaStats implements MarketStats, Resetable {
     while ( i.hasNext() ) {
       Shout bid = (Shout) i.next();
       Shout ask = (Shout) i.next();
-      qty += bid.getQuantity();      
+      qty += bid.getQuantity();
     }
     minQty = qty;
     maxQty = qty;
