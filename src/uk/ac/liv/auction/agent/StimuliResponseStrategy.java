@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.ai.learning.*;
@@ -49,7 +51,8 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 
-public class StimuliResponseStrategy extends DiscreteLearnerStrategy {
+public class StimuliResponseStrategy extends DiscreteLearnerStrategy 
+							 	implements Serializable {
 
   /**
    * The learning algorithm to use.

@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
@@ -28,6 +30,7 @@ import uk.ac.liv.util.Resetable;
  * </p>
  */
 public abstract class AbstractStrategy implements
+								Serializable,
                                         Strategy,
                                         Resetable,
                                         Cloneable {

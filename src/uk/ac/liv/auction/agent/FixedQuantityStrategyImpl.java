@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
@@ -38,7 +40,7 @@ import uk.ac.liv.util.Parameterizable;
  */
 
 public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
-    implements FixedQuantityStrategy, Parameterizable {
+    implements FixedQuantityStrategy, Parameterizable, Serializable {
 
   int quantity = 1;
 

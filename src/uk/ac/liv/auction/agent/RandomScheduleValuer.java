@@ -16,6 +16,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 import uk.ac.liv.auction.core.Auction;
 
 /**
@@ -26,7 +28,7 @@ import uk.ac.liv.auction.core.Auction;
  * @version $Revision$
  */
 
-public class RandomScheduleValuer extends RandomValuer {
+public class RandomScheduleValuer extends RandomValuer implements Serializable {
 
   public RandomScheduleValuer( double min, double max ) {
     super(min, max);

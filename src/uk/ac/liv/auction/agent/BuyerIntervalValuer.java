@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * Buyers configured with this valuation policy will receive a unique private
@@ -26,7 +28,7 @@ package uk.ac.liv.auction.agent;
  * @author Steve Phelps
  */
 
-public class BuyerIntervalValuer extends IntervalValuer {
+public class BuyerIntervalValuer extends IntervalValuer implements Serializable {
    
   /**
    * The minimum valuation that any buyer will receive.

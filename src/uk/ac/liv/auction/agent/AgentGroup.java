@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 /**
  * A class representing an arbitrary grouping of agents. Every agent can
  * optionally belong to a group. This is useful for reporting purposes; for
@@ -27,7 +29,7 @@ package uk.ac.liv.auction.agent;
  * @version $Revision$
  */
 
-public class AgentGroup {
+public class AgentGroup implements Serializable {
   
   protected String description;
 

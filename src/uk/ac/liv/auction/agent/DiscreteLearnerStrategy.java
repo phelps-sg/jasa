@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
@@ -42,7 +44,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
+public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
+										implements Serializable {
 
   /**
    * A scaling factor used to multiply-up the output from
