@@ -48,7 +48,7 @@ import java.io.Serializable;
  * @author Steve Phelps
  */
 
-public class StimuliResponseStrategy extends AdaptiveStrategy
+public class StimuliResponseStrategy extends DiscreteLearnerStrategy
                                        implements Serializable {
 
   /**

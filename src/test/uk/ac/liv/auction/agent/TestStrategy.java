@@ -22,7 +22,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.ai.learning.Learner;
 
 
-class TestStrategy extends AdaptiveStrategy {
+class TestStrategy extends DiscreteLearnerStrategy {
 
   public int actions = 0;
 

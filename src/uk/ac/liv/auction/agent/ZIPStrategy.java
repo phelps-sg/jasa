@@ -47,7 +47,7 @@ import java.io.Serializable;
  */
 
 public class ZIPStrategy extends FixedQuantityStrategyImpl
-    implements Seedable, Serializable, Parameterizable {
+    implements Seedable, Serializable, Parameterizable, AdaptiveStrategy {
 
   protected double currentMargin;
 

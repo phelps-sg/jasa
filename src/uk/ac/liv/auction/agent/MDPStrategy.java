@@ -40,24 +40,22 @@ import java.io.Serializable;
  * </p>
  */
 
-public class MDPStrategy extends AdaptiveStrategy implements Serializable {
+public class MDPStrategy extends DiscreteLearnerStrategy
+                                  implements Serializable, AdaptiveStrategy {
 
-  /**
-   * The learning algorithm to use.
-   */
-  MDPLearner learner;
+  protected MDPLearner learner;
 
-  double bidBinStart;
+  protected double bidBinStart;
 
-  double bidBinWidth;
+  protected double bidBinWidth;
 
-  double askBinStart;
+  protected double askBinStart;
 
-  double askBinWidth;
+  protected double askBinWidth;
 
-  int quoteBins;
+  protected int quoteBins;
 
-  boolean firstShout = true;
+  protected boolean firstShout = true;
 
   static final String P_LEARNER = "learner";
   static final String P_QUOTEBINS = "quotebins";
