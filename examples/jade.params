@@ -32,7 +32,9 @@ auction.agenttype.n = 2
 # learning algorithm
 auction.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.0.numagents = 50
-auction.agenttype.0.randomprivatevalue = true
+auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+auction.agenttype.0.valuer.minvalue = 10
+auction.agenttype.0.valuer.maxvalue = 100
 auction.agenttype.0.capacity = 10
 auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
@@ -42,7 +44,9 @@ auction.agenttype.0.isseller = true
 #  Roth-Erev learning algorithm
 auction.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.1.numagents = 50
-auction.agenttype.1.randomprivatevalue = true
+auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+auction.agenttype.1.valuer.minvalue = 10
+auction.agenttype.1.valuer.maxvalue = 150
 auction.agenttype.1.capacity = 20
 auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner

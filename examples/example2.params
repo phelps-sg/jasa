@@ -30,6 +30,9 @@ simulation.agenttype.0.initialtradeentitlement = 1000
 simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.agenttype.0.strategy.maxmarkup = 100
 simulation.agenttype.0.isseller = true
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.0.valuer.minvalue = 10
+simulation.agenttype.0.valuer.maxvalue = 100
 
 # 2nd population- 5000 buyers 
 simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
@@ -37,6 +40,10 @@ simulation.agenttype.1.numagents = 5000
 simulation.agenttype.1.initialtradeentitlement = 1000
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.agenttype.1.isseller = false
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.1.valuer.minvalue = 20
+simulation.agenttype.1.valuer.maxvalue = 150
+
 
 # log4j configuration
 log4j.rootCategory=INFO, stdout
