@@ -18,14 +18,17 @@ package uk.ac.liv.auction.ui;
 import JSci.swing.JLineGraph;
 import JSci.awt.Graph2DModel;
 import JSci.awt.DefaultGraph2DModel;
+import JSci.swing.JGraphLayout;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.agent.AbstractTraderAgent;
 
 import uk.ac.liv.auction.stats.GraphMarketDataLogger;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import java.text.DecimalFormat;
 
@@ -56,6 +59,13 @@ public class AuctionConsoleFrame extends JFrame
   protected JButton supplyAndDemandButton;
   protected JButton rerunAuctionButton;
   protected JButton reportButton;
+  protected JButton resumeButton;
+  protected JButton pauseButton;
+  protected JButton resetAgentsButton;
+
+  protected JGraphLayout graphLayout;
+
+  protected JPanel graphPanel;
 
   protected DecimalFormat currencyFormatter =
       new DecimalFormat("+000000.00;-000000.00");
@@ -68,6 +78,8 @@ public class AuctionConsoleFrame extends JFrame
   protected int currentRound = 0;
 
   protected GraphMarketDataLogger graphModel;
+
+  protected LinkedList graphs = new LinkedList();
 
   private Thread auctionRunner;
 
@@ -83,9 +95,9 @@ public class AuctionConsoleFrame extends JFrame
 
     c.fill = GridBagConstraints.NONE;
     c.anchor = GridBagConstraints.EAST;
-    c.ipady = 20;
-    c.ipadx = 80;
-    c.insets = new Insets(20,20,20,20);
+    c.ipady = 0;
+    c.ipadx = 0;
+    c.insets = new Insets(5,5,5,5);
 
     JLabel bidTextLabel = new JLabel("Bid: ");
     c.gridx = 0;
@@ -156,11 +168,9 @@ public class AuctionConsoleFrame extends JFrame
     contentPane.add(roundLabel);
 
     closeAuctionButton = new JButton("Stop");
+    closeAuctionButton.setToolTipText("Close the auction");
     c.gridx = 1;
     c.gridy = 5;
-    c.ipadx = 0;
-    c.ipady = 0;
-    c.gridwidth = 1;
     gridBag.setConstraints(closeAuctionButton, c);
     contentPane.add(closeAuctionButton);
     closeAuctionButton.addActionListener(new ActionListener() {
@@ -171,6 +181,7 @@ public class AuctionConsoleFrame extends JFrame
 
 
     rerunAuctionButton = new JButton("Rerun");
+    rerunAuctionButton.setToolTipText("Run the auction from the beginning");
     c.gridx = 2;
     c.gridy = 5;
     c.ipadx = 0;
@@ -186,6 +197,7 @@ public class AuctionConsoleFrame extends JFrame
 
 
     JButton logAuctionStatusButton = new JButton("Dump");
+    logAuctionStatusButton.setToolTipText("Display the current state of the auction");
     c.gridx = 3;
     c.gridy = 5;
     c.weightx = 0;
@@ -198,6 +210,7 @@ public class AuctionConsoleFrame extends JFrame
     });
 
     JButton reportButton = new JButton("Report");
+    reportButton.setToolTipText("Generate a report on the auction");
     c.gridx = 1;
     c.gridy = 6;
     c.weightx = 0;
@@ -211,6 +224,7 @@ public class AuctionConsoleFrame extends JFrame
 
 
     JButton supplyAndDemandButton = new JButton("S/D");
+    supplyAndDemandButton.setToolTipText("Draw a graph of supply and demand");
     c.gridx = 2;
     c.gridy = 6;
     c.weightx = 0;
@@ -222,18 +236,56 @@ public class AuctionConsoleFrame extends JFrame
       }
     });
 
+   pauseButton = new JButton("Pause");
+    c.gridx = 1;
+    c.gridy = 7;
+    gridBag.setConstraints(pauseButton, c);
+    contentPane.add(pauseButton);
+    pauseButton.addActionListener(new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        pause();
+      }
+    });
+
+    resumeButton = new JButton("Resume");
+    resumeButton.setToolTipText("Resume the auction");
+    resumeButton.setEnabled(false);
+    c.gridx = 2;
+    c.gridy = 7;
+    gridBag.setConstraints(resumeButton, c);
+    contentPane.add(resumeButton);
+    resumeButton.addActionListener(new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        resume();
+      }
+    });
+
+    JButton resetAgentsButton = new JButton("Reset");
+    resetAgentsButton.setToolTipText("Reset all agents");
+    c.gridx = 3;
+    c.gridy = 7;
+    gridBag.setConstraints(resetAgentsButton, c);
+    contentPane.add(resetAgentsButton);
+    resetAgentsButton.addActionListener(new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        resetAgents();
+      }
+    });
+
     if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
+      graphPanel = new JPanel(graphLayout = new JGraphLayout());
       JLineGraph graph = new JLineGraph(graphModel);
-      graph.setMinimumSize(new Dimension(600,200));
-      graph.setPreferredSize(new Dimension(600,200));
+      graphPanel.add(graph,"Graph");
       c.gridx = 0;
       c.gridy = 0;
-      c.gridwidth = 7;
+      c.gridwidth = 8;
       c.gridheight = 1;
       c.weightx = 1;
       c.weighty = 1;
-      gridBag.setConstraints(graph, c);
-      contentPane.add(graph);
+      c.fill = c.BOTH;
+      graphPanel.setPreferredSize(new Dimension(600,200));
+      gridBag.setConstraints(graphPanel, c);
+      contentPane.add(graphPanel);
     }
 
     setAuctionName(name);
@@ -286,7 +338,7 @@ public class AuctionConsoleFrame extends JFrame
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
 
     if ( graphModel != null && auction.getAge() != currentRound) {
-      logger.debug("Notifying model of data change..");
+      logger.debug("Notifying graph model of data change..");
       currentRound = auction.getAge();
       graphModel.fireDataChanged();
     }
@@ -299,6 +351,44 @@ public class AuctionConsoleFrame extends JFrame
         new SupplyAndDemandFrame((RoundRobinAuction) auction);
     graphFrame.pack();
     graphFrame.setVisible(true);
+    graphs.add(graphFrame);
+  }
+
+  public void pause() {
+    try {
+      auction.pause();
+      while (!auction.isPaused()) {
+        //wait for auction to be paused
+      }
+      pauseButton.setEnabled(false);
+      resumeButton.setEnabled(true);
+    } catch ( AuctionPauseException e ) {
+      logger.debug(e);
+    }
+  }
+
+  public void resume() {
+    auction.resume();
+    pauseButton.setEnabled(true);
+    resumeButton.setEnabled(false);
+  }
+
+  public void resetAgents() {
+    pause();
+    Iterator i = auction.getTraderIterator();
+    while (i.hasNext()) {
+      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      agent.reset();
+    }
+    updateGraphs();
+  }
+
+  public void updateGraphs() {
+    Iterator i = graphs.iterator();
+    while ( i.hasNext() ) {
+      SupplyAndDemandFrame gFrame = (SupplyAndDemandFrame) i.next();
+      gFrame.updateGraph();
+    }
   }
 
   /**

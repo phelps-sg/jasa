@@ -27,9 +27,6 @@ import ec.util.Parameter;
 
 import huyd.poolit.*;
 
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
 import uk.ac.liv.util.io.DataWriter;
 
 import java.util.*;
@@ -45,7 +42,7 @@ import org.apache.log4j.Logger;
 public class SupplyAndDemandStats extends DirectRevelationStats
     implements MarketStats {
 
-  static Logger logger = Logger.getLogger(DirectRevelationStats.class);
+  static Logger logger = Logger.getLogger(SupplyAndDemandStats.class);
 
   protected DataWriter supplyStats;
 
@@ -78,7 +75,6 @@ public class SupplyAndDemandStats extends DirectRevelationStats
     writeStats(supplyStats, asks, new AscendingShoutComparator());
   }
 
-
   public void writeDemandStats() {
     writeStats(demandStats, bids, new DescendingShoutComparator());
   }
@@ -103,7 +99,7 @@ public class SupplyAndDemandStats extends DirectRevelationStats
     }
   }
 
-  protected void enumerateShout( Shout shout ) {
+  protected void enumerateTruthfulShout( Shout shout ) {
     Shout copyOfShout = new Shout();
     copyOfShout.copyFrom(shout);
     if ( shout.isBid() ) {
@@ -111,12 +107,13 @@ public class SupplyAndDemandStats extends DirectRevelationStats
     } else {
       asks.add(copyOfShout);
     }
+    super.enumerateTruthfulShout(shout);
   }
 
   protected void releaseShouts() {
     super.releaseShouts();
-    releaseShouts(bids.iterator());
-    releaseShouts(asks.iterator());
+//    releaseShouts(bids.iterator());
+//    releaseShouts(asks.iterator());
   }
 
   public void initialise() {

@@ -163,6 +163,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Insert a matched ask into the appropriate heap
    */
   private void insertMatchedAsk( Shout ask ) throws DuplicateShoutException {
+    Debug.assertTrue(ask.isAsk());
     insertShout(sIn, ask);
   }
 
@@ -170,6 +171,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Insert a matched bid into the appropriate heap.
    */
   private void insertMatchedBid( Shout bid ) throws DuplicateShoutException {
+    Debug.assertTrue(bid.isBid());
     insertShout(bIn, bid);
   }
 
@@ -177,6 +179,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Insert an unmatched ask into the approriate heap.
    */
   public void insertUnmatchedAsk( Shout ask ) throws DuplicateShoutException {
+    Debug.assertTrue(ask.isAsk());
     insertShout(sOut, ask);
   }
 
@@ -184,6 +187,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Insert an unmatched bid into the approriate heap.
    */
   public void insertUnmatchedBid( Shout bid ) throws DuplicateShoutException {
+    Debug.assertTrue(bid.isBid());
     insertShout(bOut, bid);
   }
 
@@ -260,18 +264,22 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   }
 
   public int displaceHighestMatchedAsk( Shout ask ) throws DuplicateShoutException {
+    Debug.assertTrue(ask.isAsk());
     return displaceShout(ask, sIn, sOut);
   }
 
   public int displaceLowestMatchedBid( Shout bid ) throws DuplicateShoutException {
+    Debug.assertTrue(bid.isBid());
     return displaceShout(bid, bIn, bOut);
   }
 
   public int promoteHighestUnmatchedBid( Shout ask ) throws DuplicateShoutException {
+    Debug.assertTrue(ask.isAsk());
     return promoteShout(ask, bOut, bIn, sIn);
   }
 
   public int promoteLowestUnmatchedAsk( Shout bid ) throws DuplicateShoutException {
+    Debug.assertTrue(bid.isBid());
     return promoteShout(bid, sOut, sIn, bIn);
   }
 

@@ -27,9 +27,6 @@ import ec.util.Parameter;
 
 import huyd.poolit.*;
 
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
 import uk.ac.liv.util.io.DataWriter;
 
 import java.util.*;
@@ -83,25 +80,15 @@ public class DirectRevelationStats implements Resetable, Serializable {
   }
 
   protected void simulateDirectRevelation() {
-    try {
-      Iterator traders = auction.getTraderIterator();
-      while ( traders.hasNext() ) {
-        AbstractTraderAgent trader = (AbstractTraderAgent) traders.next();
-        int quantity = trader.determineQuantity(auction);
-        double value = trader.getPrivateValue();
-        boolean isBid = trader.isBuyer();
-        Shout shout = ShoutPool.fetch(trader, quantity, value, isBid);
-        shouts.add(shout);
-        if ( isBid ) {
-          shoutEngine.newBid(shout);
-        } else {
-          shoutEngine.newAsk(shout);
-        }
-        enumerateShout(shout);
-      }
-    } catch ( DuplicateShoutException e ) {
-      e.printStackTrace();
-      throw new Error(e.getMessage());
+    Iterator traders = auction.getTraderIterator();
+    while ( traders.hasNext() ) {
+      AbstractTraderAgent trader = (AbstractTraderAgent) traders.next();
+      int quantity = trader.determineQuantity(auction);
+      double value = trader.getPrivateValue();
+      boolean isBid = trader.isBuyer();
+      Shout shout = ShoutPool.fetch(trader, quantity, value, isBid);
+      shouts.add(shout);
+      enumerateTruthfulShout(shout);
     }
   }
 
@@ -128,8 +115,18 @@ public class DirectRevelationStats implements Resetable, Serializable {
     initialise();
   }
 
-  protected void enumerateShout( Shout shout ) {
-    // Do nothing
+  protected void enumerateTruthfulShout( Shout shout ) {
+    try {
+      if (shout.isBid()) {
+        shoutEngine.newBid(shout);
+      }
+      else {
+        shoutEngine.newAsk(shout);
+      }
+    } catch (DuplicateShoutException e) {
+        e.printStackTrace();
+        throw new Error(e.getMessage());
+      }
   }
 
 

@@ -155,6 +155,10 @@ public class RoundRobinAuction extends AuctionImpl
    */
   protected MarketStats marketStats = null;
 
+  protected boolean paused;
+
+  protected boolean pausePending;
+
 
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
@@ -355,6 +359,7 @@ public class RoundRobinAuction extends AuctionImpl
     try {
       while (!closed()) {
         runSingleRound();
+        checkPaused();
       }
 
     } catch ( AuctionClosedException e ) {
@@ -514,6 +519,29 @@ public class RoundRobinAuction extends AuctionImpl
     return guiConsole;
   }
 
+  /**
+   * Pause the running of the auction at the end of the current round.
+   *
+   * @throws AuctionPauseException
+   */
+  public void pause() throws AuctionPauseException {
+    if ( closed ) {
+      throw new AuctionPauseException("Auction is closed");
+    }
+    pausePending = true;
+  }
+
+  /**
+   * Resume running of the auction after it has been paused.
+   */
+  public void resume() {
+    pausePending = false;
+  }
+
+  public boolean isPaused() {
+    return paused;
+  }
+
 
   protected void initialise() {
     super.initialise();
@@ -524,12 +552,26 @@ public class RoundRobinAuction extends AuctionImpl
     activeTraders.addAll(registeredTraders);
     numTraders = activeTraders.size();
     shoutsProcessed = false;
+    paused = false;
+    pausePending = false;
   }
 
   protected void activate( TraderAgent agent ) {
     activeTraders.add(agent);
     numTraders++;
   }
+
+  /**
+   * If a pause request is pending then loop until a resume
+   * request is received.
+   */
+  protected void checkPaused() {
+    while ( pausePending ) {
+      paused = true;
+    }
+    paused = false;
+  }
+
 
 
 }

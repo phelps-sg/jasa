@@ -24,6 +24,29 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 /**
+ * <p>
+ * A data writer that stores data in a memory-resident data structure
+ * that can also be used as a data series for a JSci graph.
+ * </p>
+ *
+ * <p>
+ * Each datum written to the DataWriter is one half a 2-dimensional
+ * coordinate.  The first datum is typically a time value.
+ * </p>
+ *
+ * <p>
+ * Example usage:
+ * </p>
+ *
+ * <code>
+ * MemoryResidentDataSeries timeSeries = new MemoryResidentDataSeries();
+ * for( int t=0; t<1000; t++ ) {
+ *   timeSeries.newData(t);
+ *   timeSeries.newData(getValue(t));
+ * }
+ * </code>
+ *
+ *
  * @author Steve Phelps
  */
 
@@ -33,9 +56,9 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
 
   protected boolean isVisible = true;
 
-  protected boolean isTime = true;
+  protected boolean isXCoordinate = true;
 
-  protected double time;
+  protected double xCoord;
 
   static Logger logger = Logger.getLogger(MemoryResidentDataSeries.class);
 
@@ -56,14 +79,15 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
   }
 
   public void newData( double datum ) {
-    if ( isTime ) {
-      time = datum;
+    logger.debug("newData(" + datum + ")");
+    if ( isXCoordinate ) {
+      xCoord = datum;
     } else {
-      TimeSeriesDatum d = new TimeSeriesDatum(time, datum);
+      SeriesDatum d = new SeriesDatum(xCoord, datum);
       logger.debug("Adding " + d);
       data.add(d);
     }
-    isTime = !isTime;
+    isXCoordinate = !isXCoordinate;
   }
 
   public void clear() {
@@ -86,7 +110,7 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
   }
 
   public float getXCoord( int datum ) {
-    return (float) ((TimeSeriesDatum) data.get(datum)).getTime();
+    return (float) ((SeriesDatum) data.get(datum)).getX();
   }
 
   public float getYCoord( int datum ) {
@@ -94,12 +118,30 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
   }
 
   public double getDatum( int i ) {
-    double value = ((TimeSeriesDatum) data.get(i)).getValue();
+    double value = ((SeriesDatum) data.get(i)).getY();
     if ( Double.isNaN(value) || Double.isInfinite(value) ) {
       return 0;
     } else {
       return value;
     }
+  }
+
+  public void flush() {
+  }
+
+  public void close() {
+  }
+
+  public int length() {
+    return data.size();
+  }
+
+  public void setVisible( boolean isVisible ) {
+    this.isVisible = isVisible;
+  }
+
+  public boolean isVisible() {
+    return isVisible;
   }
 
   public void newData(Iterator i) {
@@ -122,46 +164,27 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
     throw new java.lang.UnsupportedOperationException("Method newData() not yet implemented.");
   }
 
-  public void flush() {
-  }
-
-  public void close() {
-  }
-
-  public int length() {
-    return data.size();
-  }
-
-  public void setVisible( boolean isVisible ) {
-    this.isVisible = isVisible;
-  }
-
-  public boolean isVisible() {
-    return isVisible;
-  }
-
-
 }
 
-class TimeSeriesDatum {
+class SeriesDatum {
 
-  double time;
+  double x;
 
-  double value;
+  double y;
 
-  public TimeSeriesDatum( double time, double value ) {
-    this.time = time;
-    this.value = value;
+  public SeriesDatum( double x, double y ) {
+    this.x = x;
+    this.y = y;
   }
 
-  public void setTime( double time ) { this.time = time; }
-  public void setValue( double value ) { this.value = value; }
+  public void setX( double x ) { this.x = x; }
+  public void setY( double y ) { this.y = y; }
 
-  public double getTime() { return time; }
-  public double getValue() { return value; }
+  public double getX() { return x; }
+  public double getY() { return y; }
 
   public String toString() {
-    return "(" + getClass() + " time:" + time + " value:" + value + ")";
+    return "(" + getClass() + " x:" + x + " y:" + y + ")";
   }
 
 }

@@ -1,15 +1,24 @@
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.maximumrounds = 1000
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
-u
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+simulation.auction.maximumrounds = 10000
+
+# Use a double-auction with clearing occuring every time a new shout arrives
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+# Set the transaction price as a function of individual bid and ask prices
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+# Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
 
-# Get cummulative stats
+# Configure 3 different loggers
 simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
 simulation.auction.logger.n = 3
+
+# The first logger collects stats on the auction as it progresses
 simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+
+# The second logger logs data to a graph on the console
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+
+# The third logger dumps data to CSV files
 simulation.auction.logger.2 = uk.ac.liv.auction.stats.CSVMarketDataLogger
 simulation.auction.logger.2.askquotelogfile = results/askquote.csv
 simulation.auction.logger.2.bidquotelogfile = results/bidquote.csv

@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.ui;
 
 import JSci.swing.JLineGraph;
+import JSci.swing.JGraphLayout;
 import JSci.awt.Graph2DModel;
 import JSci.awt.DefaultGraph2DModel;
 
@@ -41,8 +42,6 @@ public class SupplyAndDemandFrame extends JFrame {
 
   protected RoundRobinAuction auction;
 
-  protected GridBagLayout gridBag;
-
   protected JButton updateButton;
 
   protected JLineGraph graph;
@@ -55,39 +54,28 @@ public class SupplyAndDemandFrame extends JFrame {
 
     this.auction = auction;
     Container contentPane = getContentPane();
-    gridBag = new GridBagLayout();
-    GridBagConstraints c = new GridBagConstraints();
-    contentPane.setLayout(gridBag);
-
-    c.fill = GridBagConstraints.NONE;
-    c.anchor = GridBagConstraints.EAST;
-    c.ipady = 20;
-    c.ipadx = 80;
-    c.insets = new Insets(40,40,40,40);
+    BorderLayout layout = new BorderLayout();
+    contentPane.setLayout(layout);
 
     Graph2DModel supplyAndDemand = constructSupplyAndDemandModel();
     graph = new JLineGraph(supplyAndDemand);
-    graph.setPreferredSize(new Dimension(400,400));
-    c.gridx = 0;
-    c.gridy = 0;
-    c.gridwidth = 5;
-    c.gridheight = 1;
-    c.weightx = 1;
-    c.weighty = 1;
-    gridBag.setConstraints(graph, c);
-    contentPane.add(graph);
+    JPanel graphPanel = new JPanel(new JGraphLayout());
+    graphPanel.add(graph, "Graph");
+    graphPanel.add(new JLabel("Quantity"), "X-axis");
+    graphPanel.add(new JLabel("Price"), "Y-axis");
+
+    graphPanel.setPreferredSize(new Dimension(400,400));
+
+    contentPane.add(graphPanel, BorderLayout.CENTER);
 
     updateButton = new JButton("Update");
-    c.gridx = 0;
-    c.gridy = 1;
-    gridBag.setConstraints(updateButton, c);
     updateButton.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         updateGraph();
       }
     }
     );
-    contentPane.add(updateButton);
+    contentPane.add(updateButton, BorderLayout.SOUTH);
 
     updateTitle();
   }
