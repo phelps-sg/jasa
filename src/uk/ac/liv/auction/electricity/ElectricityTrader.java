@@ -29,9 +29,14 @@ import java.io.Serializable;
 
 
 /**
+ * <p>
+ * An adaptive trader, trading in a simulated Elecitricty market.  Agents
+ * of this type have a fixed generating capacity, and they will place
+ * bids with a quantity equal to their capacity.
+ * </p>
  *
  * <p>
- * An adaptive trader, trading in a simulated Elecitricty market.  See:
+ * For further details, see:
  * </p>
  * <p>
  * "Market Power and Efficiency in a Computational Electricity Market
@@ -47,6 +52,15 @@ import java.io.Serializable;
  * welcome.
  * </p>
  *
+ * <p><b>Parameters</b><br></p>
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.capacity</tt><br>
+ * <font size=-1>int >= 0</font></td>
+ * <td valign=top>(the generating capacity of the agent)</td><tr>
+ *
+ * </table>
+
  * @author Steve Phelps
  * @version $Revision$
  */

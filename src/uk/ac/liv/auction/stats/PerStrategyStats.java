@@ -131,7 +131,7 @@ public class PerStrategyStats extends EquilibriaStats {
     super.generateReport();
   }
 
-  public void reset() {
+  public void initialise() {
     totalProfits = 0;
     table.clear();
   }

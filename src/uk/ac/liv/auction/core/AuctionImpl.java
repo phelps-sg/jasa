@@ -257,6 +257,9 @@ public abstract class AuctionImpl extends Observable
     ((CombiMarketDataLogger) logger).addLogger(newLogger);
   }
 
+  public void addEndOfDayListener( EndOfDayListener listener ) {
+    endOfDayListeners.add(listener);
+  }
 
   public void addAuctionEventListener( AuctionEventListener listener ) {
     for( int i=0; i<auctionEventListeners.length; i++ ) {

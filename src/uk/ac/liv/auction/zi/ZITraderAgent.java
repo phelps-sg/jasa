@@ -28,7 +28,9 @@ import org.apache.log4j.Logger;
 /**
  * <p>
  * Class for "Zero Intelligence" (ZI) trader agents.
- * Agents of this type become inactive once their intitial trade
+ * Agents of this type have a finite trade entitlement, which determines
+ * how many units they are able to trade in a given trading period.
+ * ZITraderAgents become inactive once their intitial trade
  * entitlement is used up, and their trade entitlement is restored
  * at the end of each day.
  * </p>
@@ -43,6 +45,16 @@ import org.apache.log4j.Logger;
  * Smith, V.L. 1962 in The Journal of Political Economy, vol 70.
  * </p>
  *
+ * <p><b>Parameters</b><br></p>
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.initialtradeentitlement</tt><br>
+ * <font size=-1>int >= 0</font></td>
+ * <td valign=top>(the number of units of commodity that this agent is allowed to trade)</td><tr>
+ *
+ * </table>
+ *
+
  * @author Steve Phelps
  * @version $Revision$
  */

@@ -8,13 +8,13 @@
 
 # Number of games to play per entry in the payoff matrix
 #  (for real experiments should be 2000+)
-heuristic.numsamples = 100
+heuristic.numsamples = 10
 
 # Total number of agents in the game
 heuristic.numagents = 6
 
 # Total number of different strategies
-heuristic.strategy.n = 3
+heuristic.strategy.n = 2
 
 # Kaplan
 heuristic.strategy.0 = uk.ac.liv.auction.agent.KaplanStrategy
@@ -36,12 +36,12 @@ heuristic.strategy.2.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 heuristic.agent = uk.ac.liv.auction.zi.ZITraderAgent
 heuristic.agent.initialtradeentitlement = 1
 # Dummy valuer
-heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Dummy strategy 
 heuristic.agent.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
 heuristic.auction = uk.ac.liv.auction.core.RoundRobinAuction
-heuristic.auction.lengthofday = 300
+heuristic.auction.lengthofday = 30
 heuristic.auction.maximumdays = 20
 
 heuristic.auction.logger = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger

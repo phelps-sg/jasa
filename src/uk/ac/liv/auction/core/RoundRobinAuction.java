@@ -172,7 +172,7 @@ public class RoundRobinAuction extends AuctionImpl
   protected int lengthOfDay = -1;
 
   /**
-   * The current trading day
+   * The current trading day (period)
    */
   protected int day = 0;
 
@@ -189,12 +189,17 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * The optional logger used to calculate statistics for the previous
    * day's trading.
+   *
+   * @see RoundRobinAuction#getPreviousDayTransPriceStats()
    */
   protected DailyStatsMarketDataLogger dailyStats = null;
 
   /**
    * The optional logger used to calculate the historical statistics
-   * used by the GD strategy.
+   * returned by the getNumberOfBids() and getNumberOfAsks() methods.
+   *
+   * @see RoundRobinAuction#getNumberOfBids(double, boolean)
+   * @see RoundRobinAuction#getNumberOfAsks(double, boolean)
    */
   protected HistoryStatsMarketDataLogger historyStats = null;
 
@@ -558,15 +563,6 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   /**
-   *
-   * @deprecated
-   */
-  public List getTraderList() {
-    log4jLogger.warn("getTraderList() is not safe");
-    return registeredTraders;
-  }
-
-  /**
    * Returns true if no bidding activity occured in the latest auction round.
    */
   public boolean isQuiescent() {
@@ -683,10 +679,7 @@ public class RoundRobinAuction extends AuctionImpl
    * Resume running of the auction after it has been paused.
    */
   public void resume() {
-    log4jLogger.debug("resume()");
     pausePending = false;
-    log4jLogger.debug("pausePending = " + pausePending);
-    log4jLogger.debug("exiting resume()");
   }
 
   /**
@@ -767,6 +760,10 @@ public class RoundRobinAuction extends AuctionImpl
     paused = false;
   }
 
+  /**
+   * Terminate the current trading day (period) if the auction is quiescent
+   * or the maximum time allowed for a period has expired.
+   */
   protected void checkEndOfDay() {
     if ( isQuiescent() ) {
       log4jLogger.debug("Auction quiescent - ending day");
@@ -774,14 +771,15 @@ public class RoundRobinAuction extends AuctionImpl
     } else {
       if (lengthOfDay > 0) {
         if ( round >= lengthOfDay ) {
-          log4jLogger.debug("ending day of length " + lengthOfDay +
-                             " at round " + round);
           endOfDay();
         }
       }
     }
   }
 
+  /**
+   * End the current trading period (day)
+   */
   protected void endOfDay() {
     log4jLogger.debug("endOfDay()");
     informEndOfDay();

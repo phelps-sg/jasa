@@ -21,6 +21,7 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.PerStrategyStats;
+import uk.ac.liv.auction.stats.EquilibriaStats;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 
 import uk.ac.liv.ai.learning.Learner;
@@ -49,7 +50,7 @@ import org.apache.log4j.PropertyConfigurator;
  */
 
 public class HeuristicPayoffCalculator extends AbstractSeeder
-    implements  Runnable, Serializable {
+    implements  Runnable, Serializable, EndOfDayListener {
 
   protected String resultsFileName = "/tmp/payoffs.csv";
 
@@ -249,15 +250,13 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
       randomlyAssignRoles();
       randomlyAssignValuers();
+      ensureEquilibriaExists();
 
-      do {
-        auction.reset();
-        strategyStats.calculate();
-      } while ( !strategyStats.equilibriaExists() );
-
+      auction.reset();
+      auction.addEndOfDayListener(this);
       auction.run();
+
       strategyStats.calculate();
-      strategyStats.generateReport();
 
       for( int i=0; i<numStrategies; i++ ) {
         payoffs[i].newData(strategyStats.getPayoff(strategies[i].getClass()));
@@ -272,6 +271,28 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     }
 
     results.flush();
+  }
+
+  public void endOfDay( Auction a ) {
+    ensureEquilibriaExists();
+  }
+
+  public void ensureEquilibriaExists() {
+    EquilibriaStats stats = new EquilibriaStats(auction);
+    stats.calculate();
+    while ( ! (stats.equilibriaExists()) ) {
+      resetValuations();
+      stats.reset();
+      stats.calculate();
+    }
+  }
+
+  protected void resetValuations() {
+    Iterator i = auction.getTraderIterator();
+    while (i.hasNext()) {
+      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      agent.getValuer().reset();
+    }
   }
 
 
