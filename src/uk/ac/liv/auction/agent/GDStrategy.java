@@ -44,7 +44,7 @@ import java.util.List;
  * </p>
  * 
  * <p>
- * Note that you must configure a logger of type HistoryStatsMarketDataLogger in
+ * Note that you must configure a logger of type HistoricalDataReport in
  * order to use this strategy.
  * </p>
  * 
@@ -105,11 +105,12 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
   }
   
   public void auctionOpen( AuctionOpenEvent event ) {
+    auction = event.getAuction();
     historyStats = 
       (HistoricalDataReport) auction.getReport(HistoricalDataReport.class);
 
     if ( historyStats == null ) {
-      throw new AuctionError(getClass() + " requires a HistoryStatsMarketDataLogger to be configured");
+      throw new AuctionError(getClass() + " requires a HistoricalDataReport to be configured");
     }
   }
   
