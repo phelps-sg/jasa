@@ -16,8 +16,7 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.util.CummulativeDistribution;
-import uk.ac.liv.util.Distribution;
+
 import uk.ac.liv.util.HeavyweightDistribution;
 
 import ec.util.Parameter;
