@@ -49,7 +49,7 @@ public abstract class AbstractSeeder extends AbstractSeedable
   }
 
   public long nextSeed() {
-    return currentSeed += prng.choose(0, 1000);
+    return currentSeed += prng.choose(7, 1000);
   }
 
 
