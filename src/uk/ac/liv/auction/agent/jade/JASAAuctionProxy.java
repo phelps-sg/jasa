@@ -119,6 +119,11 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
     throw new java.lang.UnsupportedOperationException("Method getAge() not yet implemented.");
   }
 
+  public int getDay() {
+    /**@todo Implement this uk.ac.liv.auction.core.Auction method*/
+    throw new java.lang.UnsupportedOperationException("Method getDay() not yet implemented.");
+  }
+
   public int getNumberOfTraders() {
     /**@todo Implement this uk.ac.liv.auction.core.Auction method*/
     throw new java.lang.UnsupportedOperationException("Method getNumberOfTraders() not yet implemented.");

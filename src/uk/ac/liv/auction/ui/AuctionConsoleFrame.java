@@ -54,6 +54,7 @@ public class AuctionConsoleFrame extends JFrame
   protected JLabel askLabel;
   protected JLabel lastShoutLabel;
   protected JLabel roundLabel;
+  protected JLabel dayLabel;
   protected JLabel numTradersLabel;
 
   protected JButton closeAuctionButton;
@@ -170,6 +171,20 @@ public class AuctionConsoleFrame extends JFrame
     c.weightx = 1;
     gridBag.setConstraints(roundLabel, c);
     contentPane.add(roundLabel);
+
+    JLabel dayTextLabel = new JLabel("Day: ");
+    c.gridx = 2;
+    c.gridy = 4;
+    c.weightx = 0;
+    gridBag.setConstraints(dayTextLabel, c);
+    contentPane.add(dayTextLabel);
+
+    dayLabel = new JLabel();
+    c.gridx = 3;
+    c.gridy = 4;
+    c.weightx = 0;
+    gridBag.setConstraints(dayLabel, c);
+    contentPane.add(dayLabel);
 
     closeAuctionButton = new JButton("Stop");
     closeAuctionButton.setToolTipText("Close the auction");
@@ -347,6 +362,7 @@ public class AuctionConsoleFrame extends JFrame
       lastShoutLabel.setText(currencyFormatter.format(((double)lastPrice)/100));
     }
     roundLabel.setText(decimalFormatter.format(auction.getAge()));
+    dayLabel.setText(decimalFormatter.format(auction.getDay()));
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
 
     if ( graphModel != null && auction.getAge() != currentRound) {

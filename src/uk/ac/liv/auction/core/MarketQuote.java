@@ -28,13 +28,13 @@ public class MarketQuote implements Serializable {
 
   /**
    * The current ask-quote.
-   * Sellers need to beat this in order for their asks to get matched.
+   * Buyers need to beat this in order for their asks to get matched.
    */
   protected double ask;
 
   /**
    * The current bid-quote.
-   * Buyers need to beat this in order for their bids to get matched.
+   * Sellers need to ask less than this in order for their offers to get matched.
    */
   protected double bid;
 

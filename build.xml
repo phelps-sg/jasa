@@ -55,7 +55,7 @@
    </target>
 
    <target depends="compile,prepareDoc" name="doc">
-     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" sourcepath="${sourceDir}" windowtitle="${projectName}">
+     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" sourcepath="${sourceDir}" windowtitle="${projectName}" source="1.4">
         <classpath refid="project.classpath" />
      </javadoc>
    </target>

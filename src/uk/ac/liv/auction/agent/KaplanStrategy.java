@@ -29,7 +29,15 @@ import uk.ac.liv.auction.core.*;
 import org.apache.log4j.Logger;
 
 /**
- * An implementation of Kaplan's sniping strategy.
+ * <p>
+ * An implementation of Kaplan's sniping strategy.  Agents using this strategy
+ * wait until the last minute before attempting to "steal the bid".  See
+ * </p>
+ * <p>
+ * "Behaviour of trading automata in a computerized double auction market"
+ * J. Rust, J. Miller and R. Palmer in "The Double Auction Market:
+ * Institutions, Theories and Evidence" 1992, Addison-Wesley
+ * </p>
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -63,7 +71,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
       logger.debug("quote = " + quote);
       logger.debug("my priv value = " + agent.getPrivateValue(auction));
-      logger.debug("seller = " + agent.isSeller());
+      logger.debug("isSeller = " + agent.isSeller());
       if ( agent.isBuyer() ) {
         if ( quote.getAsk() > agent.getPrivateValue(auction) ) {
           shout.setPrice(quote.getAsk());
@@ -73,7 +81,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
       } else {
         if ( quote.getBid() < agent.getPrivateValue(auction) ) {
           shout.setPrice(quote.getBid());
-          logger.debug(this + " asking at " + quote.getAsk());
+          logger.debug(this + " asking at " + quote.getBid());
           return true;
         }
       }

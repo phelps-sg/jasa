@@ -17,6 +17,10 @@
 package uk.ac.liv.util;
 
 /**
+ * Classes implementing this interface are able to provide a series
+ * of PRNG seeds for deep-seeding other objects.
+ *
+ * @see Seedable
  *
  * @author Steve Phelps
  * @version $Revision$

@@ -13,7 +13,7 @@ simulation.auction.maximumdays = 50
 simulation.auction.name = Example3
 
 # Use a double-auction with clearing occuring every time a new shout arrives
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
 # Set the transaction price as a function of individual bid and ask prices
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 # Set the transaction price halfway between the bid and the ask price
@@ -35,46 +35,44 @@ simulation.auction.logger.2 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 # Show GUI console
 simulation.console = true
 
-# Gather meta-stats on market-equilibria
-simulation.auction.stats = uk.ac.liv.auction.electricity.ElectricityStats
-
 # Two populations of agents
 simulation.agenttype.n = 3
 
 # 1st population-
 #  50 electricity sellers with a capacity of 10MWh
 #  using the Roth-Erev strategy
-simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
+simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.0.numagents = 70
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.agenttype.0.valuer.minvalue = 50
 simulation.agenttype.0.valuer.maxvalue = 100
-simulation.agenttype.0.capacity = 10
 simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+simulation.agenttype.0.strategy.markupscale = 10
+simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
+simulation.agenttype.0.strategy.learner.k = 10
 simulation.agenttype.0.isseller = true
 
 # 2nd population-
 #  50 electricity buyers with a capacity of 20MWh
 #  using the modified Roth-Erev strategy
-simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
+simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.1.numagents = 20
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.agenttype.1.valuer.minvalue = 80
 simulation.agenttype.1.valuer.maxvalue = 150
-simulation.agenttype.1.capacity = 10
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
+simulation.agenttype.1.strategy.markupscale = 10
+simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.StatelessQLearner
+simulation.agenttype.1.strategy.learner.k = 10
 simulation.agenttype.1.isseller = false
 
 #  3rd population-
 #   3 buyers using Kaplan
-simulation.agenttype.2 = uk.ac.liv.auction.electricity.ElectricityTrader
+simulation.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.2.numagents = 50
-simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.agenttype.2.valuer.minvalue = 10
 simulation.agenttype.2.valuer.maxvalue = 200
-simulation.agenttype.2.capacity = 10
 simulation.agenttype.2.strategy = uk.ac.liv.auction.agent.KaplanStrategy
 simulation.agenttype.2.isseller = false
 
@@ -83,7 +81,7 @@ simulation.prng = uk.ac.liv.prng.MT
 simulation.seed = 7842
 
 # log4j configuration
-log4j.rootCategory=DEBUG, stdout
+log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m%n

@@ -106,7 +106,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
   public static final String GNU_MESSAGE =
     "\n" +
-    "JASA v" + VERSION + " - (C) 2001-2003 Steve Phelps\n" +
+    "JASA v" + VERSION + " - (C) 2001-2004 Steve Phelps\n" +
     "JASA comes with ABSOLUTELY NO WARRANTY. This is free software,\n" +
     "and you are welcome to redistribute it under certain conditions;\n" +
     "see the GNU General Public license for more details.\n\n" +
@@ -149,7 +149,8 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    logger.info("Setup...");
+
+    logger.debug("Setup... ");
 
     PRNGFactory.setup(parameters, base.push(P_PRNG));
 
@@ -180,7 +181,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
       int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS), null, 0);
 
-      logger.info("\nConfiguring agent population " + t + ":\n\t" + numAgents +
+      logger.info("Configuring agent population " + t + ":\n\t" + numAgents +
                    " agents of type " + parameters.getString(typeParamT, null));
 
       for( int i=0; i<numAgents; i++ ) {
@@ -202,6 +203,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
     seedObjects();
 
+    logger.debug("Setup complete.");
   }
 
 
@@ -232,9 +234,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      if ( agent instanceof Seedable ) {
-        agent.seed(this);
-      }
+      agent.seed(this);
       agent.reset();
     }
   }

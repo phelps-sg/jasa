@@ -411,6 +411,10 @@ public class RoundRobinAuction extends AuctionImpl
     return round;
   }
 
+  public int getDay() {
+    return day;
+  }
+
 
   public int getRemainingTime() {
     if ( lengthOfDay > 0 ) {
