@@ -24,7 +24,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-
+/**
+ * A frame for monitoring and controlling the progress of an auction.
+ *
+ * @author Steve Phelps
+ */
 public class AuctionConsoleFrame extends JFrame implements Observer {
 
   protected Auction auction;
@@ -153,10 +157,16 @@ public class AuctionConsoleFrame extends JFrame implements Observer {
     setTitle("Auction Console for " + name);
   }
 
+  /**
+   *  Close the auction.
+   */
   public void closeAuction() {
     auction.close();
   }
 
+  /**
+   *  Log the status of the auction.   
+   */
   public void logAuctionStatus() {
     auction.printState();
   }
@@ -181,11 +191,17 @@ public class AuctionConsoleFrame extends JFrame implements Observer {
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
   }
 
+  /**
+   *  Activate the frame by popping it up.
+   */
   public void activate() {
     pack();
     setVisible(true);
   }
 
+  /**
+   *  Close the frame.
+   */
   public void deactivate() {
     setVisible(false);
   }
