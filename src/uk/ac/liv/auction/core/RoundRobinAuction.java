@@ -182,7 +182,7 @@ public class RoundRobinAuction extends AuctionImpl
     Auctioneer auctioneer =
       (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
                                                       null, Auctioneer.class);
-    ((Parameterizable) auctioneer).setup(parameters, base);
+    ((Parameterizable) auctioneer).setup(parameters, base.push(P_AUCTIONEER));
     setAuctioneer(auctioneer);
     auctioneer.setAuction(this);
     initialise();

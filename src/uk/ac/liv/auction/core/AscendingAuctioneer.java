@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2003 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -17,6 +17,10 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.TraderAgent;
 
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,11 +28,27 @@ import java.util.List;
  *  Auctioneer for standard multi-unit english ascending auction.
  */
 
-public class AscendingAuctioneer extends AbstractAuctioneer {
+public class AscendingAuctioneer extends AbstractAuctioneer
+    implements Parameterizable  {
 
+  /**
+   * The reservation price.
+   */
   protected double reservePrice;
+
+  /**
+   * The seller.
+   */
   protected TraderAgent seller;
+
+  /**
+   * The number of items for sale.
+   */
   int quantity;
+
+  public static final String P_RESERVEPRICE = "reserveprice";
+  public static final String P_QUANTITY = "quantity";
+  public static final String P_SELLER = "seller";
 
 
   public AscendingAuctioneer( Auction auction, TraderAgent seller,
@@ -42,6 +62,25 @@ public class AscendingAuctioneer extends AbstractAuctioneer {
     this.reservePrice = reservePrice;
     this.quantity = quantity;
     this.seller = seller;
+  }
+
+  public AscendingAuctioneer() {
+    super();
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    quantity = parameters.getInt(base.push(P_QUANTITY), null, 1);
+
+    reservePrice = parameters.getDouble(base.push(P_RESERVEPRICE), null, 0);
+
+    seller = (TraderAgent)
+        parameters.getInstanceForParameterEq(base.push(P_SELLER), null,
+                                             TraderAgent.class);
+
+    if ( seller instanceof Parameterizable ) {
+      ((Parameterizable) seller).setup(parameters, base.push(P_SELLER));
+    }
   }
 
   public void endOfRoundProcessing() {
