@@ -13,32 +13,27 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp.func;
+package uk.ac.liv.auction.stats;
 
-import ec.gp.*;
+import uk.ac.liv.auction.agent.AbstractTraderAgent;
 
 
-public class GPGenericData extends GPData {
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
+public class StrategyPayoffLogger extends PayoffLogger {
 
-  public Object data;
-
-  public GPGenericData() {
+  public Object getKey( AbstractTraderAgent agent ) {
+    return agent.getStrategy().getClass();
   }
-
-  public GPData copyTo( GPData other ) {
-    ((GPGenericData) other).data = this.data;
-    //TODO What is the exact semantics of copyTo?  Is this safe for ADF calls?
-    return other;
+  
+  public String getKeyName() {
+    return "strategy";
   }
-
-  public GPGenericData safeCopy() {
-    GPGenericData copy = new GPGenericData();
-    copyTo(copy);
-    return copy;
-  }
-
-  public String toString() {
-    return "(" + getClass() + " data:" + data + ")";
+  
+  public String getReportText() {
+    return "agents playing strategy";
   }
 
 }

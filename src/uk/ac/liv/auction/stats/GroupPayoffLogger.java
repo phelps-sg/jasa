@@ -13,18 +13,26 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp.func;
+package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.util.UntypedNumber;
+import uk.ac.liv.auction.agent.AbstractTraderAgent;
 
-public class Divide extends GPArithmeticBinaryOperator {
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
+public class GroupPayoffLogger extends PayoffLogger {
 
-  public UntypedNumber arithmeticOperator( UntypedNumber op1, UntypedNumber op2 ) {
-    return op1.divide(op2);
+  public Object getKey( AbstractTraderAgent agent ) {   
+    return agent.getGroup();
   }
 
-  public String toString() {
-    return "/";
+  public String getKeyName() {
+    return "group";
+  }
+
+  public String getReportText() {
+    return "in group";
   }
 
 }

@@ -27,7 +27,9 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.agent.RandomValuer;
+import uk.ac.liv.auction.agent.AgentGroup;
 
+import uk.ac.liv.auction.stats.GroupPayoffLogger;
 import uk.ac.liv.auction.stats.PayoffLogger;
 import uk.ac.liv.auction.stats.EquilibriaStats;
 
@@ -39,6 +41,8 @@ import uk.ac.liv.util.io.CSVWriter;
 
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
+
+import uk.ac.liv.ec.EvolutionStateSingleton;
 
 import java.util.Iterator;
 
@@ -105,6 +109,8 @@ public class HeuristicPayoffCalculator
   protected int numStrategies;
 
   protected Strategy[] strategies;
+  
+  protected AgentGroup[] groups;
 
   protected ParameterDatabase parameters;
 
@@ -124,6 +130,8 @@ public class HeuristicPayoffCalculator
   public static final String P_GAMBITEXPORT = "gambitexport";
   public static final String P_RDPLOT = "rdplots";
   public static final String P_NUMSAMPLES = "numsamples";
+  public static final String P_ECJPARAMS = "ecjparams";
+  public static final String P_INDIVIDUALFACTORY = "gpindividualfactory";
 
   static Logger logger = Logger.getLogger(HeuristicPayoffCalculator.class);
 
@@ -189,6 +197,12 @@ public class HeuristicPayoffCalculator
     this.parameters = parameters;
 
     GlobalPRNG.setup(parameters, base);
+
+    String ecjParamFileName =
+        parameters.getString(base.push(P_ECJPARAMS), null);
+    if ( ecjParamFileName != null ) {
+      EvolutionStateSingleton.initialise(ecjParamFileName);      
+    }
     
     auction =
         (RoundRobinAuction)
@@ -198,7 +212,7 @@ public class HeuristicPayoffCalculator
 
     auction.setup(parameters, base.push(P_AUCTION));
     
-    payoffLogger = new PayoffLogger();
+    payoffLogger = new GroupPayoffLogger();
     payoffLogger.setAuction(auction);
     auction.addMarketDataLogger(payoffLogger);
 
@@ -207,6 +221,7 @@ public class HeuristicPayoffCalculator
 
     numStrategies = parameters.getInt(base.push(P_STRATEGY).push(P_N));
     strategies = new Strategy[numStrategies];
+    groups = new AgentGroup[numStrategies];
 
     for( int s=0; s<numStrategies; s++ ) {
 
@@ -218,6 +233,7 @@ public class HeuristicPayoffCalculator
         ((Parameterizable) strategy).setup(parameters, strategyParam);
       }
       strategies[s] = strategy;
+      groups[s] = new AgentGroup("strategy " + s);
 
       logger.debug("Strategy " + s + " = " + strategy);
     }
@@ -252,11 +268,11 @@ public class HeuristicPayoffCalculator
     rdPlotFileName =
         parameters.getStringWithDefault(base.push(P_RDPLOT), null, null);        
       
+        
     logger.info("numAgents = " + numAgents);
     logger.info("numStrategies = " + numStrategies);
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
-
 
     logger.debug("Setup complete.");
   }
@@ -281,7 +297,7 @@ public class HeuristicPayoffCalculator
     logger.info("");
     logger.info("Calculating expected payoffs for ");
     for( int i=0; i<numStrategies; i++ ) {
-      logger.info("\t" + entry[i] + "/" + strategies[i].getClass().getName() + " ");    
+      logger.info("\t" + entry[i] + "/" + groups[i] + " ");    
     }
     logger.info("");
 
@@ -289,8 +305,7 @@ public class HeuristicPayoffCalculator
         new CummulativeStatCounter[numStrategies];
     for( int i=0; i<numStrategies; i++ ) {
       payoffs[i] =
-          new CummulativeStatCounter("Payoff for strategy " +
-                                       strategies[i].getClass().getName());
+          new CummulativeStatCounter("Payoff for group " + groups[i]);
     }
 
     assignStrategies(entry);
@@ -312,7 +327,7 @@ public class HeuristicPayoffCalculator
 //      payoffLogger.finalReport();      
       
       for( int i=0; i<numStrategies; i++ ) {
-        double payoff = payoffLogger.getPayoff(strategies[i].getClass());        
+        double payoff = payoffLogger.getPayoff(groups[i]);        
         payoffs[i].newData(payoff);             
       }
 
@@ -391,6 +406,7 @@ public class HeuristicPayoffCalculator
         Strategy clonedStrategy = (Strategy) prototypeStrategy.protoClone();
         AbstractTraderAgent agent = agents[agentIndex++];
         agent.setStrategy(clonedStrategy);
+        agent.setGroup(groups[i]);
         agent.reset();
       }
     }

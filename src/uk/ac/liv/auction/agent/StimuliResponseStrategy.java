@@ -54,9 +54,9 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy {
   /**
    * The learning algorithm to use.
    */
-  StimuliResponseLearner learner;
+  protected StimuliResponseLearner learner;
 
-  static final String P_LEARNER = "learner";
+  public static final String P_LEARNER = "learner";
 
   public StimuliResponseStrategy( AbstractTraderAgent agent ) {
     super(agent);

@@ -13,22 +13,19 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp.func;
+package uk.ac.liv.auction.heuristic;
 
-import uk.ac.liv.ec.gp.*;
+import uk.ac.liv.util.Parameterizable;
+
+import uk.ac.liv.auction.agent.Strategy;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class Block extends GPSchemeNode {
-	
-  public void eval( GPGenericData input ) {                      
-  	evaluateChild(0, input);
-    evaluateChild(1, input);
-  }
+public abstract class StrategyFactory implements Parameterizable {
   
-  public String toString() {
-		return "Block";
-	}
+  public abstract Strategy create();
+
 }

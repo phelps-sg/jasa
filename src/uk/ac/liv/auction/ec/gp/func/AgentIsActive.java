@@ -13,31 +13,27 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp.func;
-
-import ec.gp.*;
-import ec.*;
+package uk.ac.liv.auction.ec.gp.func;
 
 import uk.ac.liv.ec.gp.*;
+import uk.ac.liv.ec.gp.func.GPGenericData;
 
-import uk.ac.liv.util.UntypedLong;
 
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
+public class AgentIsActive extends GPSchemeNode {
 
-public class Fetch extends GPNode {
-
-  public void eval( EvolutionState state, int thread, GPData input,
-                      ADFStack stack, GPIndividual individual, Problem problem ) {
-
-    children[0].eval(state, thread, input, stack, individual, problem);
-    long address = ((UntypedLong) ((GPGenericData) input).data).longValue();
-
-    GPGenericData result = ((GPIndividualWithMemory) individual).get(address);
-
-    result.copyTo(input);
+  public void eval( GPGenericData input ) {
+    GPTradingStrategy strategy = 
+      (GPTradingStrategy) 
+        ((GPGenericIndividual) currentIndividual).getGPObject();
+    input.data = new Boolean( strategy.getAgent().active() );
   }
 
-  public String toString() {
-    return "Fetch";
+  public String toString() {    
+    return "AgentIsActive";
   }
 
 }

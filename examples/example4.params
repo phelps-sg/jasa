@@ -13,7 +13,7 @@ simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
 simulation.auction.logger.n = 4
 simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
-simulation.auction.logger.2 = uk.ac.liv.auction.stats.PayoffLogger
+simulation.auction.logger.2 = uk.ac.liv.auction.stats.StrategyPayoffLogger
 simulation.auction.logger.3 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
 

@@ -13,28 +13,34 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp.func;
+package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.ec.gp.*;
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 
-import uk.ac.liv.util.UntypedLong;
+public class AgentGroup {
+  
+  protected String description;
 
-import scheme.kernel.ScmObject;
-import scheme.kernel.ScmInteger;
-
-public class One extends GPSchemeNode {
-
-	private UntypedLong one = new UntypedLong(1);
-	
-  public void eval( GPGenericData input ) {
-    input.data = one;
+  public static final int MAX_GROUPS = 100;
+  
+  private static AgentGroup[] groups = new AgentGroup[MAX_GROUPS];
+  
+  public AgentGroup( String description ) {
+    this.description = description;
   }
-
+  
   public String toString() {
-    return "1";
+    return "(" + getClass() + " description:\"" + description + "\")";
+  }
+  
+  public static AgentGroup getAgentGroup( int n ) {
+    if ( groups[n] == null ) {
+      groups[n] = new AgentGroup("group " + n);
+    }
+    return groups[n];
   }
 
-  public ScmObject toScheme() {
-  	return new ScmInteger(1);
-  }
 }

@@ -97,7 +97,7 @@ public abstract class GPTradingProblem extends GPProblem {
 
     auction.setup(parameters, base.push(P_AUCTION));
     
-    surplusLogger = new PayoffLogger();
+    surplusLogger = new StrategyPayoffLogger();
     surplusLogger.setAuction(auction);
     auction.addMarketDataLogger(surplusLogger);
 

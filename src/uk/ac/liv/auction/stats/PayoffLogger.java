@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class PayoffLogger extends EquilibriumSurplusLogger {
+public abstract class PayoffLogger extends EquilibriumSurplusLogger {
 
   private HashMap table = new HashMap();
 
@@ -55,11 +55,11 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
       double profits = agent.getProfits();
       //assert profits >= 0;
-      Class strategyClass = agent.getStrategy().getClass();
-      StrategyStats stats = (StrategyStats) table.get(strategyClass);
+      Object key = getKey(agent);
+      StrategyStats stats = (StrategyStats) table.get(key);
       if ( stats == null ) {
         stats = new StrategyStats(1, profits);
-        table.put(strategyClass, stats);
+        table.put(key, stats);
       } else {
         stats.profits += profits;
         stats.numAgents++;
@@ -76,8 +76,8 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
     double totalPayoff = 0;
     Iterator i = table.keySet().iterator();
     while ( i.hasNext() ) {
-      Class strategyClass = (Class) i.next();
-      StrategyStats stats = (StrategyStats) table.get(strategyClass);
+      Object key = i.next();
+      StrategyStats stats = (StrategyStats) table.get(key);
       if ( averageSurplus != 0 ) {        
         stats.payoff = ((stats.profits / stats.numAgents)  ) / averageSurplus;
       } else {        
@@ -91,9 +91,9 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
     return totalProfits;
   }
 
-  public double getProfits( Class strategyClass ) {
+  public double getProfits( Object key ) {
     StrategyStats stats =
-        (StrategyStats) table.get(strategyClass);
+        (StrategyStats) table.get(key);
     if ( stats != null ) {
       return stats.profits;
     } else {
@@ -101,19 +101,19 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
     }
   }
 
-  public double getPayoff( Class strategyClass ) {
+  public double getPayoff( Object key ) {
     StrategyStats stats =
-       (StrategyStats) table.get(strategyClass);
-    if (stats != null) {
+       (StrategyStats) table.get(key);
+    if ( stats != null ) {
       return stats.payoff;
     } else {
       return 0;
     }
   }
 
-  public int getNumberOfAgents( Class strategyClass ) {
+  public int getNumberOfAgents( Object key ) {
     StrategyStats stats =
-        (StrategyStats) table.get(strategyClass);
+        (StrategyStats) table.get(key);
     if ( stats != null ) {
       return stats.numAgents;
     } else {
@@ -125,15 +125,15 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
 
   public void finalReport() {
     calculate();
-    logger.info("\nProfits per strategy");
+    logger.info("\nProfits per " + getKeyName());
     logger.info("-----------------------");
     logger.info("");
     Iterator i = table.keySet().iterator();
     while ( i.hasNext() ) {
-      Class strategy = (Class) i.next();
-      StrategyStats stats = (StrategyStats) table.get(strategy);
-      logger.info(stats.numAgents + " agents playing strategy " +
-                   strategy.getName() + "\n\ttotal profits: " + stats.profits +
+      Object key = (Object) i.next();
+      StrategyStats stats = (StrategyStats) table.get(key);
+      logger.info(stats.numAgents + " " + getReportText() + " " +
+                   key + "\n\ttotal profits: " + stats.profits +
                                         "\n\tpayoff: " + stats.payoff +
                    "\n");
     }
@@ -146,7 +146,12 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
     totalProfits = 0;
     table.clear();
   }
+  
+  public abstract Object getKey( AbstractTraderAgent agent );
 
+  public abstract String getKeyName();
+  
+  public abstract String getReportText();
 }
 
 

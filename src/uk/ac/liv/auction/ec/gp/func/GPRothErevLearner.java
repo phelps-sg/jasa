@@ -13,17 +13,23 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp.func;
+package uk.ac.liv.auction.ec.gp.func;
 
-import uk.ac.liv.util.UntypedNumber;
+import uk.ac.liv.ai.learning.NPTRothErevLearner;
 
-public class Multiply extends GPArithmeticBinaryOperator {
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 
-  public UntypedNumber arithmeticOperator( UntypedNumber op1, UntypedNumber op2 ) {
-    return op1.multiply(op2);
+public class GPRothErevLearner extends NPTRothErevLearner {
+  
+  public void reward( int action, double reward ) {
+    if ( reward < 0 ) {
+      reward = 0;
+    }
+    updatePropensities(action, reward);
+    updateProbabilities();
   }
-
-  public String toString() {
-    return "*";
-  }
+  
 }

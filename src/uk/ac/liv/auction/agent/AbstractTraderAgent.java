@@ -138,6 +138,8 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * The current shout for this trader.
    */
   protected Shout currentShout;
+  
+  protected AgentGroup group = null;
 
   static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
 
@@ -149,6 +151,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   public static final String P_INITIAL_STOCK = "initialstock";
   public static final String P_INITIAL_FUNDS = "initialfunds";  
   public static final String P_VALUER = "valuer";
+  public static final String P_GROUP = "group";
   public static final String P_DEFAULT_STRATEGY =
                                    "uk.ac.liv.auction.core.PureSimpleStrategy";
 
@@ -211,6 +214,11 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
                                             null, AbstractStrategy.class);
     ((AbstractStrategy) strategy).setAgent(this);
     ((Parameterizable) strategy).setup(parameters, base.push(P_STRATEGY));
+    
+    int groupNumber = parameters.getIntWithDefault(base.push(P_GROUP), null, -1);
+    if ( groupNumber >= 0 ) {
+      setGroup(AgentGroup.getAgentGroup(groupNumber));
+    }
     
     initialise();
   }
@@ -414,6 +422,14 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
 
   public void setValuer( Valuer valuer ) {
     this.valuer = valuer;
+  }
+  
+  public AgentGroup getGroup() {
+    return group;
+  }
+  
+  public void setGroup( AgentGroup group ) {
+    this.group = group;
   }
 
 

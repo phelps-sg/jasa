@@ -13,47 +13,39 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.ec.gp.func;
+package uk.ac.liv.auction.ec.gp.func;
 
-import scheme.kernel.ScmObject;
-import scheme.kernel.ScmReal;
+import uk.ac.liv.ai.learning.WidrowHoffLearner;
 
-import uk.ac.liv.ec.gp.*;
+import uk.ac.liv.ec.gp.GPSchemeNode;
+import uk.ac.liv.ec.gp.GPGenericIndividual;
+import uk.ac.liv.ec.gp.func.GPGenericData;
 
-import uk.ac.liv.util.UntypedDouble;
+import uk.ac.liv.util.UntypedNumber;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DoubleConstant extends GPSchemeNode {
+public class SetLearningRate extends GPSchemeNode {
 
-	protected UntypedDouble javaValue;
-	
-	protected ScmReal schemeValue;
-	
-	public static final String NAME = "DoubleConstant";
-	
   public void eval( GPGenericData input ) {
-    input.data = javaValue;
+    
+    evaluateChild(0, input);
+    UntypedNumber learningRate = (UntypedNumber) input.data;
+    
+    GPTradingStrategy strategy = (GPTradingStrategy)
+        ((GPGenericIndividual) currentIndividual).getGPObject();
+    
+    WidrowHoffLearner learner = 
+      (WidrowHoffLearner) strategy.getMomentumLearner();
+    
+    learner.setLearningRate(learningRate.doubleValue());
   }
   
-  public void setValue( double primitiveValue ) {
-  	javaValue = new UntypedDouble(primitiveValue);
-  	schemeValue = new ScmReal(primitiveValue);
-  }
-  
-  public double getValue() {
-  	return javaValue.doubleValue();
-  }  
-
   public String toString() {
-    return NAME;
+    return "SetMomentum";
   }
   
-  public ScmObject toScheme() {
-  	return schemeValue;
-  }
-	
 }

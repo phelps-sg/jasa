@@ -64,6 +64,7 @@
 		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params" prefix="jasa">
                   <exclude name="src/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
+				  <exclude name="src/uk/ac/liv/auction/heuristic/**/"/>
 		 </tarfileset>
 	</tar>
     </target>

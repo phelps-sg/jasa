@@ -47,14 +47,11 @@ import org.apache.log4j.Logger;
 public class GPHeuristicTradingProblem extends GPProblem 
 	implements SimpleProblemForm {
 	
-	protected HeuristicPayoffCalculator payoffCalculator;
+	protected GPHeuristicPayoffCalculator payoffCalculator;
 	
 	protected GPContext context = new GPContext();
 	
-	protected int gpStrategyIndex;
-	
 	public static final String P_CALCULATOR = "heuristic";
-	public static final String P_GPSTRATEGY = "gpstrategy";
 	
 	static Logger logger = Logger.getLogger(GPHeuristicTradingProblem.class);
 	
@@ -62,12 +59,11 @@ public class GPHeuristicTradingProblem extends GPProblem
 		
 		super.setup(state, base);		
 		
-		payoffCalculator = (HeuristicPayoffCalculator)
+		payoffCalculator = (GPHeuristicPayoffCalculator)
 			state.parameters.getInstanceForParameterEq(base.push(P_CALCULATOR), null,																									
-																									HeuristicPayoffCalculator.class);
+																									GPHeuristicPayoffCalculator.class);
 		payoffCalculator.setup(state.parameters, base.push(P_CALCULATOR));
-		
-		gpStrategyIndex = state.parameters.getInt(base.push(P_GPSTRATEGY));			
+				
 	}
 	
 	public void evaluate( EvolutionState state, Individual individual, 
@@ -89,13 +85,14 @@ public class GPHeuristicTradingProblem extends GPProblem
 		
 		GPTradingStrategy gpStrategy = (GPTradingStrategy) individual.getGPObject();
 		
-		payoffCalculator.setStrategy(gpStrategyIndex, gpStrategy);
+		payoffCalculator.setGPStrategy(gpStrategy);
 		
 		payoffCalculator.computePayoffMatrix();
 		
 		CompressedPayoffMatrix payoffMatrix = 
 			payoffCalculator.getCompressedPayoffMatrix();
 		
+    int gpStrategyIndex = payoffCalculator.getGPStrategyIndex();
 		CummulativeStatCounter payoff = new CummulativeStatCounter("gp payoff");
 		Iterator i = payoffMatrix.compressedEntryIterator();		
 		while ( i.hasNext() ) {
@@ -118,7 +115,8 @@ public class GPHeuristicTradingProblem extends GPProblem
 		
 		SimpleFitness f = (SimpleFitness) individual.fitness;
 	       
-		if ( !individual.misbehaved() && !Float.isInfinite(fitness) 
+		if ( !payoffCalculator.gpStrategyMisbehaved() && 
+          !individual.misbehaved() && !Float.isInfinite(fitness) 
           && fitness > 0 && payoff.getMin() >= 0 ) {			
 			if ( fitness > 1000 ) {
 				logger.warn("Large fitness " + payoff);

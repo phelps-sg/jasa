@@ -185,7 +185,7 @@ public class RothErevLearner extends AbstractLearner implements
   /**
    * Generate the next action for this learner.
    *
-   * @return An int in the range 0..k representing the choice
+   * @return An int in the range [0..k) representing the choice
    * made by the learner.
    */
   public int act() {
@@ -209,7 +209,7 @@ public class RothErevLearner extends AbstractLearner implements
    * Choose a random number according to the probability distribution defined by
    * p.
    *
-   * @return one of 0..k according to the probabilities p[0..k].
+   * @return one of [0..k) according to the probabilities p[0..k-1].
    */
   public int choose() {
     return p.generateRandomEvent();
