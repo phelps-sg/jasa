@@ -18,6 +18,8 @@ package uk.ac.liv.util;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -28,6 +30,8 @@ public class HeavyweightDistribution extends CummulativeDistribution {
   protected ArrayList data;
   
   private static final int INITIAL_SIZE = 10000;
+  
+  static Logger logger = Logger.getLogger(HeavyweightDistribution.class);
   
   public HeavyweightDistribution( String name ) {
     super(name);
@@ -50,7 +54,7 @@ public class HeavyweightDistribution extends CummulativeDistribution {
     for( int i=trimmedN; i<(n - trimmedN); i++ ) {
       trimmedTotal += ((Double) data.get(i)).doubleValue();
     }
-    return trimmedTotal / (1-p * n);
+    return trimmedTotal / ((1-p) * n);
   }
     
 }
