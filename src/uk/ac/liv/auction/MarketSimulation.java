@@ -66,7 +66,7 @@ public class MarketSimulation {
       }
 
       for( int i=0; i<NUM_ZC_AGENTS; i++ ) {
-        double privateValue = randGenerator.nextDouble() * 100;
+        double privateValue = 50 + randGenerator.nextDouble() * 100;
         auction.register(new ZICTraderAgent(privateValue, 100, true));
       }
 

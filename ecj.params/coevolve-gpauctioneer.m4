@@ -7,10 +7,10 @@ define(`NUM_BUYERS', ENV_VAR(`$GP_NB', 3))
 define(`SELLER_CAPACITY', ENV_VAR(`$GP_CS', 10))
 define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
 
-define(`POPULATION_SIZE', 100)
-define(`NUM_GENERATIONS', 1000)
+define(`POPULATION_SIZE', 50)
+define(`NUM_GENERATIONS', 100)
 
-define(`RESULTS', `CONF_OUTHOME/gpcoevolve')
+define(`RESULTS', `CONF_OUTHOME/gpcoevolve-MRE')
 
 define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
 
@@ -19,10 +19,10 @@ parent.0 = CONF_ECJHOME/ec/simple/simple.params
 eval = uk.ac.liv.ec.coevolve.CoEvolutionaryEvaluator
 
 eval.problem = uk.ac.liv.auction.ec.gp.GPCoEvolveAuctionProblem
-eval.problem.maxrounds = 10
+eval.problem.maxrounds = 1000
 eval.problem.ns = NUM_SELLERS
 eval.problem.nb = NUM_BUYERS
-eval.problem.cs = SELLER_CAPACITY
+eval.problem.cs = SELLER_CaPACITY
 eval.problem.cb = BUYER_CAPACITY
 eval.problem.randomprivatevalues = false
 eval.problem.marketstatsfile = RESULTS/marketstats-PARAM_SUMMARY.csv

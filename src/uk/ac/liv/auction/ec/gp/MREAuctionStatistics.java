@@ -39,7 +39,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
  *
  */
 
-public class CoEvolveAuctionStatistics extends KozaStatistics {
+public class MREAuctionStatistics extends KozaStatistics {
 
   static final String P_PREFIX = "serfilenameprefix";
   static final String DEFAULT_PREFIX = "/tmp/auction";

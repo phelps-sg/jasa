@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -116,7 +116,6 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
     // Reward the learning algorithm according to profits made
     double profit = quantity * (privateValue - price);
-    profits += profit;
 
     if ( profit < 0 ) {
       //System.out.println("currentShout = " + getCurrentShout());
@@ -125,10 +124,20 @@ public class ElectricityTrader extends AbstractTraderAgent {
       //System.out.println("price = " + price);
       //System.out.println("winningShout = " + winningShout);
       //Debug.assert(profit >= 0);
+      return;
     }
 
+
     ElectricityTrader trader = (ElectricityTrader) seller;
-    trader.informOfBuyer(price,quantity);
+    if ( trader.acceptDeal(price, quantity) ) {
+      profits += profit;
+      trader.informOfBuyer(price,quantity);
+    }
+  }
+
+  public boolean acceptDeal( double price, int quantity ) {
+    Debug.assert(isSeller);
+    return price > privateValue;
   }
 
   public double getProfits() {
