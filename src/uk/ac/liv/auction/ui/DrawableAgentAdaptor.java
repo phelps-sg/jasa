@@ -86,7 +86,11 @@ public class DrawableAgentAdaptor implements Drawable {
     Color color = Color.BLACK;
     if ( colorMap == null ) {
       if ( relProfit > 0.01 ) {
-        color = new Color(relProfit, 0, 0);
+        if ( agent.isBuyer() ) {
+          color = new Color(relProfit, 0, 0);
+        } else {
+          color = new Color(0, 0, relProfit);
+        }
       } else {
         color = Color.WHITE;
       }
