@@ -85,8 +85,6 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
 
   protected Shout dummyShout;
   
-  protected RandomElement prng;
-  
   protected double activationProbability = 1.0;
 
   public static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
