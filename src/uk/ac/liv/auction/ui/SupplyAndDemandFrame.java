@@ -76,7 +76,8 @@ public class SupplyAndDemandFrame extends JFrame {
   }
 
   public void updateGraph() {
-    graph.clearPoints();
+    graph.clear(0);
+    graph.clear(1);
     plotSupplyAndDemand();
     updateTitle();
   }
