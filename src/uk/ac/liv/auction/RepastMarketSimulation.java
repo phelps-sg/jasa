@@ -21,7 +21,11 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 
+import uk.ac.liv.auction.stats.GraphMarketDataLogger;
+
 import uk.ac.liv.util.Parameterizable;
+
+import uk.ac.liv.auction.ui.JASAConsoleGraph;
 
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
@@ -32,6 +36,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import uchicago.src.sim.engine.*;
+
+import uchicago.src.sim.analysis.OpenSequenceGraph;
 
 import org.apache.log4j.Logger;
 
@@ -81,6 +87,8 @@ public class RepastMarketSimulation
   protected Hashtable parameterDescriptors;
   
   protected Schedule schedule;
+  
+  protected OpenSequenceGraph graph;
 
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "n";
@@ -190,6 +198,7 @@ public class RepastMarketSimulation
 
       logger.info("done.\n");
     }
+    
 
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
@@ -198,19 +207,33 @@ public class RepastMarketSimulation
   }
 
   public void begin() {
-    auction.informAuctionOpen();
+    GraphMarketDataLogger graphLogger;
+    if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
+      graph = new JASAConsoleGraph(getName(), this, graphLogger);
+      graph.display();
+    }
+    auction.begin();
   }
   
   public void step() {
     try {
-      auction.runSingleRound();
+      auction.step();
     } catch ( AuctionClosedException e ) {
       controller.stopSim();
     }
+    graph.step();
   }
   
   public String getName() {
     return "JASA auction simulation";
+  }
+  
+  public String getParameterFileName () {
+    return parameterFileName;
+  }
+  
+  public void setParameterFileName ( String parameterFileName) {
+    this.parameterFileName = parameterFileName;
   }
   
   public Schedule getSchedule() {
@@ -218,7 +241,7 @@ public class RepastMarketSimulation
   }
   
   public String[] getInitParam() {
-    return new String[] {"name"};
+    return new String[] {"parameterFileName"};
   }
 
   public void report() {
@@ -273,13 +296,11 @@ public class RepastMarketSimulation
   }
   
   public long getRngSeed () {
-    // TODO Auto-generated method stub
-    return 0;
+    return GlobalPRNG.getSeed();
   }
   
   public double getTickCount () {
-    // TODO Auto-generated method stub
-    return 0;
+    return auction.getAge();
   }
   
   public void setController ( IController controller) {
@@ -287,8 +308,8 @@ public class RepastMarketSimulation
   }
   
   public void setRngSeed ( long seed) {
-    // TODO Auto-generated method stub
-
+    
+    GlobalPRNG.initialiseWithSeed(seed);
   }
   
   public void addSimEventListener ( SimEventListener l) {
