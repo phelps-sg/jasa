@@ -17,21 +17,22 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomSeedable;
-import edu.cornell.lassp.houle.RngPack.Ranmar;
+//import edu.cornell.lassp.houle.RngPack.RandomSeedable;
+//import edu.cornell.lassp.houle.RngPack.Ranmar;
 
 
-public class Mar extends PRNGFactory {
+public class Mar { // extends PRNGFactory {
 
-  public RandomSeedable create() {
-    return new Ranmar();
-  }
-
-  public RandomSeedable create( long seed ) {
-    return new Ranmar(seed);
-  }
-
-  public String getDescription() {
-    return "Lagged Fibonacci generator (Marsaglia and Zaman)";
-  }
+//  
+//  public RandomSeedable create() {
+//    return new Ranmar();
+//  }
+//
+//  public RandomSeedable create( long seed ) {
+//    return new Ranmar(seed);
+//  }
+//
+//  public String getDescription() {
+//    return "Lagged Fibonacci generator (Marsaglia and Zaman)";
+//  }
 }

@@ -16,18 +16,24 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomSeedable;
-import edu.cornell.lassp.houle.RngPack.Ranecu;
+import cern.jet.random.engine.RandomEngine;
+
+//import edu.cornell.lassp.houle.RngPack.RandomSeedable;
+//import edu.cornell.lassp.houle.RngPack.Ranecu;
 
 
 public class Ecu extends PRNGFactory {
 
-  public RandomSeedable create() {
-    return new Ranecu();
+  public RandomEngine create() {
+    return null;
+    //return new Ranecu();
+    //TODO
   }
 
-  public RandomSeedable create( long seed ) {
-    return new Ranecu(seed);
+  public RandomEngine create( long seed ) {
+//    return new Ranecu(seed);
+    //TODO
+    return null;
   }
 
   public String getDescription() {

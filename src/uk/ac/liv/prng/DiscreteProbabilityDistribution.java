@@ -45,7 +45,7 @@ public class DiscreteProbabilityDistribution
    * The number of possible events for this distribution.
    */
   protected int k;
-
+  
   /**
    * The log4j logger.
    */
@@ -61,6 +61,9 @@ public class DiscreteProbabilityDistribution
   public DiscreteProbabilityDistribution( int k ) {
     this.k = k;
     p = new double[k];
+    for( int i=0; i<k; i++ ) {
+      p[i] = 1.0/k;
+    }    
   }
   
   public Object protoClone() {
@@ -98,8 +101,8 @@ public class DiscreteProbabilityDistribution
    *
    *  @return An integer value representing one of the possible events.
    */
-  public int generateRandomEvent() {
-    double rand = GlobalPRNG.getInstance().uniform(0, 1);
+  public int generateRandomEvent() {    
+    double rand = GlobalPRNG.getInstance().raw();
     double cummProb = 0;
     for( int i=0; i<k; i++ ) {
       cummProb += p[i];

@@ -14,12 +14,15 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+//import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import org.apache.log4j.Logger;
+
+import cern.jet.random.engine.RandomEngine;
+import cern.jet.random.engine.RandomSeedGenerator;
 
 /**
  * @author Steve Phelps
@@ -28,7 +31,10 @@ import org.apache.log4j.Logger;
 
 public class GlobalPRNG {
 
-  protected static RandomElement prng;
+  protected static RandomEngine prng;
+  
+  protected static RandomSeedGenerator seedGenerator = 
+    										new RandomSeedGenerator();
 
   protected static long seed;
 
@@ -42,17 +48,17 @@ public class GlobalPRNG {
 
     uk.ac.liv.prng.PRNGFactory.setup(parameters, base.push(P_PRNG));
 
-    long defaultSeed = PRNGFactory.getFactory().create().ClockSeed();
+    long defaultSeed = seedGenerator.nextSeed();
 
     seed = parameters.getLongWithDefault(base.push(P_SEED), null, defaultSeed);
 
     prng = PRNGFactory.getFactory().create(seed);
   }
 
-  public static RandomElement getInstance() {
+  public static RandomEngine getInstance() {
     if ( prng == null ) {
       logger.warn("No PRNG configured: using default");
-      long defaultSeed = PRNGFactory.getFactory().create().ClockSeed();
+      long defaultSeed = seedGenerator.nextSeed();
       prng = PRNGFactory.getFactory().create(defaultSeed);
     }
     return prng;
@@ -69,7 +75,9 @@ public class GlobalPRNG {
 
   public static void randomPermutation( Object[] a ) {
     for( int i = 0; i < a.length - 1; i++ ) {
-      int choice = getInstance().choose(i, a.length-1);
+      //int choice = getInstance().choose(i, a.length-1);
+//      int choice = getInstance().choose(i, a.length);
+      int choice = (int) ((long)a.length *getInstance().raw());
       Object tmp = a[i];
       a[i] = a[choice];
       a[choice] = tmp;

@@ -17,22 +17,24 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomSeedable;
-import edu.cornell.lassp.houle.RngPack.Ranlux;
+//import edu.cornell.lassp.houle.RngPack.RandomSeedable;
+//import edu.cornell.lassp.houle.RngPack.Ranlux;
 
 
 
-public class Lux extends PRNGFactory {
-
-  public RandomSeedable create() {
-    return new Ranlux();
-  }
-
-  public RandomSeedable create( long seed ) {
-    return new Ranlux(seed);
-  }
-
-  public String getDescription() {
-    return "RCARRY algorithm (Marsaglia and Zaman)";
-  }
+public class Lux { //extends PRNGFactory {
+//
+//
+//  public RandomEngine create() {
+//    return new Ranlux();
+//  }
+//
+//  public RandomSeedable create( long seed ) {
+//    return new Ranlux(seed);
+//  }
+//
+//  public String getDescription() {
+//    return "RCARRY algorithm (Marsaglia and Zaman)";
+//  }
+  
 }

@@ -16,17 +16,20 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomSeedable;
+//import edu.cornell.lassp.houle.RngPack.RandomSeedable;
 
 import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
+//import edu.cornell.lassp.houle.RngPack.RanMT;
+
 
 public class MT32 extends PRNGFactory {
 
-  public RandomSeedable create() {
+  public RandomEngine create() {
      return new MersenneTwister();
   }
 
-  public RandomSeedable create( long seed ) {
+  public RandomEngine create( long seed ) {
     return new MersenneTwister((int) seed);
   }
 

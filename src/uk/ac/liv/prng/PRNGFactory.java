@@ -16,7 +16,9 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.*;
+//import edu.cornell.lassp.houle.RngPack.*;
+
+import cern.jet.random.engine.RandomEngine;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -35,7 +37,7 @@ import org.apache.log4j.Logger;
 
 public abstract class PRNGFactory {
 
-  protected static PRNGFactory currentFactory = new MT32();
+  protected static PRNGFactory currentFactory = new MT();
 
   static Logger logger = Logger.getLogger(PRNGFactory.class);
 
@@ -56,9 +58,9 @@ public abstract class PRNGFactory {
     return currentFactory;
   }
 
-  public abstract RandomSeedable create();
+  public abstract RandomEngine create();
 
-  public abstract RandomSeedable create( long seed );
+  public abstract RandomEngine create( long seed );
 
   public abstract String getDescription();
 
