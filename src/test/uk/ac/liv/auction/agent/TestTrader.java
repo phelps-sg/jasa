@@ -53,9 +53,9 @@ public class TestTrader extends AbstractTraderAgent {
     return 1;
   }
 
-  public void requestShout( RoundRobinAuction auction ) {
+  public void requestShout( Auction auction ) {
     if ( currentShoutIndex >= shouts.length ) {
-      auction.remove(this);
+      ((RoundRobinAuction) auction).remove(this); //TODO
       return;
     }
     if ( currentShoutIndex > 0 ) {

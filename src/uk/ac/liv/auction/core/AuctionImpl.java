@@ -32,7 +32,7 @@ import java.util.Observable;
  * logging facilities and an optional popup GUI console.
  */
 
-public abstract class AuctionImpl extends Observable 
+public abstract class AuctionImpl extends Observable
                                     implements Auction, Resetable {
 
   /**
@@ -64,12 +64,12 @@ public abstract class AuctionImpl extends Observable
    * The last bid placed in the auction.
    */
   Shout lastBid;
-  
+
   /**
    * The last ask placed in the auction.
-   */ 
+   */
   Shout lastAsk;
-  
+
   /**
    * Flag indicating whether the auction is currently closed.
    */
@@ -139,6 +139,7 @@ public abstract class AuctionImpl extends Observable
    */
   public void close() {
     closed = true;
+    auctioneer.endOfAuctionProcessing();
   }
 
 
@@ -209,29 +210,29 @@ public abstract class AuctionImpl extends Observable
   public void newShout( Shout shout ) throws AuctionException {
     if ( closed() ) {
       throw new AuctionClosedException("Auction " + name + " is closed.");
-    }   
+    }
     if ( shout == null ) {
       throw new IllegalShoutException("null shout");
     }
     auctioneer.newShout(shout);
     recordShout(shout);
-    
+
     notifyObservers();
   }
-  
+
   protected void recordShout( Shout shout ) {
-    if ( lastShout == null ) lastShout = new Shout();    
+    if ( lastShout == null ) lastShout = new Shout();
     lastShout.copyFrom(shout);
     if ( shout.isAsk() ) {
       if ( lastAsk == null ) lastAsk = new Shout();
-      lastAsk.copyFrom(shout);      
+      lastAsk.copyFrom(shout);
     } else {
       if ( lastBid == null ) lastBid = new Shout();
-      lastBid.copyFrom(shout);      
-    } 
+      lastBid.copyFrom(shout);
+    }
   }
-  
-  
+
+
   public void printState() {
     auctioneer.printState();
   }

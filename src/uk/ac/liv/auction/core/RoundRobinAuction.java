@@ -220,27 +220,35 @@ public class RoundRobinAuction extends AuctionImpl
       throw new AuctionError("No auctioneer has been assigned for auction " + name);
     }
 
-    for( round=0; !closed(); round++ ) {
-
-      if ( maximumRounds > 0 && round >= maximumRounds ) {
-        close();
-        break;
+    try {
+      while (!closed()) {
+        runSingleRound();
       }
-
-      requestShouts();
-
-      logger.updateQuoteLog(round, getQuote());
-
-      sweepDefunctTraders();
-
-      auctioneer.endOfRoundProcessing();
-
-      setChanged();
-      notifyObservers();  // notify, e.g. the gui console, of a state change
-
+    } catch ( AuctionClosedException e ) {
+      e.printStackTrace();
+      throw new Error(e.getMessage());
     }
 
-    auctioneer.endOfAuctionProcessing();
+  }
+
+
+  public void runSingleRound() throws AuctionClosedException {
+
+    if ( closed() ) {
+      throw new AuctionClosedException("Auction " + name + "is closed.");
+    }
+
+    if ( maximumRounds > 0 && round >= maximumRounds ) {
+      close();
+    } else {
+      requestShouts();
+      logger.updateQuoteLog(round++, getQuote());
+      sweepDefunctTraders();
+      auctioneer.endOfRoundProcessing();
+    }
+
+    setChanged();
+    notifyObservers();
   }
 
 
