@@ -2,7 +2,7 @@
 simulation.days=10
 simulation.console = false
 simulation.auction = uk.ac.liv.auction.core.RandomShoutAuction
-simulation.auction.shoutprobability = 0.9
+simulation.auction.shoutprobability = 1.0
 simulation.auction.maximumrounds = 3000
 simulation.auction.lengthofday = 100
 simulation.auction.maximumdays = 20

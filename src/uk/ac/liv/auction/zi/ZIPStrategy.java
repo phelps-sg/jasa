@@ -97,6 +97,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     if ( learner instanceof Parameterizable ) {
       ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
     }
+    initialise();
 
     logger.debug("Initialised with scaling = " + scaling + " and learner = " +
                   learner);
@@ -145,7 +146,11 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
   }
 
   public void seed( Seeder s ) {
+    logger.debug("seed(" + s + ")");
     setSeed(s.nextSeed());
+    ((Seedable) learner).seed(s);
+//    learner.randomInitialise();
+    logger.debug("learner = " + learner);
   }
 
   public void setLearner( Learner learner ) {

@@ -15,6 +15,8 @@
 
 package uk.ac.liv.ai.learning;
 
+import uk.ac.liv.util.Seedable;
+
 /**
  * A learner that attempts to adjust its output to match a training
  * signal.
@@ -23,7 +25,7 @@ package uk.ac.liv.ai.learning;
  * @version $Revision$
  */
 
-public interface MimicryLearner extends ContinuousLearner {
+public interface MimicryLearner extends ContinuousLearner, Seedable {
 
   /**
    * Provide a training signal to the learning algorithm.
@@ -34,5 +36,10 @@ public interface MimicryLearner extends ContinuousLearner {
    * Initialise the learning algorithm to output the supplied value.
    */
   public void setOutputLevel( double currentOutput );
+
+  /**
+   * Initialise with random values for free parameters
+   */
+  public void randomInitialise();
 
 }

@@ -129,11 +129,18 @@ public class WidrowHoffLearner extends AbstractLearner
   }
 
   public void reset() {
-    learningRate = 0.1 + paramPRNG.raw() * 0.4;
-    momentum = 0.2 + paramPRNG.raw() * 0.6;
-    delta = 0;
-    currentOutput = 0;
+    initialise();
   }
 
+  public void randomInitialise() {
+    learningRate = 0.1 + paramPRNG.raw() * 0.4;
+    momentum = 0.2 + paramPRNG.raw() * 0.6;
+  }
+
+  public String toString() {
+    return ("(" + getClass() + " learningRate:" + learningRate +
+             " momentum:" + momentum + " delta:" + delta + " currentOutput:" +
+             currentOutput + ")");
+  }
 
 }

@@ -28,6 +28,7 @@ import uk.ac.liv.auction.MarketSimulation;
 import uk.ac.liv.prng.PRNGFactory;
 
 import uk.ac.liv.ai.learning.Learner;
+import uk.ac.liv.ai.learning.MimicryLearner;
 import uk.ac.liv.ai.learning.StochasticLearner;
 import uk.ac.liv.ai.learning.WidrowHoffLearner;
 
@@ -231,6 +232,10 @@ public class ZIPExperiment extends MarketSimulation {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
+      MimicryLearner l =
+          (MimicryLearner)
+            ((AdaptiveStrategy) trader.getStrategy()).getLearner();
+//      l.randomInitialise();
       trader.reset();
     }
   }
