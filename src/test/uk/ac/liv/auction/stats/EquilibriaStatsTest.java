@@ -165,7 +165,7 @@ class TestEquilibriaStats implements MarketStats {
     long quantity = 0;
     for( int i=0; i<traders.size(); i++ ) {
       AbstractTraderAgent trader = (AbstractTraderAgent) traders.get(i);
-      double val = trader.getPrivateValue(auction);
+      double val = trader.getValuation(auction);
       PriceQtyTuple priceQty = null;
       if ( ascending ) {
         priceQty = newTuple(currentVal, val, quantity);
@@ -174,7 +174,7 @@ class TestEquilibriaStats implements MarketStats {
       }
       curve.add(priceQty);
       while ( i<traders.size() &&
-              ((AbstractTraderAgent) traders.get(i)).getPrivateValue(auction) == val ) {
+              ((AbstractTraderAgent) traders.get(i)).getValuation(auction) == val ) {
         quantity += ((AbstractTraderAgent) traders.get(i)).determineQuantity(auction);
         i++;
       }
@@ -315,9 +315,9 @@ class AscendingTraderComparator implements Comparator {
   public int compare( Object a, Object b ) {
     AbstractTraderAgent x = (AbstractTraderAgent) a;
     AbstractTraderAgent y = (AbstractTraderAgent) b;
-    if ( x.getPrivateValue(auction) > y.getPrivateValue(auction) ) {
+    if ( x.getValuation(auction) > y.getValuation(auction) ) {
       return 1;
-    } else if ( x.getPrivateValue(auction) == y.getPrivateValue(auction) ) {
+    } else if ( x.getValuation(auction) == y.getValuation(auction) ) {
       return 0;
     } else {
       return -1;
@@ -332,9 +332,9 @@ class DescendingTraderComparator implements Comparator {
   public int compare( Object a, Object b ) {
     AbstractTraderAgent x = (AbstractTraderAgent) a;
     AbstractTraderAgent y = (AbstractTraderAgent) b;
-    if ( x.getPrivateValue(auction) > y.getPrivateValue(auction) ) {
+    if ( x.getValuation(auction) > y.getValuation(auction) ) {
       return -1;
-    } else if ( x.getPrivateValue(auction) == y.getPrivateValue(auction) ) {
+    } else if ( x.getValuation(auction) == y.getValuation(auction) ) {
       return 0;
     } else {
       return 1;

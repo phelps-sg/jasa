@@ -207,7 +207,7 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
 
 
   public double equilibQuant( AbstractTraderAgent t, double price ) {
-    double privateValue = t.getPrivateValue(auction);
+    double privateValue = t.getValuation(auction);
     if ( t.isBuyer() ) {
       if ( price > privateValue ) {
         return 0;
@@ -253,7 +253,7 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
       Shout truth = ShoutFactory.getFactory().create(trader, trader.getCapacity(),
-                                    trader.getPrivateValue(auction), trader.isBuyer());
+                                    trader.getValuation(auction), trader.isBuyer());
       shouts.add(truth);
       try {
         auctioneer.newShout(truth);

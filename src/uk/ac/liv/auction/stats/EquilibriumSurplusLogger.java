@@ -112,9 +112,9 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   protected double equilibriumSurplus( AbstractTraderAgent agent, double ep, int quantity ) {
     double surplus;
     if ( agent.isSeller() ) {
-      surplus = (ep - agent.getPrivateValue(auction)) * quantity;
+      surplus = (ep - agent.getValuation(auction)) * quantity;
     } else {
-      surplus = (agent.getPrivateValue(auction) - ep) * quantity;
+      surplus = (agent.getValuation(auction) - ep) * quantity;
     }  
     if ( surplus >= 0 ) {      
       return surplus;

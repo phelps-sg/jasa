@@ -107,15 +107,15 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     quote = auction.getQuote();
     if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
       logger.debug("quote = " + quote);
-      logger.debug("my priv value = " + agent.getPrivateValue(auction));
+      logger.debug("my priv value = " + agent.getValuation(auction));
       logger.debug("isSeller = " + agent.isSeller());
-      shout.setPrice(agent.getPrivateValue(auction));
+      shout.setPrice(agent.getValuation(auction));
       if ( agent.isBuyer() ) {
-        if ( quote.getAsk() <= agent.getPrivateValue(auction) ) {
+        if ( quote.getAsk() <= agent.getValuation(auction) ) {
           shout.setPrice(quote.getAsk());
         }
       } else {
-        if ( quote.getBid() >= agent.getPrivateValue(auction) ) {
+        if ( quote.getBid() >= agent.getValuation(auction) ) {
           shout.setPrice(quote.getBid());
         }
       }

@@ -195,10 +195,10 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
                                       int quantity ) {
     double surplus = 0;
     if ( isSeller ) {
-      surplus = equilibriumPrice - getPrivateValue(auction);
+      surplus = equilibriumPrice - getValuation(auction);
     }
     else {
-      surplus = getPrivateValue(auction) - equilibriumPrice;
+      surplus = getValuation(auction) - equilibriumPrice;
     }
     //TODO
     if (surplus < 0) {

@@ -90,7 +90,7 @@ public class DirectRevelationStats implements Resetable, Serializable {
     while ( traders.hasNext() ) {
       AbstractTraderAgent trader = (AbstractTraderAgent) traders.next();
       int quantity = trader.determineQuantity(auction);
-      double value = trader.getPrivateValue(auction);
+      double value = trader.getValuation(auction);
       boolean isBid = trader.isBuyer();
       Shout shout = ShoutFactory.getFactory().create(trader, quantity, value, isBid);
       shouts.add(shout);

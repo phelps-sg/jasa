@@ -341,7 +341,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     }
   }
 
-  public double getPrivateValue( Auction auction ) {
+  public double getValuation( Auction auction ) {
     return valuer.determineValue(auction);
   }
 

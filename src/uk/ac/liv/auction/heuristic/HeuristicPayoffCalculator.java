@@ -327,8 +327,10 @@ public class HeuristicPayoffCalculator
 //      payoffLogger.finalReport();      
       
       for( int i=0; i<numStrategies; i++ ) {
-        double payoff = payoffLogger.getPayoff(groups[i]);        
-        payoffs[i].newData(payoff);             
+        double payoff = payoffLogger.getPayoff(groups[i]);  
+        if ( payoff > 0 ) {
+          payoffs[i].newData(payoff);
+        }
       }
 
     }
@@ -337,7 +339,7 @@ public class HeuristicPayoffCalculator
     for( int i=0; i<numStrategies; i++ ) {
       logger.info("");
       payoffs[i].log();
-      outcome[i] = payoffs[i].getTrimmedMean(0.5);     
+      outcome[i] = payoffs[i].getTrimmedMean(0.75);     
     }
     
   }

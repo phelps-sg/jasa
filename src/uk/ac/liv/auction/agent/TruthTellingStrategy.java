@@ -27,7 +27,7 @@ public class TruthTellingStrategy extends FixedQuantityStrategyImpl {
 	
 	
   public boolean modifyShout( Shout.MutableShout shout ) {    
-    shout.setPrice(agent.getPrivateValue(auction));       
+    shout.setPrice(agent.getValuation(auction));       
     return super.modifyShout(shout);
   }
 

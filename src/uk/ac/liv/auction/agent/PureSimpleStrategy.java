@@ -86,7 +86,7 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
     } else {
       delta = -margin;
     }
-    shout.setPrice(agent.getPrivateValue(auction) + delta);
+    shout.setPrice(agent.getValuation(auction) + delta);
     shout.setQuantity(quantity);
     if ( shout.getPrice() < 0 ) {
       shout.setPrice(0);

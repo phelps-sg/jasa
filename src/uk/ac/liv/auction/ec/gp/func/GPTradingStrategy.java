@@ -94,7 +94,7 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
 
 
   protected double getPrivateValue() {
-    return agent.getPrivateValue(auction);
+    return agent.getValuation(auction);
   }
 
   public Auction getAuction() {
@@ -123,7 +123,7 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     }
     shout.setPrice(price);    
     rlLastAction = rlAction(price);
-    priceStats.newData(price - agent.getPrivateValue(auction)); 
+    priceStats.newData(price - agent.getValuation(auction)); 
     return true;
   }
 
@@ -184,9 +184,9 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   public double markedUpPrice() {  	
   	double price;
   	if ( agent.isBuyer() ) {
-      price = agent.getPrivateValue(auction) * (1 - currentMargin);
+      price = agent.getValuation(auction) * (1 - currentMargin);
     } else {
-      price = agent.getPrivateValue(auction) * (1 + currentMargin);
+      price = agent.getValuation(auction) * (1 + currentMargin);
     }    
   	return price;
   }
@@ -199,14 +199,14 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   public double rlPrice() {
     double markup = rlLearner.act() * rlScale;
     if ( agent.isBuyer() ) {
-      return agent.getPrivateValue(auction) - markup;
+      return agent.getValuation(auction) - markup;
     } else {
-      return agent.getPrivateValue(auction) + markup;
+      return agent.getValuation(auction) + markup;
     }
   }
   
   public int rlAction( double price ) {
-    return (int) (Math.abs(agent.getPrivateValue(auction) - price) / rlScale);
+    return (int) (Math.abs(agent.getValuation(auction) - price) / rlScale);
   }
   
   public GPRothErevLearner getRlLearner() {
