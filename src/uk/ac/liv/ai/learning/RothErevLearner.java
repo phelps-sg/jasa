@@ -45,6 +45,7 @@ import uk.ac.liv.util.io.DataWriter;
 public class RothErevLearner implements
                                 Resetable,
                                 StimuliResponseLearner,
+                                StochasticLearner,
                                 Parameterizable {
 
   /**
