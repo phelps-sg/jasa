@@ -150,23 +150,6 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     }
   }
 
-
-  /**
-   * Insert a matched ask into the appropriate heap
-   */
-  private void insertMatchedAsk( Shout ask ) throws DuplicateShoutException {
-    assert ask.isAsk();
-    insertShout(sIn, ask);
-  }
-
-  /**
-   * Insert a matched bid into the appropriate heap.
-   */
-  private void insertMatchedBid( Shout bid ) throws DuplicateShoutException {
-    assert bid.isBid();
-    insertShout(bIn, bid);
-  }
-
   /**
    * Insert an unmatched ask into the approriate heap.
    */
@@ -348,6 +331,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     }
   }
 
+  /*
   public void newShout( Shout shout ) throws DuplicateShoutException {
     if ( shout.isAsk() ) {
       newAsk(shout);
@@ -355,7 +339,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
       newBid(shout);
     }
   }
-
+*/
 
 //  protected Iterator matchedBidDisassembler() {
 //    return new QueueDisassembler(bIn);
