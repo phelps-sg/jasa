@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import java.util.List;
  */
 
 public class KContinuousDoubleAuctioneerNoQueue
-    extends KContinuousDoubleAuctioneer {
+    extends KContinuousDoubleAuctioneer implements Serializable {
 
   public KContinuousDoubleAuctioneerNoQueue() {
     super(null, 0);

@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
+
 import uk.ac.liv.util.Parameterizable;
 
 import ec.util.Parameter;
@@ -28,7 +30,8 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public abstract class KPricingPolicy implements PricingPolicy, Parameterizable {
+public abstract class KPricingPolicy implements 
+	Serializable, PricingPolicy, Parameterizable {
 
   protected double k;
 

@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
+
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Prototypeable;
 
@@ -31,7 +33,7 @@ import org.apache.log4j.Logger;
  */
 
 public abstract class AbstractAuctioneer
-    implements Auctioneer, Resetable, Prototypeable, Cloneable {
+    implements Serializable, Auctioneer, Resetable, Prototypeable, Cloneable {
 
   /**
    * The auction container for this auctioneer.

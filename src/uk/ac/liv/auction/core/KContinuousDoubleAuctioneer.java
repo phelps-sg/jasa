@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
+
 
 /**
  * An auctioneer for a k-double-auction with continuous clearing.
@@ -25,7 +27,8 @@ package uk.ac.liv.auction.core;
  * @version $Revision$
  */
 
-public class KContinuousDoubleAuctioneer extends KAuctioneer {
+public class KContinuousDoubleAuctioneer extends KAuctioneer implements
+                                                            Serializable {
 
   public KContinuousDoubleAuctioneer() {
     this(null, 0);
