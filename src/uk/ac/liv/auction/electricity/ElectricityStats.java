@@ -353,25 +353,19 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   public void calculateStrategicMarketPower() {
     simulateTruthfulBidding();
     Iterator i = auction.getTraderIterator();
-    double buyerProfits = 0;
-    double sellerProfits = 0;
+    pBT = 0;
+    pST = 0;
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
+      double truthProfits = trader.getLastProfit();
       if ( trader.isBuyer() ) {
-        buyerProfits += trader.getProfits();
+        pBT += truthProfits;
       } else {
-        sellerProfits += trader.getProfits();
+        pST += truthProfits;
       }
     }
-    pBT = truthfulProfits(buyerProfits, pBA);
-    pST = truthfulProfits(sellerProfits, pSA);
     sMPB = (pBA - pBT) / pBT;
     sMPS = (pSA - pST) / pST;
-  }
-
-  protected double truthfulProfits( double finalRoundProfits,
-                                    double previousProfits ) {
-    return (finalRoundProfits - previousProfits) * auction.getAge();
   }
 
 
