@@ -45,9 +45,9 @@ public class CompressedPayoffMatrix {
   protected int numStrategies;
 
   protected Vector matrix;
-  
+
   static Logger logger = Logger.getLogger(CompressedPayoffMatrix.class);
-  
+
   public CompressedPayoffMatrix( int numPlayers, int numStrategies ) {
     this.numPlayers = numPlayers;
     this.numStrategies = numStrategies;
@@ -108,7 +108,7 @@ public class CompressedPayoffMatrix {
     }
     return fullOutcome;
   }
-  
+
   public double[] mixedStrategyPayoffs( double[] mixedStrategy ) {
     double totalProbability = 0;
     double[] payoffs = new double[numStrategies];
@@ -117,11 +117,11 @@ public class CompressedPayoffMatrix {
     Iterator entries = fullEntryIterator();
     while ( entries.hasNext() ) {
       int[] entry = (int[]) entries.next();
-      double[] outcome = getFullOutcome(entry);      
+      double[] outcome = getFullOutcome(entry);
       double probability = 1;
       for( int i=0; i<entry.length; i++ ) {
-        probability *= mixedStrategy[entry[i]];        
-      }            
+        probability *= mixedStrategy[entry[i]];
+      }
       for( int s=0; s<numStrategies; s++ ) {
         strategyCounts[s] = 0;
         totalPayoffs[s] = 0;
@@ -137,25 +137,25 @@ public class CompressedPayoffMatrix {
         }
       }
       totalProbability += probability;
-    }     
+    }
     return payoffs;
   }
-  
-  public double evolveMixedStrategy( double[] population ) {        
+
+  public double evolveMixedStrategy( double[] population ) {
     double[] payoffs = mixedStrategyPayoffs(population);
     double averagePayoff = 0;
     double totalDelta = 0;
     for( int i=0; i<numStrategies; i++ ) {
       averagePayoff += payoffs[i] * population[i];
-    }       
-    for( int s=0; s<numStrategies; s++ ) {      
-      double delta = population[s] * (payoffs[s] - averagePayoff);
+    }
+    for( int s=0; s<numStrategies; s++ ) {
+      double delta = population[s] * 0.1 * (payoffs[s] - averagePayoff);
       population[s] += delta;
       totalDelta += delta*delta;
-    }        
+    }
     return totalDelta;
   }
-  
+
   public double size( double[] population ) {
     double size = 0;
     for( int i=0; i<population.length; i++ ) {
@@ -163,24 +163,24 @@ public class CompressedPayoffMatrix {
     }
     return size;
   }
-  
-  public double[] plotRDflow( DataWriter out, double[] initialPopulation, 
+
+  public double[] plotRDflow( DataWriter out, double[] initialPopulation,
                             double error, int maxIterations ) {
     double[] population = initialPopulation;
     double diff;
     int iteration = 0;
     do {
-      evolveMixedStrategy(population);                 
+      evolveMixedStrategy(population);
       for( int i=0; i<population.length; i++ ) {
         out.newData(population[i]);
       }
-      diff = evolveMixedStrategy(population);                 
-      iteration++;      
+      diff = evolveMixedStrategy(population);
+      iteration++;
     } while (  diff > error && iteration < maxIterations );
     return population;
   }
-    
-  
+
+
   public void importFromCSV( CSVReader in ) throws IOException {
     List record;
     while ( (record = in.nextRecord()) != null ) {
@@ -194,10 +194,10 @@ public class CompressedPayoffMatrix {
       for( int s=0; s<numStrategies; s++ ) {
         Double payoff = (Double) fields.next();
         outcome[s] = payoff.doubleValue();
-      }      
+      }
     }
   }
-  
+
   public void export( DataWriter out ) {
     Iterator entries = compressedEntryIterator();
     while ( entries.hasNext() ) {
@@ -210,7 +210,7 @@ public class CompressedPayoffMatrix {
         out.newData(outcome[i]);
       }
     }
-  }  
+  }
 
   public void exportToGambit( PrintWriter nfgOut ) {
     exportToGambit(nfgOut, "JASA NFG");
@@ -268,64 +268,64 @@ public class CompressedPayoffMatrix {
     }
     nfgOut.flush();
   }
-  
-  
+
+
   public static void main( String[] args ) {
-    
+
     CompressedPayoffMatrix payoffMatrix = new CompressedPayoffMatrix(6, 3);
-    
-    edu.cornell.lassp.houle.RngPack.RandomElement prng = new edu.cornell.lassp.houle.RngPack.RanMT(1234);
-    
+
+    edu.cornell.lassp.houle.RngPack.RandomElement prng = new edu.cornell.lassp.houle.RngPack.RanMT(System.currentTimeMillis());
+
     String filename = args[0];
-    
+
     try {
 
-      FileInputStream file = new FileInputStream(filename);  
+      FileInputStream file = new FileInputStream(filename);
       CSVReader csvIn = new CSVReader(file, new Class[] {Integer.class, Integer.class, Integer.class, Double.class, Double.class, Double.class} );
       EquilibriaDistribution ed = new EquilibriaDistribution();
 
       payoffMatrix.importFromCSV(csvIn);
 
-      for( int i=0; i<200; i++ ) {
+      for( int i=0; i<1000; i++ ) {
         double x, y;
         do {
           x = prng.uniform(0, 1);
           y = prng.uniform(0, 1);
         } while ( x+y > 1 );
-          
+
         double z = 1 - x - y;
 
         uk.ac.liv.util.io.CSVWriter rdPlot = new uk.ac.liv.util.io.CSVWriter( new FileOutputStream("/tmp/rdplot" + i + ".csv"), 3);
-        double[] equilibrium = 
-          payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.00001, 200000);
+        double[] equilibrium =
+          payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.000001, 200000);
         rdPlot.close();
-        
+
         ed.newEquilibrium(equilibrium);
       }
-      
+
       ed.generateReport();
-      
+
     } catch ( Exception e  ) {
       e.printStackTrace();
     }
   }
-  
+
 }
 
 
 class EquilibriaDistribution {
 
   protected HashMap equilibria;
-  
+
   protected int totalInstances;
-  
+
   static Logger logger = Logger.getLogger(EquilibriaDistribution.class);
-  
+
   public EquilibriaDistribution() {
-    equilibria = new HashMap();  
+    equilibria = new HashMap();
     totalInstances = 0;
   }
-  
+
   public void newEquilibrium( double[] probabilities ) {
     MixedStrategy equilibrium = new MixedStrategy(probabilities);
     MutableIntWrapper instances;
@@ -335,28 +335,28 @@ class EquilibriaDistribution {
       equilibria.put(equilibrium, instances);
     } else {
       instances.value++;
-    }    
+    }
     totalInstances++;
-  }  
-  
+  }
+
   public void generateReport() {
     Iterator i = equilibria.keySet().iterator();
     while ( i.hasNext() ) {
       MixedStrategy strategy = (MixedStrategy) i.next();
-      MutableIntWrapper instanceCount = 
+      MutableIntWrapper instanceCount =
         (MutableIntWrapper) equilibria.get(strategy);
       System.out.println(strategy + ": " + instanceCount.value / (double) totalInstances);
     }
   }
-  
+
 }
 
 class MixedStrategy {
- 
+
   protected double[] probabilities;
-  
+
   protected static double precision = 10;
-  
+
   public MixedStrategy( double[] mixedStrategy ) {
     this.probabilities = new double[mixedStrategy.length];
     for( int i=0; i<mixedStrategy.length; i++ ) {
@@ -364,13 +364,13 @@ class MixedStrategy {
     }
     round();
   }
-  
-  public void round() {    
+
+  public void round() {
     for( int i=0; i<probabilities.length; i++ ) {
       probabilities[i] = Math.round(probabilities[i]*precision) / precision;
-    }   
+    }
   }
-  
+
   public boolean equals( Object other ) {
     for( int i=0; i<probabilities.length; i++ ) {
       if ( probabilities[i] != ((MixedStrategy) other).probabilities[i] ) {
@@ -379,7 +379,7 @@ class MixedStrategy {
     }
     return true;
   }
-  
+
   public int hashCode() {
     int hash = 0;
     int base = 1;
@@ -389,7 +389,7 @@ class MixedStrategy {
     }
     return hash;
   }
-  
+
   public String toString() {
     StringBuffer result = new StringBuffer();
     for( int i=0; i<probabilities.length; i++ ) {
@@ -397,5 +397,5 @@ class MixedStrategy {
     }
     return result.toString();
   }
-  
+
 }
