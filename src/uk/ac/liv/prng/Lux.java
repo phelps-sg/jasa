@@ -17,18 +17,18 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import edu.cornell.lassp.houle.RngPack.RandomSeedable;
 import edu.cornell.lassp.houle.RngPack.Ranlux;
 
 
 
 public class Lux extends PRNGFactory {
 
-  public RandomElement create() {
+  public RandomSeedable create() {
     return new Ranlux();
   }
 
-  public RandomElement create( long seed ) {
+  public RandomSeedable create( long seed ) {
     return new Ranlux(seed);
   }
 

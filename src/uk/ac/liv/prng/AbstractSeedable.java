@@ -13,12 +13,12 @@
  * See the GNU General Public License for more details.
  */
 
-
-package uk.ac.liv.util;
+package uk.ac.liv.prng;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Seeder;
 
 /**
  * Abstract class for objects making use of a PRNG.

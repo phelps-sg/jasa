@@ -13,9 +13,11 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.util;
+package uk.ac.liv.prng;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.*;
+import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.Resetable;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 

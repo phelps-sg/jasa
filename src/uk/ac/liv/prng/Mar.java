@@ -17,17 +17,17 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import edu.cornell.lassp.houle.RngPack.RandomSeedable;
 import edu.cornell.lassp.houle.RngPack.Ranmar;
 
 
 public class Mar extends PRNGFactory {
 
-  public RandomElement create() {
+  public RandomSeedable create() {
     return new Ranmar();
   }
 
-  public RandomElement create( long seed ) {
+  public RandomSeedable create( long seed ) {
     return new Ranmar(seed);
   }
 

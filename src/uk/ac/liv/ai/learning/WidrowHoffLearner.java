@@ -65,8 +65,6 @@ public class WidrowHoffLearner extends AbstractLearner
 
   public static final double DEFAULT_LEARNING_RATE = 0.1;
 
-  public static final double DEFAULT_MOMENTUM = 0.1;
-
   public static final String P_LEARNINGRATE = "learningrate";
 
   public WidrowHoffLearner( double learningRate ) {

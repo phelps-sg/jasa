@@ -26,8 +26,8 @@ import uk.ac.liv.ai.learning.StochasticLearner;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.AbstractSeeder;
 
+import uk.ac.liv.prng.AbstractSeeder;
 import uk.ac.liv.prng.PRNGFactory;
 
 import java.util.Random;

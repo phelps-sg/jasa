@@ -31,6 +31,7 @@ import uk.ac.liv.ai.learning.StochasticLearner;
 import uk.ac.liv.util.*;
 import uk.ac.liv.util.io.CSVWriter;
 
+import uk.ac.liv.prng.*;
 import uk.ac.liv.prng.PRNGFactory;
 
 import java.util.ArrayList;

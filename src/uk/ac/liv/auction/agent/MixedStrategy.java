@@ -18,7 +18,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.DiscreteProbabilityDistribution;
+import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Seedable;

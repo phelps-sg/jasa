@@ -18,12 +18,12 @@ package uk.ac.liv.ai.learning;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 import uk.ac.liv.prng.PRNGFactory;
 
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Prototypeable;
-import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.MathUtil;
 import uk.ac.liv.util.Seeder;

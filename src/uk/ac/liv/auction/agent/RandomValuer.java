@@ -17,8 +17,8 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.util.AbstractSeedable;
 
+import uk.ac.liv.prng.AbstractSeedable;
 import uk.ac.liv.prng.PRNGFactory;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;

@@ -25,7 +25,7 @@ import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.ai.learning.Learner;
 
-import uk.ac.liv.util.DiscreteProbabilityDistribution;
+import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 
 
 public class MixedStrategyTest extends TestCase {

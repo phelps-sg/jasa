@@ -56,9 +56,9 @@ public abstract class PRNGFactory {
     return currentFactory;
   }
 
-  public abstract RandomElement create();
+  public abstract RandomSeedable create();
 
-  public abstract RandomElement create( long seed );
+  public abstract RandomSeedable create( long seed );
 
   public abstract String getDescription();
 

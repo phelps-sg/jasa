@@ -16,17 +16,17 @@
 
 package uk.ac.liv.prng;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+import edu.cornell.lassp.houle.RngPack.RandomSeedable;
 import edu.cornell.lassp.houle.RngPack.Ranecu;
 
 
 public class Ecu extends PRNGFactory {
 
-  public RandomElement create() {
+  public RandomSeedable create() {
     return new Ranecu();
   }
 
-  public RandomElement create( long seed ) {
+  public RandomSeedable create( long seed ) {
     return new Ranecu(seed);
   }
 

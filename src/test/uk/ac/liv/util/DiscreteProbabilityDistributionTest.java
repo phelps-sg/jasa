@@ -17,7 +17,7 @@ package test.uk.ac.liv.util;
 
 import junit.framework.*;
 
-import uk.ac.liv.util.DiscreteProbabilityDistribution;
+import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.CummulativeStatCounter;
 
 /** 
