@@ -29,9 +29,8 @@ public class GPConstrainedTradingStrategy extends GPTradingStrategy {
 
     super.modifyShout(shout, auction);
 
-    if ( agent.isSeller() && shout.getPrice() < agent.getPrivateValue() ) {
-      misbehaved = true;
-    } else if ( agent.isBuyer() && shout.getPrice() > agent.getPrivateValue() ) {
+    if ( (agent.isSeller() && shout.getPrice() < agent.getPrivateValue()) ||
+          (agent.isBuyer() && shout.getPrice() > agent.getPrivateValue()) ) {
       misbehaved = true;
     }
 

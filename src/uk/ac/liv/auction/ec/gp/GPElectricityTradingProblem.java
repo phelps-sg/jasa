@@ -112,7 +112,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   static final String DEFAULT_STATS_FILE = "coevolve-electricity-stats.csv";
 
   static final String DEFAULT_PARAM_FILE
-                    = "ecj.params/coevolve-gpauctioneer-3-3-10-10.params";
+                    = "ecj.params/ecjtest.params";
 
   static final int buyerValues[] = { 36, 17, 12 };
 

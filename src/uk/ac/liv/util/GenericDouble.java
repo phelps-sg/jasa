@@ -31,7 +31,7 @@ public class GenericDouble extends GenericNumber {
 
   static Pooler pool;
 
-  static final int DEFAULT_POOL_SIZE = 1000000;
+  static final int DEFAULT_POOL_SIZE = 100000;
 
   static int poolSize = DEFAULT_POOL_SIZE;
 

@@ -24,6 +24,7 @@ import ec.*;
 import ec.gp.*;
 import ec.gp.koza.*;
 import ec.util.*;
+import ec.multiobjective.MultiObjectiveFitness;
 
 import uk.ac.liv.ec.coevolve.*;
 
@@ -44,8 +45,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
 
 public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
-  protected CummulativeStatCounter auctioneerFitnesses;
-
+  boolean auctioneerMisbehaved;
 
   protected void postEvaluationStats() {
     try {
@@ -61,13 +61,12 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
 
   protected void resetFitnesses() {
-    auctioneerFitnesses.reset();
+    auctioneerMisbehaved = false;
     super.resetFitnesses();
   }
 
 
   protected void initialiseFitnesses() {
-    auctioneerFitnesses = new CummulativeStatCounter("auctioneerFitness");
     super.initialiseFitnesses();
   }
 
@@ -79,15 +78,40 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
 
   protected void computeFitnesses() {
-    computeAuctioneerFitness((GPAuctioneer) auctioneer);
+    if ( ((GPAuctioneer) auctioneer).misbehaved() ) {
+      auctioneerMisbehaved = true;
+    }
     super.computeFitnesses();
   }
 
 
   protected void setAuctioneerFitness( GPIndividual auctioneer ) {
-    KozaFitness fitness = (KozaFitness) auctioneer.fitness;
-    fitness.setStandardizedFitness(context.getState(),
-                                    (float) auctioneerFitnesses.getMean());
+
+    MultiObjectiveFitness fitness = (MultiObjectiveFitness) auctioneer.fitness;
+
+    if ( auctioneerMisbehaved ) {
+      for( int i=0; i<3; i++ ) {
+        fitness.multifitness[i] = 0;
+      }
+      return;
+    }
+
+    fitness.multifitness[0] = efficiencyFitness(efficiency.getMean());
+    fitness.multifitness[1] = mpFitness(buyerMP.getMean());
+    fitness.multifitness[2] = mpFitness(sellerMP.getMean());
+  }
+
+
+  protected float mpFitness( double mp ) {
+    return (float) (1 / (Math.abs(mp) + 1));
+  }
+
+  protected float efficiencyFitness( double eA ) {
+    if ( eA > 1 && Math.abs(eA) < 2 ) {
+      return 1f;
+    } else {
+      return (float) eA;
+    }
   }
 
 
@@ -113,24 +137,6 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
     return (GPTradingStrategy) group[i+1].get(0);
   }
 
-
-  protected double computeAuctioneerFitness( GPAuctioneer auctioneer ) {
-
-    if ( verbose && stats.eA > 100 ) {
-      System.err.println("eA > 100% !!");
-      System.err.println(stats);
-    }
-
-    double fitness = Float.MAX_VALUE;
-
-    if ( ! (auctioneer.misbehaved() || Double.isNaN(stats.eA)) ) {
-      fitness = 1-(stats.eA/100);
-    }
-
-    auctioneerFitnesses.newData(fitness);
-
-    return fitness;
-  }
 
 
   public Object protoClone() throws CloneNotSupportedException {
