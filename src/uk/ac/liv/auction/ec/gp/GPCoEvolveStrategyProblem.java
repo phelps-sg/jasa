@@ -108,23 +108,11 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
 
   protected void preAuctionProcessing() {
     super.preAuctionProcessing();
-    Iterator i = allTraders.iterator();
-    while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
-      GPTradingStrategy strategy = (GPTradingStrategy) trader.getStrategy();
-      strategy.prepareForEvaluating();
-    }
   }
 
 
   protected void postAuctionProcessing() {
     super.postAuctionProcessing();
-    Iterator i = allTraders.iterator();
-    while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
-      GPTradingStrategy strategy = (GPTradingStrategy) trader.getStrategy();
-      strategy.doneEvaluating();
-    }
   }
 
   public Object protoClone() throws CloneNotSupportedException {

@@ -58,10 +58,11 @@ public class GPAuctionProblem extends GPCoEvolveAuctionProblem
     int numStrategies = numSellers + numBuyers;
     strategies = new ArrayList(numSellers + numBuyers);
     for( int i=0; i<numStrategies; i++ ) {
+      Parameter strategyBase = base.push(P_STRATEGY+"."+i);
       Strategy s = (Strategy)
-        state.parameters.getInstanceForParameter(base.push(P_STRATEGY+"."+i),
-                                                  null, Strategy.class);
-      ((Parameterizable) s).setup(state.parameters, base);
+        state.parameters.getInstanceForParameter(strategyBase, null,
+                                                  Strategy.class);
+      ((Parameterizable) s).setup(state.parameters, strategyBase);
       strategies.add(i, s);
     }
     group = new Vector[1];
