@@ -24,7 +24,7 @@ import uk.ac.liv.ai.learning.*;
 import uk.ac.liv.util.*;
 import uk.ac.liv.util.io.*;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -158,7 +158,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    PRNGFactory.setup(parameters, base.push(P_PRNG));
+    GlobalPRNG.setup(parameters, base.push(P_PRNG));
 
     DATAFILE_NUM_COLUMNS = variables.length*4 + 1;
 
