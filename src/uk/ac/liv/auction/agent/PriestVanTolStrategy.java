@@ -17,7 +17,9 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.AuctionError;
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionOpenEvent;
+import uk.ac.liv.auction.stats.HistoricalDataReport;
 
 import java.io.Serializable;
 
@@ -32,14 +34,26 @@ public class PriestVanTolStrategy extends MomentumStrategy
     implements Serializable  {
 
   static Logger logger = Logger.getLogger(PriestVanTolStrategy.class);
+  
+  protected HistoricalDataReport historyStats;
 
-  protected void adjustMargin() {
-    
-    HistoryStatsMarketDataLogger historyStats = auction.getHistoryStats();
-    
-    if ( historyStats == null ) {
-      throw new AuctionError("The auction must be configured with a HistoryStatsMarketDataLogger in order to use strategy " + getClass());
+  public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
+    if ( event instanceof AuctionOpenEvent ) {
+      auctionOpen((AuctionOpenEvent) event);
     }
+  }
+
+  public void auctionOpen( AuctionOpenEvent event ) {
+    historyStats = 
+      (HistoricalDataReport) auction.getReport(HistoricalDataReport.class);
+
+    if ( historyStats == null ) {
+      throw new AuctionError(getClass() + " requires a HistoryStatsMarketDataLogger to be configured");
+    }
+  }
+  
+  protected void adjustMargin() {
 
     double highestBid = historyStats.getHighestBidPrice();
     double lowestAsk = historyStats.getLowestAskPrice();

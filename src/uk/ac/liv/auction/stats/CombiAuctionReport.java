@@ -32,8 +32,7 @@ import uk.ac.liv.util.Resetable;
 
 /**
  * <p>
- * An implementation of MarketDataLogger that can be used to log
- * data to a number of different sources.
+ * A report that combines several different reports.
  * </p>
  *
  * <p><b>Parameters</b><br></p>
@@ -48,22 +47,22 @@ import uk.ac.liv.util.Resetable;
  * @version $Revision$
  */
 
-public class CombiMarketDataLogger
-    implements MarketDataLogger, Parameterizable, Resetable {
+public class CombiAuctionReport
+    implements AuctionReport, Parameterizable, Resetable {
 
-  protected List loggers = null;
+  protected List reports = null;
 
   protected RoundRobinAuction auction;
 
   public static final String P_NUMLOGGERS = "n";
 
 
-  public CombiMarketDataLogger(List loggers) {
-    this.loggers = loggers;
+  public CombiAuctionReport( List reports ) {
+    this.reports = reports;
   }
 
-  public CombiMarketDataLogger() {
-    this.loggers = new LinkedList();
+  public CombiAuctionReport() {
+    this.reports = new LinkedList();
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -71,57 +70,61 @@ public class CombiMarketDataLogger
     int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), null, 1);
 
     for( int i=0; i<numLoggers; i++ ) {
-      MarketDataLogger logger = (MarketDataLogger)
+      AuctionReport report = (AuctionReport)
         parameters.getInstanceForParameter(base.push(i+""), null,
-                                            MarketDataLogger.class);
-      logger.setAuction(auction);
-      if ( logger instanceof Parameterizable ) {
-        ((Parameterizable) logger).setup(parameters, base.push(i+""));
+                                            AuctionReport.class);
+      report.setAuction(auction);
+      if ( report instanceof Parameterizable ) {
+        ((Parameterizable) report).setup(parameters, base.push(i+""));
       }
-      addLogger(logger);
+      addReport(report);
     }
   }
 
   /**
    * Add a new logger
    */
-  public void addLogger( MarketDataLogger logger ) {
-    loggers.add(logger);
+  public void addReport( AuctionReport report ) {
+    reports.add(report);
   }
 
 
   public void reset() {
-    Iterator i = loggers.iterator();
+    Iterator i = reports.iterator();
     while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
+      AuctionReport logger = (AuctionReport) i.next();
       if ( logger instanceof Resetable ) {
         ((Resetable) logger).reset();
       }
     }
   }
 
-  public void generateReport() {
-    Iterator i = loggers.iterator();
+  public void produceUserOutput() {
+    Iterator i = reports.iterator();
     while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.generateReport();
+      AuctionReport logger = (AuctionReport) i.next();
+      logger.produceUserOutput();
     }
+  }
+  
+  public Iterator reportIterator() {
+    return reports.iterator();
   }
 
   public Map getVariables() {
     HashMap variableMap = new HashMap();
-    Iterator i = loggers.iterator();
+    Iterator i = reports.iterator();
     while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
+      AuctionReport logger = (AuctionReport) i.next();
       variableMap.putAll(logger.getVariables());
     }
     return variableMap;
   }
   
   public void eventOccurred( AuctionEvent event ) {
-    Iterator i = loggers.iterator();
+    Iterator i = reports.iterator();
     while (  i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
+      AuctionReport logger = (AuctionReport) i.next();
       logger.eventOccurred(event);
     }
   }
@@ -129,9 +132,9 @@ public class CombiMarketDataLogger
 
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
-    Iterator i = loggers.iterator();
+    Iterator i = reports.iterator();
     while ( i.hasNext() ) {
-      MarketDataLogger logger = (MarketDataLogger) i.next();
+      AuctionReport logger = (AuctionReport) i.next();
       logger.setAuction(auction);
     }
   }

@@ -33,19 +33,19 @@ simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPri
 # Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
 
-# Configure a combination of two different loggers
-simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
-simulation.auction.logger.n = 2
+# Configure a combination of three different reports
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
+simulation.auction.report.n = 3
 
-# The first logger collects stats on the auction as it progresses
-simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+# The first report collects stats on the auction as it progresses
+simulation.auction.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
 
-# The second logger collects data on profit distribution
-simulation.auction.logger.1 = uk.ac.liv.auction.stats.EquilibriumSurplusLogger
+# The second report collects data on profit distribution
+simulation.auction.report.1 = uk.ac.liv.auction.stats.SurplusReport
 
 # In addition, generate a report on the relative concentration 
 #  and capacity of the electricity traders
-simulation.auction.stats = uk.ac.liv.auction.electricity.ElectricityStats
+simulation.auction.report.2 = uk.ac.liv.auction.electricity.ElectricityStats
 
 # Do not show the GUI console, as this is a batch experiment
 simulation.auction.console = false

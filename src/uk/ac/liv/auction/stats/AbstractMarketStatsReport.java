@@ -15,24 +15,21 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
+import uk.ac.liv.auction.event.AuctionClosedEvent;
+import uk.ac.liv.auction.event.AuctionEvent;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
-public class GroupPayoffLogger extends PayoffLogger {
+public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
 
-  public Object getKey( AbstractTradingAgent agent ) {   
-    return agent.getGroup();
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof AuctionClosedEvent ) {
+      calculate();
+    }
   }
-
-  public String getKeyName() {
-    return "group";
-  }
-
-  public String getReportText() {
-    return "in group";
-  }
+  
+  public abstract void calculate();
 
 }

@@ -58,7 +58,7 @@ public class CoEvolveAuctionStatistics extends CoEvolveStrategyStatistics {
       println(auctioneer.getMarketStats().toString());
       println();
 
-      StatsMarketDataLogger logger = auctioneer.getLogStats();
+      PriceStatisticsReport logger = auctioneer.getLogStats();
       println("Bid price: " + logger.getBidPriceStats());
       println();
       println("Ask price: " + logger.getAskPriceStats());

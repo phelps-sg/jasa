@@ -51,9 +51,9 @@ import org.apache.log4j.Logger;
 
 public class ZIPExperiment extends MarketSimulation {
 
-  protected DailyStatsMarketDataLogger marketData;
+  protected DailyStatsReport marketData;
 
-  protected MarketStats stats;
+  protected AuctionReport stats;
 
   protected boolean gatherStats;
 
@@ -139,8 +139,8 @@ public class ZIPExperiment extends MarketSimulation {
     numSamples =
         parameters.getIntWithDefault(base.push(P_NUMSAMPLES), null, numSamples);
 
-    marketData = new DailyStatsMarketDataLogger();
-    auction.addMarketDataLogger(marketData);
+    marketData = new DailyStatsReport();
+    auction.addReport(marketData);
 
     numDays = auction.getMaximumDays();
 
@@ -183,7 +183,7 @@ public class ZIPExperiment extends MarketSimulation {
         }
       }
 
-      marketData.generateReport();
+      marketData.produceUserOutput();
       auction.reset();
 
       logger.info("Sample " + sample + " done.\n");

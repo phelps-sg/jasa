@@ -26,7 +26,7 @@ import uk.ac.liv.util.io.*;
 import org.apache.log4j.Logger;
 
 /**
- * This logger keeps track of the mean value of each market variable
+ * This report keeps track of the mean value of each market variable
  * over the course of each round of bidding and logs the mean value
  * to the specified DataWriter objects.
  *
@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLogger {
+public class MeanValueDataWriterReport extends DataWriterReport {
 
 
   protected CummulativeDistribution askQuoteStats =
@@ -59,10 +59,10 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
   protected int round;
 
   static Logger logger =
-      Logger.getLogger(MeanValueDataWriterMarketDataLogger.class);
+      Logger.getLogger(MeanValueDataWriterReport.class);
 
 
-  public MeanValueDataWriterMarketDataLogger( DataWriter askQuoteLog,
+  public MeanValueDataWriterReport( DataWriter askQuoteLog,
                                       DataWriter bidQuoteLog,
                                       DataWriter bidLog,
                                       DataWriter askLog,
@@ -70,7 +70,7 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
     super(askQuoteLog, bidQuoteLog, bidLog, askLog, transPriceLog);
   }
 
-  public MeanValueDataWriterMarketDataLogger() {
+  public MeanValueDataWriterReport() {
     super();
   }
 
@@ -130,7 +130,7 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
   }
 
 
-  public void generateReport() {
+  public void produceUserOutput() {
   }
 
 

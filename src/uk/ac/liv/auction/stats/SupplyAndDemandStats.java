@@ -34,8 +34,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class SupplyAndDemandStats extends DirectRevelationStats
-    implements MarketStats {
+public class SupplyAndDemandStats extends DirectRevelationReport {
 
   /**
    * The DataWriter to write the supply curve to.
@@ -76,7 +75,7 @@ public class SupplyAndDemandStats extends DirectRevelationStats
     this.demandStats = demandStats;
   }
 
-  public void generateReport() {
+  public void produceUserOutput() {
     writeSupplyStats();
     writeDemandStats();    
   }

@@ -48,7 +48,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class ElectricityStats extends SurplusStats implements Cloneable {
+public class ElectricityStats extends SurplusReport implements Cloneable {
 
   /**
    * The relative concentration of sellers to buyers.
@@ -346,8 +346,8 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
   }
 
 
-  public void generateReport() {
-    super.generateReport();
+  public void produceUserOutput() {
+    super.produceUserOutput();
     logger.info("NPT Auction statistics");
     logger.info("----------------------");
     logger.info("Relative generating capacity (RCAP) =\t" + getRCAP());

@@ -17,7 +17,7 @@ package uk.ac.liv.auction.ui;
 
 import java.util.Iterator;
 
-import uk.ac.liv.auction.stats.GraphMarketDataLogger;
+import uk.ac.liv.auction.stats.GraphReport;
 import uk.ac.liv.auction.stats.RepastGraphSequence;
 
 import uchicago.src.sim.engine.SimModel;
@@ -31,7 +31,7 @@ import uchicago.src.sim.analysis.OpenSequenceGraph;
 public class RepastAuctionConsoleGraph extends OpenSequenceGraph {
 
   public RepastAuctionConsoleGraph( String title, SimModel repastModel, 
-      						 GraphMarketDataLogger graphModel ) {
+      						 GraphReport graphModel ) {
     super(title, repastModel);
     Iterator i = graphModel.getSequenceIterator();
     while ( i.hasNext() ) {

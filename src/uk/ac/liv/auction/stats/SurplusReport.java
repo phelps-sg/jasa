@@ -31,15 +31,15 @@ import org.apache.log4j.Logger;
  * trades occur at the equilibrium price.  Note that this report
  * assumes that the equilibrium price is constant.  To calculate
  * theoretical surplus with dynamic supply and demand you should configure
- * an EquilibriumSurplusLogger.
+ * a DynamicSurplusLogger.
  *
- * @see EquilibriumSurplusLogger
+ * @see DynamicSurplusReport
  *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class SurplusStats extends EquilibriaStats {
+public class SurplusReport extends EquilibriumReport {
 
   /**
    * The profits of the buyers in theoretical equilibrium.
@@ -99,14 +99,14 @@ public class SurplusStats extends EquilibriaStats {
     new ReportVariable("surplus.psce", 
         				"Profits of sellers in competitive equilibrium");
 
-  static Logger logger = Logger.getLogger(SurplusStats.class);
+  static Logger logger = Logger.getLogger(SurplusReport.class);
 
 
-  public SurplusStats( RoundRobinAuction auction ) {
+  public SurplusReport( RoundRobinAuction auction ) {
     super(auction);
   }
 
-  public SurplusStats() {
+  public SurplusReport() {
     super();
   }
 
@@ -214,8 +214,8 @@ public class SurplusStats extends EquilibriaStats {
            " pBCE:" + pBCE + " pSCE:" + pSCE + ")";
   }
 
-  public void generateReport() {
-    super.generateReport();
+  public void produceUserOutput() {
+    super.produceUserOutput();
     logger.info("");
     logger.info("Profit analysis");
     logger.info("---------------");

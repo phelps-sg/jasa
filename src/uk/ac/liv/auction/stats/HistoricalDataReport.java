@@ -44,7 +44,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
+public class HistoricalDataReport extends AbstractAuctionReport
                                            implements Serializable, Resetable {
 
   protected LinkedList asks = new LinkedList();
@@ -69,7 +69,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   
   static final String P_MEMORYSIZE = "memorysize";
 
-  static Logger logger = Logger.getLogger(HistoryStatsMarketDataLogger.class);
+  static Logger logger = Logger.getLogger(HistoricalDataReport.class);
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null,
@@ -80,7 +80,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
       memoryBids[i] = 0;
       memoryAsks[i] = 0;
     }
-    auction.setHistoryStats(this);
+    //auction.setHistoryStats(this);
   }
 
 
@@ -233,7 +233,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   }
   
 
-  public void generateReport() {
+  public void produceUserOutput() {
   }
   
   public Map getVariables() {

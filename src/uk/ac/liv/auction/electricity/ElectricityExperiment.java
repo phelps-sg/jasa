@@ -83,7 +83,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
   protected Auctioneer auctioneer;
 
-  protected StatsMarketDataLogger marketData;
+  protected PriceStatisticsReport marketData;
 
   protected String paramSummary;
 
@@ -297,10 +297,10 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
     writeDataFileHeadings();
 
-    marketData = new StatsMarketDataLogger();
+    marketData = new PriceStatisticsReport();
     ((Resetable) auctioneer).reset();
     auction.setAuctioneer(auctioneer);
-    auction.setMarketDataLogger(marketData);
+    auction.setReport(marketData);
     stats.setAuction(auction);
 
     registerTraders(auction, true, numSellers, sellerCapacity);

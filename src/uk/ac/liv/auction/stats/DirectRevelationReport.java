@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class DirectRevelationStats implements Resetable, Serializable {
+public abstract class DirectRevelationReport extends AbstractMarketStatsReport implements Resetable, Serializable {
 
   /**
    * The auction state after forced direct revelation.
@@ -57,15 +57,15 @@ public class DirectRevelationStats implements Resetable, Serializable {
   protected ArrayList shouts;
 
 
-  static Logger logger = Logger.getLogger(DirectRevelationStats.class);
+  static Logger logger = Logger.getLogger(DirectRevelationReport.class);
 
 
-  public DirectRevelationStats( RoundRobinAuction auction ) {
+  public DirectRevelationReport( RoundRobinAuction auction ) {
     this();
     this.auction = auction;
   }
 
-  public DirectRevelationStats() {
+  public DirectRevelationReport() {
     shouts = new ArrayList();
   }
 

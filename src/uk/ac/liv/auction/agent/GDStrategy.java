@@ -23,8 +23,10 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionOpenEvent;
 
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.HistoricalDataReport;
 
 import org.apache.log4j.Logger;
 
@@ -58,7 +60,7 @@ import java.util.List;
  * 
  * </table>
  * 
- * @see uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger
+ * @see uk.ac.liv.auction.stats.HistoricalDataReport
  * 
  * @author Marek Marcinkiewicz
  * @version $Revision$
@@ -74,7 +76,7 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
 
   protected MarketQuote quote;
   
-  protected HistoryStatsMarketDataLogger historyStats;
+  protected HistoricalDataReport historyStats;
 
   public static final String P_MAXPRICE = "maxprice";
 
@@ -94,16 +96,29 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
     GDStrategy clone = new GDStrategy();
     return clone;
   }
+  
+  public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
+    if ( event instanceof AuctionOpenEvent ) {
+      auctionOpen((AuctionOpenEvent) event);
+    }
+  }
+  
+  public void auctionOpen( AuctionOpenEvent event ) {
+    historyStats = 
+      (HistoricalDataReport) auction.getReport(HistoricalDataReport.class);
+
+    if ( historyStats == null ) {
+      throw new AuctionError(getClass() + " requires a HistoryStatsMarketDataLogger to be configured");
+    }
+  }
+  
 
   public boolean modifyShout( Shout.MutableShout shout ) {
 
     super.modifyShout(shout);
     
     quote = auction.getQuote();
-    historyStats = auction.getHistoryStats();
-    if ( historyStats == null ) {
-      throw new AuctionError(getClass() + " requires a HistoryStatsMarketDataLogger to be configured");
-    }
 
     List sortedShouts = historyStats.getSortedShouts();
 

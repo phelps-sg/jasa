@@ -15,19 +15,24 @@
 
 package uk.ac.liv.auction.stats;
 
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
+
 /**
- * An auction report that is generated at the end of an auction.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
+public class GroupPayoffReport extends PayoffReport {
 
-public interface MarketStats extends AuctionReport {
+  public Object getKey( AbstractTradingAgent agent ) {   
+    return agent.getGroup();
+  }
 
-  /**
-   * Calculate the market statistics.
-   */
-  public void calculate();
+  public String getKeyName() {
+    return "group";
+  }
 
+  public String getReportText() {
+    return "in group";
+  }
 
 }

@@ -18,7 +18,7 @@ import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
 import uk.ac.liv.auction.core.UniformPricingPolicy;
 import uk.ac.liv.auction.core.KDoubleAuctioneer;
 import uk.ac.liv.auction.core.RoundRobinAuction;
-import uk.ac.liv.auction.stats.EquilibriaStats;
+import uk.ac.liv.auction.stats.EquilibriumReport;
 
 import uk.ac.liv.auction.agent.TruthTellingStrategy;
 import uk.ac.liv.util.MathUtil;
@@ -72,10 +72,10 @@ public class KPricingPolicyTest extends TestCase {
    */
   public void testUniformPolicyEquilibriumPrice() {
     
-    EquilibriaStats eqStats = new EquilibriaStats(auction);
+    EquilibriumReport eqStats = new EquilibriumReport(auction);
     auctioneer.setPricingPolicy( new UniformPricingPolicy(0.5) );
     auction.setMaximumRounds(1);
-    auction.addMarketStats(eqStats);
+    auction.addReport(eqStats);
     auction.run();
     
     eqStats.calculate();

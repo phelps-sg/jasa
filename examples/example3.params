@@ -28,21 +28,21 @@ simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPri
 # Set the transaction price halfway between the bid and the ask price
 simulation.auction.auctioneer.pricing.k = 0.5
 
-# Configure a combination of four different loggers
-simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
-simulation.auction.logger.n = 4
+# Configure a combination of four different reports
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
+simulation.auction.report.n = 4
 
-# The first logger collects stats on the auction as it progresses
-simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+# The first report collects stats on the auction as it progresses
+simulation.auction.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
 
-# The second logger logs data to a graph on the console
-simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+# The second report logs data to a graph on the console
+simulation.auction.report.1 = uk.ac.liv.auction.stats.GraphReport
 
 # Collect data on relative profits by agent group
-simulation.auction.logger.2 = uk.ac.liv.auction.stats.GroupPayoffLogger
+simulation.auction.report.2 = uk.ac.liv.auction.stats.GroupPayoffReport
 
-# The following logger is used by the Kaplan strategy
-simulation.auction.logger.3 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
+# The following report is used by the Kaplan strategy
+simulation.auction.report.3 = uk.ac.liv.auction.stats.DailyStatsReport
 
 # Show GUI console
 simulation.auction.console = true

@@ -39,7 +39,7 @@ public class ZIPStrategyTest extends TestCase {
 
   KDoubleAuctioneer auctioneer;
 
-  MarketDataLogger marketDataLogger;
+  AuctionReport marketDataLogger;
 
   MersenneTwisterFast prng = new MersenneTwisterFast();
 
@@ -70,13 +70,13 @@ public class ZIPStrategyTest extends TestCase {
     auctioneer = new KDoubleAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(NUM_ROUNDS);
-    marketDataLogger = new StatsMarketDataLogger();
-    auction.setMarketDataLogger(marketDataLogger);
+    marketDataLogger = new PriceStatisticsReport();
+    auction.setReport(marketDataLogger);
     buyers = new ZITraderAgent[NUM_BUYERS];
     sellers = new ZITraderAgent[NUM_SELLERS];
     registerTraders(buyers, false);
     registerTraders(sellers, true);
-    EquilibriaStats eqStats = new EquilibriaStats(auction);
+    EquilibriumReport eqStats = new EquilibriumReport(auction);
     eqStats.calculate();
     logger.info(eqStats);
   }

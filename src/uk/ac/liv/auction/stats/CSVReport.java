@@ -24,7 +24,7 @@ import ec.util.Parameter;
 import java.io.*;
 
 /**
- * A MarketDataLogger that records data in CSV (comma-separated values) files.
+ * A report that records data in CSV (comma-separated values) files.
  *
  * <p><b>Parameters</b><br></p>
  * <table>
@@ -47,7 +47,7 @@ import java.io.*;
  * @version $Revision$
  */
 
-public class CSVMarketDataLogger extends DataWriterMarketDataLogger
+public class CSVReport extends DataWriterReport
     implements Parameterizable {
 
   static final String P_ASK_QUOTE_LOG_FILE = "askquotelogfile";

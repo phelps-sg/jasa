@@ -25,7 +25,7 @@ import uk.ac.liv.auction.zi.ZITraderAgent;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.KDoubleAuctioneer;
 
-import uk.ac.liv.auction.stats.StatsMarketDataLogger;
+import uk.ac.liv.auction.stats.PriceStatisticsReport;
 
 import uk.ac.liv.util.CummulativeDistribution;
 
@@ -42,7 +42,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
 
   protected RoundRobinAuction auction;
 
-  protected StatsMarketDataLogger logger;
+  protected PriceStatisticsReport logger;
 
   static final double MAX_MARKUP = 100.0;
   static final double PRIV_VALUE = 7.0;
@@ -61,8 +61,8 @@ public class RandomConstrainedStrategyTest extends TestCase {
     auction = new RoundRobinAuction();
     auctioneer = new KDoubleAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
-    logger = new StatsMarketDataLogger();
-    auction.setMarketDataLogger(logger);
+    logger = new PriceStatisticsReport();
+    auction.setReport(logger);
     auction.register(testAgent);
     auction.setMaximumRounds(MAX_ROUNDS);
   }
@@ -72,7 +72,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
     System.out.println("testAgent = " + testAgent);
     System.out.println("testStrategy = " + testStrategy);
     auction.run();
-    logger.generateReport();
+    logger.produceUserOutput();
     CummulativeDistribution askStats = logger.getAskPriceStats();
     assertTrue(approxEqual(askStats.getMin(), PRIV_VALUE));
     assertTrue(approxEqual(askStats.getMax(), MAX_MARKUP + PRIV_VALUE));
@@ -85,7 +85,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
     System.out.println("testAgent = " + testAgent);
     System.out.println("testStrategy = " + testStrategy);
     auction.run();
-    logger.generateReport();
+    logger.produceUserOutput();
     CummulativeDistribution bidStats = logger.getBidPriceStats();
     assertTrue(bidStats.getMin() >= 0);
     assertTrue(bidStats.getMax() <= PRIV_VALUE);

@@ -37,7 +37,7 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A market data logger that keeps cummulative statistics on a number of
+ * A report that keeps cummulative statistics on a number of
  * market variables.
  * </p>
  *
@@ -45,12 +45,12 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class StatsMarketDataLogger extends AbstractMarketDataLogger
+public class PriceStatisticsReport extends AbstractAuctionReport
    implements Serializable, Cloneable, Resetable {
 
   protected CummulativeDistribution[] stats;
 
-  static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
+  static Logger logger = Logger.getLogger(PriceStatisticsReport.class);
 
   protected static final int TRANS_PRICE = 0;
   protected static final int BID_PRICE = 1;
@@ -58,7 +58,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
   protected static final int BID_QUOTE = 3;
   protected static final int ASK_QUOTE = 4;
   
-  public StatsMarketDataLogger() {
+  public PriceStatisticsReport() {
     initialise();
   }
 
@@ -135,10 +135,10 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     return super.clone();
   }
 
-  public StatsMarketDataLogger newCopy() {
-    StatsMarketDataLogger copy = null;
+  public PriceStatisticsReport newCopy() {
+    PriceStatisticsReport copy = null;
     try {
-      copy = (StatsMarketDataLogger) clone();
+      copy = (PriceStatisticsReport) clone();
       for( int i=0; i<stats.length; i++ ) {
         copy.stats[i] = (CummulativeDistribution) stats[i].clone();
       }
@@ -150,7 +150,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     return copy;
   }
 
-  public void generateReport() {
+  public void produceUserOutput() {
     reportHeader();
     for( int i=0; i<stats.length; i++ ) {
       printStats(stats[i]);
@@ -188,7 +188,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
   }
   
   protected ReportVariable makeVar( String varName, String moment ) {
-    return new ReportVariable("auctionstats." + varName + "." + moment, 
+    return new ReportVariable("pricestats." + varName + "." + moment, 
          					 varName + " distribution " + moment);
   }
 }

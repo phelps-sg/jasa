@@ -35,14 +35,14 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class PayoffLogger extends EquilibriumSurplusLogger 
+public abstract class PayoffReport extends DynamicSurplusReport 
 								implements Serializable {
 
   private HashMap table = new HashMap();
   
   protected double totalProfits;
 
-  static Logger logger = Logger.getLogger(PayoffLogger.class);
+  static Logger logger = Logger.getLogger(PayoffReport.class);
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -126,7 +126,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger
   }
 
 
-  public void generateReport() {
+  public void produceUserOutput() {
     calculate();
     logger.info("\nProfits per " + getKeyName());
     logger.info("-----------------------");
@@ -140,7 +140,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger
                                         "\n\tpayoff: " + stats.payoff +
                    "\n");
     }
-    super.generateReport();
+    super.produceUserOutput();
   }
   
 

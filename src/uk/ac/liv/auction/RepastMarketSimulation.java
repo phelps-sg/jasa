@@ -21,7 +21,7 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 
-import uk.ac.liv.auction.stats.GraphMarketDataLogger;
+import uk.ac.liv.auction.stats.GraphReport;
 import uk.ac.liv.auction.stats.RepastGraphSequence;
 
 import uk.ac.liv.auction.ui.RepastAuctionConsoleGraph;
@@ -123,7 +123,7 @@ public class RepastMarketSimulation extends SimModelImpl
     parameterDescriptors = new Hashtable();
     schedule = new Schedule();
     schedule.scheduleActionBeginning(1, this, "step");
-    schedule.scheduleActionAtEnd(this, "report");
+    schedule.scheduleActionAtEnd(this, "end");
   }
   
   public RepastMarketSimulation() {
@@ -205,6 +205,12 @@ public class RepastMarketSimulation extends SimModelImpl
     //ProbeUtilities.updateProbePanels();
   }
   
+
+  public void end() {
+    auction.end();
+    auction.generateReport();
+  }
+
   
   public String getName() {
     return "JASA auction simulation";
@@ -224,10 +230,6 @@ public class RepastMarketSimulation extends SimModelImpl
   
   public String[] getInitParam() {
     return new String[] {"parameterFileName"};
-  }
-
-  public void report() {
-    auction.generateReport();
   }
 
 
@@ -278,8 +280,8 @@ public class RepastMarketSimulation extends SimModelImpl
   
   protected void buildDisplay() {
     
-    GraphMarketDataLogger graphLogger;
-    if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
+    GraphReport graphLogger;
+    if ( (graphLogger = GraphReport.getSingletonInstance()) != null ) {
       graph = new RepastAuctionConsoleGraph("JASA graph for " + auction.getName(), this, graphLogger);
       graph.display();
     }

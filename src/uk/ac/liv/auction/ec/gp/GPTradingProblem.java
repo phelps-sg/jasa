@@ -43,7 +43,7 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 public abstract class GPTradingProblem extends GPProblem {
 
-  protected EquilibriumSurplusLogger surplusLogger;
+  protected DynamicSurplusReport surplusLogger;
 
   protected GPContext context = new GPContext();
 
@@ -97,9 +97,9 @@ public abstract class GPTradingProblem extends GPProblem {
 
     auction.setup(parameters, base.push(P_AUCTION));
     
-    surplusLogger = new StrategyPayoffLogger();
+    surplusLogger = new StrategyPayoffReport();
     surplusLogger.setAuction(auction);
-    auction.addMarketDataLogger(surplusLogger);
+    auction.addReport(surplusLogger);
 
     numAgents = parameters.getInt(base.push(P_NUMAGENTS));
   
@@ -167,7 +167,7 @@ public abstract class GPTradingProblem extends GPProblem {
 
   protected void postEvaluationStats() {
     //TODO
-  	surplusLogger.generateReport();
+  	surplusLogger.produceUserOutput();
   }
 
   protected void resetStatCounters() {
@@ -191,7 +191,7 @@ public abstract class GPTradingProblem extends GPProblem {
   }
 
   public void ensureEquilibriaExists() {
-    EquilibriaStats stats = new EquilibriaStats(auction);
+    EquilibriumReport stats = new EquilibriumReport(auction);
     stats.calculate();
     while ( ! (stats.equilibriaExists() && stats.getQuantity() >= ((numAgents) / 2)-2) ) {
       resetTraders();

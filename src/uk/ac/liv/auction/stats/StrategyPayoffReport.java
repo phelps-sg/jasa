@@ -22,7 +22,7 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
  * @author Steve Phelps
  * @version $Revision$
  */
-public class StrategyPayoffLogger extends PayoffLogger {
+public class StrategyPayoffReport extends PayoffReport {
 
   public Object getKey( AbstractTradingAgent agent ) {
     return agent.getStrategy().getClass();

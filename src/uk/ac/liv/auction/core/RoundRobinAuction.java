@@ -21,9 +21,7 @@ import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
-import uk.ac.liv.auction.stats.MarketDataLogger;
-import uk.ac.liv.auction.stats.MarketStats;
-import uk.ac.liv.auction.stats.CombiMarketStats;
+import uk.ac.liv.auction.stats.AuctionReport;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
@@ -170,11 +168,6 @@ public class RoundRobinAuction extends AuctionImpl
   protected AuctionConsoleFrame guiConsole = null;
 
   /**
-   * The statistics to use
-   */
-  protected MarketStats marketStats = null;
-
-  /**
    * The maximum length in rounds of a trading day
    */
   protected int lengthOfDay = -1;
@@ -197,7 +190,7 @@ public class RoundRobinAuction extends AuctionImpl
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   public static final String P_MAXIMUM_DAYS = "maximumdays";
-  public static final String P_LOGGER = "logger";
+  public static final String P_REPORT = "report";
   public static final String P_AUCTIONEER = "auctioneer";
   public static final String P_NAME = "name";
   public static final String P_STATS = "stats";
@@ -244,34 +237,21 @@ public class RoundRobinAuction extends AuctionImpl
                                                 null, -1);
 
     try {
-      marketDataLogger =
-          (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
+      report =
+          (AuctionReport) parameters.getInstanceForParameter(base.push(P_REPORT),
                                                                  null,
-                                                                 MarketDataLogger.class);
-      marketDataLogger.setAuction(this);
-      addAuctionEventListener(marketDataLogger);
+                                                                 AuctionReport.class);
+      report.setAuction(this);
+      addAuctionEventListener(report);
 
     } catch ( ParamClassLoadException e ) {
-      marketDataLogger = null;
+      report = null;
     }
 
-    if ( marketDataLogger != null && marketDataLogger instanceof Parameterizable ) {
-      ((Parameterizable) marketDataLogger).setup(parameters, base.push(P_LOGGER));
+    if ( report != null && report instanceof Parameterizable ) {
+      ((Parameterizable) report).setup(parameters, base.push(P_REPORT));
     }
 
-    try {
-      marketStats =
-          (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS),
-                                                            null,
-                                                            MarketStats.class);
-      marketStats.setAuction(this);
-    } catch ( ParamClassLoadException e ) {
-      marketStats = null;
-    }
-
-    if ( marketStats != null && marketStats instanceof Parameterizable ) {
-      ((Parameterizable) marketStats).setup(parameters, base.push(P_STATS));
-    }
 
     Auctioneer auctioneer =
       (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
@@ -598,12 +578,12 @@ public class RoundRobinAuction extends AuctionImpl
       ((Resetable) auctioneer).reset();
     }
 
-    if ( marketDataLogger != null && marketDataLogger instanceof Resetable ) {
-      ((Resetable) marketDataLogger).reset();
+    if ( report != null && report instanceof Resetable ) {
+      ((Resetable) report).reset();
     }
 
-    if ( marketStats != null && marketStats instanceof Resetable ) {
-      ((Resetable) marketStats).reset();
+    if ( report != null && report instanceof Resetable ) {
+      ((Resetable) report).reset();
     }
 
     if ( guiConsole != null ) {
@@ -621,31 +601,11 @@ public class RoundRobinAuction extends AuctionImpl
    * Generate a report.
    */
   public void generateReport() {
-    if ( marketDataLogger != null ) {
-      marketDataLogger.generateReport();
-    }
-    if ( marketStats != null ) {
-      marketStats.calculate();
-      marketStats.generateReport();
+    if ( report != null ) {
+      report.produceUserOutput();
     }
   }
   
-  public Map getResults() {
-    HashMap results = new HashMap();
-    results.putAll(super.getResults());
-    marketStats.calculate();
-    results.putAll(marketStats.getVariables());
-    return results;
-  }
-
-  public void addMarketStats( MarketStats newStats ) {
-    MarketStats oldStats = marketStats;
-    marketStats = new CombiMarketStats();
-    if ( oldStats != null ) {
-      ( (CombiMarketStats) marketStats).addStats(oldStats);
-    }
-    ((CombiMarketStats) marketStats).addStats(newStats);
-  }
 
   /**
    * Activate a graphical console for monitoring and controlling

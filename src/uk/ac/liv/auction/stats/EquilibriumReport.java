@@ -34,8 +34,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class EquilibriaStats extends DirectRevelationStats
-    implements MarketStats, Serializable {
+public class EquilibriumReport extends DirectRevelationReport
+    implements Serializable {
 
   /**
    * The minimum equilibrium price.
@@ -69,17 +69,16 @@ public class EquilibriaStats extends DirectRevelationStats
     new ReportVariable("equilibria.quantity", "Equilibrium quantity");
   
 
-  static Logger logger = Logger.getLogger(EquilibriaStats.class);
+  static Logger logger = Logger.getLogger(EquilibriumReport.class);
 
 
-  public EquilibriaStats( RoundRobinAuction auction ) {
+  public EquilibriumReport( RoundRobinAuction auction ) {
     super(auction);
   }
 
-  public EquilibriaStats() {
+  public EquilibriumReport() {
     super();
   }
-
 
   public void recalculate() {
     reset();
@@ -153,7 +152,7 @@ public class EquilibriaStats extends DirectRevelationStats
            " minPrice:" + minPrice + " maxPrice:" + maxPrice + ")";
   }
 
-  public void generateReport() {
+  public void produceUserOutput() {
     logger.info("");
     logger.info("Equilibrium analysis report");
     logger.info("---------------------------");

@@ -93,7 +93,7 @@ public class SupplyAndDemandFrame extends JFrame {
     SupplyAndDemandStats stats =
         new SupplyAndDemandStats(auction, supplyCurve, demandCurve);
     stats.calculate();
-    stats.generateReport();
+    stats.produceUserOutput();
     plotCurve(0, supplyCurve);
     plotCurve(1, demandCurve);
   }

@@ -37,7 +37,7 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
+public class DataWriterReport extends AbstractAuctionReport {
 
 
   /**
@@ -70,11 +70,11 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
    */
   protected RoundRobinAuction auction;
 
-  public DataWriterMarketDataLogger() {
+  public DataWriterReport() {
     this(null, null, null, null, null);
   }
 
-  public DataWriterMarketDataLogger( DataWriter askQuoteLog,
+  public DataWriterReport( DataWriter askQuoteLog,
                                       DataWriter bidQuoteLog,
                                       DataWriter bidLog,
                                       DataWriter askLog,
@@ -146,7 +146,7 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
   }
 
 
-  public void generateReport() {
+  public void produceUserOutput() {
   }
   
   public Map getVariables() {

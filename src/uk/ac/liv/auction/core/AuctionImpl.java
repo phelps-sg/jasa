@@ -17,10 +17,8 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.event.*;
 
-import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
-import uk.ac.liv.auction.stats.MarketDataLogger;
-import uk.ac.liv.auction.stats.CombiMarketDataLogger;
+import uk.ac.liv.auction.stats.AuctionReport;
+import uk.ac.liv.auction.stats.CombiAuctionReport;
 
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
@@ -93,13 +91,10 @@ public abstract class AuctionImpl extends Observable
   /**
    * The optional MarketDataLogger to log data to.
    */
-  protected MarketDataLogger marketDataLogger = null;
+  protected AuctionReport report = null;
 
   protected HashMap eventListeners = new HashMap();
   
-  protected HistoryStatsMarketDataLogger historyStats;
-  
-  protected DailyStatsMarketDataLogger dailyStats;
   
   private static final Class[] allEvents = 
   	{ RoundClosedEvent.class, AuctionOpenEvent.class, AuctionClosedEvent.class,
@@ -164,8 +159,8 @@ public abstract class AuctionImpl extends Observable
   /**
    * Assign a data logger
    */
-  public void setMarketDataLogger( MarketDataLogger logger ) {
-    this.marketDataLogger = logger;
+  public void setReport( AuctionReport logger ) {
+    this.report = logger;
     removeAuctionEventListener(logger);
     addAuctionEventListener(logger);
   }
@@ -173,8 +168,8 @@ public abstract class AuctionImpl extends Observable
   /**
    * Get the current data logger
    */
-  public MarketDataLogger getMarketDataLogger() {
-    return marketDataLogger;
+  public AuctionReport getReport() {
+    return report;
   }
 
   /**
@@ -242,13 +237,13 @@ public abstract class AuctionImpl extends Observable
    *
    * @param newLogger  The new logger to add.
    */
-  public void addMarketDataLogger( MarketDataLogger newLogger ) {
-    MarketDataLogger oldLogger = marketDataLogger;
-    setMarketDataLogger(new CombiMarketDataLogger());
-    if ( oldLogger != null ) {
-      ( (CombiMarketDataLogger) marketDataLogger).addLogger(oldLogger);
+  public void addReport( AuctionReport newReport ) {
+    AuctionReport oldReport = report;
+    setReport(new CombiAuctionReport());
+    if ( oldReport != null ) {
+      ( (CombiAuctionReport) report).addReport(oldReport);
     }
-    ((CombiMarketDataLogger) marketDataLogger).addLogger(newLogger);
+    ((CombiAuctionReport) report).addReport(newReport);
   }
 
   public void addListener( LinkedList listeners, AuctionEventListener listener ) {
@@ -322,24 +317,28 @@ public abstract class AuctionImpl extends Observable
    * @see uk.ac.liv.auction.stats.ReportVariable
    */
   public Map getResults() {
-    return marketDataLogger.getVariables();
-  }
-
-  public DailyStatsMarketDataLogger getDailyStats() {
-    return dailyStats;
-  }
-  
-  public void setDailyStats( DailyStatsMarketDataLogger dailyStats ) {
-    this.dailyStats = dailyStats;
+    if ( report != null ) {
+      return report.getVariables();
+    } else {
+      return new HashMap();
+    }
   }
   
-  public HistoryStatsMarketDataLogger getHistoryStats() {
-    return historyStats;
+  public AuctionReport getReport( Class reportClass ) {
+    if ( report.getClass().equals(reportClass) ) {
+      return report;
+    } else if ( report instanceof CombiAuctionReport ) {
+      Iterator i = ((CombiAuctionReport) report).reportIterator();
+      while ( i.hasNext() ) {
+        AuctionReport report = (AuctionReport) i.next();
+        if ( report.getClass().equals(reportClass) ) {
+          return report;
+        }
+      }
+    }
+    return null;
   }
-  
-  public void setHistoryStats( HistoryStatsMarketDataLogger historyStats ) {
-    this.historyStats = historyStats;
-  }
+ 
   
   public String toString() {
     return "(Auction id:" + id + ")";

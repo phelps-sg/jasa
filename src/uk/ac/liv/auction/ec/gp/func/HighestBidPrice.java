@@ -20,7 +20,7 @@ import uk.ac.liv.ec.gp.func.GPGenericData;
 
 import uk.ac.liv.util.UntypedDouble;
 
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.HistoricalDataReport;
 
 /**
  * @author Steve Phelps
@@ -32,9 +32,9 @@ public class HighestBidPrice extends GPSchemeNode {
   public void eval( GPGenericData input ) {
     GPTradingStrategy strategy = (GPTradingStrategy)
       ((GPGenericIndividual) currentIndividual).getGPObject();
-    HistoryStatsMarketDataLogger historyStats = 
-      strategy.getAuction().getHistoryStats();
-    input.data =new UntypedDouble(historyStats.getHighestBidPrice());
+    //HistoricalDataReport historyStats = 
+      //strategy.getAuction().getHistoryStats();
+    //input.data =new UntypedDouble(historyStats.getHighestBidPrice());
   }
 
   public String toString() {

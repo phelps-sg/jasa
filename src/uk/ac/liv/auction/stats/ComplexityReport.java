@@ -44,7 +44,7 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public class ComplexityLogger extends AbstractMarketDataLogger implements
+public class ComplexityReport extends AbstractAuctionReport implements
                                                               Resetable,
                                                               Serializable,
                                                               Parameterizable{
@@ -66,7 +66,7 @@ public class ComplexityLogger extends AbstractMarketDataLogger implements
   public static final String P_NUMSTATES = "numstates";
   
   
-  public ComplexityLogger() {
+  public ComplexityReport() {
     initialise();
   }
 
@@ -111,7 +111,7 @@ public class ComplexityLogger extends AbstractMarketDataLogger implements
     
   }
 
-  public void generateReport() {
+  public void produceUserOutput() {
   }
 
   public Map getVariables() {

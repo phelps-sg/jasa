@@ -16,7 +16,7 @@
 package uk.ac.liv.auction.ec.gp.func;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.stats.StatsMarketDataLogger;
+import uk.ac.liv.auction.stats.PriceStatisticsReport;
 
 import uk.ac.liv.util.*;
 
@@ -55,7 +55,7 @@ public class GPAuctioneer extends GPSchemeIndividual
   /**
    * A copy of the logger stats for the last auction run by this auctioneer.
    */
-  protected StatsMarketDataLogger logger;
+  protected PriceStatisticsReport logger;
 
   /**
    * The last set of strategies played against this auctioneer.
@@ -183,12 +183,12 @@ public class GPAuctioneer extends GPSchemeIndividual
 
 
   public void setMarketStats( CummulativeDistribution stats ) { this.stats = stats; }
-  public void setLogStats( StatsMarketDataLogger logger ) { this.logger = logger; }
+  public void setLogStats( PriceStatisticsReport logger ) { this.logger = logger; }
   public void setStrategies( LinkedList strategies ) { this.strategies = strategies; }
   public void setAuction( Auction auction ) { this.auction = auction; }
 
   public CummulativeDistribution getMarketStats() { return stats; }
-  public StatsMarketDataLogger getLogStats() { return logger; }
+  public PriceStatisticsReport getLogStats() { return logger; }
   public LinkedList getStrategies() { return strategies; }
   public Auction getAuction() { return auction; }
   public boolean shoutsVisible() { return true; }

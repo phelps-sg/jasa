@@ -29,9 +29,9 @@ import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 
-import uk.ac.liv.auction.stats.EquilibriaStats;
-import uk.ac.liv.auction.stats.EquilibriumSurplusLogger;
-import uk.ac.liv.auction.stats.SurplusStats;
+import uk.ac.liv.auction.stats.EquilibriumReport;
+import uk.ac.liv.auction.stats.DynamicSurplusReport;
+import uk.ac.liv.auction.stats.SurplusReport;
 
 import uk.ac.liv.auction.zi.ZITraderAgent;
 
@@ -54,7 +54,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase
   
   protected RandomRobinAuction auction;
   
-  protected EquilibriumSurplusLogger eqLogger;
+  protected DynamicSurplusReport eqLogger;
   
   protected double computedSurplus = 0;
   
@@ -83,8 +83,8 @@ public class EquilibriumSurplusLoggerTest extends TestCase
     auction.setAuctioneer(auctioneer);
     auction.setMaximumDays(MAX_DAYS);
     auction.setLengthOfDay(DAY_LEN);
-    eqLogger = new EquilibriumSurplusLogger();
-    auction.setMarketDataLogger(eqLogger);
+    eqLogger = new DynamicSurplusReport();
+    auction.setReport(eqLogger);
     eqLogger.setAuction(auction);
     eqLogger.setQuantity(tradeEnt);
     
@@ -155,7 +155,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase
     auction.run();
     
     double totEqSurplus = eqLogger.calculateTotalEquilibriumSurplus();
-    SurplusStats surplusStats = new SurplusStats(auction);
+    SurplusReport surplusStats = new SurplusReport(auction);
     surplusStats.calculate();
     double totActualSurplus = surplusStats.getPSA() + surplusStats.getPBA();
     
@@ -181,7 +181,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof EndOfDayEvent ) {
       //System.out.println("At end of day " + auction.getDay());
-      EquilibriaStats eqStats = new EquilibriaStats(auction);
+      EquilibriumReport eqStats = new EquilibriumReport(auction);
       eqStats.calculate();
       double eqPrice = eqStats.calculateMidEquilibriumPrice();
       //System.out.println("equilibria found? " + eqStats.equilibriaExists());

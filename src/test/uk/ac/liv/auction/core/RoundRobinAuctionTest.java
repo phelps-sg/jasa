@@ -17,8 +17,8 @@ package test.uk.ac.liv.auction.core;
 import junit.framework.*;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.DailyStatsReport;
+import uk.ac.liv.auction.stats.HistoricalDataReport;
 import uk.ac.liv.util.Distribution;
 
 import test.uk.ac.liv.auction.agent.MockTrader;
@@ -95,9 +95,9 @@ public class RoundRobinAuctionTest extends TestCase {
     auction.setLengthOfDay(3);
     auction.setMaximumDays(1);
 
-    DailyStatsMarketDataLogger dailyStats = new DailyStatsMarketDataLogger();
+    DailyStatsReport dailyStats = new DailyStatsReport();
     dailyStats.setAuction(auction);
-    auction.setMarketDataLogger(dailyStats);
+    auction.setReport(dailyStats);
     dailyStats.setup(new ParameterDatabase(), new Parameter("stats"));
 
     auction.run();
@@ -110,9 +110,9 @@ public class RoundRobinAuctionTest extends TestCase {
   public void testHistoryStats() {
     logger.info("testHistoryStats()");
 
-    HistoryStatsMarketDataLogger stats = new HistoryStatsMarketDataLogger();
+    HistoricalDataReport stats = new HistoricalDataReport();
     stats.setAuction(auction);
-    auction.setMarketDataLogger(stats);
+    auction.setReport(stats);
     stats.setup(new ParameterDatabase(), new Parameter("stats"));
 
     auction.run();

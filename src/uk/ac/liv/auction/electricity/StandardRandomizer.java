@@ -104,7 +104,7 @@ public class StandardRandomizer
   protected double[][] generateRandomizedPrivateValues( int numTraders,
                                                          int numIterations ) {
     double[][] values = new double[numIterations][numTraders];
-    EquilibriaStats stats = new EquilibriaStats(auction);
+    EquilibriumReport stats = new EquilibriumReport(auction);
     for( int i=0; i<numIterations; i++ ) {
     	privValuePRNG = PRNGFactory.getFactory().create(seeds[i]);
       do {

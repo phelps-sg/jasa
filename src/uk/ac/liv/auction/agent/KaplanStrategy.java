@@ -25,7 +25,10 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionOpenEvent;
+import uk.ac.liv.auction.stats.DailyStatsReport;
+import uk.ac.liv.auction.stats.HistoricalDataReport;
 
 import org.apache.log4j.Logger;
 
@@ -58,7 +61,7 @@ import org.apache.log4j.Logger;
  *
  * </table>
  *
- * @see uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
+ * @see uk.ac.liv.auction.stats.DailyStatsReport
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -80,7 +83,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
   protected MarketQuote quote;
   
-  protected DailyStatsMarketDataLogger dailyStats;
+  protected DailyStatsReport dailyStats;
 
   public static final String P_T = "t";
   public static final String P_S = "s";
@@ -104,14 +107,26 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   	}
     return clone;
   }
+  
+
+  public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
+    if ( event instanceof AuctionOpenEvent ) {
+      auctionOpen((AuctionOpenEvent) event);
+    }
+  }
+
+  public void auctionOpen( AuctionOpenEvent event ) {
+    dailyStats = 
+      (DailyStatsReport) event.getAuction().getReport(DailyStatsReport.class);
+    if ( dailyStats == null ) {
+      throw new AuctionError(getClass() + " requires a DailyStatsReport to be configured");
+    }
+  }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
     super.modifyShout(shout);
     quote = auction.getQuote();
-    dailyStats = auction.getDailyStats();
-    if ( dailyStats == null ) {
-      throw new AuctionError(getClass() + " requires a DailyStatsMarketDataLogger to be configured");
-    }
     if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
       logger.debug("quote = " + quote);
       logger.debug("my priv value = " + agent.getValuation(auction));

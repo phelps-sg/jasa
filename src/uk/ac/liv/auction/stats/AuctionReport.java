@@ -17,6 +17,7 @@ package uk.ac.liv.auction.stats;
 
 import java.util.Map;
 
+import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
 /**
@@ -26,20 +27,20 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
  * @version $Revision$
  */
 
-public interface AuctionReport {
+public interface AuctionReport extends AuctionEventListener {
   
   /**
    * Produce the final report for the user. Implementors can do whatever they
    * see fit, for example by writing a report on stdout, or they may choose to
    * do nothing.
    */
-  public void generateReport();
+  public void produceUserOutput();
   
   /**
-   * Returns a Map of all of the variables, such as market efficiency, that are
-   * produced in the report. The Map maps variables, represented by objects of
-   * type ReportVariable, onto values, which may be of any class. If no
-   * variables are produced by this report then an empty Map is returned.
+   * Returns a Map of all of the variables that are produced in the report. The
+   * Map maps variables, represented by objects of type ReportVariable, onto
+   * values, which may be of any class. If no variables are produced by this
+   * report then an empty Map is returned.
    * 
    * @see ReportVariable
    */

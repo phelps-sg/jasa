@@ -30,9 +30,9 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.RandomValuer;
 import uk.ac.liv.auction.agent.AgentGroup;
 
-import uk.ac.liv.auction.stats.GroupPayoffLogger;
-import uk.ac.liv.auction.stats.PayoffLogger;
-import uk.ac.liv.auction.stats.EquilibriaStats;
+import uk.ac.liv.auction.stats.GroupPayoffReport;
+import uk.ac.liv.auction.stats.PayoffReport;
+import uk.ac.liv.auction.stats.EquilibriumReport;
 
 import uk.ac.liv.util.Distribution;
 import uk.ac.liv.util.CummulativeDistribution;
@@ -88,7 +88,7 @@ public class HeuristicPayoffCalculator
   
   protected RoundRobinAuction auction;
 
-  protected PayoffLogger payoffLogger;
+  protected PayoffReport payoffLogger;
 
   protected int numAgents;
 
@@ -214,9 +214,9 @@ public class HeuristicPayoffCalculator
 
     auction.setup(parameters, base.push(P_AUCTION));
     
-    payoffLogger = new GroupPayoffLogger();
+    payoffLogger = new GroupPayoffReport();
     payoffLogger.setAuction(auction);
-    auction.addMarketDataLogger(payoffLogger);
+    auction.addReport(payoffLogger);
 
     numAgents = parameters.getInt(base.push(P_NUMAGENTS));
     numSamples = parameters.getInt(base.push(P_NUMSAMPLES));
@@ -358,7 +358,7 @@ public class HeuristicPayoffCalculator
   }
   
   protected void ensureEquilibriaExists() {
-    EquilibriaStats stats = new EquilibriaStats(auction);
+    EquilibriumReport stats = new EquilibriumReport(auction);
     stats.calculate();
     while ( ! (stats.equilibriaExists() && stats.getQuantity() >= ((numAgents) / 2)-2) ) {
       resetValuations();

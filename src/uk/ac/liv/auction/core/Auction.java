@@ -15,8 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.AuctionReport;
+
 
 /**
  * The interface used by agents to interact with an auction.
@@ -98,12 +98,6 @@ public interface Auction extends QuoteProvider {
    */
   public boolean transactionsOccured() throws ShoutsNotVisibleException;
   
-  public HistoryStatsMarketDataLogger getHistoryStats();
-  
-  public void setHistoryStats( HistoryStatsMarketDataLogger historyStats );
-  
-  public DailyStatsMarketDataLogger getDailyStats();
-  
-  public void setDailyStats( DailyStatsMarketDataLogger dailyStats );
+  public AuctionReport getReport( Class reportClass );
 
 }

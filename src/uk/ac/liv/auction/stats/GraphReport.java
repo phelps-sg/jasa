@@ -31,32 +31,31 @@ import uchicago.src.sim.analysis.Sequence;
 
 /**
  * <p>
- * A MarketDataLogger that logs data to a graph model which can be
- * rendered by JSCi's JLineGraph component.
+ * A report that logs data to a RePast graph sequence.
  * </p>
  *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
+public class GraphReport extends MeanValueDataWriterReport
     implements  Parameterizable, Resetable {
 
   protected int currentSeries;
 
   protected RepastGraphSequence[] allSeries;
 
-  protected static GraphMarketDataLogger singletonInstance;
+  protected static GraphReport singletonInstance;
   
   protected RepastGraphSequence askQuoteSeries, bidQuoteSeries, transPriceSeries;
 
   protected EventListenerList listenerList = new EventListenerList();
 //  protected GraphDataEvent event = new GraphDataEvent(this);
 
-  static Logger logger = Logger.getLogger(GraphMarketDataLogger.class);
+  static Logger logger = Logger.getLogger(GraphReport.class);
 
 
-  public GraphMarketDataLogger() {
+  public GraphReport() {
     super();
     askQuoteLog = new RepastGraphSequence("mean ask quote per round");
     bidQuoteLog = new RepastGraphSequence("mean bid quote per round");
@@ -72,7 +71,7 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
     singletonInstance = this;
   }
   
-  public static GraphMarketDataLogger getSingletonInstance() {
+  public static GraphReport getSingletonInstance() {
     return singletonInstance;
   }
 

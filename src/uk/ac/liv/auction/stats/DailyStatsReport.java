@@ -30,26 +30,26 @@ import uk.ac.liv.util.Parameterizable;
 import org.apache.log4j.Logger;
 
 /**
- * A logger that collections individual statistics for each trading day.
+ * A report that collects individual statistics for each trading day.
  *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
+public class DailyStatsReport extends PriceStatisticsReport
     implements Parameterizable {
 
   protected Vector dailyStats;
 
-  static Logger logger = Logger.getLogger(DailyStatsMarketDataLogger.class);
+  static Logger logger = Logger.getLogger(DailyStatsReport.class);
 
-  public DailyStatsMarketDataLogger() {
+  public DailyStatsReport() {
     super();
     initialise();
   }
 
   public void setup( ParameterDatabase params, Parameter base ) {
-    auction.setDailyStats(this);
+    //auction.setDailyStats(this);
   }
   
   public void eventOccurred( AuctionEvent event ) {
@@ -90,7 +90,7 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
     }
   }
 
-  public void generateReport() {
+  public void produceUserOutput() {
     for( int day=0; day<dailyStats.size(); day++ ) {
       CummulativeDistribution[] todaysStats =
           (CummulativeDistribution[]) dailyStats.get(day);

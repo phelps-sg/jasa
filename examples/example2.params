@@ -23,18 +23,18 @@ simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPol
 # Set the transaction price halfway between the bid-ask spread.
 simulation.auction.auctioneer.pricing.k = 0.5
 
-# Configure a combination of two different loggers
-simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
-simulation.auction.logger.n = 2
+# Configure a combination of two different reports
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
+simulation.auction.report.n = 3
 
-# 1st logger collects statistics on the auction as it progresses
-simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+# 1st report collects statistics on the auction as it progresses
+simulation.auction.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
 
-# 2nd logger logs data to a graph on the console
-simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+# 2nd report logs data to a graph on the console
+simulation.auction.report.1 = uk.ac.liv.auction.stats.GraphReport
 
 # Produce a report on the equilibrium price and quantity
-simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
+simulation.auction.report.2 = uk.ac.liv.auction.stats.EquilibriumReport
 
 # Two populations of agents
 simulation.auction.agenttype.n = 2

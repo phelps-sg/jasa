@@ -33,11 +33,11 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A MarketDataLogger that keeps track of the surplus available to each agent in
+ * A report that keeps track of the surplus available to each agent in
  * theoretical equilibrium. The equilibrium price is recomputed at the end of
  * each day, thus this class can be used to keep track of theoretically
  * available surplus even when supply and demand are changing over time.
- * Each agent is assumed to be theoretically able to trade the specified 
+ * Each agent is assumed to heoretically be able to trade the specified 
  * quantity of units in each day.
  * </p>
  * 
@@ -45,10 +45,10 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
+public class DynamicSurplusReport extends AbstractAuctionReport
     implements Resetable {
 
-  protected EquilibriaStats equilibriaStats;
+  protected EquilibriumReport equilibriaStats;
 
   private HashMap surplusTable = new HashMap();
   
@@ -60,7 +60,7 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   
   public static final String P_QUANTITY = "quantity";
 
-  static Logger logger = Logger.getLogger(EquilibriumSurplusLogger.class);
+  static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     quantity = 
@@ -69,7 +69,7 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
 
   public void setAuction( RoundRobinAuction auction ) {
     super.setAuction(auction);
-    equilibriaStats = new EquilibriaStats(auction);
+    equilibriaStats = new EquilibriumReport(auction);
   }
 
   public void eventOccurred( AuctionEvent event ) {
@@ -144,7 +144,7 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   }
 
   
-  public void generateReport() {
+  public void produceUserOutput() {
   }
   
   public Map getVariables() {
