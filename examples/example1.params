@@ -1,3 +1,13 @@
+# This example demonstrates a discriminatory-price k-CDA
+#
+# To run this example, run the following commands:
+#
+#  cd <directory where jasa installed>
+#  mkdir results
+#  java uk.ac.liv.auction.MarketSimulation examples/example1.params
+#
+
+# Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.maximumrounds = 10000
 
@@ -35,7 +45,9 @@ simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
 # Two populations of agents
 simulation.agenttype.n = 2
 
-# 1st population- 5000 sellers bidding random markups
+# 1st population- 
+#  50 electricity sellers with a capacity of 10MWh
+#  using the Roth-Erev strategy
 simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.0.numagents = 50
 simulation.agenttype.0.randomprivatevalue = true
@@ -45,14 +57,16 @@ simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrateg
 simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 simulation.agenttype.0.isseller = true
 
-# 2nd population- 5000 buyers using the Roth-Erev learning algorithm
+# 2nd population- 
+#  50 electricity buyers with a capacity of 20MWh
+#  using the modified Roth-Erev strategy
 simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.1.numagents = 50
 simulation.agenttype.1.randomprivatevalue = true
 simulation.agenttype.1.maxprivatevalue = 100
 simulation.agenttype.1.capacity = 20
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 simulation.agenttype.1.isseller = false
 
 # log4j configuration

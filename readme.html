@@ -1,114 +1,275 @@
-<h1>
-README for JASA 
-</h1>
+
+<HTML>
+  <HEAD>
+    <TITLE>README for JASA</TITLE>
+  </HEAD>
+
+<BODY>
+
+<h2>
+README for JASA
+</h2>
+
 <p>
 Last modified: $Author$<br>
-$Date$
+$Date$<br>
+$Revision$<br>
 </p>
 
 <p>
-The Auction Simulator API allows researchers in experimental economics to write
+The Auction Simulator API allows researchers in agent-based computational economics to write
 high-performance trading simulations using a number of different auction
 protocols. The software also provides base classes for implementing simple
 adaptive trading agents.
 </p>
 
-<p>
-The system is based on the 4-heap algorithm, described in the paper
+<H3>
+Contents
+</H3>
+
+<LI>
+  <A href="#about">About</A>
+</LI>
+
+<LI>
+  <A href="#status">Development Status</A>
+</LI>
+
+<LI>
+  <A href="#license">Licensing information</A>
+</LI>
+
+<LI>
+  <A href="#prerequisites">Prerequisites</A>
+</LI>
+
+<LI>
+  <A href="#downloading">Obtaining the latest release</A>
+</LI>
+
+<LI>
+  <A href="#installation">Installation</A>
+</LI>
+
+<LI>
+  <A href="#running">Running the examples</A>
+</LI>
+
+<LI>
+  <A href="#compiling">Compiling the code</A>
+</LI>
+
+<LI>
+  <A href="#documentation">Documentation</A>
+</LI>
+
+<LI>
+  <A href="#acknowledgements">Acknowledgements</A>
+</LI>
+
+<a name="About"></a>
+<h3>
+About
+</h3>
 
 <p>
-"Flexible Double Auctions for Electronic Commerce: Theory and Implementation"
-by Wurman, Walsh amnd Wellman 1998.
+Features:
+</p>
+
+
+<p>
+<li>
+High-performance (suitable for use in evolutionary-computing experiments)
+</li>
 </p>
 
 <p>
-The system implements various experiments, agents and learning agents described elsewhere in the experimental economics literature.  The documentation provides citation details where appropriate.
+<li>
+Highly extensible architecture
+</li>
 </p>
 
 <p>
-The system currently supports parameterisable auctioneer classes for the following auction types:
+<li>
+Highly configurable - experiments can easily be configured from parameter files
+</li>
 </p>
-
-<li>Multi-Unit Continuous Double Auction</li>
-<li>Multi-Unit Ascending Auction</li>
 
 <p>
-The system is designed so that introducing new classes of auctioneers should be relatively straightforward.
+<li>
+Real-time graphing of simulation as it progresses
+</li>
 </p>
 
-<h2>
-Downloading
-</h2>
+<p>
+<li>
+Implementations of existing agents, learning algorithms, experiments and
+ auction types described in the computationl economics literature.
+</li>
+</p>
+
+<p>
+<li>
+Experimental support for the <a href="http://jade.cselt.it/">JADE</a> agent platform.
+</li>
+</p>
+
+<A name="status"></A>
+<H3>
+Development Status
+</H3>
+
+<p>
+  This package is currently at alpha.  This code is not
+stable or fully tested.  Please report any bugs, issues or suggestions to <A
+href="mailto:sphelps@csc.liv.ac.uk">Steve Phelps</A>.
+</p>
+
+<A name="license"></A>
+<H3>
+License
+</H3>
+</A>
+
+<P>
+This software is licensed under the <a href="LICENSE.TXT">GNU General Public License</a>.
+Although it is not an official term of the licensing conditions, you are also expected to cite
+use of this software if you use it in your research.
+</P>
+
+<A name="downloading"></A>
+<h3>
+Obtaining the latest release
+</h3>
+</A>
 
 <p>
 The latest release of JASA can be downloaded from the JASA <a href="http://sourceforge.net/projects/jasa">summary page</a>.
 </p>
 
-<h2>
+
+<A name="documentation"></A>
+<h3>
 Documentation
-</h2>
+</h3>
 <p>
-The javadoc documentation can be found <a href="doc/index.html">here</a>.
+<a href="doc/index.html">API Documentation</a>.
 </p>
 
-<h2>
-Required libraries
-</h2>
+<A name="prerequisites"></A>
+<h3>
+Prerequisites
+</h3>
 
 <p>
-<a href="http://poolit.sourceforge.net/">PooliT</a>
-</p>
-
-<p>
-<a href="http://www.cs.umd.edu/projects/plus/ec/ecj/">ECJ</a>
-<p>
-
-<p>
-<a href="http://jakarta.apache.log/log4j">Log4j</a> 
+    <LI>
+        Java JVM 1.4.0 or later
+    </LI>
 </p>
 
 <p>
-<a href="http://jade.cselt.it/">JADE</a> (Optional) required for running 
+<li>
+<a href="http://poolit.sourceforge.net/">PooliT</a> version 1.0 or later
+</li>
+</p>
+
+<p>
+<li>
+<a href="http://www.cs.umd.edu/projects/plus/ec/ecj/">ECJ</a> version 10 or later
+</li>
+<p>
+
+<p>
+<li>
+<a href="http://jakarta.apache.log/log4j">Log4j</a>
+</li>
+</p>
+
+<p>
+<li>
+<a href="http://jsci.sourceforge.net">JSci</a> version ? or later
+</li>
+</p>
+
+<p>
+<li>
+<a href="http://jade.cselt.it/">JADE</a> version 2.61 or later - (Optional) required for running
 simulations under the JADE agent platform</a>
+</li>
 </p>
 
 <p>
-<a href="http://www.junit.org">JUnit</a> (Optional) required for running 
+<li>
+<a href="http://www.junit.org">JUnit</a> version 3.81 or later -  (Optional) required for running
 the unit tests</a>
+</li>
 </p>
 
 <p>
-<a href="http://alphaworks.ibm.com/tech/Skij">Skij</a> (Optional) required for manipulating koza trees as scheme s-expressions
+<li>
+<a href="http://alphaworks.ibm.com/tech/Skij">Skij</a> version 1.73 or later - (Optional) required for manipulating koza trees as scheme s-expressions
+</li>
 </p>
 
 <p>
 Optional libraries are required for compilation, but are not required for running JASA if the indicated functionality is not being used.  The core libraries can be downloaded from <a href="http://sourceforge.net/project/showfiles.php?group_id=47257&release_id=140735">SourceForge</a>.
 <p>
 
-<h2>
-Running
-</h2>
-
-Ensure that all required libraries, including the <code>jasa.jar</code> file, are present in your <code>CLASSPATH</code> environment variable, and then run the class <code>uk.ac.liv.auction.MarketSimulation</code>, giving the name of a parameter file as the first argument.
-
-<h2>
-Examples
-</h2>
+<A name="installation"></A>
+<h3>
+Installation
+</h3>
 
 <p>
-The <code>examples/</code> directory contains several parameter files 
-for different example experiments.  
-These can be run using the <code>uk.ac.liv.auction.MarketSimulation</code> 
+<li>
+Unpack the distribution into a directory.
+The instructions refer to this directory as JASADIR from here on.
+</li>
+</p>
+
+<p>
+<li>
+Obtain all of the libraries listed in the <a href="prerequisites">prerequisites</a> section,
+and place them in the directory JASADIR/jasa/lib.
+</li>
+</p>
+
+<p>
+<li>
+Set your <code>CLASSPATH</code> environment variable to include the file JASADIR/jasa/jasa.jar,
+and all of the libraries in the directory JASADIR/jasa/lib.  On linux, use the command:
+</p>
+<p>
+<code>
+export CLASSPATH=$CLASSPATH:JASADIR/jasa/jasa.jar:JASADIR/jasa/lib/ecj:JASADIR/jasa/lib/log4j.jar:
+JASADIR/jasa/lib/JSci/classes/core.jar:JASADIR/jasa/lib/JSci/classes/sci.jar:
+JASADIR/jasa/lib/JSci/classes/xtra.jar:JASADIR/jasa/lib/poolit/poolit.jar
+</code>
+</p>
+</li>
+</p>
+
+
+<A name="running"></A>
+<h3>
+Running the examples
+</h3>
+
+<p>
+The <code>examples/</code> directory contains several parameter files
+for different example experiments.
+These can be run using the <code>uk.ac.liv.auction.MarketSimulation</code>
 application, e.g.
 <p>
 <code>
-java uk.ac.liv.auction.MarketSimulation examples/example1.params
+java uk.ac.liv.auction.MarketSimulation JASADIR/jasa/examples/example1.params
 </code>
 </p>
 
-<h2>
-Compiling
-</h2>
+<A name="compiling"></A>
+<h3>
+Compiling the code
+</h3>
 
 <p>
 JASA ships with a <code>build.xml</code> file that can be used with <a
@@ -116,23 +277,41 @@ href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> to build the
 project.  The default settings in <code>build.xml</code> expect to find the
 various third-party class libraries used by JASA either in the CLASSPATH or in
 the directory </code>jasa/lib</code>, however alternative locations can be
-specified by creating a file <code>build.ant.properties</code>.  
+specified by creating a file <code>build.ant.properties</code>.
 </p>
 <hr>
 
-<h2>
+<A name="acknowledgements"></A>
+<h3>
 Acknowledgements
-</h2>
+</h3>
 
 <p>
-This work was partially supported by the EU IST Programme through the SLIE Project.  JASA makes use of the  <a href="http://www.math.keio.ac.jp/matumoto/emt.html">Mersenne Twister PRNG</a>, as implemented by Sean Luke's <a href="http://www.cs.umd.edu/projects/plus/ec/ecj/">ECJ</a> system.  Full details of the Mersenne Twister algorithm can be found in:
+This work was partially supported by the EU IST Programme through the SLIE Project.
+</p>
+
+<p>
+The system is based on the 4-heap algorithm, described in the paper
+</p>
+<p>
+"Flexible Double Auctions for Electronic Commerce: Theory and Implementation"
+by Wurman, Walsh amnd Wellman 1998.
+</p>
+
+<p>
+  JASA makes use of the  <a href="http://www.math.keio.ac.jp/matumoto/emt.html">Mersenne Twister PRNG</a>, as implemented by Sean Luke's <a href="http://www.cs.umd.edu/projects/plus/ec/ecj/">ECJ</a> system.  Full details of the Mersenne Twister algorithm can be found in:
 </p>
 <p>
 Makato Matsumoto and Takuji Nishimura, "Mersenne Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random Number Generator", in <i>ACM Transactions on modeling and Computer Simulation</i>, Vol. 8, No. 1, January 1998, pp 3--30.
 </p>
-
+<P>
+This product includes software developed by the Apache Software Foundation <a href="http://www.apache.org">(http://www.apache.org)</A>.
+</P>
 
 <hr>
 
-<a href="http://www.csc.liv.ac.uk/~sphelps">Steve Phelps</p>
+<p>
+<a href="http://www.csc.liv.ac.uk/~sphelps">Steve Phelps</a>
+</p>
 
+</body>
