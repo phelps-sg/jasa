@@ -448,6 +448,20 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   }
 
   /**
+   * Get the profits of the sellers in competitive equilibrium.
+   */
+  public double getPSCE() {
+    return pSCE;
+  }
+
+  /**
+   * Get the profits of the buyers in competitive equilibrium.
+   */
+  public double getPBCE() {
+    return pBCE;
+  }
+
+  /**
    * Get the equilibrium market statistics.
    */
   public EquilibriaStats getEquilibriaStats() {

@@ -107,7 +107,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_STATS = "stats";
   static final String P_ITER_DATA = "iterdata";
 
-  static final int DATAFILE_NUM_COLUMNS = 29;
+  static final int DATAFILE_NUM_COLUMNS = 35;
 
   public ElectricityAuctionSimulation() {
   }
@@ -289,15 +289,17 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
       CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
       CummulativeStatCounter equilibPrice = new CummulativeStatCounter("equilibPrice");
+      CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
+      CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
 
       LinkedList variables = new LinkedList();
       variables.add(efficiency);
       variables.add(mPB);
       variables.add(mPS);
-      variables.add(pSA);
       variables.add(pBA);
-      variables.add(pST);
+      variables.add(pSA);
       variables.add(pBT);
+      variables.add(pST);
       variables.add(eAN);
       variables.add(mPBN);
       variables.add(mPSN);
@@ -305,6 +307,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       variables.add(sMPS);
       variables.add(sMPBN);
       variables.add(sMPSN);
+      variables.add(equilibPrice);
+      variables.add(pBCE);
+      variables.add(pSCE);
+
 
       Debug.assertTrue("CSV file not configured with correct number of columns",
                          variables.size()*2 == DATAFILE_NUM_COLUMNS-1);
@@ -336,6 +342,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         sMPSN.newData(mpNormalise(stats.getSMPS()));
         pBT.newData(stats.getPBT());
         pST.newData(stats.getPST());
+        pBCE.newData(stats.getPBCE());
+        pSCE.newData(stats.getPSCE());
+
         double ep = (stats.getEquilibriaStats().getMinPrice()
                                + stats.getEquilibriaStats().getMaxPrice()) / 2;
         equilibPrice.newData(ep);
