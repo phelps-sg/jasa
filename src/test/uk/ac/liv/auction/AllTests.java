@@ -45,6 +45,8 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.auction.agent.MixedStrategyTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.RandomConstrainedStrategyTest.suite());
     
+    suite.addTest(test.uk.ac.liv.auction.electricity.ElectricityStatsTest.suite());
+    
     suite.addTest(test.uk.ac.liv.auction.core.AuctioneerTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.RoundRobinAuctionTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.RandomRobinAuctionTest.suite());
