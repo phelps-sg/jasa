@@ -57,7 +57,7 @@
       <delete file="jasa.tar.gz"/>
    </target>
 
-   <target depends="prepareOutput" name="compile">
+   <target depends="prepareOutput,version" name="compile">
       <javac debug="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${sourceDir}">
         <classpath refid="project.classpath"/>
      </javac>
@@ -74,8 +74,10 @@
    </target>
 
    <target depends="jar,doc,cleanTar" name="tar">
-   	<tar compression="gzip" tarfile="jasa.tar.gz">
-		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params,lib/**" prefix="jasa">
+	<loadproperties srcFile="version.properties"/>
+	<property name="versionStr" value="${majorVersion}.${minorVersion}"/>
+   	<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
+		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params,lib/**" prefix="jasa-${versionStr}">
                   <exclude name="src/uk/ac/liv/ec/**"/>
                   <exclude name="src/test/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
@@ -147,7 +149,7 @@
         </propertyfile>
 </target>
 
-<target name="versionsrc">
+<target depends="incbuildnum" name="version">
          <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}"/>
         <replace
             file="${versionSrc}"
