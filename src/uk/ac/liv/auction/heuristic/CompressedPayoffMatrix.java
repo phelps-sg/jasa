@@ -18,9 +18,12 @@ package uk.ac.liv.auction.heuristic;
 import java.util.Vector;
 import java.util.Iterator;
 import java.util.List;
+import java.util.HashMap;
 
 import java.io.*;
 
+import uk.ac.liv.util.MutableDoubleWrapper;
+import uk.ac.liv.util.MutableIntWrapper;
 import uk.ac.liv.util.Partitioner;
 import uk.ac.liv.util.BaseNIterator;
 
@@ -161,19 +164,20 @@ public class CompressedPayoffMatrix {
     return size;
   }
   
-  public void plotRDflow( DataWriter out, double[] initialPopulation, 
+  public double[] plotRDflow( DataWriter out, double[] initialPopulation, 
                             double error, int maxIterations ) {
     double[] population = initialPopulation;
     double diff;
     int iteration = 0;
-    double oldPopSize;
     do {
+      evolveMixedStrategy(population);                 
       for( int i=0; i<population.length; i++ ) {
         out.newData(population[i]);
       }
       diff = evolveMixedStrategy(population);                 
       iteration++;      
     } while (  diff > error && iteration < maxIterations );
+    return population;
   }
     
   
@@ -265,6 +269,7 @@ public class CompressedPayoffMatrix {
     nfgOut.flush();
   }
   
+  
   public static void main( String[] args ) {
     
     CompressedPayoffMatrix payoffMatrix = new CompressedPayoffMatrix(6, 3);
@@ -275,14 +280,13 @@ public class CompressedPayoffMatrix {
     
     try {
 
-      FileInputStream file = new FileInputStream(filename);
-
+      FileInputStream file = new FileInputStream(filename);  
       CSVReader csvIn = new CSVReader(file, new Class[] {Integer.class, Integer.class, Integer.class, Double.class, Double.class, Double.class} );
+      EquilibriaDistribution ed = new EquilibriaDistribution();
 
       payoffMatrix.importFromCSV(csvIn);
 
       for( int i=0; i<200; i++ ) {
-        
         double x, y;
         do {
           x = prng.uniform(0, 1);
@@ -292,12 +296,66 @@ public class CompressedPayoffMatrix {
         double z = 1 - x - y;
 
         uk.ac.liv.util.io.CSVWriter rdPlot = new uk.ac.liv.util.io.CSVWriter( new FileOutputStream("/tmp/rdplot" + i + ".csv"), 3);
-        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.00001, 20000);
+        double[] equilibrium = 
+          payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.00001, 200000);
         rdPlot.close();
+        
+        ed.newEquilibrium(equilibrium);
       }
+      
+      ed.generateReport();
       
     } catch ( Exception e  ) {
       e.printStackTrace();
+    }
+  }
+  
+}
+
+
+class EquilibriaDistribution {
+
+  protected HashMap equilibria;
+  
+  protected double precision = 100;
+  
+  static Logger logger = Logger.getLogger(EquilibriaDistribution.class);
+  
+  public EquilibriaDistribution() {
+    equilibria = new HashMap();  
+  }
+  
+  public void newEquilibrium( double[] mixedStrategy ) {
+    double[] equilibrium = round(mixedStrategy);
+    MutableIntWrapper instances;
+    instances = (MutableIntWrapper) equilibria.get(equilibrium);
+    if ( instances == null ) {
+      instances = new MutableIntWrapper(1);
+      equilibria.put(equilibrium, instances);
+    } else {
+      instances.value++;
+    }    
+  }
+  
+  public double[] round( double[] mixedStrategy ) {
+    double[] result = new double[mixedStrategy.length];
+    for( int i=0; i<mixedStrategy.length; i++ ) {
+      result[i] = Math.round(mixedStrategy[i]*precision) / precision;
+    }
+    return result;
+  }
+  
+  public void generateReport() {
+    Iterator i = equilibria.keySet().iterator();
+    while ( i.hasNext() ) {
+      double[] profile = (double[]) i.next();
+      MutableIntWrapper instanceCount = (MutableIntWrapper) equilibria.get(profile);
+      StringBuffer s = new StringBuffer();
+      for( int j=0; j<profile.length; j++ ) {
+        s.append(profile[j] + " ");
+      }
+      s.append(": " + instanceCount.value);
+      logger.info(s.toString());
     }
   }
   
