@@ -27,7 +27,7 @@ public class JASAConstants {
 
   public static final String GNU_MESSAGE =
     "\n" +
-    "JASA v" + getVersion() + " - (C) 2001-2004 Steve Phelps\n" +
+    "JASA v" + getVersion() + " - (C) 2001-2005 Steve Phelps\n" +
     "JASA comes with ABSOLUTELY NO WARRANTY. This is free software,\n" +
     "and you are welcome to redistribute it under certain conditions;\n" +
     "see the GNU General Public license for more details.\n\n" +
