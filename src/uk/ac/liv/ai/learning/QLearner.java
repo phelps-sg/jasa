@@ -15,22 +15,35 @@
 
 package uk.ac.liv.ai.learning;
 
+import java.io.Serializable;
+
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
+import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.MersenneTwisterFast;
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
 
 
-public class QLearner implements ReinforcementLearner {
+
+public class QLearner
+    implements ReinforcementLearner, Resetable, Serializable,
+                Parameterizable {
 
   int numStates;
 
   int numActions;
 
-  DiscreteProbabilityDistribution p[];
+  MersenneTwisterFast randGenerator;
 
   double q[][];
 
   double learningRate;
 
-  double k;
+  double discountRate;
+
+  double epsilon;
 
   int previousState;
 
@@ -38,22 +51,51 @@ public class QLearner implements ReinforcementLearner {
 
   int lastActionChosen;
 
+  int bestAction;
+
   /**
    * The last action chosen.
    */
   int lastAction;
 
-  public QLearner( int numStates, int numActions,
-                    double learningRate, double k ) {
+  static final double DEFAULT_EPSILON = 0.2;
+  static final double DEFAULT_LEARNING_RATE = 0.5;
+  static final double DEFAULT_DISCOUNT_RATE = 0.8;
+
+  static final String P_EPSILON = "e";
+  static final String P_LEARNING_RATE = "p";
+  static final String P_DISCOUNT_RATE = "g";
+
+  public QLearner( int numStates, int numActions, double epsilon,
+                    double learningRate, double discountRate  ) {
+    setStatesAndActions(numStates, numActions);
+    this.learningRate = learningRate;
+    this.discountRate = discountRate;
+    this.epsilon = epsilon;
+    initialise();
+  }
+
+  public QLearner() {
+    this(0, 0, DEFAULT_EPSILON, DEFAULT_LEARNING_RATE,
+          DEFAULT_DISCOUNT_RATE);
+  }
+
+  public void initialise() {
+    for( int s=0; s<numStates; s++ ) {
+      for( int a=0; a<numActions; a++ ) {
+        q[s][a] = 0;
+      }
+    }
+  }
+
+  public void setStatesAndActions( int numStates, int numActions ) {
     this.numStates = numStates;
     this.numActions = numActions;
-    this.learningRate = learningRate;
-    this.k = k;
     q = new double[numStates][numActions];
-    p = new DiscreteProbabilityDistribution[numStates];
-    for( int s=0; s<numStates; s++ ) {
-      p[s] = new DiscreteProbabilityDistribution(numActions);
-    }
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    //TODO
   }
 
   public void setState( int state ) {
@@ -62,18 +104,23 @@ public class QLearner implements ReinforcementLearner {
   }
 
   public int act() {
-    lastActionChosen = p[currentState].generateRandomEvent();
-    return lastActionChosen;
+    double e = randGenerator.nextDouble();
+    if ( e <= epsilon ) {
+      return randGenerator.nextInt(numActions);
+    } else {
+      return bestAction(currentState);
+    }
   }
 
   public void newState( double reward, int newState ) {
     updateQ(reward, newState);
-    updateProbabilities(newState);
     setState(newState);
   }
 
   protected void updateQ( double reward, int newState ) {
-    q[currentState][lastActionChosen] = learningRate * maxQ(newState);
+    q[currentState][lastActionChosen] =
+      learningRate * (reward + discountRate * maxQ(newState))
+        + (1-learningRate) * q[currentState][lastActionChosen];
   }
 
   public double maxQ( int newState ) {
@@ -81,20 +128,19 @@ public class QLearner implements ReinforcementLearner {
     for( int a=0; a<numActions; a++ ) {
       if ( q[newState][a] > max ) {
         max = q[newState][a];
+        bestAction = a;
       }
     }
     return max;
   }
 
-  protected void updateProbabilities(int newState) {
-    double sigmaKq = 0;
-    for( int a=0; a<numActions; a++ ) {
-      sigmaKq += Math.pow(k, q[newState][a]);
-    }
-    for( int a=0; a<numActions; a++ ) {
-      p[newState].setProbability(a,Math.pow(k, q[newState][a]) / sigmaKq);
-    }
+  public int bestAction( int state ) {
+    double payoff = maxQ(state);
+    return bestAction;
   }
 
+  public void reset() {
+    initialise();
+  }
 
 }

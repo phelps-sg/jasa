@@ -16,7 +16,7 @@
 package uk.ac.liv.ai.learning;
 
 /**
- * Classes implementing this interface implement myopic stimuli-response
+ * Classes implementing this interface implement
  * reinformcement learning algorithms.
  *
  * @author Steve Phelps
@@ -36,7 +36,5 @@ public interface ReinforcementLearner {
    * an action with a reward value and a new state.
    */
   public void newState( double reward, int newState );
-
-  public void setState( int state );
 
 }
