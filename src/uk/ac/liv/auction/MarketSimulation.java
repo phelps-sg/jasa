@@ -171,6 +171,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
       simulation.report();
 
     } catch ( Exception e ) {
+      logger.error(e.getMessage());
       e.printStackTrace();
     }
   }

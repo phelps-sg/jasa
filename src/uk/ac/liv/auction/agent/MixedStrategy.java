@@ -40,9 +40,13 @@ import java.util.*;
  * <font size=-1>int &gt;= 1</font></td>
  * <td valign=top>(the number of pure strategies)</td></tr>
  *
- * <tr><td valign=top><i>base.<i>.i</i><br>
+ * <tr><td valign=top><i>base.<i>i</i><br>
  * <font size=-1>classname, inherits uk.ac.liv.auction.agent.Strategy</font></td>
  * <td valign=top>(the class for pure strategy #<i>i</i>)</td></tr>
+ *
+ * <tr><td valign=top><i>base.<i>i</i>.<tt>prob</tt><br>
+ * <font size=-1>double [0, 1]</font></td>
+ * <td valign=top>(the probability of playing pure strategy #<i>i</i>)</td></tr>
  *
  * </table>
  *
@@ -68,6 +72,7 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
   protected Strategy currentStrategy;
   
   static final String P_N = "n";
+  static final String P_PROBABILITY = "prob";
 
 
   public MixedStrategy( DiscreteProbabilityDistribution probabilities,
@@ -86,6 +91,8 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
     int numStrategies = parameters.getInt(base.push(P_N), null, 1);
     pureStrategies = new Strategy[numStrategies];
     
+    probabilities = new DiscreteProbabilityDistribution(numStrategies);
+    
     for( int i=0; i<numStrategies; i++ ) {      
       Strategy s = (Strategy)
         parameters.getInstanceForParameter(base.push(i+""), null, 
@@ -94,6 +101,10 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
         ((Parameterizable) s).setup(parameters, base.push(i+""));
       }
       pureStrategies[i] = s;
+      
+      double probability = parameters.getDouble(base.push(i+P_PROBABILITY), 
+                                                  null, 0);
+      probabilities.setProbability(i, probability);
     }    
     
   }
