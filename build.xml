@@ -62,7 +62,7 @@
    	<jar basedir="${outputDir}" jarfile="jasa.jar"/>
    </target>
 
-   <target depends="jar" name="tar">
+   <target depends="jar,doc" name="tar">
    	<tar  compression="gzip" tarfile="jasa.tar.gz">
 		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,lib/**,examples/*.params" prefix="jasa">
                   <exclude name="src/uk/ac/liv/ec/**"/>
