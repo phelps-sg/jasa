@@ -161,8 +161,6 @@ public class RoundRobinAuction extends AuctionImpl
 
   protected int lengthOfDay = -1;
 
-
-
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   public static final String P_LOGGER = "logger";
   public static final String P_AUCTIONEER = "auctioneer";
@@ -553,7 +551,10 @@ public class RoundRobinAuction extends AuctionImpl
    * Resume running of the auction after it has been paused.
    */
   public void resume() {
+    log4jLogger.debug("resume()");
     pausePending = false;
+    log4jLogger.debug("pausePending = " + pausePending);
+    log4jLogger.debug("exiting resume()");
   }
 
   public boolean isPaused() {
@@ -584,10 +585,13 @@ public class RoundRobinAuction extends AuctionImpl
    * request is received.
    */
   protected void checkPaused() {
+    log4jLogger.debug("checkPaused()");
     while ( pausePending ) {
+//      log4jLogger.debug("waiting for !pausePending");
       paused = true;
     }
     paused = false;
+    log4jLogger.debug("exiting checkPaused()");
   }
 
   protected void checkEndOfDay() {

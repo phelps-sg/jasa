@@ -23,7 +23,7 @@ import JSci.awt.DefaultGraph2DModel;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.SupplyAndDemandStats;
 
-import uk.ac.liv.util.io.MemoryResidentDataSeries;
+import uk.ac.liv.util.io.DataSeriesWriter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,6 +78,8 @@ public class SupplyAndDemandFrame extends JFrame {
     contentPane.add(updateButton, BorderLayout.SOUTH);
 
     updateTitle();
+
+    pack();
   }
 
   public void updateGraph() {
@@ -91,8 +93,8 @@ public class SupplyAndDemandFrame extends JFrame {
   }
 
   protected Graph2DModel constructSupplyAndDemandModel() {
-    MemoryResidentDataSeries supplyCurve = new MemoryResidentDataSeries();
-    MemoryResidentDataSeries demandCurve = new MemoryResidentDataSeries();
+    DataSeriesWriter supplyCurve = new DataSeriesWriter();
+    DataSeriesWriter demandCurve = new DataSeriesWriter();
     SupplyAndDemandStats stats =
         new SupplyAndDemandStats(auction, supplyCurve, demandCurve);
     stats.calculate();

@@ -35,7 +35,7 @@ simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
 # Two populations of agents
 simulation.agenttype.n = 2
 
-# 1st population- 
+# 1st population-
 #  50 electricity sellers with a capacity of 10MWh
 #  using the Roth-Erev strategy
 simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
@@ -47,7 +47,7 @@ simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrateg
 simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 simulation.agenttype.0.isseller = true
 
-# 2nd population- 
+# 2nd population-
 #  50 electricity buyers with a capacity of 20MWh
 #  using the modified Roth-Erev strategy
 simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader

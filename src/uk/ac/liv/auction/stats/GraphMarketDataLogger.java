@@ -26,7 +26,7 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.util.Parameterizable;
 
 import uk.ac.liv.util.io.DataWriter;
-import uk.ac.liv.util.io.MemoryResidentDataSeries;
+import uk.ac.liv.util.io.DataSeriesWriter;
 
 import java.util.Vector;
 
@@ -60,11 +60,11 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public GraphMarketDataLogger() {
     super();
-    askQuoteLog = new MemoryResidentDataSeries();
-    bidQuoteLog = new MemoryResidentDataSeries();
-    askLog = new MemoryResidentDataSeries();
-    bidLog = new MemoryResidentDataSeries();
-    transPriceLog = new MemoryResidentDataSeries();
+    askQuoteLog = new DataSeriesWriter();
+    bidQuoteLog = new DataSeriesWriter();
+    askLog = new DataSeriesWriter();
+    bidLog = new DataSeriesWriter();
+    transPriceLog = new DataSeriesWriter();
     allSeries =
         new DataWriter[] { askLog, bidLog, transPriceLog };
 //                            askQuoteLog, bidQuoteLog };
@@ -83,11 +83,11 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
     return (float) getCurrentSeries().getXCoord(i);
   }
 
-  public MemoryResidentDataSeries getCurrentSeries() {
+  public DataSeriesWriter getCurrentSeries() {
     logger.debug("getCurrentSeries()");
     logger.debug("currentSeries = " + currentSeries);
-    logger.debug("allSeries[currentSeries] = " + allSeries[currentSeries]);
-    return (MemoryResidentDataSeries) allSeries[currentSeries];
+//    logger.debug("allSeries[currentSeries] = " + allSeries[currentSeries]);
+    return (DataSeriesWriter) allSeries[currentSeries];
   }
 
   public float getYCoord( int i ) {
@@ -101,9 +101,6 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public int seriesLength() {
     int size = getCurrentSeries().length();
-    if ( size < 2 ) {
-      size = 2;
-    }
     logger.debug("Size of current series = " + size);
     return size;
   }
@@ -136,6 +133,7 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
       ( (GraphDataListener) listenerList.elementAt(i)).dataChanged(event);
       logger.debug("Notification done.");
     }
+    logger.debug("fireDataChanged() done");
   }
 
   public final void addGraphDataListener( GraphDataListener l ) {
@@ -152,7 +150,7 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public void clear() {
     for( int i=0; i<allSeries.length; i++ ) {
-      ((MemoryResidentDataSeries) allSeries[i]).clear();
+      ((DataSeriesWriter) allSeries[i]).clear();
     }
   }
 

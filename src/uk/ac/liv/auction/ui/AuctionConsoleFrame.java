@@ -277,7 +277,7 @@ public class AuctionConsoleFrame extends JFrame
     if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
       graphPanel = new JPanel(graphLayout = new JGraphLayout());
       JLineGraph graph = new JLineGraph(graphModel);
-      graphPanel.add(graph,"Graph");
+      graphPanel.add(graph, "Graph");
       c.gridx = 0;
       c.gridy = 0;
       c.gridwidth = 8;
@@ -340,9 +340,10 @@ public class AuctionConsoleFrame extends JFrame
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
 
     if ( graphModel != null && auction.getAge() != currentRound) {
-      logger.debug("Notifying graph model of data change..");
       currentRound = auction.getAge();
-      graphModel.fireDataChanged();
+      if ( currentRound > 1 ) {
+        notifyGraphModelChanged();
+      }
     }
     logger.debug("update() complete");
   }
@@ -354,16 +355,21 @@ public class AuctionConsoleFrame extends JFrame
     graphFrame.pack();
     graphFrame.setVisible(true);
     graphs.add(graphFrame);
+    logger.debug("exiting GraphSupplyAndDemand()");
   }
 
   public void pause() {
+    logger.debug("pause()");
     try {
+      logger.debug("Invoking auction.pause()..");
       auction.pause();
-      while (!auction.isPaused()) {
-        //wait for auction to be paused
-      }
+//      while (!auction.isPaused()) {
+//        //wait for auction to be paused
+//        logger.debug("waiting for auction.isPaused()");
+//      }
       pauseButton.setEnabled(false);
       resumeButton.setEnabled(true);
+      logger.debug("exiting pause()");
     } catch ( AuctionPauseException e ) {
       logger.debug(e);
     }
@@ -426,4 +432,24 @@ public class AuctionConsoleFrame extends JFrame
     graphModel.clear();
   }
 
+  protected void notifyGraphModelChanged() {
+    logger.debug("notifyGraphModelChanged()");
+    try {
+      SwingUtilities.invokeAndWait(new Runnable() {
+        public void run() {
+          graphModel.fireDataChanged();
+        }
+      });
+      Thread.currentThread().sleep(1);
+    }
+    catch (InterruptedException e) {
+      logger.warn(e);
+      e.printStackTrace();
+    }
+    catch (java.lang.reflect.InvocationTargetException e) {
+      logger.warn(e);
+      e.printStackTrace();
+    }
+    logger.debug("exiting notifyGraphModelChanged()");
+  }
 }
