@@ -19,7 +19,7 @@ import uk.ac.liv.util.BinaryHeap;
 import uk.ac.liv.util.Debug;
 
 import java.util.List;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import java.io.Serializable;
@@ -84,13 +84,13 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   }
 
   public synchronized void removeShout( Shout shout ) {
-    checkBalanced();
+    preRemovalProcessing();
     if ( shout.isAsk() ) {
       removeAsk(shout);
     } else {
       removeBid(shout);
     }
-    checkBalanced();
+    postRemovalProcessing();
   }
 
   protected void removeAsk( Shout shout ) {
@@ -117,7 +117,6 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Log the current state of the auction.
    */
   public void printState() {
-    //checkBalanced();
     logger.info("Auction state:\n");
     prettyPrint("Matched bids", bIn);
     prettyPrint("Matched asks", sIn);
@@ -370,9 +369,9 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * clear by matching bi with ai for all i at some price.</p>
    */
   public List getMatchedShouts() {
-    LinkedList result = new LinkedList();
+    ArrayList result = new ArrayList(sIn.size() + bIn.size());
     while ( ! sIn.isEmpty() ) {
-      //Debug.assertTrue("count(bIn) != count(sIn)", ! bIn.isEmpty());
+      assert !bIn.isEmpty();
       Shout sInTop = (Shout) sIn.pop();
       Shout bInTop = (Shout) bIn.pop();
       int nS = sInTop.getQuantity();
@@ -405,10 +404,19 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
 
   /**
    * Sub-classes should override this method if they wish
-   * to check auction state integrity after
-   * shout insertion/removal.  This is useful for testing/debugging.
+   * to check auction state integrity before
+   * shout removal.  This is useful for testing/debugging.
    */
-  protected void checkBalanced() {
+  protected void preRemovalProcessing() {
+    // Do nothing
+  }
+
+  /**
+   * Sub-classes should override this method if they wish
+   * to check auction state integrity after
+   * shout removal.  This is useful for testing/debugging.
+   */
+  protected void postRemovalProcessing() {
     // Do nothing
   }
 

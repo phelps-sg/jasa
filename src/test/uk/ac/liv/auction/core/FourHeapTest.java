@@ -124,6 +124,14 @@ public class FourHeapTest extends TestCase {
 
 class TestShoutEngine extends FourHeapShoutEngine {
 
+  protected void preRemovalProcessing() {
+    checkBalanced();
+  }
+
+  protected void postRemovalProcessing() {
+    checkBalanced();
+  }
+
   protected void checkBalanced() {
 
     int nS = countQty(sIn);
