@@ -47,7 +47,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   protected Auction auction;
 
-  protected MarketQuote currentQuote;
+  protected MarketQuote currentQuote = new MarketQuote(Double.NaN, Double.NaN);
 
   protected Shout clearBid, clearAsk;
 
@@ -101,7 +101,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public double determineClearingPrice( Shout bid, Shout ask ) {
     clearBid = bid;
     clearAsk = ask;
-    GPGenericData input = new GPGenericData();
+    GPGenericData input = GPGenericData.newGPGenericData();
     try {
       evaluateTree(0, input);
     } catch ( ArithmeticException e ) {
@@ -112,6 +112,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     }
     GenericNumber result = (GenericNumber) input.data;
     result.release();
+    input.release();
     if ( result.doubleValue() < 0 ) {
       misbehaved = true;
       return 0;
@@ -120,9 +121,15 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   }
 
   public void generateQuote() {
-    double bid = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine.getHighestUnmatchedBid());
-    double ask = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
-    currentQuote = new MarketQuote(ask, bid);
+
+    currentQuote.setBid(
+      Shout.maxPrice(shoutEngine.getHighestMatchedAsk(),
+                     shoutEngine.getHighestUnmatchedBid()) );
+
+    currentQuote.setAsk(
+      Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
+                     shoutEngine.getLowestMatchedBid()) );
+
   }
 
   public synchronized void newShout( Shout shout ) throws IllegalShoutException {

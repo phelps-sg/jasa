@@ -234,7 +234,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   protected void initialise() {
     stock = initialStock;
     funds = initialFunds;
-    currentShout = new Shout(this);
+    if ( currentShout == null ) {
+      currentShout = new Shout(this);
+    }
     currentShout.setIsBid(!isSeller);
     if ( randomPrivateValue ) {
       privateValue = randGenerator.nextDouble() * maxPrivateValue;
