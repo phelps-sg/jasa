@@ -51,7 +51,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
 
   protected LinkedList bids = new LinkedList();
 
-  protected LinkedList sortedShouts = new LinkedList();
+  protected ArrayList sortedShouts = new ArrayList();
 
   protected HashSet acceptedShouts = new HashSet();
 
@@ -188,7 +188,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
     return getNumberOfShouts(bids, price, accepted);
   }
 
-  public LinkedList getSortedShouts() {
+  public List getSortedShouts() {
     return sortedShouts;
   }
 
@@ -248,7 +248,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   protected void deleteOldShouts() {
     deleteOldShouts(asks);
     deleteOldShouts(bids);
-    sortedShouts = new LinkedList();
+    sortedShouts.clear();
     Iterator i = bids.iterator();
     while ( i.hasNext() ) {
       addToSortedShouts((Shout) i.next());

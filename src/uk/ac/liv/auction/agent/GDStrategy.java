@@ -28,8 +28,8 @@ import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 import org.apache.log4j.Logger;
 
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>
@@ -105,7 +105,7 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
       throw new AuctionError(getClass() + " requires a HistoryStatsMarketDataLogger to be configured");
     }
 
-    LinkedList sortedShouts = historyStats.getSortedShouts();
+    List sortedShouts = historyStats.getSortedShouts();
 
     boolean changed = false;
     double lastPoint = 0;
