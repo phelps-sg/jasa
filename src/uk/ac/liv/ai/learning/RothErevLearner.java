@@ -193,7 +193,7 @@ public class RothErevLearner implements
 
   /**
    * Choose a random number according to the probability distribution defined by
-   * p[].
+   * p.
    *
    * @return one of 0..k according to the probabilities p[0..k].
    */
