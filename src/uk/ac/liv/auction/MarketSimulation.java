@@ -16,16 +16,14 @@
 package uk.ac.liv.auction;
 
 import ec.util.MersenneTwisterFast;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.*;
 
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.io.CSVReader;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -62,13 +60,22 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     System.out.print("Setup.. ");
+
     gatherStats = parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
-    auction = (RoundRobinAuction) parameters.getInstanceForParameterEq(base.push(P_AUCTION), null, RoundRobinAuction.class);
+
+    auction =
+      (RoundRobinAuction) parameters.getInstanceForParameterEq(base.push(P_AUCTION),
+                                                               null, RoundRobinAuction.class);
+
     auction.setup(parameters, base.push(P_AUCTION));
-    auctioneer = (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER), null, Auctioneer.class);
+
+    auctioneer =
+      (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
+                                                      null, Auctioneer.class);
     ((Parameterizable) auctioneer).setup(parameters, base);
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
+
     logger = (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER), null, MarketDataLogger.class);
     auction.setMarketDataLogger(logger);
 
@@ -77,28 +84,38 @@ public class MarketSimulation implements Parameterizable, Runnable {
     }
 
     if ( gatherStats ) {
-      stats = (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS), null, MarketStats.class);
+      stats =
+        (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS),
+                                                         null, MarketStats.class);
       stats.setup(parameters, base.push(P_STATS));
       stats.setAuction(auction);
     }
 
     int numAgentTypes = parameters.getInt(base.push(P_NUM_AGENT_TYPES), null, 1);
     for( int t=0; t<numAgentTypes; t++ ) {
+
       Parameter typeParam = base.push(P_AGENT_TYPE).push(""+t);
       Parameter agentParam = typeParam.push(P_AGENTS);
+
       int numAgents = parameters.getInt(typeParam.push(P_NUM_AGENTS), null, 0);
       for( int i=0; i<numAgents; i++ ) {
-      	AbstractTraderAgent agent = (AbstractTraderAgent) parameters.getInstanceForParameter(typeParam, null, AbstractTraderAgent.class);
-	agent.setup(parameters, typeParam);
+
+      	RoundRobinTrader agent =
+          (RoundRobinTrader) parameters.getInstanceForParameter(typeParam, null,
+                                                                RoundRobinTrader.class);
+	((Parameterizable) agent).setup(parameters, typeParam);
         auction.register(agent);
+
       }
     }
     System.out.println("done.");
   }
 
+
   public void run() {
     auction.run();
   }
+
 
   public void report() {
     logger.finalReport();
@@ -107,6 +124,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
       System.out.println(stats);
     }
   }
+
 
   public static void main( String[] args ) {
 
