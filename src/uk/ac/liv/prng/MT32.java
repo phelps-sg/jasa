@@ -17,23 +17,21 @@
 package uk.ac.liv.prng;
 
 import edu.cornell.lassp.houle.RngPack.RandomSeedable;
-//import edu.cornell.lassp.houle.RngPack.RanMT;
 
-import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.MersenneTwister;
 
-
-public class MT extends PRNGFactory {
+public class MT32 extends PRNGFactory {
 
   public RandomSeedable create() {
-     return new MersenneTwister64();
+     return new MersenneTwister();
   }
 
   public RandomSeedable create( long seed ) {
-    return new MersenneTwister64((int) seed);
+    return new MersenneTwister((int) seed);
   }
 
   public String getDescription() {
-    return "64-bit Mersenne Twister (Matsumoto and Nishimura)";
+    return "32-bit Mersenne Twister (Matsumoto and Nishimura)";
   }
 
 }

@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
 
 public abstract class PRNGFactory {
 
-  protected static PRNGFactory currentFactory = new MT();
+  protected static PRNGFactory currentFactory = new MT32();
 
   static Logger logger = Logger.getLogger(PRNGFactory.class);
 
