@@ -48,8 +48,6 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
 
   protected void postEvaluationStats() {
-    // Save a copy of the stats for posterity
-
     try {
       GPAuctioneer auctioneer = (GPAuctioneer) auction.getAuctioneer();
       auctioneer.setMarketStats((CummulativeStatCounter) efficiency.clone());
