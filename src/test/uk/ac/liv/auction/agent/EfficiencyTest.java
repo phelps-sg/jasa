@@ -92,9 +92,19 @@ public abstract class EfficiencyTest extends TestCase {
       }
     }
     double meanEfficiency = efficiency.getMean();
+    
     System.out.println("Mean efficiency = " + meanEfficiency);
-    assertTrue("mean efficiency too low", !Double.isInfinite(meanEfficiency) &&
+    
+    assertTrue("infinite efficiency", !Double.isInfinite(meanEfficiency));
+    
+    assertTrue("mean efficiency too low", 
         			meanEfficiency >= getMinMeanEfficiency());
+    
+    assertTrue("max efficiency too high", 
+        			efficiency.getMax() <= 100 + 10E-6);
+    
+    assertTrue("negative efficiency encountered",
+        			efficiency.getMin() >= 0 );
   }
   
   protected void initialiseExperiment() {
