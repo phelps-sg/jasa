@@ -59,7 +59,7 @@ import org.apache.log4j.PropertyConfigurator;
  * <font size=-1>int</font></td>
  * <td valign=top>(the number of different agent types)</td></tr>
  *
- * <tr><td valign=top><i>base.i</i><br>
+ * <tr><td valign=top><i>base</i><tt>.agenttype.</tt><i>i</i><br>
  * <font size=-1>classname, inherits uk.ac.liv.auction.agent.RoundRobinTrader</font></td>
  * <td valign=top>(the class for agent type #<i>i</i>)</td></tr>
  *

@@ -21,6 +21,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Seedable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -54,7 +55,8 @@ import java.util.*;
  */
 
 public class MixedStrategy extends AbstractStrategy implements Parameterizable,
-                                                                Resetable {
+                                                                Resetable,
+                                                                Seedable {
 
   /**
    *  The probabilities for playing each strategy
@@ -140,6 +142,10 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
     for( int i=0; i<pureStrategies.length; i++ ) {
       ((Resetable) pureStrategies[i]).reset();
     }
+  }
+  
+  public void setSeed( long seed ) {
+    probabilities.setSeed(seed);
   }
 
 }

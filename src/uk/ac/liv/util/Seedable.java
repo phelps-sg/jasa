@@ -25,6 +25,9 @@ package uk.ac.liv.util;
 
 public interface Seedable {
 
+  /**
+   *  Set the PRNG seed.
+   */
   public void setSeed( long seed );
 
 }
