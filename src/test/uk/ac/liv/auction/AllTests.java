@@ -53,6 +53,7 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.auction.core.RoundRobinAuctionTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.RandomRobinAuctionTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.FourHeapTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.core.KPricingPolicyTest.suite());
 
     suite.addTest(test.uk.ac.liv.ai.learning.RothErevLearnerTest.suite());
     suite.addTest(test.uk.ac.liv.ai.learning.QLearnerTest.suite());
