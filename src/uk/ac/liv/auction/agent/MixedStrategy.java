@@ -19,6 +19,11 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
+import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 import java.util.*;
 
@@ -27,29 +32,67 @@ import java.util.*;
  * A mixed strategy is a strategy in which we play a number of pure strategies
  * with different probabilities on each auction round.
  *
+ * <p><b>Parameters</b><br>
+ *
+ * <table>
+ *
+ * <tr><td valign=top><i>base.</i><tt>n</tt><br>
+ * <font size=-1>int &gt;= 1</font></td>
+ * <td valign=top>(the number of pure strategies)</td></tr>
+ *
+ * <tr><td valign=top><i>base.<i>.i</i><br>
+ * <font size=-1>classname, inherits uk.ac.liv.auction.agent.Strategy</font></td>
+ * <td valign=top>(the class for pure strategy #<i>i</i>)</td></tr>
+ *
+ * </table>
+ *
  * @author Steve Phelps
  */
 
-public class MixedStrategy extends AbstractStrategy {
+public class MixedStrategy extends AbstractStrategy implements Parameterizable,
+                                                                Resetable {
 
+  /**
+   *  The probabilities for playing each strategy
+   */
   protected DiscreteProbabilityDistribution probabilities;
 
-  protected ArrayList pureStrategies;
-
+  /**
+   *  The pure strategy components
+   */
+  protected Strategy pureStrategies[];
+  
+  /**
+   *  The strategy currently being played
+   */
   protected Strategy currentStrategy;
+  
+  static final String P_N = "n";
 
 
-  public MixedStrategy( DiscreteProbabilityDistribution probabilities ) {
-    pureStrategies = new ArrayList(10);
+  public MixedStrategy( DiscreteProbabilityDistribution probabilities,
+                          Strategy[] pureStrategies ) {
+    pureStrategies = pureStrategies;
     this.probabilities = probabilities;
     currentStrategy = null;
   }
-
-
-  public void addPureStrategy( Strategy newPureStrategy ) {
-    pureStrategies.add(newPureStrategy);
+  
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    
+    int numStrategies = parameters.getInt(base.push(P_N), null, 1);
+    pureStrategies = new Strategy[numStrategies];
+    
+    for( int i=0; i<numStrategies; i++ ) {      
+      Strategy s = (Strategy)
+        parameters.getInstanceForParameter(base.push(i+""), null, 
+                                            Strategy.class);
+      if ( s instanceof Parameterizable ) {
+        ((Parameterizable) s).setup(parameters, base.push(i+""));
+      }
+      pureStrategies[i] = s;
+    }    
+    
   }
-
 
   public void addPureStrategies( Collection pureStrategies ) {
     pureStrategies.addAll(pureStrategies);
@@ -63,8 +106,7 @@ public class MixedStrategy extends AbstractStrategy {
 
   public void modifyShout( Shout shout, Auction auction ) {
 
-    currentStrategy =
-        (Strategy) pureStrategies.get(probabilities.generateRandomEvent());
+    currentStrategy = pureStrategies[probabilities.generateRandomEvent()];
 
     currentStrategy.modifyShout(shout, auction);
   }
@@ -74,6 +116,16 @@ public class MixedStrategy extends AbstractStrategy {
     currentStrategy.endOfRound(auction);
   }
 
+  public Strategy getCurrentStrategy() {
+    return currentStrategy;
+  }
+  
+  public void reset() {
+    probabilities.reset();
+    for( int i=0; i<pureStrategies.length; i++ ) {
+      ((Resetable) pureStrategies[i]).reset();
+    }
+  }
 
 }
 
