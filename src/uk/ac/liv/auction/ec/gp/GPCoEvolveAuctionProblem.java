@@ -68,6 +68,8 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   static final String P_RANDOMPRIVATEVALUES = "randomprivatevalues";
   static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
 
+  static final String[] DEFAULT_PARAMS = new String[] { "-file", "ecj.params/coevolve-gpauctioneer-3-3-10-10.params"};
+
   static final int buyerValues[] = { 36, 17, 12 };
   //static final int buyerValues[] = { 100, 17, 12 };
 
@@ -296,7 +298,11 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   }
 
   public static void main( String[] args ) {
-    ec.Evolve.main(new String[] { "-file", "ecj.params/coevolve-gpauctioneer.params"} );
+    ec.Evolve.main(DEFAULT_PARAMS);
+  }
+
+  public static EvolutionState make() {
+    return ec.Evolve.make(DEFAULT_PARAMS);
   }
 
 }
