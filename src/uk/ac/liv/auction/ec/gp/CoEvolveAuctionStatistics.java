@@ -46,8 +46,9 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
     findBestOfGeneration();
     for( int i=0; i<state.population.subpops.length; i++ ) {
       System.out.println("Serializing " + best[i]);
-      writeIndividual(best[i], fileNamePrefix + "." + i);
+      writeObject(best[i], fileNamePrefix + "." + i);
     }
+    writeObject(state, fileNamePrefix + ".state");
   }
 
   public void postEvaluationStatistics( final EvolutionState state ) {
@@ -106,7 +107,7 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
   }
 
 
-  public void writeIndividual( Individual individual, String fileName ) {
+  public void writeObject( Object individual, String fileName ) {
     try {
       FileOutputStream file = new FileOutputStream(fileName);
       ObjectOutputStream out = new ObjectOutputStream(file);

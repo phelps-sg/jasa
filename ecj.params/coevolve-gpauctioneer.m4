@@ -9,7 +9,7 @@ define(`SELLER_CAPACITY', ENV_VAR(`$GP_CS', 10))
 define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
 
 define(`POPULATION_SIZE', 50)
-define(`NUM_GENERATIONS', 10)
+define(`NUM_GENERATIONS', 10000)
 
 define(`RESULTS', `CONF_OUTHOME/gpcoevolve')
 
