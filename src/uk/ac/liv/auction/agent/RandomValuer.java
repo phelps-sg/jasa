@@ -99,7 +99,8 @@ public class RandomValuer
     initialise();
   }
 
-  public double determineValue( Auction auction ) {    
+  public double determineValue( Auction auction ) {   
+    assert minValue >= 0 && maxValue >= minValue;
     return value;
   }
 
@@ -115,8 +116,7 @@ public class RandomValuer
     initialise();
   }
 
-  public void initialise() {
-    assert minValue >= 0 && maxValue >= minValue;
+  public void initialise() {    
     distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
     drawRandomValue();
   }
@@ -141,7 +141,7 @@ public class RandomValuer
     return value;
   }
 
-  public void drawRandomValue() {
+  public void drawRandomValue() {    
     value = distribution.nextDouble();
   }
 
