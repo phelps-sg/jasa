@@ -49,12 +49,12 @@ public class HeavyweightDistribution extends CummulativeDistribution {
   
   public double getTrimmedMean( double p ) {
     Collections.sort(data);
-    int trimmedN = (int) (p/2 * n);    
+    int trimmedN = (int) ((p/2) * n);    
     double trimmedTotal = 0;
     for( int i=trimmedN; i<(n - trimmedN); i++ ) {
       trimmedTotal += ((Double) data.get(i)).doubleValue();
     }
-    return trimmedTotal / ((1-p) * n);
+    return trimmedTotal / (n-trimmedN*2);
   }
     
 }
