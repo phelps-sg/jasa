@@ -8,10 +8,10 @@
    <property name="projectName" value="JASA"/>
    <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io"/>
    <property name="docDir" value="doc"/>
-   <property name="javaLibPath" value="/usr/local/java/lib"/>
+   <property name="javaLibPath" value="./lib"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj"/>
    <property name="poolitLoc" value="${javaLibPath}/poolit/poolit.jar"/>
-   <property name="junitLoc" value="${javaLibPath}/junit3.7/junit.jar"/>
+   <property name="junitLoc" value="${javaLibPath}/junit/junit.jar"/>
    <property name="skijLoc" value="${javaLibPath}/skij.jar"/>
    <property name="log4jLoc" value="${javaLibPath}/log4j.jar"/>
    <property name="jadePath" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
@@ -61,8 +61,7 @@
    </target>
 
    <target depends="jar" name="tar">
-   	<tar basedir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/*.params" tarfile="jasa.tar"/>
-	<gzip src="jasa.tar" zipfile="jasa.tar.gz"/>
+   	<tar basedir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/*.params" compression="gzip" tarfile="jasa.tar.gz"/>
     </target>
 
    <target name="cvsupdate">
@@ -73,6 +72,10 @@
 	   <java classname="test.uk.ac.liv.auction.AllTests" fork="true">
         	<classpath refid="project.classpath" />
 	   </java>
+    </target>
+
+    <target name="libtar">
+    	<tar basedir="." includes="lib/**" compression="gzip" tarfile="lib.tar.gz"/>
     </target>
 
 
