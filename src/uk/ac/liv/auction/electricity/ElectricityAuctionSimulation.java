@@ -73,7 +73,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   protected ElectricityStats stats;
 
-  protected RandomRobinAuction auction;
+  protected RandomRobinAuction auction = new RandomRobinAuction("electricity");
 
   protected Auctioneer auctioneer;
 
@@ -141,9 +141,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
                                                                 null, ElectricityStats.class);
 
     randomizer =
-        (StandardRandomizer) parameters.getInstanceForParameter(base.push(P_RANDOMIZER),
-                                                                  null,
-                                                                  StandardRandomizer.class);
+        (StandardRandomizer) parameters.getInstanceForParameterEq(base.push(P_RANDOMIZER),
+                                                                   null,
+                                                                   StandardRandomizer.class);
     randomizer.setAuction(auction);
     randomizer.setup(parameters, base.push(P_RANDOMIZER));
 
@@ -252,7 +252,6 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       throw new Error(e.getMessage());
     }
 
-    auction = new RandomRobinAuction("Electricity Auction");
     marketData = new StatsMarketDataLogger();
     ((Resetable) auctioneer).reset();
     auction.setAuctioneer(auctioneer);
