@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -58,21 +58,22 @@ public class CSVWriter implements Serializable {
 
   public void newData( Object data ) {
     out.print(data);
-    currentColumn++;
-    if ( currentColumn < numColumns ) {
-      out.print(seperator);
-    } else {
-      out.println();
-      currentColumn = 0;
-    }
+    nextColumn();
   }
 
   public void newData( int data ) {
-    newData(new Integer(data));
+    out.print(data);
+    nextColumn();
   }
 
   public void newData( long data ) {
-    newData(new Long(data));
+    out.print(data);
+    nextColumn();
+  }
+
+  public void newData( double data ) {
+    out.print(data);
+    nextColumn();
   }
 
   public void newData( boolean data ) {
@@ -83,16 +84,22 @@ public class CSVWriter implements Serializable {
     }
   }
 
-  public void newData( double data ) {
-    newData(new Double(data));
-  }
-
   public void flush() {
     out.flush();
   }
 
   public void close() {
     out.close();
+  }
+
+  protected void nextColumn() {
+    currentColumn++;
+    if ( currentColumn < numColumns ) {
+      out.print(seperator);
+    } else {
+      out.println();
+      currentColumn = 0;
+    }
   }
 
   private void writeObject(java.io.ObjectOutputStream out)

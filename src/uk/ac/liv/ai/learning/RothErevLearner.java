@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -17,8 +17,12 @@ package uk.ac.liv.ai.learning;
 
 import ec.util.MersenneTwisterFast;  // Fast random number generator
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Parameterizable;
 
 /**
  * <p>
@@ -35,7 +39,10 @@ import uk.ac.liv.util.Resetable;
  *
  */
 
-public class RothErevLearner implements Resetable, StimuliResponseLearner {
+public class RothErevLearner implements
+                                Resetable,
+                                StimuliResponseLearner,
+                                Parameterizable {
 
   /**
    * The number of choices available to make at each iteration.
@@ -103,6 +110,14 @@ public class RothErevLearner implements Resetable, StimuliResponseLearner {
   public RothErevLearner( int k, double r, double e, double s1, long seed ) {
     this(k, r, e, s1);
     randGenerator.setSeed(seed);
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    k = parameters.getIntWithDefault(base.push("k"), null, 40);
+    r = parameters.getDoubleWithDefault(base.push("r"), null, 0.1);
+    e = parameters.getDoubleWithDefault(base.push("e"), null, 0.2);
+    s1 = parameters.getDoubleWithDefault(base.push("s1"), null, 1);
+    validateParams();
   }
 
   protected void validateParams() {

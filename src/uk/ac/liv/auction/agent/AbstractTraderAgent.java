@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -17,9 +17,15 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionException;
 
 import uk.ac.liv.util.IdAllocator;
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
+import ec.util.MersenneTwisterFast;
 
 import java.io.Serializable;
 
@@ -38,8 +44,9 @@ import java.io.Serializable;
  */
 
 public abstract class AbstractTraderAgent implements RoundRobinTrader,
-                                                      TraderAgent,
-                                                      Serializable {
+                                                      Serializable,
+                                                      Parameterizable,
+                                                      Cloneable {
 
   /**
    * The number of items of stock this agent posseses.
@@ -87,12 +94,30 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    */
   protected Strategy strategy;
 
+  protected boolean randomPrivateValue;
+  protected double maxPrivateValue;
+
   /**
    * The current shout for this trader.
    */
   Shout currentShout;
 
+  static MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
+
+
+  /**
+   * Parameter names used when initialising from parameter db
+   */
+  static final String P_PRIVATE_VALUE = "privatevalue";
+  static final String P_IS_SELLER = "isseller";
+  static final String P_STRATEGY = "strategy";
+  static final String P_INITIAL_STOCK = "initialstock";
+  static final String P_INITIAL_FUNDS = "initialfunds";
+  static final String P_RANDOM_PRIVATE_VALUE = "randomprivatevalue";
+  static final String P_MAX_PRIVATE_VALUE = "maxprivatevalue";
+
+  static final String P_DEFAULT_STRATEGY = "uk.ac.liv.auction.core.PureSimpleStrategy";
 
   /**
    * Construct a trader with given stock level and funds.
@@ -129,6 +154,22 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    */
   public AbstractTraderAgent() {
     id = idAllocator.nextId();
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    initialStock = parameters.getIntWithDefault(base.push(P_INITIAL_STOCK), null, 0);
+    initialFunds = parameters.getDoubleWithDefault(base.push(P_INITIAL_FUNDS), null, 0);
+    isSeller = parameters.getBoolean(base.push(P_IS_SELLER), null, false);
+    randomPrivateValue = parameters.getBoolean(base.push(P_RANDOM_PRIVATE_VALUE), null, true);
+    if ( randomPrivateValue ) {
+      maxPrivateValue = parameters.getDoubleWithDefault(base.push(P_MAX_PRIVATE_VALUE), null, 100);
+    } else {
+      privateValue = parameters.getDoubleWithDefault(base.push(P_PRIVATE_VALUE), null, 100);
+    }
+    strategy = (AbstractStrategy) parameters.getInstanceForParameter(base.push(P_STRATEGY), null, AbstractStrategy.class);
+    ((AbstractStrategy) strategy).setup(parameters, base.push(P_STRATEGY));
+    ((AbstractStrategy) strategy).setAgent(this);
+    initialise();
   }
 
   /**
@@ -195,6 +236,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     funds = initialFunds;
     currentShout = new Shout(this);
     currentShout.setIsBid(!isSeller);
+    if ( randomPrivateValue ) {
+      privateValue = randGenerator.nextDouble() * maxPrivateValue;
+    }
   }
 
   public void reset() {
@@ -224,5 +268,33 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   public Strategy getStrategy() {
     return strategy;
   }
+
+  /**
+   * Return the profit made in the most recent auction round.
+   * Sub-classes should override this to return something sensible.
+   */
+  public double getLastProfit() {
+    return 0;
+  }
+
+  /**
+   *
+   */
+  public int determineQuantity( Auction auction ) {
+    return 1;
+  }
+
+  public AbstractTraderAgent protoClone() {
+    AbstractTraderAgent copy = null;
+    try {
+      copy = (AbstractTraderAgent) super.clone();
+      copy.id = idAllocator.nextId();
+      //TODO deep-clone strategy.
+      copy.initialise();
+    } catch ( CloneNotSupportedException e ) {
+    }
+    return copy;
+  }
+
 
 }

@@ -19,6 +19,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import uk.ac.liv.util.Debug;
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * An Auctioneer for a uniform-price, continuous k-double-auction,
@@ -27,7 +31,9 @@ import uk.ac.liv.util.Debug;
  */
 
 public class ContinuousDoubleAuctioneer extends AbstractAuctioneer
-                                            implements ParameterizablePricing {
+                                            implements
+                                              Parameterizable,
+                                              ParameterizablePricing {
 
   /**
    * k is a parameter that determines the clearing price of currently matched shouts.
@@ -56,6 +62,10 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer
   public ContinuousDoubleAuctioneer( double k ) {
     this();
     this.k = k;
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    k = parameters.getDoubleWithDefault(base.push("k"), null, 0.5);
   }
 
   public synchronized void clear() {

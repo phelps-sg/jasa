@@ -33,7 +33,6 @@ public class AllTests {
     TestSuite suite = new TestSuite("auction test suite");
     suite.addTest(test.uk.ac.liv.util.BinaryHeapTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.RoundRobinTraderTest.suite());
-    suite.addTest(test.uk.ac.liv.auction.agent.ZISTraderTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.AuctioneerTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.AuctionTest.suite());
     suite.addTest(test.uk.ac.liv.auction.core.FourHeapTest.suite());

@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -20,6 +20,10 @@ import uk.ac.liv.auction.agent.TraderAgent;
 
 import uk.ac.liv.util.io.CSVWriter;
 import uk.ac.liv.util.IdAllocator;
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -71,7 +75,7 @@ import java.io.Serializable;
  */
 
 public class RoundRobinAuction extends AuctionImpl
-                                implements Runnable, Serializable {
+  implements Runnable, Serializable, Parameterizable {
 
   /**
    * The collection of TraderAgents currently taking part in this auction.
@@ -104,6 +108,7 @@ public class RoundRobinAuction extends AuctionImpl
    */
   int numTraders;
 
+  static final String P_MAXIMUM_ROUNDS = "maximumrounds";
 
   /**
    * Construct a new auction in the stopped state, with no traders, no shouts,
@@ -119,6 +124,12 @@ public class RoundRobinAuction extends AuctionImpl
   public RoundRobinAuction() {
     this(null);
   }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS), null, -1);
+    initialise();
+  }
+
 
   public void clear( Shout winningShout, TraderAgent buyer,
                       TraderAgent seller, double price, int quantity ) {

@@ -87,4 +87,7 @@ public class ListMarketDataLogger implements MarketDataLogger {
     initialise();
   }
 
+  public void finalReport() {
+  }
+
 }

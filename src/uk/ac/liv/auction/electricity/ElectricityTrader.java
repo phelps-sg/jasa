@@ -28,6 +28,9 @@ import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 import java.io.Serializable;
 
 
@@ -71,6 +74,11 @@ public class ElectricityTrader extends AbstractTraderAgent {
    */
   protected double profits;
 
+  protected double lastProfit;
+
+  static final String P_CAPACITY = "capacity";
+  static final String P_FIXED_COSTS = "fixedcosts";
+
 
   public ElectricityTrader( int capacity, double privateValue,
                               double fixedCosts, boolean isSeller,
@@ -86,9 +94,22 @@ public class ElectricityTrader extends AbstractTraderAgent {
     this(capacity, privateValue, fixedCosts, isSeller, null);
   }
 
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
+    capacity = parameters.getIntWithDefault(base.push(P_CAPACITY), null, 0);
+    fixedCosts = parameters.getDoubleWithDefault(base.push(P_FIXED_COSTS), null, 0);
+    initialise();
+  }
+
   public void initialise() {
     super.initialise();
     profits = 0;
+    lastProfit = 0;
+  }
+
+  public void requestShout( RoundRobinAuction auction ) {
+    super.requestShout(auction);
+    lastProfit = 0;
   }
 
   public void transferFunds( double amount, ElectricityTrader other ) {
@@ -96,18 +117,16 @@ public class ElectricityTrader extends AbstractTraderAgent {
     other.profits += amount;
   }
 
-
-
   public void informOfBuyer( double price, int quantity ) {
     Debug.assertTrue(isSeller);
 
     // Reward the learning algorithm according to profits made.
-    double profit = quantity * (price - privateValue);
+    lastProfit = quantity * (price - privateValue);
 
     //Relax this constraint for GP experiments!
     //Debug.assert(profit >= 0);
 
-    profits += profit;
+    profits += lastProfit;
   }
 
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
@@ -115,9 +134,9 @@ public class ElectricityTrader extends AbstractTraderAgent {
     Debug.assertTrue(!isSeller);
 
     // Reward the learning algorithm according to profits made
-    double profit = quantity * (privateValue - price);
+    lastProfit = quantity * (privateValue - price);
 
-    if ( profit < 0 ) {
+    if ( lastProfit < 0 ) {
       //System.out.println("currentShout = " + getCurrentShout());
       //System.out.println("quantity = " + quantity);
       //System.out.println("privateValue = " + privateValue);
@@ -130,7 +149,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
     ElectricityTrader trader = (ElectricityTrader) seller;
     if ( trader.acceptDeal(price, quantity) ) {
-      profits += profit;
+      profits += lastProfit;
       trader.informOfBuyer(price,quantity);
     }
   }
@@ -148,6 +167,13 @@ public class ElectricityTrader extends AbstractTraderAgent {
     return capacity;
   }
 
+  public double getLastProfit() {
+    return lastProfit;
+  }
+
+  public int determineQuantity() {
+    return capacity;
+  }
 
   public String toString() {
     return "(" + getClass() + " id:" + id + " capacity:" + capacity + " privateValue:" + privateValue + " fixedCosts:" + fixedCosts + " profits:" + profits + " isSeller:" + isSeller + ")";

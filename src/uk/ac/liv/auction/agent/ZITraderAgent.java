@@ -17,7 +17,8 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
 
-import java.util.Random;
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
 
 
 /**
@@ -37,12 +38,7 @@ import java.util.Random;
  * @author Steve Phelps
  */
 
-public abstract class ZITraderAgent extends AbstractTraderAgent {
-
-  /**
-   * The maximum price of any shout for all ZI agents.
-   */
-  public static final double MAX_PRICE = 200;
+public class ZITraderAgent extends AbstractTraderAgent {
 
   /**
    * The number of units this agent is entitlted to trade in this trading period.
@@ -60,25 +56,22 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
   protected boolean lastShoutSuccessful;
 
   /**
-   * The current shout for this agent.
-   */
-  protected Shout shout;
-
-  /**
-   * Static helper class for generating random numbers.
-   */
-  protected static Random randGenerator;
-
-  /**
    * The number of units traded to date
    */
   protected int quantityTraded = 0;
 
+  static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
+
+  static final double DEFAULT_MAX_MARKUP = 100;
+
+  public ZITraderAgent() {
+    super();
+  }
 
   public ZITraderAgent( int stock, double funds, double privateValue,
                           int tradeEntitlement, boolean isSeller ) {
-    super(stock, funds, privateValue, isSeller);
-    randGenerator = new Random();
+    super(stock, funds, privateValue, isSeller, null);
+    setStrategy(new RandomConstrainedStrategy(this, DEFAULT_MAX_MARKUP));
     this.initialTradeEntitlement = tradeEntitlement;
     initialise();
   }
@@ -87,39 +80,16 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
     this(0, 0, privateValue, tradeEntitlement, isSeller);
   }
 
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    initialTradeEntitlement = parameters.getIntWithDefault(base.push(P_INITIAL_TRADE_ENTITLEMENT), null, 100);
+    super.setup(parameters, base);
+  }
+
   protected void initialise() {
     super.initialise();
     lastShoutSuccessful = false;
     tradeEntitlement = initialTradeEntitlement;
     quantityTraded = 0;
-    shout = null;
-  }
-
-  /**
-   * This method is a hook for subclasses to determine the pricing behaviour of
-   * an agent.
-   */
-  protected abstract double determinePrice( Auction auction );
-
-  /**
-   * This method is a hook for subclasses to determine the quantity of a trade.
-   * The default quantity is 1.
-   */
-  protected int determineQuantity( Auction auction ) {
-    return 1;
-  }
-
-  protected long randomPrice( int n ) {
-    if ( n == 0 ) {
-      return 0;
-    }
-    synchronized(randGenerator) {
-      return (long) randGenerator.nextInt(n);
-    }
-  }
-
-  protected long randomPrice( long n ) {
-    return randomPrice((int) n);
   }
 
   public void requestShout( RoundRobinAuction auction ) {
@@ -130,24 +100,9 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
       return;
     }
 
-    double price = determinePrice(auction);
-    int qty = determineQuantity(auction);
-
-    if ( shout == null ) {
-      shout = new Shout(this, qty, price, !isSeller);
-    } else {
-      auction.removeShout(shout);
-      shout.setPrice(price);
-      shout.setQuantity(qty);
-    }
+    super.requestShout(auction);
 
     lastShoutSuccessful = false;
-
-    try {
-      auction.newShout(shout);
-    } catch ( AuctionException e ) {
-      e.printStackTrace();
-    }
   }
 
   /**
@@ -155,7 +110,6 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
    */
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                                   double price, int quantity) {
-    //System.out.println(this + ": buying " + winningShout.getQuantity() + " from " + seller);
     AbstractTraderAgent agent = (AbstractTraderAgent) seller;
     purchaseFrom(agent, quantity, price);
     lastShoutSuccessful = true;
@@ -170,7 +124,6 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
   }
 
   public int deliver( int quantity ) {
-    //System.out.println(this + ": selling " + quantity);
     lastShoutSuccessful = true;
     tradeEntitlement--;
     quantityTraded += quantity;
@@ -184,6 +137,10 @@ public abstract class ZITraderAgent extends AbstractTraderAgent {
 
   public int getQuantityTraded() {
     return quantityTraded;
+  }
+
+  public String toString() {
+    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " privateValue:" + privateValue + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
   }
 
 
