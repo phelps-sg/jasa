@@ -285,9 +285,9 @@ public abstract class AuctionImpl extends Observable
   }
 
   protected void updateTransPriceLog( int time, Shout winningShout,
-                                       double price ) {
+                                       double price, int quantity ) {
     if ( logger != null ) {
-      logger.updateTransPriceLog(time, winningShout, price);
+      logger.updateTransPriceLog(time, winningShout, price, quantity);
     }
   }
 

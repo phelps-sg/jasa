@@ -194,7 +194,7 @@ public class RoundRobinAuction extends AuctionImpl
     RoundRobinTrader rrBuyer = (RoundRobinTrader) buyer;
     RoundRobinTrader rrSeller = (RoundRobinTrader) seller;
     rrBuyer.informOfSeller(winningShout, rrSeller, price, quantity);
-    updateTransPriceLog(round, winningShout, price);
+    updateTransPriceLog(round, winningShout, price, quantity);
   }
 
   /**
