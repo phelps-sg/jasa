@@ -19,6 +19,9 @@ import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 
 /**
+ * A report that performs additional calculations at the end of an auction
+ * before producing its results.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -30,6 +33,9 @@ public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
     }
   }
   
+  /**
+   * Perform final calculations at the end of the auction.   
+   */
   public abstract void calculate();
 
 }
