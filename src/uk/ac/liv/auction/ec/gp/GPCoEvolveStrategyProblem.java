@@ -74,7 +74,6 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
       KozaFitness fitness = (KozaFitness) strategy.fitness;
       fitness.setStandardizedFitness(context.getState(),
                                       (float) strategyFitnesses[s].getMean());
-      strategy.evaluated = true;
     }
   }
 
@@ -107,6 +106,26 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
   }
 
 
+  protected void preAuctionProcessing() {
+    super.preAuctionProcessing();
+    Iterator i = allTraders.iterator();
+    while ( i.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) i.next();
+      GPTradingStrategy strategy = (GPTradingStrategy) trader.getStrategy();
+      strategy.prepareForEvaluating();
+    }
+  }
+
+
+  protected void postAuctionProcessing() {
+    super.postAuctionProcessing();
+    Iterator i = allTraders.iterator();
+    while ( i.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) i.next();
+      GPTradingStrategy strategy = (GPTradingStrategy) trader.getStrategy();
+      strategy.doneEvaluating();
+    }
+  }
 
   public Object protoClone() throws CloneNotSupportedException {
 

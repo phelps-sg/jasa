@@ -73,7 +73,7 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
 
   protected void setFitnesses( Vector[] group ) {
-    setAuctioneerFitness( (GPIndividual) group[0].get(0));
+    setAuctioneerFitness( (GPIndividualCtx) group[0].get(0));
     super.setFitnesses(group);
   }
 
@@ -86,7 +86,7 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
   }
 
 
-  protected void setAuctioneerFitness( GPIndividual auctioneer ) {
+  protected void setAuctioneerFitness( GPIndividualCtx auctioneer ) {
 
     MultiObjectiveFitness fitness = (MultiObjectiveFitness) auctioneer.fitness;
 
@@ -101,7 +101,7 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
     fitness.multifitness[1] = mpFitness(sellerMP.getMean());
     fitness.multifitness[2] = mpFitness(buyerMP.getMean());            
 
-    auctioneer.evaluated = true;
+    auctioneer.doneEvaluating();
   }
 
 
@@ -134,6 +134,18 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
     ((GPAuctioneer) auctioneer).setStrategies(strategies);
 
     return strategies;
+  }
+
+
+  protected void preAuctionProcessing() {
+    super.preAuctionProcessing();
+    ((GPIndividualCtx) auctioneer).prepareForEvaluating();
+  }
+
+
+  protected void postAuctionProcessing() {
+    super.postAuctionProcessing();
+    ((GPIndividualCtx) auctioneer).doneEvaluating();
   }
 
 
