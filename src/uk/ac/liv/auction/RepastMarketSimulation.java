@@ -114,9 +114,16 @@ public class RepastMarketSimulation
 
 
   public static void main( String[] args ) {
+    
     SimInit init = new SimInit();
+
+    if ( args.length < 1 ) {
+      fatalError("You must specify a parameter file");
+    }
+
     init.loadModel( new RepastMarketSimulation(args[0]), null, false);
   }
+  
   
   public RepastMarketSimulation( String parameterFileName ) {
     this.parameterFileName = parameterFileName;
