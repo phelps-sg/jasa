@@ -41,7 +41,8 @@ public class StandardRandomizer implements Parameterizable, Serializable {
 
   protected double maxPrivateValue = 1000;
 
-  protected MersenneTwisterFast randGenerator;
+  protected MersenneTwisterFast privValuePRNG;
+   
   
   protected ElectricityAuctionSimulation simulation;
 
@@ -58,7 +59,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
   }
 
   public StandardRandomizer() {
-    randGenerator = new MersenneTwisterFast(seed);
+    privValuePRNG = new MersenneTwisterFast(seed);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -73,7 +74,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
         parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null,
                                         maxPrivateValue);
 
-    randGenerator.setSeed(seed);
+    privValuePRNG.setSeed(seed);
   }
 
   public void setSimulation( ElectricityAuctionSimulation simulation ) {
@@ -81,12 +82,16 @@ public class StandardRandomizer implements Parameterizable, Serializable {
     this.auction = simulation.auction;
   }
 
-  public double randomValue( double min, double max ) {
-    return min + (max - min) * randGenerator.nextDouble();
+  public double randomValue( MersenneTwisterFast prng, double min, double max ) {
+    return min + (max - min) * prng.nextDouble();
+  }
+  
+  public double randomPrivateValue( double min, double max ) {
+    return randomValue(privValuePRNG, min, max);                
   }
   
   public double randomPrivateValue() {
-    return randomValue(minPrivateValue, maxPrivateValue);                
+    return randomPrivateValue(minPrivateValue, maxPrivateValue);
   }
 
   public void randomizePrivateValues( double[][] values, int iteration ) {

@@ -117,7 +117,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_RANDOMIZER = "randomizer";
 
 
-  static final int DATAFILE_NUM_COLUMNS = 41;
+  static final int DATAFILE_NUM_COLUMNS = 81;
 
   
   public ElectricityAuctionSimulation() {
@@ -333,7 +333,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     };
     
     Debug.assertTrue("CSV file not configured with correct number of columns",
-                       variables.length*2 == DATAFILE_NUM_COLUMNS-1);
+                       variables.length*4 == DATAFILE_NUM_COLUMNS-1);
 
     initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
 
@@ -410,6 +410,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     for( int i=0; i<variables.length; i++ ) {     
       dataFile.newData(variables[i].getMean());
       dataFile.newData(variables[i].getStdDev());
+      dataFile.newData(variables[i].getMin());
+      dataFile.newData(variables[i].getMax());
     }
   }
   

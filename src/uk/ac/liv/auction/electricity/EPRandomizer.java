@@ -17,6 +17,7 @@ package uk.ac.liv.auction.electricity;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
+import ec.util.MersenneTwisterFast;
 
 import uk.ac.liv.util.Parameterizable;
 
@@ -30,19 +31,31 @@ import org.apache.log4j.Logger;
  */
 public class EPRandomizer extends StandardRandomizer {
   
+  MersenneTwisterFast equilibPricePRNG;
+  
   static Logger logger = Logger.getLogger(EPRandomizer.class);
   
+  public EPRandomizer() {
+    super();
+    equilibPricePRNG = new MersenneTwisterFast();
+  }
     
   public void setup(ParameterDatabase parameters, Parameter base) {
     super.setup(parameters, base);
+    equilibPricePRNG.setSeed(seed);
+  }
+  
+  
+  public void randomizePrivateValues( double[][] values, int iteration ) {
+    super.randomizePrivateValues(values, 0);
   }
   
   protected double[][] generateRandomizedPrivateValues( int numTraders,
                                                          int numIterations ) {
     double[][] values = new double[numIterations][numTraders];    
     for( int i=0; i<numIterations; i++ ) {
-      double equilibMinPrice = randomValue(0, maxPrivateValue);
-      double equilibMaxPrice = randomValue(equilibMinPrice, maxPrivateValue);
+      double equilibMinPrice = randomValue(equilibPricePRNG, 0, maxPrivateValue);
+      double equilibMaxPrice = randomValue(equilibPricePRNG, equilibMinPrice, maxPrivateValue);
       int equilibQty = (int) (((double) simulation.numSellers)/2 * simulation.sellerCapacity);
       logger.debug("Generating values for target equilibrium range: [" + equilibMinPrice + ", " + equilibMaxPrice + "]");
       values[i] = generateValues(equilibMinPrice, equilibMaxPrice, equilibQty);
@@ -78,7 +91,7 @@ public class EPRandomizer extends StandardRandomizer {
     int n = offset+numAgents;
     for( int i=offset; i<n-1; i++ ) {
       logger.debug("generating value between " + p0 + " and " + (p0+p));
-      double value = randomValue(p0, p0+p);
+      double value = randomPrivateValue(p0, p0+p);
       logger.debug("values[" + i + "] = " + value);
       values[i] = value;
       p0 = value;
