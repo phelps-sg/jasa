@@ -16,6 +16,13 @@
 package uk.ac.liv.auction.agent;
 
 /**
+ * A class representing an arbitrary grouping of agents.  Every agent can
+ * belong to one group.  This is useful for reporting purposes; for example, 
+ * agents can be grouped according to what kind of strategy they use
+ * and then the uk.ac.liv.auction.stats.PayoffLogger class can be used
+ * to report on the payoff to each kind of strategy.
+ * 
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -26,6 +33,10 @@ public class AgentGroup {
 
   public static final int MAX_GROUPS = 100;
   
+  
+  /**
+   * A global list of groups indexed by number.
+   */
   private static AgentGroup[] groups = new AgentGroup[MAX_GROUPS];
   
   public AgentGroup( String description ) {
@@ -36,6 +47,10 @@ public class AgentGroup {
     return "(" + getClass() + " description:\"" + description + "\")";
   }
   
+  /**
+   * Get group n
+   * 
+   */
   public static AgentGroup getAgentGroup( int n ) {
     if ( groups[n] == null ) {
       groups[n] = new AgentGroup("group " + n);
