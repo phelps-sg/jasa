@@ -206,8 +206,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * Default trading behaviour for agents.
    */
   public void requestShout( Auction auction ) {
-    try {
-      auction.removeShout(currentShout);
+    try {      
       strategy.modifyShout(currentShout, auction);
       auction.newShout(currentShout);
     } catch ( AuctionClosedException e ) {
@@ -224,6 +223,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   }
 
   public void roundClosed( Auction auction ) {
+    auction.removeShout(currentShout);
     strategy.endOfRound(auction);
   }
 
