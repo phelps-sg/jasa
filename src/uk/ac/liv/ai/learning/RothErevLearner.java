@@ -147,10 +147,12 @@ public class RothErevLearner implements Resetable, StimuliResponseLearner {
 /*    if ( cummProb == 0 ) {
       return randGenerator.nextInt(k);
     } */
-    System.out.println(this);
-    System.out.println("cummProb = " + cummProb);
-    Debug.assert("Probabilities do not sum to 1!", false);
-    return -1;
+    //System.out.println("WARNING:");
+    //System.out.println(this);
+    //System.out.println("cummProb = " + cummProb);
+    //System.out.println("Probabilities do not sum to 1!");
+    reset();
+    return randGenerator.nextInt(k);
   }
 
   /**

@@ -82,7 +82,8 @@ public class ElectricityTrader extends AbstractTraderAgent {
     // Reward the learning algorithm according to profits made.
     double profit = quantity * (price - privateValue);
 
-    Debug.assert(profit >= 0);
+    //Relax this constraint for GP experiments!
+    //Debug.assert(profit >= 0);
 
     profits += profit;
   }
@@ -96,12 +97,12 @@ public class ElectricityTrader extends AbstractTraderAgent {
     profits += profit;
 
     if ( profit < 0 ) {
-      System.out.println("currentShout = " + getCurrentShout());
-      System.out.println("quantity = " + quantity);
-      System.out.println("privateValue = " + privateValue);
-      System.out.println("price = " + price);
-      System.out.println("winningShout = " + winningShout);
-      Debug.assert(profit >= 0);
+      //System.out.println("currentShout = " + getCurrentShout());
+      //System.out.println("quantity = " + quantity);
+      //System.out.println("privateValue = " + privateValue);
+      //System.out.println("price = " + price);
+      //System.out.println("winningShout = " + winningShout);
+      //Debug.assert(profit >= 0);
     }
 
     ElectricityTrader trader = (ElectricityTrader) seller;

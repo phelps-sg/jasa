@@ -4,12 +4,13 @@ import ec.gp.*;
 import ec.*;
 
 
-public class Nil extends GPNode {
+public class True extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
+    ((GPBoolData) input).data = true;
   }
 
   public String toString() {
-    return "Nil";
+    return "True";
   }
 }

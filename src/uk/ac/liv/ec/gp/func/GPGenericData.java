@@ -1,14 +1,17 @@
-package uk.ac.liv.gp.func;
+package uk.ac.liv.ec.gp.func;
 
 import ec.gp.*;
 
 
 public class GPGenericData extends GPData {
 
+  public Object data;
+
   public GPGenericData() {
   }
 
-  public GPData copyTo(GPData parm1) {
-    return null;
+  public GPData copyTo( GPData other ) {
+    ((GPGenericData) other).data = this.data;
+    return other;
   }
 }

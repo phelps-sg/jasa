@@ -7,12 +7,12 @@ import ec.gp.*;
  * @author Steve Phelps
  */
 
-public class GPBoolData extends GPData {
+public class GPDoubleData extends GPData {
 
-  public boolean data;
+  public double data;
 
   public GPData copyTo( GPData other ) {
-    ((GPBoolData) other).data = this.data;
+    ((GPDoubleData) other).data = this.data;
     return other;
   }
 
