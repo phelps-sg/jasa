@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
@@ -262,6 +263,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
 
   public void auctionOpen( Auction auction ) {
     lastShoutAccepted = false;
+    if ( strategy == null ) {
+      throw new AuctionError("No strategy configured for agent " + this);
+    }
   }
 
   public void auctionClosed( Auction auction ) {
