@@ -124,10 +124,18 @@ public abstract class AuctionImpl extends Observable
   public void setAuctioneer( Auctioneer auctioneer ) {
     this.auctioneer = auctioneer;
     auctioneer.setAuction(this);
-  }
+  }    
 
   public Auctioneer getAuctioneer() {
     return auctioneer;
+  }
+  
+  public void setConsole( AuctionConsoleFrame console ) {
+    this.guiConsole = console;
+  }
+  
+  public AuctionConsoleFrame getConsole() {
+    return guiConsole;
   }
 
   public boolean closed() {
