@@ -24,6 +24,7 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
 
 import uk.ac.liv.util.io.DataWriter;
 import uk.ac.liv.util.io.DataSeriesWriter;
@@ -47,7 +48,7 @@ import java.util.Iterator;
  */
 
 public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
-    implements Graph2DModel, Parameterizable {
+    implements Graph2DModel, Parameterizable, Resetable {
 
   protected int currentSeries;
 
@@ -63,19 +64,24 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public GraphMarketDataLogger() {
     super();
+    initialise();
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    singletonInstance = this;
+  }
+
+  public void initialise() {
     askQuoteLog = new DataSeriesWriter();
     bidQuoteLog = new DataSeriesWriter();
     askLog = new DataSeriesWriter();
     bidLog = new DataSeriesWriter();
     transPriceLog = new DataSeriesWriter();
     allSeries =
-        new DataWriter[] { askLog, bidLog, transPriceLog };
+        new DataWriter[] {
+        askLog, bidLog, transPriceLog};
 //                            askQuoteLog, bidQuoteLog };
     currentSeries = 0;
-  }
-
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    singletonInstance = this;
   }
 
   public Iterator seriesIterator() {
@@ -160,6 +166,11 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
 
   public void endOfDay() {
     //TODO
+  }
+
+  public void reset() {
+    initialise();
+//    fireGraphChanged(new GraphDataEvent(this));
   }
 
 

@@ -79,7 +79,8 @@ public abstract class AuctionImpl extends Observable
 
 
   /**
-   * The plugable bidding logic to use for this auction, e.g. AscendingAuctioneer
+   * The plugable auction rules to use for this auction,
+   * e.g. AscendingAuctioneer.
    */
   protected Auctioneer auctioneer = null;
 

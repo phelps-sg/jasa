@@ -17,6 +17,7 @@ package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.MarketQuote;
+import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import uk.ac.liv.util.Resetable;
 
@@ -67,5 +68,7 @@ public interface MarketDataLogger {
    * may choose to do nothing for this method.
    */
   public void finalReport();
+
+  public void setAuction( RoundRobinAuction auction );
 
 }

@@ -22,22 +22,27 @@ import uk.ac.liv.ec.gp.func.*;
 
 import uk.ac.liv.util.FastDouble;
 
-import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.*;
 
 
 public class LastBid extends GPNode {
 
-  public void eval( EvolutionState state, int thread, GPData input, 
+  public void eval( EvolutionState state, int thread, GPData input,
                       ADFStack stack, GPIndividual individual, Problem problem ) {
-    GPTradingStrategy strategy = (GPTradingStrategy) individual;
-    Shout lastBid = strategy.getAuction().getLastBid();
-    double price;
-    if ( lastBid == null ) {
-      price = -1;
-    } else {
-      price = lastBid.getPrice();
+    try {
+      GPTradingStrategy strategy = (GPTradingStrategy) individual;
+      Shout lastBid = strategy.getAuction().getLastBid();
+      double price;
+      if (lastBid == null) {
+        price = -1;
+      }
+      else {
+        price = lastBid.getPrice();
+      }
+      ( (GPGenericData) input).data = FastDouble.newFastDouble(price);
+    } catch ( ShoutsNotVisibleException e ) {
+      throw new AuctionError("This function can only be used with auctioneers who permit shout visibility");
     }
-    ((GPGenericData) input).data = FastDouble.newFastDouble(price);  
   }
 
   public String toString() {

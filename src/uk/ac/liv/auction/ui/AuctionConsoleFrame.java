@@ -413,19 +413,6 @@ public class AuctionConsoleFrame extends JFrame
   public void activate() {
     pack();
     setVisible(true);
-    if ( graphModel != null ) {
-//      startGraphUpdateTimer();
-    }
-  }
-
-  protected void startGraphUpdateTimer() {
-    ActionListener graphUpdateListener = new ActionListener() {
-      public void actionPerformed( ActionEvent e ) {
-        graphModel.dataUpdated();
-      }
-    };
-    graphUpdateTimer = new Timer(1000, graphUpdateListener);
-    graphUpdateTimer.start();
   }
 
   /**
@@ -433,21 +420,34 @@ public class AuctionConsoleFrame extends JFrame
    */
   public void deactivate() {
     setVisible(false);
-    if ( graphUpdateTimer != null ) {
-//      graphUpdateTimer.stop();
-    }
   }
 
   public void rerunAuction() {
+
     logger.debug("rerunAuction()");
+
+    // Resume the auction in case it is paused.
     resume();
+
+    // Close the auction and wait until it has finished.
     auction.close();
     while ( auction.isRunning() ) {
-      // Wait until the auction has finished running
     }
+
+    // Reset everything
     reset();
     auction.reset();
+    if ( graphModel != null ) {
+      graphModel.reset();
+      graphPanel.remove(graph);
+      graph = new JLineGraph(graphModel);
+      graphPanel.add(graph, "Graph");
+    }
+
+    // Update graphs
     updateSupplyAndDemandGraphs();
+
+    // Start a new auction thread
     auctionRunner = new Thread(auction);
     auctionRunner.start();
   }

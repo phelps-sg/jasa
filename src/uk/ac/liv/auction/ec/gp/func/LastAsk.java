@@ -27,17 +27,22 @@ import uk.ac.liv.auction.core.*;
 
 public class LastAsk extends GPNode {
 
-  public void eval( EvolutionState state, int thread, GPData input, 
+  public void eval( EvolutionState state, int thread, GPData input,
                       ADFStack stack, GPIndividual individual, Problem problem ) {
-    GPTradingStrategy strategy = (GPTradingStrategy) individual;
-    Shout lastAsk = strategy.getAuction().getLastAsk();
-    double price;
-    if ( lastAsk == null ) {
-      price = -1;
-    } else {
-      price = lastAsk.getPrice();
+    try {
+      GPTradingStrategy strategy = (GPTradingStrategy) individual;
+      Shout lastAsk = strategy.getAuction().getLastAsk();
+      double price;
+      if (lastAsk == null) {
+        price = -1;
+      }
+      else {
+        price = lastAsk.getPrice();
+      }
+      ( (GPGenericData) input).data = FastDouble.newFastDouble(price);
+    } catch ( ShoutsNotVisibleException e ) {
+      throw new AuctionError("This function can only be used with auctioneers who permit shout visibility");
     }
-    ((GPGenericData) input).data = FastDouble.newFastDouble(price);  
   }
 
   public String toString() {

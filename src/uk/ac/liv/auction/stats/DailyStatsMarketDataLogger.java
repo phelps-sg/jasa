@@ -16,18 +16,25 @@
 
 package uk.ac.liv.auction.stats;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 import java.util.Vector;
 
 import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 
 /**
+ * A logger that collections individual statistics for each trading day.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DailyStatsMarketDataLogger extends StatsMarketDataLogger {
+public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
+    implements Parameterizable {
 
   protected Vector dailyStats;
 
@@ -36,6 +43,10 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger {
   public DailyStatsMarketDataLogger() {
     super();
     initialise();
+  }
+
+  public void setup( ParameterDatabase params, Parameter base ) {
+    auction.setDailyStats(this);
   }
 
   public CummulativeStatCounter getTransPriceStats( int day ) {
@@ -83,7 +94,6 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger {
     super.reset();
     dailyStats.clear();
   }
-
 
 
 }

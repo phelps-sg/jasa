@@ -20,6 +20,7 @@ import uk.ac.liv.auction.agent.TraderAgent;
 
 import uk.ac.liv.auction.stats.MarketDataLogger;
 import uk.ac.liv.auction.stats.MarketStats;
+import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
@@ -28,6 +29,7 @@ import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.CummulativeStatCounter;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -185,6 +187,13 @@ public class RoundRobinAuction extends AuctionImpl
    */
   protected Set acceptedShouts = new HashSet();
 
+  /**
+   * The optional logger used to calculate statistics for the previous
+   * day's trading.
+   */
+  protected DailyStatsMarketDataLogger dailyStats;
+
+
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   public static final String P_MAXIMUM_DAYS = "maximumdays";
   public static final String P_LOGGER = "logger";
@@ -230,9 +239,14 @@ public class RoundRobinAuction extends AuctionImpl
           (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
                                                                  null,
                                                                  MarketDataLogger.class);
+      logger.setAuction(this);
 
     } catch ( ParamClassLoadException e ) {
       logger = null;
+    }
+
+    if ( logger != null && logger instanceof Parameterizable ) {
+      ((Parameterizable) logger).setup(parameters, base.push(P_LOGGER));
     }
 
     try {
@@ -245,8 +259,8 @@ public class RoundRobinAuction extends AuctionImpl
       marketStats = null;
     }
 
-    if ( logger != null && logger instanceof Parameterizable ) {
-      ((Parameterizable) logger).setup(parameters, base.push(P_LOGGER));
+    if ( marketStats != null && marketStats instanceof Parameterizable ) {
+      ((Parameterizable) marketStats).setup(parameters, base.push(P_STATS));
     }
 
     Auctioneer auctioneer =
@@ -396,16 +410,41 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * Get the last bid placed in the auction.
    */
-  public Shout getLastBid() {
+  public Shout getLastBid() throws ShoutsNotVisibleException {
     return lastBid;
   }
 
   /**
    * Get the last ask placed in the auction.
    */
-  public Shout getLastAsk() {
+  public Shout getLastAsk() throws ShoutsNotVisibleException {
     return lastAsk;
   }
+
+  /**
+   * Fetch statistics on the previous day's transaction price.
+   * The auction must be configured with a DailyStatsMarketDataLogger
+   * in order for this method to succeed.
+   *
+   * @throws DataUnavailableException  Thrown if the auction does not have
+   *                                   a DailyStatsMarketDataLogger configured.
+   */
+  public CummulativeStatCounter getPreviousDayTransPriceStats()
+      throws DataUnavailableException {
+
+    if ( day == 0 ) {
+      throw new DataUnavailableException("This is the first day of trading");
+    }
+
+    if ( dailyStats == null ) {
+      throw new DataUnavailableException("The auction must be configured " +
+                               "with a DailyStatsMarketDataLogger in order " +
+                               "to retrieve previous day's statistics");
+    }
+
+    return dailyStats.getTransPriceStats(day-1);
+  }
+
 
   /**
    * Runs the auction.
@@ -619,6 +658,18 @@ public class RoundRobinAuction extends AuctionImpl
     return paused;
   }
 
+  public void setLengthOfDay( int lengthOfDay ) {
+    this.lengthOfDay = lengthOfDay;
+  }
+
+  public void setMaximumDays( int maximumDays ) {
+    this.maximumDays = maximumDays;
+  }
+
+  public void setDailyStats( DailyStatsMarketDataLogger dailyStats ) {
+    this.dailyStats = dailyStats;
+  }
+
 
   /**
    * Remove defunct traders.
@@ -690,6 +741,7 @@ public class RoundRobinAuction extends AuctionImpl
       close();
     }
   }
+
 
 
 

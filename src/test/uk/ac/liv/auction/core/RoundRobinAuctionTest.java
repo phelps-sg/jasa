@@ -17,9 +17,15 @@ package test.uk.ac.liv.auction.core;
 
 import junit.framework.*;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
+import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
+
+import uk.ac.liv.util.CummulativeStatCounter;
 
 import test.uk.ac.liv.auction.agent.TestTrader;
 
@@ -81,6 +87,28 @@ public class RoundRobinAuctionTest extends TestCase {
     auctioneer.setAuction(auction);
     for( int i=0; i<traders.length; i++ ) {
       auction.register(traders[i]);
+    }
+  }
+
+  public void testDailyStats() {
+
+    auction.setLengthOfDay(3);
+    auction.setMaximumDays(1);
+
+    DailyStatsMarketDataLogger dailyStats = new DailyStatsMarketDataLogger();
+    dailyStats.setAuction(auction);
+    auction.setMarketDataLogger(dailyStats);
+    dailyStats.setup(new ParameterDatabase(), new Parameter("stats"));
+
+    auction.run();
+
+    try {
+      CummulativeStatCounter transPrice =
+          auction.getPreviousDayTransPriceStats();
+      logger.info("Previous day transaction price statistics = " + transPrice);
+      assertTrue(transPrice.getMean() == 725);
+    } catch ( DataUnavailableException e ) {
+      fail("caught DataUnavailableException " + e);
     }
   }
 

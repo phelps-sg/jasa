@@ -58,6 +58,11 @@ public class DataWriterMarketDataLogger implements MarketDataLogger {
    */
   protected DataWriter transPriceLog = null;
 
+  /**
+   * The auction we are keeping statistics on.
+   */
+  protected RoundRobinAuction auction;
+
   public DataWriterMarketDataLogger() {
     this(null, null, null, null, null);
   }
@@ -123,6 +128,10 @@ public class DataWriterMarketDataLogger implements MarketDataLogger {
 
   public void endOfDay() {
     // Do nothing
+  }
+
+  public void setAuction( RoundRobinAuction auction ) {
+    this.auction = auction;
   }
 
 

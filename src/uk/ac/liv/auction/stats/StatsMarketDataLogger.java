@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.Resetable;
@@ -45,12 +46,12 @@ public class StatsMarketDataLogger
 
   protected CummulativeStatCounter[] stats;
 
+  /**
+   * The auction we are keeping statistics on.
+   */
+  protected RoundRobinAuction auction;
+
   static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
-
-
-  public StatsMarketDataLogger() {
-    initialise();
-  }
 
   public void updateQuoteLog( int time, MarketQuote quote ) {
     stats[BID_QUOTE].newData((double) quote.getBid());
@@ -105,6 +106,10 @@ public class StatsMarketDataLogger
     for( int i=0; i<stats.length; i++ ) {
       ((CummulativeStatCounter) stats[i]).reset();
     }
+  }
+
+  public void setAuction( RoundRobinAuction auction ) {
+    this.auction = auction;
   }
 
   public Object clone() throws CloneNotSupportedException {

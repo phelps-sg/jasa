@@ -24,6 +24,7 @@ import ec.util.Parameter;
 
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
@@ -141,6 +142,14 @@ public class CombiMarketDataLogger
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
       logger.endOfDay();
+    }
+  }
+
+  public void setAuction( RoundRobinAuction auction ) {
+    Iterator i = loggers.iterator();
+    while ( i.hasNext() ) {
+      MarketDataLogger logger = (MarketDataLogger) i.next();
+      logger.setAuction(auction);
     }
   }
 

@@ -32,9 +32,11 @@ import uk.ac.liv.util.Debug;
 
 public class ListMarketDataLogger implements MarketDataLogger {
 
-  List quoteLog = null;
-  List transPriceLog = null;
-  List shoutLog = null;
+  protected List quoteLog = null;
+  protected List transPriceLog = null;
+  protected List shoutLog = null;
+
+  protected RoundRobinAuction auction;
 
   public ListMarketDataLogger() {
     initialise();
@@ -100,6 +102,10 @@ public class ListMarketDataLogger implements MarketDataLogger {
 
   public void endOfDay() {
     // Do nothing
+  }
+
+  public void setAuction( RoundRobinAuction auction ) {
+    this.auction = auction;
   }
 
 }

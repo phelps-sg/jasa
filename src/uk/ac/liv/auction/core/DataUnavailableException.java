@@ -16,21 +16,20 @@
 package uk.ac.liv.auction.core;
 
 /**
- * This exception is thrown if an agent attempts to examine the shouts
- * of other agents in an auction where the auctioneer does not permit
- * agents to see each others shouts.
+ * This is exception is thrown when requesting data from an auction
+ * that is not available due to the way that the auction is configured.
  *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class ShoutsNotVisibleException extends DataUnavailableException {
+public class DataUnavailableException extends AuctionException {
 
-  public ShoutsNotVisibleException( String message ) {
+  public DataUnavailableException( String message ) {
     super(message);
   }
 
-  public ShoutsNotVisibleException() {
+  public DataUnavailableException() {
     super();
   }
 

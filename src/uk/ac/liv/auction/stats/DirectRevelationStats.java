@@ -36,6 +36,10 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 /**
+ * This class computes the hypothetical auction state when all agents
+ * bid at their private valuation, ie when all agents bid truthfully.
+ * This can be used, for example, for equilibrium calculations.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -43,7 +47,7 @@ import org.apache.log4j.Logger;
 public class DirectRevelationStats implements Resetable, Serializable {
 
   /**
-   * The shout engine used to compute.
+   * The auction state after forced direct revelation.
    */
   protected FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
 
@@ -83,7 +87,9 @@ public class DirectRevelationStats implements Resetable, Serializable {
     simulateDirectRevelation();
   }
 
-
+  /**
+   *  Update the auction state with a truthful shout from each trader.
+   */
   protected void simulateDirectRevelation() {
     Iterator traders = auction.getTraderIterator();
     while ( traders.hasNext() ) {
@@ -121,7 +127,11 @@ public class DirectRevelationStats implements Resetable, Serializable {
     initialise();
   }
 
-
+  /**
+   * Process a truthful shout from an agent
+   *
+   * @param shout The truthful shout
+   */
   protected void enumerateTruthfulShout( Shout shout ) {
     try {
       if ( shout.isBid() ) {
