@@ -70,7 +70,7 @@ public class FourHeapTest extends TestCase {
         }
 
         for( int shout=0; shout<200; shout++ ) {
-          shoutEngine.newShout(randomShout());
+          shoutEngine.newShout( randomShout());
         }
 
         shoutEngine.newShout(testRemoveShout = randomShout());
@@ -168,6 +168,14 @@ class TestShoutEngine extends FourHeapShoutEngine {
       qty += s.getQuantity();
     }
     return qty;
+  }
+  
+  public void newShout( Shout shout ) throws DuplicateShoutException {
+    if ( shout.isAsk() ) {
+      newAsk(shout);
+    } else {
+      newBid(shout);
+    }
   }
 
 
