@@ -1,7 +1,7 @@
 
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.lengthofday = 20
-simulation.auction.maximumdays = 200
+simulation.auction.maximumdays = 1000
 simulation.auction.name = Example 4: Zip/RothErev/Kaplan
 simulation.auction.console = true
 
