@@ -43,11 +43,11 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
 
   public void finalStatistics( final EvolutionState state, final int result ) {
     //super.finalStatistics(state, result);
-    findBestOfGeneration();
+    /*findBestOfGeneration();
     for( int i=0; i<state.population.subpops.length; i++ ) {
       System.out.println("Serializing " + best[i]);
       writeObject(best[i], fileNamePrefix + "." + i);
-    }
+    } */
     writeObject(state, fileNamePrefix + ".state");
   }
 

@@ -8,9 +8,9 @@ define(`SELLER_CAPACITY', ENV_VAR(`$GP_CS', 10))
 define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
 
 define(`POPULATION_SIZE', 50)
-define(`NUM_GENERATIONS', 1000)
+define(`NUM_GENERATIONS', 200)
 
-define(`RESULTS', `CONF_OUTHOME/gpcoevolve')
+define(`RESULTS', `CONF_OUTHOME/gpcoevolve/fixedauctioneer')
 
 define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
 
@@ -151,6 +151,7 @@ NEW_FUNCTION(uk.ac.liv.ec.gp.func.LessThan, comparator)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.IfElse, numberboolnumbernumber)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Nand, binaryboolop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.True, bool)
+NEW_FUNCTION(uk.ac.liv.ec.gp.func.DoubleERC, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.PrivateValue, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteAskPrice, numberterminal)
 NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteBidPrice, numberterminal)

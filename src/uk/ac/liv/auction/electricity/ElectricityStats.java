@@ -41,7 +41,7 @@ public class ElectricityStats implements Serializable, Cloneable {
   public ElectricityStats( long minPrice, long maxPrice, RoundRobinAuction auction ) {
     this.auction = auction;
     standardStats = new ElectricityMetaStats(minPrice, maxPrice, auction.getTraderList());
-    calculate(true);
+    calculate();
   }
 
   /**
@@ -49,6 +49,10 @@ public class ElectricityStats implements Serializable, Cloneable {
    */
   public void recalculate() {
     calculate(false);
+  }
+
+  public void calculate() {
+    calculate(true);
   }
 
   protected void calculate( boolean equilibrium ) {

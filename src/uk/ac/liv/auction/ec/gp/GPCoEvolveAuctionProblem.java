@@ -179,7 +179,9 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     GPAuctioneer auctioneer = (GPAuctioneer) group[0].get(0);
     auctioneer.setGPContext(state, thread, stack, this);
     auctioneer.setAuction(auction);
-    auction.setAuctioneer(auctioneer);
+    //auction.setAuctioneer(auctioneer);
+    auction.setAuctioneer( new ContinuousDoubleAuctioneer(auction, 0.5) );
+    // TODO!
 
     // Assign the GP-evolved strategies to each trader
     initialiseTraders(auctioneer, state, group, thread);
@@ -210,7 +212,13 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     if ( stats == null ) {
       stats = new ElectricityStats(0, 200, auction);
     } else {
-      stats.recalculate();
+
+      if ( randomPrivateValues ) {
+        stats.calculate();
+      } else {
+        stats.recalculate();
+      }
+
     }
 
     // Save a copy of the stats for posterity
