@@ -76,4 +76,6 @@ public interface Auctioneer
 
   public void endOfAuctionProcessing();
 
+  public void endOfDayProcessing();
+  
 }

@@ -787,11 +787,11 @@ public class RoundRobinAuction extends AuctionImpl
   protected void checkEndOfDay() {
     if ( isQuiescent() ) {
       log4jLogger.debug("Auction quiescent - ending day");
-      endOfDay();
+      endDay();
     } else {
       if (lengthOfDay > 0) {
         if ( round >= lengthOfDay ) {
-          endOfDay();
+          endDay();
         }
       }
     }
@@ -800,9 +800,10 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * Terminate the current trading period (day)
    */
-  protected void endOfDay() {
-    log4jLogger.debug("endOfDay()");
+  protected void endDay() {
+    log4jLogger.debug("endDay()");
     informEndOfDay();
+    auctioneer.endOfDayProcessing();
     day++;
     log4jLogger.debug("new day = " + day + " of " + maximumDays);
     round = 0;

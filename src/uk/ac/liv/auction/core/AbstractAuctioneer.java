@@ -156,6 +156,10 @@ public abstract class AbstractAuctioneer
   public Auction getAuction() {
     return auction;
   }
+  
+  public void endOfDayProcessing() {
+    shoutEngine.reset();
+  }
 
 
 }

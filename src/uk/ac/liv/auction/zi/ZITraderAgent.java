@@ -150,6 +150,9 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
                                   double price, int quantity) {
     super.informOfSeller(auction, winningShout, seller, price, quantity);
     AbstractTraderAgent agent = (AbstractTraderAgent) seller;
+    if ( price < valuer.determineValue(auction) ) {
+      logger.debug("Unprofitable transaction, seller=" + seller + ", shout=" + winningShout);
+    }
     purchaseFrom(auction, agent, quantity, price);
   }
 

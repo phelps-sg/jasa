@@ -39,6 +39,7 @@ public class DiscriminatoryPricingPolicy extends KPricingPolicy
 
   public double determineClearingPrice( Shout bid, Shout ask,
                                          MarketQuote clearingQuote ) {
+    assert bid.getPrice() >= ask.getPrice();                                         
     return kInterval(ask.getPrice(), bid.getPrice());
   }
 

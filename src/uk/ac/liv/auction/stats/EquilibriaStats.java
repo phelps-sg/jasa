@@ -50,6 +50,10 @@ public class EquilibriaStats extends DirectRevelationStats
    * Do any equilbria exist?
    */
   protected boolean equilibriaFound = false;
+  
+  protected List matchedShouts;
+  
+  protected int quantity;
 
   static Logger logger = Logger.getLogger(EquilibriaStats.class);
 
@@ -77,8 +81,19 @@ public class EquilibriaStats extends DirectRevelationStats
     } else {
       calculateEquilibriaPriceRange();
       equilibriaFound = true;
+      matchedShouts = shoutEngine.getMatchedShouts();
+      calculateEquilibriaQuantity();
     }
     releaseShouts();
+  }
+  
+  protected void calculateEquilibriaQuantity() {
+    quantity = 0;
+    Iterator i = matchedShouts.iterator();
+    while ( i.hasNext() ) {
+      Shout shout = (Shout) i.next();
+      quantity += shout.getQuantity();
+    }
   }
 
   protected void calculateEquilibriaPriceRange() {
@@ -95,6 +110,7 @@ public class EquilibriaStats extends DirectRevelationStats
 
   public void initialise() {
     super.initialise();
+    quantity = 0;
   }
 
   public double getMinPrice() {
@@ -103,6 +119,10 @@ public class EquilibriaStats extends DirectRevelationStats
 
   public double getMaxPrice() {
     return maxPrice;
+  }
+  
+  public int getQuantity() {
+    return quantity;
   }
 
 
@@ -125,6 +145,7 @@ public class EquilibriaStats extends DirectRevelationStats
     logger.info("---------------------------");
     logger.info("");
     logger.info("\tEquilibria Found?\t" + equilibriaFound);
+    logger.info("\n\tquantity:\t" + quantity + "\n");
     logger.info("\n\tprice:\n\t\tmin:\t" + minPrice + "\tmax:\t" + maxPrice);
     logger.info("");
   }

@@ -162,6 +162,10 @@ public class GPAuctioneer extends GPIndividualCtx
   public void endOfAuctionProcessing() {
     // Do nothing
   }
+  
+  public void endOfDayProcessing() {
+    // Do nothing
+  }
 
   public Shout getCurrentShout() {
     return currentShout;

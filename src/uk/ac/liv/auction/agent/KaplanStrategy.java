@@ -101,7 +101,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
   public boolean modifyShout( Shout.MutableShout shout ) {
     super.modifyShout(shout);
-    quote = auction.getAuctioneer().getQuote();
+    quote = auction.getQuote();
     if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
       logger.debug("quote = " + quote);
       logger.debug("my priv value = " + agent.getPrivateValue(auction));

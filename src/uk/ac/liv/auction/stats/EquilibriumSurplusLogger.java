@@ -96,6 +96,7 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   }
 
   protected void updateStats( AbstractTraderAgent agent, double lastSurplus ) {
+    assert lastSurplus >= 0;
     MutableDoubleWrapper stats = (MutableDoubleWrapper) surplusTable.get(agent);
     if ( stats == null ) {
       stats = new MutableDoubleWrapper(lastSurplus);
@@ -106,11 +107,16 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   }
 
   protected double equilibriumSurplus( AbstractTraderAgent agent, double ep, int quantity ) {
+    double surplus;
     if ( agent.isSeller() ) {
-      return (ep - agent.getPrivateValue(auction)) * quantity;
+      surplus = (ep - agent.getPrivateValue(auction)) * quantity;
     } else {
-      return (agent.getPrivateValue(auction) - ep) * quantity;
+      surplus = (agent.getPrivateValue(auction) - ep) * quantity;
     }
+    if ( surplus < 0 ) { 
+      surplus = 0;
+    }
+    return surplus;
   }
 
   public void initialise() {

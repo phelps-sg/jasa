@@ -47,10 +47,7 @@ import org.apache.log4j.Logger;
  *
  * </p><p><b>Parameters</b><br>
  * <table>
- * <tr><td valign=top><i>base</i><tt>.privatevalue</tt><br>
- * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(the private value for the agent)</td></tr>
- *
+ * 
  * <tr><td valign=top><i>base</i><tt>.isseller</tt><br>
  * <font size=-1>boolean</font></td>
  * <td valign=top>(is this agent a seller)</td><tr>
@@ -67,23 +64,19 @@ import org.apache.log4j.Logger;
  * <font size=-1>double</font></td>
  * <td valign=top>(the initial funds)</td><tr>
  *
- * <tr><td valign=top><i>base</i><tt>.randomprivatevalue</tt><br>
- * <font size=-1>boolean</font></td>
- * <td valign=top>(use a random private value?)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.maxprivatevalue</tt><br>
- * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(the maximum private value if we are drawing randomly)</td><tr>
+ * <tr><td valign=top><i>base</i><tt>.valuer</tt><br>
+ * <font size=-1>class, inherits uk.ac.liv.auction.agent.Valuer</td>
+ * <td valign=top>(the valuation policy to use)</td><tr>
  *
  * </table>
  *
- * @see TraderAgent
  * @see uk.ac.liv.auction.core.RoundRobinAuction
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class AbstractTraderAgent implements PrivateValueTrader,
+public abstract class AbstractTraderAgent implements RoundRobinTrader,
                                                       Serializable,
                                                       Parameterizable,
                                                       Prototypeable,
@@ -150,25 +143,17 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   /**
    * The current shout for this trader.
    */
-  Shout currentShout;
-
-  /**
-   * Used to allocate random private values.
-   */
-  static MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  protected Shout currentShout;
 
   static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
 
   /**
    * Parameter names used when initialising from parameter db
    */
-  public static final String P_PRIVATE_VALUE = "privatevalue";
   public static final String P_IS_SELLER = "isseller";
   public static final String P_STRATEGY = "strategy";
   public static final String P_INITIAL_STOCK = "initialstock";
-  public static final String P_INITIAL_FUNDS = "initialfunds";
-  public static final String P_RANDOM_PRIVATE_VALUE = "randomprivatevalue";
-  public static final String P_MAX_PRIVATE_VALUE = "maxprivatevalue";
+  public static final String P_INITIAL_FUNDS = "initialfunds";  
   public static final String P_VALUER = "valuer";
   public static final String P_DEFAULT_STRATEGY =
                                    "uk.ac.liv.auction.core.PureSimpleStrategy";
@@ -273,11 +258,11 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   }
 
   public void roundClosed( Auction auction ) {
-//    if ( currentShout != null ) {
-//      auction.removeShout(currentShout);
-//      ShoutPool.release(currentShout);
-//      currentShout = null;
-//    }
+    //if ( currentShout != null ) {
+      //auction.removeShout(currentShout);
+      //ShoutPool.release(currentShout);
+      //currentShout = null;
+    //}
     strategy.endOfRound(auction);
   }
 
@@ -291,6 +276,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     giveFunds(seller, price*quantity);
     stock += seller.deliver(auction, quantity, price);
     lastProfit = quantity * (valuer.determineValue(auction)-price);
+    //assert lastProfit >= 0;
     profits += lastProfit;
     valuer.consumeUnit(auction);
   }
@@ -317,6 +303,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   public int deliver( Auction auction, int quantity, double price ) {
     stock -= quantity;
     lastProfit = quantity * (price-valuer.determineValue(auction));
+//    assert lastProfit >= 0;
     profits += lastProfit;
     valuer.consumeUnit(auction);
     return quantity;

@@ -59,10 +59,6 @@ public class SurplusStats extends EquilibriaStats {
    */
   protected double pSA = 0;
 
-  protected int minQty;
-
-  protected int maxQty;
-
   static Logger logger = Logger.getLogger(SurplusStats.class);
 
 
@@ -75,14 +71,11 @@ public class SurplusStats extends EquilibriaStats {
   }
 
   public void calculate() {
-    super.calculate();
-    int qty = 0;
-    List matches = shoutEngine.getMatchedShouts();
-    Iterator i = matches.iterator();
+    super.calculate();       
+    Iterator i = matchedShouts.iterator();
     while ( i.hasNext() ) {
       Shout bid = (Shout) i.next();
-      Shout ask = (Shout) i.next();
-      qty += bid.getQuantity();
+      Shout ask = (Shout) i.next();      
 
       pBCE += equilibriumProfits(bid.getQuantity(),
                                   (AbstractTraderAgent) bid.getAgent());
@@ -91,9 +84,6 @@ public class SurplusStats extends EquilibriaStats {
                                   (AbstractTraderAgent) ask.getAgent());
 
     }
-
-    minQty = qty;
-    maxQty = qty;
 
     calculateActualProfits();
   }
@@ -122,19 +112,8 @@ public class SurplusStats extends EquilibriaStats {
   public void initialise() {
     super.initialise();
     pBCE = 0;
-    pSCE = 0;
-    minQty = 0;
-    maxQty = 0;
+    pSCE = 0;  
   }
-
-  public double getMinQuantity() {
-    return minQty;
-  }
-
-  public double getMaxQuantity() {
-    return maxQty;
-  }
-
 
   /**
    * @return The theoretical surplus available to buyers in competitive
@@ -169,8 +148,7 @@ public class SurplusStats extends EquilibriaStats {
 
   public String toString() {
     return "(" + getClass() + " equilibriaFound:" + equilibriaFound +
-           " minPrice:" + minPrice + " maxPrice:" + maxPrice +
-           " minQty: " + minQty + " maxQty:" + maxQty +
+           " minPrice:" + minPrice + " maxPrice:" + maxPrice +          
            " pBCE:" + pBCE + " pSCE:" + pSCE + ")";
   }
 
