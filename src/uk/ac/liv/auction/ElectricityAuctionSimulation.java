@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -71,6 +71,8 @@ public class ElectricityAuctionSimulation  {
 
   static CSVWriter dataFile;
 
+  static ec.util.MersenneTwisterFast randGenerator = new ec.util.MersenneTwisterFast();
+
   public static void main( String[] args ) {
 
     if ( args.length > 0 && "-set".equals(args[0]) ) {
@@ -98,7 +100,6 @@ public class ElectricityAuctionSimulation  {
       e.printStackTrace();
     }
 
-    experiment( 6, 3, 10, 10 );
     experiment( 6, 3, 10, 20 );
     experiment( 6, 3, 10, 40 );
     experiment( 3, 3, 20, 10 );
