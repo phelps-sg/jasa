@@ -194,36 +194,16 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
 
-      experiment( 3, 3, 10, 10 );
+      experiment(6, 3, 10, 10);
+      experiment(6, 3, 10, 20);
+      experiment(6, 3, 10, 40);
+      experiment(3, 3, 20, 10);
+      experiment(3, 3, 10, 10);
+      experiment(3, 3, 10, 20);
+      experiment(3, 6, 40, 10);
+      experiment(3, 6, 20, 10);
+      experiment(3, 6, 10, 10);
 
-//      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
-
-//      experiment( 3, 3, 9, 9 );
-
-      auctioneer = new ControlAuctioneer(auction, 0.5);
-
-      experiment( 3, 3, 1, 1 );
-
-      auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
-
-      experiment( 30, 30, 10, 10 );
-
-//      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
-
-//      experiment( 30, 30, 9, 9 );
-
-      auctioneer = new ControlAuctioneer(auction, 0.5);
-
-      experiment( 30, 30, 1, 1 );
-/*
-      experiment( 6, 3, 10, 40 );
-      experiment( 3, 3, 20, 10 );
-      experiment( 3, 3, 10, 20 );
-      experiment( 3, 6, 40, 10 );
-      experiment( 3, 6, 20, 10 );
-      experiment( 3, 6, 10, 10 );
-
-*/
     } catch ( FileNotFoundException e ) {
       e.printStackTrace();
     }
