@@ -59,7 +59,8 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   		((Parameterizable) momentumLearner).setup(parameters, 
   																									base.push(P_LEARNER));
   	}
-  		
+    
+    momentumLearner.setOutputLevel(currentMargin=0.5);  		
   }
   
   public void setGPIndividual( GPGenericIndividual individual ) {
@@ -127,6 +128,7 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     priceStats.reset();
     ((Resetable) momentumLearner).reset();
     gpIndividual.reset();
+    momentumLearner.setOutputLevel(currentMargin=0.5);
     super.reset();    
   }
   

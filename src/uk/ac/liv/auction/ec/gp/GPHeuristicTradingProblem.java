@@ -118,7 +118,8 @@ public class GPHeuristicTradingProblem extends GPProblem
 		
 		SimpleFitness f = (SimpleFitness) individual.fitness;
 	       
-		if ( !individual.misbehaved() && !Float.isInfinite(fitness) && fitness > 0 ) {			
+		if ( !individual.misbehaved() && !Float.isInfinite(fitness) 
+          && fitness > 0 && payoff.getMin() >= 0 ) {			
 			if ( fitness > 1000 ) {
 				logger.warn("Large fitness " + payoff);
 			}
