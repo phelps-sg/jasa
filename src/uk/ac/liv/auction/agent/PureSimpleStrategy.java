@@ -93,6 +93,9 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
   public void endOfRound( Auction auction ) {
     // Do nothing
   }
-
+  
+  public void setMargin( double margin ) {
+    this.margin = margin;
+  }
 
 }

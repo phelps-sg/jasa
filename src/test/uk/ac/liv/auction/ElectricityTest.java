@@ -98,8 +98,12 @@ public abstract class ElectricityTest extends TestCase {
       GlobalPRNG.initialiseWithSeed(seeds[i]);
       auction.run();
       stats.calculate();
-      updateStats();
-      System.out.println("EA = " + stats.getEA());
+      if ( stats.equilibriaExists() ) {
+        updateStats();        
+        System.out.println("EA = " + stats.getEA());
+      } else {
+        System.out.println("no equilibrium price");
+      }
     }
     System.out.println(eA);
     System.out.println(mPS);
@@ -143,6 +147,7 @@ public abstract class ElectricityTest extends TestCase {
      ElectricityTrader agent =
        new ElectricityTrader(capacity, value, 0, areSellers);
      assignStrategy(agent);
+     assignValuer(agent);
      auction.register(agent);
    }
   }
@@ -172,6 +177,10 @@ public abstract class ElectricityTest extends TestCase {
     strategy.setLearner(learner);
     agent.setStrategy(strategy);
     agent.reset();
+  }
+  
+  public void assignValuer( ElectricityTrader agent ) {
+    // Stick with default fixed valuation
   }
 
   public void randomizePrivateValues( double[] values ) {
