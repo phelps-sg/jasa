@@ -70,6 +70,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   int K = 30;         // No. of possible different actions
   double X = 15000;
   double S1 = 9.0;
+  double auctioneerK = 0.5;
 
   CSVWriter dataFile, distributionFile;
 
@@ -113,6 +114,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     K = parameters.getIntWithDefault(base.push("k"), null, K);
     X = parameters.getDoubleWithDefault(base.push("x"), null, X);
     S1 = parameters.getDoubleWithDefault(base.push("s1"), null, S1);
+    auctioneerK =
+        parameters.getDoubleWithDefault(base.push("auctioneerk"), null, auctioneerK);
 
     iterations =
       parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
@@ -246,7 +249,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     ContinuousDoubleAuctioneer auctioneer;
 
     auction = new RandomRobinAuction("Electricity Auction");
-    auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+    auctioneer = new DiscrimPriceCDAAuctioneer(auction, auctioneerK);
     auction.setAuctioneer(auctioneer);
 
     registerTraders(auction, true, ns, cs, sellerValues);
