@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 
 
-public class MockTrader extends AbstractTraderAgent {
+public class MockTrader extends AbstractTraderAgent  {
 
   public Shout lastWinningShout = null;
   public double lastWinningPrice = 0;

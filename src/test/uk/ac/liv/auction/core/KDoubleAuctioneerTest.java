@@ -36,7 +36,7 @@ public class KDoubleAuctioneerTest extends AuctioneerTest {
   
   public void setUp() {
     super.setUp();
-    auctioneer = new KDoubleAuctioneer(auction, 0);
+    auctioneer = new KDoubleAuctioneer(auction, 1);
     auction.setAuctioneer(auctioneer);
   }
   

@@ -56,7 +56,8 @@ public class RandomConstrainedStrategyTest extends TestCase {
   public void setUp() {
   	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
-    testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);    
+    testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);
+    testAgent.setStrategy(testStrategy);
     auction = new RoundRobinAuction();
     auctioneer = new KDoubleAuctioneer(auction);
     auction.setAuctioneer(auctioneer);

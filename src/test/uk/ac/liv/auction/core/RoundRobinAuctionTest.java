@@ -76,7 +76,7 @@ public class RoundRobinAuctionTest extends TestCase {
   }	
 
   public void setUp () {
-    auctioneer = new KDoubleAuctioneer(auction, 0);
+    auctioneer = new KDoubleAuctioneer(auction, 1);
     setUpTraders();
     setUpAuction();
   }
@@ -213,6 +213,7 @@ public class RoundRobinAuctionTest extends TestCase {
       fail("test is configured incorrectly: we must use an auctioneer that permits shout visibility");
     }
   }
+  
 
   public static void main ( String[] args) {
     junit.textui.TestRunner.run(suite());

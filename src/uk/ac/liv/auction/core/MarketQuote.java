@@ -18,7 +18,7 @@ package uk.ac.liv.auction.core;
 import java.io.Serializable;
 
 /**
- * Encapsulation of market-quote data.
+ * A price quote summarising the current state of an auction.
  *
  * @author Steve Phelps
  * @version $Revision$

@@ -23,7 +23,7 @@ import uk.ac.liv.auction.core.Shout;
  * @version $Revision$
  */
 
-public class MockStrategy extends AbstractStrategy {
+public class MockStrategy extends AbstractStrategy  {
 
   protected int currentShout = 0;
   
