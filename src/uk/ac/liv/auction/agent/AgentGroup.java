@@ -16,11 +16,11 @@
 package uk.ac.liv.auction.agent;
 
 /**
- * A class representing an arbitrary grouping of agents.  Every agent can
- * belong to one group.  This is useful for reporting purposes; for example, 
- * agents can be grouped according to what kind of strategy they use
- * and then the uk.ac.liv.auction.stats.PayoffLogger class can be used
- * to report on the payoff to each kind of strategy.
+ * A class representing an arbitrary grouping of agents. Every agent can
+ * optionally belong to a group. This is useful for reporting purposes; for
+ * example, agents can be grouped according to what kind of strategy they use
+ * and then the uk.ac.liv.auction.stats.PayoffLogger class can be used to report
+ * on the payoff to each kind of strategy.
  * 
  * 
  * @author Steve Phelps
