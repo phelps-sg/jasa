@@ -59,7 +59,11 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
     // numTraders = state.parameters.getInt(base.push(P_TRADERS),null,1);
     maxRounds = state.parameters.getInt(base.push(P_ROUNDS),null,1);
 
-    iterations = state.parameters.getInt(base.push(P_ITERATIONS),null,100);
+    iterations = state.parameters.getInt(base.push(P_ITERATIONS),null,1);
+
+    System.out.println("Using parameters");
+    System.out.println("maxRounds = " + maxRounds);
+    System.out.println("iterations = " + iterations);
 
     auction = new RoundRobinAuction();
     auction.setMaximumRounds(maxRounds);
