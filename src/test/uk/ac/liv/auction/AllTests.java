@@ -30,9 +30,8 @@ public class AllTests {
 
     TestSuite suite = new TestSuite("auction test suite");
 
-    suite.addTest(test.uk.ac.liv.util.BinaryHeapTest.suite());
     suite.addTest(test.uk.ac.liv.util.DiscreteProbabilityDistributionTest.suite());
-    suite.addTest(test.uk.ac.liv.util.CummulativeStatCounterTest.suite());
+    suite.addTest(test.uk.ac.liv.util.CummulativeDistributionTest.suite());
     
     suite.addTest(test.uk.ac.liv.prng.GlobalPRNGTest.suite());
 
