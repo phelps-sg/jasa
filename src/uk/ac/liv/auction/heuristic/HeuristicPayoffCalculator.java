@@ -363,14 +363,9 @@ public class HeuristicPayoffCalculator
     for( int i = 0; i < numAgents; i++ ) {
       agents[i].setIsSeller(true);
     }
-    int numCandidates = numAgents;
+    GlobalPRNG.randomPermutation(agents);    
     for( int i=0; i<numBuyers; i++ ) {
-      int choice = GlobalPRNG.getInstance().choose(numCandidates)-1;
-      agents[choice].setIsSeller(false);
-      AbstractTraderAgent lastAgent = agents[numCandidates-1];
-      agents[numCandidates-1] = agents[choice];
-      agents[choice] = lastAgent;
-      numCandidates--;
+      agents[i].setIsSeller(false);
     }
     for( int i=0; i<numAgents; i++ ) {
       logger.debug("Agent " + agents[i] + " isBuyer = " + agents[i].isBuyer());
