@@ -26,6 +26,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
+import java.util.Observer;
 
 import org.apache.log4j.Logger;
 
@@ -38,7 +40,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class SupplyAndDemandFrame extends JFrame implements AuctionEventListener {
+public abstract class SupplyAndDemandFrame extends JFrame 
+		implements Observer {
 
   protected RoundRobinAuction auction;
 
@@ -49,6 +52,8 @@ public abstract class SupplyAndDemandFrame extends JFrame implements AuctionEven
   protected DataSeriesWriter demandCurve;
   
   protected JButton updateButton;
+  
+  protected JCheckBox autoUpdate;
 
   static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
@@ -64,19 +69,42 @@ public abstract class SupplyAndDemandFrame extends JFrame implements AuctionEven
     
     contentPane.add(graph, BorderLayout.CENTER);
     
+    JPanel controlPanel = new JPanel();
     updateButton = new JButton("Update");
     updateButton.addActionListener( new ActionListener() {
       public void actionPerformed( ActionEvent event ) {
         updateGraph();
       }
     });
-    contentPane.add(updateButton, BorderLayout.SOUTH);
+    controlPanel.add(updateButton);
+    
+    autoUpdate = new JCheckBox("Auto Update");
+    autoUpdate.addActionListener( new ActionListener() {
+      public void actionPerformed( ActionEvent event ) {
+        toggleAutoUpdate();
+      }
+    });
+    controlPanel.add(autoUpdate);
+    
+    contentPane.add(controlPanel, BorderLayout.SOUTH);
 
     updateTitle();
 
     pack();
   }
   
+  
+  protected void toggleAutoUpdate() {
+    if ( autoUpdate.isSelected() ) {
+      auction.addObserver(this);
+    } else {
+      auction.deleteObserver(this);      
+    }
+  }
+  
+  public void update( Observable auction, Object o ) {
+    updateGraph();
+  }
 
   public void updateGraph() {
     graph.clear(0);
@@ -90,25 +118,13 @@ public abstract class SupplyAndDemandFrame extends JFrame implements AuctionEven
               auction.getRound());
   }
   
-  public void open() {
-    final SupplyAndDemandFrame thisFrame = this;
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        //auction.addAuctionEventListener(thisFrame);
-        pack();
-        setVisible(true);
-      }
-    });
+  public void open() { 
+    pack();
+    setVisible(true);
   }
-  
+
   public void close() {
-    final SupplyAndDemandFrame thisFrame = this;
-    SwingUtilities.invokeLater(new Runnable() {
-      public void run() {
-        //auction.removeAuctionEventListener(thisFrame);
-        setVisible(false);
-      }
-    });
+    setVisible(false);
   }
   
   public abstract String getGraphName();
