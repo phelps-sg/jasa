@@ -174,15 +174,6 @@ public class ElectricityTrader extends AbstractTraderAgent {
     return capacity;
   }
 
-  public void auctionOpen( Auction auction ) {
-  }
-
-  public void auctionClosed( Auction auction ) {
-  }
-
-  public void roundClosed( Auction auction ) {
-  }
-
   public String toString() {
     return "(" + getClass() + " id:" + id + " capacity:" + capacity + " privateValue:" + privateValue + " fixedCosts:" + fixedCosts + " profits:" + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit + " strategy:" + strategy + ")";
   }

@@ -69,5 +69,9 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl {
     }
   }
 
+  public void endOfRound( Auction auction ) {
+    // Do nothing
+  }
+
 
 }

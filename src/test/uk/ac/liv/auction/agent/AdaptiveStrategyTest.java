@@ -50,7 +50,7 @@ public class AdaptiveStrategyTest extends TestCase {
     System.out.println("Number of rewards = " + strategy.rewards);
     System.out.println("done.");
     assertTrue(strategy.actions==NUM_ROUNDS);
-    assertTrue(strategy.rewards==NUM_ROUNDS-1);
+    assertTrue(strategy.rewards==NUM_ROUNDS);
   }
 
   public void testReset() {

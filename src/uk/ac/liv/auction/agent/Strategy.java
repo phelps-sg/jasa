@@ -36,7 +36,12 @@ public interface Strategy {
    * @param shout   The shout to be updated
    * @param auction The auction in which this strategy is being employed
    */
-  public abstract void modifyShout( Shout shout, Auction auction );
+  public void modifyShout( Shout shout, Auction auction );
+
+  /**
+   * Perform any end-of-round processing.
+   */
+  public void endOfRound( Auction auction );
 
   public void setAgent( AbstractTraderAgent agent );
 

@@ -65,6 +65,10 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl {
     shout.setQuantity(quantity);
   }
 
+  public void endOfRound( Auction auction ) {
+    // Do nothing
+  }
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null, 100);

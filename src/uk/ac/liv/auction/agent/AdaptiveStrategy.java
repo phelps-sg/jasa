@@ -26,8 +26,6 @@ import ec.util.ParameterDatabase;
 
 public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
 
-  boolean firstShout;
-
   static final String P_MARKUPSCALE = "markupscale";
 
   double markupScale = 1;
@@ -43,7 +41,6 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
   }
 
   public void initialise() {
-    firstShout = true;
     super.initialise();
   }
 
@@ -53,15 +50,13 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
                                                    null,1);
   }
 
+  public void endOfRound( Auction auction ) {
+    calculateReward(auction);
+  }
+
   public void modifyShout( Shout shout, Auction auction ) {
 
     super.modifyShout(shout, auction);
-
-    if ( firstShout ) {
-      firstShout = false;
-    } else {
-      calculateReward(auction);
-    }
 
     // Generate an action from the learning algorithm
     int action = act();

@@ -97,6 +97,10 @@ public class GPTradingStrategy extends GPIndividualCtx
     result.release();
   }
 
+  public void endOfRound( Auction auction ) {
+    // Do nothing
+  }
+
   public double getLastProfit() {
     return agent.getLastProfit();
   }

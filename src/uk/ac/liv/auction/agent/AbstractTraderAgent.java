@@ -189,6 +189,16 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     }
   }
 
+  public void auctionOpen( Auction auction ) {
+  }
+
+  public void auctionClosed( Auction auction ) {
+  }
+
+  public void roundClosed( Auction auction ) {
+    strategy.endOfRound(auction);
+  }
+
   public Shout getCurrentShout() {
     return currentShout;
   }

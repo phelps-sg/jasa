@@ -24,7 +24,7 @@ import uk.ac.liv.util.Parameterizable;
  * @author Steve Phelps
  */
 
-public class FixedQuantityStrategyImpl extends AbstractStrategy
+public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
     implements FixedQuantityStrategy, Parameterizable {
 
   int quantity = 1;
