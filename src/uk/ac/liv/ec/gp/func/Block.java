@@ -15,26 +15,17 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import ec.EvolutionState;
-import ec.Problem;
-import ec.gp.ADFStack;
-import ec.gp.GPData;
-import ec.gp.GPIndividual;
-import ec.gp.GPNode;
-
+import uk.ac.liv.ec.gp.*;
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class Block extends GPNode {
+public class Block extends GPSchemeNode {
 	
-  public void eval( EvolutionState state, int thread, GPData input,
-                      ADFStack stack, GPIndividual individual, Problem problem ) {
-
-    children[0].eval(state, thread, input, stack, individual, problem);
-
-    children[1].eval(state, thread, input, stack, individual, problem);    
+  public void eval( GPGenericData input ) {                      
+  	evaluateChild(0, input);
+    evaluateChild(1, input);
   }
   
   public String toString() {

@@ -15,25 +15,24 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import ec.gp.*;
-import ec.*;
+import uk.ac.liv.ec.gp.*;
 
 import uk.ac.liv.util.UntypedNumber;
 
-public abstract class GPArithmeticBinaryOperator extends GPNode {
+public abstract class GPArithmeticBinaryOperator extends GPSchemeNode {
 
-  public void eval( EvolutionState state, int thread, GPData input,
-                     ADFStack stack, GPIndividual individual, Problem problem ) {
+  public void eval( GPGenericData input ) {
 
-    children[0].eval(state, thread, input, stack, individual, problem);
-    UntypedNumber op1 = (UntypedNumber) ((GPGenericData) input).data;
+  	evaluateChild(0, input);    
+    UntypedNumber op1 = (UntypedNumber) input.data;
 
-    children[1].eval(state, thread, input, stack, individual, problem);
-    UntypedNumber op2 = (UntypedNumber) ((GPGenericData) input).data;
+    evaluateChild(1, input);  
+    UntypedNumber op2 = (UntypedNumber) input.data;
 
-    ((GPGenericData) input).data = arithmeticOperator(op1, op2);    
+    input.data = arithmeticOperator(op1, op2);    
   }
 
-  public abstract UntypedNumber arithmeticOperator( UntypedNumber op1, UntypedNumber op2 );
+  public abstract UntypedNumber arithmeticOperator( UntypedNumber op1, 
+  																										UntypedNumber op2 );
 
 }

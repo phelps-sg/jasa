@@ -23,7 +23,7 @@ import uk.ac.liv.ec.gp.func.GPGenericData;
  * @version $Revision$
  */
 
-public class GPIndividualWithMemory extends GPIndividualCtx  {
+public class GPIndividualWithMemory extends GPSchemeIndividual  {
 
   int memorySize;
 

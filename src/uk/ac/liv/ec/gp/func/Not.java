@@ -15,22 +15,21 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import ec.gp.*;
-import ec.*;
 
-public class Not extends GPNode {
+import uk.ac.liv.ec.gp.*;
 
-  public void eval( EvolutionState state, int thread, GPData input,
-                      ADFStack stack, GPIndividual individual, Problem problem ) {
+public class Not extends GPSchemeNode {
 
-    children[0].eval(state,thread,input,stack,individual,problem);
-    boolean arg0 = ((Boolean) ((GPGenericData) input).data).booleanValue();
+  public void eval( GPGenericData input ) {
+  	
+  	evaluateChild(0, input);    
+    boolean arg0 = ((Boolean) input.data).booleanValue();
 
-    ((GPGenericData) input).data = new Boolean(!arg0);
-
+    input.data = new Boolean(!arg0);
   }
 
   public String toString() {
     return "Not";
   }
+  
 }

@@ -15,22 +15,19 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import ec.gp.*;
-import ec.*;
+import uk.ac.liv.ec.gp.*;
 
-public class And extends GPNode {
+public class And extends GPSchemeNode {
 
-  public void eval( EvolutionState state, int thread, GPData input,
-                      ADFStack stack, GPIndividual individual, Problem problem ) {
+  public void eval( GPGenericData input ) {                      
 
-    children[0].eval(state, thread,input,stack,individual,problem);
-    Boolean result1 = (Boolean) ((GPGenericData) input).data;
+  	evaluateChild(0, input);    
+    Boolean result1 = (Boolean) input.data;
 
-    children[1].eval(state,thread,input,stack,individual,problem);
-    Boolean result2 = (Boolean) ((GPGenericData) input).data;
+    evaluateChild(1, input);    
+    Boolean result2 = (Boolean) input.data;
 
-    ((GPGenericData) input).data = new Boolean(result1.booleanValue() && result2.booleanValue());
-
+    input.data = new Boolean(result1.booleanValue() && result2.booleanValue());
   }
 
   public String toString() {

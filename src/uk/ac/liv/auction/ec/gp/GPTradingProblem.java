@@ -212,10 +212,10 @@ public abstract class GPTradingProblem extends GPProblem {
   }
 
 
-  protected void preAuctionProcessing() {
-  	auction.reset();
+  protected void preAuctionProcessing() {  
   	randomizePrivateValues();   
   	randomlyAssignRoles();
+  	auction.reset();
   	ensureEquilibriaExists();    
   }
 

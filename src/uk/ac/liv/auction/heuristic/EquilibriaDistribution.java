@@ -114,7 +114,12 @@ public class EquilibriaDistribution  {
       parameters.getDoubleWithDefault(base.push(P_PRECISION), null, MixedStrategy.precision);
     try {
       FileInputStream file = new FileInputStream(payoffMatrixFileName);
-      CSVReader csvIn = new CSVReader(file, new Class[] {Integer.class, Integer.class, Integer.class, Double.class, Double.class, Double.class} );      
+      Class[] columns = new Class[numStrategies*2];
+      for( int i=0; i<numStrategies; i++ ) {
+      	columns[i] = Integer.class;
+      	columns[numStrategies+i] = Double.class;
+      }
+      CSVReader csvIn = new CSVReader(file, columns);      
       payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
       payoffMatrix.importFromCSV(csvIn);
     } catch ( IOException e ) {
@@ -129,18 +134,19 @@ public class EquilibriaDistribution  {
       RandomElement prng = GlobalPRNG.getInstance();
       double x, y, z;
       
-      do {
+      //do {
         x = prng.uniform(0, 1);
-        y = prng.uniform(0, 1);
-      } while ( x+y > 1 );
-      z = 1 - x - y;
+        //y = prng.uniform(0, 1);
+      //} while ( x+y > 1 );
+      //z = 1 - x - y;
+      y = 1 - x;
 
       CSVWriter rdPlot = 
         new CSVWriter( new FileOutputStream(fileRDPrefix + i + ".csv"), 
                         numStrategies);
       
       double[] equilibrium =
-        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z},
+        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y},
                                   minimumVelocity, maxIterations);  
         
       newEquilibrium(equilibrium);

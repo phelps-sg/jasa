@@ -26,7 +26,7 @@ import uk.ac.liv.util.Resetable;
  * @version $Revision$
  */
 
-public class GPGenericIndividual extends GPIndividualCtx implements Resetable {
+public class GPGenericIndividual extends GPSchemeIndividual implements Resetable {
 	
 	protected GPObject object;
 	
@@ -37,7 +37,7 @@ public class GPGenericIndividual extends GPIndividualCtx implements Resetable {
 		super.setup(state, base);
 		
 		object = (GPObject)
-			state.parameters.getInstanceForParameterEq(base.push(P_OBJECT), null, 
+			state.parameters.getInstanceForParameter(base.push(P_OBJECT), null, 
 																												GPObject.class);
 		
 		object.setGPIndividual(this);

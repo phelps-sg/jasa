@@ -30,7 +30,7 @@ import java.util.*;
  *
  */
 
-public class GPAuctioneer extends GPIndividualCtx
+public class GPAuctioneer extends GPSchemeIndividual
                             implements Auctioneer, Resetable {
 
   final ShoutEngine shoutEngine = new FourHeapShoutEngine();

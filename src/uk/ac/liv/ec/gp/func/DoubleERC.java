@@ -38,6 +38,8 @@ import uk.ac.liv.ec.gp.func.GPGenericData;
 public class DoubleERC extends ERC {
 
   public double value;
+  
+  public static final String NAME = "DoubleERC";
 
   public void resetNode( final EvolutionState state, final int thread ) {
     value = state.random[thread].nextDouble() * 2 - 1.0;
@@ -81,7 +83,7 @@ public class DoubleERC extends ERC {
   }
 
   public String name() {
-    return "DoubleERC";
+    return NAME;
   }
 
   public String toStringForHumans() {

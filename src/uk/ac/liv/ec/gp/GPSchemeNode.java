@@ -13,7 +13,7 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.ec.gp.func;
+package uk.ac.liv.ec.gp;
 
 import ec.EvolutionState;
 import ec.Problem;
@@ -23,36 +23,43 @@ import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
 
-import uk.ac.liv.ec.gp.GPGenericIndividual;
-import uk.ac.liv.ec.gp.func.GPGenericData;
+import scheme.kernel.ScmObject;
+import scheme.kernel.ScmSymbol;
 
-import uk.ac.liv.util.UntypedNumber;
-import uk.ac.liv.util.UntypedDouble;
+import uk.ac.liv.ec.gp.func.GPGenericData;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class AdjustMargin extends GPNode {
-
+public abstract class GPSchemeNode extends GPNode {
+	
+	protected GPContext context = new GPContext();
+	
+	protected GPIndividual currentIndividual;
+	
 	public void eval( EvolutionState state, int thread, GPData input,
 											ADFStack stack, GPIndividual individual, 
-											Problem problem ) {
-
-    children[0].eval(state, thread, input, stack, individual, problem);
-    UntypedNumber arg1 = (UntypedNumber) ((GPGenericData) input).data;
-    
-  	GPTradingStrategy strategy = 
-  		(GPTradingStrategy) ((GPGenericIndividual) individual).getGPObject();
-  	
-  	strategy.adjustMargin(arg1.doubleValue()); 
-  	
-  	((GPGenericData) input).data = 
-  			new UntypedDouble(strategy.markedUpPrice());
+											Problem problem) {
+		context.setProblem(problem);
+		context.setStack(stack);
+		context.setState(state);
+		context.setThread(thread);
+		currentIndividual = individual;
+		eval((GPGenericData) input);
 	}
-
-	public String toString() {		
-		return "AdjustMargin";
+	
+	public void evaluateChild( int childNumber, GPData input ) {
+		children[childNumber].eval(context.getState(), context.getThread(),
+																input, context.getStack(), currentIndividual, 
+																context.getProblem());
 	}
+	
+	public ScmObject toScheme() {
+		return new ScmSymbol(toString());
+	}
+	
+	public abstract void eval( GPGenericData input );
+
 }

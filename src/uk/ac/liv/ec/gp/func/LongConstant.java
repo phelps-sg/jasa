@@ -15,26 +15,45 @@
 
 package uk.ac.liv.ec.gp.func;
 
+import scheme.kernel.ScmObject;
+import scheme.kernel.ScmInteger;
+
 import uk.ac.liv.ec.gp.*;
 
 import uk.ac.liv.util.UntypedLong;
 
-import scheme.kernel.ScmObject;
-import scheme.kernel.ScmInteger;
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 
-public class One extends GPSchemeNode {
+public class LongConstant extends GPSchemeNode {
 
-	private UntypedLong one = new UntypedLong(1);
+	protected UntypedLong javaValue;
+	
+	protected ScmInteger schemeValue;
+	
+	public static final String NAME = "LongConstant";
 	
   public void eval( GPGenericData input ) {
-    input.data = one;
+    input.data = javaValue;
   }
+  
+  public void setValue( int primitiveValue ) {
+  	javaValue = new UntypedLong(primitiveValue);
+  	schemeValue = new ScmInteger(primitiveValue);
+  }
+  
+  public long getValue() {
+  	return javaValue.longValue();
+  }  
 
   public String toString() {
-    return "1";
+    return NAME;
   }
-
+  
   public ScmObject toScheme() {
-  	return new ScmInteger(1);
+  	return schemeValue;
   }
+	
 }

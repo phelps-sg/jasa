@@ -26,33 +26,26 @@ import ec.gp.GPNode;
 import uk.ac.liv.ec.gp.GPGenericIndividual;
 import uk.ac.liv.ec.gp.func.GPGenericData;
 
-import uk.ac.liv.util.UntypedNumber;
-import uk.ac.liv.util.UntypedDouble;
-
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class AdjustMargin extends GPNode {
+public class AgentIsSeller extends GPNode {
 
 	public void eval( EvolutionState state, int thread, GPData input,
 											ADFStack stack, GPIndividual individual, 
 											Problem problem ) {
-
-    children[0].eval(state, thread, input, stack, individual, problem);
-    UntypedNumber arg1 = (UntypedNumber) ((GPGenericData) input).data;
     
   	GPTradingStrategy strategy = 
   		(GPTradingStrategy) ((GPGenericIndividual) individual).getGPObject();
   	
-  	strategy.adjustMargin(arg1.doubleValue()); 
+  	Boolean isSeller = new Boolean(strategy.getAgent().isSeller());    
   	
-  	((GPGenericData) input).data = 
-  			new UntypedDouble(strategy.markedUpPrice());
+		((GPGenericData) input).data = isSeller;
 	}
 
 	public String toString() {		
-		return "AdjustMargin";
+		return "AgentIsSeller";
 	}
 }
