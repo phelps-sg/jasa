@@ -209,7 +209,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
     auction.generateReport();
     if ( gatherStats ) {
       stats.calculate();
-      logger.info(stats);
+      stats.generateReport();
     }
   }
 

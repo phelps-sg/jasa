@@ -26,6 +26,8 @@ import ec.util.Parameter;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Steve Phelps
  */
@@ -54,6 +56,9 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
 
   protected int round;
 
+  static Logger logger =
+      Logger.getLogger(MeanValueDataWriterMarketDataLogger.class);
+
 
   public MeanValueDataWriterMarketDataLogger( DataWriter askQuoteLog,
                                       DataWriter bidQuoteLog,
@@ -67,15 +72,18 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
     super();
   }
 
+
   public void updateQuoteLog( int time, MarketQuote quote ) {
     askQuoteStats.newData(quote.getAsk());
     bidQuoteStats.newData(quote.getBid());
   }
 
+
   public void updateTransPriceLog( int time, Shout shout, double price,
                                     int quantity ) {
      transPriceStats.newData(price);
   }
+
 
   public void updateShoutLog( int time, Shout shout ) {
     round = time;
@@ -86,23 +94,32 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
     }
   }
 
+
   public void endOfRound() {
+
+    logger.debug("endOfRound()");
+
     update(askQuoteLog, askQuoteStats);
     update(bidQuoteLog, bidQuoteStats);
     update(askLog, askStats);
     update(bidLog, bidStats);
     update(transPriceLog, transPriceStats);
+
+    for( int i=0; i<allStats.length; i++ ) {
+      allStats[i].reset();
+      logger.debug("Finished resetting: " + allStats[i]);
+    }
   }
+
 
   protected void update( DataWriter writer, CummulativeStatCounter stats ) {
     writer.newData(round);
     writer.newData(stats.getMean());
   }
 
+
   public void finalReport() {
   }
-
-
 
 
 }

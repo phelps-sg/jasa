@@ -152,4 +152,8 @@ public class MetaMarketStats implements MarketStats, Serializable {
               "\n\tqtyStats:" + qtyStats + ")";
   }
 
+  public void generateReport() {
+    //TODO
+  }
+
 }

@@ -17,6 +17,8 @@ package uk.ac.liv.util;
 
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 /**
  * <p>
  * A utility class for cummulative tracking of stats for a series
@@ -47,27 +49,34 @@ public class CummulativeStatCounter implements Serializable, Cloneable, Resetabl
   /**
    * The number of data in the series so far.
    */
-  int n;
+  protected int n;
+
   /**
    * The cummulative total of all numbers in the series so far.
    */
-  double total;
+  protected double total;
+
   /**
    * The square of the total.
    */
-  double totalSq;
+  protected double totalSq;
+
   /**
    * The minimum so far.
    */
-  double min;
+  protected double min;
+
   /**
    * The maximum so far.
    */
-  double max;
+  protected double max;
+
   /**
    * The name of this series.
    */
-  String varName;
+  protected String varName;
+
+  static Logger logger = Logger.getLogger(CummulativeStatCounter.class);
 
   public CummulativeStatCounter( String varName ) {
     this.varName = varName;
@@ -177,8 +186,18 @@ public class CummulativeStatCounter implements Serializable, Cloneable, Resetabl
   }
 
   public String toString() {
-    return varName + "\n\tn:" + n + " mean:" + getMean() + " stdev:" +
-             getStdDev() + " min:" + min + " max:" + max;
+    return "(" + getClass() + " varName:" + varName + " n:" + n + " mean:" +
+             getMean() + " stdev:" + getStdDev() + " min:" + min + " max:" +
+             max + ")";
+  }
+
+  public void log() {
+    logger.info(getName());
+    logger.info("\tn:\t" + getN());
+    logger.info("\tmin:\t" + getMin());
+    logger.info("\tmax:\t" + getMax());
+    logger.info("\tmean:\t" + getMean());
+    logger.info("\tstdev:\t" + getStdDev());
   }
 
 }

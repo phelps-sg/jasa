@@ -25,12 +25,16 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import java.util.*;
-
 import huyd.poolit.*;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
+
+import java.util.*;
+
+import java.io.Serializable;
+
+import org.apache.log4j.Logger;
 
 /**
  * <p>
@@ -41,21 +45,69 @@ import ec.util.ParameterDatabase;
  * @author Steve Phelps
  */
 
-public class EquilibriaStats implements MarketStats, Resetable {
+public class EquilibriaStats implements MarketStats, Resetable, Serializable {
 
+  /**
+   * The shout engine used to compute equilibrium.
+   */
   protected FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
 
+  /**
+   * The auction we are computing equilibrium for.
+   */
   protected RoundRobinAuction auction;
 
-  protected double minPrice, maxPrice;
-  protected int minQty, maxQty;
+  /**
+   * The minimum equilibrium price.
+   */
+  protected double minPrice;
 
+  /**
+   * The maximum equilibrium price.
+   */
+  protected double  maxPrice;
+
+  /**
+   * The minimum equilibrium quantity.
+   */
+  protected int minQty;
+
+  /**
+   * The maximum equilibrium quantity.
+   */
+  protected int maxQty;
+
+  /**
+   * Do any equilbria exist?
+   */
   protected boolean equilibriaFound = false;
 
+  /**
+   * The profits of the buyers in equilibrium.
+   */
   protected double pBCE = 0;
+
+  /**
+   * The profits of the sellers in equilibrium.
+   */
   protected double pSCE = 0;
 
+  /**
+   * The actual profits of the buyers.
+   */
+  protected double pBA = 0;
+
+  /**
+   * The actual profits of the sellers.
+   */
+  protected double pSA = 0;
+
+  /**
+   * The truthful shouts of all traders in the auction.
+   */
   protected ArrayList shouts;
+
+  static Logger logger = Logger.getLogger(EquilibriaStats.class);
 
   public EquilibriaStats( RoundRobinAuction auction ) {
     this();
@@ -68,9 +120,6 @@ public class EquilibriaStats implements MarketStats, Resetable {
 
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
-  }
-
-  public void setPriceRange( long min, long max ) {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -136,6 +185,22 @@ public class EquilibriaStats implements MarketStats, Resetable {
 
     minQty = qty;
     maxQty = qty;
+
+    calculateActualProfits();
+  }
+
+  protected void calculateActualProfits() {
+    pSA = 0;
+    pBA = 0;
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      if ( agent.isSeller() ) {
+        pSA += agent.getProfits();
+      } else {
+        pBA += agent.getProfits();
+      }
+    }
   }
 
   public double equilibriumProfits( int quantity, AbstractTraderAgent trader ) {
@@ -209,9 +274,27 @@ public class EquilibriaStats implements MarketStats, Resetable {
     return (getMinPrice() + getMaxPrice()) / 2;
   }
 
-
   public String toString() {
-    return "(" + getClass() + " equilibriaFound:" + equilibriaFound + " minPrice:" + minPrice + " maxPrice:" + maxPrice + " minQty: " + minQty + " maxQty:" + maxQty + " pBCE:" + pBCE + " pSCE:" + pSCE + ")";
+    return "(" + getClass() + " equilibriaFound:" + equilibriaFound +
+           " minPrice:" + minPrice + " maxPrice:" + maxPrice +
+           " minQty: " + minQty + " maxQty:" + maxQty +
+           " pBCE:" + pBCE + " pSCE:" + pSCE + ")";
+  }
+
+  public void generateReport() {
+    logger.info("");
+    logger.info("Equilibrium analysis report");
+    logger.info("---------------------------");
+    logger.info("");
+    logger.info("\tEquilibria Found?\t" + equilibriaFound);
+    logger.info("\n\tprice:\n\t\tmin:\t" + minPrice + "\tmax:\t" + maxPrice);
+    logger.info("\n\tquantity\n\t\tmin:\t" + minQty + "\tmax:\t" + maxQty + "\n");
+    logger.info("\tbuyers' profits in equilibrium:\t" + pBCE);
+    logger.info("\tsellers' profits in equilibrium:\t" + pSCE);
+    logger.info("");
+    logger.info("\tbuyers' actual profits:\t" + pBA);
+    logger.info("\tsellers' actual profits:\t" + pSA);
+    logger.info("");
   }
 
 }

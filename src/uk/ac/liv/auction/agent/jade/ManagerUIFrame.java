@@ -59,6 +59,7 @@ public class ManagerUIFrame extends AuctionConsoleFrame {
     c.insets = new Insets(20,20,20,20);
     gridBag.setConstraints(startButton, c);
 
+//    startButton.disable();
     contentPane.add(startButton);
     startButton.addActionListener(new ActionListener() {
         public void actionPerformed( ActionEvent e ) {
@@ -72,4 +73,9 @@ public class ManagerUIFrame extends AuctionConsoleFrame {
     logger.debug("Starting auction..");
     manager.startAuction();
   }
+
+  public void setReadyToStart() {
+//    startButton.enable();
+  }
+
 }

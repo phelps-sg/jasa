@@ -31,7 +31,7 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
 
   Vector data;
 
-  protected boolean isVisible;
+  protected boolean isVisible = true;
 
   protected boolean isTime = true;
 

@@ -152,6 +152,9 @@ class TestEquilibriaStats implements MarketStats {
 
   }
 
+  public void generateReport() {
+    //DO nothing
+  }
 
   protected static PriceQtyTuple newTuple( double minPrice, double maxPrice, long quantity ) {
     return new PriceQtyTuple(minPrice, maxPrice, quantity);

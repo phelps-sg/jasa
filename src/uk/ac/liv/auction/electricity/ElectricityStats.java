@@ -470,6 +470,10 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     return equilibStats;
   }
 
+  public void generateReport() {
+    //TODO
+  }
+
 }
 
 

@@ -23,10 +23,21 @@ import uk.ac.liv.util.Parameterizable;
 
 public interface MarketStats  {
 
-  public void setPriceRange( long min, long max );
+  /**
+   * Set the auction we are calculating statistics for.
+   *
+   * @param auction The auction to calculate stats for.
+   */
+  public void setAuction( RoundRobinAuction auction );
 
-  public void setAuction( RoundRobinAuction aucion );
-
+  /**
+   * Calculate the market statistics.
+   */
   public void calculate();
+
+  /**
+   * Generate a report on the statistics.
+   */
+  public void generateReport();
 
 }

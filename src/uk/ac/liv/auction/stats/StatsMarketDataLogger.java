@@ -23,6 +23,8 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.Resetable;
 
+import org.apache.log4j.Logger;
+
 /**
  * <p>
  * A market data logger that keeps cummulative statistics on a number of variables.
@@ -37,27 +39,29 @@ public class StatsMarketDataLogger
   /**
    * Cummulative statistics on transaction prices.
    */
-  CummulativeStatCounter transPriceStats;
+  protected CummulativeStatCounter transPriceStats;
 
   /**
    * Cummulative statistics on bid prices.
    */
-  CummulativeStatCounter bidPriceStats;
+  protected CummulativeStatCounter bidPriceStats;
 
   /**
    * Cummulative statistics on ask prices.
    */
-  CummulativeStatCounter askPriceStats;
+  protected CummulativeStatCounter askPriceStats;
 
   /**
    * Cummulative statistics on the bid part of market quotes.
    */
-  CummulativeStatCounter bidQuoteStats;
+  protected CummulativeStatCounter bidQuoteStats;
 
   /**
    * Cumulative statistics on the ask part of market quotes.
    */
-  CummulativeStatCounter askQuoteStats;
+  protected CummulativeStatCounter askQuoteStats;
+
+  static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
 
 
   public StatsMarketDataLogger() {
@@ -148,6 +152,10 @@ public class StatsMarketDataLogger
   }
 
   public void finalReport() {
+    logger.info("");
+    logger.info("Auction statistics");
+    logger.info("------------------");
+    logger.info("");
     printStats(transPriceStats);
     printStats(bidPriceStats);
     printStats(askPriceStats);
@@ -160,6 +168,7 @@ public class StatsMarketDataLogger
   }
 
   protected void printStats( CummulativeStatCounter stats ) {
-    System.out.println(stats + "\n");
+    stats.log();
+    logger.info("");
   }
 }
