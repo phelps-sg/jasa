@@ -40,7 +40,7 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
  */
 
 public class WidrowHoffLearner extends AbstractLearner
-    implements MimicryLearner, Prototypeable, Serializable {
+    implements Seedable, MimicryLearner, Prototypeable, Serializable {
 
   /**
    * The learning rate.
