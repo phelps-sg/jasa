@@ -61,6 +61,9 @@ public class HeavyweightDistribution extends CummulativeDistribution {
   }
   
   public double getTrimmedMean( double p ) {
+    if ( p == 0 ) {
+      return getMean();
+    }
     if ( hasChanged ) {
       data.sort();
     }
@@ -75,19 +78,11 @@ public class HeavyweightDistribution extends CummulativeDistribution {
   }
   
 
-  /**
-   * Add the data in the supplied distribution to the data
-   * in this one yielding a combined distribution.
-   */
-  public void combine( HeavyweightDistribution other ) {
-    TDoubleArrayList otherData = other.getData();
-    for( int i=0; i<otherData.size(); i++ ) {
-      newData(otherData.get(i));
+  public void combine( Distribution other ) {
+    HeavyweightDistribution d = (HeavyweightDistribution) other;    
+    for( int i=0; i<d.data.size(); i++ ) {
+      newData(d.data.get(i));
     }
-  }
-  
-  protected TDoubleArrayList getData() {
-    return data;
   }
   
     

@@ -79,7 +79,18 @@ public interface Distribution {
    */
   public abstract double getTotal();
 
+  /**
+   * Combine this distribution with the supplied distribution.
+   */
+  public void combine( Distribution other );
+  
+  /**
+   * @return The name of the variable.
+   */
   public abstract String getName();
 
+  /**
+   * Output the moments of the distribution to the info log.  
+   */
   public abstract void log();
 }

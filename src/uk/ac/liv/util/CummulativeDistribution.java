@@ -59,7 +59,7 @@ public class CummulativeDistribution implements
   protected double total;
 
   /**
-   * The square of the total.
+   * The total of the squares of all numbers in the series so far.
    */
   protected double totalSq;
 
@@ -209,8 +209,21 @@ public class CummulativeDistribution implements
     logger.info("\tstdev:\t" + getStdDev());
   }
   
+  public void combine( Distribution other ) {
+    CummulativeDistribution d = (CummulativeDistribution) other;
+    min = Math.min(this.min, d.min);
+    max = Math.max(this.max, d.max);
+    n += d.n;
+    total += d.total;
+    totalSq += d.totalSq;
+  }
+  
   public double getTrimmedMean( double p ) {
-    throw new Error("method not implemented");
+    if ( p > 0 ) {
+      throw new Error("method not implemented for p > 0");
+    } else {
+      return getMean();
+    }
   }
 
 }
