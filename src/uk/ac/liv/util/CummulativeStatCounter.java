@@ -1,0 +1,144 @@
+package uk.ac.liv.util;
+
+/**
+ * <p>
+ * A utility class for cummulative tracking of stats for a series
+ * of doubles.
+ * </p>
+ *
+ * <p>
+ * Example usage:
+ * </p>
+ * <br>
+ * <p>
+ * <code>
+ * CummulativeStatCounter series1 = new CummulativeStatCounter("series1");<br>
+ * series1.newData(4.5);<br>
+ * series2.newData(5.6);<br>
+ * series3.newData(9.0);<br>
+ * System.out.println("Standard deviation of series1 = " + series1.getStdDev());<br>
+ * </code>
+ * </p>
+ * @author Steve Phelps
+ * @version 1.0
+ *
+ */
+
+public class CummulativeStatCounter {
+
+  /**
+   * The number of data in the series so far.
+   */
+  int n = 0;
+  /**
+   * The cummulative total of all numbers in the series so far.
+   */
+  double total = 0;
+  /**
+   * The square of the total.
+   */
+  double totalSq;
+  /**
+   * The minimum so far.
+   */
+  double min = Double.POSITIVE_INFINITY;
+  /**
+   * The maximum so far.
+   */
+  double max = Double.NEGATIVE_INFINITY;
+  /**
+   * The name of this series.
+   */
+  String varName;
+
+  public CummulativeStatCounter( String varName ) {
+    this.varName = varName;
+  }
+
+  public CummulativeStatCounter() {
+    this("");
+  }
+
+  /**
+   * Add a new datum to the series.
+   */
+  public void newData( double i ) {
+    n++;
+    total += i;
+    totalSq += i*i;
+    if ( i > max ) {
+      max = i;
+    }
+    if ( i < min ) {
+      min = i;
+    }
+  }
+
+  /**
+   * Get the number of items in the series.
+   */
+  public int getN() {
+    return n;
+  }
+
+  /**
+   * Get the mean of the data.
+   */
+  public double getMean() {
+    return total / n;
+  }
+
+  /**
+   * Get the variance of the data about origin.
+   */
+  public double getVariance( double origin ) {
+    return Math.abs(totalSq/n - origin*origin);
+  }
+
+  /**
+   * Get the standard deviation of the data about origin.
+   */
+  public double getStdDev( double origin ) {
+    return Math.sqrt(getVariance(origin));
+  }
+
+  /**
+   * Get the variance about the mean.
+   */
+  public double getVariance() {
+    return getVariance(getMean());
+  }
+
+  /**
+   * Get the standard deviation from the mean.
+   */
+  public double getStdDev() {
+    return getStdDev(getMean());
+  }
+
+  /**
+   * Get the coefficient of variable about origin.
+   */
+  public double getVarCoef( double origin ) {
+    return 100 * getStdDev(origin) / origin;
+  }
+
+  /**
+   * Get the minimum datum.
+   */
+  public double getMin() {
+    return min;
+  }
+
+  /**
+   * Get the maximum datum.
+   */
+  public double getMax() {
+    return max;
+  }
+
+  public String toString() {
+    return "(" + getClass() + " varName:\"" + varName + "\" n:" + n + " mean:" + getMean() + " stdev:" + getStdDev() + " min:" + min + " max:" + max + ")";
+  }
+
+}

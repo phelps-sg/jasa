@@ -1,0 +1,52 @@
+<project name="JASA" default="compile" basedir=".">
+   <target name="init">
+      <property name="sourceDir" value="src"/>
+      <property name="outputDir" value="classes" />
+      <property name="classPath" value="/cygwin/home/StevePhelps/java/lib/ecj;/cygwin/home/StevePhelps/java/lib/junit3.7/junit.jar" />
+      <property name="projectName" value="JASA"/>
+      <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io" />
+      <property name="docDir" value="doc" />
+   </target>
+
+   <target name="clean" depends="init">
+      <delete dir="${outputDir}" />
+      <delete dir="${docDir}" />
+   </target>
+
+   <target name="prepare" depends="clean">
+      <mkdir dir="${outputDir}" />
+      <mkdir dir="${docDir}" />
+   </target>
+
+   <target name="compile" depends="prepare">
+     <javac classpath="${classPath}" srcdir="${sourceDir}" destdir="${outputDir}" />
+   </target>
+
+   <target name="doc" depends="compile">
+     <javadoc packagenames="${packages}"
+		sourcepath="${sourceDir}"
+		destdir="${docDir}"
+		author="true"
+		windowtitle="${Name}"
+		bottom="Copyright (c) 2002 Liverpool University. All Rights Reserved"
+	/>
+   </target>
+
+   <target name="jar" depends="compile,doc">
+   	<jar jarfile="jasa.jar"
+		basedir="${outputDir}"
+	 />
+   </target>	
+
+   <target name="tar" depends="jar" >
+   	<tar tarfile="jasa.tar"
+		basedir="."
+		includes="jasa.jar,build.xml,doc/**,src/**"
+	/>
+	<gzip src="jasa.tar" zipfile="jasa.tar.gz" />
+    </target>
+
+
+</project>
+
+
