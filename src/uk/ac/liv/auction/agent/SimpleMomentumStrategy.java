@@ -29,7 +29,7 @@ public class SimpleMomentumStrategy extends MomentumStrategy
   protected void adjustMargin() {    
     if ( agent.lastShoutAccepted() ) {
       adjustMargin(1.0);      
-    } else {
+    } else if ( agent.active() ) {
       adjustMargin(0);
     } 
   }
