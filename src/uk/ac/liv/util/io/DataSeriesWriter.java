@@ -43,7 +43,7 @@ import org.apache.log4j.Logger;
  *
  * <code>
  * DataSeriesWriter timeSeries = new DataSeriesWriter();<br>
- * for( int t=0; t&lt1000; t++ ) {<br>
+ * for( int t=0; t&lt;1000; t++ ) {<br>
  *   timeSeries.newData(t);<br>
  *   timeSeries.newData(getValue(t));<br>
  * }<br>
