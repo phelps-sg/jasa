@@ -79,21 +79,21 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
       logger.debug("quote = " + quote);
       logger.debug("my priv value = " + agent.getPrivateValue(auction));
       logger.debug("isSeller = " + agent.isSeller());
+      shout.setPrice(agent.getPrivateValue(auction));
       if ( agent.isBuyer() ) {
         if ( quote.getAsk() <= agent.getPrivateValue(auction) ) {
           shout.setPrice(quote.getAsk());
-          logger.debug(this + " bidding at " + quote.getAsk());
-          return true;
         }
       } else {
         if ( quote.getBid() >= agent.getPrivateValue(auction) ) {
-          shout.setPrice(quote.getBid());
-          logger.debug(this + " asking at " + quote.getBid());
-          return true;
+          shout.setPrice(quote.getBid());;
         }
       }
+      logger.debug(this + ": price = " + shout.getPrice());
+      return true;
+    } else {
+      return false;
     }
-    return false;
   }
 
   public void endOfRound( Auction auction ) {
@@ -116,7 +116,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
       return false;
     }
 
-    if (agent.isBuyer()) {
+    if ( agent.isBuyer() ) {
       juicyOffer =
           quote.getAsk() < transPrice.getMin();
     } else {
