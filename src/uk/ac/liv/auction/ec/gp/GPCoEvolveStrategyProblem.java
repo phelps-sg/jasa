@@ -89,7 +89,7 @@ public class GPCoEvolveStrategyProblem extends GPElectricityTradingProblem
 
       if ( ! (Double.isNaN(profits)
               || ((GPTradingStrategy) trader.getStrategy()).misbehaved()) ) {
-        fitness = 20000 - profits;
+        fitness = 200000 - profits;
       }
       if ( fitness < 0 ) {
         System.err.println("WARNING: trader " + trader + " had negative fitness!");

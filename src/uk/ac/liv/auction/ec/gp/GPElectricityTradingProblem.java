@@ -62,6 +62,8 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
   protected double maxPrivateValue = 100;
 
+  protected double minPrivateValue = 50;
+
   protected int shockInterval = 1;
 
   protected int evalIterations = 3;
@@ -100,6 +102,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   static final String P_ROUNDS = "maxrounds";
   static final String P_RANDOMPRIVATEVALUES = "randomprivatevalues";
   static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
+  static final String P_MINPRIVATEVALUE = "minprivatevalue";
   static final String P_VERBOSE = "verbose";
   static final String P_GENERATECSV ="generatecsv";
   static final String P_SHOCKINTERVAL = "shockinterval";
@@ -112,7 +115,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   static final String DEFAULT_STATS_FILE = "coevolve-electricity-stats.csv";
 
   static final String DEFAULT_PARAM_FILE
-                    = "ecj.params/ecjtest.params";
+                    = "ecj.params/amec.params";
 
   static final int buyerValues[] = { 36, 17, 12 };
 
@@ -149,6 +152,11 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     maxPrivateValue =
       state.parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null,
                                               maxPrivateValue);
+
+    minPrivateValue =
+      state.parameters.getDoubleWithDefault(base.push(P_MINPRIVATEVALUE), null,
+                                              minPrivateValue);
+
     shockInterval =
       state.parameters.getIntWithDefault(base.push(P_SHOCKINTERVAL), null,
         shockInterval);
@@ -244,10 +252,18 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
   protected void randomizePrivateValues() {
     do {
+
       Iterator traders = allTraders.iterator();
+
       for( int i=0; traders.hasNext(); i++ ) {
+
         ElectricityTrader trader = (ElectricityTrader) traders.next();
-        trader.setPrivateValue(randGenerator.nextDouble() * maxPrivateValue);
+
+        double randPrivValue = minPrivateValue +
+              randGenerator.nextDouble() * (maxPrivateValue - minPrivateValue);
+
+        trader.setPrivateValue(randPrivValue);
+
         if ( verbose ) {
           System.out.println("pv " +  i + " = " + trader.getPrivateValue());
         }
