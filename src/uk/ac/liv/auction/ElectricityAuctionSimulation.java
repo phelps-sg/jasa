@@ -65,6 +65,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   int numBuyers, numSellers;
   int buyerCapacity, sellerCapacity;
 
+  int seed = (int) System.currentTimeMillis();
+
   FixedQuantityStrategy[] sellerStrategies;
   FixedQuantityStrategy[] buyerStrategies;
 
@@ -106,6 +108,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_STRATEGY = "strategy";
   static final String P_STATS = "stats";
   static final String P_ITER_DATA = "iterdata";
+  static final String P_SEED = "seed";
 
   static final int DATAFILE_NUM_COLUMNS = 35;
 
@@ -133,6 +136,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     iterations =
       parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
+
+    seed =
+      parameters.getIntWithDefault(base.push(P_SEED), null, seed);
 
     outputDir =
       parameters.getStringWithDefault(base.push(P_OUTPUTDIR), null,
@@ -447,7 +453,6 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   protected long[][] generatePRNGseeds( int numTraders, int numIterations ) {
     long[][] seeds = new long[numTraders][numIterations];
-    long seed = System.currentTimeMillis();
     System.out.println("PRNG seed = " + seed);
     MersenneTwisterFast metaPRNG = new MersenneTwisterFast((int) seed);
     for( int t=0; t<numTraders; t++ ) {
