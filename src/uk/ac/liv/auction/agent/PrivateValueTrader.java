@@ -27,7 +27,7 @@ import uk.ac.liv.auction.core.Shout;
 
 public interface PrivateValueTrader extends RoundRobinTrader {
 
-  public double getPrivateValue();
+  public double getPrivateValue( Auction auction );
 
   public int determineQuantity( Auction auction );
 
