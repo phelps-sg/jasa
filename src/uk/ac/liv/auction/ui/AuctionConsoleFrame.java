@@ -53,7 +53,6 @@ public class AuctionConsoleFrame extends JFrame
   
   protected JMenuBar menuBar;
  
-  protected JButton reportButton; 
   protected JButton resetAgentsButton;
   protected JButton closeAuctionButton;
   protected float graphXExtrema = 0f;
@@ -177,7 +176,7 @@ public class AuctionConsoleFrame extends JFrame
 
     JButton logAuctionStatusButton = new JButton("Dump");
     logAuctionStatusButton.setToolTipText("Display the current state of the auction");
-    c.gridx = 1;
+    c.gridx = 2;
     c.gridy = 6;
     c.weightx = 0;
     gridBag.setConstraints(logAuctionStatusButton, c);
@@ -187,20 +186,6 @@ public class AuctionConsoleFrame extends JFrame
           logAuctionStatus();
         }
     });
-
-    JButton reportButton = new JButton("Report");
-    reportButton.setToolTipText("Generate a report on the auction");
-    c.gridx = 2;
-    c.gridy = 6;
-    c.weightx = 0;
-    gridBag.setConstraints(reportButton, c);
-    contentPane.add(reportButton);
-    reportButton.addActionListener(new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          generateReport();
-        }
-    });
-
 
     JButton resetAgentsButton = new JButton("Reset");
     resetAgentsButton.setToolTipText("Reset all agents");
@@ -327,25 +312,34 @@ public class AuctionConsoleFrame extends JFrame
   
   class AuctionConsoleMenu extends JMenuBar {
     
-    protected JCheckBoxMenuItem viewSupplyAndDemand;
+    protected JCheckBoxMenuItem viewTrueSupplyAndDemand;    
+    protected JCheckBoxMenuItem viewAuctionState;    
+    protected JCheckBoxMenuItem viewReportedSupplyAndDemand;
     
-    protected JCheckBoxMenuItem viewAuctionState;
-    
-    protected TrueSupplyAndDemandFrame supplyAndDemandGraph = null;
-    
-    protected ReportedSupplyAndDemandFrame auctionStateGraph = null;
+    protected TrueSupplyAndDemandFrame trueSupDemGraph = null;
+    protected ReportedSupplyAndDemandFrame reportedSupDemGraph = null;
+    protected AuctionStateFrame auctionStateGraph = null;
     
     public AuctionConsoleMenu() {
       JMenu viewMenu = new JMenu("View");
       
-      viewSupplyAndDemand = new JCheckBoxMenuItem("Supply and Demand");
+      viewTrueSupplyAndDemand = new JCheckBoxMenuItem("True Supply and Demand");
       ActionListener viewListener = new ActionListener() {
         public void actionPerformed( ActionEvent event ) {
-          toggleSupplyAndDemand();
+          toggleTrueSupplyAndDemand();
         }
       };
-      viewSupplyAndDemand.addActionListener(viewListener);
-      viewMenu.add(viewSupplyAndDemand);
+      viewTrueSupplyAndDemand.addActionListener(viewListener);
+      viewMenu.add(viewTrueSupplyAndDemand);
+      
+      viewReportedSupplyAndDemand = new JCheckBoxMenuItem("Reported Supply and Demand");
+      viewListener = new ActionListener() {
+        public void actionPerformed( ActionEvent event ) {
+          toggleReportedSupplyAndDemand();
+        }
+      };
+      viewReportedSupplyAndDemand.addActionListener(viewListener);
+      viewMenu.add(viewReportedSupplyAndDemand);
       
       viewAuctionState = new JCheckBoxMenuItem("Auction State");
       viewListener = new ActionListener() {
@@ -361,16 +355,16 @@ public class AuctionConsoleFrame extends JFrame
     
     
     
-    public void toggleSupplyAndDemand() {
-      if ( supplyAndDemandGraph == null ) {
-        supplyAndDemandGraph = new TrueSupplyAndDemandFrame(
+    public void toggleTrueSupplyAndDemand() {
+      if ( trueSupDemGraph == null ) {
+        trueSupDemGraph = new TrueSupplyAndDemandFrame(
             (RoundRobinAuction) auction);
         
         ComponentListener listener = new ComponentListener() {
 
           public void componentHidden( ComponentEvent e ) {
-            viewSupplyAndDemand.setSelected(false);
-            supplyAndDemandGraph = null;
+            viewTrueSupplyAndDemand.setSelected(false);
+            trueSupDemGraph = null;
           }
           
           public void componentMoved( ComponentEvent e ) {
@@ -382,17 +376,17 @@ public class AuctionConsoleFrame extends JFrame
           public void componentShown( ComponentEvent e ) {
           }
         };
-        supplyAndDemandGraph.addComponentListener(listener);
-        supplyAndDemandGraph.open();
-        viewSupplyAndDemand.setSelected(true);
+        trueSupDemGraph.addComponentListener(listener);
+        trueSupDemGraph.open();
+        viewTrueSupplyAndDemand.setSelected(true);
       } else {
-        supplyAndDemandGraph.close();
+        trueSupDemGraph.close();
       }
     }
     
     public void toggleAuctionState() {
       if ( auctionStateGraph == null ) {
-        auctionStateGraph = new ReportedSupplyAndDemandFrame(
+        auctionStateGraph = new AuctionStateFrame(
             (RoundRobinAuction) auction);
         
         ComponentListener listener = new ComponentListener() {
@@ -417,6 +411,35 @@ public class AuctionConsoleFrame extends JFrame
         viewAuctionState.setSelected(true);
       } else {
         auctionStateGraph.close();
+      }
+    }
+
+    public void toggleReportedSupplyAndDemand() {
+      if ( reportedSupDemGraph == null ) {
+        reportedSupDemGraph = new ReportedSupplyAndDemandFrame(
+            (RoundRobinAuction) auction);
+        
+        ComponentListener listener = new ComponentListener() {
+
+          public void componentHidden( ComponentEvent e ) {
+            viewReportedSupplyAndDemand.setSelected(false);
+            reportedSupDemGraph = null;
+          }
+          
+          public void componentMoved( ComponentEvent e ) {
+          }
+          
+          public void componentResized( ComponentEvent e ) {
+          }
+          
+          public void componentShown( ComponentEvent e ) {
+          }
+        };
+        reportedSupDemGraph.addComponentListener(listener);
+        reportedSupDemGraph.open();
+        viewTrueSupplyAndDemand.setSelected(true);
+      } else {
+        reportedSupDemGraph.close();
       }
     }
     
