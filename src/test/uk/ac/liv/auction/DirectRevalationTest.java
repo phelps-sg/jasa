@@ -59,9 +59,8 @@ public class DirectRevalationTest extends ElectricityTest {
   }
   
   public void assignStrategy( ElectricityTrader agent ) {
-    PureSimpleStrategy truth = new PureSimpleStrategy();
-    truth.setMargin(0.0);
-    agent.setStrategy(truth);
+    TruthTellingStrategy truthTelling = new TruthTellingStrategy();    
+    agent.setStrategy(truthTelling);
     agent.reset();
   }
   

@@ -15,23 +15,22 @@
 
 package uk.ac.liv.auction.agent;
 
-import java.io.Serializable;
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.Shout;
 
 /**
- *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class SimpleMomentumStrategy extends MomentumStrategy 
-    implements Serializable {
-  
-  protected void adjustMargin() {    
-    if ( agent.lastShoutAccepted() ) {
-      adjustMargin(1.0);      
-    } else {
-      adjustMargin(0);
-    } 
+public class TruthTellingStrategy extends FixedQuantityStrategyImpl {
+	
+	
+  public boolean modifyShout( Shout.MutableShout shout ) {    
+    shout.setPrice(agent.getPrivateValue(auction));       
+    return super.modifyShout(shout);
   }
-  
+
+	public void endOfRound( Auction auction ) {		
+	}
 }
