@@ -25,7 +25,7 @@ package uk.ac.liv.auction.core;
  * @author Steve Phelps
  */
 
-public interface ParameterizablePricing {
+public interface ParameterizablePricing extends Auctioneer {
 
   public void setK( double k );
 
