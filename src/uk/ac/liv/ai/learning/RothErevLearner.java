@@ -23,6 +23,7 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.io.CSVWriter;
 
 /**
@@ -72,18 +73,12 @@ public class RothErevLearner implements
   /**
    * Probabilities for each possible action.
    */
-  double p[];
+  DiscreteProbabilityDistribution p;
 
   /**
    * The current iteration.
    */
   int iteration;
-
-  /**
-   * Random number generator.
-   */
-  MersenneTwisterFast randGenerator = new MersenneTwisterFast();
-
 
   /**
    * The last action chosen.
@@ -110,13 +105,13 @@ public class RothErevLearner implements
     this.s1 = s1;
     validateParams();
     q = new double[k];
-    p = new double[k];
+    p = new DiscreteProbabilityDistribution(k);
     initialise();
   }
 
   public RothErevLearner( int k, double r, double e, double s1, long seed ) {
     this(k, r, e, s1);
-    randGenerator.setSeed(seed);
+    p.setSeed(seed);
   }
 
   public RothErevLearner() {
@@ -163,9 +158,6 @@ public class RothErevLearner implements
    * @param reward  The payoff for the last action taken by the learner.
    */
   public void reward( double reward ) {
-  //  if ( reward < 0 ) {
-  //    reward = 0; // TODO: Is this really the correct thing to do?
-  //  }
     updatePropensities(lastAction, reward);
     updateProbabilities();
   }
@@ -177,24 +169,7 @@ public class RothErevLearner implements
    * @return one of 0..k according to the probabilities p[0..k].
    */
   public int choose() {
-    double rand = randGenerator.nextDouble();
-    double cummProb = 0;
-    for( int i=0; i<k; i++ ) {
-      cummProb += p[i];
-      if ( rand <= cummProb ) {
-        return i;
-      }
-    }
-   // return randGenerator.nextInt(k);
-/*    if ( cummProb == 0 ) {
-      return randGenerator.nextInt(k);
-    } */
-    //System.out.println("WARNING:");
-    //System.out.println(this);
-    //System.out.println("cummProb = " + cummProb);
-    //System.out.println("Probabilities do not sum to 1!");
-    reset();
-    return randGenerator.nextInt(k);
+    return p.generateRandomEvent();
   }
 
   /**
@@ -214,16 +189,10 @@ public class RothErevLearner implements
   protected void updateProbabilities() {
     double sigmaQ = 0;
     for( int i=0; i<k; i++ ) {
-//      if ( q[i] > 0 ) {
-        sigmaQ += q[i];
-//      }
+      sigmaQ += q[i];
     }
     for( int i=0; i<k; i++ ) {
- //     if ( q[i] <= 0 ) {
- //       p[i] = 0;
- //     } else {
-        p[i] = q[i] / sigmaQ;
- //     }
+      p.setProbability(i, q[i] / sigmaQ);
     }
   }
 
@@ -254,7 +223,7 @@ public class RothErevLearner implements
 
   public void initialise() {
     for( int i=0; i<k; i++ ) {
-      p[i] = 1.0/k;
+      p.setProbability(i, 1.0/k);
       q[i] = s1/k;
     }
     iteration = 0;
@@ -298,29 +267,13 @@ public class RothErevLearner implements
   }
 
   public void setSeed( long seed ) {
-    randGenerator.setSeed(seed);
+    p.setSeed(seed);
   }
 
   public void dumpDistributionToCSV( CSVWriter out ) {
     for( int i=0; i<k; i++ ) {
-      out.newData(p[i]);
+      out.newData(p.getProbability(i));
     }
   }
-
-  /*
-  public String toString() {
-    StringBuffer str = new StringBuffer("(" + this.getClass() + " ");
-    str.append("k:" + k + " r:" + r + " e:" + e + " ");
-    str.append("iteration:" + iteration + " lastAction:" + lastAction + " ");
-    for( int i=0; i<k; i++ ) {
-      str.append(" p[" + i + "]:" + p[i]);
-    }
-    for( int i=0; i<k; i++ ) {
-      str.append(" q[" + i + "]:" + q[i]);
-    }
-    str.append("\n)");
-    return str.toString();
-  } */
-
 
 }
