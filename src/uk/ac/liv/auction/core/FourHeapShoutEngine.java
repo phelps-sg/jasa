@@ -15,13 +15,15 @@
 
 package uk.ac.liv.auction.core;
 
+import uk.ac.liv.util.BinaryHeap;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import java.io.Serializable;
 
-import org.apache.commons.collections.buffer.PriorityBuffer;
+//import org.apache.commons.collections.BinaryHeap;
 
 import org.apache.log4j.Logger;
 
@@ -50,22 +52,22 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   /**
    * Matched bids in ascending order
    */
-  protected PriorityBuffer bIn = new PriorityBuffer(greaterThan);
+  protected BinaryHeap bIn = new BinaryHeap(greaterThan);
 
   /**
    * Unmatched bids in descending order
    */
-  protected PriorityBuffer bOut = new PriorityBuffer(lessThan);
+  protected BinaryHeap bOut = new BinaryHeap(lessThan);
 
   /**
    * Matched asks in descending order
    */
-  protected PriorityBuffer sIn = new PriorityBuffer(lessThan);
+  protected BinaryHeap sIn = new BinaryHeap(lessThan);
 
   /**
    * Unmatched asks in ascending order
    */
-  protected PriorityBuffer sOut = new PriorityBuffer(greaterThan);
+  protected BinaryHeap sOut = new BinaryHeap(greaterThan);
 
   protected static AscendingShoutComparator greaterThan =
     new AscendingShoutComparator();
@@ -89,7 +91,27 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     }
     postRemovalProcessing();
   }
-  
+
+  protected void removeAsk( Shout shout ) {
+    if ( sIn.remove(shout) ) {
+      reinsert(bIn, shout.getQuantity());
+    } else {
+      sOut.remove(shout);
+    }
+  }
+
+  protected void removeBid( Shout shout ) {
+    if ( bIn.remove(shout) ) {
+      reinsert(sIn, shout.getQuantity());
+    } else {
+      bOut.remove(shout);
+    }
+  }
+
+  public String toString() {
+    return "sIn = " + sIn + "\nbIn = " + bIn + "\nsOut = " + sOut + "\nbOut = " + bOut;
+  }
+
   /**
    * Log the current state of the auction.
    */
@@ -101,7 +123,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     prettyPrint("Runner-up asks", sOut);
   }
 
-  public void prettyPrint( String title, PriorityBuffer shouts ) {
+  public void prettyPrint( String title, BinaryHeap shouts ) {
     logger.info(title);
     logger.info("--------------");
     Iterator i = shouts.iterator();
@@ -112,6 +134,40 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     logger.info("");
   }
 
+
+  /**
+   * Insert a shout into a binary heap.
+   *
+   * @param heap  The heap to insert into
+   * @param shout The shout to insert
+   *
+   */
+  private static void insertShout( BinaryHeap heap, Shout shout ) throws DuplicateShoutException {
+    try {
+      heap.insert(shout);
+    } catch ( IllegalArgumentException e ) {
+      logger.error(e);
+      e.printStackTrace();
+      throw new DuplicateShoutException("Duplicate shout: " + shout.toString());
+    }
+  }
+
+
+  /**
+   * Insert a matched ask into the appropriate heap
+   */
+  private void insertMatchedAsk( Shout ask ) throws DuplicateShoutException {
+    assert ask.isAsk();
+    insertShout(sIn, ask);
+  }
+
+  /**
+   * Insert a matched bid into the appropriate heap.
+   */
+  private void insertMatchedBid( Shout bid ) throws DuplicateShoutException {
+    assert bid.isBid();
+    insertShout(bIn, bid);
+  }
 
   /**
    * Insert an unmatched ask into the approriate heap.
@@ -170,36 +226,64 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     return (Shout) sIn.get();
   }
 
-  
+  /**
+   * Unify the shout at the top of the heap with the supplied shout,
+   * so that quantity(shout) = quantity(top(heap)).  This is achieved
+   * by splitting the supplied shout or the shout at the top of the heap.
+   *
+   * @param shout The shout.
+   * @param heap  The heap.
+   *
+   * @return A reference to the, possibly modified, shout.
+   *
+   */
+  protected static Shout unifyShout( Shout shout, BinaryHeap heap ) {
 
-  public int promoteShout( Shout shout, PriorityBuffer from, PriorityBuffer to,
-                            PriorityBuffer matched ) throws DuplicateShoutException {
+    Shout top = (Shout) heap.get();
 
+    if ( shout.getQuantity() > top.getQuantity() ) {
+      shout = shout.splat( shout.getQuantity() - top.getQuantity() );
+    } else {
+      if ( top.getQuantity() > shout.getQuantity() ) {
+        Shout remainder = top.split( top.getQuantity() - shout.getQuantity() );
+        heap.insert(remainder);
+      }
+    }
+
+    return shout;
+  }
+
+  protected int displaceShout( Shout shout, BinaryHeap from, BinaryHeap to ) throws DuplicateShoutException {
     shout = unifyShout(shout, from);
-    insertShout(matched, shout);
-    to.add(from.get());
+    to.insert(from.pop());
+    insertShout(from, shout);
     return shout.getQuantity();
   }
 
-  
+  public int promoteShout( Shout shout, BinaryHeap from, BinaryHeap to,
+                            BinaryHeap matched ) throws DuplicateShoutException {
+
+    shout = unifyShout(shout, from);
+    insertShout(matched, shout);
+    to.insert(from.pop());
+    return shout.getQuantity();
+  }
+
   public int displaceHighestMatchedAsk( Shout ask ) throws DuplicateShoutException {
     assert ask.isAsk();
     return displaceShout(ask, sIn, sOut);
   }
 
-  
   public int displaceLowestMatchedBid( Shout bid ) throws DuplicateShoutException {
     assert bid.isBid();
     return displaceShout(bid, bIn, bOut);
   }
 
-  
   public int promoteHighestUnmatchedBid( Shout ask ) throws DuplicateShoutException {
     assert ask.isAsk();
     return promoteShout(ask, bOut, bIn, sIn);
   }
 
-  
   public int promoteLowestUnmatchedAsk( Shout bid ) throws DuplicateShoutException {
     assert bid.isBid();
     return promoteShout(bid, sOut, sIn, bIn);
@@ -274,6 +358,16 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     }
   }
 
+
+//  protected Iterator matchedBidDisassembler() {
+//    return new QueueDisassembler(bIn);
+//  }
+//
+//  protected Iterator matchedAskDisassembler() {
+//    return new QueueDisassembler(sIn);
+//  }
+
+
   /**
    * <p>
    * Return a list of matched bids and asks.  The list is of the form
@@ -288,18 +382,18 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   public List getMatchedShouts() {
     ArrayList result = new ArrayList(sIn.size() + bIn.size());
     while ( ! sIn.isEmpty() ) {
-      Shout sInTop = (Shout) sIn.get();
-      Shout bInTop = (Shout) bIn.get();
+      Shout sInTop = (Shout) sIn.pop();
+      Shout bInTop = (Shout) bIn.pop();
       int nS = sInTop.getQuantity();
       int nB = bInTop.getQuantity();
       if ( nS < nB ) {
         // split the bid
         Shout remainder = bInTop.split(nB-nS);
-        bIn.add(remainder);
+        bIn.insert(remainder);
       } else if ( nB < nS ) {
         // split the ask
         Shout remainder = sInTop.split(nS-nB);
-        sIn.add(remainder);
+        sIn.insert(remainder);
       }
       result.add(bInTop);
       result.add(sInTop);
@@ -308,13 +402,15 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     return result;
   }
 
+  protected void initialise() {
+    bIn.clear();
+    bOut.clear();
+    sIn.clear();
+    sOut.clear();
+  }
 
   public synchronized void reset() {
     initialise();
-  }
-
-  public String toString() {
-    return "sIn = " + sIn + "\nbIn = " + bIn + "\nsOut = " + sOut + "\nbOut = " + bOut;
   }
 
   /**
@@ -345,14 +441,14 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * @param heap      The heap to remove shouts from.
    * @param quantity  The total quantity to remove.
    */
-  protected void reinsert( PriorityBuffer heap, int quantity ) {
+  protected void reinsert( BinaryHeap heap, int quantity ) {
 
     while ( quantity > 0 ) {
 
-      Shout top = (Shout) heap.get();
+      Shout top = (Shout) heap.pop();
 
       if ( top.getQuantity() > quantity ) {
-        heap.add( top.split(top.getQuantity() - quantity) );
+        heap.insert( top.split(top.getQuantity() - quantity) );
       }
 
       quantity -= top.getQuantity();
@@ -368,105 +464,6 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
       }
     }
 
-  }
-  
-  /**
-   * Unify the shout at the top of the heap with the supplied shout,
-   * so that quantity(shout) = quantity(top(heap)).  This is achieved
-   * by splitting the supplied shout or the shout at the top of the heap.
-   *
-   * @param shout The shout.
-   * @param heap  The heap.
-   *
-   * @return A reference to the, possibly modified, shout.
-   *
-   */
-  protected static Shout unifyShout( Shout shout, PriorityBuffer heap ) {
-
-    Shout top = (Shout) heap.get();
-
-    if ( shout.getQuantity() > top.getQuantity() ) {
-      shout = shout.splat( shout.getQuantity() - top.getQuantity() );
-    } else {
-      if ( top.getQuantity() > shout.getQuantity() ) {
-        Shout remainder = top.split( top.getQuantity() - shout.getQuantity() );
-        heap.add(remainder);
-      }
-    }
-
-    return shout;
-  }
-  
-  
-  protected void initialise() {
-    bIn.clear();
-    bOut.clear();
-    sIn.clear();
-    sOut.clear();
-  }
-
-  
-  protected int displaceShout( Shout shout, PriorityBuffer from, 
-                                PriorityBuffer to ) 
-                                  throws DuplicateShoutException {
-    shout = unifyShout(shout, from);
-    to.add(from.get());
-    insertShout(from, shout);
-    return shout.getQuantity();
-  }
-
-  
-  protected void removeAsk( Shout shout ) {
-    if ( sIn.remove(shout) ) {
-      reinsert(bIn, shout.getQuantity());
-    } else {
-      sOut.remove(shout);
-    }
-  }
-
-  
-  protected void removeBid( Shout shout ) {
-    if ( bIn.remove(shout) ) {
-      reinsert(sIn, shout.getQuantity());
-    } else {
-      bOut.remove(shout);
-    }
-  }
-
-
-  /**
-   * Insert a shout into a binary heap.
-   *
-   * @param heap  The heap to insert into
-   * @param shout The shout to insert
-   *
-   */
-  private static void insertShout( PriorityBuffer heap, Shout shout )
-                                          throws DuplicateShoutException {
-    try {
-      heap.add(shout);
-    } catch ( IllegalArgumentException e ) {
-      logger.error(e);
-      e.printStackTrace();
-      throw new DuplicateShoutException("Duplicate shout: " + shout.toString());
-    }
-  }
-
-
-  /**
-   * Insert a matched ask into the appropriate heap
-   */
-  private void insertMatchedAsk( Shout ask ) throws DuplicateShoutException {
-    assert ask.isAsk();
-    insertShout(sIn, ask);
-  }
-
-  /**
-   * Insert a matched bid into the appropriate heap.
-   */
-  private void insertMatchedBid( Shout bid ) throws DuplicateShoutException {
-    assert bid.isBid();
-    insertShout(bIn, bid);
   }
 
 }
