@@ -138,7 +138,7 @@ NEW_FUNCTION(uk.ac.liv.auction.ec.gp.func.QuoteBidPrice, numberterminal)
 
 ################### tradingStrategy
 
-NEW_FUNCTION_SET(tradingStrategy, 14)
+NEW_FUNCTION_SET(tradingStrategy, 15)
 
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Add, binaryarithop)
 NEW_FUNCTION(uk.ac.liv.ec.gp.func.Subtract, binaryarithop)
