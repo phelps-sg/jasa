@@ -312,17 +312,18 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
       GPElectricityTrader trader = (GPElectricityTrader) traders.next();
       double profits = trader.getProfits();
-      float fitness = Float.MAX_VALUE;
+      double fitness = Float.MAX_VALUE;
 
-      if ( (!Double.isNaN(profits)) ) {
-        fitness = 20000f - (float) profits;
+      if ( ! (Double.isNaN(profits)
+              || ((GPTradingStrategy) trader.getStrategy()).misbehaved()) ) {
+        fitness = 20000 - profits;
       }
       if ( fitness < 0 ) {
         System.err.println("WARNING: trader " + trader + " had negative fitness!");
         fitness = 0;
       }
 
-      strategyFitnesses[i].newData( (double) fitness );
+      strategyFitnesses[i].newData(fitness );
       if ( generateCSV ) {
         statsOut.newData(profits);
       }

@@ -27,8 +27,6 @@ import huyd.poolit.*;
 
 public class GenericLong extends GenericNumber {
 
-  Long value;
-
   long primitiveValue;
 
   protected static Pooler pool;
@@ -65,25 +63,17 @@ public class GenericLong extends GenericNumber {
 
   protected GenericLong( long value ) {
     primitiveValue = value;
-    synchFromPrimitive();
   }
 
   protected void setValue( long value ) {
     primitiveValue = value;
-    synchFromPrimitive();
-  }
-
-  protected void synchFromPrimitive() {
-    if ( value == null || value.longValue() != primitiveValue ) {
-      value = new Long(primitiveValue);
-    }
   }
 
   public GenericNumber add( GenericNumber other ) {
     if ( other instanceof GenericLong ) {
       return newGenericLong( primitiveValue + other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return GenericDouble.newGenericDouble(value.doubleValue() + other.doubleValue());
+      return GenericDouble.newGenericDouble(doubleValue() + other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
@@ -93,7 +83,7 @@ public class GenericLong extends GenericNumber {
     if ( other instanceof GenericLong ) {
       return newGenericLong( primitiveValue * other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return GenericDouble.newGenericDouble(value.doubleValue() * other.doubleValue());
+      return GenericDouble.newGenericDouble(doubleValue() * other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
@@ -103,14 +93,14 @@ public class GenericLong extends GenericNumber {
   if ( other instanceof GenericLong ) {
       return newGenericLong( primitiveValue - other.longValue() );
     } else if ( other instanceof GenericDouble ) {
-      return GenericDouble.newGenericDouble(value.doubleValue() - other.doubleValue());
+      return GenericDouble.newGenericDouble(doubleValue() - other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
   public GenericNumber divide( GenericNumber other ) {
-    return opResult( value.doubleValue() / other.doubleValue() );
+    return opResult( doubleValue() / other.doubleValue() );
   }
 
   protected GenericNumber opResult( double tempResult ) {
@@ -125,7 +115,15 @@ public class GenericLong extends GenericNumber {
 
   public int compareTo( Object other ) {
     if ( other instanceof GenericLong ) {
-      return value.compareTo( ((GenericLong) other).getValue() );
+      long l0 = primitiveValue;
+      long l1 = ((GenericLong) other).longValue();
+      if ( l0 < l1 ) {
+        return -1;
+      } else if ( l0 > l1 ) {
+        return +1;
+      } else {
+        return 0;
+      }
     } else if ( other instanceof GenericDouble ) {
       double d0 = doubleValue();
       double d1 = ((GenericDouble) other).doubleValue();
@@ -142,34 +140,31 @@ public class GenericLong extends GenericNumber {
   }
 
   public int intValue() {
-    return value.intValue();
+    return (int) primitiveValue;
   }
 
   public float floatValue() {
-    return value.floatValue();
+    return (float) primitiveValue;
   }
 
   public double doubleValue() {
-    return value.doubleValue();
+    return (double) primitiveValue;
   }
 
   public long longValue() {
-    return value.longValue();
+    return primitiveValue;
   }
 
-  public Long getValue() {
-    return value;
-  }
 
   public String toString() {
-    return value.toString();
+    return primitiveValue+"";
   }
 
   public boolean equals( Object other ) {
     if ( other instanceof GenericLong ) {
-      return value.longValue() == ((GenericLong) other).longValue();
+      return primitiveValue == ((GenericLong) other).longValue();
     } else if ( other instanceof GenericNumber ) {
-      return value.longValue() == ((GenericNumber) other).doubleValue();
+      return doubleValue() == ((GenericNumber) other).doubleValue();
     } else {
       return super.equals(other);
     }

@@ -52,22 +52,22 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   /**
    * Matched bids in ascending order
    */
-  protected BinaryHeap bIn = new BinaryHeap(greaterThan);
+  protected BinaryHeap bIn = new FastBinaryHeap(greaterThan);
 
   /**
    * Unmatched bids in descending order
    */
-  protected BinaryHeap bOut = new BinaryHeap(lessThan);
+  protected BinaryHeap bOut = new FastBinaryHeap(lessThan);
 
   /**
    * Matched asks in descending order
    */
-  protected BinaryHeap sIn = new BinaryHeap(lessThan);
+  protected BinaryHeap sIn = new FastBinaryHeap(lessThan);
 
   /**
    * Unmatched asks in ascending order
    */
-  protected BinaryHeap sOut = new BinaryHeap(greaterThan);
+  protected BinaryHeap sOut = new FastBinaryHeap(greaterThan);
 
   protected static AscendingShoutComparator greaterThan =
     new AscendingShoutComparator();

@@ -20,16 +20,18 @@ import ec.*;
 
 import uk.ac.liv.util.GenericLong;
 
+import uk.ac.liv.util.Debug;
+
 public class One extends GPNode {
 
   static GenericLong one = GenericLong.newGenericLong(1L);
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPGenericData) input).data = one;
+    ((GPGenericData) input).data = GenericLong.newGenericLong(1L);
   }
 
   public String toString() {
-    return "1";
+    return one.toString();
   }
 
 }

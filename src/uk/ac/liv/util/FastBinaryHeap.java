@@ -17,6 +17,8 @@ package uk.ac.liv.util;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import huyd.poolit.*;
 
@@ -37,6 +39,9 @@ public class FastBinaryHeap extends BinaryHeap {
 
   protected IndexMap map = new IndexMap();
 
+  static final int DEFAULT_INDEX_POOL_SIZE = 100000;
+
+  static int indexPoolSize = DEFAULT_INDEX_POOL_SIZE;
 
   public FastBinaryHeap( Comparator comparator ) {
     super(comparator);
@@ -44,6 +49,10 @@ public class FastBinaryHeap extends BinaryHeap {
 
   public FastBinaryHeap() {
     super();
+  }
+
+  public static void setIndexPoolSize( int indexPoolSize ) {
+    FastBinaryHeap.indexPoolSize = indexPoolSize;
   }
 
   protected void set( int index, Object x ) {
@@ -82,6 +91,11 @@ public class FastBinaryHeap extends BinaryHeap {
     return result;
   }
 
+  public void clear() {
+    map.clear();
+    super.clear();
+  }
+
 }
 
 class IndexMap {
@@ -89,8 +103,6 @@ class IndexMap {
   HashMap map = new HashMap();
 
   static Pooler intPool = null;
-
-  static final int DEFAULT_POOL_SIZE = 50000;
 
 
   public IndexMap( int poolSize ) {
@@ -106,7 +118,7 @@ class IndexMap {
   }
 
   public IndexMap() {
-    this(DEFAULT_POOL_SIZE);
+    this(FastBinaryHeap.indexPoolSize);
   }
 
   public void associate( Object key, int index ) {
@@ -140,6 +152,14 @@ class IndexMap {
       return -1;
     }
     return indexWrapper.intValue();
+  }
+
+  public void clear() {
+    Iterator i = map.entrySet().iterator();
+    while ( i.hasNext() ) {
+      intPool.release((MutableIntWrapper) ((Map.Entry) i.next()).getValue());
+    }
+    map.clear();
   }
 
 }

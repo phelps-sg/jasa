@@ -21,16 +21,15 @@ import uk.ac.liv.auction.agent.TraderAgent;
 import uk.ac.liv.util.io.CSVWriter;
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Debug;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -85,7 +84,7 @@ public class RoundRobinAuction extends AuctionImpl
   /**
    * The collection of idle TraderAgents
    */
-  LinkedList defunctTraders;
+  LinkedList defunctTraders = new LinkedList();
 
   /**
    * The collection of all TraderAgents registered in the auction.
@@ -162,6 +161,7 @@ public class RoundRobinAuction extends AuctionImpl
    * each trader the opportunity to bid in the auction.
    */
   public void requestShouts() {
+    System.err.println(activeTraders.size());
     Iterator i = activeTraders.iterator();
     while ( i.hasNext() ) {
       RoundRobinTrader trader = (RoundRobinTrader) i.next();
@@ -297,13 +297,10 @@ public class RoundRobinAuction extends AuctionImpl
     super.initialise();
     numTraders = 0;
     round = 0;
-    defunctTraders = new LinkedList();
-    activeTraders = new LinkedList();
-    Iterator i = registeredTraders.iterator();
-    while ( i.hasNext() ) {
-      TraderAgent agent = (TraderAgent) i.next();
-      activate(agent);
-    }
+    defunctTraders.clear();
+    activeTraders.clear();
+    activeTraders.addAll(registeredTraders);
+    numTraders = activeTraders.size();
   }
 
   protected void activate( TraderAgent agent ) {

@@ -33,6 +33,8 @@ public class GenericDouble extends GenericNumber {
 
   static final int DEFAULT_POOL_SIZE = 1000000;
 
+  static int poolSize = DEFAULT_POOL_SIZE;
+
   public GenericDouble() {
     this(Double.NaN);
   }
@@ -49,6 +51,10 @@ public class GenericDouble extends GenericNumber {
       result = new GenericDouble(value);
     }
     return result;
+  }
+
+  public static void setPoolSize( int poolSize ) {
+    GenericDouble.poolSize = poolSize;
   }
 
   public void release() {
@@ -131,7 +137,7 @@ public class GenericDouble extends GenericNumber {
   protected static void initialisePool() {
     try {
       if ( pool == null ) {
-        pool = new FixedPooler(GenericDouble.class, DEFAULT_POOL_SIZE);
+        pool = new FixedPooler(GenericDouble.class, poolSize);
       }
     } catch ( CreateException e ) {
       e.printStackTrace();

@@ -1,17 +1,17 @@
 package uk.ac.liv.auction.stats;
 
-import ec.util.ParameterDatabase;
-import ec.util.Parameter;
-
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
-import uk.ac.liv.util.BinaryHeap;
 import uk.ac.liv.util.Debug;
+
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
 
 import java.util.*;
 
 import huyd.poolit.*;
+
 
 public class EquilibriaStats implements MarketStats {
 
@@ -85,8 +85,7 @@ public class EquilibriaStats implements MarketStats {
         sellers.add(agent);
       }
     }
-    Collections.sort(buyers, descendingValues);
-    Collections.sort(sellers, ascendingValues);
+
   }
 /*
   protected void buildCurve( ArrayList curve, BinaryHeap traders,
@@ -111,7 +110,7 @@ public class EquilibriaStats implements MarketStats {
   }
 */
 
-  protected synchronized static void initialiseTuplePool() {
+  protected static void initialiseTuplePool() {
     try {
       if ( tuplePool == null ) {
         tuplePool = new FixedPooler(PriceQtyTuple.class, TUPLE_POOL_SIZE);
@@ -168,6 +167,9 @@ public class EquilibriaStats implements MarketStats {
   }
 
   protected void buildCurves() {
+
+    Collections.sort(buyers, descendingValues);
+    Collections.sort(sellers, ascendingValues);
 
     if ( supplyCurve == null ) {
       supplyCurve = new ArrayList(sellers.size());
