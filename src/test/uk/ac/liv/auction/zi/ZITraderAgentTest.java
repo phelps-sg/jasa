@@ -18,16 +18,15 @@ package test.uk.ac.liv.auction.zi;
 import junit.framework.*;
 
 import uk.ac.liv.auction.zi.*;
-import uk.ac.liv.auction.agent.TruthTellingStrategy;
-import uk.ac.liv.auction.core.*;
 
-import java.util.Observer;
-import java.util.Observable;
+import uk.ac.liv.auction.agent.TruthTellingStrategy;
+
+import uk.ac.liv.auction.core.*;
 
 import org.apache.log4j.Logger;
 
 
-public class ZITraderAgentTest extends TestCase implements Observer {
+public class ZITraderAgentTest extends TestCase  {
 
   ZITraderAgent buyer, seller;
 
@@ -64,18 +63,44 @@ public class ZITraderAgentTest extends TestCase implements Observer {
   }
 
   /**
-   * Test that the agent drops out of the auction after its trade entitlement
-   * has been depleted.
+   * Test that the agent drops out of the auction (becomes inactive) after its
+   * trade entitlement has been depleted.
    */
   public void testTradeEntitlement() {
-    auction.addObserver(this);
-    auction.run();
-  }
+    
+    try {
 
-  public void update( Observable observable, Object o ) {
-    RoundRobinAuction auction = (RoundRobinAuction) observable;
-    assertTrue( buyer.getQuantityTraded() <= TRADE_ENTITLEMENT);
-    assertTrue( seller.getQuantityTraded() <= TRADE_ENTITLEMENT);
+      auction.begin();
+
+      assertTrue("Agents not active at start of auction", 
+          buyer.active() && seller.active());
+      
+      for ( int i = 0; i < TRADE_ENTITLEMENT; i++ ) {
+        auction.step();
+      }
+
+      assertTrue("agents did not trade all their units", 
+          buyer.getQuantityTraded() == TRADE_ENTITLEMENT &&
+           seller.getQuantityTraded() == TRADE_ENTITLEMENT);
+
+      // Agents must still be active after trading their last unit
+      // so that reinforcement learning algorithms can still learn from
+      // the last trade- v. important if you are only entitled to trade
+      // a single unit.  See BR #1064544.
+      assertTrue("agents not active immediately after trading all units", 
+          		buyer.active() && seller.active());
+
+      // Ok, after this step they should be inactive.
+      auction.step();
+
+      assertTrue("agents not inactive after trading all units", 
+          			!buyer.active() && !seller.active());
+      
+    } catch ( AuctionClosedException e ) {
+      fail(e.getMessage());
+    }
+
+
   }
 
   public static void main( String[] args ) {
