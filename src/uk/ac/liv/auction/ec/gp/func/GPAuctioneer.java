@@ -33,13 +33,15 @@ import java.util.*;
 
 
 /**
- * An Auctioneer whose princing rule is evolved using genetic programming.
+ * An Auctioneer whose pricing rule is evolved using genetic programming.
  *
  */
 
 public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   final ShoutEngine shoutEngine = new FourHeapShoutEngine();
+
+  protected boolean misbehaved = false;
 
   protected Shout currentShout;
 
@@ -71,6 +73,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   public void reset() {
     shoutEngine.reset();
+    misbehaved = false;
   }
 
   public void endOfRoundProcessing() {
@@ -102,12 +105,17 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     try {
       evaluateTree(0, input);
     } catch ( ArithmeticException e ) {
+      misbehaved = true;
       System.out.println("Caught: " + e);
       //e.printStackTrace();
       return 0;
     }
     GenericNumber result = (GenericNumber) input.data;
     result.release();
+    if ( result.doubleValue() < 0 ) {
+      misbehaved = true;
+      return 0;
+    }
     return result.doubleValue();
   }
 
@@ -153,6 +161,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public StatsMarketDataLogger getLogStats() { return logger; }
   public LinkedList getStrategies() { return strategies; }
   public Auction getAuction() { return auction; }
+  public boolean misbehaved() { return misbehaved; }
 
 
 }

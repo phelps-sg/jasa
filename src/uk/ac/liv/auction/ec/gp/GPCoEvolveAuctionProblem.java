@@ -206,13 +206,12 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       preAuctionProcessing();
       auction.run();
       postAuctionProcessing();
-      computeAuctioneerFitness();
+      computeAuctioneerFitness((GPAuctioneer) auctioneer);
       computeStrategyFitnesses();
     }
 
     setAuctioneerFitness( (GPIndividual) group[0].get(0));
     setStrategyFitnesses(group);
-
 
     logStats(auctioneerFitnesses.getMean());
     reportStatus();
@@ -355,21 +354,20 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   }
 
 
-  protected float computeAuctioneerFitness() {
+  protected double computeAuctioneerFitness( GPAuctioneer auctioneer ) {
 
-    float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;
-    if ( stats.eA > 100 ) {
+    if ( verbose && stats.eA > 100 ) {
       System.err.println("eA > 100% !!");
       System.err.println(stats);
     }
-    float fitness = Float.MAX_VALUE;
 
-    if ( !Float.isNaN(relMarketPower) && !Float.isInfinite(relMarketPower)
-           && !Double.isNaN(stats.eA) ) {
-      fitness = 1-((float) stats.eA/100); //TODO + relMarketPower;
+    double fitness = Float.MAX_VALUE;
+
+    if ( ! (auctioneer.misbehaved() || Double.isNaN(stats.eA)) ) {
+      fitness = 1-(stats.eA/100);
     }
 
-    auctioneerFitnesses.newData( (double) fitness );
+    auctioneerFitnesses.newData(fitness);
 
     return fitness;
   }
