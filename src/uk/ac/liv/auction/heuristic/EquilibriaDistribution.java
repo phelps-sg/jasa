@@ -100,7 +100,8 @@ public class EquilibriaDistribution  {
     }
   }
   
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {  	
+  	GlobalPRNG.setup(parameters, base);  	
     payoffMatrixFileName = parameters.getString(base.push(P_PAYOFFMATRIX), null);
     numAgents = parameters.getInt(base.push(P_NUMAGENTS), null, 1);
     numStrategies = parameters.getInt(base.push(P_NUMSTRATEGIES), null, 1);
