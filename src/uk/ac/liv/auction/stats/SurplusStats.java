@@ -68,6 +68,25 @@ public class SurplusStats extends EquilibriaStats {
 
   private DecimalFormat percentageFormatter =
       new DecimalFormat("#00.00");
+  
+  public static final ReportVariable VAR_EA =
+    new ReportVariable("surplus.ea", "Market efficiency");
+  
+  public static final ReportVariable VAR_PBA = 
+    new ReportVariable("surplus.pba",
+        				"Profits of buyers in the actual auction");
+  
+  public static final ReportVariable VAR_PSA = 
+    new ReportVariable("surplus.psa",
+        				"Profits of sellers in the actual auction");
+  
+  public static final ReportVariable VAR_PBCE = 
+    new ReportVariable("surplus.pbce",
+        				"Profits of buyers in competitive equilibrium");
+  
+  public static final ReportVariable VAR_PSCE = 
+    new ReportVariable("surplus.psce", 
+        				"Profits of sellers in competitive equilibrium");
 
   static Logger logger = Logger.getLogger(SurplusStats.class);
 
@@ -186,11 +205,11 @@ public class SurplusStats extends EquilibriaStats {
   public Map getVariables() {
     HashMap vars = new HashMap();
     vars.putAll(super.getVariables());
-    vars.put("profit.pbce", new Double(pBCE));
-    vars.put("profit.psce", new Double(pSCE));
-    vars.put("profit.pba", new Double(pBA));
-    vars.put("profit.psa", new Double(pSA));
-    vars.put("profit.ea", new Double(eA));
+    vars.put(VAR_PBCE, new Double(pBCE));
+    vars.put(VAR_PSCE, new Double(pSCE));
+    vars.put(VAR_PBA, new Double(pBA));
+    vars.put(VAR_PSA, new Double(pSA));
+    vars.put(VAR_EA, new Double(eA));
     return vars;
   }
 

@@ -54,7 +54,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
   protected static final int ASK_PRICE = 2;
   protected static final int BID_QUOTE = 3;
   protected static final int ASK_QUOTE = 4;
-
+  
   public StatsMarketDataLogger() {
     initialise();
   }
@@ -178,9 +178,14 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
   }
   
   protected void createReportVars( Map vars, String var, Distribution stats ) {
-    vars.put(var + ".mean", new Double(stats.getMean()));
-    vars.put(var + ".min", new Double(stats.getMin()));
-    vars.put(var + ".max", new Double(stats.getMax()));
-    vars.put(var + ".stdev", new Double(stats.getStdDev()));
+    vars.put(makeVar(var, "mean"), new Double(stats.getMean()));
+    vars.put(makeVar(var, "min"), new Double(stats.getMin()));
+    vars.put(makeVar(var, "max"), new Double(stats.getMax()));
+    vars.put(makeVar(var, "stdev"), new Double(stats.getStdDev()));
+  }
+  
+  protected ReportVariable makeVar( String varName, String moment ) {
+    return new ReportVariable("auctionstats." + varName + "." + moment, 
+         					 varName + " distribution " + moment);
   }
 }

@@ -119,6 +119,19 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
    * The age of the auction in rounds.
    */
   protected int auctionAge;
+  
+  public static final ReportVariable VAR_MPB =
+    new ReportVariable("electricity.mpb", "The market-power of buyers");
+  
+  public static final ReportVariable VAR_MPS =
+    new ReportVariable("electricity.mps", "The market-power of sellers");
+  
+  public static final ReportVariable VAR_RCAP =
+    new ReportVariable("electricity.rcap", 
+        				"The relative generating capacity of buyers to sellers");
+  
+  public static final ReportVariable VAR_RCON =
+    new ReportVariable("electricity.rcon", "The ratio of sellers to buyers" );
 
   static Logger logger = Logger.getLogger(ElectricityStats.class);
 
@@ -404,10 +417,10 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
   public Map getVariables() {
     HashMap vars = new HashMap();
     vars.putAll(super.getVariables());
-    vars.put("electricity.mpb", new Double(getMPB()));
-    vars.put("electricity.mps", new Double(getMPS()));
-    vars.put("electricity.rcap", new Double(getRCAP()));
-    vars.put("electricity.rcon", new Double(getRCON()));
+    vars.put(VAR_MPB, new Double(getMPB()));
+    vars.put(VAR_MPS, new Double(getMPS()));
+    vars.put(VAR_RCAP, new Double(getRCAP()));
+    vars.put(VAR_RCON, new Double(getRCON()));
     return vars;
   }
 

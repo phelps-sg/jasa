@@ -20,6 +20,7 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.stats.ReportVariable;
 
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
@@ -209,9 +210,9 @@ public class MarketSimulation implements Serializable, Runnable {
     Collections.sort(variableList);
     Iterator i = variableList.iterator();
     while ( i.hasNext() ) {
-      String varName = (String) i.next();
+      ReportVariable var = (ReportVariable) i.next();
       logger.info("");
-      Distribution stats = (Distribution) resultsStats.get(varName);
+      Distribution stats = (Distribution) resultsStats.get(var);
       stats.log();
     }
   }
@@ -224,15 +225,15 @@ public class MarketSimulation implements Serializable, Runnable {
     Collections.sort(vars);
     Iterator i = vars.iterator();
     while ( i.hasNext() ) {
-      String variableName = (String) i.next();
-      Object value = results.get(variableName);
+      ReportVariable var = (ReportVariable) i.next();
+      Object value = results.get(var);
       if ( value instanceof Number ) {
         double v = ((Number) value).doubleValue();
         CummulativeDistribution varStats = 
-          (CummulativeDistribution) resultsStats.get(variableName);
+          (CummulativeDistribution) resultsStats.get(var);
         if ( varStats == null ) {
-          varStats = new CummulativeDistribution(variableName);
-          resultsStats.put(variableName, varStats);
+          varStats = new CummulativeDistribution(var.toString());
+          resultsStats.put(var, varStats);
         }
         varStats.newData(v);
       }

@@ -53,6 +53,19 @@ public class EquilibriaStats extends DirectRevelationStats
   protected List matchedShouts;
   
   protected int quantity;
+  
+  public static final ReportVariable VAR_EXISTS =
+    new ReportVariable("equilibria.exists", "Does an equilibrium exist?");
+  
+  public static final ReportVariable VAR_MINPRICE =
+    new ReportVariable("equilibria.minprice", "Minimum equilibrium price");
+  
+  public static final ReportVariable VAR_MAXPRICE =
+    new ReportVariable("equilibria.maxprice", "Maximum equilibrium price");
+  
+  public static final ReportVariable VAR_QUANTITY =
+    new ReportVariable("equilibria.quantity", "Equilibrium quantity");
+  
 
   static Logger logger = Logger.getLogger(EquilibriaStats.class);
 
@@ -151,10 +164,10 @@ public class EquilibriaStats extends DirectRevelationStats
   
   public Map getVariables() {
     HashMap reportVars = new HashMap();
-    reportVars.put("equilibria.found", new Boolean(equilibriaFound));
-    reportVars.put("equilibria.quantity", new Long(quantity));
-    reportVars.put("equilibria.minprice", new Double(minPrice));
-    reportVars.put("equilibria.maxPrice", new Double(maxPrice));
+    reportVars.put(VAR_EXISTS, new Boolean(equilibriaFound));
+    reportVars.put(VAR_QUANTITY, new Long(quantity));
+    reportVars.put(VAR_MINPRICE, new Double(minPrice));
+    reportVars.put(VAR_MAXPRICE, new Double(maxPrice));
     return reportVars;
   }
 
