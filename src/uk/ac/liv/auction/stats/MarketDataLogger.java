@@ -20,15 +20,46 @@ import uk.ac.liv.auction.core.MarketQuote;
 
 import uk.ac.liv.util.Resetable;
 
-
+/**
+ * The interface used to log market-data on an auction as it progresses.
+ * Different implementations of this interface can be used to record
+ * or process this data in different ways, for example to log it to
+ * CSV files or to keep cummulative statistics on each variable, or some
+ * combination thereof.
+ *
+ * @author Steve Phelps
+ */
 public interface MarketDataLogger extends Resetable {
 
+  /**
+   * Record the market quote.
+   *
+   * @param time  The time of this event in unspecified units.
+   * @param quote The market-quote data
+   */
   public void updateQuoteLog( int time, MarketQuote quote );
 
+  /**
+   * Record a transaction that has occured in the market.
+   *
+   * @param time  The time of this event in unspecified units.
+   * @param ask   The shout of the seller that gave rise to this transaction
+   * @param price The actual price of the transaction that took place.
+   */
   public void updateTransPriceLog( int time, Shout ask, double price );
 
+  /**
+   * Record an individual shout that occured in the auction.
+   *
+   * @param time  The time of this event in unspecified units.
+   * @param shout The shout that was placed in the auction.
+   */
   public void updateShoutLog( int time, Shout shout );
 
+  /**
+   * Generate a report on the market data.  Implementing classes
+   * may choose to do nothing for this method.
+   */
   public void finalReport();
 
 }

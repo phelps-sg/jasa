@@ -172,14 +172,49 @@ public class RoundRobinAuction extends AuctionImpl
     }
   }
 
+  public void informAuctionOpen() {
+    Iterator i = activeTraders.iterator();
+    while ( i.hasNext() ) {
+      RoundRobinTrader trader = (RoundRobinTrader) i.next();
+      trader.auctionOpen(this);
+    }
+  }
+
+  public void informAuctionClosed() {
+    Iterator i = registeredTraders.iterator();
+    while ( i.hasNext() ) {
+      RoundRobinTrader trader = (RoundRobinTrader) i.next();
+      trader.auctionClosed(this);
+    }
+  }
+
+
+  public void informRoundClosed() {
+    Iterator i = activeTraders.iterator();
+    while ( i.hasNext() ) {
+      RoundRobinTrader trader = (RoundRobinTrader) i.next();
+      trader.roundClosed(this);
+    }
+  }
+
+
 
   /**
    * Set the maximum number of rounds for this auction.
    * The auction will automatically close after this number
    * of rounds has been dealt.
+   *
+   * @param maximumRounds The maximum number of roudns for this auction.
    */
   public void setMaximumRounds( int maximumRounds ) {
     this.maximumRounds = maximumRounds;
+  }
+
+  /**
+   * Return the maximum number of rounds for this auction.
+   */
+  public int getMaximumRounds() {
+    return maximumRounds;
   }
 
   /**
@@ -220,6 +255,8 @@ public class RoundRobinAuction extends AuctionImpl
       throw new AuctionError("No auctioneer has been assigned for auction " + name);
     }
 
+    informAuctionOpen();
+
     try {
       while (!closed()) {
         runSingleRound();
@@ -245,10 +282,16 @@ public class RoundRobinAuction extends AuctionImpl
       logger.updateQuoteLog(round++, getQuote());
       sweepDefunctTraders();
       auctioneer.endOfRoundProcessing();
+      informRoundClosed();
     }
 
     setChanged();
     notifyObservers();
+  }
+
+  public void close() {
+    super.close();
+    informAuctionClosed();
   }
 
 

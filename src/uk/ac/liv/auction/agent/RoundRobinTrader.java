@@ -41,6 +41,27 @@ public interface RoundRobinTrader extends TraderAgent, Resetable {
   public void requestShout( Auction auction );
 
   /**
+   * Inform the trader that the auction is open.
+   *
+   * @param auction The auction that has just opened.
+   */
+  public void auctionOpen( Auction auction );
+
+  /**
+   * Inform the trader that the auction is closed.
+   *
+   * @param auction The auction that has just closed.
+   */
+  public void auctionClosed( Auction auction );
+
+  /**
+   * Inform the trader that the current auction round is closed.
+   *
+   * @param auction The auction in which a round has closed.
+   */
+  public void roundClosed( Auction auction );
+
+  /**
    * This method is used to notify a buyer that one of its bids has been successful.
    *
    * @param seller  The seller whose ask has been matched

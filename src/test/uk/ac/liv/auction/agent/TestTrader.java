@@ -29,6 +29,11 @@ public class TestTrader extends AbstractTraderAgent {
   public double lastWinningPrice;
   public int lastWinningQuantity;
   public Shout[] shouts;
+  public boolean receivedAuctionOpen = false;
+  public boolean receivedAuctionClosed = false;
+  public boolean receivedAuctionClosedAfterAuctionOpen = false;
+  public int receivedRoundClosed = 0;
+  public int receivedRequestShout = 0;
   int currentShoutIndex = 0;
   TestCase test;
 
@@ -67,6 +72,20 @@ public class TestTrader extends AbstractTraderAgent {
       e.printStackTrace();
       test.fail();
     }
+    receivedRequestShout++;
+  }
+
+  public void auctionOpen( Auction auction ) {
+    receivedAuctionOpen = true;
+  }
+
+  public void auctionClosed( Auction auction ) {
+    receivedAuctionClosed = true;
+    receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
+  }
+
+  public void roundClosed( Auction auction ) {
+    receivedRoundClosed++;
   }
 
 }

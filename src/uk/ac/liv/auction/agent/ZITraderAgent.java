@@ -143,6 +143,15 @@ public class ZITraderAgent extends AbstractTraderAgent {
     return 1;
   }
 
+  public void auctionOpen( Auction auction ) {
+  }
+
+  public void auctionClosed( Auction auction ) {
+  }
+
+  public void roundClosed( Auction auction ) {
+  }
+
   public String toString() {
     return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " privateValue:" + privateValue + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
   }

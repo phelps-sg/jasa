@@ -24,15 +24,14 @@ import uk.ac.liv.auction.agent.RoundRobinTrader;
 import test.uk.ac.liv.auction.agent.TestTrader;
 
 
-public class AuctionTest extends TestCase {
+public class RoundRobinAuctionTest extends TestCase {
 
   ContinuousDoubleAuctioneer auctioneer;
   RoundRobinAuction auction;
-  RandomRobinAuction auction2;
   TestTrader[] traders;
 
 
-  public AuctionTest( String name ) {
+  public RoundRobinAuctionTest( String name ) {
     super(name);
   }
 
@@ -68,41 +67,43 @@ public class AuctionTest extends TestCase {
   public void setUp() {
     auctioneer = new ContinuousDoubleAuctioneer(auction, 0);
     setUpTraders();
+    setUpAuction();
   }
 
-  public void testRoundRobinAuction() {
-
-    RoundRobinAuction auction =
-      new RoundRobinAuction("Round Robin Test Auction");
-
+  public void setUpAuction() {
+    auction = new RoundRobinAuction("Round Robin Test Auction");
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
-
     for( int i=0; i<traders.length; i++ ) {
       auction.register(traders[i]);
     }
-
-    doCommonTests(auction);
-
   }
 
-  public void testRandomRobinAuction() {
 
-    RandomRobinAuction auction =
-      new RandomRobinAuction("Random Robin Test Auction");
+  public void testProtocol() {
 
-    auction.setAuctioneer(auctioneer);
-    auctioneer.setAuction(auction);
+    assertTrue(auction.getNumberOfTraders() == traders.length);
+    assertTrue(!auction.closed());
+
+    auction.setMaximumRounds(2);
+
+    assertTrue( auction.getMaximumRounds() == 2 );
+
+    auction.run();
 
     for( int i=0; i<traders.length; i++ ) {
-      auction.register(traders[i]);
+      assertTrue( traders[i].receivedAuctionOpen );
+      assertTrue( traders[i].receivedAuctionClosed );
+      assertTrue( traders[i].receivedAuctionClosedAfterAuctionOpen );
+      assertTrue( traders[i].receivedRequestShout == 2 );
+      assertTrue( traders[i].receivedRoundClosed == 2 );
     }
 
-    doCommonTests(auction);
 
   }
 
-  public void doCommonTests( RoundRobinAuction auction ) {
+
+  public void testBasic() {
 
     assertTrue(auction.getNumberOfTraders() == traders.length);
     assertTrue(!auction.closed());
@@ -112,6 +113,7 @@ public class AuctionTest extends TestCase {
     assertTrue( auction.closed() );
     assertTrue( auction.getNumberOfTraders() == 0 );
     assertTrue( traders[1].lastWinningPrice == 725 );
+
 
     assertTrue( auction.getQuote().getBid() == 700 );
 
@@ -133,7 +135,7 @@ public class AuctionTest extends TestCase {
   }
 
   public static Test suite() {
-    return new TestSuite(AuctionTest.class);
+    return new TestSuite(RoundRobinAuctionTest.class);
   }
 
 }
