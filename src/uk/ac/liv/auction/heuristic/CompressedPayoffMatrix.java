@@ -163,7 +163,7 @@ public class CompressedPayoffMatrix {
       Entry entry = (Entry) entries.next();            
       double[] payoffs = getCompressedPayoffs(entry);            
       int occurances = calculateOccurances(entry);      
-      if ( pureStrategy > 0 ) {
+      if ( pureStrategy >= 0 ) {
         entry = entry.removeSingleAgent(pureStrategy);        
       }
       double probability = 1;
@@ -171,7 +171,7 @@ public class CompressedPayoffMatrix {
         probability *= Math.pow(mixedStrategy[s], entry.getNumAgents(s));
       }
       assert probability <= 1;
-      if ( pureStrategy > 0 ) {
+      if ( pureStrategy >= 0 ) {
         payoff += probability * payoffs[pureStrategy];
       } else {
         payoff += probability * averagePayoff(payoffs);
