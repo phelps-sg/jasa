@@ -18,12 +18,15 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
+import java.io.Serializable;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class TruthTellingStrategy extends FixedQuantityStrategyImpl {
+public class TruthTellingStrategy extends FixedQuantityStrategyImpl
+							implements Serializable {
 
   public TruthTellingStrategy ( AbstractTraderAgent agent) {
     super(agent);
