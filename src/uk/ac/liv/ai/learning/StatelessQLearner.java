@@ -98,6 +98,10 @@ public class StatelessQLearner extends AbstractLearner
   public int getNumberOfActions() {
     return qLearner.getNumberOfActions();
   }
+  
+  public void setNumberOfActions( int n ) {
+    qLearner.setStatesAndActions(1, n);
+  }
 
   public void dumpState( uk.ac.liv.util.io.DataWriter out ) {
     qLearner.dumpState(out);
