@@ -41,6 +41,18 @@ import org.apache.log4j.PropertyConfigurator;
  * the name of a parameter file describing an auction experiment, and
  * proceeds to run that experiment.
  * </p>
+ *
+ * <p><b>Parameters</b><br>
+ *
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.auction</tt><br>
+ * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
+ * <td valign=top>(the class of auction to use)</td></tr>
+ *
+ *
+ * </table>
+ *
  */
 
 public class MarketSimulation implements Parameterizable, Runnable {
@@ -54,8 +66,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
   protected MarketStats stats;
 
   protected boolean gatherStats;
-
-  static final String P_LOGGER = "logger";
+ 
   static final String P_AUCTION = "auction";
   static final String P_NUM_AGENT_TYPES = "numagenttypes";
   static final String P_NUM_AGENTS = "numagents";
@@ -90,12 +101,6 @@ public class MarketSimulation implements Parameterizable, Runnable {
                                                                RoundRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
-
-    marketData =
-        (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
-                                                               null,
-                                                               MarketDataLogger.class);
-    auction.setMarketDataLogger(marketData);
 
     if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
       auction.activateGUIConsole();
