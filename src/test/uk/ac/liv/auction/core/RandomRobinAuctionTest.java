@@ -17,13 +17,16 @@ package test.uk.ac.liv.auction.core;
 
 import junit.framework.*;
 
+import test.uk.ac.liv.PRNGTestSeeds;
 import uk.ac.liv.auction.core.*;
 
+import uk.ac.liv.prng.GlobalPRNG;
 
 public class RandomRobinAuctionTest extends RoundRobinAuctionTest {
 
   public RandomRobinAuctionTest( String name ) {
     super(name);
+    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
   }
 
 
@@ -36,6 +39,10 @@ public class RandomRobinAuctionTest extends RoundRobinAuctionTest {
     }
   }
 
+  public static void main( String[] args ) {
+    junit.textui.TestRunner.run(suite());
+  }
+  
   public static Test suite() {
     return new TestSuite(RandomRobinAuctionTest.class);
   }
