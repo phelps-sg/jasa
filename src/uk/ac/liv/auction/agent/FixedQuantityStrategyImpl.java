@@ -40,7 +40,7 @@ public class FixedQuantityStrategyImpl extends AbstractStrategy
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), null, quantity);
-  }
+  }ps a
 
   public void setQuantity( int quantity ) {
     this.quantity = quantity;
