@@ -1,3 +1,18 @@
+/*
+ * JASA Java Auction Simulator API
+ * Copyright (C) Steve Phelps
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ */
+
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
@@ -6,9 +21,18 @@ import java.util.Random;
 
 
 /**
+ * <p>
  * Abstract superclass for "Zero Intelligence" (ZI) trader agents.
- * See "Minimal Intelligence Agents for Bargaining Behaviours in
+ * See:
+ * </p>
+ * <p>
+ * "Minimal Intelligence Agents for Bargaining Behaviours in
  * Market-based Environments" Dave Cliff 1997.
+ * </p>
+ * <p>
+ * and "An experimental study of competitive market behaviour",
+ * Smith, V.L. 1962 in The Journal of Political Economy, vol 70.
+ * </p>
  *
  * @author Steve Phelps
  */
