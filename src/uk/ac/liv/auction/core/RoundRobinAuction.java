@@ -38,6 +38,8 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
 /**
  * <p>
  * A class representing an auction in which RoundRobinTraders can trade by
@@ -134,9 +136,10 @@ public class RoundRobinAuction extends AuctionImpl
   protected int numTraders;
 
   /**
-   * Were any shouts received in the last round of trading?
+   * Were any shouts processed (received & accepted) in the last round of
+   * trading?
    */
-  protected boolean shoutsReceived;
+  protected boolean shoutsProcessed;
 
 
 
@@ -145,6 +148,7 @@ public class RoundRobinAuction extends AuctionImpl
   public static final String P_AUCTIONEER = "auctioneer";
   public static final String P_NAME = "name";
 
+  static Logger log4jLogger = Logger.getLogger(RoundRobinAuction.class);
 
   /**
    * Construct a new auction in the stopped state, with no traders, no shouts,
@@ -195,6 +199,7 @@ public class RoundRobinAuction extends AuctionImpl
 
 
   public void clear( Shout ask, Shout bid, double price ) {
+//    log4jLogger.info("Matching " + ask + " with " + bid + " at " + price);
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
     buyer.informOfSeller(ask, seller, price, ask.getQuantity());
@@ -340,7 +345,7 @@ public class RoundRobinAuction extends AuctionImpl
     if ( maximumRounds > 0 && round >= maximumRounds ) {
       close();
     } else {
-      shoutsReceived = false;
+      shoutsProcessed = false;
       requestShouts();
       updateQuoteLog(round, getQuote());
       round++;
@@ -348,6 +353,7 @@ public class RoundRobinAuction extends AuctionImpl
       auctioneer.endOfRoundProcessing();
       informRoundClosed();
       if ( isQuiescent() ) {
+        log4jLogger.debug("Auction is quiescent - closing");
         close();
       }
     }
@@ -367,7 +373,7 @@ public class RoundRobinAuction extends AuctionImpl
     setChanged();
     notifyObservers();
     updateShoutLog(round, shout);
-    shoutsReceived = true;
+    shoutsProcessed = true;
   }
 
 
@@ -392,7 +398,7 @@ public class RoundRobinAuction extends AuctionImpl
    * Returns true if no bidding activity occured in the latest auction round.
    */
   public boolean isQuiescent() {
-    return !shoutsReceived;
+    return !shoutsProcessed;
   }
 
   /**
@@ -447,7 +453,7 @@ public class RoundRobinAuction extends AuctionImpl
     activeTraders.clear();
     activeTraders.addAll(registeredTraders);
     numTraders = activeTraders.size();
-    shoutsReceived = false;
+    shoutsProcessed = false;
   }
 
   protected void activate( TraderAgent agent ) {

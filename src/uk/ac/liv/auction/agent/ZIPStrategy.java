@@ -43,8 +43,6 @@ import org.apache.log4j.Logger;
  * Market-based Environments" Dave Cliff 1997.
  * </p>
  *
- * Note that this class is currently untested.
- *
  * @author Steve Phelps
  */
 
@@ -59,9 +57,12 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
 
   protected MimicryLearner learner;
 
-  protected MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  /**
+   * The PRNG used to draw perturbation values
+   */
+  protected static MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
-  protected double scaling = 0.1;
+  protected double scaling = 0.01;
 
   public static final String P_SCALING = "scaling";
   public static final String P_LEARNER = "learner";
@@ -128,7 +129,7 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
   }
 
   protected void sellerStrategy( Shout lastShout ) {
-    logger.debug("sellerStrategy()");
+    logger.debug("sellerStrategy(" + lastShout + ")");
     double lastPrice = lastShout.getPrice();
     if ( lastShout.accepted() ) {
       if ( agent.active() && currentPrice <= lastPrice ) {
@@ -148,7 +149,7 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
   }
 
   protected void buyerStrategy( Shout lastShout ) {
-    logger.debug("buyerStrategy()");
+    logger.debug("buyerStrategy(" + lastShout + ")");
     double lastPrice = lastShout.getPrice();
     if ( lastShout.accepted() ) {
       if ( agent.active() && currentPrice >= lastPrice ) {

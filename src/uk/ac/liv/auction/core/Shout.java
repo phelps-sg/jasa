@@ -175,8 +175,9 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " quantity:" + quantity + " price:"
-               + price + " isBid:" + isBid + " agent:" + agent + ")";
+    return "(" + getClass() + " id:" + id + " quantity:" + quantity +
+               " price:" + price + " isBid:" + isBid + " accepted:" + accepted +
+               " agent:" + agent + ")";
   }
 
 
@@ -219,6 +220,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
     setAgent(other.getAgent());
     setQuantity(other.getQuantity());
     setIsBid(other.isBid());
+    setAccepted(other.accepted());
     id = other.getId();
     child = null;
   }

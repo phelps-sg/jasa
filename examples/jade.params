@@ -26,17 +26,17 @@ auction.auctioneer.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
 # Two populations of trader agents
 auction.agenttype.n = 2
 
-# 1st population- 30 sellers bidding using the modified Roth-Erev 
+# 1st population- 50 sellers bidding using the modified Roth-Erev 
 # learning algorithm
 auction.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.0.numagents = 50
 auction.agenttype.0.randomprivatevalue = true
 auction.agenttype.0.capacity = 10
 auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 auction.agenttype.0.isseller = true
 
-# 2nd population- 30 buyers using the the modified
+# 2nd population- 50 buyers using the the original
 #  Roth-Erev learning algorithm
 auction.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.1.numagents = 50

@@ -17,6 +17,8 @@ package test.uk.ac.liv.auction;
 
 import junit.framework.*;
 
+import test.uk.ac.liv.PRNGTestSeeds;
+
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
@@ -154,6 +156,7 @@ public abstract class ElectricityTest extends TestCase {
 
   public void generatePRNGseeds( int numAgents ) {
 
+    prng.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     System.out.println(this + ": generating PRNG seeds using default seed.. ");
 
     for( int i=0; i<ITERATIONS; i++ ) {

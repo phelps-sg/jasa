@@ -13,17 +13,22 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.core;
 
+package test.uk.ac.liv;
 
-public class AuctionException extends Exception {
+/**
+ * The PRNG seed to use for deterministing unit-testing of seedable classes.
+ * This was introduced for ecj10, which uses a seed based on the
+ * current system time when using the null argument constructor.
+ *
+ * @author Steve Phelps
+ */
 
-  public AuctionException( String message ) {
-    super(message);
-  }
+public class PRNGTestSeeds {
 
-  public AuctionException() {
-    super();
-  }
+  /**
+   * The seed to use for all unit tests.
+   */
+  public static final long UNIT_TEST_SEED = 1465187;
 
 }

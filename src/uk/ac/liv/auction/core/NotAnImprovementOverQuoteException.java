@@ -15,14 +15,13 @@
 
 package uk.ac.liv.auction.core;
 
+public class NotAnImprovementOverQuoteException extends IllegalShoutException {
 
-public class AuctionException extends Exception {
-
-  public AuctionException( String message ) {
+  public NotAnImprovementOverQuoteException( String message ) {
     super(message);
   }
 
-  public AuctionException() {
+  public NotAnImprovementOverQuoteException() {
     super();
   }
 

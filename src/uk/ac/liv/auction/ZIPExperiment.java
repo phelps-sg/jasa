@@ -43,8 +43,19 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
+ * An implementation of the symetric supply and demand ZIP experiment
+ * described in
  *
- *  @author Steve Phelps
+ * <p>
+ * "Minimal Intelligence Agents for Bargaining Behaviours in
+ * Market-based Environments" Dave Cliff 1997
+ * </p>
+ *
+ * Work is currently in progress to attempt a full replication of the
+ * results in the above paper.  Currently JASA is not able to replicate
+ * these results.
+ *
+ * @author Steve Phelps
  */
 
 public class ZIPExperiment implements Parameterizable, Runnable,
@@ -208,14 +219,14 @@ public class ZIPExperiment implements Parameterizable, Runnable,
       logger.info("Sample " + sample + "... ");
       selectRandomLearnerParameters();
       for( int day=0; day<numDays; day++ ) {
-        logger.info("Day " + day + "... ");
+        logger.debug("Day " + day + "... ");
         auction.run();
         double meanTransPrice = marketDataLogger.getTransPriceStats().getMean();
         transPriceStats[day].newData(meanTransPrice);
-        logger.info("Auction terminated at round " + auction.getAge());
-        logger.info(marketDataLogger.getTransPriceStats());
+        logger.debug("Auction terminated at round " + auction.getAge());
+        logger.debug(marketDataLogger.getTransPriceStats());
         auction.reset();
-        logger.info("Day " + day + " done.");
+        logger.debug("Day " + day + " done.");
       }
       logger.info("Sample " + sample + " done.");
     }

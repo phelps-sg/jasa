@@ -20,6 +20,7 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.AuctionClosedException;
+import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
 
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
@@ -30,6 +31,8 @@ import ec.util.Parameter;
 import ec.util.MersenneTwisterFast;
 
 import java.io.Serializable;
+
+import org.apache.log4j.Logger;
 
 /** <p>
  * An abstract class representing a simple agent trading in a round-robin auction.
@@ -144,9 +147,12 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
    */
   Shout currentShout;
 
+  /**
+   * Used to allocate random private values.
+   */
   static MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
-
+  static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
 
   /**
    * Parameter names used when initialising from parameter db
@@ -223,8 +229,13 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
       strategy.modifyShout(currentShout, auction);
       auction.newShout(currentShout);
     } catch ( AuctionClosedException e ) {
-      // fail silently
+      logger.debug("requestShout(): Received AuctionClosedException");
+      // do nothing
+    } catch ( NotAnImprovementOverQuoteException e ) {
+      logger.debug("requestShout(): Received NotAnImprovementOverQuoteException");
+      // do nothing
     } catch ( AuctionException e ) {
+      logger.warn(e.getMessage());
       e.printStackTrace();
     }
   }

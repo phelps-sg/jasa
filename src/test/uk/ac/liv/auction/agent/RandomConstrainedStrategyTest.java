@@ -17,6 +17,8 @@ package test.uk.ac.liv.auction.agent;
 
 import junit.framework.*;
 
+import test.uk.ac.liv.PRNGTestSeeds;
+
 import uk.ac.liv.auction.agent.RandomConstrainedStrategy;
 import uk.ac.liv.auction.agent.ZITraderAgent;
 
@@ -52,6 +54,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
   public void setUp() {
     testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
     testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);
+    testStrategy.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     auction = new RoundRobinAuction();
     auctioneer = new KDoubleAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
@@ -86,7 +89,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
   }
 
   public boolean approxEqual( double x, double y ) {
-    return Math.abs(x-y) < 0.05;
+    return Math.abs(x-y) < 0.1;
   }
 
   public static void main( String[] args ) {

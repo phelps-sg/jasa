@@ -26,13 +26,10 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * Abstract superclass for "Zero Intelligence" (ZI) trader agents.
- * Agent sof this type drop out of the auction once their trade
- * entitlement is used up.
- * </p>
- * <p>
- * Note that this type of agent does not currently implement the ZIP
- * strategy.  An implementation of the ZIP strategy is forthcoming.
+ * Class for "Zero Intelligence" (ZI) trader agents.
+ * Agents of this type drop out of the auction once their trade
+ * entitlement is used up, and do not reinitialise their strategy
+ * when they are reset.
  * </p>
  * See:
  * </p>
@@ -162,7 +159,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public int determineQuantity( Auction auction ) {
-    return 1;
+    return strategy.determineQuantity(auction);
   }
 
   public String toString() {

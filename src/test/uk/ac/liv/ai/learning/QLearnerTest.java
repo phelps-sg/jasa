@@ -17,6 +17,8 @@ package test.uk.ac.liv.ai.learning;
 
 import junit.framework.*;
 
+import test.uk.ac.liv.PRNGTestSeeds;
+
 import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.CummulativeStatCounter;
@@ -41,7 +43,9 @@ public class QLearnerTest extends TestCase {
   }
 
   public void setUp() {
-    learner1 = new QLearner(1, NUM_ACTIONS, EPSILON, LEARNING_RATE, DISCOUNT_RATE);
+    learner1 = new QLearner(1, NUM_ACTIONS, EPSILON, LEARNING_RATE,
+                              DISCOUNT_RATE);
+    learner1.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     score = 0;
   }
 

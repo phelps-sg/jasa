@@ -72,8 +72,26 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
   }
 
   public void newShout( Shout shout ) throws IllegalShoutException {
+    checkImprovement(shout);
     super.newShout(shout);
     clear();
+  }
+
+  public void checkImprovement( Shout shout ) throws IllegalShoutException {
+    double quote;
+    if ( shout.isBid() ) {
+      quote = bidQuote();
+      if ( shout.getPrice() < bidQuote() ) {
+        logger.debug("not an improvement: " + shout.getPrice() + "/" + quote);
+        throw new NotAnImprovementOverQuoteException();
+      }
+    } else {
+      quote = askQuote();
+      if ( quote < shout.getPrice() ) {
+        logger.debug("not an improvement: " + shout.getPrice() + "/" + quote);
+        throw  new NotAnImprovementOverQuoteException();
+      }
+    }
   }
 
 }
