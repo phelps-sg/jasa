@@ -302,16 +302,23 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
 
-  public void clear( Shout ask, Shout bid, double price ) {
-    assert price >= ask.getPrice();
-    assert price <= bid.getPrice();  
-    fireEvent( new TransactionExecutedEvent(this, round, ask, bid, price, ask.getQuantity()) );
-    //updateTransPriceLog(round, ask, bid, price, ask.getQuantity());
+  public void clear( Shout ask, Shout bid, double trPrice ) {
+    
     TradingAgent buyer = (TradingAgent) bid.getAgent();
     TradingAgent seller = (TradingAgent) ask.getAgent();
+    
     assert buyer.isBuyer();
     assert seller.isSeller();
-    buyer.informOfSeller(this, ask, seller, price, ask.getQuantity());
+    assert trPrice >= ask.getPrice();
+    assert trPrice <= bid.getPrice(); 
+    
+    TransactionExecutedEvent transactionEvent =
+      new TransactionExecutedEvent(this, round, ask, bid, trPrice, 
+          								ask.getQuantity());
+    fireEvent(transactionEvent);
+        
+    buyer.informOfSeller(this, ask, seller, trPrice, ask.getQuantity());
+    
     acceptedShouts.add(ask);
     acceptedShouts.add(bid);
   }
