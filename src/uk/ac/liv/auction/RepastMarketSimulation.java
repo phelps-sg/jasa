@@ -26,14 +26,17 @@ import uk.ac.liv.auction.stats.GraphMarketDataLogger;
 import uk.ac.liv.util.Parameterizable;
 
 import uk.ac.liv.auction.ui.RepastAuctionConsoleGraph;
+import uk.ac.liv.auction.ui.DrawableAgentAdaptor;
 
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.Serializable;
 
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
@@ -45,6 +48,9 @@ import uchicago.src.sim.engine.*;
 import uchicago.src.sim.analysis.OpenSequenceGraph;
 import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.DisplaySurface;
+import uchicago.src.sim.gui.Drawable;
+import uchicago.src.sim.gui.Object2DDisplay;
+import uchicago.src.sim.gui.SimGraphics;
 import uchicago.src.sim.gui.Value2DDisplay;
 import uchicago.src.sim.space.Discrete2DSpace;
 
@@ -227,22 +233,21 @@ public class RepastMarketSimulation
     
     logger.debug("Setup complete.");
     
-    agentSpace = new AgentSpace(auction);
-    ColorMap map = new ColorMap();
-    for( int i=0; i<1000; i++ ) {
-      map.mapColor(i, 0, ((double)i / 1000.0), 0);
-    }
-    Value2DDisplay agentDisplay = new Value2DDisplay(agentSpace, map);
-    displaySurface.addDisplayableProbeable(agentDisplay, "agents");
   }
 
   public void begin() {
+    
     GraphMarketDataLogger graphLogger;
     if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
       graph = new RepastAuctionConsoleGraph(getName(), this, graphLogger);
       graph.display();
     }
+    
+    agentSpace = new AgentSpace(auction);
+    Object2DDisplay agentDisplay = new Object2DDisplay(agentSpace);
+    displaySurface.addDisplayableProbeable(agentDisplay, "agents");
     displaySurface.display();
+
     auction.begin();
   }
   
@@ -255,7 +260,6 @@ public class RepastMarketSimulation
     if ( graph != null ) {
       graph.step();
     }
-    agentSpace.step();
     displaySurface.updateDisplay();
   }
   
@@ -363,82 +367,135 @@ public class RepastMarketSimulation
     // TODO Auto-generated method stub
 
   }
-}
+  
 
-
-class AgentSpace implements Discrete2DSpace {
-
-  protected RoundRobinAuction auction;
-  
-  protected int width;
-  
-  protected int height;
-  
-  protected Vector agents;
-  
-  protected DoubleMatrix matrix;
-  
-  public AgentSpace( RoundRobinAuction auction, int width ) {
-    this.width = width;
-    this.auction = auction;
-    height = auction.getNumberOfRegisteredTraders() / width;
-    agents = new Vector();
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-      agents.add(agent);
+  class AgentMatrix implements BaseMatrix {
+    
+    protected Vector agents;
+    
+    protected int height;
+    
+    protected int width;
+    
+    public AgentMatrix( Vector agents, int height, int width ) {
+      this.agents = agents;
+      this.height = height;
+      this.width = width;
     }
-    matrix = new DoubleMatrix(width, height);
-  }
-  
-  public AgentSpace( RoundRobinAuction auction ) {
-    this(auction, (int) Math.sqrt(auction.getNumberOfRegisteredTraders()));
-  }
-  
-  public void step () {
-    for ( int x = 0; x < width; x++ ) {
-      for ( int y = 0; y < height; y++ ) {
-        matrix.putDoubleAt(x, y, getValueAt(x, y));
+
+    public Object get( int x, int y ) {
+      int abs = y * width + x;
+      if ( abs >= agents.size() ) {
+        return new DrawableAgentAdaptor(auction);
       }
+      DrawableAgentAdaptor agent = (DrawableAgentAdaptor) agents.get(abs);
+      if ( agent == null ) {
+        return new DrawableAgentAdaptor(auction);
+      }
+      return agents.get( y * width + x );
+    }
+    
+    
+    public int getNumCols() {
+      // TODO Auto-generated method stub
+      return width;
+    }
+    
+    public int getNumRows() {
+      // TODO Auto-generated method stub
+      return height;
+    }
+    
+    public void put( int col, int row, Object obj ) {
+      // TODO Auto-generated method stub
+
+    }
+    
+    public Object remove( int col, int row ) {
+      // TODO Auto-generated method stub
+      return null;
+    }
+    
+    public int size() {
+      // TODO Auto-generated method stub
+      return agents.size();
+    }
+    
+    public void trim() {
+      // TODO Auto-generated method stub
+
     }
   }
-  
-  public BaseMatrix getMatrix() {
-    return matrix;
-  }
-  
-  public Object getObjectAt( int x, int y ) {
-    return agents.get( y * width + x );
-  }
-  
-  public Dimension getSize() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  public int getSizeX() {
-    return width;
-  }
-  
-  public int getSizeY() {
-    return height;
-  }
-  
-  public double getValueAt( int x, int y ) {
-    AbstractTraderAgent agent = (AbstractTraderAgent) getObjectAt(x, y);
-    if ( agent == null ) return 0;
-    Shout currentShout = agent.getCurrentShout();
-    if ( currentShout == null ) return 0;
-    return currentShout.getPrice();
-  }
-  
-  public void putObjectAt( int x, int y, Object object) {
 
-  }
-  
-  public void putValueAt( int x, int y, double value) {
+
+  class AgentSpace implements Discrete2DSpace {
+
+    protected RoundRobinAuction auction;
+    
+    protected int width;
+    
+    protected int height;
+    
+    protected Vector agents;
+    
+    protected AgentMatrix matrix;
+    
+    public AgentSpace( RoundRobinAuction auction, int width ) {
+      this.width = width;
+      this.auction = auction;
+      height = auction.getNumberOfRegisteredTraders() / width;
+      agents = new Vector();
+      Iterator i = auction.getTraderIterator();
+      while ( i.hasNext() ) {
+        AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+        agents.add(new DrawableAgentAdaptor(auction, agent));
+      }
+      matrix = new AgentMatrix(agents, width, height);
+    }
+    
+    public Collection getAgents() {
+      return agents;
+    }
+    
+    public AgentSpace( RoundRobinAuction auction ) {
+      this(auction, (int) Math.sqrt(auction.getNumberOfRegisteredTraders()));
+    }
+    
+    public BaseMatrix getMatrix() {
+      return matrix;
+    }
+    
+    public Object getObjectAt( int x, int y ) {
+      return matrix.get(x, y);
+    }
+    
+    public Dimension getSize() {
+      // TODO Auto-generated method stub
+      return null;
+    }
+    
+    public int getSizeX() {
+      return width;
+    }
+    
+    public int getSizeY() {
+      return height;
+    }
+    
+    public double getValueAt( int x, int y ) {
+      //TODO
+      return 0;
+    }
+    
+    public void putObjectAt( int x, int y, Object object) {
+
+    }
+    
+    public void putValueAt( int x, int y, double value) {
+      
+    }
     
   }
-  
+
 }
 
