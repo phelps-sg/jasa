@@ -221,8 +221,7 @@ public class RothErevLearner extends AbstractLearner implements
    */
   protected void updatePropensities( int action, double reward ) {
     for( int i=0; i<k; i++ ) {
-      double q1 = (1-r) * q[i] + experience(i,action,reward);
-      q[i] = q1;
+      q[i] = (1-r) * q[i] + experience(i, action, reward);      
     }
   }
 
