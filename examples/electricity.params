@@ -75,7 +75,7 @@ electricity.stats = uk.ac.liv.auction.electricity.ElectricityStats
 
 # log4j configuration
 
-electricity.prng = uk.ac.liv.prng.Lux
+electricity.prng = uk.ac.liv.prng.MT32
 
 log4j.rootCategory=INFO, stdout, file
 

@@ -1,10 +1,19 @@
+# This example demonstrates a CDA with interaction between several
+#  different strategies.
+#
+# To run this example, use the following command:
+#
+#  ant run -Dparams=examples/example4.params
+#
 
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.lengthofday = 20
 simulation.auction.maximumdays = 1000
-simulation.auction.name = Example 4: Zip/RothErev/Kaplan
+simulation.auction.name = Example 4: CDA with Zip/RothErev/Kaplan 
 simulation.auction.console = true
 
+# Use a continuous double-auction with prices set halfway between bid
+# and ask price.
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 simulation.auction.auctioneer.pricing.k = 0.5
@@ -15,8 +24,6 @@ simulation.auction.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
 simulation.auction.report.1 = uk.ac.liv.auction.stats.DailyStatsReport
 simulation.auction.report.2 = uk.ac.liv.auction.stats.StrategyPayoffReport
 simulation.auction.report.3 = uk.ac.liv.auction.stats.GraphReport
-
-
 
 simulation.auction.agenttype.n = 3
 

@@ -44,7 +44,7 @@ simulation.auction.agenttype.1.initialtradeentitlement = 1
 simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.FixedValuer
 
 # prng configuration
-simulation.prng = uk.ac.liv.prng.Mar
+simulation.prng = uk.ac.liv.prng.MT32
 simulation.seed = 3465
 
 # log4j configuration

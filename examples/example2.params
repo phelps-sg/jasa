@@ -1,7 +1,7 @@
 # This example demonstrates a uniform-price k-DA with a large number
 # of agents.
 #
-# To run this example in RePast, run the following command:
+# To run this example in RePast, use the following command:
 #
 #  ant run -Dparams=examples/example2.params
 #
@@ -39,39 +39,41 @@ simulation.auction.report.2 = uk.ac.liv.auction.stats.EquilibriumReport
 # Two populations of agents
 simulation.auction.agenttype.n = 2
 
-# 1st population- 5000 ZI-C sellers
+# 1st population- 500 ZI-C sellers
 simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.0.numagents = 500
 simulation.auction.agenttype.0.initialtradeentitlement = 1000
+# Configure a ZI-C strategy to bid with a random markup between $0 and $100
 simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.auction.agenttype.0.strategy.maxmarkup = 100
 simulation.auction.agenttype.0.isseller = true
 # Valuations (limit prices) will be drawn randomly when agents are initialised
 simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
-# Range for valuations is (110, 200)
+# Range for valuations is ($110, $200)
 simulation.auction.agenttype.0.valuer.minvalue = 110
 simulation.auction.agenttype.0.valuer.maxvalue = 200
 
-# 2nd population- 5000 ZI-C buyers
+# 2nd population- 500 ZI-C buyers
 simulation.auction.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.1.numagents = 500
 simulation.auction.agenttype.1.initialtradeentitlement = 1000
+# Configure a ZI-C strategy to bid with a random markup between $0 and $100
 simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.auction.agenttype.1.strategy.maxmarkup = 100
 simulation.auction.agenttype.1.isseller = false
 # Valuations (limit prices) will be drawn randomly when agents are initialised
 simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
-# Range for valuations is (120, 250)
+# Range for valuations is ($120, $250)
 simulation.auction.agenttype.1.valuer.minvalue = 120
 simulation.auction.agenttype.1.valuer.maxvalue = 250
 
 # PRNG configuration
-#  Use the RanMar algorithm
-simulation.prng = uk.ac.liv.prng.Mar
+#  Use the 32bit version of the Mersenne Twister algorithm 
+simulation.prng = uk.ac.liv.prng.MT32
 #  with the following PRNG seed
 simulation.seed = 4523
 
-# log4j configuration - substitute DEBUG for INFO to turn on debugging output
+# log4j configuration - substitute DEBUG instead of INFO to turn on debugging 
 log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout

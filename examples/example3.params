@@ -1,6 +1,6 @@
-# This example demonstrates randomly changing supply and demand schedules
+# This example demonstrates randomly changing supply and demand curves
 #
-# To run this example, run the following command:
+# To run this example, use the following command:
 #
 #  ant run -Dparams=examples/example3.params
 #
@@ -41,11 +41,11 @@ simulation.auction.report.3 = uk.ac.liv.auction.stats.DailyStatsReport
 # Show GUI console
 simulation.auction.console = true
 
-# Two populations of agents
+# Three populations of agents
 simulation.auction.agenttype.n = 3
 
 # 1st population-
-#  40 electricity sellers with a capacity of 10MWh
+#  40 sellers 
 #  using the Roth-Erev strategy (with NPT modifications)
 simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.0.group = 0
@@ -61,8 +61,7 @@ simulation.auction.agenttype.0.strategy.learner.k = 10
 simulation.auction.agenttype.0.isseller = true
 
 # 2nd population-
-#  50 electricity buyers with a capacity of 20MWh
-#  using a q-learning strategy
+#  30 buyers using a q-learning strategy
 simulation.auction.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.1.group = 1
 simulation.auction.agenttype.1.numagents = 30
@@ -77,7 +76,7 @@ simulation.auction.agenttype.1.strategy.learner.k = 10
 simulation.auction.agenttype.1.isseller = false
 
 #  3rd population-
-#   3 buyers using Kaplan
+#   30 buyers using Kaplan
 simulation.auction.agenttype.2 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.2.group = 2
 simulation.auction.agenttype.2.numagents = 30
@@ -90,7 +89,7 @@ simulation.auction.agenttype.2.isseller = false
 
 # prng configuration
 
-# Use the Mersenne Twister PRNG
+# Use the default Mersenne Twister PRNG
 simulation.prng = uk.ac.liv.prng.MT
 
 #  ..configured with the following seed

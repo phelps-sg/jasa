@@ -16,10 +16,10 @@ simulation.auction.name = Example 6: Fixed supply and demand
 # Use a double-auction with clearing occuring at the end of each round
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 
-# Set the transaction price as a function of individual bid and ask prices
+# Set the transaction price as a function of the market quote
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 
-# Set the transaction price halfway between the bid and the ask price
+# Set the transaction price halfway between the bid and the ask quote
 simulation.auction.auctioneer.pricing.k = 0.5
 
 # Configure a combination of four different reports
@@ -32,7 +32,7 @@ simulation.auction.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
 # The second report logs data to a graph on the console
 simulation.auction.report.1 = uk.ac.liv.auction.stats.GraphReport
 
-# Collect data on relative profits by agent group
+# Collect data on relative profits to each strategy
 simulation.auction.report.2 = uk.ac.liv.auction.stats.StrategyPayoffReport
 simulation.auction.report.2.quantity = 20
 
@@ -70,7 +70,7 @@ simulation.auction.agenttype.1.isseller = false
 
 # prng configuration
 
-# Use the Mersenne Twister PRNG
+# Use the default (64-bit) Mersenne Twister PRNG
 simulation.prng = uk.ac.liv.prng.MT
 
 #  ..configured with the following seed
