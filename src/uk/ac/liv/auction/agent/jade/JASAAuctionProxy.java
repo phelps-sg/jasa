@@ -45,7 +45,7 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
 
   public void removeShout(Shout shout) {
     /**@todo Implement this uk.ac.liv.auction.core.Auction method*/
-    throw new java.lang.UnsupportedOperationException("Method removeShout() not yet implemented.");
+    //throw new java.lang.UnsupportedOperationException("Method removeShout() not yet implemented.");
   }
 
   public Shout getLastShout() {

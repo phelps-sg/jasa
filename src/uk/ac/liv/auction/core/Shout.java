@@ -18,6 +18,7 @@ package uk.ac.liv.auction.core;
 import uk.ac.liv.auction.agent.TraderAgent;
 
 import uk.ac.liv.util.Debug;
+import uk.ac.liv.util.IdAllocator;
 
 import java.io.Serializable;
 
@@ -64,10 +65,21 @@ public class Shout implements Comparable, Cloneable, Serializable {
    */
   boolean isBid;
 
+  /**
+   * Used to allocate each agent with a unique id.
+   */
+  static IdAllocator idAllocator = new IdAllocator();
+
+  int id;
+
+  /**
+   * The child of this shout.
+   */
   Shout child = null;
 
 
   public Shout( TraderAgent agent, int quantity, double price, boolean isBid ) {
+    this();
     this.agent = agent;
     this.quantity = quantity;
     this.price = price;
@@ -79,6 +91,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   public Shout() {
+    this.id = idAllocator.nextId();
   }
 
   public int getQuantity() {  return quantity; }
@@ -155,8 +168,8 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   public String toString() {
-    return "(" + getClass() + " quantity:" + quantity + " price:" + price +
-                              " isBid:" + isBid + " agent:" + agent + ")";
+    return "(" + getClass() + " id:" + id + " quantity:" + quantity + " price:"
+               + price + " isBid:" + isBid + " agent:" + agent + ")";
   }
 
 
@@ -196,5 +209,5 @@ public class Shout implements Comparable, Cloneable, Serializable {
     setQuantity(other.getQuantity());
     child = null;
   }
-  
+
 }

@@ -54,7 +54,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
               RegisterAction action = (RegisterAction) content;
               AID traderAID = new AID(action.getAgent(), true);
               System.out.println("Registering trader " + traderAID);
-              auction.register(new JASATraderAgentProxy(getAID(),traderAID, myAgent));
+              auction.register(new JASATraderAgentProxy(traderAID, myAgent));
             } else if ( content instanceof StartAuctionAction ) {
               System.out.println("Starting auction");
               finished = true;
