@@ -25,7 +25,7 @@ import uk.ac.liv.auction.stats.GraphMarketDataLogger;
 
 import uk.ac.liv.util.Parameterizable;
 
-import uk.ac.liv.auction.ui.RepasAuctionConsoleGraph;
+import uk.ac.liv.auction.ui.RepastAuctionConsoleGraph;
 
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
@@ -217,7 +217,7 @@ public class RepastMarketSimulation
   public void begin() {
     GraphMarketDataLogger graphLogger;
     if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
-      graph = new RepasAuctionConsoleGraph(getName(), this, graphLogger);
+      graph = new RepastAuctionConsoleGraph(getName(), this, graphLogger);
       graph.display();
     }
     auction.begin();

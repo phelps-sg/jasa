@@ -28,9 +28,9 @@ import uchicago.src.sim.analysis.OpenSequenceGraph;
  * @version $Revision$
  */
 
-public class RepasAuctionConsoleGraph extends OpenSequenceGraph {
+public class RepastAuctionConsoleGraph extends OpenSequenceGraph {
 
-  public RepasAuctionConsoleGraph( String title, SimModel repastModel, 
+  public RepastAuctionConsoleGraph( String title, SimModel repastModel, 
       						 GraphMarketDataLogger graphModel ) {
     super(title, repastModel);
     Iterator i = graphModel.getSequenceIterator();
