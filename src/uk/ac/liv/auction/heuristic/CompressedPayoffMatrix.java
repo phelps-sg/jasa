@@ -135,81 +135,86 @@ public class CompressedPayoffMatrix {
     return fullPayoffs;
   }
   
-  public int calculateOccurances( Entry entry ) {
-    int a = (int) MathUtil.factorial(numPlayers);
-    int b = 1;
-    for( int s=0; s<numStrategies; s++ ) {
-      b *= MathUtil.factorial(entry.getNumAgents(s));
-    }
-    return a / b;
-  }
-  
-  public double averagePayoff( double[] compressedPayoffs ) {
-    double total = 0;
-    for( int s=0; s<numStrategies; s++ ) {
-      total += compressedPayoffs[s];
-    }
-    return total / numStrategies;
-  }
-  
   public double payoff( double[] mixedStrategy ) {
-    return payoff(-1, mixedStrategy);
+    return payoff(false, -1, mixedStrategy);
   }
   
-  public double payoff( int pureStrategy, double[] mixedStrategy ) {
+  public double payoff( int strategy, double[] population ) {
+    return payoff(true, strategy, population);
+  }
+  
+  public double payoff( boolean pure, int strategy, double[] mixedStrategy ) {
+    logger.debug("\nCalculating payoff to " + strategy + "...\n");
+    assert MathUtil.approxEqual(MathUtil.sum(mixedStrategy), 1); 
     double payoff = 0;
     Iterator entries = compressedEntryIterator();
-    while ( entries.hasNext() ) {      
-      Entry entry = (Entry) entries.next();            
-      double[] payoffs = getCompressedPayoffs(entry);            
-      int occurances = calculateOccurances(entry);      
-      if ( pureStrategy >= 0 ) {
-        entry = entry.removeSingleAgent(pureStrategy);        
+    iterating: while ( entries.hasNext() ) {      
+      Entry entry = (Entry) entries.next();
+      logger.debug(entry);
+      double[] payoffs = getCompressedPayoffs(entry);                       
+      if ( pure ) {
+        if ( entry.getNumAgents(strategy) == 0 ) {
+          logger.debug("- NA");
+          continue iterating;
+        }
+        entry = entry.removeSingleAgent(strategy);        
       }
       double probability = 1;
       for( int s=0; s<numStrategies; s++ ) {
         probability *= Math.pow(mixedStrategy[s], entry.getNumAgents(s));
-      }
+      }      
       assert probability <= 1;
-      if ( pureStrategy >= 0 ) {
-        payoff += probability * payoffs[pureStrategy];
+      if ( pure ) {
+        payoff += probability * payoffs[strategy];
       } else {
-        payoff += probability * averagePayoff(payoffs);
+        payoff += probability * MathUtil.sum(payoffs);
       }
-    }
+      logger.debug(" probability = " + probability);
+      for( int s=0; s<numStrategies; s++ ) {
+        logger.debug("  payoff(" + s + ") = " + payoffs[s]);
+      }
+    }    
     return payoff;
   }
   
 
-  public double evolveMixedStrategy( double[] population ) {    
-    double averagePayoff = payoff(population);   
-    System.out.println("Average payoff is " + averagePayoff);    
+  public double evolveMixedStrategy( double[] population ) {       
     double totalDelta = 0;
+    double[] delta = new double[numStrategies];
+    double[] payoffs = new double[numStrategies];
+    double totalPayoff = 0;
     for( int s=0; s<numStrategies; s++ ) {
-      System.out.println("Pure payoff is " + payoff(s, population));
-      double delta = population[s] * 0.1 * (payoff(s, population) - averagePayoff);
-      population[s] += delta;
-      totalDelta += delta*delta;
+      double payoff = payoff(s, population);
+      payoffs[s] = payoff;
+      logger.debug("Payoff to " + s +" = " + payoff);
+      totalPayoff += payoff;
+    }
+    double averagePayoff = payoff(population);
+    logger.debug("Average payoff is " + averagePayoff);
+    for( int s=0; s<numStrategies; s++ ) {
+      delta[s] = 0.1 * population[s] * (payoffs[s] - averagePayoff);      
+      totalDelta += delta[s]*delta[s];
+    }
+    for( int s=0; s<numStrategies; s++ ) {
+      population[s] += delta[s];
     }
     return totalDelta;
   }
 
-  public double size( double[] population ) {
-    double size = 0;
-    for( int i=0; i<population.length; i++ ) {
-      size += population[i];
-    }
-    return size;
+  public double[] plotRDflow( double[] initialPopulation, double error, int maxIterations ) {
+    return plotRDflow(null, initialPopulation, error, maxIterations);
   }
-
+  
   public double[] plotRDflow( DataWriter out, double[] initialPopulation,
-                            double error, int maxIterations ) {
+                              double error, int maxIterations ) {
     double[] population = initialPopulation;
     double diff;
     int iteration = 0;
     do {      
-      for( int i=0; i<population.length; i++ ) {
-        out.newData(population[i]);
+      if ( out != null ) {
+        for( int i=0; i<population.length; i++ ) {
+          out.newData(population[i]);
+        }
       }
       diff = evolveMixedStrategy(population);
       iteration++;
@@ -337,11 +342,23 @@ public class CompressedPayoffMatrix {
     public Entry removeSingleAgent( int strategy ) {
       try {
         Entry entry = (Entry) clone();
-        entry.numAgentsPerStrategy[strategy]--;
+        if ( numAgentsPerStrategy[strategy] > 0 ) {
+          entry.numAgentsPerStrategy[strategy]--;
+        }
         return entry;
       } catch ( CloneNotSupportedException e ) {
         throw new Error(e);
       }
+    }
+    
+    public String toString() {
+      StringBuffer result = new StringBuffer("");      
+      int numStrategies = numAgentsPerStrategy.length;
+      for( int i=0; i<numStrategies-1; i++ ) {
+        result.append(numAgentsPerStrategy[i] + "/");
+      }
+      result.append(numAgentsPerStrategy[numStrategies-1]);
+      return result.toString();
     }
     
   }
