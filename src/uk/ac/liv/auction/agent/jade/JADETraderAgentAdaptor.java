@@ -77,28 +77,12 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
     addBehaviour( new OneShotBehaviour(this) {
       public void action() {
         try {
-          AID auctioneerAID = null;
-          DFAgentDescription dfd = new DFAgentDescription();
-          ServiceDescription sd = new ServiceDescription();
-          sd.setType(JADEAuctionAdaptor.SERVICE_AUCTIONEER);
-          dfd.addServices(sd);
-          while (true) {
-            System.out.println(getLocalName()+ " waiting for a JASAAuctioneer registering with the DF");
-            SearchConstraints c = new SearchConstraints();
-            c.setMaxDepth(new Long(3));
-            DFAgentDescription[] result = DFService.search(myAgent,dfd,c);
-            if ((result != null) && (result.length > 0)) {
-              dfd = result[0];
-              auctioneerAID = dfd.getName();
-              break;
-            }
-            Thread.sleep(10000);
-          }
+          AID auctioneerAID = findAuctioneer();
           ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+          msg.addReceiver(auctioneerAID);
           RegisterAction content = new RegisterAction();
           content.setAgent(getAID().getName());
-          getContentManager().fillContent(msg, content);
-          JADEAbstractAuctionAgent.sendMessage(myAgent, msg);
+          JADEAbstractAuctionAgent.sendMessage(myAgent, msg, content);
         } catch (Exception fe) {
           fe.printStackTrace();
         }

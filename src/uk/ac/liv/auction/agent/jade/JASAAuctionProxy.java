@@ -24,8 +24,7 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
       ACLShout aclShout = new ACLShout(shout);
       aclShout.setAgent(sender.getAID().getName());
       content.setShout(aclShout);
-      sender.getContentManager().fillContent(msg, content);
-      JADEAbstractAuctionAgent.sendMessage(sender, msg);
+      JADEAbstractAuctionAgent.sendMessage(sender, msg, content);
     } catch ( Exception e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());

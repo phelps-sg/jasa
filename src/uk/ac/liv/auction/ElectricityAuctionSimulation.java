@@ -253,6 +253,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     auction.setMaximumRounds(maxRounds);
 
+    long[][] prngSeeds = generatePRNGseeds(ns+nb, iterations);
+
     double[][] randomizedPrivateValues = null;
     if ( randomPrivateValues ) {
       randomizedPrivateValues = generateRandomizedPrivateValues(ns+nb,
@@ -290,6 +292,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         if ( randomPrivateValues ) {
           randomizePrivateValues(randomizedPrivateValues, i);
         }
+
+        setStrategyPRNGseeds(prngSeeds, i);
 
         ElectricityStats results = runExperiment();
 
@@ -402,6 +406,29 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       } while ( ! stats.equilibriaExists() );
     }
     return values;
+  }
+
+  protected long[][] generatePRNGseeds( int numTraders, int numIterations ) {
+    long[][] seeds = new long[numTraders][numIterations];
+    long time = System.currentTimeMillis();
+    MersenneTwisterFast metaPRNG = new MersenneTwisterFast((int) time);
+    for( int t=0; t<numTraders; t++ ) {
+      for( int i=0; i<numIterations; i++ ) {
+        seeds[t][i] = (long) metaPRNG.nextInt();
+      }
+    }
+    return seeds;
+  }
+
+  protected void setStrategyPRNGseeds( long[][] seeds, int iteration ) {
+    Iterator i = auction.getTraderIterator();
+    int traderNumber = 0;
+    while ( i.hasNext() ) {
+      ElectricityTrader t = (ElectricityTrader) i.next();
+      StimuliResponseStrategy strategy = (StimuliResponseStrategy) t.getStrategy();
+      RothErevLearner learner = (RothErevLearner) strategy.getLearner();
+      learner.setSeed(seeds[traderNumber++][iteration]); //FIXME
+    }
   }
 
 
