@@ -167,7 +167,7 @@ public class RoundRobinAuction extends AuctionImpl
       logger = null;
     }
 
-    if ( logger != null ) {
+    if ( logger != null && logger instanceof Parameterizable ) {
       ((Parameterizable) logger).setup(parameters, base.push(P_LOGGER));
     }
     
