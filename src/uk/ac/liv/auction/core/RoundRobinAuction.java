@@ -585,13 +585,10 @@ public class RoundRobinAuction extends AuctionImpl
    * request is received.
    */
   protected void checkPaused() {
-    log4jLogger.debug("checkPaused()");
     while ( pausePending ) {
-//      log4jLogger.debug("waiting for !pausePending");
       paused = true;
     }
     paused = false;
-    log4jLogger.debug("exiting checkPaused()");
   }
 
   protected void checkEndOfDay() {

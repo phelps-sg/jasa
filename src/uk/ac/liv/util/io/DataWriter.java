@@ -38,6 +38,8 @@ public interface DataWriter {
 
   public void newData( double data );
 
+  public void newData( float data );
+
   public void newData( boolean data );
 
   public void flush();

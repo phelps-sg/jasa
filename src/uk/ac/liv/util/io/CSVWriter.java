@@ -76,6 +76,11 @@ public class CSVWriter implements Serializable, DataWriter {
     nextColumn();
   }
 
+  public void newData( float data ) {
+    out.print(data);
+    nextColumn();
+  }
+
   public void newData( boolean data ) {
     if ( data ) {
       newData(1);
