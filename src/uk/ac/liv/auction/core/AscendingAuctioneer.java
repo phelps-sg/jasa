@@ -27,11 +27,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import java.io.Serializable;
+
 /**
  *  Auctioneer for standard multi-unit english ascending auction.
  */
 
-public class AscendingAuctioneer extends KAuctioneer {
+public class AscendingAuctioneer extends KAuctioneer implements Serializable {
 
   /**
    * The reservation price.
