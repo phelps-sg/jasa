@@ -64,11 +64,19 @@ public class MomentumStrategyTest extends TestCase {
   }
   
   public void testClipping() {
+    
+    double margin = -1;
+    
     testTrader.setIsSeller(false);
-    double margin = testStrategy.targetMargin(PRIV_VALUE - 10);
+    margin = testStrategy.targetMargin(PRIV_VALUE - 10);
+    assertTrue( margin >= 0 );
+    
+    testTrader.setIsSeller(true);
+    margin = testStrategy.targetMargin(PRIV_VALUE + 10);
     assertTrue( margin >= 0 );
   }
 
+  
   public static void main ( String[] args) {
     junit.textui.TestRunner.run(suite());
   }
@@ -81,10 +89,14 @@ public class MomentumStrategyTest extends TestCase {
 class MockMomentumStrategy extends MomentumStrategy {
    
   protected void adjustMargin() {
-    //TODO
+    // For a mock strategy do nothing
   }
   
+  /**
+   * A publically accessible tagetMargin() method.
+   */
   public double targetMargin( double price ) {
     return super.targetMargin(price);
   }
+  
 }
