@@ -102,16 +102,16 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {      
       if ( agent.active() && currentPrice <= lastPrice ) {        
-        raiseMargin(lastPrice);
+        adjustMargin(targetMargin(lastPrice+perterb(lastPrice)));
       } else if ( lastShout.isBid() ) {
         if ( currentPrice >= lastPrice ) {
-          lowerMargin(lastPrice);
+          adjustMargin(targetMargin(lastPrice-perterb(lastPrice)));
         }
       }
     } else {      
       if ( lastShout.isAsk() ) {
         if ( currentPrice >= lastPrice ) {
-          lowerMargin(lastPrice);
+          adjustMargin(targetMargin(lastPrice-perterb(lastPrice)));
         }
       }
     }
@@ -128,15 +128,15 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {      
       if ( agent.active() && currentPrice >= lastPrice ) {        
-        raiseMargin(lastPrice);
+        adjustMargin(targetMargin(lastPrice+perterb(lastPrice)));
       } else if ( lastShout.isAsk() ) {
         if ( currentPrice <= lastPrice ) {
-          lowerMargin(lastPrice);
+          adjustMargin(targetMargin(lastPrice-perterb(lastPrice)));
         }
       }
     } else if ( lastShout.isBid() ) {
       if ( currentPrice <= lastPrice ) {
-        lowerMargin(lastPrice);
+        adjustMargin(targetMargin(lastPrice+perterb(lastPrice)));
       }
     }
   }

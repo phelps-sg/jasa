@@ -521,6 +521,16 @@ public class RoundRobinAuction extends AuctionImpl
     checkHistoryStats();
     return historyStats.getNumberOfBids(price, accepted);
   }
+  
+  public double getHighestBidPrice() throws DataUnavailableException {
+    checkHistoryStats();
+    return historyStats.getHighestBidPrice();
+  }
+  
+  public double getLowestAskPrice() throws DataUnavailableException {
+    checkHistoryStats();
+    return historyStats.getLowestAskPrice();
+  }
 
   /**
    * Runs the auction.

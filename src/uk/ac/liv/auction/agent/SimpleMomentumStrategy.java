@@ -15,22 +15,21 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Steve Phelps
  * @version $Revision$
  */
-public class SimpleMomentumStrategy extends MomentumStrategy {
-  
-  public SimpleMomentumStrategy() {
-    super(null);
-  }
+public class SimpleMomentumStrategy extends MomentumStrategy 
+    implements Serializable {
   
   protected void adjustMargin() {    
     if ( agent.lastShoutAccepted() ) {
-      raiseMargin(1.0);
+      adjustMargin(1.0);      
     } else {
-      lowerMargin(0);
+      adjustMargin(0);
     } 
   }
   

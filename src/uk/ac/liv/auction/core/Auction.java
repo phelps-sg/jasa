@@ -81,6 +81,10 @@ public interface Auction extends QuoteProvider {
   public int getNumberOfBids( double price, boolean accepted )
     throws DataUnavailableException;
 
+  public double getHighestBidPrice() throws DataUnavailableException;
+  
+  public double getLowestAskPrice() throws DataUnavailableException;
+  
   /**
    * Report the state of the auction.
    */

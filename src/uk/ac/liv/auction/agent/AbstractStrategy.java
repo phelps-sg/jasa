@@ -68,11 +68,14 @@ public abstract class AbstractStrategy implements
 
   public Shout modifyShout( Shout shout, Auction auction ) {
     this.auction = auction;
-    modifyShout(currentShout);
-    return ShoutFactory.getFactory().create(currentShout.getAgent(),
-                                             currentShout.getQuantity(),
-                                             currentShout.getPrice(),
-                                             currentShout.isBid());
+    if ( modifyShout(currentShout) ) {
+      return ShoutFactory.getFactory().create(currentShout.getAgent(),
+                                               currentShout.getQuantity(),
+                                               currentShout.getPrice(),
+                                               currentShout.isBid());
+    } else {
+      return null;
+    }
   }
 
   /**

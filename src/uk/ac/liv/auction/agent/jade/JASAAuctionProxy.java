@@ -20,6 +20,7 @@ import uk.ac.liv.auction.core.Auctioneer;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.MarketQuote;
+import uk.ac.liv.auction.core.DataUnavailableException;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 
@@ -158,4 +159,12 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
     throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
   }
 
+  public double getHighestBidPrice() throws DataUnavailableException {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
+  
+  public double getLowestAskPrice() throws DataUnavailableException {
+    throw new java.lang.UnsupportedOperationException("Method not yet implemented.");
+  }
+  
 }

@@ -17,7 +17,6 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
 
 import uk.ac.liv.ai.learning.MimicryLearner;
 import uk.ac.liv.ai.learning.Learner;
@@ -44,7 +43,7 @@ import org.apache.log4j.Logger;
  */
 
 public abstract class MomentumStrategy extends AdaptiveStrategyImpl
-    implements Seedable, Serializable  {
+    implements Seedable  {
 
   protected MimicryLearner learner;
   
@@ -70,6 +69,10 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
 
   public MomentumStrategy( AbstractTraderAgent agent ) {
     super(agent);
+  }
+  
+  public MomentumStrategy() {
+    this(null);
   }
   
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -148,8 +151,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
   }
 
   
-  protected double targetMargin( double price, double absolute, double relative ) {    
-    double targetPrice = relative * price + absolute;    
+  protected double targetMargin( double targetPrice ) {        
     double privValue = agent.getPrivateValue(auction);
     double targetMargin = 0;
     if ( agent.isBuyer() ) {
@@ -162,19 +164,16 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     }    
     return targetMargin;
   }
-
-  protected void raiseMargin( double price ) {    
-    double relative = 1 + randGenerator.raw() * scaling;
-    double absolute = randGenerator.raw() * scaling;
-    learner.train(targetMargin(price, absolute, relative));
-  }
-
-  protected void lowerMargin( double price ) {    
-    double relative = 1 - randGenerator.raw() * scaling;
-    double absolute = randGenerator.raw() * -scaling;
-    learner.train(targetMargin(price, absolute, relative));
-  }
-
   
+  protected void adjustMargin( double targetMargin ) {
+    learner.train(targetMargin);
+  }
+  
+  protected double perterb( double price ) {
+    double relative = randGenerator.raw() * scaling;
+    double absolute = randGenerator.raw() * scaling;
+    return relative*price + absolute;
+  }
+
   protected abstract void adjustMargin();
 }

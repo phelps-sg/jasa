@@ -32,8 +32,12 @@ import uk.ac.liv.util.Resetable;
 import org.apache.log4j.Logger;
 
 /**
+ * <p>
  * A MarketDataLogger that keeps a historical record of the shouts in
- * the market that lead to the last N transactions.
+ * the market that lead to the last N transactions.  This logger
+ * is used to keep historical data that is used by various different
+ * trading strategies.
+ * </p>
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -49,6 +53,10 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   protected HashSet acceptedShouts = new HashSet();
 
   protected int memorySize = 10;
+  
+  protected double lowestAskPrice;
+  
+  protected double highestBidPrice;
 
   static final String P_MEMORYSIZE = "memorysize";
 
@@ -72,7 +80,9 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
     acceptedShouts.clear();
     bids.clear();
     asks.clear();
+    initialisePriceRanges();
   }
+   
 
   public void reset() {
     initialise();
@@ -81,11 +91,16 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   public void updateShoutLog( int time, Shout shout ) {
     if ( shout.isAsk() ) {
       asks.add(shout);
+      if ( shout.getPrice() < lowestAskPrice ) {
+        lowestAskPrice = shout.getPrice();
+      } 
     } else {
       bids.add(shout);
+      if ( shout.getPrice() > highestBidPrice ) {
+        highestBidPrice = shout.getPrice();
+      }
     }
   }
-
 
 
   public void roundClosed( Auction auction ) {
@@ -94,6 +109,7 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
     if ( getNumberOfTrades() > memorySize ) {
       deleteOldShouts();
     }
+    initialisePriceRanges();
   }
 
   public void auctionClosed( Auction auction ) {
@@ -107,7 +123,14 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   public int getNumberOfTrades() {
     return acceptedShouts.size() / 2;
   }
-
+  
+  public double getHighestBidPrice() {
+    return highestBidPrice;
+  }
+  
+  public double getLowestAskPrice() {
+    return lowestAskPrice;
+  }
 
   public List getBids() {
     return bids;
@@ -149,16 +172,22 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   }
 
 
+  protected void initialisePriceRanges() {
+    highestBidPrice = Double.NEGATIVE_INFINITY;
+    lowestAskPrice = Double.POSITIVE_INFINITY;
+  }
+ 
+  
   protected void deleteOldShouts() {
     deleteOldShouts(asks);
     deleteOldShouts(bids);
   }
 
 
-  protected void deleteOldShouts( List shouts ) {
-    while ( !acceptedShouts.contains(shouts.get(0)) ) {
+  protected void deleteOldShouts( List shouts ) {    
+    while ( !shouts.isEmpty() && !acceptedShouts.contains(shouts.get(0)) ) {
       shouts.remove(0);
-    }
+    }    
   }
 
 
