@@ -201,7 +201,14 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     return timeOut;
   }
 
-
+  public double getS() {
+    return s;
+  }
+  
+  public double getT() {
+    return t;
+  }
+  
   public String toString() {
     return "(" + getClass() + " s:" + s + " t:" + t + ")";
   }

@@ -59,6 +59,10 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
   public void setQuantity( int quantity ) {
     this.quantity = quantity;
   }
+  
+  public int getQuantity() {
+    return quantity;
+  }
 
   public int determineQuantity( Auction auction ) {
     return quantity;

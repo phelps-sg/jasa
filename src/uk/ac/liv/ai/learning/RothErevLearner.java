@@ -347,6 +347,26 @@ public class RothErevLearner extends AbstractLearner implements
     return p.getProbability(i);
   }
 
+  public double getE() {
+    return e;
+  }
+  
+  public int getIteration() {
+    return iteration;
+  }
+  
+  public int getLastAction() {
+    return lastAction;
+  }
+
+  public double getR() {
+    return r;
+  }
+  
+  public double getS1() {
+    return s1;
+  }
+  
   public String toString() {
     return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1 + " learningDelta:" + deltaP + ")";
   }

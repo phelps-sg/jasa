@@ -121,6 +121,14 @@ public class WidrowHoffLearner extends AbstractLearner
     learningRate = GlobalPRNG.getInstance().uniform(0.1, 0.4);       
   }
 
+  public double getCurrentOutput() {
+    return currentOutput;
+  }
+  
+  public double getDelta() {
+    return delta;
+  }
+  
   public String toString() {
     return ("(" + getClass() + " learningRate:" + learningRate +
              " delta:" + delta + " currentOutput:" + currentOutput + ")");

@@ -114,6 +114,10 @@ public class RandomValuer
   public double getMinValue() {
     return minValue;
   }
+  
+  public double getCurrentValuation() {
+    return value;
+  }
 
   protected void drawRandomValue() {
     value = GlobalPRNG.getInstance().uniform(minValue, maxValue);

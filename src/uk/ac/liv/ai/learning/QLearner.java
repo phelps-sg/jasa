@@ -297,7 +297,22 @@ public class QLearner extends AbstractLearner
     return numActions;
   }
 
-
+  public double getLearningRate() {
+    return learningRate;
+  }
+  
+  public int getNumActions() {
+    return numActions;
+  }
+  
+  public int getNumStates() {
+    return numStates;
+  }
+  
+  public int getPreviousState() {
+    return previousState;
+  }
+  
   public String toString() {
     return "(" + getClass() + " lastActionChosen:" + lastActionChosen
               + " epsilon:" + epsilon + " learningRate:"
