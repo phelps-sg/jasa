@@ -49,13 +49,13 @@ import uk.ac.liv.auction.agent.TraderAgent;
 
 public abstract class ShoutFactory {
 
-  protected static PooledShoutFactory pooledFactory = new PooledShoutFactory();
+  protected static ShoutFactory factory = new UnpooledShoutFactory();
 
   /**
    * Get the concrete factory.
    */
   public static ShoutFactory getFactory() {
-    return pooledFactory;
+    return factory;
   }
 
   /**
@@ -66,6 +66,18 @@ public abstract class ShoutFactory {
 
 }
 
+class UnpooledShoutFactory extends ShoutFactory {
+  
+  public UnpooledShoutFactory() {
+  }
+  
+  public Shout create( TraderAgent agent, int quantity, double price,
+                        boolean isBid ) {
+     return new Shout(agent, quantity, price, isBid);   
+  }
+  
+}
+
 class PooledShoutFactory extends ShoutFactory {
 
   public PooledShoutFactory() {
@@ -73,7 +85,7 @@ class PooledShoutFactory extends ShoutFactory {
 
   public Shout create( TraderAgent agent, int quantity, double price,
                         boolean isBid ) {
-     return ShoutPool.fetch(agent, quantity, price, isBid);
+     return ShoutPool.fetch(agent, quantity, price, isBid);   
   }
 
 }
