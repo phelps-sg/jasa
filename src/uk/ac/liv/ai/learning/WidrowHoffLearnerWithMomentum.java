@@ -44,4 +44,13 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
     super.randomInitialise();
     momentum = GlobalPRNG.getInstance().uniform(0.1, 0.4);       
   }
+  
+  public double getMomentum () {
+    return momentum;
+  }
+  
+  public void setMomentum ( double momentum) {
+    this.momentum = momentum;
+  }
+  
 }
