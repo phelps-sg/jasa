@@ -15,19 +15,28 @@
 
 package uk.ac.liv.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import gnu.trove.TDoubleArrayList;
 
 import org.apache.log4j.Logger;
 
 /**
+ * An distribution which keeps actual cases in memory as well as updating
+ * moments dynamically. This implementation of a Distribution is capable of
+ * calculating trimmed means. Note that calculating the trimmed mean results in
+ * a sorting operation, and hence is not as efficient as calculating the
+ * untrimmed mean.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class HeavyweightDistribution extends CummulativeDistribution {
 
-  protected ArrayList data;
+  protected TDoubleArrayList data;
+  
+  protected double trimmedMean = Double.NaN;
+  
+  protected boolean hasChanged = false;
   
   private static final int INITIAL_SIZE = 10000;
   
@@ -39,22 +48,30 @@ public class HeavyweightDistribution extends CummulativeDistribution {
   
   public void initialise() {
     super.initialise();
-    data = new ArrayList(INITIAL_SIZE);    
+    data = new TDoubleArrayList(INITIAL_SIZE); 
+    hasChanged = false;
   }
   
   public void newData( double datum ) {
     super.newData(datum);
-    data.add(new Double(datum));
+    data.add(datum);
+    hasChanged = true;
   }
   
   public double getTrimmedMean( double p ) {
-    Collections.sort(data);
-    int trimmedN = (int) ((p/2) * n);    
-    double trimmedTotal = 0;
-    for( int i=trimmedN; i<(n - trimmedN); i++ ) {
-      trimmedTotal += ((Double) data.get(i)).doubleValue();
+    if ( !hasChanged ) {
+      return trimmedMean;
+    } else {      
+      data.sort();
+      int trimmedN = (int) ((p / 2) * n);
+      double trimmedTotal = 0;
+      for ( int i = trimmedN; i < (n - trimmedN); i++ ) {
+        trimmedTotal += data.get(i);
+      }
+      trimmedMean = trimmedTotal / (n - trimmedN * 2);
+      hasChanged = false;
+      return trimmedMean;
     }
-    return trimmedTotal / (n-trimmedN*2);
   }
     
 }
