@@ -16,8 +16,12 @@
 package uk.ac.liv.auction.agent.jade;
 
 import uk.ac.liv.auction.agent.*;
-
 import uk.ac.liv.auction.core.*;
+
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 import jade.core.*;
 
@@ -48,7 +52,8 @@ import jade.domain.*;
  * @see AbstractTraderAgent
  */
 
-public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
+public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent 
+                                     implements Parameterizable {
 
   AbstractTraderAgent jasaTraderAgent;
 
@@ -56,15 +61,30 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
 
 
   public JADETraderAgentAdaptor( AbstractTraderAgent jasaTraderAgent ) {
+    this();
     this.jasaTraderAgent = jasaTraderAgent;
   }
+  
+  public JADETraderAgentAdaptor() {    
+  }
 
+ 
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    jasaTraderAgent = 
+      (AbstractTraderAgent) parameters.getInstanceForParameterEq(base, null,
+                                                                  AbstractTraderAgent.class);    
+    jasaTraderAgent.setup(parameters, base);
+  }  
+
+  
   public String getServiceName() {
     return SERVICE_TRADER;
   }
 
   public void addBehaviours() {
+    
     // add a Behaviour to handle messages from auctioneers
+    
     addBehaviour( new CyclicBehaviour( this ) {
       public void action() {
         ACLMessage msg = receive();
@@ -97,6 +117,8 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
         block();
       }
     } );
+    
+    // add initialisation behaviour to find and register with an auctioneer
 
     addBehaviour( new OneShotBehaviour(this) {
       public void action() {
@@ -113,7 +135,6 @@ public class JADETraderAgentAdaptor extends JADEAbstractAuctionAgent {
       }
     } );
   }
-
 
 
 

@@ -61,6 +61,9 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
   PlatformController container;
 
   static Logger logger = Logger.getLogger(AuctionManager.class);
+  
+  static final String AGENTNAME_AUCTIONEER = "Auctioneer";
+  static final String AGENTNAME_TRADER = "Trader";
 
   static final String P_AUCTION = "auction";
   static final String P_NUM_AGENT_TYPES = "numagenttypes";
@@ -92,10 +95,10 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
       Object[] auctioneerArguments = new Object[2];
       auctioneerArguments[0] = parameters;
-      auctioneerArguments[1] = base.push(P_AUCTIONEER);
+      auctioneerArguments[1] = base;
       AgentController auctioneerController =
-          container.createNewAgent("auctioneer",
-                                    JADERandomRobinAuctioneer.class.getName(),
+          container.createNewAgent(AGENTNAME_AUCTIONEER,
+                                    JADEAuctionAdaptor.class.getName(),
                                     auctioneerArguments);
 
       auctioneerController.start();
@@ -113,19 +116,15 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
         int numAgents = parameters.getInt(typeParam.push(P_NUM_AGENTS), null, 0);
         for( int i=0; i<numAgents; i++ ) {
 
-          JADETraderAgentAdaptor dummyAgent = (JADETraderAgentAdaptor)
-              parameters.getInstanceForParameter(typeParam,
-                                                  null,
-                                                  JADETraderAgentAdaptor.class);
-
           try {
             Object[] agentParameters = new Object[2];
             agentParameters[0] = parameters;
             agentParameters[1] = typeParam;
-            String agentClassName = dummyAgent.getClass().getName();
-            logger.debug("Attempting to start trader agent with class name " + agentClassName);
+            String agentClassName = JADETraderAgentAdaptor.class.getName();
+            logger.debug("Attempting to start trader agent with class name " +
+                           agentClassName);
             AgentController agentController =
-                container.createNewAgent("trader-" + i + "-" + t,
+                container.createNewAgent(AGENTNAME_TRADER + i + "-" + t,
                                            agentClassName, agentParameters);
             agentController.start();
           } catch ( Exception e ) {

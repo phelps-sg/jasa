@@ -66,6 +66,59 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
   static final String STATE_FINALISE_ROUND = "FINALISE_ROUND";
   static final String STATE_END = "END";
 
+
+  public JADEAuctionAdaptor( JADEAuction auction ) {
+    this();
+    this.auction = auction;    
+  }
+  
+  public JADEAuctionAdaptor() {
+  }
+
+
+  public void setup( ec.util.ParameterDatabase parameters, ec.util.Parameter base ) {
+    auction = 
+      (JADEAuction) parameters.getInstanceForParameterEq(base, null,
+                                                          JADEAuction.class);
+    auction.setup(parameters, base);
+  }
+
+
+  public String getServiceName() {
+    return SERVICE_AUCTIONEER;
+  }
+
+  
+  public void addBehaviours() {
+      
+    RegistrationBehaviour registrationBehaviour = new RegistrationBehaviour(this);
+    RequestShoutsBehaviour requestShoutsBehaviour = new RequestShoutsBehaviour(this);
+    ProcessShoutsBehaviour processShoutsBehaviour = new ProcessShoutsBehaviour(this);
+    FinaliseRoundBehaviour finaliseRoundBehaviour = new FinaliseRoundBehaviour(this);
+
+    FSMBehaviour auctionFSM = new FSMBehaviour(this);
+    auctionFSM.registerFirstState(registrationBehaviour, STATE_REGISTRATION);
+    auctionFSM.registerState(requestShoutsBehaviour, STATE_REQUEST_SHOUTS);
+    auctionFSM.registerState(processShoutsBehaviour, STATE_PROCESS_SHOUTS);
+    auctionFSM.registerState(finaliseRoundBehaviour, STATE_FINALISE_ROUND);
+    OneShotBehaviour end = new OneShotBehaviour(this) {
+      public void action() {
+        auction.generateReport();
+      }
+    };
+    auctionFSM.registerLastState(end, STATE_END);
+
+    auctionFSM.registerDefaultTransition(STATE_REGISTRATION, STATE_REQUEST_SHOUTS);
+    auctionFSM.registerDefaultTransition(STATE_REQUEST_SHOUTS, STATE_PROCESS_SHOUTS);
+    auctionFSM.registerDefaultTransition(STATE_PROCESS_SHOUTS, STATE_FINALISE_ROUND);
+    auctionFSM.registerDefaultTransition(STATE_FINALISE_ROUND, STATE_REQUEST_SHOUTS);
+    auctionFSM.registerTransition(STATE_REQUEST_SHOUTS, STATE_END,
+                                  RequestShoutsBehaviour.FSM_EVENT_AUCTION_CLOSED);
+
+    addBehaviour(auctionFSM);
+  }
+
+
 /// Inner classes for behaviours
 
   class RegistrationBehaviour extends SimpleBehaviour {
@@ -194,50 +247,6 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
   }
 
 /// end of inner-classes
-
-
-  public JADEAuctionAdaptor( JADEAuction auction ) {
-    this.auction = auction;
-  }
-
-
-  public void setup( ec.util.ParameterDatabase parameters, ec.util.Parameter base ) {
-    auction.setup(parameters, base);
-  }
-
-
-  public String getServiceName() {
-    return SERVICE_AUCTIONEER;
-  }
-
-  public void addBehaviours() {
-    RegistrationBehaviour registrationBehaviour = new RegistrationBehaviour(this);
-    RequestShoutsBehaviour requestShoutsBehaviour = new RequestShoutsBehaviour(this);
-    ProcessShoutsBehaviour processShoutsBehaviour = new ProcessShoutsBehaviour(this);
-    FinaliseRoundBehaviour finaliseRoundBehaviour = new FinaliseRoundBehaviour(this);
-
-    FSMBehaviour auctionFSM = new FSMBehaviour(this);
-    auctionFSM.registerFirstState(registrationBehaviour, STATE_REGISTRATION);
-    auctionFSM.registerState(requestShoutsBehaviour, STATE_REQUEST_SHOUTS);
-    auctionFSM.registerState(processShoutsBehaviour, STATE_PROCESS_SHOUTS);
-    auctionFSM.registerState(finaliseRoundBehaviour, STATE_FINALISE_ROUND);
-    OneShotBehaviour end = new OneShotBehaviour(this) {
-      public void action() {
-        auction.generateReport();
-      }
-    };
-    auctionFSM.registerLastState(end, STATE_END);
-
-    auctionFSM.registerDefaultTransition(STATE_REGISTRATION, STATE_REQUEST_SHOUTS);
-    auctionFSM.registerDefaultTransition(STATE_REQUEST_SHOUTS, STATE_PROCESS_SHOUTS);
-    auctionFSM.registerDefaultTransition(STATE_PROCESS_SHOUTS, STATE_FINALISE_ROUND);
-    auctionFSM.registerDefaultTransition(STATE_FINALISE_ROUND, STATE_REQUEST_SHOUTS);
-    auctionFSM.registerTransition(STATE_REQUEST_SHOUTS, STATE_END,
-                                  RequestShoutsBehaviour.FSM_EVENT_AUCTION_CLOSED);
-
-    addBehaviour(auctionFSM);
-  }
-
 
 
 }
