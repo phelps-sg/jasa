@@ -22,6 +22,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 
 import uk.ac.liv.auction.stats.GraphMarketDataLogger;
+import uk.ac.liv.auction.stats.RepastGraphSequence;
 
 import uk.ac.liv.auction.ui.RepastAuctionConsoleGraph;
 import uk.ac.liv.auction.ui.DrawableAgentAdaptor;
@@ -36,6 +37,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Vector;
 
 import uchicago.src.collection.BaseMatrix;
@@ -43,6 +45,7 @@ import uchicago.src.collection.BaseMatrix;
 import uchicago.src.sim.engine.*;
 
 import uchicago.src.sim.analysis.OpenSequenceGraph;
+import uchicago.src.sim.analysis.plot.OpenGraph;
 
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.Object2DDisplay;
@@ -90,6 +93,10 @@ public class RepastMarketSimulation extends SimModelImpl
   protected DisplaySurface displaySurface;
   
   protected AgentSpace agentSpace;
+  
+  protected LinkedList auxGraphs = new LinkedList();
+  
+  protected static RepastMarketSimulation modelSingleton;
 
   public static final String P_AUCTION = "auction";
   public static final String P_SIMULATION = "simulation";
@@ -104,8 +111,10 @@ public class RepastMarketSimulation extends SimModelImpl
     if ( args.length < 1 ) {
       fatalError("You must specify a parameter file");
     }
+    
+    modelSingleton = new RepastMarketSimulation(args[0]);
 
-    init.loadModel( new RepastMarketSimulation(args[0]), null, false);
+    init.loadModel( modelSingleton, null, false);
   }
   
   
@@ -119,6 +128,10 @@ public class RepastMarketSimulation extends SimModelImpl
   
   public RepastMarketSimulation() {
     this(null);
+  }
+  
+  public static RepastMarketSimulation getModelSingleton() {
+    return modelSingleton;
   }
 
   public void setup() {
@@ -180,6 +193,13 @@ public class RepastMarketSimulation extends SimModelImpl
     }
     if ( graph != null ) {
       graph.step();
+    }
+    if ( auxGraphs != null ) {
+      Iterator i = auxGraphs.iterator();
+      while ( i.hasNext() ) {
+        OpenGraph auxGraph = (OpenGraph) i.next();
+        auxGraph.step();
+      }
     }
     displaySurface.updateDisplay();
     //ProbeUtilities.updateProbePanels();
@@ -250,10 +270,23 @@ public class RepastMarketSimulation extends SimModelImpl
     GlobalPRNG.initialiseWithSeed(seed);
   }
   
+  public void addGraphSequence( RepastGraphSequence graphSequence ) {
+    OpenSequenceGraph graph = new OpenSequenceGraph(graphSequence.getName(), this);
+    graph.addSequence(graphSequence.getName(), graphSequence);
+    auxGraphs.add(graph);
+  }
+  
   protected void buildDisplay() {
+    
     GraphMarketDataLogger graphLogger;
     if ( (graphLogger = GraphMarketDataLogger.getSingletonInstance()) != null ) {
       graph = new RepastAuctionConsoleGraph("JASA graph for " + auction.getName(), this, graphLogger);
+      graph.display();
+    }
+    
+    Iterator i = auxGraphs.iterator();
+    while ( i.hasNext() ) {
+      OpenGraph graph = (OpenGraph) i.next();
       graph.display();
     }
     
@@ -348,7 +381,7 @@ public class RepastMarketSimulation extends SimModelImpl
       agents = new Vector();
       Iterator i = auction.getTraderIterator();
       while ( i.hasNext() ) {
-        AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+        AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
         agents.add(new DrawableAgentAdaptor(auction, agent));
       }
       matrix = new AgentMatrix(agents, width, height);
