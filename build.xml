@@ -49,7 +49,7 @@
    </target>
 
    <target depends="prepareOutput" name="compile">
-      <javac debug="on" destdir="${outputDir}" srcdir="${sourceDir}" deprecation="on">
+      <javac debug="on" destdir="${outputDir}" srcdir="${sourceDir}" deprecation="on" source="1.4">
         <classpath refid="project.classpath" />
      </javac>
    </target>
@@ -84,6 +84,7 @@
    <target depends="compile" name="test">
 	   <java classname="test.uk.ac.liv.auction.AllTests" fork="true">
         	<classpath refid="project.classpath" />
+		<jvmarg value="-ea" />
 	   </java>
     </target>
 

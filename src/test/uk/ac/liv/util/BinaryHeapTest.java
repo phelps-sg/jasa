@@ -2,22 +2,26 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2003 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
 package test.uk.ac.liv.util;
 
+import test.uk.ac.liv.PRNGTestSeeds;
+
 import junit.framework.*;
 
 import uk.ac.liv.util.*;
+
+//import org.apache.commons.collections.BinaryHeap;
 
 import java.util.Random;
 import java.util.Iterator;
@@ -51,7 +55,7 @@ public class BinaryHeapTest extends TestCase {
     assertTrue( h1.contains(new Integer(5)) );
     assertTrue( !h1.contains(new Integer(10)) );
     assertTrue( !h1.contains(new Integer(-1)) );
-    Object x = h1.removeFirst();
+    Object x = h1.pop();
     System.out.println("h1 after removing first = " + h1);
     checkOrder(h1);
     assertTrue( ((Integer) x).equals(new Integer(1)));
@@ -66,9 +70,9 @@ public class BinaryHeapTest extends TestCase {
     assertTrue( h1.remove( new Integer(3) ) );
     System.out.println("h1 after removing 3 = " + h1);
     // assertTrue( ! h1.contains(new Integer(3)) );
-    x = h1.removeFirst();
+    x = h1.pop();
     System.out.println("h1 after removing first = " + h1);
-    h1.removeFirst();
+    h1.pop();
     System.out.println("h1 after removing first = " + h1);
     assertTrue( h1.remove( new Integer(7) ) );
     System.out.println("h1 after removing 7 = " + h1);
@@ -85,32 +89,31 @@ public class BinaryHeapTest extends TestCase {
 
 
   public void checkOrder( BinaryHeap h ) {
-    LinkedList l = new LinkedList();
-    Iterator it = new QueueDisassembler(h);
     Integer lastNum = null;
-    while ( it.hasNext() ) {
-      Integer num = (Integer) it.next();
+    LinkedList l = new LinkedList();
+    while ( !h.isEmpty() ) {
+      Integer num = (Integer) h.pop();
       assertTrue( lastNum == null || num.intValue() >= lastNum.intValue() );
       lastNum = num;
       l.add(num);
     }
-    it = l.iterator();
+    Iterator it = l.iterator();
     while ( it.hasNext() ) {
       h.add( it.next() );
     }
   }
 
   public void testRandom() {
-    Random randGenerator = new Random();
+    Random randGenerator = new Random(PRNGTestSeeds.UNIT_TEST_SEED);
     for( int i=0; i<1000; i++ ) {
       BinaryHeap h = new BinaryHeap();
       for( int r=0; r<100; r++ ) {
         h.add( new Integer( randGenerator.nextInt(100)) );
       }
+//      System.out.println("Testing heap " + h);
       for( int r=0; r<20; r++ ) {
-        h.remove( new Integer(r) );
-        //h.removeFirst();
-        h.add( new Integer( randGenerator.nextInt(100) ));
+        Integer n = new Integer( randGenerator.nextInt(100) );
+        h.add(n);
       }
       checkOrder(h);
     }

@@ -25,6 +25,8 @@ import test.uk.ac.liv.auction.agent.TestTrader;
 
 import junit.framework.*;
 
+//import org.apache.commons.collections.BinaryHeap;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -131,10 +133,10 @@ class TestShoutEngine extends FourHeapShoutEngine {
       throw new Error("shout heaps not balanced nS="+nS + " nB=" + nB);
     }
 
-    Shout bInTop = (Shout) bIn.getFirst();
-    Shout sInTop = (Shout) sIn.getFirst();
-    Shout bOutTop = (Shout) bOut.getFirst();
-    Shout sOutTop = (Shout) sOut.getFirst();
+    Shout bInTop = (Shout) bIn.peek();
+    Shout sInTop = (Shout) sIn.peek();
+    Shout bOutTop = (Shout) bOut.peek();
+    Shout sOutTop = (Shout) sOut.peek();
 
     checkBalanced(bInTop, bOutTop, "bIn >= bOut");
     checkBalanced(sOutTop, sInTop, "sOut >= sIn");

@@ -238,8 +238,8 @@ public class Shout implements Comparable, Cloneable, Serializable {
                                                        isBid);
 //    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
     child = newShout;
-    Debug.assertTrue(isValid());
-    Debug.assertTrue(newShout.isValid());
+    assert isValid();
+    assert newShout.isValid();
     return newShout;
   }
 
@@ -249,8 +249,8 @@ public class Shout implements Comparable, Cloneable, Serializable {
 //    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
     quantity = excess;
     child = newShout;
-    Debug.assertTrue(this.isValid());
-    Debug.assertTrue(newShout.isValid());
+    assert isValid();
+    assert newShout.isValid();
     return newShout;
   }
 
