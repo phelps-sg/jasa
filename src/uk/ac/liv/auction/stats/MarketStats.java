@@ -20,8 +20,9 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
 import java.util.List;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
 
-public interface MarketStats  {
+public interface MarketStats {
 
   /**
    * Set the auction we are calculating statistics for.

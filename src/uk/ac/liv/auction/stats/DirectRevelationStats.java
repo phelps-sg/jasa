@@ -60,6 +60,7 @@ public class DirectRevelationStats implements Resetable, Serializable {
 
   static Logger logger = Logger.getLogger(DirectRevelationStats.class);
 
+
   public DirectRevelationStats( RoundRobinAuction auction ) {
     this();
     this.auction = auction;
@@ -76,9 +77,12 @@ public class DirectRevelationStats implements Resetable, Serializable {
   public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
+
   public void calculate() {
+    initialise();
     simulateDirectRevelation();
   }
+
 
   protected void simulateDirectRevelation() {
     Iterator traders = auction.getTraderIterator();
@@ -98,6 +102,7 @@ public class DirectRevelationStats implements Resetable, Serializable {
     releaseShouts(shouts.iterator());
   }
 
+
   protected void releaseShouts( Iterator i ) {
     while ( i.hasNext() ) {
       Shout s = (Shout) i.next();
@@ -116,18 +121,18 @@ public class DirectRevelationStats implements Resetable, Serializable {
     initialise();
   }
 
+
   protected void enumerateTruthfulShout( Shout shout ) {
     try {
-      if (shout.isBid()) {
+      if ( shout.isBid() ) {
         shoutEngine.newBid(shout);
-      }
-      else {
+      } else {
         shoutEngine.newAsk(shout);
-      }
-    } catch (DuplicateShoutException e) {
-        e.printStackTrace();
-        throw new Error(e.getMessage());
-      }
+       }
+    } catch ( DuplicateShoutException e ) {
+      e. printStackTrace();
+      throw new Error(e.getMessage());
+    }
   }
 
 
