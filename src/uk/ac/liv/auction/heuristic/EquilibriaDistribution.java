@@ -69,6 +69,7 @@ public class EquilibriaDistribution extends AbstractSeedable {
   public static final String P_MAXITERATIONS = "maxiterations";
   public static final String P_MINVELOCITY = "minvelocity";
   public static final String P_RESOLUTION = "resolution";
+  public static final String P_PRECISION = "precision";
 
   public EquilibriaDistribution() {
     equilibria = new HashMap();
@@ -107,6 +108,8 @@ public class EquilibriaDistribution extends AbstractSeedable {
     resolution = parameters.getDoubleWithDefault(base.push(P_RESOLUTION), null, resolution);
     maxIterations = parameters.getIntWithDefault(base.push(P_MAXITERATIONS), null, maxIterations);
     minimumVelocity = parameters.getDoubleWithDefault(base.push(P_MINVELOCITY), null, minimumVelocity);
+    MixedStrategy.precision = 
+      parameters.getDoubleWithDefault(base.push(P_PRECISION), null, MixedStrategy.precision);
     try {
       FileInputStream file = new FileInputStream(payoffMatrixFileName);
       CSVReader csvIn = new CSVReader(file, new Class[] {Integer.class, Integer.class, Integer.class, Double.class, Double.class, Double.class} );      
