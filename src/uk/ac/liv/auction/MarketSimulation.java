@@ -82,7 +82,7 @@ public class MarketSimulation
   public static final String P_SIMULATION = "simulation";
 
 
-  public static final String VERSION = "0.29";
+  public static final String VERSION = "0.30";
 
   public static final String GNU_MESSAGE =
     "\n" +

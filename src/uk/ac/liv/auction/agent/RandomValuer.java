@@ -81,6 +81,7 @@ public class RandomValuer
   public void setup( ParameterDatabase parameters, Parameter base ) {
     minValue = parameters.getDouble(base.push(P_MINVALUE), null, 0);
     maxValue = parameters.getDouble(base.push(P_MAXVALUE), null, 0);
+    initialise();
   }
 
   public double determineValue( Auction auction ) {    
