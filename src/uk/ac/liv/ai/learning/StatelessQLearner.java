@@ -72,5 +72,9 @@ public class StatelessQLearner
   public void setSeed( long seed ) {
     qLearner.setSeed(seed);
   }
+  
+  public double getLearningDelta() {
+    return qLearner.getLearningDelta();
+  }
 
 }

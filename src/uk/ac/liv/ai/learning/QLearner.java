@@ -256,6 +256,10 @@ public class QLearner
   public int getLastActionChosen() {
     return lastActionChosen;
   }
+  
+  public double getLearningDelta() {
+    return 0; //TODO
+  }
 
   public String toString() {
     return "(" + getClass() + " lastActionChosen:" + lastActionChosen

@@ -32,4 +32,5 @@ public interface Learner {
    */
   public int act();
 
+  public double getLearningDelta();
 }

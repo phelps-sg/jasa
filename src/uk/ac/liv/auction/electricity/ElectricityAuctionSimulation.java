@@ -112,10 +112,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       new CummulativeStatCounter("EquilibPrice");
   protected CummulativeStatCounter equilibQty =
       new CummulativeStatCounter("EquilibQty");
+  protected CummulativeStatCounter learningDelta =
+      new CummulativeStatCounter("LD");
   
   protected CummulativeStatCounter[] variables = new CummulativeStatCounter[] {
     efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
-    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty
+    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, learningDelta
   };
 
   static Logger logger = Logger.getLogger(ElectricityAuctionSimulation.class);
@@ -144,7 +146,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_RANDOMIZER = "randomizer";
 
 
-  static final int DATAFILE_NUM_COLUMNS = 73;
+  static final int DATAFILE_NUM_COLUMNS = 77;
   static final int ITERRESULTS_NUM_COLUMNS = 9;
 
 
@@ -416,6 +418,16 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     double eq = (equilibria.getMinQuantity() + equilibria.getMaxQuantity()) / 2;
     equilibPrice.newData(ep);
     equilibQty.newData(eq);
+    
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      ElectricityTrader t = (ElectricityTrader) i.next();
+      Strategy s = t.getStrategy();
+      if ( s instanceof AdaptiveStrategy ) {
+        Learner l = ((AdaptiveStrategy) s).getLearner();
+        learningDelta.newData(l.getLearningDelta());
+      }
+    }
   }
 
   

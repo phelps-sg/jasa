@@ -111,6 +111,11 @@ public class RothErevLearner implements
    * The last action chosen.
    */
   protected int lastAction;
+  
+  /**
+   * The total amount of update to the propensity vector on the last iteration.
+   */
+  protected double deltaQ;
 
   static final int    DEFAULT_K   = 100;
   static final double DEFAULT_R   = 0.1;
@@ -207,8 +212,11 @@ public class RothErevLearner implements
    * @param action The last action chosen by the learner
    */
   protected void updatePropensities( int action, double reward ) {
-    for( int i=0; i<k; i++ ) {
-      q[i] = (1-r) * q[i] + experience(i,action,reward);
+    deltaQ = 0;
+    for( int i=0; i<k; i++ ) {      
+      double q1 = (1-r) * q[i] + experience(i,action,reward);
+      deltaQ += Math.abs(q1-q[i]);      
+      q[i] = q1;
     }
   }
 
@@ -319,6 +327,10 @@ public class RothErevLearner implements
   
   public int getK() {
     return k;
+  }
+  
+  public double getLearningDelta() {
+    return deltaQ;
   }
   
   public double getProbability( int i ) {
