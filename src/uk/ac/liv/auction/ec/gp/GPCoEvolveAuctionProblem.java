@@ -226,7 +226,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     float fitness = Float.MAX_VALUE;
     if ( !Float.isNaN(relMarketPower) && !Float.isInfinite(relMarketPower)
            && !Double.isNaN(stats.eA) ) {
-      fitness = 1-((float) stats.eA/100) + relMarketPower;
+      fitness = 1-((float) stats.eA/100); //TODO + relMarketPower;
     }
     GPIndividual individual = (GPIndividual) group[0].get(0);
     ((KozaFitness) individual.fitness).setStandardizedFitness(state, fitness);

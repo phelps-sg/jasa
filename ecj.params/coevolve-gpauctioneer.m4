@@ -24,7 +24,7 @@ eval.problem.ns = NUM_SELLERS
 eval.problem.nb = NUM_BUYERS
 eval.problem.cs = SELLER_CAPACITY
 eval.problem.cb = BUYER_CAPACITY
-eval.problem.randomprivatevalues = true
+eval.problem.randomprivatevalues = false
 eval.problem.marketstatsfile = RESULTS/marketstats-PARAM_SUMMARY.csv
 
 stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
