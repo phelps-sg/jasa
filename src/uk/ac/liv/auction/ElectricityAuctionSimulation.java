@@ -277,6 +277,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
       CummulativeStatCounter pSA = new CummulativeStatCounter("PSA");
       CummulativeStatCounter pBA = new CummulativeStatCounter("PBA");
+      CummulativeStatCounter pST = new CummulativeStatCounter("PST");
+      CummulativeStatCounter pBT = new CummulativeStatCounter("PBT");
       CummulativeStatCounter eAN = new CummulativeStatCounter("EAN");
       CummulativeStatCounter mPBN = new CummulativeStatCounter("MPBN");
       CummulativeStatCounter mPSN = new CummulativeStatCounter("MPSN");
@@ -311,6 +313,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         mPSN.newData(mpNormalise(stats.getMPS()));
         sMPBN.newData(mpNormalise(stats.getSMPB()));
         sMPSN.newData(mpNormalise(stats.getSMPS()));
+        pBT.newData(stats.getPBT());
+        pST.newData(stats.getPST());
         double ep = (stats.getEquilibriaStats().getMinPrice()
                                + stats.getEquilibriaStats().getMaxPrice()) / 2;
         equilibPrice.newData(ep);
@@ -324,6 +328,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       System.out.println(mPS);
       System.out.println(sMPB);
       System.out.println(sMPS);
+      System.out.println(pST);
+      System.out.println(pBT);
       System.out.println(pSA);
       System.out.println(pBA);
       System.out.println(equilibPrice);

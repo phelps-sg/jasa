@@ -136,12 +136,6 @@ public class ElectricityTrader extends AbstractTraderAgent {
     lastProfit = quantity * (privateValue - price);
 
     if ( lastProfit < 0 ) {
-      //System.out.println("currentShout = " + getCurrentShout());
-      //System.out.println("quantity = " + quantity);
-      //System.out.println("privateValue = " + privateValue);
-      //System.out.println("price = " + price);
-      //System.out.println("winningShout = " + winningShout);
-      //Debug.assert(profit >= 0);
       return;
     }
 

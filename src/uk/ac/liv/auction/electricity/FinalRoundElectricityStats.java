@@ -33,6 +33,7 @@ public class FinalRoundElectricityStats extends ElectricityStats {
     super(auction);
   }
 
+
   protected double getProfits( AbstractTraderAgent trader ) {
     return ((ElectricityTrader) trader).getLastProfit();
   }
@@ -47,9 +48,5 @@ public class FinalRoundElectricityStats extends ElectricityStats {
     return equilibQuant(trader, equilibPrice) * surplus;
   }
 
-  protected double truthfulProfits( double finalRoundProfits,
-                                    double previousProfits ) {
-    return finalRoundProfits - previousProfits;
-  }
 
 }

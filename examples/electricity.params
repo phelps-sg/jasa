@@ -2,6 +2,7 @@
 # Parameters for the fitness-landscape experiment described in
 # "Applying Multi-Objective Evolutionary Computing to Auction Mechanism Design"
 #  S. Phelps, S. Parsons, E. Sklar, P. McBurney
+#  University of Liverpool Computer Science Department
 #  Technical Report ULCS-02-031
 #
 # Run this experiment using the command:
