@@ -70,7 +70,7 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
   /**
    *  The strategy currently being played
-   */
+    */
   protected Strategy currentStrategy;
 
   static final String P_N = "n";
