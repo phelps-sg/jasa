@@ -32,5 +32,14 @@ public interface Learner {
    */
   public int act();
 
+  /**
+   * Return a value indicative of the amount of learning that
+   * occured during the last iteration.  Values close to 0.0
+   * indicate that the learner has converged to an equilibrium
+   * state.  
+   *
+   * @return A double representing the amount of learning that occured.
+   */
   public double getLearningDelta();
+  
 }
