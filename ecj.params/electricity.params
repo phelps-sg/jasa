@@ -14,19 +14,19 @@
 electricity.maxrounds = 10000
 
 # Number of samples per value of k
-electricity.iterations = 1000
+electricity.iterations = 100
 
 # Output data
-electricity.outputdir = results/electricity/test-equilib
+electricity.outputdir = results/electricity/analstrat
 
-electricity.strategydata = false
+electricity.strategydata = true
 
 # Use random private values
-electricity.randomizer = uk.ac.liv.auction.electricity.StandardRandomizer
+electricity.randomizer = uk.ac.liv.auction.electricity.FixedScheduleRandomizer
 
 # Private value range
-electricity.randomizer.minprivatevalue = 3
-electricity.randomizer.maxprivatevalue = 10
+electricity.randomizer.minprivatevalue = 10
+electricity.randomizer.maxprivatevalue = 20
 
 # PRNG seed
 electricity.randomizer.seed = 1726567842
