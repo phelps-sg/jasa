@@ -17,6 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.util.Prototypeable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -44,7 +45,7 @@ import java.io.Serializable;
  */
 
 public class PureSimpleStrategy extends FixedQuantityStrategyImpl
-                                    implements Serializable {
+                                    implements Serializable, Prototypeable {
 
   protected double margin;
 
@@ -69,8 +70,13 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
   }
 
   public Object protoClone() {
-    PureSimpleStrategy clone = new PureSimpleStrategy(agent, margin, quantity);
-    return clone;
+  	Object clonedStrategy;
+  	try {
+  		clonedStrategy = this.clone();
+  	} catch ( CloneNotSupportedException e ) {
+  		throw new Error(e);
+  	}
+    return clonedStrategy;
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
