@@ -320,7 +320,7 @@ public class RothErevLearner implements
     p.setSeed(seed);
   }
 
-  public void dumpDistribution( DataWriter out ) {
+  public void dumpState( DataWriter out ) {
     for( int i=0; i<k; i++ ) {
       out.newData(p.getProbability(i));
     }
@@ -328,6 +328,10 @@ public class RothErevLearner implements
   
   public int getK() {
     return k;
+  }
+  
+  public int getNumberOfActions() {
+    return getK();
   }
   
   public double getLearningDelta() {

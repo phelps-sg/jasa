@@ -513,9 +513,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         Strategy s = t.getStrategy();
         if ( s instanceof AdaptiveStrategy ) {
           Learner l = ((AdaptiveStrategy) s).getLearner();
-          if ( l instanceof RothErevLearner ) {
-            ((RothErevLearner) l).dumpDistribution(strategyData);
-          }
+          l.dumpState(strategyData);          
         }
       }
     }
@@ -531,8 +529,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   
   protected void initStrategyData( String filename ) throws FileNotFoundException {    
     AdaptiveStrategy s = (AdaptiveStrategy) buyerStrategies[0];
-    RothErevLearner l = (RothErevLearner) s.getLearner();
-    int numColumns = l.getK();
+    Learner l = (Learner) s.getLearner();
+    int numColumns = l.getNumberOfActions();
     FileOutputStream strategyDataOut = new FileOutputStream(filename);
     strategyData = new CSVWriter(strategyDataOut, numColumns);   
   }

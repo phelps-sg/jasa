@@ -37,8 +37,8 @@ import uk.ac.liv.auction.agent.*;
 
 /**
  * <p>
- * Calculate the market-power and efficiency variables described in the 
- * following paper.
+ * Calculate the NPT market-power and efficiency variables. These are described 
+ * in detail in the following paper.
  * </p>
  * <p>
  * "Market Power and Efficiency in a Computational Electricity Market

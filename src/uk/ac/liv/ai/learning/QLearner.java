@@ -17,9 +17,9 @@ package uk.ac.liv.ai.learning;
 
 import java.io.Serializable;
 
-import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.io.DataWriter;
 
 import ec.util.MersenneTwisterFast;
 import ec.util.ParameterDatabase;
@@ -259,6 +259,14 @@ public class QLearner
   
   public double getLearningDelta() {
     return 0; //TODO
+  }
+  
+  public void dumpState( DataWriter out ) {
+    //TODO
+  }
+  
+  public int getNumberOfActions() {
+    return numActions;
   }
 
   public String toString() {

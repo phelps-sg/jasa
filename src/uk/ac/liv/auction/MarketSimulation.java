@@ -67,7 +67,7 @@ import org.apache.log4j.PropertyConfigurator;
  *
  */
 
-public class MarketSimulation implements Parameterizable, Runnable, 
+public class MarketSimulation implements Parameterizable, Runnable,
                                           Serializable {
 
   protected RoundRobinAuction auction;
@@ -79,16 +79,16 @@ public class MarketSimulation implements Parameterizable, Runnable,
   protected MarketStats stats;
 
   protected boolean gatherStats;
- 
-  static final String P_AUCTION = "auction";
-  static final String P_NUM_AGENT_TYPES = "numagenttypes";
-  static final String P_NUM_AGENTS = "numagents";
-  static final String P_AGENT_TYPE = "agenttype";
-  static final String P_AGENTS = "agents";
-  static final String P_CONSOLE = "console";
-  static final String P_SIMULATION = "simulation";
-  static final String P_STATS = "stats";
-  static final String P_GATHER_STATS = "gatherstats";
+
+  public static final String P_AUCTION = "auction";
+  public static final String P_NUM_AGENT_TYPES = "numagenttypes";
+  public static final String P_NUM_AGENTS = "numagents";
+  public static final String P_AGENT_TYPE = "agenttype";
+  public static final String P_AGENTS = "agents";
+  public static final String P_CONSOLE = "console";
+  public static final String P_SIMULATION = "simulation";
+  public static final String P_STATS = "stats";
+  public static final String P_GATHER_STATS = "gatherstats";
 
 
   static final String VERSION = "0.18";
@@ -154,7 +154,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
 
   public void report() {
-    auction.generateReport();    
+    auction.generateReport();
     if ( gatherStats ) {
       stats.calculate();
       logger.info(stats);

@@ -18,6 +18,8 @@ package uk.ac.liv.ai.learning;
 
 import ec.util.MersenneTwisterFast;
 
+import uk.ac.liv.util.io.DataWriter;
+
 /**
  * A learner that simply plays a random action on each iteration 
  * without any learning.  This is useful for control experiments.
@@ -46,6 +48,14 @@ public class DumbRandomLearner implements StochasticLearner {
   
   public double getLearningDelta() {
     return 0.0;
+  }
+  
+  public void dumpState( DataWriter out ) {
+    //TODO
+  }
+  
+  public int getNumberOfActions() {
+    return numActions;
   }
   
 }

@@ -77,4 +77,12 @@ public class StatelessQLearner
     return qLearner.getLearningDelta();
   }
 
+  public int getNumberOfActions() {
+    return qLearner.getNumberOfActions();
+  }
+  
+  public void dumpState( uk.ac.liv.util.io.DataWriter out ) {
+    qLearner.dumpState(out);
+  }
+  
 }

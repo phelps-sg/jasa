@@ -76,16 +76,20 @@ import java.io.Serializable;
  *
  * <tr><td valign=top><i>base</i><tt>.maximumrounds</tt><br>
  * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of auction rounds)</td><tr> 
+ * <td valign=top>(the number of auction rounds)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.auctioneer</tt><br>
  * <font size=-1>class</font></td>
- * <td valign=top>(the auction protocol to use)</td><tr> 
+ * <td valign=top>(the auction protocol to use)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.logger</tt><br>
  * <font size=-1>class</font></td>
- * <td valign=top>(the MarketDataLogger to use)</td><tr> 
+ * <td valign=top>(the MarketDataLogger to use)</td><tr>
  *
+ * <tr><td valign=top><i>base</i><tt>.name</tt><br>
+ * <font size=-1>string</font></td>
+ * <td valign=top>(the name of this auction)</td><tr>
+
  * </table>
  *
  *
@@ -131,9 +135,10 @@ public class RoundRobinAuction extends AuctionImpl
 
 
 
-  static final String P_MAXIMUM_ROUNDS = "maximumrounds";
-  static final String P_LOGGER = "logger";
-  static final String P_AUCTIONEER = "auctioneer";
+  public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
+  public static final String P_LOGGER = "logger";
+  public static final String P_AUCTIONEER = "auctioneer";
+  public static final String P_NAME = "name";
 
 
   /**
@@ -154,6 +159,9 @@ public class RoundRobinAuction extends AuctionImpl
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
+    name =
+        parameters.getStringWithDefault(base.push(P_NAME), null, "Auction " + id);
+
     maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS),
                                                   null, -1);
 
@@ -162,7 +170,7 @@ public class RoundRobinAuction extends AuctionImpl
           (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
                                                                  null,
                                                                  MarketDataLogger.class);
-      
+
     } catch ( ParamClassLoadException e ) {
       logger = null;
     }
@@ -170,7 +178,7 @@ public class RoundRobinAuction extends AuctionImpl
     if ( logger != null && logger instanceof Parameterizable ) {
       ((Parameterizable) logger).setup(parameters, base.push(P_LOGGER));
     }
-    
+
     Auctioneer auctioneer =
       (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
                                                       null, Auctioneer.class);

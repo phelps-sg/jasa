@@ -20,6 +20,7 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.io.DataWriter;
 
 /**
  *
@@ -84,6 +85,14 @@ public class MetaLearner implements StimuliResponseLearner, Parameterizable {
   
   public double getLearningDelta() {
     return masterLearner.getLearningDelta();
+  }
+  
+  public int getNumberOfActions() {
+    return subLearners.length;
+  }
+  
+  public void dumpState( DataWriter out ) {
+    //TODO
   }
   
 }

@@ -16,6 +16,7 @@
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.io.DataWriter;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -54,6 +55,14 @@ public class DumbLearner implements Learner, uk.ac.liv.util.Parameterizable {
   
   public double getLearningDelta() {
     return 0.0;
+  }
+  
+  public void dumpState( DataWriter out ) {
+    //TODO
+  }
+  
+  public int getNumberOfActions() {
+    return 1;
   }
   
   

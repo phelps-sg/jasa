@@ -126,16 +126,16 @@ public abstract class AuctionImpl extends Observable
   public void setAuctioneer( Auctioneer auctioneer ) {
     this.auctioneer = auctioneer;
     auctioneer.setAuction(this);
-  }    
+  }
 
   public Auctioneer getAuctioneer() {
     return auctioneer;
   }
-  
+
   public void setConsole( AuctionConsoleFrame console ) {
     this.guiConsole = console;
   }
-  
+
   public AuctionConsoleFrame getConsole() {
     return guiConsole;
   }
@@ -179,6 +179,15 @@ public abstract class AuctionImpl extends Observable
   }
 
   /**
+   * Change the name of this auction.
+   *
+   * @param name The new name of the auction.
+   */
+  public void setName( String name ) {
+    this.name = name;
+  }
+
+  /**
    * Activate a graphical console for monitoring and controlling
    * the progress of the auction.  Activation of the console
    * may significantly impact the time performance of the auction.
@@ -205,7 +214,11 @@ public abstract class AuctionImpl extends Observable
   public MarketQuote getQuote() {
     return auctioneer.getQuote();
   }
-  
+
+  public String getName() {
+    return name;
+  }
+
   public void removeShout( Shout shout ) {
     // Remove this shout and all of its children.
     for( Shout s = shout; s != null; s = s.getChild() ) {
