@@ -1,0 +1,12 @@
+simulation.auction = uk.ac.liv.auction.core.RoundRobinAuction
+simulation.auction.maximumrounds = 1000
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+u
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+simulation.auction.auctioneer.pricing.k = 0.5
+
+# log4j configuration
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n
