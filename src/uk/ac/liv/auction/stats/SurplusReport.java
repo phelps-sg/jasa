@@ -208,6 +208,10 @@ public class SurplusReport extends EquilibriumReport {
     return mPS;
   }
   
+  public double getEA() {
+    return eA;
+  }
+  
   public String toString() {
     return "(" + getClass() + " equilibriaFound:" + equilibriaFound +
            " minPrice:" + minPrice + " maxPrice:" + maxPrice +          
