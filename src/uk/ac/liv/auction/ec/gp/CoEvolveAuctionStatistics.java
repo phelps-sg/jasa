@@ -66,11 +66,9 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
     printIndividual(auctioneer);
 
     println("\nMarket statistics:");
-    println(auctioneer.getStats().toString());
+    println(auctioneer.getMarketStats().toString());
 
-    RoundRobinAuction auction = (RoundRobinAuction) auctioneer.getAuction();
-
-    StatsMarketDataLogger logger = (StatsMarketDataLogger) auction.getMarketDataLogger();
+    StatsMarketDataLogger logger = auctioneer.getLogStats();
     println("Bid price: " + logger.getBidPriceStats());
     println("");
     println("Ask price: " + logger.getAskPriceStats());
@@ -80,19 +78,15 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
     println("Ask quote: " + logger.getAskQuoteStats());
     println("");
     println("Trans price: " + logger.getTransPriceStats());
-    println("");
-
-    Iterator traders = auction.getTraderIterator();
 
     println("");
-    println("Traders participating in best auction of generation " + state.generation);
+    println("Strategies participating in best auction of generation " + state.generation);
     println("========================================================");
     println("");
 
-    while ( traders.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) traders.next();
-      GPTradingStrategy strategy = (GPTradingStrategy) trader.getStrategy();
-      println("Strategy for trader " + trader);
+    Iterator strategies = auctioneer.getStrategies().iterator();
+    while ( strategies.hasNext() ) {
+      GPTradingStrategy strategy = (GPTradingStrategy) strategies.next();
       printIndividual(strategy);
       println("");
       println("Price stats for trader: " + strategy.getPriceStats());

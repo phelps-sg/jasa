@@ -1,6 +1,7 @@
 package uk.ac.liv.auction.ec.gp.func;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.stats.StatsMarketDataLogger;
 import uk.ac.liv.auction.electricity.ElectricityStats;
 
 import uk.ac.liv.util.Debug;
@@ -39,16 +40,22 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   protected ElectricityStats stats;
 
   /**
+   * A copy of the logger stats for the last auction run by this auctioneer.
+   */
+  protected StatsMarketDataLogger logger;
+
+  /**
    * The last set of strategies played against this auctioneer.
    */
   protected LinkedList strategies;
+
 
   public GPAuctioneer() {
     super();
   }
 
-
   public void reset() {
+    shoutEngine.reset();
   }
 
   public void endOfRoundProcessing() {
@@ -120,11 +127,13 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     shoutEngine.printState();
   }
 
-  public void setStats( ElectricityStats stats ) { this.stats = stats; }
+  public void setMarketStats( ElectricityStats stats ) { this.stats = stats; }
+  public void setLogStats( StatsMarketDataLogger logger ) { this.logger = logger; }
   public void setStrategies( LinkedList strategies ) { this.strategies = strategies; }
   public void setAuction( Auction auction ) { this.auction = auction; }
 
-  public ElectricityStats getStats() { return stats; }
+  public ElectricityStats getMarketStats() { return stats; }
+  public StatsMarketDataLogger getLogStats() { return logger; }
   public LinkedList getStrategies() { return strategies; }
   public Auction getAuction() { return auction; }
 

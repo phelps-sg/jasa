@@ -6,6 +6,7 @@ import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 
 import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.Resetable;
 
 /**
  * <p>
@@ -15,7 +16,8 @@ import uk.ac.liv.util.CummulativeStatCounter;
  * @author Steve Phelps
  */
 
-public class StatsMarketDataLogger implements MarketDataLogger, Serializable {
+public class StatsMarketDataLogger
+  implements MarketDataLogger, Serializable, Cloneable, Resetable {
 
   /**
    * Cummulative statistics on transaction prices.
@@ -105,6 +107,19 @@ public class StatsMarketDataLogger implements MarketDataLogger, Serializable {
 
   public void reset() {
     initialise();
+  }
+
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
+
+  public StatsMarketDataLogger newCopy() {
+    StatsMarketDataLogger copy = null;
+    try {
+      copy = (StatsMarketDataLogger) clone();
+    } catch ( CloneNotSupportedException e ) {
+    }
+    return copy;
   }
 
 }

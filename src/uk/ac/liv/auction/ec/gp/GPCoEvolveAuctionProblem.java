@@ -195,7 +195,8 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     }
 
     // Save a copy of the stats for posterity
-    auctioneer.setStats(stats.newCopy());
+    auctioneer.setMarketStats(stats.newCopy());
+    auctioneer.setLogStats(logger.newCopy());
 
     // Calculate auctioneer fitness based on market stats
     float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;
