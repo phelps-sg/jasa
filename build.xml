@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="compile" name="JASA">
-    <property file="build.ant.properties"/>
+   <property file="build.ant.properties"/>
    <target name="init">
       <property name="build.compiler" value="modern"/>
       <property name="sourceDir" value="src"/>
@@ -58,16 +58,16 @@
 	<gzip src="jasa.tar" zipfile="jasa.tar.gz"/>
     </target>
 
-    <target name="cvsupdate">
-	<cvs command="update" cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa"/>
+   <target name="cvsupdate">
+	   <cvs command="update" cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa"/>
     </target>
 
-    <target depends="compile" name="test">
-	<java classname="test.uk.ac.liv.auction.AllTests" fork="true">
+   <target depends="compile" name="test">
+	   <java classname="test.uk.ac.liv.auction.AllTests" fork="true">
         	<classpath>
 			<pathelement path="${classPath}:./classes"/>       
         	</classpath>
-	</java>
+	   </java>
     </target>	
 
 
