@@ -94,11 +94,13 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String VERSION = "0.21";
 
   public static final String GNU_MESSAGE =
+    "\n" +
     "JASA v" + VERSION + " - (C) 2001-2003 Steve Phelps\n" +
-    "JASA comes with ABSOLUTELY NO WARRANTY; see the GNU General Public\n" +
-    "license for more details.  This is free software, and you are welcome\n" +
-    "to redistribute it under certain conditions; see the GNU General Public\n" +
-    "license for more details.\n";
+    "JASA comes with ABSOLUTELY NO WARRANTY. This is free software,\n" +
+    "and you are welcome to redistribute it under certain conditions;\n" +
+    "see the GNU General Public license for more details.\n\n" +
+    "This is alpha test software.  Please report any bugs, issues\n" +
+    "or suggestions to sphelps@csc.liv.ac.uk.\n";
 
   static Logger logger = Logger.getLogger("JASA");
 
