@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -70,7 +70,7 @@ public class RothErevLearnerTest extends TestCase {
     System.out.println("\ntestDistribution()");
     double q[] = { 55, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
     CummulativeStatCounter action1Data = new CummulativeStatCounter("action1");
-    for( int r=0; r<1000; r++ ) {
+    for( int r=0; r<10000; r++ ) {
       learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 1, System.currentTimeMillis());
       learner1.setPropensities(q);
       CummulativeStatCounter choiceData = new CummulativeStatCounter("choice");
@@ -78,14 +78,15 @@ public class RothErevLearnerTest extends TestCase {
       for( int i=0; i<100; i++ ) {
         int choice = learner1.act();
         choiceData.newData(choice);
+        action1Chosen = 0;
         if ( choice == 0 ) {
-          action1Chosen++;
+          action1Chosen = 1;
         }
+        action1Data.newData(action1Chosen);
       }
-      action1Data.newData(action1Chosen);
     }
     System.out.println(action1Data);
-    assertTrue( action1Data.getMean() <= 56 && action1Data.getMean() >= 54 );
+    assertTrue( action1Data.getMean() <= 0.57 && action1Data.getMean() >= 0.53 );
   }
 
 
