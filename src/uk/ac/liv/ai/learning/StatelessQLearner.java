@@ -22,6 +22,8 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+import java.io.Serializable;
+
 /**
  * A memory-less version of the Q-Learning algorithm.
  *
@@ -35,7 +37,8 @@ import ec.util.Parameter;
  */
 
 public class StatelessQLearner
-    implements StimuliResponseLearner, Parameterizable, Resetable {
+    implements StimuliResponseLearner, StochasticLearner, Parameterizable,
+                Resetable, Serializable {
 
   QLearner qLearner;
 
@@ -64,6 +67,10 @@ public class StatelessQLearner
 
   public void reset() {
     qLearner.reset();
+  }
+
+  public void setSeed( long seed ) {
+    qLearner.setSeed(seed);
   }
 
 }

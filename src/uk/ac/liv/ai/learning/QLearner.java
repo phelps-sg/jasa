@@ -34,7 +34,7 @@ import ec.util.Parameter;
 
 
 public class QLearner
-    implements MDPLearner, Resetable, Serializable,
+    implements MDPLearner, StochasticLearner, Resetable, Serializable,
                 Parameterizable {
 
 
@@ -189,6 +189,10 @@ public class QLearner
 
   public void reset() {
     initialise();
+  }
+
+  public void setSeed( long seed ) {
+    randGenerator.setSeed(seed);
   }
 
 }
