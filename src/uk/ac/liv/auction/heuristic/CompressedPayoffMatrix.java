@@ -21,6 +21,7 @@ import java.util.List;
 
 import java.io.*;
 
+import uk.ac.liv.util.MathUtil;
 import uk.ac.liv.util.Partitioner;
 import uk.ac.liv.util.BaseNIterator;
 
@@ -66,87 +67,127 @@ public class CompressedPayoffMatrix {
     }
   }
 
-  public double[] getCompressedOutcome( int[] compressedEntry ) {
+  public double[] getCompressedPayoffs( Entry entry ) {
     Vector v = matrix;
-    int i;
-    for( i=0; i<compressedEntry.length-1; i++ ) {
-      v = (Vector) v.get(compressedEntry[i]);
+    int strategy;
+    for( strategy=0; strategy<numStrategies-1; strategy++ ) {
+      v = (Vector) v.get(entry.getNumAgents(strategy));
     }
-    return (double[]) v.get(compressedEntry[i]);
+    return (double[]) v.get(entry.getNumAgents(strategy));
   }
 
-  public void setCompressedOutcome( int[] compressedEntry,
-                                      double[] compressedOutcome ) {
+  public void setCompressedPayoffs( Entry entry,
+                                      double[] compressedPayoffs ) {
     Vector v = matrix;
-    int i;
-    for( i=0; i<compressedEntry.length-1; i++ ) {
-      v = (Vector) v.get(i);
-    }
-    v.set(compressedEntry[i], compressedOutcome);
+    int strategy;
+    for( strategy=0; strategy<numStrategies-1; strategy++ ) {
+      v = (Vector) v.get(entry.getNumAgents(strategy));
+    }    
+    v.set(entry.getNumAgents(strategy), compressedPayoffs);
   }
 
   public Iterator compressedEntryIterator() {
-    return new Partitioner(numPlayers, numStrategies);
+    return new Iterator() {
+      
+      Partitioner p = new Partitioner(numPlayers, numStrategies);
+      
+      public boolean hasNext() {
+        return p.hasNext();
+      }
+      
+      public Object next() {
+        return new Entry((int[])p.next());
+      }
+      
+      public void remove() {        
+      }
+            
+    };    
   }
 
   public Iterator fullEntryIterator() {
-    return new BaseNIterator(numStrategies, numPlayers);
+    final CompressedPayoffMatrix matrix = this;
+    return new Iterator() {
+      
+      BaseNIterator b = new BaseNIterator(numStrategies, numPlayers);
+    
+      public boolean hasNext() {
+        return b.hasNext();        
+      }
+      
+      public Object next() {
+        return new FullEntry((int[])b.next(), matrix);               
+      }
+      
+      public void remove() {        
+      }
+      
+    };
   }
 
-  public double[] getFullOutcome( int[] fullEntry ) {
-    int[] compressedEntry = new int[numStrategies];
-    for( int i=0; i<fullEntry.length; i++ ) {
-      compressedEntry[fullEntry[i]]++;
-    }
-    double[] compressedOutcome = getCompressedOutcome(compressedEntry);
-    double[] fullOutcome = new double[numPlayers];
+  public double[] getFullPayoffs( FullEntry entry ) {    
+    Entry compressedEntry = entry.compress();
+    double[] compressedPayoffs = getCompressedPayoffs(compressedEntry);
+    double[] fullPayoffs = new double[numPlayers];
     for( int i=0; i<numPlayers; i++ ) {
-      fullOutcome[i] = compressedOutcome[fullEntry[i]];
+      fullPayoffs[i] = compressedPayoffs[entry.getStrategy(i)];
     }
-    return fullOutcome;
+    return fullPayoffs;
   }
-
-  public double[] mixedStrategyPayoffs( double[] mixedStrategy ) {
-    double totalProbability = 0;
-    double[] payoffs = new double[numStrategies];
-    double[] totalPayoffs = new double[numStrategies];
-    int[] strategyCounts = new int[numStrategies];
-    Iterator entries = fullEntryIterator();
-    while ( entries.hasNext() ) {
-      int[] entry = (int[]) entries.next();
-      double[] outcome = getFullOutcome(entry);
-      double probability = 1;
-      for( int i=0; i<entry.length; i++ ) {
-        probability *= mixedStrategy[entry[i]];
-      }
-      for( int s=0; s<numStrategies; s++ ) {
-        strategyCounts[s] = 0;
-        totalPayoffs[s] = 0;
-      }
-      for( int p=0; p<outcome.length; p++ ) {
-        int strategy = entry[p];
-        totalPayoffs[strategy] += outcome[p];
-        strategyCounts[strategy]++;
-      }
-      for( int i=0; i<payoffs.length; i++ ) {
-        if ( strategyCounts[i] > 0 ) {
-          payoffs[i] += (totalPayoffs[i] * probability) / strategyCounts[i];
-        }
-      }
-      totalProbability += probability;
-    }
-    return payoffs;
-  }
-
-  public double evolveMixedStrategy( double[] population ) {
-    double[] payoffs = mixedStrategyPayoffs(population);
-    double averagePayoff = 0;
-    double totalDelta = 0;
-    for( int i=0; i<numStrategies; i++ ) {
-      averagePayoff += payoffs[i] * population[i];
-    }
+  
+  public int calculateOccurances( Entry entry ) {
+    int a = (int) MathUtil.factorial(numPlayers);
+    int b = 1;
     for( int s=0; s<numStrategies; s++ ) {
-      double delta = population[s] * 0.1 * (payoffs[s] - averagePayoff);
+      b *= MathUtil.factorial(entry.getNumAgents(s));
+    }
+    return a / b;
+  }
+  
+  public double averagePayoff( double[] compressedPayoffs ) {
+    double total = 0;
+    for( int s=0; s<numStrategies; s++ ) {
+      total += compressedPayoffs[s];
+    }
+    return total / numStrategies;
+  }
+  
+  public double payoff( double[] mixedStrategy ) {
+    return payoff(-1, mixedStrategy);
+  }
+  
+  public double payoff( int pureStrategy, double[] mixedStrategy ) {
+    double payoff = 0;
+    Iterator entries = compressedEntryIterator();
+    while ( entries.hasNext() ) {      
+      Entry entry = (Entry) entries.next();            
+      double[] payoffs = getCompressedPayoffs(entry);            
+      int occurances = calculateOccurances(entry);      
+      if ( pureStrategy > 0 ) {
+        entry = entry.removeSingleAgent(pureStrategy);        
+      }
+      double probability = 1;
+      for( int s=0; s<numStrategies; s++ ) {
+        probability *= Math.pow(mixedStrategy[s], entry.getNumAgents(s));
+      }
+      assert probability <= 1;
+      if ( pureStrategy > 0 ) {
+        payoff += probability * payoffs[pureStrategy];
+      } else {
+        payoff += probability * averagePayoff(payoffs);
+      }
+    }
+    return payoff;
+  }
+  
+
+  public double evolveMixedStrategy( double[] population ) {    
+    double averagePayoff = payoff(population);   
+    System.out.println("Average payoff is " + averagePayoff);    
+    double totalDelta = 0;
+    for( int s=0; s<numStrategies; s++ ) {
+      System.out.println("Pure payoff is " + payoff(s, population));
+      double delta = population[s] * 0.1 * (payoff(s, population) - averagePayoff);
       population[s] += delta;
       totalDelta += delta*delta;
     }
@@ -181,12 +222,13 @@ public class CompressedPayoffMatrix {
     List record;
     while ( (record = in.nextRecord()) != null ) {
       Iterator fields = record.iterator();
-      int entry[] = new int[numStrategies];
+      int numAgentsPerStrategy[] = new int[numStrategies];
       for( int s=0; s<numStrategies; s++ ) {
         Integer n = (Integer) fields.next();
-        entry[s] = n.intValue();
+        numAgentsPerStrategy[s] = n.intValue();
       }
-      double[] outcome = getCompressedOutcome(entry);
+      Entry entry = new Entry(numAgentsPerStrategy);
+      double[] outcome = getCompressedPayoffs(entry);
       for( int s=0; s<numStrategies; s++ ) {
         Double payoff = (Double) fields.next();
         outcome[s] = payoff.doubleValue();
@@ -197,13 +239,13 @@ public class CompressedPayoffMatrix {
   public void export( DataWriter out ) {
     Iterator entries = compressedEntryIterator();
     while ( entries.hasNext() ) {
-      int[] entry = (int[]) entries.next();
-      for( int i=0; i<entry.length; i++ ) {
-        out.newData(entry[i]);
+      Entry entry = (Entry) entries.next();
+      for( int s=0; s<numStrategies; s++ ) {
+        out.newData(entry.getNumAgents(s));
       }
-      double[] outcome = getCompressedOutcome(entry);
-      for( int i=0; i<outcome.length; i++ ) {
-        out.newData(outcome[i]);
+      double[] payoffs = getCompressedPayoffs(entry);
+      for( int i=0; i<payoffs.length; i++ ) {
+        out.newData(payoffs[i]);
       }
     }
   }
@@ -239,12 +281,12 @@ public class CompressedPayoffMatrix {
     Iterator entries = fullEntryIterator();
     while ( entries.hasNext() ) {
       nfgOut.print("{ \"");
-      int[] fullEntry = (int[]) entries.next();
-      for( int i=fullEntry.length-1; i>=0; i-- ) {
-        nfgOut.print(fullEntry[i]+1);
+      FullEntry fullEntry = (FullEntry) entries.next();
+      for( int i=numPlayers-1; i>=0; i-- ) {
+        nfgOut.print(fullEntry.getStrategy(i)+1);
       }
       nfgOut.print("\" ");
-      double[] outcome = getFullOutcome(fullEntry);
+      double[] outcome = getFullPayoffs(fullEntry);
       for( int i=0; i<outcome.length; i++ ) {
         nfgOut.print(outcome[i]);
         if ( i < outcome.length-1 ) {
@@ -264,7 +306,71 @@ public class CompressedPayoffMatrix {
     }
     nfgOut.flush();
   }
+  
+  public int getNumStrategies() {
+    return numStrategies;    
+  }
+  
+  public int getNumPlayers() {
+    return numPlayers;
+  }
 
 
+  public static class Entry implements Cloneable {
+  
+    protected int[] numAgentsPerStrategy;
+    
+    public Entry( int[] numAgentsPerStrategy ) {
+      this.numAgentsPerStrategy = numAgentsPerStrategy;
+    }
+    
+    public int getNumAgents( int strategy ) {
+      return numAgentsPerStrategy[strategy];
+    }
+    
+    public Object clone() throws CloneNotSupportedException {      
+      Entry newEntry = (Entry) super.clone();
+      newEntry.numAgentsPerStrategy = (int[]) this.numAgentsPerStrategy.clone();
+      return newEntry;    
+    }
+    
+    public Entry removeSingleAgent( int strategy ) {
+      try {
+        Entry entry = (Entry) clone();
+        entry.numAgentsPerStrategy[strategy]--;
+        return entry;
+      } catch ( CloneNotSupportedException e ) {
+        throw new Error(e);
+      }
+    }
+    
+  }
+  
+  public static class FullEntry {
+    
+    protected int[] pureStrategyProfile;
+    
+    protected CompressedPayoffMatrix matrix;
+    
+    public FullEntry( int[] pureStrategyProfile, CompressedPayoffMatrix matrix ) {
+      this.pureStrategyProfile = pureStrategyProfile;
+      this.matrix = matrix;
+    }
+    
+    public int getStrategy( int player ) {
+      return pureStrategyProfile[player];
+    }
+    
+    public Entry compress() {
+      int[] numAgentsPerStrategy = new int[matrix.getNumStrategies()];
+      for( int i=0; i<matrix.getNumPlayers(); i++ ) {
+        numAgentsPerStrategy[getStrategy(i)]++;
+      }
+      return new Entry(numAgentsPerStrategy);      
+    }
+    
+  }
+  
 }
+
 

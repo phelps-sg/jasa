@@ -287,18 +287,18 @@ public class HeuristicPayoffCalculator
     payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
     Iterator i = payoffMatrix.compressedEntryIterator();
     while ( i.hasNext() ) {
-      int[] payoffMatrixEntry = (int[]) i.next();
-      calculateExpectedPayoffs(payoffMatrixEntry);
+      CompressedPayoffMatrix.Entry entry = (CompressedPayoffMatrix.Entry) i.next();
+      calculateExpectedPayoffs(entry);
     }
   }
 
 
-  public void calculateExpectedPayoffs( int[] entry ) {
+  public void calculateExpectedPayoffs( CompressedPayoffMatrix.Entry entry  ) {
 
     logger.info("");
     logger.info("Calculating expected payoffs for ");
-    for( int i=0; i<numStrategies; i++ ) {
-      logger.info("\t" + entry[i] + "/" + groups[i] + " ");    
+    for( int s=0; s<numStrategies; s++ ) {
+      logger.info("\t" + entry.getNumAgents(s) + "/" + groups[s] + " ");    
     }
     logger.info("");
 
@@ -333,7 +333,7 @@ public class HeuristicPayoffCalculator
 
     }
 
-    double[] outcome = payoffMatrix.getCompressedOutcome(entry);
+    double[] outcome = payoffMatrix.getCompressedPayoffs(entry);
     for( int i=0; i<numStrategies; i++ ) {
       logger.info("");
       payoffs[i].log();
@@ -351,7 +351,7 @@ public class HeuristicPayoffCalculator
   }
 
   public void setStrategy( int i, Strategy s ) {
-  	strategies[i] = s;
+    strategies[i] = s;
   }
   
   protected void ensureEquilibriaExists() {
@@ -398,10 +398,10 @@ public class HeuristicPayoffCalculator
     }
   }
 
-  protected void assignStrategies( int[] entry ) {
+  protected void assignStrategies( CompressedPayoffMatrix.Entry entry ) {
     int agentIndex = 0;
     for( int i=0; i<numStrategies; i++ ) {
-      for( int s=0; s<entry[i]; s++ ) {
+      for( int s=0; s<entry.getNumAgents(i); s++ ) {
         Prototypeable prototypeStrategy = (Prototypeable) strategies[i];
         Strategy clonedStrategy = (Strategy) prototypeStrategy.protoClone();
         AbstractTraderAgent agent = agents[agentIndex++];

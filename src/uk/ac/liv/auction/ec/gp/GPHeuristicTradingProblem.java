@@ -44,92 +44,90 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class GPHeuristicTradingProblem extends GPProblem 
-	implements SimpleProblemForm {
-	
-	protected GPHeuristicPayoffCalculator payoffCalculator;
-	
-	protected GPContext context = new GPContext();
-	
-	public static final String P_CALCULATOR = "heuristic";
-	
-	static Logger logger = Logger.getLogger(GPHeuristicTradingProblem.class);
-	
-	public void setup( EvolutionState state, Parameter base ) {
-		
-		super.setup(state, base);		
-		
-		payoffCalculator = (GPHeuristicPayoffCalculator)
-			state.parameters.getInstanceForParameterEq(base.push(P_CALCULATOR), null,																									
-																									GPHeuristicPayoffCalculator.class);
-		payoffCalculator.setup(state.parameters, base.push(P_CALCULATOR));
-				
-	}
-	
-	public void evaluate( EvolutionState state, Individual individual, 
-														int thread ) {
+public class GPHeuristicTradingProblem extends GPProblem implements
+    SimpleProblemForm {
+
+  protected GPHeuristicPayoffCalculator payoffCalculator;
+
+  protected GPContext context = new GPContext();
+
+  public static final String P_CALCULATOR = "heuristic";
+
+  static Logger logger = Logger.getLogger(GPHeuristicTradingProblem.class);
+
+  public void setup( EvolutionState state, Parameter base ) {
+
+    super.setup(state, base);
+
+    payoffCalculator = (GPHeuristicPayoffCalculator) state.parameters
+        .getInstanceForParameterEq(base.push(P_CALCULATOR), null,
+            GPHeuristicPayoffCalculator.class);
+    payoffCalculator.setup(state.parameters, base.push(P_CALCULATOR));
+
+  }
+
+  public void evaluate( EvolutionState state, Individual individual, int thread ) {
 
     context.setState(state);
     context.setThread(thread);
     context.setStack(stack);
     context.setProblem(this);
-    
+
     ((GPGenericIndividual) individual).setGPContext(context);
-    
+
     evaluate((GPGenericIndividual) individual);
-	}
-	
-	protected void evaluate( GPGenericIndividual individual ) {
-		
-		individual.printIndividualForHumans(context.getState(), 0, Output.V_NO_GENERAL);
-		
-		GPTradingStrategy gpStrategy = (GPTradingStrategy) individual.getGPObject();
-		        
+  }
+
+  protected void evaluate( GPGenericIndividual individual ) {
+
+    individual.printIndividualForHumans(context.getState(), 0,
+        Output.V_NO_GENERAL);
+
+    GPTradingStrategy gpStrategy = (GPTradingStrategy) individual.getGPObject();
+
     payoffCalculator.reset();
-		payoffCalculator.setGPStrategy(gpStrategy);
-		
-		payoffCalculator.computePayoffMatrix();
-		
-		CompressedPayoffMatrix payoffMatrix = 
-			payoffCalculator.getCompressedPayoffMatrix();
-		
+    payoffCalculator.setGPStrategy(gpStrategy);
+
+    payoffCalculator.computePayoffMatrix();
+
+    CompressedPayoffMatrix payoffMatrix = payoffCalculator
+        .getCompressedPayoffMatrix();
+
     int gpStrategyIndex = payoffCalculator.getGPStrategyIndex();
-		CummulativeDistribution payoff = new CummulativeDistribution("gp payoff");
-		Iterator i = payoffMatrix.compressedEntryIterator();		
-		while ( i.hasNext() ) {
-			int[] entry = (int[]) i.next();
-			if ( entry[gpStrategyIndex] > 0 ) {
-				double[] payoffs = payoffMatrix.getCompressedOutcome(entry);
-				payoff.newData(payoffs[gpStrategyIndex]);
-			}
-		}
-		
-		payoff.log();
-			
-		computeFitness(individual, payoff);
-	}
-		
-	protected void computeFitness( GPGenericIndividual individual, 
-													  				CummulativeDistribution payoff ) {	
-			
-		float fitness = (float) payoff.getMean();
-		
-		SimpleFitness f = (SimpleFitness) individual.fitness;
-	       
-		if ( !payoffCalculator.gpStrategyMisbehaved() && 
-          !individual.misbehaved() && !Float.isInfinite(fitness) 
-          && fitness > 0 && payoff.getMin() >= 0 ) {			
-			if ( fitness > 1000 ) {
-				logger.warn("Large fitness " + payoff);
-			}
-			f.setFitness(context.getState(), fitness, false);	     
-		} else {
-			logger.info("Individual misbehaved.");
-			f.setFitness(context.getState(), 0, false);		 
-		}
-		 		
-		
-		individual.evaluated = true; 
-	}
+    CummulativeDistribution payoff = new CummulativeDistribution("gp payoff");
+    Iterator i = payoffMatrix.compressedEntryIterator();
+    while ( i.hasNext() ) {
+      CompressedPayoffMatrix.Entry entry = (CompressedPayoffMatrix.Entry) i.next();
+      if ( entry.getNumAgents(gpStrategyIndex) > 0 ) {
+        double[] payoffs = payoffMatrix.getCompressedPayoffs(entry);
+        payoff.newData(payoffs[gpStrategyIndex]);
+      }
+    }
+
+    payoff.log();
+
+    computeFitness(individual, payoff);
+  }
+
+  protected void computeFitness( GPGenericIndividual individual,
+      CummulativeDistribution payoff ) {
+
+    float fitness = (float) payoff.getMean();
+
+    SimpleFitness f = (SimpleFitness) individual.fitness;
+
+    if ( !payoffCalculator.gpStrategyMisbehaved() && !individual.misbehaved()
+        && !Float.isInfinite(fitness) && fitness > 0 && payoff.getMin() >= 0 ) {
+      if ( fitness > 1000 ) {
+        logger.warn("Large fitness " + payoff);
+      }
+      f.setFitness(context.getState(), fitness, false);
+    } else {
+      logger.info("Individual misbehaved.");
+      f.setFitness(context.getState(), 0, false);
+    }
+
+    individual.evaluated = true;
+  }
 
 }

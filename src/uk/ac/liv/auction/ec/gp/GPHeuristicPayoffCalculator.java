@@ -52,9 +52,9 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
       payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
       Iterator i = payoffMatrix.compressedEntryIterator();
       while ( i.hasNext() ) {
-        int[] payoffMatrixEntry = (int[]) i.next();
-        if ( payoffMatrixEntry[gpStrategyIndex] > 0 ) {
-          calculateExpectedGPPayoffs(payoffMatrixEntry);
+        CompressedPayoffMatrix.Entry entry = (CompressedPayoffMatrix.Entry) i.next();
+        if ( entry.getNumAgents(gpStrategyIndex) > 0 ) {
+          calculateExpectedGPPayoffs(entry);
         }
       }
       
@@ -64,12 +64,12 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
   }
 
   
-  public void calculateExpectedGPPayoffs( int[] entry ) throws NegativePayoffException {
+  public void calculateExpectedGPPayoffs( CompressedPayoffMatrix.Entry entry ) throws NegativePayoffException {
 
     logger.info("");
     logger.info("Calculating expected payoffs for ");
     for( int i=0; i<numStrategies; i++ ) {
-      logger.info("\t" + entry[i] + "/" + groups[i] + " ");    
+      logger.info("\t" + entry.getNumAgents(i) + "/" + groups[i] + " ");    
     }
     logger.info("");
     
@@ -107,7 +107,7 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
 
     }
 
-    double[] outcome = payoffMatrix.getCompressedOutcome(entry);
+    double[] outcome = payoffMatrix.getCompressedPayoffs(entry);
     for( int i=0; i<numStrategies; i++ ) {
       logger.info("");
       payoffs[i].log();

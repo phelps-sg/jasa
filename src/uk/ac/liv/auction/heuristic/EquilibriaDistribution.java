@@ -134,19 +134,19 @@ public class EquilibriaDistribution  {
       RandomElement prng = GlobalPRNG.getInstance();
       double x, y, z;
       
-      //do {
+      do {
         x = prng.uniform(0, 1);
-        //y = prng.uniform(0, 1);
-      //} while ( x+y > 1 );
-      //z = 1 - x - y;
-      y = 1 - x;
+        y = prng.uniform(0, 1);
+      } while ( x+y > 1 );
+      z = 1 - x - y;
+      
 
       CSVWriter rdPlot = 
         new CSVWriter( new FileOutputStream(fileRDPrefix + i + ".csv"), 
                         numStrategies);
       
       double[] equilibrium =
-        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y},
+        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z},
                                   minimumVelocity, maxIterations);  
         
       newEquilibrium(equilibrium);
