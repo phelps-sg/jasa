@@ -22,7 +22,7 @@ import junit.framework.*;
 import test.uk.ac.liv.auction.agent.MockTrader;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 import uk.ac.liv.auction.stats.EquilibriaStats;
 import uk.ac.liv.auction.stats.MarketStats;
@@ -142,7 +142,7 @@ class TestEquilibriaStats implements MarketStats {
     sellers = new ArrayList(numTraders);
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
-      AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
       if ( agent.isBuyer() ) {
         buyers.add(agent);
       } else {
@@ -164,7 +164,7 @@ class TestEquilibriaStats implements MarketStats {
     double currentVal = initVal;
     long quantity = 0;
     for( int i=0; i<traders.size(); i++ ) {
-      AbstractTraderAgent trader = (AbstractTraderAgent) traders.get(i);
+      AbstractTradingAgent trader = (AbstractTradingAgent) traders.get(i);
       double val = trader.getValuation(auction);
       PriceQtyTuple priceQty = null;
       if ( ascending ) {
@@ -174,8 +174,8 @@ class TestEquilibriaStats implements MarketStats {
       }
       curve.add(priceQty);
       while ( i<traders.size() &&
-              ((AbstractTraderAgent) traders.get(i)).getValuation(auction) == val ) {
-        quantity += ((AbstractTraderAgent) traders.get(i)).determineQuantity(auction);
+              ((AbstractTradingAgent) traders.get(i)).getValuation(auction) == val ) {
+        quantity += ((AbstractTradingAgent) traders.get(i)).determineQuantity(auction);
         i++;
       }
       currentVal = val;
@@ -317,8 +317,8 @@ class AscendingTraderComparator implements Comparator {
   static Auction auction = new RoundRobinAuction();
 
   public int compare( Object a, Object b ) {
-    AbstractTraderAgent x = (AbstractTraderAgent) a;
-    AbstractTraderAgent y = (AbstractTraderAgent) b;
+    AbstractTradingAgent x = (AbstractTradingAgent) a;
+    AbstractTradingAgent y = (AbstractTradingAgent) b;
     if ( x.getValuation(auction) > y.getValuation(auction) ) {
       return 1;
     } else if ( x.getValuation(auction) == y.getValuation(auction) ) {
@@ -334,8 +334,8 @@ class DescendingTraderComparator implements Comparator {
   static Auction auction = new RoundRobinAuction();
 
   public int compare( Object a, Object b ) {
-    AbstractTraderAgent x = (AbstractTraderAgent) a;
-    AbstractTraderAgent y = (AbstractTraderAgent) b;
+    AbstractTradingAgent x = (AbstractTradingAgent) a;
+    AbstractTradingAgent y = (AbstractTradingAgent) b;
     if ( x.getValuation(auction) > y.getValuation(auction) ) {
       return -1;
     } else if ( x.getValuation(auction) == y.getValuation(auction) ) {

@@ -52,7 +52,7 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
   static Logger logger = Logger.getLogger(ZIPStrategy.class);
 
 
-  public ZIPStrategy( AbstractTraderAgent agent ) {
+  public ZIPStrategy( AbstractTradingAgent agent ) {
     super(agent);
   }
 
