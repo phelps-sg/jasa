@@ -1,0 +1,61 @@
+<h1>
+README for JASA 15/3/2002
+</h1>
+
+<p>
+The Auction Simulator API allows researchers in experimental economics to write
+high-performance trading simulations using a number of different auction
+protocols. The software also provides base classes for implementing simple
+adaptive trading agents.
+</p>
+
+<p>
+The system is based on the 4-heap algorithm, described in the paper
+
+<p>
+"Flexible Double Auctions for Electronic Commerce: Theory and Implementation"
+by Wurman, Walsh amnd Wellman 1998.
+</p>
+
+<p>
+The system implements various experiments, agents and learning agents described elsewhere in the experimental economics literature.  The documentation provides citation details where appropriate.
+</p>
+
+
+<h2>
+Documentation
+</h2>
+<p>
+The javadoc documentation can be found <a href="doc/index.html">here</a>.
+</p>
+
+<h2>
+Required libraries
+</h2>
+
+<p>
+<a href="http://www.junit.org">JUnit</a> (Optional) required for running the unit tests</a>
+</p>
+
+<p>
+<a href="http://www.cs.umd.edu/projects/plus/ec/ecj/">ECJ</a> (Optional) Required for running the genetic-programming experiments</a>
+<p>
+
+<h2>
+Examples
+</h2>
+
+<p>The following examples demonstrate the use of the auction simulator:</p>
+
+<p><code>
+uk.ac.liv.auction.DCSimulation<br>
+uk.ac.liv.auction.MarketSimulation<br>
+uk.ac.liv.auction.SupplyRingSimulation<br>
+</p></code>
+
+<p>Each of these examples can be run as an independent application. The file <a href="auction.params">auction.params</a> can be used to initialise ECJ to run the genetic programming experiments.
+
+
+
+
+
