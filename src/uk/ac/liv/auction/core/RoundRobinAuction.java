@@ -139,9 +139,9 @@ public class RoundRobinAuction extends AuctionImpl
 
     try {
       logger =
-          (MarketDataLogger) parameters.getClassForParameter(base.push(P_LOGGER),
-                                                              null,
-                                                              MarketDataLogger.class);
+          (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
+                                                                 null,
+                                                                 MarketDataLogger.class);
     } catch ( ParamClassLoadException e ) {
       logger = null;
     }
