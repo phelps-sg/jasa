@@ -74,18 +74,18 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer implements
   }
 
   public void checkImprovement( Shout shout ) throws IllegalShoutException {
-//    double quote;
-//    if ( shout.isBid() ) {
-//      quote = bidQuote();
-//      if ( shout.getPrice() < quote ) {
-//        bidNotAnImprovementException();
-//      }  
-//    } else {
-//      quote = askQuote();
-//      if ( shout.getPrice() > quote ) {
-//        askNotAnImprovementException();
-//      }      
-//    }
+    double quote;
+    if ( shout.isBid() ) {
+      quote = bidQuote();
+      if ( shout.getPrice() < quote ) {
+        bidNotAnImprovementException();
+      }  
+    } else {
+      quote = askQuote();
+      if ( shout.getPrice() > quote ) {
+        askNotAnImprovementException();
+      }      
+    }
   }
   
   protected void initialise() {
