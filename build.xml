@@ -77,7 +77,7 @@
 	<loadproperties srcFile="version.properties"/>
 	<property name="versionStr" value="${majorVersion}.${minorVersion}"/>
    	<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
-		<tarfileset dir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params,lib/**" prefix="jasa-${versionStr}">
+		<tarfileset dir="." includes="jasa.jar,version.properties,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params,lib/**" prefix="jasa-${versionStr}">
                   <exclude name="src/uk/ac/liv/ec/**"/>
                   <exclude name="src/test/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
@@ -150,7 +150,7 @@
 </target>
 
 <target depends="incbuildnum" name="version">
-         <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}"/>
+         <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}" overwrite="true"/>
         <replace
             file="${versionSrc}"
             value="value not found in version.properties"
