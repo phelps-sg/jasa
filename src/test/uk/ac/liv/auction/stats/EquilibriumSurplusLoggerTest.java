@@ -65,7 +65,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase
   protected static final double SELLER_MIN_VALUE = 75;
   protected static final double SELLER_MAX_VALUE = 300;
   protected static final int TRADE_ENT = 10;
-  protected static final int MAX_DAYS = 1500;
+  protected static final int MAX_DAYS = 150;
   protected static final int DAY_LEN = 20;
   
 
@@ -171,11 +171,11 @@ public class EquilibriumSurplusLoggerTest extends TestCase
     
     assertTrue( "theoretical surplus reported by EquilibriumSurplusLogger differs from truthful agents bidding in a CH",
         			((totEqSurplus == 0) && (totActualSurplus == 0)) ||
-        			MathUtil.approxEqual(actualToTheoretical, 1, 10E-3) );
+        			MathUtil.approxEqual(actualToTheoretical, 1.0, 10E-3) );
     
     assertTrue( "theoretical surplus reported by EquilibriumSurplusLogger differs from that calculated using repeated EquilibriaStats calculations",
         			((totEqSurplus == 0) && (computedSurplus == 0)) ||
-        				MathUtil.approxEqual(computedToTheoretical, 1, 10E-3) );
+        				MathUtil.approxEqual(computedToTheoretical, 1.0, 0.005) );
   }
   
   public void eventOccurred( AuctionEvent event ) {

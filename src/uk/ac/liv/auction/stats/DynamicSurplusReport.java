@@ -126,7 +126,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
    */
   protected void updateStats( AbstractTradingAgent agent, double lastSurplus ) {    
     if ( ! surplusTable.adjustValue(agent, lastSurplus) ) {
-      surplusTable.put(agent, 0.0);
+      surplusTable.put(agent, lastSurplus);
     }
   }
 
