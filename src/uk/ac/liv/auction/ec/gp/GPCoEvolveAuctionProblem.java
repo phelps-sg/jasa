@@ -230,10 +230,13 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       System.err.println(stats);
     }
     float fitness = Float.MAX_VALUE;
+    /*
     if ( !Float.isNaN(relMarketPower) && !Float.isInfinite(relMarketPower)
            && !Double.isNaN(stats.eA) ) {
       fitness = 1-((float) stats.eA/100); //TODO + relMarketPower;
-    }
+    } */
+    float totalProfits = (float) (stats.pBA + stats.pSA);
+    fitness = 100000000f - totalProfits;
     GPIndividual individual = (GPIndividual) group[0].get(0);
     ((KozaFitness) individual.fitness).setStandardizedFitness(state, fitness);
     individual.evaluated = true;
