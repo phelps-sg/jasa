@@ -41,53 +41,59 @@ public class QLearner
   /**
    * The number of possible states
    */
-  int numStates;
+  protected int numStates;
 
   /**
    * The number of possible actions
    */
-  int numActions;
+  protected int numActions;
 
   /**
    * The matrix representing the estimated payoff of each
    * possible action in each possible state.
    */
-  double q[][];
+  protected double q[][];
 
   /**
    * The learning rate.
    */
-  double learningRate;
+  protected double learningRate;
 
   /**
-   * The discountRate for future payoffs.
+   * The discount rate for future payoffs.
    */
-  double discountRate;
+  protected double discountRate;
 
   /**
    * The parameter representing the probability of choosing
    * a random action on any given iteration.
    */
-  double epsilon;
+  protected double epsilon;
 
   /**
    * The previous state
    */
-  int previousState;
+  protected int previousState;
 
   /**
    * The current state
    */
-  int currentState;
+  protected int currentState;
 
   /**
    * The last action that was chosen.
    */
-  int lastActionChosen;
+  protected int lastActionChosen;
 
+  /**
+   * The PRNG
+   */
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
-  int bestAction;
+  /**
+   * The best action for the current state
+   */
+  protected int bestAction;
 
   static final double DEFAULT_EPSILON = 0.2;
   static final double DEFAULT_LEARNING_RATE = 0.5;
@@ -195,5 +201,22 @@ public class QLearner
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
+
+  public void setDiscountRate( double discountRate ) {
+    this.discountRate = discountRate;
+  }
+
+  public double getDiscountRate() {
+    return discountRate;
+  }
+
+  public void setEpsilon( double epsilon ) {
+    this.epsilon = epsilon;
+  }
+
+  public double getEpsilon() {
+    return epsilon;
+  }
+
 
 }
