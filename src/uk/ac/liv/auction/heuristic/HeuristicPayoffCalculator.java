@@ -297,11 +297,11 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
       logger.debug("Taking Sample " + sample + ".....\n");
 
+      randomlyAssignRoles();
+      randomlyAssignValuers();
       auction.reset();
       auction.addEndOfDayListener(this);
       
-      randomlyAssignRoles();
-      randomlyAssignValuers();
       ensureEquilibriaExists();
 
       auction.run();
