@@ -23,7 +23,6 @@ import uk.ac.liv.util.Resetable;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Iterator;
-import java.util.LinkedList;
 
 import java.text.DecimalFormat;
 
@@ -54,12 +53,9 @@ public class AuctionConsoleFrame extends JFrame
 
  
   protected JButton supplyAndDemandButton;
- 
-  protected JButton reportButton;
-  
+  protected JButton reportButton; 
   protected JButton resetAgentsButton;
-
- 
+  protected JButton closeAuctionButton;
   protected float graphXExtrema = 0f;
  
   protected Font decimalFont = new Font("Monospaced", Font.TRUETYPE_FONT, 10);
@@ -73,13 +69,6 @@ public class AuctionConsoleFrame extends JFrame
   protected GridBagLayout gridBag;
 
   protected int currentRound = 0;
-
-
-  protected LinkedList graphs = new LinkedList();
-
-  protected Timer graphUpdateTimer = null;
-
-  private Thread auctionRunner;
 
   static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);
 
@@ -238,6 +227,18 @@ public class AuctionConsoleFrame extends JFrame
       }
     });
 
+    closeAuctionButton = new JButton("Close");
+    closeAuctionButton.setToolTipText("Close the auction");
+    c.gridx = 4;
+    c.gridy = 6;
+    gridBag.setConstraints(closeAuctionButton, c);
+    contentPane.add(closeAuctionButton);
+    closeAuctionButton.addActionListener(new ActionListener() {
+        public void actionPerformed( ActionEvent e ) {
+          closeAuction();
+        }
+    });
+    
     setAuctionName(name);
   }
 
@@ -302,7 +303,6 @@ public class AuctionConsoleFrame extends JFrame
             new SupplyAndDemandFrame((RoundRobinAuction) auction);
         graphFrame.pack();
         graphFrame.setVisible(true);
-        graphs.add(graphFrame);
       }
     }.start();
     logger.debug("exiting GraphSupplyAndDemand()");
