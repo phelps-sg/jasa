@@ -6,7 +6,11 @@
    <property name="sourceDir" value="src"/>
    <property name="outputDir" value="classes"/>
    <property name="projectName" value="JASA"/>
+
+   <property name="versionSrc" value="${sourceDir}/uk/ac/liv/auction/JASAVersion.java"/>
+
    <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event"/>
+
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
    <property name="troveLoc" value="${javaLibPath}/trove-1.1b3/lib/trove.jar"/>
@@ -113,6 +117,41 @@
 		<classpath refid="project.classpath"/>
 		<arg value="${params}"/>
 	</java>
+    </target>
+
+<target name="gethostname" description="Stores the current machines hostname in a property named 'hostname'">
+  <property environment="env"/>
+  <condition property="hostname" value="${env.HOSTNAME}">
+    <os family="unix"/>
+  </condition>
+  <condition property="hostname" value="${env.COMPUTERNAME}">
+    <os family="windows"/>
+  </condition>
+  <echo message="host = ${hostname}"/>
+</target>
+
+<target name="version" depends="gethostname">
+        <propertyfile
+            file="version.properties" comment="Build version info">
+            <entry key="buildDate" type="date" value="now"/>
+            <entry key="buildNum" default="0" type="int" operation="+" value="1"/>
+	    <entry key="buildHost" type="string" value="${hostname}"/>
+        </propertyfile>
+        <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}"/>
+        <replace
+            file="${versionSrc}"
+            value="value not found in version.properties"
+            propertyFile="version.properties">
+            <replacefilter
+                token="@buildDate@"
+                property="buildDate"/>
+            <replacefilter
+                token="@buildNum@"
+                property="buildNum"/>
+ 	    <replacefilter
+		token="@buildHost@"
+		property="buildHost"/>
+        </replace>
     </target>
 
 </project>

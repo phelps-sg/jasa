@@ -1,7 +1,7 @@
-equilibria.numagents = 6
+equilibria.numagents = 12
 equilibria.numstrategies = 3
 equilibria.numrdsamples = 1000
 equilibria.minvelocity = 0.000000001
 equilibria.precision = 100
-equilibria.payoffmatrix = results/heuristic/tt-re-pvt-cda-6/tt-re-pvt-cda-6.csv
-equilibria.rdprefix = results/heuristic/tt-re-pvt-cda-6/rdplot
+equilibria.payoffmatrix = results/heuristic/hpc-updatedgd-ch-12/payoffmatrix.csv
+equilibria.rdprefix = results/heuristic/hpc-updatedgd-ch-12/rdplot

@@ -25,11 +25,11 @@ public class JASAVersion {
   
   static final int majorVersion = 0;
 
-  static final int buildNumber = 3;
+  static final int buildNumber = @buildNum@;
 
-  static final String buildDate = "2005/02/15 14:33";
+  static final String buildDate = "@buildDate@";
 
-  static final String buildHost = "mbc1.staff";
+  static final String buildHost = "@buildHost@";
 
   public static final String GNU_MESSAGE =
     "\n" +
