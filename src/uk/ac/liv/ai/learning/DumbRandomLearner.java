@@ -18,6 +18,7 @@ package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
+import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.io.DataWriter;
 
 import java.io.Serializable;
@@ -31,12 +32,24 @@ import java.io.Serializable;
  */
 
 public class DumbRandomLearner extends AbstractLearner
-    implements StimuliResponseLearner, Serializable {
+    implements StimuliResponseLearner, Serializable, Prototypeable {
 
   protected int numActions;
 
   public DumbRandomLearner( int numActions ) {    
     this.numActions = numActions;
+  }
+  
+  public Object protoClone() {
+    try {
+      return this.clone();
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
+  }
+  
+  public void reset() {
+    //Do nothing
   }
 
 
