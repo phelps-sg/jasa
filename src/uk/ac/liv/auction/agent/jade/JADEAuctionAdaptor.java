@@ -14,6 +14,7 @@
  */
 
 package uk.ac.liv.auction.agent.jade;
+
 import uk.ac.liv.auction.core.*;
 
 import jade.core.*;

@@ -6,7 +6,12 @@ simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPol
 simulation.auction.auctioneer.pricing.k = 0.5
 
 # Get cummulative stats
-simulation.auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
+simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
+simulation.auction.logger.n = 2
+simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
+
+
 
 # Show GUI console
 simulation.console = true
