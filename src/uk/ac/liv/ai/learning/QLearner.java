@@ -213,8 +213,8 @@ public class QLearner extends AbstractLearner
 
   public int act() {
   	RandomElement prng = GlobalPRNG.getInstance();    
-    if ( prng.coin(epsilon) ) {
-      lastActionChosen = prng.choose(0, numActions);
+    if ( prng.uniform(0, 1) <= epsilon ) {
+      lastActionChosen = prng.choose(0, numActions-1);
     } else {
       lastActionChosen = bestAction(currentState);
     }
