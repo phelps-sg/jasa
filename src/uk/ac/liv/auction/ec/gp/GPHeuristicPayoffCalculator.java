@@ -16,7 +16,7 @@
 package uk.ac.liv.auction.ec.gp;
 
 import uk.ac.liv.auction.heuristic.*;
-
+import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.ec.gp.func.GPTradingStrategy;
 
 import uk.ac.liv.util.CummulativeStatCounter;
@@ -45,18 +45,26 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
 
   
   public void computePayoffMatrix() {
-    payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
-    Iterator i = payoffMatrix.compressedEntryIterator();
-    while ( i.hasNext() ) {
-      int[] payoffMatrixEntry = (int[]) i.next();
-      if ( payoffMatrixEntry[gpStrategyIndex] > 0 ) {
-        calculateExpectedPayoffs(payoffMatrixEntry);
+
+    gpStrategyMisbehaved = false;
+
+    try {
+      payoffMatrix = new CompressedPayoffMatrix(numAgents, numStrategies);
+      Iterator i = payoffMatrix.compressedEntryIterator();
+      while ( i.hasNext() ) {
+        int[] payoffMatrixEntry = (int[]) i.next();
+        if ( payoffMatrixEntry[gpStrategyIndex] > 0 ) {
+          calculateExpectedGPPayoffs(payoffMatrixEntry);
+        }
       }
+      
+    } catch ( NegativePayoffException e ) {
+      gpStrategyMisbehaved = true;
     }
   }
 
   
-  public void calculateExpectedPayoffs( int[] entry ) {
+  public void calculateExpectedGPPayoffs( int[] entry ) throws NegativePayoffException {
 
     logger.info("");
     logger.info("Calculating expected payoffs for ");
@@ -65,8 +73,6 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
     }
     logger.info("");
     
-    gpStrategyMisbehaved = false;
-
     CummulativeStatCounter[] payoffs =
         new CummulativeStatCounter[numStrategies];
     for( int i=0; i<numStrategies; i++ ) {
@@ -91,8 +97,7 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
       payoffLogger.calculate();      
       
       if ( payoffLogger.getPayoff(groups[gpStrategyIndex]) < 0 ) {
-        gpStrategyMisbehaved = true;
-        return;
+        negativePayoffException();
       }
       
       for( int i=0; i<numStrategies; i++ ) {
@@ -127,4 +132,19 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
     super.setup(parameters, base);
     gpStrategyIndex = parameters.getInt(base.push(P_GPSTRATEGY)); 
   }
+  
+  private void negativePayoffException() throws NegativePayoffException {
+    if ( negativePayoffException == null ) {
+      negativePayoffException = new NegativePayoffException();
+    }
+    throw negativePayoffException;
+  }
+  
+  private NegativePayoffException negativePayoffException;
+}
+
+
+class NegativePayoffException extends AuctionException {
+ 
+  
 }
