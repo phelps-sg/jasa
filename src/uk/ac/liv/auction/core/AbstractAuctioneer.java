@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.core;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Prototypeable;
@@ -123,6 +124,14 @@ public abstract class AbstractAuctioneer
       generateQuote();
     }
     return currentQuote;
+  }
+  
+  public Iterator askIterator() {
+    return shoutEngine.askIterator();
+  }
+  
+  public Iterator bidIterator() {
+    return shoutEngine.bidIterator();
   }
 
   public abstract void generateQuote();

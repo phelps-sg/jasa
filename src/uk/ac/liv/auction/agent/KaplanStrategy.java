@@ -28,7 +28,6 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.stats.DailyStatsReport;
-import uk.ac.liv.auction.stats.HistoricalDataReport;
 
 import org.apache.log4j.Logger;
 
