@@ -132,7 +132,8 @@ public class AscendingAuctioneer extends AbstractAuctioneer
       Shout winningBid = (Shout) i.next();
       Shout winningAsk = (Shout) i.next();
 
-      auction.clear(winningBid, winningBid.getAgent(), seller, maxPrice, quantity);
+      auction.clear(winningBid, winningBid.getAgent(), seller, maxPrice,
+                     winningBid.getQuantity());
     }
   }
 
