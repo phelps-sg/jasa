@@ -86,7 +86,7 @@ public class MarketSimulation implements Serializable, Runnable {
   protected int iterations = 0;
   
   /**
-   * If running more than one iterations, then write batch statistics
+   * If running more than one iteration, then write batch statistics
    * to this DataWriter.
    */
   protected DataWriter resultsFile = null;
@@ -165,6 +165,7 @@ public class MarketSimulation implements Serializable, Runnable {
     logger.debug("Setup complete.");
   }
   
+  
   public void run() {
     if ( iterations <= 0 ) {
       runSingleExperiment();
@@ -173,6 +174,7 @@ public class MarketSimulation implements Serializable, Runnable {
     }
   }
   
+  
   public void runSingleExperiment() {
     logger.info("Running auction...");
     auction.run();
@@ -180,6 +182,7 @@ public class MarketSimulation implements Serializable, Runnable {
     auction.generateReport();
   }
 
+  
   public void runBatchExperiment( int n ) {
     HashMap resultsStats = new HashMap();
     for( int i=0; i<n; i++ ) {
@@ -191,6 +194,13 @@ public class MarketSimulation implements Serializable, Runnable {
     }
     finalReport(resultsStats);
   }
+  
+  
+  public static void gnuMessage() {
+    System.out.println(JASAConstants.getGnuMessage());
+  }
+
+  
   
   protected void finalReport( Map resultsStats ) {
     ArrayList variableList = new ArrayList(resultsStats.keySet());
@@ -229,11 +239,6 @@ public class MarketSimulation implements Serializable, Runnable {
       }
     }
   }
-  
-  public static void gnuMessage() {
-    System.out.println(JASAConstants.getGnuMessage());
-  }
-
 
   protected static void fatalError( String message ) {
     System.err.println("ERROR: " + message);

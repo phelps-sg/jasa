@@ -31,6 +31,9 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
 /**
+ * An adaptor that allows an AbstractTraderAgent to be drawn on a 
+ * Repast Object2DDisplay. 
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -72,8 +75,8 @@ public class DrawableAgentAdaptor implements Drawable {
   }
   
   public void draw( SimGraphics g ) {
-    int cellHeight = g.getCurHeight();
-    int cellWidth = g.getCurWidth();
+    int cellHeight = 5;
+    int cellWidth = 5;
     float price = Math.abs(getLastShoutPrice() - getCurrentValuation());
     if ( price > DrawableAgentAdaptor.maxMarkup) {
       DrawableAgentAdaptor.maxMarkup = price;
@@ -92,7 +95,7 @@ public class DrawableAgentAdaptor implements Drawable {
     Color color = Color.BLACK;
     if ( colorMap == null ) {
       if ( relProfit > 0.01 ) {
-        relProfit = 0.2f + 0.8f * relProfit;
+        relProfit = 0.4f + 0.6f * relProfit;
         if ( agent.isBuyer() ) {
           color = new Color(relProfit, 0, 0);
         } else {
