@@ -21,13 +21,9 @@ import junit.swingui.TestRunner;
 
 public class AllTests {
 
-  public static void main( String[] args ) {
-    try {
-      org.apache.log4j.BasicConfigurator.configure();
-      TestRunner.run(Class.forName("test.uk.ac.liv.auction.AllTests"));
-    } catch ( ClassNotFoundException e ) {
-      e.printStackTrace();
-    }
+  public static void main( String[] args ) {    
+	  org.apache.log4j.BasicConfigurator.configure();
+	  TestRunner.run(AllTests.class);    
   }
 
   public static Test suite() {
@@ -37,6 +33,8 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.util.BinaryHeapTest.suite());
     suite.addTest(test.uk.ac.liv.util.DiscreteProbabilityDistributionTest.suite());
     suite.addTest(test.uk.ac.liv.util.CummulativeStatCounterTest.suite());
+    
+    suite.addTest(test.uk.ac.liv.prng.GlobalPRNGTest.suite());
 
     suite.addTest(test.uk.ac.liv.auction.NPTReplicationTest.suite());
     suite.addTest(test.uk.ac.liv.auction.DirectRevalationTest.suite());
