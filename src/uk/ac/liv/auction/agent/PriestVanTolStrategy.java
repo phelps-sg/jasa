@@ -50,15 +50,15 @@ public class PriestVanTolStrategy extends MomentumStrategy
       double lowestAsk = auction.getLowestAskPrice();
       if ( agent.isBuyer() ) {
         if ( lowestAsk > highestBid && highestBid > 0 ) {
-          adjustMargin(targetMargin(highestBid+perterb(highestBid)));
+          adjustMargin(targetMargin(highestBid + perterb(highestBid)));
         } else if ( agent.active() && lowestAsk < Double.POSITIVE_INFINITY ) {
-          adjustMargin(targetMargin(lowestAsk-perterb(lowestAsk)));
+          adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
         }
       } else {
         if ( lowestAsk > highestBid && lowestAsk < Double.POSITIVE_INFINITY ) {
-          adjustMargin(targetMargin(lowestAsk-perterb(lowestAsk)));
+          adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
         } else if ( agent.active() && highestBid > 0 ) {
-          adjustMargin(targetMargin(highestBid+perterb(highestBid)));
+          adjustMargin(targetMargin(highestBid + perterb(highestBid)));
         }
       }
     } catch ( DataUnavailableException e ) {

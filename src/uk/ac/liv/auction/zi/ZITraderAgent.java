@@ -18,10 +18,17 @@ package uk.ac.liv.auction.zi;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 
+import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Seeder;
+
+import uk.ac.liv.prng.PRNGFactory;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import java.io.Serializable;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
 
@@ -82,8 +89,13 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   protected int quantityTraded = 0;
 
   protected Shout dummyShout;
+  
+  protected RandomElement prng;
+  
+  protected double activationProbability = 1.0;
 
-  static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
+  public static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
+  public static final String P_ACTIVATION_PROBABILITY = "activationprobability";
 
   static final double DEFAULT_MAX_MARKUP = 100;
 
@@ -106,10 +118,17 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    
     initialTradeEntitlement =
         parameters.getInt(base.push(P_INITIAL_TRADE_ENTITLEMENT));
+    
+    activationProbability =
+        parameters.getDoubleWithDefault(base.push(P_ACTIVATION_PROBABILITY), 
+                                         null, activationProbability);
+    
     super.setup(parameters, base);
   }
+  
   
   public Object protoClone() {   
     try {
@@ -139,7 +158,15 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public boolean active() {
-    return tradeEntitlement > 0;
+    return tradeEntitlement > 0 && determineRandomActivation();
+  }
+  
+  public boolean determineRandomActivation() {
+    if ( activationProbability < 1.0 ) {
+      return prng.coin(activationProbability);
+    } else {
+      return true;
+    }
   }
 
   /**
@@ -199,6 +226,15 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
 
   public int determineQuantity( Auction auction ) {
     return strategy.determineQuantity(auction);
+  }
+  
+  public void setSeed( long seed ) {
+    prng = PRNGFactory.getFactory().create(seed);
+  }
+  
+  public void seed( Seeder seeder ) {
+    super.seed(seeder);
+    setSeed(seeder.nextSeed());
   }
 
   public String toString() {

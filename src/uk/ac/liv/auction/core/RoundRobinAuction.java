@@ -822,16 +822,16 @@ public class RoundRobinAuction extends AuctionImpl
    * or the maximum time allowed for a period has expired.
    */
   protected void checkEndOfDay() {
-    if ( isQuiescent() ) {
-      log4jLogger.debug("Auction quiescent - ending day");
-      endDay();
-    } else {
+    //if ( isQuiescent() ) {
+      //log4jLogger.debug("Auction quiescent - ending day");
+      //endDay();
+    //} else {
       if (lengthOfDay > 0) {
         if ( round >= lengthOfDay ) {
           endDay();
         }
       }
-    }
+    //}
   }
 
   /**

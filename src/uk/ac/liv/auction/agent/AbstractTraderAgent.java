@@ -426,9 +426,6 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   }
 
   public void seed( Seeder seeder ) {
-    if ( this instanceof Seedable ) {
-      ((Seedable) this).setSeed(seeder.nextSeed());
-    }
     if ( valuer instanceof Seedable ) {
       ((Seedable) valuer).seed(seeder);
     }

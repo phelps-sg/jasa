@@ -33,6 +33,7 @@ import uk.ac.liv.util.MutableDoubleWrapper;
 import org.apache.log4j.Logger;
 
 /**
+ * <p>
  * A MarketDataLogger that keeps track of the surplus
  * available to each agent in theoretical equilibrium.  Each time
  * a transaction occurs in the market, the equilibrium price is recomputed
@@ -41,6 +42,7 @@ import org.apache.log4j.Logger;
  * at transaction time, this class can be used to keep track
  * of theoretically available surplus even when supply and demand are
  * changing over time.
+ * </p>
  *
  * @author Steve Phelps
  * @version $Revision$

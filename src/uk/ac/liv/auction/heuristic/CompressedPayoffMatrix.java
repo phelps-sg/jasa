@@ -19,8 +19,7 @@ import java.util.Vector;
 import java.util.Iterator;
 import java.util.List;
 
-import java.io.PrintWriter;
-import java.io.IOException;
+import java.io.*;
 
 import uk.ac.liv.util.Partitioner;
 import uk.ac.liv.util.BaseNIterator;
@@ -177,11 +176,10 @@ public class CompressedPayoffMatrix {
       diff = 0;
       for( int i=0; i<population.length; i++ ) {
         diff += Math.abs(population1[i]*population1[i] - population[i]*population[i]);        
-      }      
-      System.out.println("delta = " + diff);
+      }            
       population = population1;
       iteration++;      
-    } while (  iteration < maxIterations );
+    } while (  diff > error && iteration < maxIterations );
   }
   
   
@@ -272,5 +270,41 @@ public class CompressedPayoffMatrix {
     }
     nfgOut.flush();
   }
+  
+  public static void main( String[] args ) {
+    
+    CompressedPayoffMatrix payoffMatrix = new CompressedPayoffMatrix(6, 3);
+    
+    edu.cornell.lassp.houle.RngPack.RandomElement prng = new edu.cornell.lassp.houle.RngPack.RanMT();
+    
+    String filename = args[0];
+    
+    try {
 
+      FileInputStream file = new FileInputStream(filename);
+
+      CSVReader csvIn = new CSVReader(file, new Class[] {Integer.class, Integer.class, Integer.class, Double.class, Double.class, Double.class} );
+
+      payoffMatrix.importFromCSV(csvIn);
+
+      for( int i=0; i<100; i++ ) {
+        
+        double x, y;
+        do {
+          x = prng.uniform(0, 1);
+          y = prng.uniform(0, 1);
+        } while ( x+y > 1 );
+          
+        double z = 1 - x - y;
+
+        uk.ac.liv.util.io.CSVWriter rdPlot = new uk.ac.liv.util.io.CSVWriter( new FileOutputStream("/tmp/rdplot" + i + ".csv"), 3);
+        payoffMatrix.plotRDflow(rdPlot, new double[] {x, y, z}, 0.00001, 100000);
+        rdPlot.close();
+      }
+      
+    } catch ( Exception e  ) {
+      e.printStackTrace();
+    }
+  }
+  
 }

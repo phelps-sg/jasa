@@ -197,7 +197,7 @@ public class QLearner extends AbstractLearner
       parameters.getDoubleWithDefault(base.push(P_EPSILON), null,
                                       DEFAULT_EPSILON);
 
-    numStates = parameters.getIntWithDefault(base.push(P_NUM_STATES), null, 1);
+    numStates = parameters.getInt(base.push(P_NUM_STATES), null, 0);
     numActions = parameters.getInt(base.push(P_NUM_ACTIONS), null, 0);
     setStatesAndActions(numStates, numActions);
   }

@@ -113,7 +113,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
         }
       } else {
         if ( quote.getBid() >= agent.getPrivateValue(auction) ) {
-          shout.setPrice(quote.getBid());;
+          shout.setPrice(quote.getBid());
         }
       }
       logger.debug(this + ": price = " + shout.getPrice());
