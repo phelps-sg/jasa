@@ -222,7 +222,7 @@ public class GACoEvolveElectricityProblem extends CoEvolutionaryProblem {
   }
 
   public static void main( String[] args ) {
-    ec.Evolve.main(new String[] { "-file", "coevolve-electricity-auction.params" } );
+    ec.Evolve.main(new String[] { "-file", "ecj.params/coevolve-electricity-auction.params" } );
   }
 
 

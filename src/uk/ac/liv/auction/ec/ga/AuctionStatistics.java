@@ -20,7 +20,7 @@ public class AuctionStatistics extends SimpleStatistics
 	super.finalStatistics(state,result);
 
 	// we have only one population, so this is kosher
-	((SimpleProblemForm)(state.evaluator.p_problem.protoCloneSimple())).describe(best_of_run, state, 0, statisticslog,Output.V_NO_GENERAL);
+	((SimpleProblemForm)(state.evaluator.p_problem.protoCloneSimple())).describe(best_of_run[0], state, 0, statisticslog,Output.V_NO_GENERAL);
 	}
 
     }

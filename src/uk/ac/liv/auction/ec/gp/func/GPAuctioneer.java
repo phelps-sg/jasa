@@ -7,6 +7,10 @@ import uk.ac.liv.util.Debug;
 import ec.gp.*;
 import ec.*;
 
+import uk.ac.liv.util.*;
+
+import uk.ac.liv.ec.gp.func.GPNumberData;
+
 import java.util.List;
 import java.util.Iterator;
 
@@ -73,9 +77,9 @@ public class GPAuctioneer extends GPIndividual implements Auctioneer {
   }
 
   public double determineClearingPrice( Shout bid, Shout ask ) {
-    GPDoubleData input = new GPDoubleData();
+    GPNumberData input = new GPNumberData();
     trees[0].child.eval(contextState, contextThread, input, contextStack, this, contextProblem);
-    return input.data;
+    return input.data.doubleValue();
   }
 
   public void generateQuote() {

@@ -2,7 +2,10 @@ package uk.ac.liv.auction.ec.gp;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
+import uk.ac.liv.auction.electricity.*;
+
 import uk.ac.liv.auction.ec.gp.func.*;
+
 
 import uk.ac.liv.util.io.CSVReader;
 
@@ -47,6 +50,9 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
 
     super.setup(state,base);
 
+    String buyerConfig = state.parameters.getString(base.push("buyerconf"), null);
+    String sellerConfig = state.parameters.getString(base.push("sellerconf"), null);
+
     // numTraders = state.parameters.getInt(base.push(P_TRADERS),null,1);
     maxRounds = state.parameters.getInt(base.push(P_ROUNDS),null,1);
 
@@ -54,8 +60,8 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
     auction.setMaximumRounds(maxRounds);
 
     try {
-      registerTraders(auction,BUYER_CONF,false);
-      registerTraders(auction,SELLER_CONF,true);
+      registerTraders(auction, buyerConfig, false);
+      registerTraders(auction, sellerConfig, true);
     } catch ( Exception e ) {
       e.printStackTrace();
     }
@@ -80,32 +86,31 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
     // Reset the agents
     Iterator traders = auction.getTraderIterator();
     while ( traders.hasNext() ) {
-      ZITraderAgent agent = (ZITraderAgent) traders.next();
+      AbstractTraderAgent agent = (AbstractTraderAgent) traders.next();
       agent.reset();
     }
 
     auction.run();
 
-    // calculate global surplus
-    traders = auction.getTraderIterator();
-    long surplus = 0L;
-    while ( traders.hasNext() ) {
-      ZITraderAgent agent = (ZITraderAgent) traders.next();
-      double fundsSpent;
-      if ( agent.isSeller() ) {
-        fundsSpent = -agent.getFunds();
-      } else {
-        fundsSpent = agent.getFunds();
-      }
-      surplus += agent.getQuantityTraded() * agent.getPrivateValue() - fundsSpent;
+    ElectricityStats stats = new ElectricityStats(0, 200, auction);
+    float avMarketPower = (float) (stats.mPB + stats.mPS) / 2.0f;
+    float fitness = (Math.abs(avMarketPower) + 1-((float) stats.eA/100))/2;
+    if ( Float.isNaN(fitness) ) {
+      fitness = 100;
     }
 
-    long optSurplus = 1000000;
-
     KozaFitness f = ((KozaFitness)individual.fitness);
-    f.setFitness(state,(float)(optSurplus-surplus));
-    //? f.hits = sum;
+    f.setStandardizedFitness(state, fitness);
+
     individual.evaluated = true;
+
+
+    System.out.println("\nFitness = " + fitness);
+    System.out.println("eA = " + stats.eA);
+    System.out.println("mPB = " + stats.mPB);
+    System.out.println("mPS = " + stats.mPS);
+    System.out.println("pBA = " + stats.pBA);
+    System.out.println("pSA = " + stats.pSA);
   }
 
   public static void registerTraders( RoundRobinAuction auction, String traderConfigFile,
@@ -115,8 +120,8 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
     // Set up the parser for the trader config file
 
     ArrayList traderFormat = new ArrayList(2);  // Each record has 2 fields
-    traderFormat.add(0, Class.forName("java.lang.Long"));
-    traderFormat.add(1, Class.forName("java.lang.Integer"));
+    traderFormat.add(0, Double.class);
+    traderFormat.add(1, Integer.class);
     CSVReader traderConfig =
       new CSVReader(new FileInputStream(traderConfigFile), traderFormat);
 
@@ -125,17 +130,20 @@ public class AuctionProblem extends GPProblem implements SimpleProblemForm {
     while ( (traderRecord = traderConfig.nextRecord()) != null ) {
 
       // Get the fields from this trader's record
-      Long limitPrice = (Long) traderRecord.get(0);
-      Integer tradeEntitlement = (Integer) traderRecord.get(1);
+      Double privateValue = (Double) traderRecord.get(0);
+      Integer capacity = (Integer) traderRecord.get(1);
 
-      // Construct a ZI-C trader for this record
-      ZISTraderAgent trader =
-        new ZISTraderAgent(limitPrice.longValue(), tradeEntitlement.intValue(),
-                            areSellers);
+      // Construct a trader for this record
+      MREElectricityTrader trader =
+        new MREElectricityTrader(capacity.intValue(), privateValue.doubleValue(), 0, areSellers);
 
       // Register it in the auction
       auction.register(trader);
     }
+  }
+
+  public static void main( String[] args ) {
+    ec.Evolve.main( new String[] { "-file", "ecj.params/gpauctioneer.params" } );
   }
 
 }

@@ -1,7 +1,7 @@
 package uk.ac.liv.auction.ec;
 
 import ec.*;
-import ec.coevolve.GroupedProblem;
+//import ec.coevolve.GroupedProblem;
 import ec.util.*;
 
 import java.util.ArrayList;
