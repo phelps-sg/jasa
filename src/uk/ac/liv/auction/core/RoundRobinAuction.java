@@ -17,6 +17,7 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 import uk.ac.liv.auction.agent.TraderAgent;
+import uk.ac.liv.auction.stats.MarketDataLogger;
 
 import uk.ac.liv.util.io.CSVWriter;
 import uk.ac.liv.util.IdAllocator;
@@ -26,6 +27,7 @@ import uk.ac.liv.util.Resetable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
+import ec.util.ParamClassLoadException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -111,6 +113,7 @@ public class RoundRobinAuction extends AuctionImpl
 
 
   static final String P_MAXIMUM_ROUNDS = "maximumrounds";
+  static final String P_LOGGER = "logger";
 
 
   /**
@@ -128,8 +131,21 @@ public class RoundRobinAuction extends AuctionImpl
     this(null);
   }
 
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS), null, -1);
+
+    maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS),
+                                                  null, -1);
+
+    try {
+      logger =
+          (MarketDataLogger) parameters.getClassForParameter(base.push(P_LOGGER),
+                                                              null,
+                                                              MarketDataLogger.class);
+    } catch ( ParamClassLoadException e ) {
+      logger = null;
+    }
+
     initialise();
   }
 
@@ -139,7 +155,7 @@ public class RoundRobinAuction extends AuctionImpl
     RoundRobinTrader rrBuyer = (RoundRobinTrader) buyer;
     RoundRobinTrader rrSeller = (RoundRobinTrader) seller;
     rrBuyer.informOfSeller(winningShout, rrSeller, price, quantity);
-    logger.updateTransPriceLog(round, winningShout, price);
+    updateTransPriceLog(round, winningShout, price);
   }
 
   /**
@@ -279,7 +295,8 @@ public class RoundRobinAuction extends AuctionImpl
       close();
     } else {
       requestShouts();
-      logger.updateQuoteLog(round++, getQuote());
+      updateQuoteLog(round, getQuote());
+      round++;
       sweepDefunctTraders();
       auctioneer.endOfRoundProcessing();
       informRoundClosed();
@@ -297,7 +314,7 @@ public class RoundRobinAuction extends AuctionImpl
 
   public void newShout( Shout shout ) throws AuctionException {
     super.newShout(shout);
-    logger.updateShoutLog(round, shout);
+    updateShoutLog(round, shout);
   }
 
 
@@ -350,6 +367,15 @@ public class RoundRobinAuction extends AuctionImpl
     while ( i.hasNext() ) {
       RoundRobinTrader t = (RoundRobinTrader) i.next();
       t.reset();
+    }
+  }
+
+  /**
+   * Generate a report.
+   */
+  public void generateReport() {
+    if ( logger != null ) {
+      logger.finalReport();
     }
   }
 
