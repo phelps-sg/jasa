@@ -109,6 +109,8 @@ public class RothErevLearner implements
     this.e = e;
     this.s1 = s1;
     validateParams();
+    q = new double[k];
+    p = new double[k];
     initialise();
   }
 
@@ -251,8 +253,6 @@ public class RothErevLearner implements
   }
 
   public void initialise() {
-    q = new double[k];
-    p = new double[k];
     for( int i=0; i<k; i++ ) {
       p[i] = 1.0/k;
       q[i] = s1/k;
@@ -300,12 +300,12 @@ public class RothErevLearner implements
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
-  
+
   public void dumpDistributionToCSV( CSVWriter out ) {
     for( int i=0; i<k; i++ ) {
       out.newData(p[i]);
     }
-  }               
+  }
 
   public String toString() {
     StringBuffer str = new StringBuffer("(" + this.getClass() + " ");
@@ -320,6 +320,6 @@ public class RothErevLearner implements
     str.append("\n)");
     return str.toString();
   }
-   
+
 
 }

@@ -154,6 +154,7 @@ public class GPAuctioneer extends GPIndividualCtx
 
   public void endOfRoundProcessing() {
     clear();
+    shoutEngine.reset();
   }
 
 
@@ -174,7 +175,7 @@ public class GPAuctioneer extends GPIndividualCtx
   }
 
   public synchronized void removeShout( Shout shout ) {
-    shoutEngine.removeShout(shout);
+    //shoutEngine.removeShout(shout);
   }
 
   public synchronized void printState() {

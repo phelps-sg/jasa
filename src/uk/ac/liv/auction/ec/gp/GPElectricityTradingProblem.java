@@ -39,6 +39,8 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.ec.gp.func.*;
 
 /**
+ * Abstract super-class for electricity-trading scenarios.
+ *
  * @author Steve Phelps
  */
 
@@ -120,12 +122,13 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   static final String P_SELLERCAPACITY = "cs";
   static final String P_BUYERCAPACITY = "cb";
   static final String P_STRATEGYMIXER = "strategymixer";
+  static final String P_STATS = "stats";
   static final String P_MEMORYSIZE = "memorysize";
 
   static final String DEFAULT_STATS_FILE = "coevolve-electricity-stats.csv";
 
   static final String DEFAULT_PARAM_FILE
-                    = "ecj.params/amec.params";
+                    = "ecj.params/test.params";
 
   static final int buyerValues[] = { 36, 17, 12 };
 
@@ -203,17 +206,18 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     ((Parameterizable) strategyMixer).setup(state.parameters,
                                               base.push(P_STRATEGYMIXER));
 
-    System.out.println("numSellers = " + numSellers);
-    System.out.println("numBuyers = " + numBuyers);
-    System.out.println("sellerCapacity = " + sellerCapacity);
-    System.out.println("buyerCapacity = " + buyerCapacity);
-    System.out.println("maxRounds = " + maxRounds);
-    System.out.println("randomPrivateValues = " + randomPrivateValues);
+    stats = (ElectricityStats)
+      state.parameters.getInstanceForParameter(base.push(P_STATS), null,
+                                                ElectricityStats.class);
+    stats.setup(state.parameters, base.push(P_STATS));
 
     randGenerator = new MersenneTwisterFast();
 
     auction = new RandomRobinAuction();
     auction.setMaximumRounds(maxRounds);
+
+    stats.setAuction(auction);
+    stats.calculate();
 
     logger = new StatsMarketDataLogger();
     auction.setMarketDataLogger(logger);
@@ -226,6 +230,12 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
       initCSVFile();
     }
 
+    System.out.println("numSellers = " + numSellers);
+    System.out.println("numBuyers = " + numBuyers);
+    System.out.println("sellerCapacity = " + sellerCapacity);
+    System.out.println("buyerCapacity = " + buyerCapacity);
+    System.out.println("maxRounds = " + maxRounds);
+    System.out.println("randomPrivateValues = " + randomPrivateValues);
   }
 
 

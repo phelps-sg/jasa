@@ -40,6 +40,9 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.ec.gp.func.*;
 
 /**
+ * Scenario in which co-evolve auctioneers with co-evolving strategies
+ * using GP.
+ *
  * @author Steve Phelps
  */
 

@@ -25,6 +25,8 @@ import uk.ac.liv.util.io.*;
 import uk.ac.liv.ai.learning.*;
 
 import ec.util.MersenneTwisterFast;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 import java.util.*;
 
@@ -49,7 +51,7 @@ import java.io.*;
  * </p>
  */
 
-public class ElectricityAuctionSimulation implements Runnable {
+public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   String outputFileName  = "electricity-data.csv";
 
@@ -77,6 +79,15 @@ public class ElectricityAuctionSimulation implements Runnable {
 
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
+  static final String DEFAULT_PARAMETER_FILE = "examples/electricity.params";
+
+  static final String P_MAXROUNDS = "maxrounds";
+  static final String P_ITERATIONS = "iterations";
+  static final String P_OUTPUTFILENAME = "outputfile";
+  static final String P_OUTPUTDIR = "outputdir";
+  static final String P_ELECTRICITY = "electricity";
+
+
   public ElectricityAuctionSimulation() {
   }
 
@@ -92,27 +103,61 @@ public class ElectricityAuctionSimulation implements Runnable {
     this.outputFileName = outputFileName;
   }
 
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    maxRounds =
+      parameters.getIntWithDefault(base.push(P_MAXROUNDS), null, maxRounds);
+
+    R = parameters.getDoubleWithDefault(base.push("r"), null, R);
+    E = parameters.getDoubleWithDefault(base.push("e"), null, E);
+    K = parameters.getIntWithDefault(base.push("k"), null, K);
+    X = parameters.getDoubleWithDefault(base.push("x"), null, X);
+    S1 = parameters.getDoubleWithDefault(base.push("s1"), null, S1);
+
+    iterations =
+      parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
+
+    outputFileName =
+      parameters.getStringWithDefault(base.push(P_OUTPUTFILENAME), null,
+                                        outputFileName);
+
+    outputDir =
+      parameters.getStringWithDefault(base.push(P_OUTPUTDIR), null,
+                                        outputDir);
+  }
+
   public static void main( String[] args ) {
-    ElectricityAuctionSimulation simulation = null;
-    if ( args.length > 0 && "-set".equals(args[0]) ) {
-      int maxRounds = Integer.valueOf(args[1]).intValue();
-      double R = Double.valueOf(args[2]).doubleValue();
-      double E = Double.valueOf(args[3]).doubleValue();
-      int K = Integer.valueOf(args[4]).intValue();
-      double X = Double.valueOf(args[5]).doubleValue();
-      double S1 = Double.valueOf(args[6]).doubleValue();
-      int iterations = Integer.valueOf(args[7]).intValue();
-      String outputFileName = args[8];
-      simulation =
-        new ElectricityAuctionSimulation(maxRounds, R, E, K, X, S1, iterations, outputFileName);
-    } else {
-      simulation = new ElectricityAuctionSimulation();
+
+    try {
+
+      String fileName = null;
+
+      if ( args.length < 1 ) {
+        fileName = DEFAULT_PARAMETER_FILE;
+      } else {
+        fileName = args[0];
+      }
+
+      File file = new File(fileName);
+      if ( ! file.canRead() ) {
+        System.err.println("Cannot read parameter file " + fileName);
+        System.exit(1);
+      }
+
+      ParameterDatabase parameters =
+        new ParameterDatabase( new File(fileName) );
+
+      ElectricityAuctionSimulation simulation =
+          new ElectricityAuctionSimulation();
+      simulation.setup(parameters, new Parameter(P_ELECTRICITY));
+      simulation.run();
+
+    } catch ( Exception e ) {
+      e.printStackTrace();
     }
-    simulation.run();
   }
 
   public void run() {
-
 
     System.out.println("Using global parameters:");
     System.out.println("maxRounds = " + maxRounds);

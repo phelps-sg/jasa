@@ -39,6 +39,8 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.ec.gp.func.*;
 
 /**
+ * Scenario in which we co-evolve trading strategies using GP.
+ *
  * @author Steve Phelps
  */
 

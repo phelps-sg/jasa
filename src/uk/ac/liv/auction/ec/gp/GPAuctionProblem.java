@@ -39,6 +39,8 @@ import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.ec.gp.func.*;
 
 /**
+ * Use GP to evolve auctioneers against non-GP strategies.
+ *
  * @author Steve Phelps
  */
 
@@ -50,6 +52,7 @@ public class GPAuctionProblem extends GPCoEvolveAuctionProblem
   Vector[] group;
 
   static final String P_STRATEGY = "strategy";
+
 
   public void setup( EvolutionState state, Parameter base ) {
 
@@ -70,18 +73,22 @@ public class GPAuctionProblem extends GPCoEvolveAuctionProblem
     group[0].add(0, null);
   }
 
+
   public void evaluate( EvolutionState state, Individual individual,
                         int thread ) {
     group[0].set(0, individual);
     evaluate(state, group, thread);
   }
 
+
   protected Strategy getStrategy( int i, Vector[] group ) {
     return (Strategy) strategies.get(i);
   }
 
+
   protected void computeStrategyFitnesses() {
   }
+
 
   protected void setStrategyFitnesses( Vector[] group ) {
   }
