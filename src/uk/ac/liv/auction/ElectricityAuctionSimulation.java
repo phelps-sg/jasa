@@ -179,17 +179,28 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
   public void run() {
 
-    System.out.println("Using global parameters:");
-    System.out.println("maxRounds = " + maxRounds);
-    System.out.println("R = " + R);
-    System.out.println("E = " + E);
-    System.out.println("K = " + K);
-    System.out.println("X = " + X);
-    System.out.println("S1 = " + S1);
-    System.out.println("random private values = " + randomPrivateValues);
-
     try {
-      experiment( 3, 3, 10, 10 );
+
+      System.out.println("Using global parameters:");
+      System.out.println("maxRounds = " + maxRounds);
+      System.out.println("R = " + R);
+      System.out.println("E = " + E);
+      System.out.println("K = " + K);
+      System.out.println("X = " + X);
+      System.out.println("S1 = " + S1);
+      System.out.println("random private values = " + randomPrivateValues);
+
+//      auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
+
+      experiment( 30, 30, 10, 10 );
+
+      auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+      experiment( 30, 30, 9, 9 );
+      auctioneer = new ControlAuctioneer(auction, 0.9);
+
+      experiment( 30, 30, 1, 1 );
+/*
       experiment( 6, 3, 10, 20 );
       experiment( 6, 3, 10, 40 );
       experiment( 3, 3, 20, 10 );
@@ -197,6 +208,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       experiment( 3, 6, 40, 10 );
       experiment( 3, 6, 20, 10 );
       experiment( 3, 6, 10, 10 );
+*/
     } catch ( FileNotFoundException e ) {
       e.printStackTrace();
     }
@@ -220,7 +232,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     }
 
     auction = new RandomRobinAuction("Electricity Auction");
-    auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+    auctioneer.reset();
     auction.setAuctioneer(auctioneer);
 
     registerTraders(auction, true, ns, cs, sellerValues);
@@ -290,8 +302,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       Iterator i = auction.getTraderIterator();
       while ( i.hasNext() ) {
         ElectricityTrader trader = (ElectricityTrader) i.next();
-        RothErevLearner learner = (RothErevLearner) ((StimuliResponseStrategy) trader.getStrategy()).getLearner();
-        learner.dumpDistributionToCSV(distributionFile);
+//        RothErevLearner learner = (RothErevLearner) ((StimuliResponseStrategy) trader.getStrategy()).getLearner();
+//        learner.dumpDistributionToCSV(distributionFile);
       }
     }
     dataFile.close();
@@ -319,6 +331,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       ElectricityTrader trader =
         new ElectricityTrader(capacity, values[i % values.length], 0, areSellers);
+
 
       StimuliResponseStrategy strategy = new StimuliResponseStrategy(trader);
 
@@ -372,7 +385,7 @@ class ControlAuctioneer extends DiscrimPriceCDAAuctioneer {
         System.out.println("ask = " + ask);
         Debug.assertTrue( bid.getPrice() >= ask.getPrice() );
       }
-      double price = 0.9 * bid.getPrice();
+      double price = getK() * bid.getPrice();
       auction.clear(ask, bid.getAgent(), ask.getAgent(), price, ask.getQuantity());
     }
   }

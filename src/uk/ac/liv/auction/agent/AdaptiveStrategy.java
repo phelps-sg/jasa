@@ -36,7 +36,7 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
     super.modifyShout(shout, auction);
 
     if ( firstShout ) {
-      firstShout = true;
+      firstShout = false;
     } else {
       calculateReward(auction);
     }
