@@ -11,7 +11,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.ec.gp.func.*;
 import uk.ac.liv.ec.gp.*;
 
-import uk.ac.liv.util.GenericNumber;
+import uk.ac.liv.util.*;
 
 /**
  * <p>Title: JASA</p>
@@ -22,9 +22,8 @@ import uk.ac.liv.util.GenericNumber;
  *
  */
 
-public class GPTradingStrategy extends GPIndividualCtx implements Strategy,
-                                                                  QuoteProvider,
-                                                                  Serializable {
+public class GPTradingStrategy extends GPIndividualCtx
+    implements Strategy, QuoteProvider, Serializable, Resetable {
 
   AbstractTraderAgent agent = null;
 
@@ -33,6 +32,8 @@ public class GPTradingStrategy extends GPIndividualCtx implements Strategy,
   int quantity = 1;
 
   Auction currentAuction = null;
+
+  CummulativeStatCounter priceStats = new CummulativeStatCounter("priceStats");
 
 
   public void setAgent( AbstractTraderAgent agent ) {
@@ -71,9 +72,19 @@ public class GPTradingStrategy extends GPIndividualCtx implements Strategy,
     } else {
       shout.setPrice(0);
     }
-    shout.setQuantity( quantity ); //TODO: set depending on capacity
-    shout.setIsBid( agent.isBuyer() );
+    shout.setQuantity(quantity);
+    shout.setIsBid(agent.isBuyer());
+    priceStats.newData(price);
   }
+
+  public CummulativeStatCounter getPriceStats() {
+    return priceStats;
+  }
+
+  public void reset() {
+    priceStats = new CummulativeStatCounter("priceStats");
+  }
+
 
 }
 

@@ -17,7 +17,7 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
  * @author Steve Phelps
  */
 
-public class ElectricityStats implements Serializable {
+public class ElectricityStats implements Serializable, Cloneable {
 
   RoundRobinAuction auction;
 
@@ -114,6 +114,19 @@ public class ElectricityStats implements Serializable {
         return 0;
       }
     }
+  }
+
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
+  }
+
+  public ElectricityStats newCopy() {
+    Object copy = null;
+    try {
+      copy = this.clone();
+    } catch ( CloneNotSupportedException e ) {
+    }
+    return (ElectricityStats) copy;
   }
 
   public String toString() {

@@ -92,8 +92,12 @@ public class CoEvolveAuctionStatistics extends KozaStatistics {
     while ( traders.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
       GPTradingStrategy strategy = (GPTradingStrategy) trader.getStrategy();
-      println("Trader " + trader);
+      println("Strategy for trader " + trader);
       printIndividual(strategy);
+      println("");
+      println("Price stats for trader: " + strategy.getPriceStats());
+      println("");
+      println("-------------");
       println("");
     }
   }

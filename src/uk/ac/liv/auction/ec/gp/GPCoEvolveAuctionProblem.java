@@ -104,7 +104,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     auction.setMarketDataLogger(logger);
 
     try {
-      statsOut = new CSVWriter(new FileOutputStream(statsFileName), 9 + NS + NB);//13);
+      statsOut = new CSVWriter(new FileOutputStream(statsFileName), 10 + NS + NB);//13);
     } catch ( IOException e ) {
       e.printStackTrace();
     }
@@ -122,7 +122,8 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     }
 
     statsOut.newData( new String[] {  "eA", "mPB", "mPS", "transPrice", "bidPrice",
-                                      "askPrice", "quoteBidPrice", "quoteAskPrice" });
+                                      "askPrice", "quoteBidPrice", "quoteAskPrice",
+                                      "fitness" });
   }
 
   public void evaluate( EvolutionState state, Vector[] group, int thread ) {
@@ -138,6 +139,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     for( int i=0; traders.hasNext(); i++ ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
       GPTradingStrategy strategy = (GPTradingStrategy) group[i+1].get(0);
+      strategy.reset();
       strategy.setGPContext(state, thread, stack, this);
       trader.setStrategy(strategy);
       strategy.setAgent(trader);
@@ -179,7 +181,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     } else {
       stats.recalculate();
     }
-    auctioneer.setStats(stats);
+    auctioneer.setStats(stats.newCopy());
 
     // Calculate auctioneer fitness based on market stats
     float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;
@@ -205,6 +207,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     statsOut.newData(logger.getBidPriceStats().getMean());
     statsOut.newData(logger.getAskQuoteStats().getMean());
     statsOut.newData(logger.getBidQuoteStats().getMean());
+    statsOut.newData(fitness);
   }
 
 
