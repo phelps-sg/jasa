@@ -32,6 +32,8 @@ import java.awt.event.*;
 
 import org.apache.log4j.Logger;
 
+import com.sun.media.rtsp.protocol.SetParameterMessage;
+
 
 /**
  * A frame for monitoring and controlling the progress of an auction.
@@ -75,9 +77,13 @@ public class AuctionConsoleFrame extends JFrame
 
     this.auction = auction;
     Container contentPane = getContentPane();
+    
+    contentPane.setLayout(new BorderLayout());
+    
+    JPanel statsPanel = new JPanel();
     gridBag = new GridBagLayout();
     GridBagConstraints c = new GridBagConstraints();
-    contentPane.setLayout(gridBag);
+    statsPanel.setLayout(gridBag);
 
     c.fill = GridBagConstraints.NONE;
     c.anchor = GridBagConstraints.EAST;
@@ -89,7 +95,7 @@ public class AuctionConsoleFrame extends JFrame
     c.gridx = 0;
     c.gridy = 1;
     gridBag.setConstraints(bidTextLabel, c);
-    contentPane.add(bidTextLabel);
+    statsPanel.add(bidTextLabel);
 
     bidLabel = new JLabel();
     c.gridx = 1;
@@ -97,14 +103,14 @@ public class AuctionConsoleFrame extends JFrame
     c.weightx = 1;
     gridBag.setConstraints(bidLabel, c);
     bidLabel.setFont(decimalFont);
-    contentPane.add(bidLabel);
+    statsPanel.add(bidLabel);
 
     JLabel askTextLabel = new JLabel("Ask: ");
     c.gridx = 2;
     c.gridy = 1;
     c.weightx = 0;
     gridBag.setConstraints(askTextLabel, c);
-    contentPane.add(askTextLabel);
+    statsPanel.add(askTextLabel);
 
     askLabel = new JLabel();
     c.gridx = 3;
@@ -112,13 +118,13 @@ public class AuctionConsoleFrame extends JFrame
     c.weightx = 1;
     gridBag.setConstraints(askLabel, c);
     askLabel.setFont(decimalFont);
-    contentPane.add(askLabel);
+    statsPanel.add(askLabel);
 
     JLabel lastShoutTextLabel = new JLabel("Last Shout: ");
     c.gridx = 0;
     c.gridy = 2;
     gridBag.setConstraints(lastShoutTextLabel, c);
-    contentPane.add(lastShoutTextLabel);
+    statsPanel.add(lastShoutTextLabel);
 
     lastShoutLabel = new JLabel();
     c.gridx = 1;
@@ -126,14 +132,14 @@ public class AuctionConsoleFrame extends JFrame
     c.weightx = 1;
     gridBag.setConstraints(lastShoutLabel, c);
     lastShoutLabel.setFont(decimalFont);
-    contentPane.add(lastShoutLabel);
+    statsPanel.add(lastShoutLabel);
 
     JLabel numTradersTextLabel = new JLabel("Number of traders: ");
     c.gridx = 0;
     c.gridy = 3;
     c.weightx = 0;
     gridBag.setConstraints(numTradersTextLabel, c);
-    contentPane.add(numTradersTextLabel);
+    statsPanel.add(numTradersTextLabel);
 
     numTradersLabel = new JLabel();
     c.gridx = 1;
@@ -141,14 +147,14 @@ public class AuctionConsoleFrame extends JFrame
     c.weightx = 1;
     gridBag.setConstraints(numTradersLabel, c);
     numTradersLabel.setFont(decimalFont);
-    contentPane.add(numTradersLabel);
+    statsPanel.add(numTradersLabel);
 
     JLabel roundTextLabel = new JLabel("Round: ");
     c.gridx = 0;
     c.gridy = 4;
     c.weightx = 0;
     gridBag.setConstraints(roundTextLabel, c);
-    contentPane.add(roundTextLabel);
+    statsPanel.add(roundTextLabel);
 
     roundLabel = new JLabel();
     c.gridx = 1;
@@ -156,14 +162,14 @@ public class AuctionConsoleFrame extends JFrame
     c.weightx = 1;
     gridBag.setConstraints(roundLabel, c);
     roundLabel.setFont(decimalFont);
-    contentPane.add(roundLabel);
+    statsPanel.add(roundLabel);
 
     JLabel dayTextLabel = new JLabel("Day: ");
     c.gridx = 2;
     c.gridy = 4;
     c.weightx = 0;
     gridBag.setConstraints(dayTextLabel, c);
-    contentPane.add(dayTextLabel);
+    statsPanel.add(dayTextLabel);
 
     dayLabel = new JLabel();
     c.gridx = 3;
@@ -171,48 +177,36 @@ public class AuctionConsoleFrame extends JFrame
     c.weightx = 0;
     gridBag.setConstraints(dayLabel, c);
     dayLabel.setFont(decimalFont);
-    contentPane.add(dayLabel);
-
+    statsPanel.add(dayLabel);
+    
+    contentPane.add(statsPanel, BorderLayout.CENTER);
+    
+    JPanel controlPanel = new JPanel();
 
     JButton logAuctionStatusButton = new JButton("Dump");
     logAuctionStatusButton.setToolTipText("Display the current state of the auction");
-    c.gridx = 2;
-    c.gridy = 6;
-    c.weightx = 0;
-    gridBag.setConstraints(logAuctionStatusButton, c);
-    contentPane.add(logAuctionStatusButton);
+    controlPanel.add(logAuctionStatusButton);
     logAuctionStatusButton.addActionListener(new ActionListener() {
         public void actionPerformed( ActionEvent e ) {
           logAuctionStatus();
         }
     });
 
-    JButton resetAgentsButton = new JButton("Reset");
-    resetAgentsButton.setToolTipText("Reset all agents");
-    c.gridx = 3;
-    c.gridy = 6;
-    gridBag.setConstraints(resetAgentsButton, c);
-    contentPane.add(resetAgentsButton);
-    resetAgentsButton.addActionListener(new ActionListener() {
-      public void actionPerformed( ActionEvent e ) {
-        resetAgents();
-      }
-    });
-
     closeAuctionButton = new JButton("Close");
     closeAuctionButton.setToolTipText("Close the auction");
-    c.gridx = 4;
-    c.gridy = 6;
-    gridBag.setConstraints(closeAuctionButton, c);
-    contentPane.add(closeAuctionButton);
+   
+    controlPanel.add(closeAuctionButton);
     closeAuctionButton.addActionListener(new ActionListener() {
         public void actionPerformed( ActionEvent e ) {
           closeAuction();
         }
     });
+    contentPane.add(controlPanel, BorderLayout.SOUTH);
     
     setAuctionName(name);
     setJMenuBar(menuBar = new AuctionConsoleMenu());
+    
+    rootPane.setPreferredSize(new Dimension(480,180));
   }
 
 
