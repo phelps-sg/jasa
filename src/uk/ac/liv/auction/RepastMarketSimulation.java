@@ -352,7 +352,7 @@ public class RepastMarketSimulation extends SimModelImpl
       if ( agent == null ) {
         return new DrawableAgentAdaptor(auction);
       }
-      return agents.get( y * width + x );
+      return agent;
     }
     
     
