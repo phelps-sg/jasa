@@ -5,10 +5,14 @@
 #  java uk.ac.liv.auction.MarketSimulation jasa/examples/example1.params
 #
 
+simulation.iterations = 10
+simulation.writer = uk.ac.liv.util.io.CSVWriter
+simulation.writer.filename = results.csv
+
 # Use a random-robin auction which will randomise the order in which agents bid
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.name = Example 1: electricity k-DA
-simulation.auction.maximumrounds = 10000
+simulation.auction.maximumrounds = 100
 
 # Use a k-DA auctioneer 
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
@@ -30,57 +34,57 @@ simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
 # Show GUI console
-simulation.console = true
+simulation.auction.console = true
 
 # Generate a report on market equilibria
 simulation.auction.stats = uk.ac.liv.auction.electricity.ElectricityStats
 
 # Two populations of agents
-simulation.agenttype.n = 2
+simulation.auction.agenttype.n = 2
 
 # 1st population-
 #  50 electricity sellers with a capacity of 10MWh
 #  using the Roth-Erev strategy
-simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
-simulation.agenttype.0.numagents = 100
-simulation.agenttype.0.isseller = true
+simulation.auction.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
+simulation.auction.agenttype.0.numagents = 100
+simulation.auction.agenttype.0.isseller = true
 # Valuations will be drawn randomly at the start of the auction
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Valuations will be distributed uniformly in the range (10, 100)
-simulation.agenttype.0.valuer.minvalue = 10
-simulation.agenttype.0.valuer.maxvalue = 100
+simulation.auction.agenttype.0.valuer.minvalue = 10
+simulation.auction.agenttype.0.valuer.maxvalue = 100
 # Generating capacity is 10MWh
-simulation.agenttype.0.capacity = 10
+simulation.auction.agenttype.0.capacity = 10
 # Use a myopic stimuli-response algorithm
-simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 # Multiply the discrete output from the learning algorithm by $1
-simulation.agenttype.0.strategy.markupscale = 1
+simulation.auction.agenttype.0.strategy.markupscale = 1
 # Use the Roth-Erev learning algorithm
-simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
+simulation.auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 # ..configured with 100 different actions, ie markups
-simulation.agenttype.0.strategy.learner.k = 100
+simulation.auction.agenttype.0.strategy.learner.k = 100
 
 # 2nd population-
 #  50 electricity buyers
 #  using the modified Roth-Erev strategy
-simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
-simulation.agenttype.1.numagents = 100
-simulation.agenttype.1.isseller = false
+simulation.auction.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
+simulation.auction.agenttype.1.numagents = 100
+simulation.auction.agenttype.1.isseller = false
 # Valuations will be drawn randomly for each unit that we trade
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Valuations will be in the range (80, 150)
-simulation.agenttype.1.valuer.minvalue = 80
-simulation.agenttype.1.valuer.maxvalue = 150
+simulation.auction.agenttype.1.valuer.minvalue = 80
+simulation.auction.agenttype.1.valuer.maxvalue = 150
 # Generating capacity is 10MWh
-simulation.agenttype.1.capacity = 10
+simulation.auction.agenttype.1.capacity = 10
 # Use a myopic stimuli-response algorithm
-simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 # Multiply the discrete output from the learning algorithm by $1
-simulation.agenttype.1.strategy.markupscale = 1
+simulation.auction.agenttype.1.strategy.markupscale = 1
 # Use NPT modifications to the Roth-Erev learning algorithm
-simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
+simulation.auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 # ..with 100 different markups to choose from
-simulation.agenttype.1.strategy.learner.k = 100
+simulation.auction.agenttype.1.strategy.learner.k = 100
 
 # PRNG configuration
 #  use the Mersenne Twister algorithm

@@ -16,35 +16,35 @@ simulation.auction.logger.0 = uk.ac.liv.auction.stats.HistoryStatsMarketDataLogg
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 simulation.auction.logger.2 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 
-simulation.console = true
+simulation.auction.console = true
 
-simulation.agenttype.n = 2
+simulation.auction.agenttype.n = 2
 
-simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.agenttype.0.numagents = 11
-simulation.agenttype.0.isseller = true
-simulation.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
-simulation.agenttype.0.strategy.scaling = 0.001
-simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
-simulation.agenttype.0.strategy.learner.learningrate = 0.3
-simulation.agenttype.0.strategy.learner.momentum = 0.05
-simulation.agenttype.0.initialtradeentitlement = 1
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.SellerIntervalValuer
-simulation.agenttype.0.valuer.minvalue = 75
-simulation.agenttype.0.valuer.step = 25
+simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.auction.agenttype.0.numagents = 11
+simulation.auction.agenttype.0.isseller = true
+simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.auction.agenttype.0.strategy.scaling = 0.001
+simulation.auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
+simulation.auction.agenttype.0.strategy.learner.learningrate = 0.3
+simulation.auction.agenttype.0.strategy.learner.momentum = 0.05
+simulation.auction.agenttype.0.initialtradeentitlement = 1
+simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.SellerIntervalValuer
+simulation.auction.agenttype.0.valuer.minvalue = 75
+simulation.auction.agenttype.0.valuer.step = 25
 
-simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.agenttype.1.numagents = 11
-simulation.agenttype.1.isseller = false
-simulation.agenttype.1.strategy = uk.ac.liv.auction.zi.ZIPStrategy
-simulation.agenttype.1.strategy.scaling = 0.001
-simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
-simulation.agenttype.1.strategy.learner.learningrate = 0.3
-simulation.agenttype.1.strategy.learner.momentum = 0.05
-simulation.agenttype.1.initialtradeentitlement = 1
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.BuyerIntervalValuer
-simulation.agenttype.1.valuer.minvalue = 75
-simulation.agenttype.1.valuer.step = 25
+simulation.auction.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.auction.agenttype.1.numagents = 11
+simulation.auction.agenttype.1.isseller = false
+simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.auction.agenttype.1.strategy.scaling = 0.001
+simulation.auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
+simulation.auction.agenttype.1.strategy.learner.learningrate = 0.3
+simulation.auction.agenttype.1.strategy.learner.momentum = 0.05
+simulation.auction.agenttype.1.initialtradeentitlement = 1
+simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.BuyerIntervalValuer
+simulation.auction.agenttype.1.valuer.minvalue = 75
+simulation.auction.agenttype.1.valuer.step = 25
 
 # prng configuration
 simulation.prng = uk.ac.liv.prng.Mar

@@ -30,40 +30,38 @@ simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
 # Show GUI console
-simulation.console = true
+simulation.auction.console = true
 
-# Gather meta-stats on market-equilibria
-simulation.gatherstats = true
-simulation.stats = uk.ac.liv.auction.stats.EquilibriaStats
+simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
 
 # Two populations of agents
-simulation.agenttype.n = 2
+simulation.auction.agenttype.n = 2
 
 # 1st population- 5000 ZI-C sellers
-simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.agenttype.0.numagents = 500
-simulation.agenttype.0.initialtradeentitlement = 1000
-simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
-simulation.agenttype.0.strategy.maxmarkup = 100
-simulation.agenttype.0.isseller = true
+simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.auction.agenttype.0.numagents = 500
+simulation.auction.agenttype.0.initialtradeentitlement = 1000
+simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
+simulation.auction.agenttype.0.strategy.maxmarkup = 100
+simulation.auction.agenttype.0.isseller = true
 # Private values will be randomly drawn for each unit that we trade
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Range for private values is (10, 100)
-simulation.agenttype.0.valuer.minvalue = 110
-simulation.agenttype.0.valuer.maxvalue = 200
+simulation.auction.agenttype.0.valuer.minvalue = 110
+simulation.auction.agenttype.0.valuer.maxvalue = 200
 
 # 2nd population- 5000 ZI-C buyers
-simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
-simulation.agenttype.1.numagents = 500
-simulation.agenttype.1.initialtradeentitlement = 1000
-simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
-simulation.agenttype.1.strategy.maxmarkup = 100
-simulation.agenttype.1.isseller = false
+simulation.auction.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.auction.agenttype.1.numagents = 500
+simulation.auction.agenttype.1.initialtradeentitlement = 1000
+simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
+simulation.auction.agenttype.1.strategy.maxmarkup = 100
+simulation.auction.agenttype.1.isseller = false
 # Private values will be randomly drawn for each unit that we trade
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Range for private values is (20, 150)
-simulation.agenttype.1.valuer.minvalue = 120
-simulation.agenttype.1.valuer.maxvalue = 250
+simulation.auction.agenttype.1.valuer.minvalue = 120
+simulation.auction.agenttype.1.valuer.maxvalue = 250
 
 # PRNG configuration
 #  Use the RanMar algorithm
