@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
- 
+
 package uk.ac.liv.auction.heuristic;
 
 import java.util.Vector;
@@ -25,26 +25,26 @@ import uk.ac.liv.util.BaseNIterator;
 
 import uk.ac.liv.util.io.DataWriter;
 
-/** 
+/**
  * @author Steve Phelps
  * @version $Revision$
  */
 
 
 public class CompressedPayoffMatrix {
-  
+
   protected int numPlayers;
-  
+
   protected int numStrategies;
-  
+
   protected Vector matrix;
-  
+
   public CompressedPayoffMatrix( int numPlayers, int numStrategies ) {
     this.numPlayers = numPlayers;
-    this.numStrategies = numStrategies;    
-    matrix = initialiseMatrix(numPlayers, numStrategies);       
+    this.numStrategies = numStrategies;
+    matrix = initialiseMatrix(numPlayers, numStrategies);
   }
-  
+
   protected Vector initialiseMatrix( int numPlayers, int s ) {
     Vector v = new Vector(numPlayers);
     if ( s == 1 ) {
@@ -59,7 +59,7 @@ public class CompressedPayoffMatrix {
       return v;
     }
   }
-  
+
   public double[] getCompressedOutcome( int[] compressedEntry ) {
     Vector v = matrix;
     int i;
@@ -69,7 +69,7 @@ public class CompressedPayoffMatrix {
     return (double[]) v.get(compressedEntry[i]);
   }
 
-  public void setCompressedOutcome( int[] compressedEntry, 
+  public void setCompressedOutcome( int[] compressedEntry,
                                       double[] compressedOutcome ) {
     Vector v = matrix;
     int i;
@@ -78,15 +78,15 @@ public class CompressedPayoffMatrix {
     }
     v.set(compressedEntry[i], compressedOutcome);
   }
-   
-  public Iterator compressedEntryIterator() {  
+
+  public Iterator compressedEntryIterator() {
     return new Partitioner(numPlayers, numStrategies);
   }
-  
+
   public Iterator fullEntryIterator() {
     return new BaseNIterator(numStrategies, numPlayers);
   }
-  
+
   public double[] getFullOutcome( int[] fullEntry ) {
     int[] compressedEntry = new int[numStrategies];
     for( int i=0; i<fullEntry.length; i++ ) {
@@ -99,7 +99,7 @@ public class CompressedPayoffMatrix {
     }
     return fullOutcome;
   }
-  
+
   public void export( DataWriter out ) {
     Iterator entries = compressedEntryIterator();
     while ( entries.hasNext() ) {
@@ -109,24 +109,24 @@ public class CompressedPayoffMatrix {
       }
       double[] outcome = getCompressedOutcome(entry);
       for( int i=0; i<outcome.length; i++ ) {
-        out.newData(outcome[i]);      
+        out.newData(outcome[i]);
       }
     }
   }
-  
+
   public void exportToGambit( PrintWriter nfgOut ) {
     exportToGambit(nfgOut, "JASA NFG");
   }
-  
+
   public void exportToGambit( PrintWriter nfgOut, String title ) {
-    
+
     nfgOut.print("NFG 1 R \"" + title + "\" { ");
     for( int i=0; i<numPlayers; i++ ) {
       nfgOut.print("\"Player" + (i+1) + "\" ");
     }
     nfgOut.println("}");
     nfgOut.println();
-    
+
     nfgOut.print("{ ");
     for( int i=0; i<numPlayers; i++ ) {
       nfgOut.print("{ ");
@@ -136,12 +136,12 @@ public class CompressedPayoffMatrix {
       nfgOut.println("}");
     }
     nfgOut.println("}");
-    
+
     nfgOut.println("\"\"");
     nfgOut.println();
-    
-    nfgOut.println("{");    
-    int numEntries = 0; 
+
+    nfgOut.println("{");
+    int numEntries = 0;
     Iterator entries = fullEntryIterator();
     while ( entries.hasNext() ) {
       nfgOut.print("{ \"");
@@ -151,13 +151,13 @@ public class CompressedPayoffMatrix {
       }
       nfgOut.print("\" ");
       double[] outcome = getFullOutcome(fullEntry);
-      for( int i=outcome.length-1; i>=0; i-- ) {
+      for( int i=0; i<outcome.length; i++ ) {
         nfgOut.print(outcome[i]);
-        if ( i > 0 ) {
+        if ( i < outcome.length-1 ) {
           nfgOut.print(",");
-        }        
+        }
         nfgOut.print(" ");
-      }      
+      }
       nfgOut.println("}");
       numEntries++;
     }
@@ -166,7 +166,7 @@ public class CompressedPayoffMatrix {
       nfgOut.print(i);
       if ( i < numEntries ) {
         nfgOut.print(" ");
-      }      
+      }
     }
     nfgOut.flush();
   }
