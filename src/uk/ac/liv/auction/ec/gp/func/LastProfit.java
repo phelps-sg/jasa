@@ -30,6 +30,6 @@ public class LastProfit extends GPNode {
   }
 
   public String toString() {
-    return "LastShoutSuccessful";
+    return "LastProfit";
   }
 }
