@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -164,6 +165,8 @@ public class RoundRobinAuction extends AuctionImpl
 
   protected int lengthOfDay = -1;
 
+  protected HashSet acceptedShouts = new HashSet();
+
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   public static final String P_LOGGER = "logger";
   public static final String P_AUCTIONEER = "auctioneer";
@@ -238,7 +241,13 @@ public class RoundRobinAuction extends AuctionImpl
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
     buyer.informOfSeller(ask, seller, price, ask.getQuantity());
+    acceptedShouts.add(ask);
+    acceptedShouts.add(bid);
     updateTransPriceLog(round, ask, price, ask.getQuantity());
+  }
+
+  public boolean shoutAccepted( Shout shout ) {
+    return acceptedShouts.contains(shout);
   }
 
   /**
@@ -398,6 +407,7 @@ public class RoundRobinAuction extends AuctionImpl
       close();
     } else {
       shoutsProcessed = false;
+      acceptedShouts.clear();
       requestShouts();
       updateQuoteLog(round, getQuote());
       round++;
@@ -575,6 +585,7 @@ public class RoundRobinAuction extends AuctionImpl
     super.initialise();
     numTraders = 0;
     round = 0;
+    acceptedShouts.clear();
     defunctTraders.clear();
     activeTraders.clear();
     activeTraders.addAll(registeredTraders);

@@ -230,7 +230,7 @@ public class ZIPExperiment implements Parameterizable, Runnable,
       auction.run();
       double meanTransPrice = marketDataLogger.getTransPriceStats().getMean();
       logger.debug("Auction terminated at round " + auction.getAge());
-      logger.debug(marketDataLogger.getTransPriceStats());
+      marketDataLogger.finalReport();
       auction.reset();
 
       logger.info("Sample " + sample + " done.");

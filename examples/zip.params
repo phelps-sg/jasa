@@ -1,6 +1,6 @@
 
 simulation.days=10
-simulation.console = true
+simulation.console = false
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.logger = uk.ac.liv.auction.stats.GraphMarketDataLogger
 simulation.auction.maximumrounds = 100

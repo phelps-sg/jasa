@@ -142,40 +142,46 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
   protected void sellerStrategy( Shout lastShout ) {
     logger.debug("sellerStrategy(" + lastShout + ")");
+    if ( lastShout == null ) {
+      return;
+    }
     double lastPrice = lastShout.getPrice();
-//    if ( lastShout.accepted() ) {
-//      if ( agent.active() && currentPrice <= lastPrice ) {
-//        raiseMargin(lastPrice);
-//      } else if ( lastShout.isBid() ) {
-//        if ( currentPrice >= lastPrice ) {
-//          lowerMargin(lastPrice);
-//        }
-//      }
-//    } else {
-//      if ( lastShout.isAsk() ) {
-//        if ( currentPrice >= lastPrice ) {
-//          lowerMargin(lastPrice);
-//        }
-//      }
-//    }
+    if ( auction.shoutAccepted(lastShout) ) {
+      if ( agent.active() && currentPrice <= lastPrice ) {
+        raiseMargin(lastPrice);
+      } else if ( lastShout.isBid() ) {
+        if ( currentPrice >= lastPrice ) {
+          lowerMargin(lastPrice);
+        }
+      }
+    } else {
+      if ( lastShout.isAsk() ) {
+        if ( currentPrice >= lastPrice ) {
+          lowerMargin(lastPrice);
+        }
+      }
+    }
   }
 
   protected void buyerStrategy( Shout lastShout ) {
     logger.debug("buyerStrategy(" + lastShout + ")");
+    if ( lastShout == null ) {
+      return;
+    }
     double lastPrice = lastShout.getPrice();
-//    if ( lastShout.accepted() ) {
-//      if ( agent.active() && currentPrice >= lastPrice ) {
-//        raiseMargin(lastPrice);
-//      } else if ( lastShout.isAsk() ) {
-//        if ( currentPrice <= lastPrice ) {
-//          lowerMargin(lastPrice);
-//        }
-//      }
-//    } else if ( lastShout.isBid() ) {
-//      if ( currentPrice <= lastPrice ) {
-//        lowerMargin(lastPrice);
-//      }
-//    }
+    if ( auction.shoutAccepted(lastShout) ) {
+      if ( agent.active() && currentPrice >= lastPrice ) {
+        raiseMargin(lastPrice);
+      } else if ( lastShout.isAsk() ) {
+        if ( currentPrice <= lastPrice ) {
+          lowerMargin(lastPrice);
+        }
+      }
+    } else if ( lastShout.isBid() ) {
+      if ( currentPrice <= lastPrice ) {
+        lowerMargin(lastPrice);
+      }
+    }
   }
 
   protected double targetMargin( double price, double absolute, double relative ) {

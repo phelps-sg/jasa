@@ -68,6 +68,11 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
     throw new java.lang.UnsupportedOperationException("Method close() not yet implemented.");
   }
 
+  public boolean shoutAccepted( Shout shout ) {
+    /**@todo Implement shoutAccepted()*/
+    throw new java.lang.UnsupportedOperationException("Method shoutAccepted() not yet implemented.");
+  }
+
 
   public void removeShout( Shout shout ) {
     try {

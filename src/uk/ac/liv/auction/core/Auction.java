@@ -74,4 +74,6 @@ public interface Auction extends QuoteProvider {
    */
   public int getNumberOfTraders();
 
+  public boolean shoutAccepted( Shout shout );
+
 }
