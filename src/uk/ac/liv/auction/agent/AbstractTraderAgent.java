@@ -139,7 +139,15 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
    */
   protected double profits = 0;
 
+  /**
+   * If true then on initialisation this agent's private value
+   * is drawn from a uniform distribution in the range (0, maxPrivateValue).
+   */
   protected boolean randomPrivateValue;
+
+  /**
+   * The maximum valuation to use for our private value if drawing randomly.
+   */
   protected double maxPrivateValue;
 
   protected boolean lastShoutAccepted = false;

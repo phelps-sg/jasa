@@ -130,7 +130,6 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public void purchaseFrom( AbstractTraderAgent seller, int quantity, double price ) {
-    logger.debug("purchaseFrom(" + seller + ", " + quantity + ", " + price + ")");
     tradeEntitlement--;
     quantityTraded += quantity;
     super.purchaseFrom(seller, quantity, price);
@@ -138,7 +137,6 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public int deliver( int quantity, double price ) {
-    logger.debug("deliver(" + quantity + ", " + price +")");
     lastShoutSuccessful = true;
     tradeEntitlement--;
     quantityTraded += quantity;
