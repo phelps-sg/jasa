@@ -340,7 +340,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   public void ensureEquilibriaExists() {
     EquilibriaStats stats = new EquilibriaStats(auction);
     stats.calculate();
-    while ( ! (stats.equilibriaExists() && stats.getQuantity() >= (numAgents / 2)) ) {
+    while ( ! (stats.equilibriaExists() && stats.getQuantity() >= ((numAgents) / 2)-2) ) {
       resetValuations();
       stats.reset();
       stats.calculate();
