@@ -28,6 +28,8 @@ import ec.util.ParameterDatabase;
 
 import java.util.*;
 
+import java.io.Serializable;
+
 /**
  * A class representing a mixed strategy.
  * A mixed strategy is a strategy in which we play a number of pure strategies
@@ -56,7 +58,8 @@ import java.util.*;
 
 public class MixedStrategy extends AbstractStrategy implements Parameterizable,
                                                                 Resetable,
-                                                                Seedable {
+                                                                Seedable,
+                                                                Serializable {
 
   /**
    *  The probabilities for playing each strategy

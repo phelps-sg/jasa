@@ -24,7 +24,12 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import java.io.Serializable;
+
 /**
+ * An auctioneer for a k-double-auction with continuous clearing.
+ * The clearing operation is performed every time a shout arrives.
+ *
  * @author Steve Phelps
  */
 

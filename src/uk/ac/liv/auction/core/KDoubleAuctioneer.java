@@ -24,11 +24,16 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import java.io.Serializable;
+
 /**
+ * An auctioneer for a k-double-auction.
+ * The clearing operation is performed at the end of every round.
+ *
  * @author Steve Phelps
  */
 
-public class KDoubleAuctioneer extends KAuctioneer {
+public class KDoubleAuctioneer extends KAuctioneer implements Serializable {
 
   public KDoubleAuctioneer() {
     this(null, 0);

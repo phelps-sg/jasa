@@ -24,6 +24,8 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 import ec.util.MersenneTwisterFast;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * A trading strategy that in which we bid a different random markup on our
@@ -44,7 +46,7 @@ import ec.util.MersenneTwisterFast;
  */
 
 public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
-                                        implements Seedable {
+                                        implements Seedable, Serializable {
 
   protected double maxMarkup = 50;
 
@@ -87,13 +89,13 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     super.setup(parameters, base);
     maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null, 100);
   }
-  
+
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
-  
+
   public String toString() {
-    return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:" + 
+    return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:" +
               quantity + ")";
   }
 

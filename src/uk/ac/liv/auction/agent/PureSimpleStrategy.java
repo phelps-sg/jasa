@@ -23,6 +23,8 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * A trading strategy in which we bid a constant mark-up on the agent's
@@ -42,7 +44,8 @@ import ec.util.ParameterDatabase;
  * @author Steve Phelps
  */
 
-public class PureSimpleStrategy extends FixedQuantityStrategyImpl {
+public class PureSimpleStrategy extends FixedQuantityStrategyImpl
+                                    implements Serializable {
 
   double delta;
 

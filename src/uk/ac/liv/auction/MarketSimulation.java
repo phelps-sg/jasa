@@ -96,7 +96,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
   public static final String P_SEED = "seed";
 
 
-  public static final String VERSION = "0.20";
+  public static final String VERSION = "0.21";
 
   public static final String GNU_MESSAGE =
     "JASA v" + VERSION + " - (C) 2001-2003 Steve Phelps\n" +

@@ -28,6 +28,8 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * A trading strategy that uses an MDP learning algorithm,
@@ -38,7 +40,7 @@ import ec.util.Parameter;
  * </p>
  */
 
-public class MDPStrategy extends AdaptiveStrategy {
+public class MDPStrategy extends AdaptiveStrategy implements Serializable {
 
   /**
    * The learning algorithm to use.

@@ -26,6 +26,8 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * A trading strategy that uses a stimuli-response learning algorithm,
@@ -46,7 +48,8 @@ import ec.util.Parameter;
  * @author Steve Phelps
  */
 
-public class StimuliResponseStrategy extends AdaptiveStrategy {
+public class StimuliResponseStrategy extends AdaptiveStrategy
+                                       implements Serializable {
 
   /**
    * The learning algorithm to use.

@@ -16,21 +16,31 @@
 
 package uk.ac.liv.util;
 
-
 /**
+ * Miscalleneous mathematical functions.
+ *
  * @author Steve Phelps
  */
 
 public class MathUtil {
 
+  /**
+   * Calculate the square of x.
+   */
   public static double squared( double x ) {
     return x*x;
   }
 
+  /**
+   * Calculate the difference of the squares of x and y.
+   */
   public static double diffSq( double x, double y ) {
     return squared(x) - squared(y);
   }
 
+  /**
+   * Returns true if the difference between x and y is less than error.
+   */
   public static boolean approxEqual( double x, double y, double error ) {
     return Math.abs(x-y) <= error;
   }

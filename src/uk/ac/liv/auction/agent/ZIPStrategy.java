@@ -27,12 +27,26 @@ import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import java.io.Serializable;
+
 /**
+ * <p>
+ * An implementation of the Zero-Intelligence-Plus (ZIP) strategy.
+ * See:
+ * </p>
+ *
+ * <p>
+ * "Minimal Intelligence Agents for Bargaining Behaviours in
+ * Market-based Environments" Dave Cliff 1997.
+ * </p>
+ *
+ * Note that this class is currently untested.
+ *
  * @author Steve Phelps
  */
 
 public class ZIPStrategy extends FixedQuantityStrategyImpl
-    implements Seedable, Parameterizable {
+    implements Seedable, Serializable, Parameterizable {
 
   protected double currentMargin;
 

@@ -54,6 +54,7 @@ public class AllTests {
 
     suite.addTest(test.uk.ac.liv.ai.learning.RothErevLearnerTest.suite());
     suite.addTest(test.uk.ac.liv.ai.learning.QLearnerTest.suite());
+    suite.addTest(test.uk.ac.liv.ai.learning.WidrowHoffLearnerTest.suite());
 
     return suite;
   }

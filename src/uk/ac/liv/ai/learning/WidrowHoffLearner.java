@@ -22,18 +22,36 @@ import uk.ac.liv.util.Resetable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import java.io.Serializable;
+
 /**
+ * An implementation of the Widrow-Hoff learning algorithm with momentum
+ * for 1-dimensional training sets.
+ *
  * @author Steve Phelps
  */
 
-public class WidrowHoffLearner implements MimicryLearner, Resetable {
+public class WidrowHoffLearner implements MimicryLearner,
+                                             Resetable, Serializable {
 
+  /**
+   * The learning rate.
+   */
   protected double learningRate;
 
+  /**
+   * The current output level.
+   */
   protected double currentOutput;
 
+  /**
+   * The current amount of adjustment to the output.
+   */
   protected double delta;
 
+  /**
+   * The momentum of the learner.
+   */
   protected double momentum;
 
   public static final double DEFAULT_LEARNING_RATE = 0.1;

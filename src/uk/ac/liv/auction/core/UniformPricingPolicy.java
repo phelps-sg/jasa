@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
+
 /**
  * A pricing policy in which we set the transaction price in the
  * interval between the ask quote and the bid quote as determined by
@@ -23,7 +25,8 @@ package uk.ac.liv.auction.core;
  * @author Steve Phelps
  */
 
-public class UniformPricingPolicy extends KPricingPolicy {
+public class UniformPricingPolicy extends KPricingPolicy
+                                   implements Serializable {
 
   public UniformPricingPolicy() {
     this(0);

@@ -15,11 +15,18 @@
 
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
+
 /**
+ * A pricing policy in which we set the transaction price in the
+ * interval between the ask price and the bid price as determined by the
+ * parameter k.
+ *
  * @author Steve Phelps
  */
 
-public class DiscriminatoryPricingPolicy extends KPricingPolicy {
+public class DiscriminatoryPricingPolicy extends KPricingPolicy
+                                          implements Serializable {
 
   public DiscriminatoryPricingPolicy() {
     this(0);

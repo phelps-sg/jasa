@@ -10,7 +10,7 @@
 auction = uk.ac.liv.auction.agent.jade.JADEAuction
 auction.maximumrounds = 50
 auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
-auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 auction.auctioneer.pricing.k = 0.5
 
@@ -19,10 +19,6 @@ auction.maximumrounds = 10
 
 # GUI console
 auction.console = true
-
-# Auctioneer
-auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
-auction.auctioneer.k = 0.5
 
 # The logger to use
 auction.auctioneer.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger

@@ -20,6 +20,7 @@ import uk.ac.liv.auction.core.*;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
+import java.io.Serializable;
 
 /**
  * <p>
@@ -45,7 +46,7 @@ import ec.util.Parameter;
  * @author Steve Phelps
  */
 
-public class ZITraderAgent extends AbstractTraderAgent {
+public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
 
   /**
    * The number of units this agent is entitlted to trade in this trading period.

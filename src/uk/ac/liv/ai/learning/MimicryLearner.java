@@ -16,11 +16,17 @@
 package uk.ac.liv.ai.learning;
 
 /**
+ * A learner that attempts to adjust its output to match a training
+ * signal.
+ *
  * @author Steve Phelps
  */
 
 public interface MimicryLearner extends ContinuousLearner {
 
+  /**
+   * Provide a training signal to the learning algorithm.
+   */
   public void train( double target );
 
 }
