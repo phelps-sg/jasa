@@ -138,21 +138,15 @@ public class CompressedPayoffMatrix {
     return payoffs;
   }
   
-  public double[] evolveMixedStrategy( double[] population ) {    
-    double[] population1 = new double[population.length];
+  public void evolveMixedStrategy( double[] population ) {        
     double[] payoffs = mixedStrategyPayoffs(population);
-    double totalPayoff = 0;
+    double averagePayoff = 0;
     for( int i=0; i<numStrategies; i++ ) {
-      totalPayoff += payoffs[i] * population[i];
-    }
-    double averagePayoff = totalPayoff; // / numStrategies;    
-    double totalDifference = 0;
+      averagePayoff += payoffs[i] * population[i];
+    }       
     for( int s=0; s<numStrategies; s++ ) {      
-      double difference = payoffs[s] - averagePayoff;      
-      totalDifference += difference;
-      population1[s] = population[s] + 0.001 * population[s] * (difference);
-    }    
-    return population1;
+      population[s] += population[s] * (payoffs[s] - averagePayoff);
+    }        
   }
   
   public double size( double[] population ) {
@@ -166,22 +160,17 @@ public class CompressedPayoffMatrix {
   public void plotRDflow( DataWriter out, double[] initialPopulation, 
                             double error, int maxIterations ) {
     double[] population = initialPopulation;
-    double diff = 0;
+    double diff;
     int iteration = 0;
+    double oldPopSize;
     do {
-      for( int i=0; i<population.length; i++ ) {
-        out.newData(population[i]);
-      }
-      double[] population1 = evolveMixedStrategy(population);      
-      diff = 0;
-      for( int i=0; i<population.length; i++ ) {
-        diff += Math.abs(population1[i]*population1[i] - population[i]*population[i]);        
-      }            
-      population = population1;
+      oldPopSize = size(population);      
+      evolveMixedStrategy(population);                 
+      diff = size(population)- oldPopSize; 
       iteration++;      
     } while (  diff > error && iteration < maxIterations );
   }
-  
+    
   
   public void importFromCSV( CSVReader in ) throws IOException {
     List record;
