@@ -15,8 +15,15 @@
 
 package uk.ac.liv.auction.core;
 
+import JSci.swing.JLineGraph;
+import JSci.awt.Graph2DModel;
+import JSci.awt.DefaultGraph2DModel;
+
+import uk.ac.liv.auction.stats.GraphMarketDataLogger;
+
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 
 import java.text.DecimalFormat;
 
@@ -24,12 +31,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import org.apache.log4j.Logger;
+
+
 /**
  * A frame for monitoring and controlling the progress of an auction.
  *
  * @author Steve Phelps
  */
-public class AuctionConsoleFrame extends JFrame implements Observer {
+public class AuctionConsoleFrame extends JFrame
+    implements Observer {
 
   protected Auction auction;
 
@@ -40,10 +51,19 @@ public class AuctionConsoleFrame extends JFrame implements Observer {
   protected JLabel numTradersLabel;
   protected JButton closeAuctionButton;
 
-  protected DecimalFormat currencyFormatter = new DecimalFormat("+000000.00;-000000.00");
-  protected DecimalFormat decimalFormatter = new DecimalFormat(" #########;-#########");
+  protected DecimalFormat currencyFormatter =
+      new DecimalFormat("+000000.00;-000000.00");
+
+  protected DecimalFormat decimalFormatter =
+      new DecimalFormat(" #########;-#########");
 
   protected GridBagLayout gridBag;
+
+  protected int currentRound = 0;
+
+  protected GraphMarketDataLogger graphModel;
+
+  static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);
 
   public AuctionConsoleFrame( Auction auction, String name ) {
 
@@ -154,6 +174,14 @@ public class AuctionConsoleFrame extends JFrame implements Observer {
         }
     });
 
+    if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
+      JLineGraph graph = new JLineGraph(graphModel);
+      c.gridx = 1;
+      c.gridy = 5;
+      gridBag.setConstraints(graph, c);
+      contentPane.add(graph);
+    }
+
     setAuctionName(name);
   }
 
@@ -193,6 +221,10 @@ public class AuctionConsoleFrame extends JFrame implements Observer {
     }
     roundLabel.setText(decimalFormatter.format(auction.getAge()));
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
+    if ( graphModel != null ) {
+      logger.debug("Notifying model of data change..");
+      graphModel.fireDataChanged();
+    }
   }
 
   /**
@@ -209,5 +241,6 @@ public class AuctionConsoleFrame extends JFrame implements Observer {
   public void deactivate() {
     setVisible(false);
   }
+
 
 }

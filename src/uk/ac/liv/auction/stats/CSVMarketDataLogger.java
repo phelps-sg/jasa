@@ -49,41 +49,28 @@ import java.io.*;
  * @author Steve Phelps
  */
 
-public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
+public class CSVMarketDataLogger extends DataWriterMarketDataLogger
+    implements Parameterizable {
 
-  /**
-   * The number of columns in each CSV file.
-   */
-  static final int CSV_QUOTE_COLS       = 3;
-  static final int CSV_SHOUT_COLS       = 4;
-  static final int CSV_TRANSPRICE_COLS  = 5;
-
-  /**
-   * CSV output for market quotes as time series.
-   */
-  DataWriter csvQuoteLog = null;
-
-  /**
-   * CSV output for shout data as time series.
-   */
-  DataWriter csvShoutLog = null;
-
-  /*
-   * CSV output for transaction price time series.
-   */
-  DataWriter csvTransPriceLog = null;
-
-  static final String P_QUOTE_LOG_FILE = "quotelogfile";
+  static final String P_ASK_QUOTE_LOG_FILE = "askquotelogfile";
+  static final String P_BID_QUOTE_LOG_FILE = "bidquotelogfile";
   static final String P_SHOUT_LOG_FILE = "shoutlogfile";
   static final String P_TRANS_LOG_FILE = "translogfile";
 
+  static final int CSV_COLS = 1;
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    String quoteLogFile = parameters.getString(base.push(P_QUOTE_LOG_FILE), null);
-    String shoutLogFile = parameters.getString(base.push(P_SHOUT_LOG_FILE), null);
-    String transLogFile = parameters.getString(base.push(P_TRANS_LOG_FILE), null);
+    String askQuoteLogFile =
+        parameters.getString(base.push(P_ASK_QUOTE_LOG_FILE), null);
+    String bidQuoteLogFile =
+        parameters.getString(base.push(P_BID_QUOTE_LOG_FILE), null);
+    String shoutLogFile =
+        parameters.getString(base.push(P_SHOUT_LOG_FILE), null);
+    String transLogFile =
+        parameters.getString(base.push(P_TRANS_LOG_FILE), null);
     try {
-      setCSVQuoteLog( new FileOutputStream(new File(quoteLogFile)) );
+      setCSVAskQuoteLog( new FileOutputStream(new File(askQuoteLogFile)) );
+      setCSVBidQuoteLog( new FileOutputStream(new File(bidQuoteLogFile)) );
       setCSVShoutLog( new FileOutputStream(new File(shoutLogFile)) );
       setCSVTransPriceLog( new FileOutputStream(new File(transLogFile)) );
     } catch ( java.io.IOException e ) {
@@ -96,8 +83,16 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
    * Assign an output stream for logging market quote data
    * in comma-separated variable (CSV) format.
    */
-  public void setCSVQuoteLog( OutputStream stream ) {
-    csvQuoteLog = new CSVWriter(stream, CSV_QUOTE_COLS);
+  public void setCSVAskQuoteLog( OutputStream stream ) {
+    askQuoteLog = new CSVWriter(stream, CSV_COLS);
+  }
+
+  /**
+   * Assign an output stream for logging market quote data
+   * in comma-separated variable (CSV) format.
+   */
+  public void setCSVBidQuoteLog( OutputStream stream ) {
+    bidQuoteLog = new CSVWriter(stream, CSV_COLS);
   }
 
   /**
@@ -107,7 +102,7 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
    * of an auction.
    */
   public void setCSVShoutLog( OutputStream stream ) {
-    csvShoutLog = new CSVWriter(stream, CSV_SHOUT_COLS);
+    shoutLog = new CSVWriter(stream, CSV_COLS);
   }
 
   /**
@@ -115,44 +110,9 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
    * in CSV format.
    */
   public void setCSVTransPriceLog( OutputStream stream ) {
-    csvTransPriceLog = new CSVWriter(stream, CSV_TRANSPRICE_COLS);
+    transPriceLog = new CSVWriter(stream, CSV_COLS);
   }
 
-
-  public void updateQuoteLog( int time, MarketQuote quote ) {
-    if ( csvQuoteLog != null ) {
-      csvQuoteLog.newData(time);
-      csvQuoteLog.newData(quote.getAsk());
-      csvQuoteLog.newData(quote.getBid());
-    }
-  }
-
-  public void updateTransPriceLog( int time, Shout shout, double price,
-                                    int quantity ) {
-    if ( csvTransPriceLog != null ) {
-      csvTransPriceLog.newData(time);
-      csvTransPriceLog.newData(shout.getAgent().getId());
-      csvTransPriceLog.newData(shout.getPrice());
-      csvTransPriceLog.newData(price);
-      csvTransPriceLog.newData(quantity);
-    }
-  }
-
-  public void updateShoutLog( int time, Shout shout ) {
-    if ( csvShoutLog != null ) {
-      csvShoutLog.newData(time);
-      csvShoutLog.newData(shout.getAgent().getId());
-      csvShoutLog.newData(shout.getPrice());
-      csvShoutLog.newData(shout.isBid());
-    }
-  }
-
-  public void reset() {
-    //TODO: what?
-  }
-
-  public void finalReport() {
-  }
 
 
 }

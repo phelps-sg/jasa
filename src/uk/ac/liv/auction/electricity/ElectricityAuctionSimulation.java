@@ -38,7 +38,7 @@ import org.apache.log4j.Logger;
  * <p>
  * An implementation of the fitness-landscape experiment described in the
  * University of Liverpool Computer Science Department technical report
- * number ULCS-02-031.  This work is based largely on the work
+ * number ULCS-02-031.  This work is based on the work
  * of Nicolaisen, Petrov, and Tesfatsion described in:
  * </p>
  * <br>

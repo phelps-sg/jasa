@@ -6,7 +6,10 @@ simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPri
 simulation.auction.auctioneer.pricing.k = 0.5
 
 # Get cummulative stats
-simulation.auction.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
+simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
+simulation.auction.logger.n = 2
+simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 
 # Show GUI console
 simulation.console = true
@@ -47,7 +50,7 @@ simulation.agenttype.1.strategy.learner.learningrate = 0.5
 simulation.agenttype.1.isseller = false
 
 # log4j configuration
-log4j.rootCategory=INFO, stdout
+log4j.rootCategory=DEBUG, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m%n

@@ -1,0 +1,138 @@
+/*
+ * JASA Java Auction Simulator API
+ * Copyright (C) 2001-2003 Steve Phelps
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ */
+
+package uk.ac.liv.auction.stats;
+
+import JSci.awt.AbstractGraphModel;
+import JSci.awt.Graph2DModel;
+import JSci.awt.GraphDataEvent;
+import JSci.awt.GraphDataListener;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
+import uk.ac.liv.util.Parameterizable;
+
+import uk.ac.liv.util.io.DataWriter;
+import uk.ac.liv.util.io.MemoryResidentDataSeries;
+
+import java.util.Vector;
+
+import org.apache.log4j.Logger;
+
+/**
+ * @author Steve Phelps
+ */
+
+public class GraphMarketDataLogger extends DataWriterMarketDataLogger
+    implements Graph2DModel, Parameterizable {
+
+  protected int currentSeries;
+
+  protected DataWriter[] allSeries;
+
+  protected static GraphMarketDataLogger singletonInstance;
+
+  private final Vector listenerList = new Vector();
+  private final GraphDataEvent event = new GraphDataEvent(this);
+
+  static Logger logger = Logger.getLogger(GraphMarketDataLogger.class);
+
+  public GraphMarketDataLogger() {
+    super();
+    askQuoteLog = new MemoryResidentDataSeries();
+    bidQuoteLog = new MemoryResidentDataSeries();
+    shoutLog = new MemoryResidentDataSeries();
+    transPriceLog = new MemoryResidentDataSeries();
+    allSeries = new DataWriter[] { askQuoteLog, bidQuoteLog, shoutLog, transPriceLog };
+    currentSeries = 0;
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    singletonInstance = this;
+  }
+
+  public float getXCoord( int i ) {
+    return (float) (i+1);
+  }
+
+  public MemoryResidentDataSeries getCurrentSeries() {
+    logger.debug("getCurrentSeries()");
+    logger.debug("currentSeries = " + currentSeries);
+    logger.debug("allSeries[currentSeries] = " + allSeries[currentSeries]);
+    return (MemoryResidentDataSeries) allSeries[currentSeries];
+  }
+
+  public float getYCoord( int i ) {
+    logger.debug("Getting y coordinate for " + i);
+    if ( i < getCurrentSeries().size() ) {
+      return (float) getCurrentSeries().getDatum(i);
+    } else {
+      return 0f;
+    }
+  }
+
+  public int seriesLength() {
+    int size = getCurrentSeries().size();
+    if ( size < 2 ) {
+      size = 2;
+    }
+    logger.debug("Size of current series = " + size);
+    return size;
+  }
+
+  public void firstSeries() {
+    logger.debug("firstSeries()");
+    currentSeries = 0;
+  }
+
+  public boolean nextSeries() {
+    logger.debug("nextSeries()");
+    if ( currentSeries == allSeries.length-1 ) {
+      logger.debug("No more serieses..");
+      return false;
+    } else {
+      currentSeries++;
+      return true;
+    }
+  }
+
+  public void dataUpdated() {
+    logger.debug("dataUpdated()");
+//    fireDataChanged();
+  }
+
+  public void fireDataChanged() {
+    logger.debug("fireDataChanged()");
+    for ( int i = 0; i < listenerList.size(); i++ ) {
+      logger.debug("Notifying listener " + listenerList.elementAt(i) + ".. ");
+      ( (GraphDataListener) listenerList.elementAt(i)).dataChanged(event);
+      logger.debug("Notification done.");
+    }
+  }
+
+  public final void addGraphDataListener( GraphDataListener l ) {
+    listenerList.addElement(l);
+  }
+
+  public final void removeGraphDataListener( GraphDataListener l ) {
+    listenerList.removeElement(l);
+  }
+
+  public static GraphMarketDataLogger getSingletonInstance() {
+    return singletonInstance;
+  }
+
+}
