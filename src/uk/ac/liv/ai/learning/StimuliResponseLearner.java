@@ -22,7 +22,7 @@ package uk.ac.liv.ai.learning;
  * @author Steve Phelps
  */
 
-public interface StimuliResponseLearner extends Learner {
+public interface StimuliResponseLearner extends DiscreteLearner {
 
   /**
    * Reward the learning algorithm according to the last action

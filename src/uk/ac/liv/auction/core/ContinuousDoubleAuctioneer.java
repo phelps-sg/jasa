@@ -120,4 +120,9 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer
   public void endOfAuctionProcessing() {
     // do nothing
   }
+
+  public boolean shoutsVisible() {
+    return true;
+  }
+
 }

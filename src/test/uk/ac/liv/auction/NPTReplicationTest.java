@@ -29,6 +29,8 @@ import ec.util.MersenneTwisterFast;
 
 import java.util.*;
 
+import org.apache.log4j.BasicConfigurator;
+
 /**
  *
  * Attempt an approximate replication of some of the experiments
@@ -85,9 +87,9 @@ public class NPTReplicationTest extends ElectricityTest {
 
   public void runExperiment() {
     super.runExperiment();
-    checkRothErevProbabilities();    
+    checkRothErevProbabilities();
   }
-  
+
   public void checkRothErevProbabilities() {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {

@@ -20,6 +20,8 @@ import huyd.poolit.*;
 
 import uk.ac.liv.auction.agent.TraderAgent;
 
+import uk.ac.liv.util.Debug;
+
 /**
  * @author Steve Phelps
  */
@@ -35,7 +37,7 @@ public class ShoutPool {
   public static Shout fetch() {
     try {
       initialisePool();
-      return (Shout) pooler.fetch();
+      return fetchShoutWithNewId();
     } catch ( FetchException e ) {
       e.printStackTrace();
       return new Shout();
@@ -49,6 +51,14 @@ public class ShoutPool {
     s.setAgent(agent);
     s.setPrice(price);
     s.setQuantity(quantity);
+    return s;
+  }
+
+  protected static Shout fetchShoutWithNewId() throws FetchException {
+    Shout s = (Shout) pooler.fetch();
+    long oldId = s.getId();
+    s.id = s.idAllocator.nextId();
+    Debug.assertTrue(s.id != oldId);
     return s;
   }
 

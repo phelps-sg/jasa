@@ -198,7 +198,7 @@ public class GACoEvolveElectricityProblem extends Problem implements CoEvolution
             partner = (ElectricityTrader) sellers.get(agent);
           }
           if ( partner != null ) {
-            trader.transferFunds(sidePayment, partner);
+            trader.giveFunds(partner, sidePayment);
           }
         }
       }

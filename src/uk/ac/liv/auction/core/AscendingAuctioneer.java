@@ -150,4 +150,8 @@ public class AscendingAuctioneer extends AbstractAuctioneer
     super.newShout(shout);
   }
 
+  public boolean shoutsVisible() {
+    return true;
+  }
+
 }

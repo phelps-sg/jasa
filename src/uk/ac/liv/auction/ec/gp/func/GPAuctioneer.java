@@ -195,5 +195,6 @@ public class GPAuctioneer extends GPIndividualCtx
   public StatsMarketDataLogger getLogStats() { return logger; }
   public LinkedList getStrategies() { return strategies; }
   public Auction getAuction() { return auction; }
+  public boolean shoutsVisible() { return true; }
 
 }

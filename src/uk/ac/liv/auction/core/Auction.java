@@ -48,10 +48,10 @@ public interface Auction extends QuoteProvider {
    */
   public void removeShout( Shout shout );
 
-  /**
-   * Get the last shout to date placed in the auction.
-   * @return  A Shout object representing the last shout in the auction.
-   */
+ /**
+  * Return the last shout placed in the auction, or null
+  * if the auction rules do not permit access to this information.
+  */
   public Shout getLastShout();
 
   /**
@@ -74,4 +74,5 @@ public interface Auction extends QuoteProvider {
    * Get the number of traders known to be trading in the auction.
    */
   public int getNumberOfTraders();
+
 }

@@ -27,43 +27,44 @@ import ec.util.Parameter;
  * @author Steve Phelps
  */
 
-public class DumbLearner implements Learner, uk.ac.liv.util.Parameterizable {
-  
+public class DumbLearner implements DiscreteLearner,
+                                    uk.ac.liv.util.Parameterizable {
+
   protected int action;
-  
+
   static final String P_ACTION = "action";
-  
+
   public DumbLearner() {
   }
-  
-  public void setup( ParameterDatabase parameters, Parameter base) {    
+
+  public void setup( ParameterDatabase parameters, Parameter base) {
     action = parameters.getInt(base.push(P_ACTION), null, 0);
   }
-  
+
   public void setAction( int action ) {
     this.action = action;
   }
-  
+
   public int getAction() {
     return action;
   }
-  
-  
+
+
   public int act() {
     return action;
   }
-  
+
   public double getLearningDelta() {
     return 0.0;
   }
-  
+
   public void dumpState( DataWriter out ) {
     //TODO
   }
-  
+
   public int getNumberOfActions() {
     return 1;
   }
-  
-  
+
+
 }

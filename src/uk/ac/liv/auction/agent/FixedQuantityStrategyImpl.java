@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.core.Auction;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
@@ -53,6 +55,10 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
 
   public void setQuantity( int quantity ) {
     this.quantity = quantity;
+  }
+
+  public int determineQuantity( Auction auction ) {
+    return quantity;
   }
 
 }

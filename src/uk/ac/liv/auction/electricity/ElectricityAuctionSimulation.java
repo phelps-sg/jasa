@@ -87,7 +87,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected String paramSummary;
 
   protected boolean collectIterData = false;
-  
+
   protected boolean collectStrategyData = false;
 
   protected StandardRandomizer randomizer;
@@ -114,7 +114,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       new CummulativeStatCounter("EquilibQty");
   protected CummulativeStatCounter learningDelta =
       new CummulativeStatCounter("LD");
-  
+
   protected CummulativeStatCounter[] variables = new CummulativeStatCounter[] {
     efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
     sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, learningDelta
@@ -282,7 +282,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   public void experiment() throws IOException {
 
     summariseParameters();
-    
+
     int numTraders = numBuyers + numSellers;
 
     paramSummary = numSellers + "-" + numBuyers + "-" +
@@ -339,7 +339,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
 
     resetVariables();
-    
+
     String strategyDataFile = null;
     if ( collectStrategyData ) {
       strategyDataFile = outputDir + "/strategy-" + paramSummary + "-k" + auctioneerK;
@@ -349,14 +349,14 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       randomizer.randomizePrivateValues(randomizedPrivateValues, i);
       randomizer.setStrategyPRNGseeds(prngSeeds, i);
-      
+
       if ( collectStrategyData ) {
         initStrategyData(strategyDataFile + "-" + i);
       }
 
       auction.reset();
       auction.run();
-      
+
       calculateStatistics();
       dumpIterResults();
       dumpStrategyData();
@@ -389,10 +389,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       auction.register(trader);
     }
   }
-  
-  
+
+
   protected void calculateStatistics() {
-    
+
     stats.calculate();
     stats.calculateStrategicMarketPower();
 
@@ -418,7 +418,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     double eq = (equilibria.getMinQuantity() + equilibria.getMaxQuantity()) / 2;
     equilibPrice.newData(ep);
     equilibQty.newData(eq);
-    
+
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ElectricityTrader t = (ElectricityTrader) i.next();
@@ -430,7 +430,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     }
   }
 
-  
+
   protected void summariseParameters() {
     logger.info("\nUsing global parameters:\n");
     logger.info("maxRounds = " + maxRounds);
@@ -463,7 +463,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       variables[i].reset();
     }
   }
-  
+
   protected void writeDataFileHeadings() throws IOException {
     CSVWriter headings = new CSVWriter(
             new FileOutputStream(outputDir + "/" + "headings-"
@@ -503,8 +503,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       iterResults.newData(stats.calculateEquilibriumPrice());
     }
   }
-  
-  
+
+
   protected void dumpStrategyData() {
     if ( collectStrategyData ) {
       Iterator i = auction.getTraderIterator();
@@ -513,7 +513,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         Strategy s = t.getStrategy();
         if ( s instanceof AdaptiveStrategy ) {
           Learner l = ((AdaptiveStrategy) s).getLearner();
-          l.dumpState(strategyData);          
+          l.dumpState(strategyData);
         }
       }
     }
@@ -526,13 +526,13 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       iterResults = new CSVWriter(iterOut, ITERRESULTS_NUM_COLUMNS);
     }
   }
-  
-  protected void initStrategyData( String filename ) throws FileNotFoundException {    
+
+  protected void initStrategyData( String filename ) throws FileNotFoundException {
     AdaptiveStrategy s = (AdaptiveStrategy) buyerStrategies[0];
-    Learner l = (Learner) s.getLearner();
+    DiscreteLearner l = (DiscreteLearner) s.getLearner();
     int numColumns = l.getNumberOfActions();
     FileOutputStream strategyDataOut = new FileOutputStream(filename);
-    strategyData = new CSVWriter(strategyDataOut, numColumns);   
+    strategyData = new CSVWriter(strategyDataOut, numColumns);
   }
 
 

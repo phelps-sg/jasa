@@ -41,7 +41,7 @@ import java.io.Serializable;
  * An adaptive trader, trading in a simulated Elecitricty market.  See:
  * </p>
  * <p>
- * "Markert Power and Efficiency in a Computational Electricity Market
+ * "Market Power and Efficiency in a Computational Electricity Market
  * with Discriminatory Double-Auction Pricing"
  * Nicolaisen, J.; Petrov, V.; and Tesfatsion, L.
  * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
@@ -68,13 +68,6 @@ public class ElectricityTrader extends AbstractTraderAgent {
    * The fixed costs for this trader.
    */
   protected double fixedCosts;
-
-  /**
-   * The total profits of this trader to date.
-   */
-  protected double profits;
-
-  protected double lastProfit;
 
   static final String P_CAPACITY = "capacity";
   static final String P_FIXED_COSTS = "fixedcosts";
@@ -107,8 +100,6 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
   public void initialise() {
     super.initialise();
-    profits = 0;
-    lastProfit = 0;
     if ( strategy instanceof FixedQuantityStrategy ) {
       ((FixedQuantityStrategy) strategy).setQuantity(capacity);
     }
@@ -117,11 +108,6 @@ public class ElectricityTrader extends AbstractTraderAgent {
   public void requestShout( Auction auction ) {
     super.requestShout(auction);
     lastProfit = 0;
-  }
-
-  public void transferFunds( double amount, ElectricityTrader other ) {
-    this.profits -= amount;
-    other.profits += amount;
   }
 
   public void informOfBuyer( double price, int quantity ) {
@@ -147,7 +133,6 @@ public class ElectricityTrader extends AbstractTraderAgent {
       return;
     }
 
-
     ElectricityTrader trader = (ElectricityTrader) seller;
     if ( trader.acceptDeal(price, quantity) ) {
       profits += lastProfit;
@@ -160,20 +145,12 @@ public class ElectricityTrader extends AbstractTraderAgent {
     return price >= privateValue;
   }
 
-  public double getProfits() {
-    return profits;
-  }
-
   public int getCapacity() {
     return capacity;
   }
 
   public double getLastProfit() {
     return lastProfit;
-  }
-
-  public int determineQuantity( Auction auction ) {
-    return capacity;
   }
 
   public String toString() {

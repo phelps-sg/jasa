@@ -21,41 +21,41 @@ import ec.util.MersenneTwisterFast;
 import uk.ac.liv.util.io.DataWriter;
 
 /**
- * A learner that simply plays a random action on each iteration 
+ * A learner that simply plays a random action on each iteration
  * without any learning.  This is useful for control experiments.
  *
  * @author Steve Phelps
  */
 
-public class DumbRandomLearner implements StochasticLearner {
-  
+public class DumbRandomLearner implements DiscreteLearner, StochasticLearner {
+
   protected MersenneTwisterFast prng;
-  
+
   protected int numActions;
-  
+
   public DumbRandomLearner( int numActions ) {
     prng = new MersenneTwisterFast();
     this.numActions = numActions;
   }
-  
+
   public void setSeed( long seed ) {
     prng.setSeed(seed);
   }
-  
+
   public int act() {
     return prng.nextInt(numActions);
   }
-  
+
   public double getLearningDelta() {
     return 0.0;
   }
-  
+
   public void dumpState( DataWriter out ) {
     //TODO
   }
-  
+
   public int getNumberOfActions() {
     return numActions;
   }
-  
+
 }

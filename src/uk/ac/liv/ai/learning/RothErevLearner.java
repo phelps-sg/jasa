@@ -25,6 +25,7 @@ import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.MathUtil;
 import uk.ac.liv.util.io.DataWriter;
 
 /**
@@ -229,8 +230,8 @@ public class RothErevLearner implements
     deltaP = 0;
     for( int i=0; i<k; i++ ) {
       double p1 = q[i] / sigmaQ;
-      deltaP += Math.abs(p.getProbability(i)-p1);
-      p.setProbability(i, q[i] / sigmaQ);
+      deltaP += MathUtil.diffSq(p.getProbability(i), p1);
+      p.setProbability(i, p1);
     }
   }
 

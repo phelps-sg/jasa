@@ -44,7 +44,6 @@ public interface Auctioneer extends QuoteProvider {
    */
   public void clear();
 
-
   /**
    * Code for handling a new shout in the auction.
    * Subclasses should override this method if they wish
@@ -70,9 +69,15 @@ public interface Auctioneer extends QuoteProvider {
    * Specify which auction we are the auctioneer for.
    */
   public void setAuction( Auction auction );
- 
+
   /**
    * Find out which auction we are the auctioneer for.
    */
   public Auction getAuction();
+
+  /**
+   * Return true if the shouts of others are visible.
+   */
+  public boolean shoutsVisible();
+
 }

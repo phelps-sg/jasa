@@ -28,33 +28,18 @@ import uk.ac.liv.util.io.DataWriter;
 public interface Learner {
 
   /**
-   * Specify the next action to take.
-   *
-   * @return An integer representing the action to be taken.
-   */
-  public int act();
-
-  /**
-   * Get the number of different possible actions this learner
-   * can choose from when it performs an action.
-   *
-   * @return An integer value representing the number of actions available.
-   */
-  public int getNumberOfActions();
-  
-  /**
    * Return a value indicative of the amount of learning that
    * occured during the last iteration.  Values close to 0.0
    * indicate that the learner has converged to an equilibrium
-   * state.  
+   * state.
    *
    * @return A double representing the amount of learning that occured.
    */
   public double getLearningDelta();
-  
+
   /**
    * Write out our state data to the specified data writer.
    */
   public void dumpState( DataWriter out );
-  
+
 }

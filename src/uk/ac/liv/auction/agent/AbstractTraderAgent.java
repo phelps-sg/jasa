@@ -157,7 +157,8 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   public static final String P_RANDOM_PRIVATE_VALUE = "randomprivatevalue";
   public static final String P_MAX_PRIVATE_VALUE = "maxprivatevalue";
 
-  public static final String P_DEFAULT_STRATEGY = "uk.ac.liv.auction.core.PureSimpleStrategy";
+  public static final String P_DEFAULT_STRATEGY =
+                                   "uk.ac.liv.auction.core.PureSimpleStrategy";
 
   /**
    * Construct a trader with given stock level and funds.
@@ -359,10 +360,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     return profits;
   }
 
-  /**
-   * Return the amount of commodity to trade in the current round.
-   */
-  public abstract int determineQuantity( Auction auction );
+  public int determineQuantity( Auction auction ) {
+    return strategy.determineQuantity(auction);
+  }
 
   public AbstractTraderAgent protoClone() {
     AbstractTraderAgent copy = null;

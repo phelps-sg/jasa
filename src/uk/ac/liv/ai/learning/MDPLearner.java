@@ -22,7 +22,7 @@ package uk.ac.liv.ai.learning;
  * @author Steve Phelps
  */
 
-public interface MDPLearner extends Learner {
+public interface MDPLearner extends DiscreteLearner {
 
   /**
    * The call-back after performing an action.

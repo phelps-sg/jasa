@@ -145,11 +145,13 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
     this.auction = auction;
   }
 
-  /** Find out which auction we are the auctioneer for.
+  /*
+   * Find out which auction we are the auctioneer for.
    */
   public Auction getAuction() {
     return auction;
   }
+
 
 }
 

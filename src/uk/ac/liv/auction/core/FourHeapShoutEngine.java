@@ -137,6 +137,8 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     try {
       heap.insert(shout);
     } catch ( IllegalArgumentException e ) {
+      logger.error(e);
+      e.printStackTrace();
       throw new DuplicateShoutException("Duplicate shout: " + shout.toString());
     }
   }
@@ -229,7 +231,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   protected int displaceShout( Shout shout, BinaryHeap from, BinaryHeap to ) throws DuplicateShoutException {
     shout = unifyShout(shout, from);
     from.transfer(to);
-    from.insert(shout);
+    insertShout(from, shout);
     return shout.getQuantity();
   }
 
@@ -237,7 +239,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
                             BinaryHeap matched ) throws DuplicateShoutException {
 
     shout = unifyShout(shout, from);
-    matched.insert(shout);
+    insertShout(matched, shout);
     from.transfer(to);
     return shout.getQuantity();
   }

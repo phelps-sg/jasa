@@ -127,6 +127,10 @@ public class GPTradingStrategy extends GPIndividualCtx
     return copy;
   }
 
+  public int determineQuantity( Auction auction ) {
+    return quantity;
+  }
+
 
 }
 

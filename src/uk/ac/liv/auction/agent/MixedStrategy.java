@@ -67,12 +67,12 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
    *  The pure strategy components
    */
   protected Strategy pureStrategies[];
-  
+
   /**
    *  The strategy currently being played
    */
   protected Strategy currentStrategy;
-  
+
   static final String P_N = "n";
   static final String P_PROBABILITY = "prob";
 
@@ -81,34 +81,34 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
                           Strategy[] pureStrategies ) {
     this();
     this.pureStrategies = pureStrategies;
-    this.probabilities = probabilities;    
+    this.probabilities = probabilities;
   }
-  
+
   public MixedStrategy() {
     currentStrategy = null;
   }
-  
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    
+
     int numStrategies = parameters.getInt(base.push(P_N), null, 1);
     pureStrategies = new Strategy[numStrategies];
-    
+
     probabilities = new DiscreteProbabilityDistribution(numStrategies);
-    
-    for( int i=0; i<numStrategies; i++ ) {      
+
+    for( int i=0; i<numStrategies; i++ ) {
       Strategy s = (Strategy)
-        parameters.getInstanceForParameter(base.push(i+""), null, 
+        parameters.getInstanceForParameter(base.push(i+""), null,
                                             Strategy.class);
       if ( s instanceof Parameterizable ) {
         ((Parameterizable) s).setup(parameters, base.push(i+""));
       }
       pureStrategies[i] = s;
-      
-      double probability = parameters.getDouble(base.push(i+P_PROBABILITY), 
+
+      double probability = parameters.getDouble(base.push(i+P_PROBABILITY),
                                                   null, 0);
       probabilities.setProbability(i, probability);
-    }    
-    
+    }
+
   }
 
   public void addPureStrategies( Collection pureStrategies ) {
@@ -136,16 +136,20 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
   public Strategy getCurrentStrategy() {
     return currentStrategy;
   }
-  
+
   public void reset() {
     probabilities.reset();
     for( int i=0; i<pureStrategies.length; i++ ) {
       ((Resetable) pureStrategies[i]).reset();
     }
   }
-  
+
   public void setSeed( long seed ) {
     probabilities.setSeed(seed);
+  }
+
+  public int determineQuantity( Auction auction ) {
+    return currentStrategy.determineQuantity(auction);
   }
 
 }

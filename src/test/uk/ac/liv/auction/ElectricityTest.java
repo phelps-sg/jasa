@@ -31,6 +31,8 @@ import ec.util.MersenneTwisterFast;
 
 import java.util.*;
 
+import org.apache.log4j.BasicConfigurator;
+
 /**
  *
  * Superclass for tests based on
@@ -64,7 +66,7 @@ public abstract class ElectricityTest extends TestCase {
   protected int ns, nb, cs, cb;
 
   protected MersenneTwisterFast prng = new MersenneTwisterFast();
-  
+
   static final int ITERATIONS = 100;
   static final int MAX_ROUNDS = 1000;
   static final int K = 40;
@@ -78,6 +80,7 @@ public abstract class ElectricityTest extends TestCase {
 
   public ElectricityTest( String name ) {
     super(name);
+    org.apache.log4j.BasicConfigurator.configure();
     generatePRNGseeds();
   }
 
@@ -87,32 +90,32 @@ public abstract class ElectricityTest extends TestCase {
     System.out.println("R = " + R + " E = " + E + " K = " + K + " S1 = " + S1);
     System.out.println("with " + ITERATIONS + " iterations and " + MAX_ROUNDS
                        + " auction rounds.");
-    initStats();    
+    initStats();
     for( int i=0; i<ITERATIONS; i++ ) {
       auction.reset();
       setPRNGseeds(i);
-      auction.run();      
-      stats.calculate();      
-      updateStats();      
+      auction.run();
+      stats.calculate();
+      updateStats();
     }
     System.out.println(eA);
     System.out.println(mPS);
     System.out.println(mPB);
-   
+    traderReport();
   }
 
-  public void updateStats() {    
+  public void updateStats() {
     mPS.newData(stats.getMPS());
     mPB.newData(stats.getMPB());
     eA.newData(stats.getEA());
   }
-  
+
   public void initStats() {
     mPS = new CummulativeStatCounter("MPS");
     mPB = new CummulativeStatCounter("MPB");
     eA = new CummulativeStatCounter("EA");
   }
-  
+
   public void experimentSetup( int ns, int nb, int cs, int cb ) {
     this.ns = ns;
     this.nb = nb;
@@ -134,7 +137,7 @@ public abstract class ElectricityTest extends TestCase {
      double value = values[i % values.length];
      ElectricityTrader agent =
        new ElectricityTrader(capacity, value, 0, areSellers);
-     assignStrategy(agent);     
+     assignStrategy(agent);
      auction.register(agent);
    }
   }
@@ -148,9 +151,9 @@ public abstract class ElectricityTest extends TestCase {
   }
 
   public void generatePRNGseeds( int numAgents ) {
-    
+
     System.out.println(this + ": generating PRNG seeds using default seed.. ");
- 
+
     for( int i=0; i<ITERATIONS; i++ ) {
       for( int t=0; t<numAgents; t++ ) {
         seeds[i][t] = (long) prng.nextInt();
@@ -173,29 +176,38 @@ public abstract class ElectricityTest extends TestCase {
       }
     }
   }
-  
+
   public void assignStrategy( ElectricityTrader agent ) {
     StimuliResponseStrategy strategy = new StimuliResponseStrategy(agent);
     strategy.setQuantity(agent.getCapacity());
     NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1);
     strategy.setLearner(learner);
     agent.setStrategy(strategy);
+    agent.reset();
   }
-  
+
   public void randomizePrivateValues( double[] values ) {
     for( int i=0; i<values.length; i++ ) {
       values[i] = generateRandomPrivateValue();
     }
   }
-  
+
   public void randomizePrivateValues() {
     randomizePrivateValues(sellerValues);
     randomizePrivateValues(buyerValues);
   }
-  
+
   public double generateRandomPrivateValue() {
-    return MIN_PRIVATE_VALUE + 
+    return MIN_PRIVATE_VALUE +
                 prng.nextDouble() * (MAX_PRIVATE_VALUE-MIN_PRIVATE_VALUE);
   }
-  
+
+  public void traderReport() {
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      ElectricityTrader agent = (ElectricityTrader) i.next();
+      System.out.println(agent);
+    }
+  }
+
 }

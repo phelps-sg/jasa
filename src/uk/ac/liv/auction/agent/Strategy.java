@@ -45,4 +45,6 @@ public interface Strategy {
 
   public void setAgent( AbstractTraderAgent agent );
 
+  public int determineQuantity( Auction auction );
+
 }

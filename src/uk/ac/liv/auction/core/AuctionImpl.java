@@ -154,7 +154,11 @@ public abstract class AuctionImpl extends Observable
 
 
   public Shout getLastShout() {
-    return lastShout;
+    if ( auctioneer.shoutsVisible() ) {
+      return lastShout;
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -226,6 +230,9 @@ public abstract class AuctionImpl extends Observable
     // Remove this shout and all of its children.
     for( Shout s = shout; s != null; s = s.getChild() ) {
       auctioneer.removeShout(s);
+      if ( s != shout ) {
+        ShoutPool.release(s);
+      }
     }
     shout.makeChildless();
   }
