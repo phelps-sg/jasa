@@ -99,7 +99,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
       price = agent.getPrivateValue() - action*markupScale;
     }
     if ( price < 0 ) {
-      logger.debug(this + ": set negative price- clipping at 0");
+//      logger.debug(this + ": set negative price- clipping at 0");
       price = 0;
     }
 

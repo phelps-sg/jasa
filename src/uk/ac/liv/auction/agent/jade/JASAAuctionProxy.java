@@ -26,6 +26,8 @@ import jade.core.AID;
 
 import jade.lang.acl.ACLMessage;
 
+import org.apache.log4j.Logger;
+
 /**
  * An implementation of the JASA Auction interface that translates
  * JASA method invocations into ACL messages for a JADE auctioneer agent.
@@ -38,20 +40,24 @@ import jade.lang.acl.ACLMessage;
  */
 public class JASAAuctionProxy extends JASAProxy implements Auction {
 
+  static Logger logger = Logger.getLogger(JASAAuctionProxy.class);
+
   public JASAAuctionProxy( AID targetJadeID, Agent sender ) {
     super(targetJadeID, sender);
   }
 
   public void newShout( Shout shout ) throws AuctionException {
+    ACLShout aclShout = null;
     try {
       ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
       msg.addReceiver(targetJadeID);
       NewShoutAction content = new NewShoutAction();
-      ACLShout aclShout = new ACLShout(shout);
+      aclShout = new ACLShout(shout);
       aclShout.setAgentName(sender.getAID().getName());
       content.setShout(aclShout);
       ((JADEAbstractAuctionAgent) sender).sendMessage(msg, content);
     } catch ( Exception e ) {
+      logger.error("unable to place shout: aclShout = " + aclShout);
       e.printStackTrace();
       throw new Error(e.getMessage());
     }
@@ -75,15 +81,17 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
 
 
   public void removeShout( Shout shout ) {
+    ACLShout aclShout = null;
     try {
       ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
       msg.addReceiver(targetJadeID);
       RemoveShoutAction content = new RemoveShoutAction();
-      ACLShout aclShout = new ACLShout(shout);
+      aclShout = new ACLShout(shout);
       aclShout.setAgentName(sender.getAID().getName());
       content.setShout(aclShout);
       ((JADEAbstractAuctionAgent) sender).sendMessage(msg, content);
     } catch ( Exception e ) {
+      logger.error("unable to remove shout: aclShout = " + aclShout);
       e.printStackTrace();
       throw new Error(e.getMessage());
     }
