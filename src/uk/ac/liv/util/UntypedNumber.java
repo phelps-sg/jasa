@@ -17,10 +17,10 @@ package uk.ac.liv.util;
 
 /**
  * <p>
- * This is an extension of Java's Number class that provides fast
- * methods for performing arithmetic.  These methods use object-pooling
- * for their results, which makes them more efficient than the standard
- * Java arithmetic operators.
+ * This is an extension of Java's Number class that provides 
+ * methods for performing untyped polymorphic arithmetic.  For example,
+ * an UntypedDouble can be added to an UntypedInteger without having
+ * to know the class of each operand.  
  * </p>
  *
  * @author Steve Phelps
@@ -38,14 +38,5 @@ public abstract class UntypedNumber extends Number
   public abstract UntypedNumber subtract( UntypedNumber other );
 
   public abstract UntypedNumber divide( UntypedNumber other );
-
-  public Object newCopy() {
-    try {
-      return super.clone();
-    } catch ( CloneNotSupportedException e ) {
-      e.printStackTrace();
-      throw new Error(e.getMessage());
-    }
-  }
 
 }
