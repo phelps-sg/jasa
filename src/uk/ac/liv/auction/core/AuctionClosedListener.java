@@ -17,6 +17,9 @@ package uk.ac.liv.auction.core;
 
 
 /**
+ * Classes implementing this interface can subscribe to an auction
+ * to receive notification when the auction is closed.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */

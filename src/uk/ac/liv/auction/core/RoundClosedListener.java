@@ -17,6 +17,10 @@ package uk.ac.liv.auction.core;
 
 
 /**
+ * Classes implementing this interface can subscribe to an auction
+ * to receive notification when the current trading round is
+ * terminated.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
