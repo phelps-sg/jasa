@@ -165,8 +165,6 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
     auction.setup(parameters, base.push(P_AUCTION));
     
-    auction.activateGUIConsole();
-
     payoffLogger = new PayoffLogger();
     payoffLogger.setAuction(auction);
     auction.addMarketDataLogger(payoffLogger);
@@ -268,14 +266,14 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
       randomlyAssignRoles();
       randomlyAssignValuers();
-      //ensureEquilibriaExists();
+      ensureEquilibriaExists();
 
       auction.reset();
       auction.addEndOfDayListener(this);
       auction.run();
 
-//      payoffLogger.calculate();
-      payoffLogger.finalReport();
+      payoffLogger.calculate();
+//      payoffLogger.finalReport();
 
       for( int i=0; i<numStrategies; i++ ) {
         payoffs[i].newData(payoffLogger.getPayoff(strategies[i].getClass()));
@@ -293,7 +291,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   }
 
   public void endOfDay( Auction a ) {
-    //ensureEquilibriaExists();
+    ensureEquilibriaExists();
   }
 
   public void ensureEquilibriaExists() {
