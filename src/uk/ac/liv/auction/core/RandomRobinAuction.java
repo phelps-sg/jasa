@@ -17,6 +17,8 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 
+import uk.ac.liv.util.Seedable;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -31,7 +33,8 @@ import ec.util.MersenneTwisterFast;   // Fast random number generator
  * @author Steve Phelps
  */
 
-public class RandomRobinAuction extends RoundRobinAuction {
+public class RandomRobinAuction extends RoundRobinAuction
+                                  implements Seedable {
 
   MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
@@ -53,6 +56,10 @@ public class RandomRobinAuction extends RoundRobinAuction {
       numCandidates--;
       trader.requestShout(this);
     }
+  }
+  
+  public void setSeed( long seed ) {
+    randGenerator.setSeed(seed);
   }
 
 }

@@ -18,6 +18,8 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
+import uk.ac.liv.util.Seedable;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 import ec.util.MersenneTwisterFast;
@@ -29,12 +31,12 @@ import ec.util.MersenneTwisterFast;
  * </p>
  */
 
-public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl {
+public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
+                                        implements Seedable {
 
   protected double maxMarkup = 50;
 
-  static MersenneTwisterFast randGenerator =
-    new MersenneTwisterFast(System.currentTimeMillis());
+  static MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
   static final String P_MAX_MARKUP = "maxmarkup";
 
@@ -72,6 +74,10 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl {
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null, 100);
+  }
+  
+  public void setSeed( long seed ) {
+    randGenerator.setSeed(seed);
   }
 
 }

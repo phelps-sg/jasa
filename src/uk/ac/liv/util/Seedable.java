@@ -14,19 +14,17 @@
  */
 
 
-package uk.ac.liv.ai.learning;
-
-import uk.ac.liv.util.Seedable;
+package uk.ac.liv.util;
 
 /**
- * Classes implementing this interface indicate that they implement
- * learning algorithms with a stochastic component whose PRNG
- * can be seeded.
+ * Classes implementing this interface indicate that they have
+ * stochastic component whose PRNG can be seeded.
  *
  * @author Steve Phelps
  */
 
-public interface StochasticLearner extends Learner, Seedable {
+public interface Seedable {
 
+  public void setSeed( long seed );
 
 }
