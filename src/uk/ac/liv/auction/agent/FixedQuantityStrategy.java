@@ -24,7 +24,7 @@ package uk.ac.liv.auction.agent;
  * @author Steve Phelps
  */
 
-public interface FixedQuantityStrategy {
+public interface FixedQuantityStrategy extends Strategy {
 
   /**
    * Specify the quantity to bid for.

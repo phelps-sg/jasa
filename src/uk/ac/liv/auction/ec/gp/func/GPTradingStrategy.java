@@ -38,8 +38,8 @@ import uk.ac.liv.util.*;
  */
 
 public class GPTradingStrategy extends GPIndividualCtx
-    implements Strategy, QuoteProvider, Serializable, Resetable,
-                FixedQuantityStrategy {
+    implements FixedQuantityStrategy, QuoteProvider, Serializable, Resetable {
+
 
   AbstractTraderAgent agent = null;
 
@@ -80,7 +80,7 @@ public class GPTradingStrategy extends GPIndividualCtx
     currentShout = shout;
     currentAuction = auction;
     double price = Double.NaN;
-    GenericNumber result = evaluateNumberTree(0);
+    FastNumber result = evaluateNumberTree(0);
     if ( !misbehaved ) {
       price = result.doubleValue();
     } else {
@@ -107,7 +107,7 @@ public class GPTradingStrategy extends GPIndividualCtx
   }
 
   public void reset() {
-    priceStats = new CummulativeStatCounter("priceStats");
+    priceStats.reset();
     misbehaved = false;
   }
 

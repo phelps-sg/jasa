@@ -17,27 +17,25 @@ package uk.ac.liv.util;
 
 /**
  * <p>
- * An abstract class encapsulating numbers for weakly-typed
- * arithmetic operations.  This is an extension of Java's
- * Number class that provides actual methods for performing
- * arithemetic.  These methods use object-pooling for their results,
- * which makes them more efficient than the standard Java arithmetic
- * operators.
+ * This is an extension of Java's Number class that provides fast
+ * methods for performing arithmetic.  These methods use object-pooling
+ * for their results, which makes them more efficient than the standard
+ * Java arithmetic operators.
  * </p>
  *
  * @author Steve Phelps
  *
  */
 
-public abstract class GenericNumber extends Number implements Comparable {
+public abstract class FastNumber extends Number implements Comparable {
 
-  public abstract GenericNumber multiply( GenericNumber other );
+  public abstract FastNumber multiply( FastNumber other );
 
-  public abstract GenericNumber add( GenericNumber other );
+  public abstract FastNumber add( FastNumber other );
 
-  public abstract GenericNumber subtract( GenericNumber other );
+  public abstract FastNumber subtract( FastNumber other );
 
-  public abstract GenericNumber divide( GenericNumber other );
+  public abstract FastNumber divide( FastNumber other );
 
   public abstract void release();
 

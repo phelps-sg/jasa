@@ -121,7 +121,11 @@ public class StatsMarketDataLogger
   }
 
   public void reset() {
-    initialise();
+    transPriceStats.reset();
+    bidPriceStats.reset();
+    askPriceStats.reset();
+    bidQuoteStats.reset();
+    askQuoteStats.reset();
   }
 
   public Object clone() throws CloneNotSupportedException {

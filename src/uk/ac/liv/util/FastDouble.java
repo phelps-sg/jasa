@@ -19,42 +19,42 @@ import huyd.poolit.*;
 
 /**
  * This encapsulation of Double can be used in combination with the
- * GenericNumber and GenericLong classes, for performing weakly-typed
+ * FastNumber and FastLong classes, for performing weakly-typed
  * arithmetic operations.
  * @author Steve Phelps
  *
  */
 
-public class GenericDouble extends GenericNumber {
+public class FastDouble extends FastNumber {
 
   double primitiveValue;
 
-  public GenericDouble() {
+  public FastDouble() {
     this(Double.NaN);
   }
 
-  public static GenericDouble newGenericDouble( double value ) {
-    return GenericDoublePool.fetch(value);
+  public static FastDouble newFastDouble( double value ) {
+    return FastDoublePool.fetch(value);
   }
 
   public void release() {
-    GenericDoublePool.release(this);
+    FastDoublePool.release(this);
   }
 
-  public GenericNumber add( GenericNumber other ) {
-    return newGenericDouble(primitiveValue + other.doubleValue());
+  public FastNumber add( FastNumber other ) {
+    return newFastDouble(primitiveValue + other.doubleValue());
   }
 
-  public GenericNumber multiply( GenericNumber other ) {
-    return newGenericDouble(primitiveValue * other.doubleValue());
+  public FastNumber multiply( FastNumber other ) {
+    return newFastDouble(primitiveValue * other.doubleValue());
   }
 
-  public GenericNumber subtract( GenericNumber other ) {
-    return newGenericDouble(primitiveValue - other.doubleValue());
+  public FastNumber subtract( FastNumber other ) {
+    return newFastDouble(primitiveValue - other.doubleValue());
   }
 
-  public GenericNumber divide( GenericNumber other ) {
-    return newGenericDouble(primitiveValue / other.doubleValue());
+  public FastNumber divide( FastNumber other ) {
+    return newFastDouble(primitiveValue / other.doubleValue());
   }
 
   public int intValue() {
@@ -91,8 +91,8 @@ public class GenericDouble extends GenericNumber {
   }
 
   public boolean equals( Object other ) {
-    if ( other instanceof GenericNumber ) {
-      return doubleValue() == ((GenericNumber) other).doubleValue();
+    if ( other instanceof FastNumber ) {
+      return doubleValue() == ((FastNumber) other).doubleValue();
     } else {
       return super.equals(other);
     }
@@ -106,11 +106,11 @@ public class GenericDouble extends GenericNumber {
     primitiveValue = value;
   }
 
-  protected GenericDouble( Double value ) {
+  protected FastDouble( Double value ) {
     this(value.doubleValue());
   }
 
-  protected GenericDouble( double value ) {
+  protected FastDouble( double value ) {
     primitiveValue = value;
   }
 

@@ -18,23 +18,23 @@ package uk.ac.liv.ec.gp.func;
 import ec.gp.*;
 import ec.*;
 
-import uk.ac.liv.util.GenericNumber;
+import uk.ac.liv.util.FastNumber;
 
 public abstract class GPArithmeticBinaryOperator extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
 
     children[0].eval(state, thread, input, stack, individual, problem);
-    GenericNumber op1 = (GenericNumber) ((GPGenericData) input).data;
+    FastNumber op1 = (FastNumber) ((GPGenericData) input).data;
 
     children[1].eval(state, thread, input, stack, individual, problem);
-    GenericNumber op2 = (GenericNumber) ((GPGenericData) input).data;
+    FastNumber op2 = (FastNumber) ((GPGenericData) input).data;
 
     ((GPGenericData) input).data = arithmeticOperator(op1, op2);
     op1.release();
     op2.release();
   }
 
-  public abstract GenericNumber arithmeticOperator( GenericNumber op1, GenericNumber op2 );
+  public abstract FastNumber arithmeticOperator( FastNumber op1, FastNumber op2 );
 
 }

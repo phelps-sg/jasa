@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 import uk.ac.liv.ec.gp.func.*;
-import uk.ac.liv.util.GenericNumber;
+import uk.ac.liv.util.FastNumber;
 
 /**
  * <p>Title: JASA</p>
@@ -64,7 +64,7 @@ public class GPIndividualCtx extends GPIndividual {
     context.getStack().reset();
   }
 
-  public GenericNumber evaluateNumberTree( int treeNumber ) {
+  public FastNumber evaluateNumberTree( int treeNumber ) {
     misbehaved = false;
     GPGenericData input = GPGenericDataPool.fetch();
     try {
@@ -73,7 +73,7 @@ public class GPIndividualCtx extends GPIndividual {
       misbehaved = true;
     }
     GPGenericDataPool.release(input);
-    return (GenericNumber) input.data;
+    return (FastNumber) input.data;
   }
 
   public GPTree getTree( int treeNumber ) {

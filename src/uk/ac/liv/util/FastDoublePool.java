@@ -22,7 +22,7 @@ import huyd.poolit.*;
  * @author Steve Phelps
  */
 
-public class GenericLongPool {
+public class FastDoublePool {
 
   private static Pooler pooler;
 
@@ -30,34 +30,34 @@ public class GenericLongPool {
 
   static int poolSize = DEFAULT_POOL_SIZE;
 
-  public static GenericLong fetch() {
+  public static FastDouble fetch() {
     try {
       initialisePool();
-      return (GenericLong) pooler.fetch();
+      return (FastDouble) pooler.fetch();
     } catch ( FetchException e ) {
       e.printStackTrace();
-      return new GenericLong();
+      return new FastDouble();
     }
   }
 
-  public static GenericLong fetch( long value ) {
-    GenericLong n = fetch();
+  public static FastDouble fetch( double value ) {
+    FastDouble n = fetch();
     n.setValue(value);
     return n;
   }
 
-  public static void release( GenericLong object ) {
+  public static void release( FastDouble object ) {
     pooler.release(object);
   }
 
   public static void setPoolSize( int poolSize ) {
-    GenericLongPool.poolSize = poolSize;
+    FastDoublePool.poolSize = poolSize;
   }
 
   protected static void initialisePool() {
     if ( pooler == null ) {
       try {
-        pooler = new FixedPooler(GenericLong.class, poolSize);
+        pooler = new FixedPooler(FastDouble.class, poolSize);
       } catch ( CreateException e ) {
         e.printStackTrace();
         throw new Error(e.getMessage());

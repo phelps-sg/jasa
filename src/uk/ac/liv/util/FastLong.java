@@ -19,35 +19,35 @@ import huyd.poolit.*;
 
 /**
  * This encapsulation of Long can be used in combination with the
- * GenericNumber and GenericDouble classes, for performing weakly-typed
+ * FastNumber and FastDouble classes, for performing weakly-typed
  * arithmetic operations.
  *
  * @author Steve Phelps
  *
  */
 
-public class GenericLong extends GenericNumber {
+public class FastLong extends FastNumber {
 
   long primitiveValue;
 
-  public GenericLong() {
+  public FastLong() {
     this(0L);
   }
 
-  public static GenericLong newGenericLong( long value ) {
-    return GenericLongPool.fetch(value);
+  public static FastLong newFastLong( long value ) {
+    return FastLongPool.fetch(value);
   }
 
   public void release() {
-    GenericLongPool.release(this);
+    FastLongPool.release(this);
   }
 
 
-  protected GenericLong( Long value ) {
+  protected FastLong( Long value ) {
     this(value.longValue());
   }
 
-  protected GenericLong( long value ) {
+  protected FastLong( long value ) {
     primitiveValue = value;
   }
 
@@ -55,54 +55,54 @@ public class GenericLong extends GenericNumber {
     primitiveValue = value;
   }
 
-  public GenericNumber add( GenericNumber other ) {
-    if ( other instanceof GenericLong ) {
-      return newGenericLong( primitiveValue + other.longValue() );
-    } else if ( other instanceof GenericDouble ) {
-      return GenericDoublePool.fetch(doubleValue() + other.doubleValue());
+  public FastNumber add( FastNumber other ) {
+    if ( other instanceof FastLong ) {
+      return newFastLong( primitiveValue + other.longValue() );
+    } else if ( other instanceof FastDouble ) {
+      return FastDoublePool.fetch(doubleValue() + other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
-  public GenericNumber multiply( GenericNumber other ) {
-    if ( other instanceof GenericLong ) {
-      return newGenericLong( primitiveValue * other.longValue() );
-    } else if ( other instanceof GenericDouble ) {
-      return GenericDoublePool.fetch(doubleValue() * other.doubleValue());
+  public FastNumber multiply( FastNumber other ) {
+    if ( other instanceof FastLong ) {
+      return newFastLong( primitiveValue * other.longValue() );
+    } else if ( other instanceof FastDouble ) {
+      return FastDoublePool.fetch(doubleValue() * other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
-  public GenericNumber subtract( GenericNumber other ) {
-  if ( other instanceof GenericLong ) {
-      return newGenericLong( primitiveValue - other.longValue() );
-    } else if ( other instanceof GenericDouble ) {
-      return GenericDoublePool.fetch(doubleValue() - other.doubleValue());
+  public FastNumber subtract( FastNumber other ) {
+  if ( other instanceof FastLong ) {
+      return newFastLong( primitiveValue - other.longValue() );
+    } else if ( other instanceof FastDouble ) {
+      return FastDoublePool.fetch(doubleValue() - other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
-  public GenericNumber divide( GenericNumber other ) {
+  public FastNumber divide( FastNumber other ) {
     return opResult( doubleValue() / other.doubleValue() );
   }
 
-  protected GenericNumber opResult( double tempResult ) {
+  protected FastNumber opResult( double tempResult ) {
     long intResult = Math.round(tempResult);
     if ( intResult == tempResult ) {
-      return newGenericLong(intResult);
+      return newFastLong(intResult);
     } else {
-      return GenericDoublePool.fetch(tempResult);
+      return FastDoublePool.fetch(tempResult);
     }
   }
 
 
   public int compareTo( Object other ) {
-    if ( other instanceof GenericLong ) {
+    if ( other instanceof FastLong ) {
       long l0 = primitiveValue;
-      long l1 = ((GenericLong) other).longValue();
+      long l1 = ((FastLong) other).longValue();
       if ( l0 < l1 ) {
         return -1;
       } else if ( l0 > l1 ) {
@@ -110,9 +110,9 @@ public class GenericLong extends GenericNumber {
       } else {
         return 0;
       }
-    } else if ( other instanceof GenericDouble ) {
+    } else if ( other instanceof FastDouble ) {
       double d0 = doubleValue();
-      double d1 = ((GenericDouble) other).doubleValue();
+      double d1 = ((FastDouble) other).doubleValue();
       if ( d0 < d1 ) {
         return -1;
       } else if ( d0 > d1 ) {
@@ -147,10 +147,10 @@ public class GenericLong extends GenericNumber {
   }
 
   public boolean equals( Object other ) {
-    if ( other instanceof GenericLong ) {
-      return primitiveValue == ((GenericLong) other).longValue();
-    } else if ( other instanceof GenericNumber ) {
-      return doubleValue() == ((GenericNumber) other).doubleValue();
+    if ( other instanceof FastLong ) {
+      return primitiveValue == ((FastLong) other).longValue();
+    } else if ( other instanceof FastNumber ) {
+      return doubleValue() == ((FastNumber) other).doubleValue();
     } else {
       return super.equals(other);
     }

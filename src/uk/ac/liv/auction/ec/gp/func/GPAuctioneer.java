@@ -99,7 +99,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public double determineClearingPrice( Shout bid, Shout ask ) {
     clearBid = bid;
     clearAsk = ask;
-    GenericNumber result = evaluateNumberTree(0);
+    FastNumber result = evaluateNumberTree(0);
     result.release();
     if ( misbehaved ) {
       return 0;
