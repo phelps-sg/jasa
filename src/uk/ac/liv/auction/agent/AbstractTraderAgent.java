@@ -312,6 +312,10 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     this.strategy = strategy;
     strategy.setAgent(this);
   }
+  
+  public void setIsSeller( boolean isSeller ) {
+    this.isSeller = isSeller;
+  }
 
   public Strategy getStrategy() {
     return strategy;
