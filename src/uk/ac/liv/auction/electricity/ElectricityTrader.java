@@ -29,6 +29,13 @@ import java.io.Serializable;
  * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
  * </p>
  *
+ * <p>
+ * This code was written by Steve Phelps in an attempt to replicate
+ * the results in the above paper.  This work was carried out independently
+ * from the original authors.  Any corrections to this code are
+ * welcome.
+ * </p>
+ *
  * @author Steve Phelps
  */
 
