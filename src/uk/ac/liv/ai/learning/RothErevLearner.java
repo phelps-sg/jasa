@@ -19,14 +19,12 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.MathUtil;
 import uk.ac.liv.util.io.DataWriter;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.io.Serializable;
 
@@ -120,8 +118,6 @@ public class RothErevLearner extends AbstractLearner implements
    */
   protected double deltaP;
 
-  protected RandomElement prng = PRNGFactory.getFactory().create();
-
   static final int    DEFAULT_K   = 100;
   static final double DEFAULT_R   = 0.1;
   static final double DEFAULT_E   = 0.2;
@@ -164,8 +160,14 @@ public class RothErevLearner extends AbstractLearner implements
   }
 
   public Object protoClone() {
-    RothErevLearner clone = new RothErevLearner(k, r, e, s1);
-    return clone;
+  	RothErevLearner clonedLearner;
+  	try {
+  		clonedLearner = (RothErevLearner) clone();
+  		clonedLearner.p = (DiscreteProbabilityDistribution) p.protoClone();  		
+  	} catch ( CloneNotSupportedException e ) {
+  		throw new Error(e);
+  	}    
+    return clonedLearner;
   }
 
   protected void validateParams() {
@@ -268,7 +270,7 @@ public class RothErevLearner extends AbstractLearner implements
 
   public void initialise() {
     for( int i=0; i<k; i++ ) {
-      q[i] = prng.raw();
+      q[i] = GlobalPRNG.getInstance().raw();
     }
     updateProbabilities();
     iteration = 0;
