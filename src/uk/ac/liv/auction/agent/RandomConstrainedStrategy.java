@@ -18,7 +18,7 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -53,8 +53,6 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 
   protected double maxMarkup = DEFAULT_MARKUP;
 
-  protected RandomElement prng;
-
   public static final String P_MAX_MARKUP = "maxmarkup";
 
   public static final double DEFAULT_MARKUP = 50;
@@ -66,13 +64,12 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
   public RandomConstrainedStrategy( AbstractTraderAgent agent,
                                       double maxMarkup ) {
     super(agent);
-    prng = PRNGFactory.getFactory().create();
     this.maxMarkup = maxMarkup;
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
 
-    double markup = prng.raw() * maxMarkup;
+    double markup = GlobalPRNG.getInstance().uniform(0, maxMarkup);
     double price = 0;
     if ( agent.isBuyer() ) {
       price = agent.getPrivateValue(auction) - markup;
