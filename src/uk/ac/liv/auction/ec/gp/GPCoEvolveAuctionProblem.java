@@ -126,15 +126,11 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
                                       "fitness" });
   }
 
-  public void evaluate( EvolutionState state, Vector[] group, int thread ) {
+  protected void assignStrategies( GPAuctioneer auctioneer,
+                                    EvolutionState state, Vector[] group,
+                                    int thread ) {
 
-    // Log the generation number to the CSV file
-    statsOut.newData(state.generation);
-
-    // Reset the auction
-    auction.reset();
-
-    // Assign the appropriate GP-evolved strategy to each trading agent
+    LinkedList strategies = new LinkedList();
     Iterator traders = allTraders.iterator();
     for( int i=0; traders.hasNext(); i++ ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
@@ -145,7 +141,20 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       strategy.setAgent(trader);
       strategy.setQuantity(trader.getCapacity());
       trader.reset();
+      strategies.add(strategy);
     }
+    // Save the strategies used in this auction for posterity
+    auctioneer.setStrategies(strategies);
+  }
+
+
+  public void evaluate( EvolutionState state, Vector[] group, int thread ) {
+
+    // Log the generation number to the CSV file
+    statsOut.newData(state.generation);
+
+    // Reset the auction
+    auction.reset();
 
     // Initialise the GP-evolved auctioneer
     GPAuctioneer auctioneer = (GPAuctioneer) group[0].get(0);
@@ -153,11 +162,14 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     auctioneer.setAuction(auction);
     auction.setAuctioneer(auctioneer);
 
+    // Assign the GP-evolved strategies to each trader
+    assignStrategies(auctioneer, state, group, thread);
+
     // Run the auction
     auction.run();
 
     // Set the fitness for the strategy population according to profits made
-    traders = allTraders.iterator();
+    Iterator traders = allTraders.iterator();
     for( int i=0; traders.hasNext(); i++ ) {
       GPElectricityTrader trader = (GPElectricityTrader) traders.next();
       double profits = trader.getProfits();
@@ -181,6 +193,8 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     } else {
       stats.recalculate();
     }
+
+    // Save a copy of the stats for posterity
     auctioneer.setStats(stats.newCopy());
 
     // Calculate auctioneer fitness based on market stats

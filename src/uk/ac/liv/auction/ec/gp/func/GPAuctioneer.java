@@ -13,11 +13,11 @@ import uk.ac.liv.util.*;
 import uk.ac.liv.ec.gp.func.GPGenericData;
 import uk.ac.liv.ec.gp.*;
 
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
+
 
 /**
- * An Auctioneer whose bidding logic is evolved using genetic programming.
+ * An Auctioneer whose princing rule is evolved using genetic programming.
  *
  */
 
@@ -33,15 +33,20 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   protected Shout clearBid, clearAsk;
 
+  /**
+   * The market statistics for the last auction run by this auctioneer.
+   */
   protected ElectricityStats stats;
+
+  /**
+   * The last set of strategies played against this auctioneer.
+   */
+  protected LinkedList strategies;
 
   public GPAuctioneer() {
     super();
   }
 
-  public void setAuction( Auction auction ) {
-    this.auction = auction;
-  }
 
   public void reset() {
   }
@@ -100,6 +105,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   }
 
   public void endOfAuctionProcessing() {
+    // Do nothing
   }
 
   public Shout getCurrentShout() {
@@ -114,17 +120,13 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     shoutEngine.printState();
   }
 
-  public void setStats( ElectricityStats stats ) {
-    this.stats = stats;
-  }
+  public void setStats( ElectricityStats stats ) { this.stats = stats; }
+  public void setStrategies( LinkedList strategies ) { this.strategies = strategies; }
+  public void setAuction( Auction auction ) { this.auction = auction; }
 
-  public ElectricityStats getStats() {
-    return stats;
-  }
-
-  public Auction getAuction() {
-    return auction;
-  }
+  public ElectricityStats getStats() { return stats; }
+  public LinkedList getStrategies() { return strategies; }
+  public Auction getAuction() { return auction; }
 
 
 }

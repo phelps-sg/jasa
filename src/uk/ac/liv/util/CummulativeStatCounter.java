@@ -25,7 +25,7 @@ import java.io.Serializable;
  *
  */
 
-public class CummulativeStatCounter implements Serializable {
+public class CummulativeStatCounter implements Serializable, Cloneable {
 
   /**
    * The number of data in the series so far.
@@ -136,6 +136,10 @@ public class CummulativeStatCounter implements Serializable {
    */
   public double getMax() {
     return max;
+  }
+
+  public Object clone() throws CloneNotSupportedException {
+    return super.clone();
   }
 
   public String toString() {
