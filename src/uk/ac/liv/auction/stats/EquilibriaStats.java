@@ -15,7 +15,7 @@ import huyd.poolit.*;
 
 public class EquilibriaStats implements MarketStats {
 
-  RoundRobinAuction auction;
+  RoundRobinAuction auction = null;
 
   List buyers = null;
   List sellers = null;
@@ -39,6 +39,9 @@ public class EquilibriaStats implements MarketStats {
   public EquilibriaStats( RoundRobinAuction auction ) {
     this.auction = auction;
     calculate();
+  }
+
+  public EquilibriaStats() {
   }
 
   public void setAuction( RoundRobinAuction auction ) {

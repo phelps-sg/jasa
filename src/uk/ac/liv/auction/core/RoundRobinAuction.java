@@ -161,7 +161,6 @@ public class RoundRobinAuction extends AuctionImpl
    * each trader the opportunity to bid in the auction.
    */
   public void requestShouts() {
-    System.err.println(activeTraders.size());
     Iterator i = activeTraders.iterator();
     while ( i.hasNext() ) {
       RoundRobinTrader trader = (RoundRobinTrader) i.next();
