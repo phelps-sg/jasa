@@ -108,7 +108,7 @@ public class MetaMarketStats implements MarketStats, Serializable {
       Long price = new Long(p);
       Integer supply = (Integer) supplyCurve.get(price);
       Integer demand = (Integer) demandCurve.get(price);
-      if ( supply != null && !threshold
+      if ( supply != null && demand != null && !threshold
           && (supply.equals(demand) || supply.compareTo(demand) > 0) ) {
         equilibria.add(price);
         equilibria.add(new Integer(supply.intValue() - demand.intValue()));

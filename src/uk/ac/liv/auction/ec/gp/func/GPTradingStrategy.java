@@ -94,6 +94,10 @@ public class GPTradingStrategy extends GPIndividualCtx
     priceStats.newData(price);
   }
 
+  public double getLastProfit() {
+    return agent.getLastProfit();
+  }
+
   public CummulativeStatCounter getPriceStats() {
     return priceStats;
   }

@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -40,16 +40,16 @@ import java.io.Serializable;
  *
  */
 
-public class CummulativeStatCounter implements Serializable, Cloneable {
+public class CummulativeStatCounter implements Serializable, Cloneable, Resetable {
 
   /**
    * The number of data in the series so far.
    */
-  int n = 0;
+  int n;
   /**
    * The cummulative total of all numbers in the series so far.
    */
-  double total = 0;
+  double total;
   /**
    * The square of the total.
    */
@@ -57,11 +57,11 @@ public class CummulativeStatCounter implements Serializable, Cloneable {
   /**
    * The minimum so far.
    */
-  double min = Double.POSITIVE_INFINITY;
+  double min;
   /**
    * The maximum so far.
    */
-  double max = Double.NEGATIVE_INFINITY;
+  double max;
   /**
    * The name of this series.
    */
@@ -69,10 +69,19 @@ public class CummulativeStatCounter implements Serializable, Cloneable {
 
   public CummulativeStatCounter( String varName ) {
     this.varName = varName;
+    initialise();
   }
 
   public CummulativeStatCounter() {
     this("");
+  }
+
+  public void initialise() {
+    n = 0;
+    total = 0;
+    min = Double.POSITIVE_INFINITY;
+    max = Double.NEGATIVE_INFINITY;
+    totalSq = 0;
   }
 
   /**
@@ -155,6 +164,10 @@ public class CummulativeStatCounter implements Serializable, Cloneable {
 
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
+  }
+
+  public void reset() {
+    initialise();
   }
 
   public String toString() {

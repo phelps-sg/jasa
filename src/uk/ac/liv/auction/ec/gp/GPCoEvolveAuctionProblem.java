@@ -54,6 +54,8 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   static int NS = 3;
   static int NB = 3;
 
+  static int NT;
+
   static int CS = 10;
   static int CB = 10;
 
@@ -63,22 +65,29 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
   static boolean fixedAuctioneer = false;
 
-  static boolean verbose = true;
+  static boolean verbose = false;
 
-  static double maxPrivateValue = 10;
+  static boolean generateCSV = false;
 
-  static int shockInterval = 10;
+  static double maxPrivateValue = 100;
+
+  static int shockInterval = 1;
+
+  static int evalIterations = 3;
+
+  static String statsFileName;
 
   static final String P_TRADERS = "numtraders";
   static final String P_ROUNDS = "maxrounds";
-  static final String P_ITERATIONS = "iterations";
   static final String P_RANDOMPRIVATEVALUES = "randomprivatevalues";
   static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
   static final String P_FIXEDAUCTIONEER = "fixedauctioneer";
   static final String P_VERBOSE = "verbose";
+  static final String P_GENERATECSV ="generatecsv";
   static final String P_SHOCKINTERVAL = "shockinterval";
+  static final String P_EVALITERATIONS = "evaliterations";
 
-  static final String[] DEFAULT_PARAMS = new String[] { "-file", "ecj.params/coevolve-gpauctioneer-30-30-10-10.params"};
+  static final String[] DEFAULT_PARAMS = new String[] { "-file", "ecj.params/coevolve-gpauctioneer-3-3-10-10.params"};
 
   static final int buyerValues[] = { 36, 17, 12 };
 
@@ -100,6 +109,10 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
   protected GPContext context = new GPContext();
 
+  protected CummulativeStatCounter[] strategyFitnesses;
+
+  protected CummulativeStatCounter auctioneerFitnesses;
+
 
 
   public Object protoClone() throws CloneNotSupportedException {
@@ -116,17 +129,20 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
     NS = state.parameters.getIntWithDefault(base.push("ns"), null, 3);
     NB = state.parameters.getIntWithDefault(base.push("nb"), null, 3);
+    NT = NS + NB;
 
     CS = state.parameters.getIntWithDefault(base.push("cs"), null, 10);
     CB = state.parameters.getIntWithDefault(base.push("cb"), null, 10);
 
     MAX_ROUNDS = state.parameters.getIntWithDefault(base.push(P_ROUNDS), null, 1000);
 
-    randomPrivateValues = state.parameters.getBoolean(base.push(P_RANDOMPRIVATEVALUES), null, false);
-    maxPrivateValue = state.parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null, 100.0);
-    shockInterval = state.parameters.getIntWithDefault(base.push(P_SHOCKINTERVAL), null, 10);
-    fixedAuctioneer = state.parameters.getBoolean(base.push(P_FIXEDAUCTIONEER), null, false);
-    verbose = state.parameters.getBoolean(base.push(P_VERBOSE), null, true);
+    randomPrivateValues = state.parameters.getBoolean(base.push(P_RANDOMPRIVATEVALUES), null, randomPrivateValues);
+    maxPrivateValue = state.parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null, maxPrivateValue);
+    shockInterval = state.parameters.getIntWithDefault(base.push(P_SHOCKINTERVAL), null, shockInterval);
+    evalIterations = state.parameters.getIntWithDefault(base.push(P_EVALITERATIONS), null, evalIterations);
+    fixedAuctioneer = state.parameters.getBoolean(base.push(P_FIXEDAUCTIONEER), null, fixedAuctioneer);
+    verbose = state.parameters.getBoolean(base.push(P_VERBOSE), null, false);
+    generateCSV = state.parameters.getBoolean(base.push(P_GENERATECSV), null, generateCSV);
 
     System.out.println("NS = " + NS);
     System.out.println("NB = " + NB);
@@ -136,7 +152,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     System.out.println("randomPrivateValues = " + randomPrivateValues);
     System.out.println("maxPrivateValue = " + maxPrivateValue);
 
-    String statsFileName = state.parameters.getStringWithDefault(base.push("marketstatsfile"), "coevolve-electricity-stats.csv");
+    statsFileName = state.parameters.getStringWithDefault(base.push("marketstatsfile"), "coevolve-electricity-stats.csv");
 
     randGenerator = new MersenneTwisterFast();
 
@@ -150,27 +166,16 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     logger = new StatsMarketDataLogger();
     auction.setMarketDataLogger(logger);
 
-    try {
-      statsOut = new CSVWriter(new FileOutputStream(statsFileName), 10 + NS + NB);//13);
-    } catch ( IOException e ) {
-      e.printStackTrace();
+    auctioneerFitnesses = new CummulativeStatCounter("auctioneerFitness");
+    strategyFitnesses = new CummulativeStatCounter[NT];
+    for( int s=0; s<NT; s++ ) {
+      strategyFitnesses[s] = new CummulativeStatCounter("strategyFitness");
     }
 
-    // Print headings in CSV output file
-
-    statsOut.newData("generation");
-
-    for( int i=1; i<=NS; i++ ) {
-      statsOut.newData("s" + i);
+    if ( generateCSV ) {
+      initCSVFile();
     }
 
-    for( int i=1; i<=NB; i++ ) {
-      statsOut.newData("b" + i);
-    }
-
-    statsOut.newData( new String[] {  "eA", "mPB", "mPS", "transPrice", "bidPrice",
-                                      "askPrice", "quoteBidPrice", "quoteAskPrice",
-                                      "fitness" });
   }
 
 
@@ -181,7 +186,9 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     context.setStack(stack);
     context.setProblem(this);
 
-    statsOut.newData(state.generation);
+    if ( generateCSV ) {
+      statsOut.newData(state.generation);
+    }
 
     auction.reset();
     Auctioneer auctioneer = assignAuctioneer((GPAuctioneer) group[0].get(0));
@@ -190,16 +197,42 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
     initialiseTraders(group);
 
-    preAuctionProcessing();
-    auction.run();
-    postAuctionProcessing();
+    auctioneerFitnesses.reset();
+    for( int s=0; s<NT; s++ ) {
+      strategyFitnesses[s].reset();
+    }
 
-    computeStrategyFitnesses(group);
-    float auctioneerFitness = computeAuctioneerFitness((GPIndividual) group[0].get(0));
+    for( int i=0; i<evalIterations; i++ ) {
+      preAuctionProcessing();
+      auction.run();
+      postAuctionProcessing();
+      computeAuctioneerFitness();
+      computeStrategyFitnesses();
+    }
 
-    logStats(auctioneerFitness);
+    setAuctioneerFitness( (GPIndividual) group[0].get(0));
+    setStrategyFitnesses(group);
+
+
+    logStats(auctioneerFitnesses.getMean());
     reportStatus();
   }
+
+
+  protected void setAuctioneerFitness( GPIndividual auctioneer ) {
+    KozaFitness fitness = (KozaFitness) auctioneer.fitness;
+    fitness.setStandardizedFitness(context.getState(),
+                                    (float) auctioneerFitnesses.getMean());
+  }
+
+  protected void setStrategyFitnesses( Vector[] group ) {
+   for( int s=0; s<NT; s++ ) {
+      KozaFitness fitness = (KozaFitness) ((GPIndividual) group[s+1].get(0)).fitness;
+      fitness.setStandardizedFitness(context.getState(),
+                                      (float) strategyFitnesses[s].getMean());
+    }
+  }
+
 
 
   protected void randomizePrivateValues() {
@@ -230,6 +263,13 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       randomizePrivateValues();
     }
 
+    Iterator traders = allTraders.iterator();
+    while ( traders.hasNext() ) {
+      ElectricityTrader trader = (ElectricityTrader) traders.next();
+      trader.reset();
+    }
+
+    auction.reset();
   }
 
 
@@ -264,12 +304,16 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   }
 
 
-  protected void computeStrategyFitnesses( Vector[] group ) {
+  protected void computeStrategyFitnesses() {
+
     Iterator traders = allTraders.iterator();
+
     for( int i=0; traders.hasNext(); i++ ) {
+
       GPElectricityTrader trader = (GPElectricityTrader) traders.next();
       double profits = trader.getProfits();
       float fitness = Float.MAX_VALUE;
+
       if ( (!Double.isNaN(profits)) ) {
         fitness = 20000f - (float) profits;
       }
@@ -277,10 +321,12 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
         System.err.println("WARNING: trader " + trader + " had negative fitness!");
         fitness = 0;
       }
-      GPTradingStrategy individual = (GPTradingStrategy) group[i+1].get(0);
-      ((KozaFitness) individual.fitness).setStandardizedFitness(context.getState(), fitness);
-      individual.evaluated = true;
-      statsOut.newData(profits);
+
+      strategyFitnesses[i].newData( (double) fitness );
+      if ( generateCSV ) {
+        statsOut.newData(profits);
+      }
+
     }
   }
 
@@ -308,7 +354,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   }
 
 
-  protected float computeAuctioneerFitness( GPIndividual auctioneer ) {
+  protected float computeAuctioneerFitness() {
 
     float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;
     if ( stats.eA > 100 ) {
@@ -322,24 +368,53 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       fitness = 1-((float) stats.eA/100); //TODO + relMarketPower;
     }
 
-    ((KozaFitness) auctioneer.fitness).setStandardizedFitness(context.getState(), fitness);
-    auctioneer.evaluated = true;
+    auctioneerFitnesses.newData( (double) fitness );
 
     return fitness;
   }
 
-  protected void logStats( float auctioneerFitness ) {
-    // Log market stats to CSV file
-    statsOut.newData(stats.eA);
-    statsOut.newData(stats.mPB);
-    statsOut.newData(stats.mPS);
-    statsOut.newData(logger.getTransPriceStats().getMean());
-    statsOut.newData(logger.getAskPriceStats().getMean());
-    statsOut.newData(logger.getBidPriceStats().getMean());
-    statsOut.newData(logger.getAskQuoteStats().getMean());
-    statsOut.newData(logger.getBidQuoteStats().getMean());
-    statsOut.newData(auctioneerFitness);
+
+  public void initCSVFile() {
+
+    try {
+      statsOut = new CSVWriter(new FileOutputStream(statsFileName), 10 + NS + NB);//13);
+    } catch ( IOException e ) {
+      e.printStackTrace();
+    }
+
+    // Print headings in CSV output file
+
+    statsOut.newData("generation");
+
+    for( int i=1; i<=NS; i++ ) {
+      statsOut.newData("s" + i);
+    }
+
+    for( int i=1; i<=NB; i++ ) {
+      statsOut.newData("b" + i);
+    }
+
+    statsOut.newData( new String[] {  "eA", "mPB", "mPS", "transPrice", "bidPrice",
+                                      "askPrice", "quoteBidPrice", "quoteAskPrice",
+                                      "fitness" });
   }
+
+
+  protected void logStats( double auctioneerFitness ) {
+    // Log market stats to CSV file
+    if ( generateCSV ) {
+      statsOut.newData(stats.eA);
+      statsOut.newData(stats.mPB);
+      statsOut.newData(stats.mPS);
+      statsOut.newData(logger.getTransPriceStats().getMean());
+      statsOut.newData(logger.getAskPriceStats().getMean());
+      statsOut.newData(logger.getBidPriceStats().getMean());
+      statsOut.newData(logger.getAskQuoteStats().getMean());
+      statsOut.newData(logger.getBidQuoteStats().getMean());
+      statsOut.newData(auctioneerFitness);
+    }
+  }
+
 
   protected void reportStatus() {
     if ( verbose ) {
@@ -383,6 +458,7 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   public static EvolutionState make() {
     return ec.Evolve.make(DEFAULT_PARAMS);
   }
+
 
   public static EvolutionState make( String parameterFile ) {
     return ec.Evolve.make( new String[] { "-file", parameterFile } );
