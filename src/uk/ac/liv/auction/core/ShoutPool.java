@@ -48,18 +48,16 @@ public class ShoutPool {
   public static Shout fetch( TraderAgent agent, int quantity, double price,
                               boolean isBid ) {
     Shout s = fetch();
-    s.setIsBid(isBid);
-    s.setAgent(agent);
-    s.setPrice(price);
-    s.setQuantity(quantity);
+    s.isBid = isBid;
+    s.agent = agent;
+    s.price = price;
+    s.quantity = quantity;
     return s;
   }
 
   protected static Shout fetchShoutWithNewId() throws FetchException {
     Shout s = (Shout) pooler.fetch();
-    long oldId = s.getId();
     s.id = s.idAllocator.nextId();
-    Debug.assertTrue(s.id != oldId);
     return s;
   }
 

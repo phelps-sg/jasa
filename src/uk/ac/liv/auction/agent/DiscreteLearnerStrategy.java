@@ -45,8 +45,7 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public abstract class DiscreteLearnerStrategy extends FixedQuantityStrategyImpl
-                                               implements AdaptiveStrategy {
+public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
 
   /**
    * A scaling factor used to multiply-up the output from

@@ -42,7 +42,7 @@ import java.io.Serializable;
  */
 
 public class MDPStrategy extends DiscreteLearnerStrategy
-                                  implements Serializable, AdaptiveStrategy {
+                                  implements Serializable {
 
   protected MDPLearner learner;
 

@@ -32,7 +32,8 @@ import java.io.Serializable;
  * <p>
  * A trading strategy that uses a stimuli-response learning algorithm,
  * such as the Roth-Erev algorithm, to adapt its trading behaviour in
- * successive auction rounds.
+ * successive auction rounds by using the agent's profits in the last
+ * round as a reward signal.
  * </p>
  *
  * </p><p><b>Parameters</b><br>

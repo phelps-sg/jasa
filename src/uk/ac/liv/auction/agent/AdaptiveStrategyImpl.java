@@ -33,6 +33,10 @@ public abstract class AdaptiveStrategyImpl extends FixedQuantityStrategyImpl
     super(agent);
   }
 
+  public AdaptiveStrategyImpl() {
+    super();
+  }
+
   public void endOfRound( Auction auction ) {
 //    super.endOfRound(auction);
     getLearner().monitor();

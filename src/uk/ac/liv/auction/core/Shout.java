@@ -31,13 +31,13 @@ import java.io.Serializable;
  * </p>
  *
  * <p>
- * Shouts are mutable for performance reasons, hence care should be taken not
- * to rely on, e.g. shouts held in collections remaining constant.
+ * Shouts are mutable within this package for performance reasons,
+ * hence care should be taken not to rely on, e.g. shouts held in collections
+ * remaining constant.
  * </p>
  *
  * @author Steve Phelps
  * @version $Revision$
- *
  */
 
 public class Shout implements Comparable, Cloneable, Serializable {
@@ -192,7 +192,11 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   protected void makeChildless() {
-    child = null;
+    if ( child != null ) {
+      child.makeChildless();
+      ShoutPool.release(child);
+      child = null;
+    }
   }
 
   public void copyFrom( Shout other ) {
@@ -213,6 +217,11 @@ public class Shout implements Comparable, Cloneable, Serializable {
                     getAgent().equals(((Shout) other).getAgent());
   }
 
+  //
+  // The following methods allow muting of shouts but only by client classes
+  // that are part of the uk.ac.liv.auction.core package.
+  //
+
   /**
    * Reduce the quantity of this shout by excess and return a new
    * child shout containing the excess quantity.  After a split,
@@ -223,7 +232,8 @@ public class Shout implements Comparable, Cloneable, Serializable {
    */
  Shout split( int excess ) {
     quantity -= excess;
-    Shout newShout = new Shout(agent, excess, price, isBid);
+    Shout newShout = ShoutFactory.getFactory().create(agent, excess, price,
+                                                       isBid);
 //    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
     child = newShout;
     Debug.assertTrue(isValid());
@@ -232,7 +242,8 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   Shout splat( int excess ) {
-    Shout newShout = new Shout(agent, quantity - excess, price, isBid);
+    Shout newShout = ShoutFactory.getFactory().create(agent, quantity - excess,
+                                                       price, isBid);
 //    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
     quantity = excess;
     child = newShout;
@@ -258,6 +269,12 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
 
+  /**
+   * A Shout that is publically mutable.
+   *
+   * @author Steve Phelps
+   * @version $Revision$
+   */
   public static class MutableShout extends Shout {
 
     public MutableShout() {

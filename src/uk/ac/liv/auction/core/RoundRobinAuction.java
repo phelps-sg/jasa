@@ -146,6 +146,8 @@ public class RoundRobinAuction extends AuctionImpl
    */
   protected boolean shoutsProcessed;
 
+  protected boolean isRunning;
+
   /**
    * Optional graphical console
    */
@@ -364,6 +366,8 @@ public class RoundRobinAuction extends AuctionImpl
       throw new AuctionError("No auctioneer has been assigned for auction " + name);
     }
 
+    isRunning = true;
+
     informAuctionOpen();
 
     try {
@@ -379,6 +383,8 @@ public class RoundRobinAuction extends AuctionImpl
     }
 
     informAuctionClosed();
+
+    isRunning = false;
   }
 
 
@@ -444,6 +450,10 @@ public class RoundRobinAuction extends AuctionImpl
    */
   public boolean isQuiescent() {
     return !shoutsProcessed;
+  }
+
+  public boolean isRunning() {
+    return isRunning;
   }
 
   /**
@@ -572,6 +582,7 @@ public class RoundRobinAuction extends AuctionImpl
     shoutsProcessed = false;
     paused = false;
     pausePending = false;
+    isRunning = false;
   }
 
   protected void activate( TraderAgent agent ) {

@@ -392,10 +392,10 @@ public class AuctionConsoleFrame extends JFrame
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
       agent.reset();
     }
-    updateGraphs();
+    updateSupplyAndDemandGraphs();
   }
 
-  public void updateGraphs() {
+  public void updateSupplyAndDemandGraphs() {
     Iterator i = graphs.iterator();
     while ( i.hasNext() ) {
       SupplyAndDemandFrame gFrame = (SupplyAndDemandFrame) i.next();
@@ -437,9 +437,12 @@ public class AuctionConsoleFrame extends JFrame
   public void rerunAuction() {
     logger.debug("rerunAuction()");
     auction.close();
-    while ( !auction.closed() );
+    while ( auction.isRunning() ) {
+      // Wait until the auction has finished running
+    }
     reset();
     auction.reset();
+    updateSupplyAndDemandGraphs();
     auctionRunner = new Thread(auction);
     auctionRunner.start();
   }
