@@ -25,7 +25,7 @@ import uk.ac.liv.auction.electricity.*;
 
 import uk.ac.liv.ai.learning.NPTRothErevLearner;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import uk.ac.liv.prng.*;
 
@@ -64,7 +64,7 @@ public abstract class ElectricityTest extends TestCase {
 
   protected static long seeds[] = null;
 
-  protected CummulativeStatCounter mPB, mPS, eA;
+  protected CummulativeDistribution mPB, mPS, eA;
 
   protected int ns, nb, cs, cb;
 
@@ -118,9 +118,9 @@ public abstract class ElectricityTest extends TestCase {
   }
 
   public void initStats() {
-    mPS = new CummulativeStatCounter("MPS");
-    mPB = new CummulativeStatCounter("MPB");
-    eA = new CummulativeStatCounter("EA");
+    mPS = new CummulativeDistribution("MPS");
+    mPB = new CummulativeDistribution("MPB");
+    eA = new CummulativeDistribution("EA");
   }
 
   public void experimentSetup( int ns, int nb, int cs, int cb ) {

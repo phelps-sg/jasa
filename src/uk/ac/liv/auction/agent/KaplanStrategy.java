@@ -19,7 +19,7 @@ package uk.ac.liv.auction.agent;
 import java.io.Serializable;
 
 import uk.ac.liv.util.Prototypeable;
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -134,7 +134,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
     boolean juicyOffer = false;
 
-    CummulativeStatCounter transPrice = null;
+    CummulativeDistribution transPrice = null;
 
     try {
       transPrice = auction.getPreviousDayTransPriceStats();
@@ -166,7 +166,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
     boolean smallSpread = false;
 
-    CummulativeStatCounter transPrice = null;
+    CummulativeDistribution transPrice = null;
 
     try {
       transPrice = auction.getPreviousDayTransPriceStats();

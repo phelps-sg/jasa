@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.ec.gp;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import ec.simple.SimpleFitness;
 
@@ -34,9 +34,9 @@ public class WeightedAuctioneerFitness extends SimpleFitness
   } */
 
 
-  public void compute( CummulativeStatCounter efficiency,
-                          CummulativeStatCounter buyerMP,
-                          CummulativeStatCounter sellerMP,
+  public void compute( CummulativeDistribution efficiency,
+                          CummulativeDistribution buyerMP,
+                          CummulativeDistribution sellerMP,
                           boolean misbehaved ) {
 
     if ( misbehaved ) {

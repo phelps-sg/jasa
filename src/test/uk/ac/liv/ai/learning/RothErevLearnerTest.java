@@ -23,7 +23,7 @@ import uk.ac.liv.prng.GlobalPRNG;
 
 import uk.ac.liv.ai.learning.*;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 public class RothErevLearnerTest extends TestCase {
 
@@ -43,7 +43,7 @@ public class RothErevLearnerTest extends TestCase {
   public void testBasic() {
     learner1.setExperimentation(0.99);
     System.out.println("testBasic()");
-    CummulativeStatCounter stats = new CummulativeStatCounter("action");
+    CummulativeDistribution stats = new CummulativeDistribution("action");
     int correctActions = 0;
     for( int i=0; i<100; i++ ) {
       int action = learner1.act();
@@ -75,11 +75,11 @@ public class RothErevLearnerTest extends TestCase {
   public void testDistribution() {
     System.out.println("\ntestDistribution()");
     double q[] = { 55, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
-    CummulativeStatCounter action1Data = new CummulativeStatCounter("action1");
+    CummulativeDistribution action1Data = new CummulativeDistribution("action1");
     for( int r=0; r<10000; r++ ) {
       learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 1);
       learner1.setPropensities(q);
-      CummulativeStatCounter choiceData = new CummulativeStatCounter("choice");
+      CummulativeDistribution choiceData = new CummulativeDistribution("choice");
       int action1Chosen = 0;
       for( int i=0; i<100; i++ ) {
         int choice = learner1.act();

@@ -21,7 +21,7 @@ import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.Resetable;
 
 import ec.util.Parameter;
@@ -43,7 +43,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
    implements Serializable, Cloneable, Resetable {
 
 
-  protected CummulativeStatCounter[] stats;
+  protected CummulativeDistribution[] stats;
 
 
   static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
@@ -79,40 +79,40 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     }
   }
 
-  public CummulativeStatCounter getTransPriceStats() {
+  public CummulativeDistribution getTransPriceStats() {
     return stats[TRANS_PRICE];
   }
 
-  public CummulativeStatCounter getBidPriceStats() {
+  public CummulativeDistribution getBidPriceStats() {
     return stats[BID_PRICE];
   }
 
-  public CummulativeStatCounter getAskPriceStats() {
+  public CummulativeDistribution getAskPriceStats() {
     return stats[ASK_PRICE];
   }
 
-  public CummulativeStatCounter getBidQuoteStats() {
+  public CummulativeDistribution getBidQuoteStats() {
     return stats[BID_QUOTE];
   }
 
-  public CummulativeStatCounter getAskQuoteStats() {
+  public CummulativeDistribution getAskQuoteStats() {
     return stats[ASK_QUOTE];
   }
 
   public void initialise() {
-    stats = new CummulativeStatCounter[] {
-     new CummulativeStatCounter("Transaction Price"),
-     new CummulativeStatCounter("Bid Price"),
-     new CummulativeStatCounter("Ask Price"),
-     new CummulativeStatCounter("Bid Quote"),
-     new CummulativeStatCounter("Ask Quote")
+    stats = new CummulativeDistribution[] {
+     new CummulativeDistribution("Transaction Price"),
+     new CummulativeDistribution("Bid Price"),
+     new CummulativeDistribution("Ask Price"),
+     new CummulativeDistribution("Bid Quote"),
+     new CummulativeDistribution("Ask Quote")
    };
 
   }
 
   public void reset() {
     for( int i=0; i<stats.length; i++ ) {
-      ((CummulativeStatCounter) stats[i]).reset();
+      ((CummulativeDistribution) stats[i]).reset();
     }
   }
 
@@ -125,7 +125,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     try {
       copy = (StatsMarketDataLogger) clone();
       for( int i=0; i<stats.length; i++ ) {
-        copy.stats[i] = (CummulativeStatCounter) stats[i].clone();
+        copy.stats[i] = (CummulativeDistribution) stats[i].clone();
       }
     } catch ( CloneNotSupportedException e ) {
       logger.error(e.getMessage());
@@ -162,7 +162,7 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     logger.info("");
   }
 
-  protected void printStats( CummulativeStatCounter stats ) {
+  protected void printStats( CummulativeDistribution stats ) {
     stats.log();
     logger.info("");
   }

@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 /**
  * The interface used by agents to interact with an auction.
@@ -62,7 +62,7 @@ public interface Auction extends QuoteProvider {
   /**
    * Return statistics on yesterday's transaction price.
    */
-  public CummulativeStatCounter getPreviousDayTransPriceStats()
+  public CummulativeDistribution getPreviousDayTransPriceStats()
       throws DataUnavailableException;
 
   /**

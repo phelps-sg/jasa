@@ -49,8 +49,8 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   
   protected int rlLastAction;
 	
-  private CummulativeStatCounter priceStats = 
-  	new CummulativeStatCounter("priceStats");
+  private CummulativeDistribution priceStats = 
+  	new CummulativeDistribution("priceStats");
   
   public static final String P_MLEARNER = "mlearner";
   public static final String P_RLLEARNER = "rllearner";
@@ -141,7 +141,7 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
   	return agent.lastShoutAccepted();
   }
 
-  public CummulativeStatCounter getPriceStats() {
+  public CummulativeDistribution getPriceStats() {
     return priceStats;
   }
 
@@ -167,7 +167,7 @@ public class GPTradingStrategy extends FixedQuantityStrategyImpl
     GPTradingStrategy copy = null;
     try {
       copy = (GPTradingStrategy) super.protoClone();
-      copy.priceStats = (CummulativeStatCounter) priceStats.clone();  
+      copy.priceStats = (CummulativeDistribution) priceStats.clone();  
       copy.gpIndividual = (GPGenericIndividual) gpIndividual.shallowClone();
       copy.gpIndividual.setGPObject(copy);
     } catch ( CloneNotSupportedException e ) {

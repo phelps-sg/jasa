@@ -15,7 +15,7 @@
 
 package test.uk.ac.liv.util;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import java.util.Random;
 
@@ -28,14 +28,14 @@ import junit.framework.*;
 
 public class CummulativeStatCounterTest extends TestCase {
 
-  CummulativeStatCounter testSeries;
+  CummulativeDistribution testSeries;
 
   public CummulativeStatCounterTest( String name ) {
     super(name);
   }
 
   public void setUp() {
-    testSeries = new CummulativeStatCounter("test series");
+    testSeries = new CummulativeDistribution("test series");
   }
 
   public void testMean() {

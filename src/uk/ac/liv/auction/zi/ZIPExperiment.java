@@ -27,7 +27,7 @@ import uk.ac.liv.auction.MarketSimulation;
 import uk.ac.liv.prng.PRNGFactory;
 
 import uk.ac.liv.ai.learning.WidrowHoffLearner;
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 import java.util.Iterator;
 
 import java.io.File;
@@ -75,7 +75,7 @@ public class ZIPExperiment extends MarketSimulation {
 
   protected int numSamples = 50;
 
-  protected CummulativeStatCounter[] transPriceMean, transPriceStdDev;
+  protected CummulativeDistribution[] transPriceMean, transPriceStdDev;
 
   protected RandomElement paramPRNG;
 
@@ -166,12 +166,12 @@ public class ZIPExperiment extends MarketSimulation {
 
 
   public void run() {
-    transPriceMean = new CummulativeStatCounter[numDays];
-    transPriceStdDev = new CummulativeStatCounter[numDays];
+    transPriceMean = new CummulativeDistribution[numDays];
+    transPriceStdDev = new CummulativeDistribution[numDays];
 
     for( int day=0; day<numDays; day++ ) {
-      transPriceMean[day] = new CummulativeStatCounter("Mean of mean transaction price for day " + day);
-      transPriceStdDev[day] = new CummulativeStatCounter("Mean of stddev of transaction price for day " + day);
+      transPriceMean[day] = new CummulativeDistribution("Mean of mean transaction price for day " + day);
+      transPriceStdDev[day] = new CummulativeDistribution("Mean of stddev of transaction price for day " + day);
     }
 
     for( int sample=0; sample<numSamples; sample++ ) {
@@ -182,7 +182,7 @@ public class ZIPExperiment extends MarketSimulation {
       logger.debug("Auction terminated at round " + auction.getAge());
 
       for( int day=0; day<numDays; day++ ) {
-        CummulativeStatCounter stats = marketData.getTransPriceStats(day);
+        CummulativeDistribution stats = marketData.getTransPriceStats(day);
         if ( stats != null ) {
           transPriceMean[day].newData(stats.getMean());
           transPriceStdDev[day].newData(stats.getStdDev());

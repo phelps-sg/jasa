@@ -25,7 +25,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import test.uk.ac.liv.auction.agent.TestTrader;
 
@@ -103,7 +103,7 @@ public class RoundRobinAuctionTest extends TestCase {
     auction.run();
 
     try {
-      CummulativeStatCounter transPrice =
+      CummulativeDistribution transPrice =
           auction.getPreviousDayTransPriceStats();
       logger.info("Previous day transaction price statistics = " + transPrice);
       assertTrue(transPrice.getMean() == 725);

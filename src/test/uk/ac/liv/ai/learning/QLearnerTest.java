@@ -23,7 +23,7 @@ import uk.ac.liv.prng.GlobalPRNG;
 	
 import uk.ac.liv.ai.learning.*;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import org.apache.log4j.Logger;
 
@@ -59,7 +59,7 @@ public class QLearnerTest extends TestCase {
   public void testBestAction() {
     learner1.setEpsilon(0.0);
     System.out.println("testBestAction()");
-    CummulativeStatCounter stats = new CummulativeStatCounter("action");
+    CummulativeDistribution stats = new CummulativeDistribution("action");
     int correctActions = 0;
     for( int i=0; i<NUM_TRIALS; i++ ) {
       int action = learner1.act();
@@ -79,7 +79,7 @@ public class QLearnerTest extends TestCase {
 
   public void testMinimumScore() {
     logger.info("testMinimumScore()");
-    CummulativeStatCounter stats = new CummulativeStatCounter("action");
+    CummulativeDistribution stats = new CummulativeDistribution("action");
     int correctActions = 0;
     int bestActionChosen = 0;
     for( int i=0; i<NUM_TRIALS; i++ ) {

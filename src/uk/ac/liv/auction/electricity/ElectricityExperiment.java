@@ -93,30 +93,30 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
   protected StandardRandomizer randomizer;
 
-  protected CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
-  protected CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
-  protected CummulativeStatCounter mPS = new CummulativeStatCounter("MPS");
-  protected CummulativeStatCounter pSA = new CummulativeStatCounter("PSA");
-  protected CummulativeStatCounter pBA = new CummulativeStatCounter("PBA");
-  protected CummulativeStatCounter pST = new CummulativeStatCounter("PST");
-  protected CummulativeStatCounter pBT = new CummulativeStatCounter("PBT");
-  protected CummulativeStatCounter eAN = new CummulativeStatCounter("EAN");
-  protected CummulativeStatCounter mPBN = new CummulativeStatCounter("MPBN");
-  protected CummulativeStatCounter mPSN = new CummulativeStatCounter("MPSN");
-  protected CummulativeStatCounter sMPB = new CummulativeStatCounter("SMPB");
-  protected CummulativeStatCounter sMPS = new CummulativeStatCounter("SMPS");
-  protected CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
-  protected CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
-  protected CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
-  protected CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
-  protected CummulativeStatCounter equilibPrice =
-      new CummulativeStatCounter("EquilibPrice");
-  protected CummulativeStatCounter equilibQty =
-      new CummulativeStatCounter("EquilibQty");
-  protected CummulativeStatCounter learningDelta =
-      new CummulativeStatCounter("LD");
+  protected CummulativeDistribution efficiency = new CummulativeDistribution("EA");
+  protected CummulativeDistribution mPB = new CummulativeDistribution("MPB");
+  protected CummulativeDistribution mPS = new CummulativeDistribution("MPS");
+  protected CummulativeDistribution pSA = new CummulativeDistribution("PSA");
+  protected CummulativeDistribution pBA = new CummulativeDistribution("PBA");
+  protected CummulativeDistribution pST = new CummulativeDistribution("PST");
+  protected CummulativeDistribution pBT = new CummulativeDistribution("PBT");
+  protected CummulativeDistribution eAN = new CummulativeDistribution("EAN");
+  protected CummulativeDistribution mPBN = new CummulativeDistribution("MPBN");
+  protected CummulativeDistribution mPSN = new CummulativeDistribution("MPSN");
+  protected CummulativeDistribution sMPB = new CummulativeDistribution("SMPB");
+  protected CummulativeDistribution sMPS = new CummulativeDistribution("SMPS");
+  protected CummulativeDistribution sMPBN = new CummulativeDistribution("SMPBN");
+  protected CummulativeDistribution sMPSN = new CummulativeDistribution("SMPSN");
+  protected CummulativeDistribution pBCE = new CummulativeDistribution("PBCE");
+  protected CummulativeDistribution pSCE = new CummulativeDistribution("PSCE");
+  protected CummulativeDistribution equilibPrice =
+      new CummulativeDistribution("EquilibPrice");
+  protected CummulativeDistribution equilibQty =
+      new CummulativeDistribution("EquilibQty");
+  protected CummulativeDistribution learningDelta =
+      new CummulativeDistribution("LD");
 
-  protected CummulativeStatCounter[] variables = new CummulativeStatCounter[] {
+  protected CummulativeDistribution[] variables = new CummulativeDistribution[] {
     efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
     sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, learningDelta
   };

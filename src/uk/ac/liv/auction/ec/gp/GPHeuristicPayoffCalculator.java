@@ -19,7 +19,7 @@ import uk.ac.liv.auction.heuristic.*;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.ec.gp.func.GPTradingStrategy;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import org.apache.log4j.Logger;
 
@@ -73,11 +73,11 @@ public class GPHeuristicPayoffCalculator extends HeuristicPayoffCalculator {
     }
     logger.info("");
     
-    CummulativeStatCounter[] payoffs =
-        new CummulativeStatCounter[numStrategies];
+    CummulativeDistribution[] payoffs =
+        new CummulativeDistribution[numStrategies];
     for( int i=0; i<numStrategies; i++ ) {
       payoffs[i] =
-          new CummulativeStatCounter("Payoff for group " + groups[i]);
+          new CummulativeDistribution("Payoff for group " + groups[i]);
     }
 
     assignStrategies(entry);

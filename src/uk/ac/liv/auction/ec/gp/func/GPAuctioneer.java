@@ -50,7 +50,7 @@ public class GPAuctioneer extends GPSchemeIndividual
   /**
    * The market statistics for the last auction run by this auctioneer.
    */
-  protected CummulativeStatCounter stats;
+  protected CummulativeDistribution stats;
 
   /**
    * A copy of the logger stats for the last auction run by this auctioneer.
@@ -182,12 +182,12 @@ public class GPAuctioneer extends GPSchemeIndividual
   }
 
 
-  public void setMarketStats( CummulativeStatCounter stats ) { this.stats = stats; }
+  public void setMarketStats( CummulativeDistribution stats ) { this.stats = stats; }
   public void setLogStats( StatsMarketDataLogger logger ) { this.logger = logger; }
   public void setStrategies( LinkedList strategies ) { this.strategies = strategies; }
   public void setAuction( Auction auction ) { this.auction = auction; }
 
-  public CummulativeStatCounter getMarketStats() { return stats; }
+  public CummulativeDistribution getMarketStats() { return stats; }
   public StatsMarketDataLogger getLogStats() { return logger; }
   public LinkedList getStrategies() { return strategies; }
   public Auction getAuction() { return auction; }

@@ -23,7 +23,7 @@ import ec.util.ParameterDatabase;
 
 import java.util.Vector;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.Parameterizable;
 
 import org.apache.log4j.Logger;
@@ -51,20 +51,20 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
     auction.setDailyStats(this);
   }
 
-  public CummulativeStatCounter getTransPriceStats( int day ) {
+  public CummulativeDistribution getTransPriceStats( int day ) {
     if ( day > dailyStats.size()-1 ) {
       return null;
     }
-    return ((CummulativeStatCounter[]) dailyStats.get(day))[TRANS_PRICE];
+    return ((CummulativeDistribution[]) dailyStats.get(day))[TRANS_PRICE];
   }
 
   public void endOfDay( Auction auction ) {
     // Make a copy of the current stats, reset them and record
     try {
-      CummulativeStatCounter[] currentStats =
-          new CummulativeStatCounter[stats.length];
+      CummulativeDistribution[] currentStats =
+          new CummulativeDistribution[stats.length];
       for (int i = 0; i < stats.length; i++) {
-        currentStats[i] = (CummulativeStatCounter) stats[i].clone();
+        currentStats[i] = (CummulativeDistribution) stats[i].clone();
         stats[i].reset();
       }
       dailyStats.add(currentStats);
@@ -77,8 +77,8 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
 
   public void finalReport() {
     for( int day=0; day<dailyStats.size(); day++ ) {
-      CummulativeStatCounter[] todaysStats =
-          (CummulativeStatCounter[]) dailyStats.get(day);
+      CummulativeDistribution[] todaysStats =
+          (CummulativeDistribution[]) dailyStats.get(day);
       logger.info("Stats for day " + day);
       logger.info("");
       for( int i=0; i<todaysStats.length; i++ ) {

@@ -16,7 +16,7 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.io.*;
 
 import org.apache.log4j.Logger;
@@ -33,22 +33,22 @@ import org.apache.log4j.Logger;
 public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLogger {
 
 
-  protected CummulativeStatCounter askQuoteStats =
-      new CummulativeStatCounter("Ask Quote");
+  protected CummulativeDistribution askQuoteStats =
+      new CummulativeDistribution("Ask Quote");
 
-  protected CummulativeStatCounter bidQuoteStats =
-      new CummulativeStatCounter("Bid Quote");
+  protected CummulativeDistribution bidQuoteStats =
+      new CummulativeDistribution("Bid Quote");
 
-  protected CummulativeStatCounter bidStats =
-      new CummulativeStatCounter("Bid");
+  protected CummulativeDistribution bidStats =
+      new CummulativeDistribution("Bid");
 
-  protected CummulativeStatCounter askStats =
-      new CummulativeStatCounter("Ask");
+  protected CummulativeDistribution askStats =
+      new CummulativeDistribution("Ask");
 
-  protected CummulativeStatCounter transPriceStats =
-      new CummulativeStatCounter("Transaction Price");
+  protected CummulativeDistribution transPriceStats =
+      new CummulativeDistribution("Transaction Price");
 
-  protected CummulativeStatCounter[] allStats = {
+  protected CummulativeDistribution[] allStats = {
       askQuoteStats, bidQuoteStats, askStats, bidStats, transPriceStats
   };
 
@@ -112,7 +112,7 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
 
 
 
-  protected void update( DataWriter writer, CummulativeStatCounter stats ) {
+  protected void update( DataWriter writer, CummulativeDistribution stats ) {
     writer.newData(round);
     writer.newData(stats.getMean());
   }

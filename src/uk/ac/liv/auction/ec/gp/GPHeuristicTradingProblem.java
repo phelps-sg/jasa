@@ -28,7 +28,7 @@ import ec.simple.SimpleFitness;
 import ec.util.Parameter;
 import ec.util.Output;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import uk.ac.liv.ec.gp.GPContext;
 import uk.ac.liv.ec.gp.GPGenericIndividual;
@@ -94,7 +94,7 @@ public class GPHeuristicTradingProblem extends GPProblem
 			payoffCalculator.getCompressedPayoffMatrix();
 		
     int gpStrategyIndex = payoffCalculator.getGPStrategyIndex();
-		CummulativeStatCounter payoff = new CummulativeStatCounter("gp payoff");
+		CummulativeDistribution payoff = new CummulativeDistribution("gp payoff");
 		Iterator i = payoffMatrix.compressedEntryIterator();		
 		while ( i.hasNext() ) {
 			int[] entry = (int[]) i.next();
@@ -110,7 +110,7 @@ public class GPHeuristicTradingProblem extends GPProblem
 	}
 		
 	protected void computeFitness( GPGenericIndividual individual, 
-													  				CummulativeStatCounter payoff ) {	
+													  				CummulativeDistribution payoff ) {	
 			
 		float fitness = (float) payoff.getMean();
 		

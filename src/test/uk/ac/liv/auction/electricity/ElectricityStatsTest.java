@@ -24,7 +24,7 @@ import uk.ac.liv.auction.electricity.ElectricityTrader;
 
 import uk.ac.liv.auction.agent.PureSimpleStrategy;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 /**
  *
@@ -34,7 +34,7 @@ import uk.ac.liv.util.CummulativeStatCounter;
 
 public class ElectricityStatsTest extends ElectricityTest {
 
-  CummulativeStatCounter sMPS, sMPB, pSA, pBA, pST, pBT;
+  CummulativeDistribution sMPS, sMPB, pSA, pBA, pST, pBT;
 
   static final int NUM_SCHEDULES = 10;
 
@@ -71,12 +71,12 @@ public class ElectricityStatsTest extends ElectricityTest {
 
   public void initStats() {
     super.initStats();
-    sMPS = new CummulativeStatCounter("SMPS");
-    sMPB = new CummulativeStatCounter("SMPB");
-    pBA = new CummulativeStatCounter("PBA");
-    pSA = new CummulativeStatCounter("PSA");
-    pBT = new CummulativeStatCounter("PBT");
-    pST = new CummulativeStatCounter("PST");
+    sMPS = new CummulativeDistribution("SMPS");
+    sMPB = new CummulativeDistribution("SMPB");
+    pBA = new CummulativeDistribution("PBA");
+    pSA = new CummulativeDistribution("PSA");
+    pBT = new CummulativeDistribution("PBT");
+    pST = new CummulativeDistribution("PST");
   }
 
   public void updateStats() {

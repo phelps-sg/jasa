@@ -15,7 +15,7 @@
 
 package uk.ac.liv.prng;
 
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Prototypeable;
 
@@ -162,7 +162,7 @@ public class DiscreteProbabilityDistribution
     throw new ProbabilityError(this);
   }
 
-  public void computeStats( CummulativeStatCounter stats ) {
+  public void computeStats( CummulativeDistribution stats ) {
   }
 
   public String toString() {

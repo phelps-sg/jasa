@@ -18,7 +18,7 @@ package test.uk.ac.liv.util;
 import junit.framework.*;
 
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 /** 
  * @author Steve Phelps
@@ -57,7 +57,7 @@ public class DiscreteProbabilityDistributionTest extends TestCase {
   public void testStats() {
     for( int test=0; test<p.length; test++ ) {
       DiscreteProbabilityDistribution subject = p[test];
-      CummulativeStatCounter eventData = new CummulativeStatCounter("Event_Data");      
+      CummulativeDistribution eventData = new CummulativeDistribution("Event_Data");      
       for( int trial=0; trial<NUM_TRIALS; trial++ ) {
         int event = subject.generateRandomEvent();
         eventData.newData(event);

@@ -28,7 +28,7 @@ import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
-import uk.ac.liv.util.CummulativeStatCounter;
+import uk.ac.liv.util.CummulativeDistribution;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -471,7 +471,7 @@ public class RoundRobinAuction extends AuctionImpl
    * @throws DataUnavailableException  Thrown if the auction does not have
    *                                   a DailyStatsMarketDataLogger configured.
    */
-  public CummulativeStatCounter getPreviousDayTransPriceStats()
+  public CummulativeDistribution getPreviousDayTransPriceStats()
       throws DataUnavailableException {
 
     if ( dailyStats == null ) {
