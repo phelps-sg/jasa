@@ -17,12 +17,12 @@ package uk.ac.liv.ai.learning;
 
 /**
  * Classes implementing this interface implement
- * reinformcement learning algorithms.
+ * learning algorithms for markoff descision processes.
  *
  * @author Steve Phelps
  */
 
-public interface ReinforcementLearner {
+public interface MDPLearner {
 
   /**
    * Specify the next action to take.
@@ -32,8 +32,7 @@ public interface ReinforcementLearner {
   public int act();
 
   /**
-   * The reinforcement learner is called-back after performing
-   * an action with a reward value and a new state.
+   * The call-back after performing an action.
    */
   public void newState( double reward, int newState );
 

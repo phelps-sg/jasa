@@ -28,14 +28,14 @@ import ec.util.Parameter;
 
 
 public class QLearner
-    implements ReinforcementLearner, Resetable, Serializable,
+    implements MDPLearner, Resetable, Serializable,
                 Parameterizable {
 
   int numStates;
 
   int numActions;
 
-  MersenneTwisterFast randGenerator;
+  MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 
   double q[][];
 
@@ -98,9 +98,9 @@ public class QLearner
     //TODO
   }
 
-  public void setState( int state ) {
-    previousState = state;
-    this.currentState = state;
+  public void setState( int newState ) {
+    previousState = currentState;
+    currentState = newState;
   }
 
   public int act() {

@@ -17,12 +17,13 @@
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 public class StatelessQLearner
-    implements StimuliResponseLearner, Parameterizable {
+    implements StimuliResponseLearner, Parameterizable, Resetable {
 
   QLearner qLearner;
 
@@ -30,7 +31,7 @@ public class StatelessQLearner
   public StatelessQLearner( int numActions, double epsilon,
                               double learningRate, double discountRate  ) {
 
-    qLearner = new QLearner(0, numActions, epsilon, learningRate,
+    qLearner = new QLearner(1, numActions, epsilon, learningRate,
                             discountRate);
   }
 
@@ -44,6 +45,10 @@ public class StatelessQLearner
 
   public void reward(double reward) {
     qLearner.newState(reward, 0);
+  }
+
+  public void reset() {
+    qLearner.reset();
   }
 
 }
