@@ -30,8 +30,6 @@ import org.apache.log4j.Logger;
 
 public class ZITraderAgentTest extends TestCase implements Observer {
 
-  ZIPStrategy strategy;
-
   ZITraderAgent buyer, seller;
 
   RoundRobinAuction auction;
@@ -54,8 +52,6 @@ public class ZITraderAgentTest extends TestCase implements Observer {
   }
 
   public void setUp() {
-    strategy = new ZIPStrategy();
-    strategy.setQuantity(1);
     buyer = new ZITraderAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT, false);
     seller = new ZITraderAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true);
     auction = new RoundRobinAuction("ZIPStrategyTest auction");

@@ -107,6 +107,11 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     dummyShout = new Shout(this);
   }
 
+  public void reset() {
+    // ZITraders do not reset their strategy
+    initialise();
+  }
+
   public void requestShout( Auction auction ) {
 
     if ( active() ) {
