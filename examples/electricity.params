@@ -60,3 +60,5 @@ electricity.auctioneer = uk.ac.liv.auction.core.DiscrimPriceCDAAuctioneer
 # Number of different k values 
 electricity.ksamples = 100
 
+# Statistics to use
+electricity.stats = uk.ac.liv.auction.electricity.ElectricityStats

@@ -34,6 +34,10 @@ public class DiscrimPriceCDAAuctioneer extends ContinuousDoubleAuctioneer {
     super(auction, k);
   }
 
+  public DiscrimPriceCDAAuctioneer() {
+    super();
+  }
+
   public synchronized void clear() {
     List shouts = shoutEngine.getMatchedShouts();
     Iterator i = shouts.iterator();
