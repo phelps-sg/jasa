@@ -9,7 +9,7 @@ import ec.vector.*;
 import ec.simple.*;
 import ec.util.*;
 
-import uk.ac.liv.auction.ec.CoEvolutionaryProblem;
+import uk.ac.liv.ec.coevolve.*;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.electricity.*;
@@ -22,7 +22,7 @@ import uk.ac.liv.util.io.*;
  * @author Steve Phelps
  */
 
-public class GACoEvolveElectricityProblem extends CoEvolutionaryProblem {
+public class GACoEvolveElectricityProblem extends Problem implements CoEvolutionaryProblem {
 
   static int NS = 2;
   static int NB = 3;

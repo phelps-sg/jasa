@@ -28,6 +28,7 @@ public class GPIndividualCtx extends GPIndividual {
   public void evaluateTree( int treeNumber, GPData input ) {
     trees[treeNumber].child.eval(context.state, context.thread, input,
                                     context.stack, this, context.problem);
+    context.getStack().reset();
   }
 
 }

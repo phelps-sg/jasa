@@ -20,4 +20,5 @@ public class QuoteBidPrice extends GPNode {
   public String toString() {
     return "QuoteBidPrice";
   }
+
 }

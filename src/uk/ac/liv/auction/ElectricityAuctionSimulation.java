@@ -19,13 +19,12 @@ import java.io.*;
 public class ElectricityAuctionSimulation  {
 
   static final String OUTPUT_FILE   = "electricity-data.csv";
-  static final String BUYER_CONFIG  = "electricity-buyers.csv";
-  static final String SELLER_CONFIG = "electricity-sellers.csv";
+
 
   //static final int ATC = 1000;
 
 
-  static int MAX_ROUNDS = 2000;
+  static int MAX_ROUNDS = 1000;
 
   static final int ITERATIONS = 100;
 
@@ -33,11 +32,11 @@ public class ElectricityAuctionSimulation  {
 
   static final int sellerValues[] = { 35, 16, 11 };
 
-  static double R = 0.02;    // Recency
-  static double E = 0.99;    // Experimentation
-  static int K = 100;         // No. of possible different actions
+  static double R = 0.10;    // Recency
+  static double E = 0.20;    // Experimentation
+  static int K = 30;         // No. of possible different actions
   static double X = 15000;
-  static double S1 = 1.0;
+  static double S1 = 9.0;
 
   static String dataFileName  = "electricity-data.csv";
 
@@ -129,9 +128,9 @@ public class ElectricityAuctionSimulation  {
 
     auction = new RandomRobinAuction("Electricity Auction ns:" + ns + " nb:" + nb + " cs:" + cs + " cb:" + cb);
     //auctioneer = new ElectricityAuctioneer(new SimpleGrid(ATC), auction);
-    //auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
+    auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
     //auctioneer.setK(0);
-    auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+    //auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
     //auctioneer = new AdaptiveElectricityAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
 

@@ -10,7 +10,7 @@ import ec.Problem;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.electricity.*;
-import uk.ac.liv.auction.ec.CoEvolutionaryProblem;
+import uk.ac.liv.ec.coevolve.CoEvolutionaryProblem;
 import uk.ac.liv.auction.agent.PureSimpleStrategy;
 import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.util.io.*;
