@@ -21,8 +21,6 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.io.DataSeriesWriter;
 
-import javax.swing.*;
-
 /**
  * @author Steve Phelps
  * @version $Revision$
