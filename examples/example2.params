@@ -1,4 +1,5 @@
-simulation.auction = uk.ac.liv.auction.core.RoundRobinAuction
+simulation.auction = uk.ac.liv.auction.core.RandomShoutAuction
+simulation.auction.shoutprobability = 0.9
 simulation.auction.maximumrounds = 200
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
