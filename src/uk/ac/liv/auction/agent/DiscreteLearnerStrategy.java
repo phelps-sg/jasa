@@ -81,7 +81,9 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl {
   }
 
   public void endOfRound( Auction auction ) {
-    learn(auction);
+    if ( agent.active() ) {
+      learn(auction);
+    }
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
