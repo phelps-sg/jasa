@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class MetaLearner
+public class MetaLearner extends AbstractLearner
      implements StimuliResponseLearner, Parameterizable, Serializable {
 
   protected int currentLearner;

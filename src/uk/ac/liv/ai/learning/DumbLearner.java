@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class DumbLearner implements
+public class DumbLearner extends AbstractLearner implements
                            DiscreteLearner, Parameterizable, Serializable {
 
   protected int action;

@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class DumbRandomLearner
+public class DumbRandomLearner extends AbstractLearner
     implements DiscreteLearner, StochasticLearner, Serializable {
 
   protected MersenneTwisterFast prng;

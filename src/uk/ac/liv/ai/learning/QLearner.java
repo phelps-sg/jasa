@@ -61,7 +61,7 @@ import ec.util.Parameter;
  */
 
 
-public class QLearner
+public class QLearner extends AbstractLearner
     implements MDPLearner, StochasticLearner, Resetable, Serializable,
                 Parameterizable {
 

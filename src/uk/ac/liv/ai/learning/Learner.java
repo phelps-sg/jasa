@@ -43,4 +43,11 @@ public interface Learner {
    */
   public void dumpState( DataWriter out );
 
+  /**
+   * A hook to provide monitoring functionality.  Implementations of
+   * learning algorithms should either log, or provide a visualisation of,
+   * their state in response to this method.
+   */
+  public void monitor();
+
 }

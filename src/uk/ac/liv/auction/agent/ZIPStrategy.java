@@ -47,8 +47,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class ZIPStrategy extends FixedQuantityStrategyImpl
-    implements Seedable, Serializable, Parameterizable, AdaptiveStrategy {
+public class ZIPStrategy extends AdaptiveStrategyImpl
+    implements Seedable, Serializable, Parameterizable {
 
   protected double currentMargin;
 

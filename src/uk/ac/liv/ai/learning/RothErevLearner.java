@@ -69,11 +69,10 @@ import java.io.Serializable;
  *
  */
 
-public class RothErevLearner implements
+public class RothErevLearner extends AbstractLearner implements
                                 Resetable,
                                 StimuliResponseLearner,
                                 StochasticLearner,
-                                Parameterizable,
                                 Serializable {
 
   /**

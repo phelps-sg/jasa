@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class StatelessQLearner
+public class StatelessQLearner extends AbstractLearner
     implements StimuliResponseLearner, StochasticLearner, Parameterizable,
                 Resetable, Serializable {
 
@@ -73,7 +73,7 @@ public class StatelessQLearner
   public void setSeed( long seed ) {
     qLearner.setSeed(seed);
   }
-  
+
   public double getLearningDelta() {
     return qLearner.getLearningDelta();
   }
@@ -81,9 +81,9 @@ public class StatelessQLearner
   public int getNumberOfActions() {
     return qLearner.getNumberOfActions();
   }
-  
+
   public void dumpState( uk.ac.liv.util.io.DataWriter out ) {
     qLearner.dumpState(out);
   }
-  
+
 }

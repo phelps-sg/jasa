@@ -84,6 +84,8 @@ public class AuctionConsoleFrame extends JFrame
 
   protected LinkedList graphs = new LinkedList();
 
+  protected Timer graphUpdateTimer = null;
+
   private Thread auctionRunner;
 
   static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);
@@ -289,6 +291,7 @@ public class AuctionConsoleFrame extends JFrame
       graphPanel.setPreferredSize(new Dimension(600,200));
       gridBag.setConstraints(graphPanel, c);
       contentPane.add(graphPanel);
+
     }
 
     setAuctionName(name);
@@ -340,12 +343,12 @@ public class AuctionConsoleFrame extends JFrame
     roundLabel.setText(decimalFormatter.format(auction.getAge()));
     numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
 
-    if ( graphModel != null && auction.getAge() != currentRound) {
-      currentRound = auction.getAge();
-      if ( currentRound > 1 ) {
-        notifyGraphModelChanged();
-      }
-    }
+//    if ( graphModel != null && auction.getAge() != currentRound) {
+//      currentRound = auction.getAge();
+//      if ( currentRound > 1 && currentRound % 10 == 0 ) {
+//        notifyGraphModelChanged();
+//      }
+//    }
     logger.debug("update() complete");
   }
 
@@ -406,6 +409,19 @@ public class AuctionConsoleFrame extends JFrame
   public void activate() {
     pack();
     setVisible(true);
+    if ( graphModel != null ) {
+      startGraphUpdateTimer();
+    }
+  }
+
+  public void startGraphUpdateTimer() {
+    ActionListener graphUpdateListener = new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        graphModel.fireDataChanged();
+      }
+    };
+    graphUpdateTimer = new Timer(1000, graphUpdateListener);
+    graphUpdateTimer.start();
   }
 
   /**
@@ -413,6 +429,9 @@ public class AuctionConsoleFrame extends JFrame
    */
   public void deactivate() {
     setVisible(false);
+    if ( graphUpdateTimer != null ) {
+      graphUpdateTimer.stop();
+    }
   }
 
   public void rerunAuction() {
@@ -435,22 +454,22 @@ public class AuctionConsoleFrame extends JFrame
 
   protected void notifyGraphModelChanged() {
     logger.debug("notifyGraphModelChanged()");
-    try {
-      SwingUtilities.invokeAndWait(new Runnable() {
+//    try {
+      SwingUtilities.invokeLater(new Runnable() {
         public void run() {
           graphModel.fireDataChanged();
         }
       });
-      Thread.currentThread().sleep(1);
-    }
-    catch (InterruptedException e) {
-      logger.warn(e);
-      e.printStackTrace();
-    }
-    catch (java.lang.reflect.InvocationTargetException e) {
-      logger.warn(e);
-      e.printStackTrace();
-    }
+//      Thread.currentThread().sleep(1);
+//    }
+//    catch (InterruptedException e) {
+//      logger.warn(e);
+//      e.printStackTrace();
+//    }
+//    catch (java.lang.reflect.InvocationTargetException e) {
+//      logger.warn(e);
+//      e.printStackTrace();
+//    }
     logger.debug("exiting notifyGraphModelChanged()");
   }
 }

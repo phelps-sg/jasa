@@ -32,8 +32,8 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class WidrowHoffLearner implements MimicryLearner,
-                                             Resetable, Serializable {
+public class WidrowHoffLearner extends AbstractLearner
+    implements MimicryLearner, Resetable, Serializable {
 
   /**
    * The learning rate.

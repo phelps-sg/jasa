@@ -165,7 +165,6 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   public static final String P_INITIAL_FUNDS = "initialfunds";
   public static final String P_RANDOM_PRIVATE_VALUE = "randomprivatevalue";
   public static final String P_MAX_PRIVATE_VALUE = "maxprivatevalue";
-
   public static final String P_DEFAULT_STRATEGY =
                                    "uk.ac.liv.auction.core.PureSimpleStrategy";
 
@@ -206,21 +205,41 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     id = idAllocator.nextId();
   }
 
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    initialStock = parameters.getIntWithDefault(base.push(P_INITIAL_STOCK), null, 0);
-    initialFunds = parameters.getDoubleWithDefault(base.push(P_INITIAL_FUNDS), null, 0);
+
+    initialStock = parameters.getIntWithDefault(base.push(P_INITIAL_STOCK),
+                                                null, 0);
+
+    initialFunds = parameters.getDoubleWithDefault(base.push(P_INITIAL_FUNDS),
+                                                   null, 0);
+
     isSeller = parameters.getBoolean(base.push(P_IS_SELLER), null, false);
-    randomPrivateValue = parameters.getBoolean(base.push(P_RANDOM_PRIVATE_VALUE), null, true);
+
+    randomPrivateValue =
+        parameters.getBoolean(base.push(P_RANDOM_PRIVATE_VALUE),
+                                               null, true);
+
     if ( randomPrivateValue ) {
-      maxPrivateValue = parameters.getDoubleWithDefault(base.push(P_MAX_PRIVATE_VALUE), null, 100);
+      maxPrivateValue =
+          parameters.getDoubleWithDefault(base.push(P_MAX_PRIVATE_VALUE),
+                                          null, 100);
     } else {
-      privateValue = parameters.getDoubleWithDefault(base.push(P_PRIVATE_VALUE), null, 100);
+      privateValue =
+          parameters.getDoubleWithDefault(base.push(P_PRIVATE_VALUE),
+                                          null, 100);
     }
-    strategy = (AbstractStrategy) parameters.getInstanceForParameter(base.push(P_STRATEGY), null, AbstractStrategy.class);
+
+    strategy =
+        (AbstractStrategy)
+         parameters.getInstanceForParameter(base.push(P_STRATEGY),
+                                            null, AbstractStrategy.class);
     ((Parameterizable) strategy).setup(parameters, base.push(P_STRATEGY));
     ((AbstractStrategy) strategy).setAgent(this);
+
     initialise();
   }
+
 
   /**
    * Default trading behaviour for agents.
