@@ -23,6 +23,7 @@ public class AllTests {
 
   public static void main( String[] args ) {
     try {
+      org.apache.log4j.BasicConfigurator.configure();
       TestRunner.run(Class.forName("test.uk.ac.liv.auction.AllTests"));
     } catch ( ClassNotFoundException e ) {
       e.printStackTrace();
