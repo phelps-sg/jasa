@@ -4,10 +4,14 @@
 
    <property name="build.compiler" value="modern"/>
    <property name="sourceDir" value="src"/>
-   <property name="outputDir" value="classes"/>
+   <property name="buildDir" value="build"/>
+   <property name="buildSrc" value="${buildDir}/src"/>
+   <property name="outputDir" value="${buildDir}/classes"/>
    <property name="projectName" value="JASA"/>
 
-   <property name="versionSrc" value="${sourceDir}/uk/ac/liv/auction/JASAVersion.java"/>
+   <property name="versionFile" value="version.properties"/>
+   <property name="versionTemplate" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.template"/>
+   <property name="versionSrc" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.java"/>
 
    <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event"/>
 
@@ -57,8 +61,12 @@
       <delete file="jasa.tar.gz"/>
    </target>
 
-   <target depends="prepareOutput,version" name="compile">
-      <javac debug="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${sourceDir}">
+   <target name="cleanBuild">
+    <delete dir="${buildSrc}"/>
+   </target>
+
+   <target depends="prepareOutput,copysrc" name="compile">
+      <javac debug="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${buildSrc}">
         <classpath refid="project.classpath"/>
      </javac>
    </target>
@@ -74,10 +82,10 @@
    </target>
 
    <target depends="jar,doc,cleanTar" name="tar">
-	<loadproperties srcFile="version.properties"/>
+	<loadproperties srcFile="${versionFile}"/>
 	<property name="versionStr" value="${majorVersion}.${minorVersion}"/>
    	<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
-		<tarfileset dir="." includes="jasa.jar,version.properties,build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,examples/*.params,lib/**" prefix="jasa-${versionStr}">
+		<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,examples/*.params,lib/**" prefix="jasa-${versionStr}">
                   <exclude name="src/uk/ac/liv/ec/**"/>
                   <exclude name="src/test/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
@@ -134,7 +142,7 @@
 
 <target name="incminorversion">
 	<propertyfile
-	    file="version.properties" comment="Build version info">
+	    file="${versionFile}" comment="Build version info">
 		<entry key="minorVersion" type="int" operation="+" value="0"/>
  		<entry key="buildNum" type="int" value="1"/>
 	</propertyfile>
@@ -142,19 +150,25 @@
 
 <target name="incbuildnum" depends="gethostname">
        <propertyfile
-            file="version.properties" comment="Build version info">
+            file="${versionFile}" comment="Build version info">
             <entry key="buildDate" type="date" value="now"/>
             <entry key="buildNum" default="0" type="int" operation="+" value="1"/>
 	    <entry key="buildHost" type="string" value="${hostname}"/>
         </propertyfile>
 </target>
 
-<target depends="incbuildnum" name="version">
-         <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}" overwrite="true"/>
+<target depends="incbuildnum,cleanBuild" name="copysrc">
+       <copy todir="${buildSrc}">
+	<fileset dir="${sourceDir}" casesensitive="yes">
+	  <include name="**/*.java"/>
+	  <include name="**/*.template"/>
+	</fileset>
+ 	</copy>
+ 	<copy file="${versionTemplate}" tofile="${versionSrc}"/>
         <replace
             file="${versionSrc}"
             value="value not found in version.properties"
-            propertyFile="version.properties">
+            propertyFile="${versionFile}">
             <replacefilter
                 token="@buildDate@"
                 property="buildDate"/>
@@ -171,25 +185,7 @@
  		token="@majorVersion@"
 		property="majorVersion"/>
         </replace>
-    </target>
-
-<target name="devversion">
-        <copy file="${sourceDir}/uk/ac/liv/auction/JASAVersion.template" tofile="${versionSrc}"/>
-        <replace
-            file="${versionSrc}"
-            value="value not found in version.properties"
-            propertyFile="version.properties">
-            <replacefilter
-                token="@buildDate@"
-                property="buildDate"/>
-            <replacefilter
-                token="@buildNum@"
-                value="-1"/>
- 	    <replacefilter
-		token="@buildHost@"
-		property="buildHost"/>
-        </replace>
-    </target>
+</target>
 
 
 </project>
