@@ -307,6 +307,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     stock -= quantity;
     lastProfit = quantity * (price-valuer.determineValue(auction));
     profits += lastProfit;
+    valuer.consumeUnit(auction);
     return quantity;
   }
 

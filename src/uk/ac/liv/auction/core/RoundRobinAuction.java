@@ -453,11 +453,28 @@ public class RoundRobinAuction extends AuctionImpl
     }
   }
 
+  /**
+   * Calculate the number of unaccepted asks >= price.
+   * If accepted is true then count the number of accepted asks.
+   * If price is negative then count the number of asks < price.
+   *
+   * @throws DataUnavailableException If a HistoryStatsMarketDataLogger
+   * is not configured.
+   */
   public int getNumberOfAsks( double price, boolean accepted )
       throws DataUnavailableException {
     checkHistoryStats();
     return historyStats.getNumberOfAsks(price, accepted);
   }
+
+  /**
+    * Calculate the number of unaccepted bids >= price.
+    * If accepted is true then count the number of accepted bids.
+    * If price is negative then count the number of bids < price.
+    *
+    * @throws DataUnavailableException If a HistoryStatsMarketDataLogger
+    * is not configured.
+    */
 
   public int getNumberOfBids( double price, boolean accepted )
       throws DataUnavailableException {

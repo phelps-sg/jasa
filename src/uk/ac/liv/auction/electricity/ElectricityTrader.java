@@ -106,41 +106,15 @@ public class ElectricityTrader extends AbstractTraderAgent {
     lastProfit = 0;
   }
 
-  public void informOfBuyer( Auction auction, RoundRobinTrader seller, double price,
-                               int quantity ) {
-
-    super.informOfBuyer(auction, seller, price, quantity);
-
-    // Reward the learning algorithm according to profits made.
-    lastProfit = quantity * (price - valuer.determineValue(auction));
-
-    //Relax this constraint for GP experiments!
-    //Debug.assert(profit >= 0);
-
-    profits += lastProfit;
-  }
 
   public void informOfSeller( Auction auction, Shout winningShout,
-                               RoundRobinTrader seller,
-                               double price, int quantity) {
-
+                                   RoundRobinTrader seller,
+                                   double price, int quantity) {
      super.informOfSeller(auction, winningShout, seller, price, quantity);
-
-    // Reward the learning algorithm according to profits made
-    lastProfit = quantity * (valuer.determineValue(auction) - price);
-
-    valuer.consumeUnit(auction);
-
-    if ( lastProfit < 0 ) {
-      return;
-    }
-
-    ElectricityTrader sellerAgent = (ElectricityTrader) seller;
-    if ( sellerAgent.acceptDeal(auction, price, quantity) ) {
-      profits += lastProfit;
-      sellerAgent.informOfBuyer(auction, this, price, quantity);
-    }
-  }
+     if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) ) {
+       purchaseFrom(auction, (ElectricityTrader) seller, quantity, price);
+     }
+   }
 
   public boolean acceptDeal( Auction auction, double price, int quantity ) {
     Debug.assertTrue(isSeller);

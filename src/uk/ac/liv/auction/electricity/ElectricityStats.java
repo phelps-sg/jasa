@@ -32,6 +32,7 @@ import uk.ac.liv.auction.stats.*;
 
 import uk.ac.liv.auction.agent.*;
 
+import org.apache.log4j.Logger;
 
 
 /**
@@ -156,6 +157,8 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
    * The age of the auction in rounds.
    */
   protected int auctionAge;
+
+  static Logger logger = Logger.getLogger(ElectricityStats.class);
 
 
   public ElectricityStats( RoundRobinAuction auction ) {
@@ -471,7 +474,12 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   }
 
   public void generateReport() {
-    //TODO
+    getEquilibriaStats().generateReport();
+    logger.info("NPT Auction statistics");
+    logger.info("----------------------");
+    logger.info("Market efficiency (EA) = " + getEA());
+    logger.info("Buyer market-power (MPB) = " + getMPB());
+    logger.info("Seller market-power (MPS) = " + getMPS());
   }
 
 }

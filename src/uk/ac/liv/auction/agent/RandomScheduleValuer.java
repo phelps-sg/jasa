@@ -16,6 +16,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.core.Auction;
+
 /**
  * A valuation policy which specifies a randomly-generated series
  * of valuations for each unit of commodity.
@@ -26,7 +28,7 @@ package uk.ac.liv.auction.agent;
 
 public class RandomScheduleValuer extends RandomValuer {
 
-  public void consumeUnit() {
+  public void consumeUnit( Auction auction ) {
     drawRandomValue();
   }
 

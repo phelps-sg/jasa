@@ -7,7 +7,7 @@
 
 # Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.maximumrounds = 1000
+simulation.auction.maximumrounds = 10000
 
 # Use a double-auction with clearing occuring every time a new shout arrives
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
@@ -30,7 +30,7 @@ simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 simulation.console = true
 
 # Gather meta-stats on market-equilibria
-simulation.auction.stats = uk.ac.liv.auction.stats.EquilibriaStats
+simulation.auction.stats = uk.ac.liv.auction.electricity.ElectricityStats
 
 # Two populations of agents
 simulation.agenttype.n = 2
@@ -40,7 +40,7 @@ simulation.agenttype.n = 2
 #  using the Roth-Erev strategy
 simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.0.numagents = 50
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 simulation.agenttype.0.valuer.minvalue = 10
 simulation.agenttype.0.valuer.maxvalue = 100
 simulation.agenttype.0.capacity = 10
@@ -53,10 +53,10 @@ simulation.agenttype.0.isseller = true
 #  using the modified Roth-Erev strategy
 simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 simulation.agenttype.1.numagents = 50
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
-simulation.agenttype.1.valuer.minvalue = 10
-simulation.agenttype.1.valuer.maxvalue = 100
-simulation.agenttype.1.capacity = 20
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+simulation.agenttype.1.valuer.minvalue = 80
+simulation.agenttype.1.valuer.maxvalue = 150
+simulation.agenttype.1.capacity = 15
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 simulation.agenttype.1.isseller = false
