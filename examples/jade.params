@@ -7,8 +7,17 @@
 #  java jade.Boot -gui manager:uk.ac.liv.auction.agent.jade.AuctionManager
 #
 
+auction = uk.ac.liv.auction.agent.jade.JADEAuction
+
 # Maximum number of rounds
-auction.auctioneer.maximumrounds = 10
+auction.maximumrounds = 10
+
+# GUI console
+auction.console = true
+
+# Auctioneer
+auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+auction.auctioneer.k = 0.5
 
 # The logger to use
 auction.auctioneer.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
@@ -18,7 +27,7 @@ auction.numagenttypes = 2
 
 # 1st population- 30 sellers bidding using the modified Roth-Erev 
 # learning algorithm
-auction.agenttype.0 = uk.ac.liv.auction.agent.jade.JADEElectricityTrader
+auction.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.0.numagents = 30
 auction.agenttype.0.randomprivatevalue = true
 auction.agenttype.0.strategy.quantity = 10
@@ -28,7 +37,7 @@ auction.agenttype.0.isseller = true
 
 # 2nd population- 30 buyers using the the modified
 #  Roth-Erev learning algorithm
-auction.agenttype.1 = uk.ac.liv.auction.agent.jade.JADEElectricityTrader
+auction.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.1.numagents = 30
 auction.agenttype.1.randomprivatevalue = true
 auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
