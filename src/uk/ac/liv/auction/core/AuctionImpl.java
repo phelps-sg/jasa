@@ -312,6 +312,13 @@ public abstract class AuctionImpl extends Observable
     }
   }
 
+  /**
+   * Return a Map of all of the variables in all of the reports configured
+   * for this auction.   The Map maps report variables, represented as
+   * objects of type ReportVariable onto their values.
+   * 
+   * @see uk.ac.liv.auction.stats.ReportVariable
+   */
   public Map getResults() {
     return logger.getVariables();
   }

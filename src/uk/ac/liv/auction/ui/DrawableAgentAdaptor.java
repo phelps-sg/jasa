@@ -32,7 +32,13 @@ import uk.ac.liv.auction.core.Shout;
 
 /**
  * An adaptor that allows an AbstractTraderAgent to be drawn on a 
- * Repast Object2DDisplay. 
+ * RePast Object2DDisplay.  Each agent is represented by a coloured bar.
+ * Profitable buyers are shown as red, and profitable sellers are shown as 
+ * blue.  The brighter the colour, the more profitable the agent.  Agents
+ * with zero profits are shown as white bars.  The height of the bar represents
+ * the current margin offered by the agent; that is, the absolute difference
+ * between their current valuation of the commodity on offer and their last
+ * shout price.
  * 
  * @author Steve Phelps
  * @version $Revision$

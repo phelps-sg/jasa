@@ -19,6 +19,8 @@ import java.util.Map;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
 /**
+ * An object capable of producing a report at the end of an auction.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
