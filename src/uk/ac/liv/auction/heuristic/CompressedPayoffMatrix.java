@@ -166,8 +166,7 @@ public class CompressedPayoffMatrix {
     double[] population = initialPopulation;
     double diff;
     int iteration = 0;
-    do {
-      evolveMixedStrategy(population);
+    do {      
       for( int i=0; i<population.length; i++ ) {
         out.newData(population[i]);
       }
