@@ -17,6 +17,8 @@ package test.uk.ac.liv.prng;
 
 import java.util.*;
 
+import cern.jet.math.Arithmetic;
+
 import junit.framework.*;
 
 import test.uk.ac.liv.PRNGTestSeeds;
@@ -24,7 +26,6 @@ import test.uk.ac.liv.PRNGTestSeeds;
 import uk.ac.liv.prng.GlobalPRNG;
 
 import uk.ac.liv.util.MutableIntWrapper;
-import uk.ac.liv.util.MathUtil;
 
 /**
  * @author Steve Phelps
@@ -71,7 +72,7 @@ public class GlobalPRNGTest extends TestCase {
       numPerms++;
     }
     System.out.println("num permutations = " + numPerms);
-    assertTrue(numPerms == (int) MathUtil.factorial(N));
+    assertTrue(numPerms == (int) Arithmetic.factorial(N));
     int target = ITERATIONS / numPerms;
     i = hist.keySet().iterator();
     while ( i.hasNext() ) {

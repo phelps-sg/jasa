@@ -60,6 +60,10 @@ public class MathUtil {
     return total;
   }
   
+  /**
+   * @deprecated
+   * @see cern.jet.random.Arithmetic.factorial
+   */
   public static long factorial( int n ) {
   	long result = 1;
   	for( int i=0; i<n-1; i++ ) {

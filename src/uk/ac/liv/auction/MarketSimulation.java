@@ -198,7 +198,7 @@ public class MarketSimulation implements Serializable, Runnable {
   
   
   public static void gnuMessage() {
-    System.out.println(JASAConstants.getGnuMessage());
+    System.out.println(JASAVersion.getGnuMessage());
   }
 
   

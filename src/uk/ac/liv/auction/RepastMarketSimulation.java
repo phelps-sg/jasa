@@ -238,7 +238,7 @@ public class RepastMarketSimulation extends SimModelImpl
 
 
   public static void gnuMessage() {
-    System.out.println(JASAConstants.getGnuMessage());
+    System.out.println(JASAVersion.getGnuMessage());
   }
 
 

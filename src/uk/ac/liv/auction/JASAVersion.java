@@ -19,7 +19,7 @@ package uk.ac.liv.auction;
  * @version $Revision$
  */
 
-public class JASAConstants {
+public class JASAVersion {
   
   static final int minorVersion = 34;
   
@@ -48,6 +48,10 @@ public class JASAConstants {
   
   public static String getGnuMessage() {
     return GNU_MESSAGE;
+  }
+  
+  public static void main( String[] args ) {
+    System.out.println("JASA v" + getVersion());
   }
   
   

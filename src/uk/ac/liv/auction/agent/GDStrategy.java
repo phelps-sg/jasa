@@ -31,7 +31,6 @@ import uk.ac.liv.auction.stats.HistoricalDataReport;
 import org.apache.log4j.Logger;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * <p>
