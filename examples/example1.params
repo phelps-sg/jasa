@@ -1,8 +1,7 @@
 simulation.auction = uk.ac.liv.auction.core.RoundRobinAuction
 simulation.auction.maximumrounds = 200
-
-simulation.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
-simulation.auctioneer.k = 0.5
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+simulation.auction.auctioneer.k = 0.5
 
 # Get cummulative stats
 simulation.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger

@@ -57,7 +57,6 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
   static final String P_LOGGER = "logger";
   static final String P_AUCTION = "auction";
-  static final String P_AUCTIONEER = "auctioneer";
   static final String P_NUM_AGENT_TYPES = "numagenttypes";
   static final String P_NUM_AGENTS = "numagents";
   static final String P_AGENT_TYPE = "agenttype";
@@ -91,13 +90,6 @@ public class MarketSimulation implements Parameterizable, Runnable {
                                                                RoundRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
-
-    auctioneer =
-      (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
-                                                      null, Auctioneer.class);
-    ((Parameterizable) auctioneer).setup(parameters, base);
-    auction.setAuctioneer(auctioneer);
-    auctioneer.setAuction(auction);
 
     marketData =
         (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),

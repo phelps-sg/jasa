@@ -16,7 +16,15 @@
 
 package uk.ac.liv.ai.learning;
 
-public interface StochasticLearner {
+/**
+ * Classes implementing this interface indicate that they implement
+ * learning algorithms with a stochastic component whose PRNG
+ * can be seeded.
+ *
+ * @author Steve Phelps
+ */
+
+public interface StochasticLearner extends Learner {
 
   public void setSeed( long seed );
 

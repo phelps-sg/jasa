@@ -46,6 +46,7 @@ public class JADEAuction extends RandomRobinAuction {
     auctioneer.endOfRoundProcessing();
     setChanged();
     notifyObservers();
+    informRoundClosed();
   }
 
   public void newShout( Shout shout ) throws AuctionException {

@@ -209,6 +209,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     } catch ( Exception e ) {
       e.printStackTrace();
+      throw new Error(e.getMessage());
     }
   }
 

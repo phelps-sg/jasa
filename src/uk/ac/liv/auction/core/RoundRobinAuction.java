@@ -114,6 +114,7 @@ public class RoundRobinAuction extends AuctionImpl
 
   static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   static final String P_LOGGER = "logger";
+  static final String P_AUCTIONEER = "auctioneer";
 
 
   /**
@@ -146,6 +147,12 @@ public class RoundRobinAuction extends AuctionImpl
       logger = null;
     }
 
+    Auctioneer auctioneer =
+      (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
+                                                      null, Auctioneer.class);
+    ((Parameterizable) auctioneer).setup(parameters, base);
+    setAuctioneer(auctioneer);
+    auctioneer.setAuction(this);
     initialise();
   }
 
@@ -288,7 +295,7 @@ public class RoundRobinAuction extends AuctionImpl
   public void runSingleRound() throws AuctionClosedException {
 
     if ( closed() ) {
-      throw new AuctionClosedException("Auction " + name + "is closed.");
+      throw new AuctionClosedException("Auction " + name + " is closed.");
     }
 
     if ( maximumRounds > 0 && round >= maximumRounds ) {

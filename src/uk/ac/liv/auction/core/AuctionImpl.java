@@ -193,7 +193,7 @@ public abstract class AuctionImpl extends Observable
   public MarketQuote getQuote() {
     return auctioneer.getQuote();
   }
-
+  
   public void removeShout( Shout shout ) {
     // Remove this shout and all of its children.
     for( Shout s = shout; s != null; s = s.getChild() ) {
