@@ -24,6 +24,7 @@ import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 
@@ -112,6 +113,32 @@ public class RoundRobinAuctionTest extends TestCase {
     }
   }
 
+
+  public void testHistoryStats() {
+    logger.info("testHistoryStats()");
+
+    HistoryStatsMarketDataLogger stats = new HistoryStatsMarketDataLogger();
+    stats.setAuction(auction);
+    auction.setMarketDataLogger(stats);
+    stats.setup(new ParameterDatabase(), new Parameter("stats"));
+
+    auction.run();
+
+    try {
+      int acceptedBids = auction.getNumberOfBids(0, true);
+      int unacceptedBids = auction.getNumberOfBids(0, false);
+      int acceptedAsks = auction.getNumberOfAsks(0, true);
+      int unacceptedAsks = auction.getNumberOfAsks(0, false);
+      logger.info("Number of accepted bids above 0 = " + acceptedBids);
+      logger.info("Number of unaccepted bids above 0 = " + unacceptedBids);
+      logger.info("Number of accepted asks above 0 = " + acceptedAsks);
+      logger.info("Number of unaccepted asks above 0 = " + unacceptedAsks);
+      assertTrue(acceptedBids == acceptedAsks);
+      assertTrue(acceptedBids == 1);
+    } catch ( DataUnavailableException e ) {
+      fail("caught DataUnavailableException " + e);
+    }
+  }
 
   public void testProtocol() {
 

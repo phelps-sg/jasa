@@ -18,12 +18,15 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.util.io.*;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DataWriterMarketDataLogger implements MarketDataLogger {
+public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
 
 
   /**
@@ -70,7 +73,12 @@ public class DataWriterMarketDataLogger implements MarketDataLogger {
      this.askLog = askLog;
      this.bidLog = bidLog;
      this.transPriceLog = transPriceLog;
-   }
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
+  }
+
 
   public void updateQuoteLog( int time, MarketQuote quote ) {
     if ( askQuoteLog != null ) {

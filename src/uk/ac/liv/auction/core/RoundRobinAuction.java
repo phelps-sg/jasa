@@ -21,6 +21,7 @@ import uk.ac.liv.auction.agent.TraderAgent;
 import uk.ac.liv.auction.stats.MarketDataLogger;
 import uk.ac.liv.auction.stats.MarketStats;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
@@ -188,7 +189,13 @@ public class RoundRobinAuction extends AuctionImpl
    * The optional logger used to calculate statistics for the previous
    * day's trading.
    */
-  protected DailyStatsMarketDataLogger dailyStats;
+  protected DailyStatsMarketDataLogger dailyStats = null;
+
+  /**
+   * The optional logger used to calculate the historical statistics
+   * used by the GD strategy.
+   */
+  protected HistoryStatsMarketDataLogger historyStats = null;
 
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
@@ -429,10 +436,6 @@ public class RoundRobinAuction extends AuctionImpl
   public CummulativeStatCounter getPreviousDayTransPriceStats()
       throws DataUnavailableException {
 
-    if ( day == 0 ) {
-      throw new DataUnavailableException("This is the first day of trading");
-    }
-
     if ( dailyStats == null ) {
       throw new DataUnavailableException("The auction must be configured " +
                                "with a DailyStatsMarketDataLogger in order " +
@@ -442,6 +445,25 @@ public class RoundRobinAuction extends AuctionImpl
     return dailyStats.getTransPriceStats(day-1);
   }
 
+  protected void checkHistoryStats() throws DataUnavailableException {
+    if (historyStats == null) {
+      throw new DataUnavailableException("The auction must be configured " +
+                                         "with a HistoryStatsMarketDataLogger " +
+          "in order to retrieve historical stats");
+    }
+  }
+
+  public int getNumberOfAsks( double price, boolean accepted )
+      throws DataUnavailableException {
+    checkHistoryStats();
+    return historyStats.getNumberOfAsks(price, accepted);
+  }
+
+  public int getNumberOfBids( double price, boolean accepted )
+      throws DataUnavailableException {
+    checkHistoryStats();
+    return historyStats.getNumberOfBids(price, accepted);
+  }
 
   /**
    * Runs the auction.
@@ -667,6 +689,9 @@ public class RoundRobinAuction extends AuctionImpl
     this.dailyStats = dailyStats;
   }
 
+  public void setHistoryStats( HistoryStatsMarketDataLogger historyStats ) {
+    this.historyStats = historyStats;
+  }
 
   /**
    * Remove defunct traders.

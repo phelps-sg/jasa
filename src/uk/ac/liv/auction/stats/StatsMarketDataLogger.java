@@ -24,6 +24,9 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.Resetable;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -35,8 +38,14 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class StatsMarketDataLogger
-  implements MarketDataLogger, Serializable, Cloneable, Resetable {
+public class StatsMarketDataLogger extends AbstractMarketDataLogger
+   implements Serializable, Cloneable, Resetable {
+
+
+  protected CummulativeStatCounter[] stats;
+
+
+  static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
 
   protected static final int TRANS_PRICE = 0;
   protected static final int BID_PRICE = 1;
@@ -44,17 +53,11 @@ public class StatsMarketDataLogger
   protected static final int BID_QUOTE = 3;
   protected static final int ASK_QUOTE = 4;
 
-  protected CummulativeStatCounter[] stats;
-
-  /**
-   * The auction we are keeping statistics on.
-   */
-  protected RoundRobinAuction auction;
-
-  static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
-
   public StatsMarketDataLogger() {
     initialise();
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
   public void updateQuoteLog( int time, MarketQuote quote ) {
@@ -110,10 +113,6 @@ public class StatsMarketDataLogger
     for( int i=0; i<stats.length; i++ ) {
       ((CummulativeStatCounter) stats[i]).reset();
     }
-  }
-
-  public void setAuction( RoundRobinAuction auction ) {
-    this.auction = auction;
   }
 
   public Object clone() throws CloneNotSupportedException {
