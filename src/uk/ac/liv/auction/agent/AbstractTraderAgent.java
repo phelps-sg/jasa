@@ -182,7 +182,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
       strategy.modifyShout(currentShout, auction);
       auction.newShout(currentShout);
     } catch ( AuctionException e ) {
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
 

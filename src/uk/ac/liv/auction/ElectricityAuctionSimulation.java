@@ -67,7 +67,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   int K = 30;         // No. of possible different actions
   double X = 15000;
   double S1 = 9.0;
-  double auctioneerKSamples = 10;
+  int auctioneerKSamples = 10;
 
   boolean randomPrivateValues = false;
 
@@ -122,7 +122,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     S1 = parameters.getDoubleWithDefault(base.push("s1"), null, S1);
 
     auctioneerKSamples =
-        parameters.getDoubleWithDefault(base.push(P_AUCTIONEERKSAMPLES),
+        parameters.getIntWithDefault(base.push(P_AUCTIONEERKSAMPLES),
                                           null, auctioneerKSamples);
 
     randomPrivateValues =
@@ -225,7 +225,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
 
-      double auctioneerK = kMultiple/auctioneerKSamples;
+      double auctioneerK = kMultiple/(double) auctioneerKSamples;
       auctioneer.setK(auctioneerK);
       auction.reset();
 
@@ -311,8 +311,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       StimuliResponseStrategy strategy = new StimuliResponseStrategy(trader);
 
       strategy.setQuantity(trader.getCapacity());
-      strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X,
-                                System.currentTimeMillis()) );
+      strategy.setLearner( new NPTRothErevLearner(K, R, E, S1*X) );
+//                                System.currentTimeMillis()) );
 
 
       trader.setStrategy(strategy);
