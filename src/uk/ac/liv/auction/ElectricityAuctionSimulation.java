@@ -236,7 +236,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       dataFile = new CSVWriter(
                   new FileOutputStream(outputDir + "/" + "npt-"
-                                        + paramSummary + ".csv"), 17);
+                                        + paramSummary + ".csv"), 21);
 
     } catch ( IOException e ) {
       e.printStackTrace();
