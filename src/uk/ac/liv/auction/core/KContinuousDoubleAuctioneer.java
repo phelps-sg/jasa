@@ -27,9 +27,9 @@ package uk.ac.liv.auction.core;
 
 public class KContinuousDoubleAuctioneer extends KAuctioneer {
   
-  protected double lowestAsk = Double.POSITIVE_INFINITY;
+  protected double lowestAsk;
   
-  protected double highestBid = Double.NEGATIVE_INFINITY;
+  protected double highestBid;
 
   public KContinuousDoubleAuctioneer() {
     this(null, 0);
@@ -57,7 +57,8 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
   }
 
   public void endOfRoundProcessing() {
-    generateQuote();
+    lowestAsk = Double.POSITIVE_INFINITY;
+    highestBid = Double.NEGATIVE_INFINITY;    
   }
 
   public void endOfAuctionProcessing() {
@@ -90,6 +91,12 @@ public class KContinuousDoubleAuctioneer extends KAuctioneer {
       }
       lowestAsk = shout.getPrice();
     }
+  }
+  
+  protected void initialise() {
+    super.initialise();
+    lowestAsk = Double.POSITIVE_INFINITY;
+    highestBid = Double.NEGATIVE_INFINITY;
   }
   
   protected double bidQuote() {

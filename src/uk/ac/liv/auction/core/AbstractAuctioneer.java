@@ -52,6 +52,7 @@ public abstract class AbstractAuctioneer
 
 
   public AbstractAuctioneer() {
+    initialise();
   }
 
   public AbstractAuctioneer( Auction auction ) {
@@ -111,7 +112,7 @@ public abstract class AbstractAuctioneer
     initialise();
   }
 
-  public void initialise() {
+  protected void initialise() {
     currentQuote = null;
   }
 

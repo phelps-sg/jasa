@@ -81,18 +81,20 @@ public class SurplusStats extends EquilibriaStats {
   }
 
   public void calculate() {
-    super.calculate();       
-    Iterator i = matchedShouts.iterator();
-    while ( i.hasNext() ) {
-      Shout bid = (Shout) i.next();
-      Shout ask = (Shout) i.next();      
+    super.calculate();    
+    if ( matchedShouts != null ) {
+      Iterator i = matchedShouts.iterator();
+      while ( i.hasNext() ) {
+        Shout bid = (Shout) i.next();
+        Shout ask = (Shout) i.next();      
 
-      pBCE += equilibriumProfits(bid.getQuantity(),
-                                  (AbstractTraderAgent) bid.getAgent());
+        pBCE += equilibriumProfits(bid.getQuantity(),
+                                    (AbstractTraderAgent) bid.getAgent());
 
-      pSCE += equilibriumProfits(ask.getQuantity(),
-                                  (AbstractTraderAgent) ask.getAgent());
+        pSCE += equilibriumProfits(ask.getQuantity(),
+                                    (AbstractTraderAgent) ask.getAgent());
 
+      }
     }
 
     calculateActualProfits();
