@@ -106,8 +106,8 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
     update(transPriceLog, transPriceStats);
 
     for( int i=0; i<allStats.length; i++ ) {
+      logger.debug(allStats[i]);
       allStats[i].reset();
-      logger.debug("Finished resetting: " + allStats[i]);
     }
   }
 

@@ -153,12 +153,11 @@ public abstract class AuctionImpl extends Observable
   }
 
 
-  public Shout getLastShout() {
-    if ( auctioneer.shoutsVisible() ) {
-      return lastShout;
-    } else {
-      return null;
+  public Shout getLastShout() throws ShoutsNotVisibleException {
+    if ( !auctioneer.shoutsVisible() ) {
+      throw new ShoutsNotVisibleException();
     }
+    return lastShout;
   }
 
   /**

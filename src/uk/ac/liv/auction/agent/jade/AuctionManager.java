@@ -56,14 +56,14 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class AuctionManager extends JADEAbstractAuctionAgent {
 
-  AID auctioneerAID = null;
+  protected AID auctioneerAID = null;
 
-  PlatformController container;
+  protected PlatformController container;
 
   static Logger logger = Logger.getLogger(AuctionManager.class);
 
-  static final String AGENTNAME_AUCTIONEER = "Auctioneer";
-  static final String AGENTNAME_TRADER = "Trader";
+  public static final String AGENTNAME_AUCTIONEER = "Auctioneer";
+  public static final String AGENTNAME_TRADER = "Trader";
 
   static final String P_AUCTION = "auction";
   static final String P_NUM_AGENT_TYPES = "n";
@@ -91,19 +91,6 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
       logger.info("Setup.. ");
 
       container = getContainerController();
-
-      Object[] auctioneerArguments = new Object[3];
-      auctioneerArguments[0] = parameters;
-      auctioneerArguments[1] = base;
-      auctioneerArguments[2] = this;
-      AgentController auctioneerController =
-          container.createNewAgent(AGENTNAME_AUCTIONEER,
-                                    JADEAuctionAdaptor.class.getName(),
-                                    auctioneerArguments);
-
-      auctioneerController.start();
-
-      auctioneerAID = findAuctioneer();
 
       int numAgentTypes =
           parameters.getInt(base.push(P_AGENT_TYPE).push("n"), null, 1);
@@ -134,7 +121,23 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
         }
       }
+
+      // Create auctioneer
+      Object[] auctioneerArguments = new Object[3];
+      auctioneerArguments[0] = parameters;
+      auctioneerArguments[1] = base;
+      auctioneerArguments[2] = this;
+      AgentController auctioneerController =
+          container.createNewAgent(AGENTNAME_AUCTIONEER,
+                                   JADEAuctionAdaptor.class.getName(),
+                                   auctioneerArguments);
+
+      auctioneerController.start();
+
+      auctioneerAID = findAuctioneer();
+
       logger.info("done.");
+
     } catch ( Exception e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());

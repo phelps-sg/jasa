@@ -217,7 +217,12 @@ public class AuctionConsoleFrame extends JFrame
       bidLabel.setText(currencyFormatter.format(((double)quote.getBid())/100));
       askLabel.setText(currencyFormatter.format(((double) quote.getAsk())/100));
     }
-    Shout lastShout = auction.getLastShout();
+    Shout lastShout = null;
+    try {
+      auction.getLastShout();
+    } catch ( ShoutsNotVisibleException e ) {
+      lastShout = null;
+    }
     if ( lastShout != null ) {
       double lastPrice = lastShout.getPrice();
       if ( !lastShout.isBid() ) {

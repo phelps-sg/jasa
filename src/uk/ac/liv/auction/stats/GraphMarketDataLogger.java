@@ -61,8 +61,8 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
     bidLog = new MemoryResidentDataSeries();
     transPriceLog = new MemoryResidentDataSeries();
     allSeries =
-        new DataWriter[] { askLog, bidLog, transPriceLog,
-                            askQuoteLog, bidQuoteLog };
+        new DataWriter[] { askLog, bidLog, transPriceLog };
+//                            askQuoteLog, bidQuoteLog };
     currentSeries = 0;
   }
 

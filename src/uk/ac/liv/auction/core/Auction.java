@@ -49,10 +49,9 @@ public interface Auction extends QuoteProvider {
   public void removeShout( Shout shout );
 
  /**
-  * Return the last shout placed in the auction, or null
-  * if the auction rules do not permit access to this information.
+  * Return the last shout placed in the auction.
   */
-  public Shout getLastShout();
+  public Shout getLastShout() throws ShoutsNotVisibleException;
 
   /**
    * Report the state of the auction.
@@ -62,7 +61,7 @@ public interface Auction extends QuoteProvider {
   /**
    * Handle a single clearing operation between two traders
    */
-  public void clear( Shout ask, Shout bid, double price);
+  public void clear( Shout ask, Shout bid, double price );
 
   /**
    * Get the age of the auction in unspecified units

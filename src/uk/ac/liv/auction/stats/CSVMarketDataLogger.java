@@ -72,11 +72,21 @@ public class CSVMarketDataLogger extends DataWriterMarketDataLogger
     String transLogFile =
         parameters.getString(base.push(P_TRANS_LOG_FILE), null);
     try {
-      setCSVAskQuoteLog( new FileOutputStream(new File(askQuoteLogFile)) );
-      setCSVBidQuoteLog( new FileOutputStream(new File(bidQuoteLogFile)) );
-      setCSVAskLog( new FileOutputStream(new File(askLogFile)) );
-      setCSVBidLog( new FileOutputStream(new File(bidLogFile)) );
-      setCSVTransPriceLog( new FileOutputStream(new File(transLogFile)) );
+      if ( askQuoteLogFile != null ) {
+        setCSVAskQuoteLog(new FileOutputStream(new File(askQuoteLogFile)));
+      }
+      if ( bidQuoteLogFile != null ) {
+        setCSVBidQuoteLog(new FileOutputStream(new File(bidQuoteLogFile)));
+      }
+      if ( askLogFile != null ) {
+        setCSVAskLog(new FileOutputStream(new File(askLogFile)));
+      }
+      if ( bidLogFile != null ) {
+        setCSVBidLog(new FileOutputStream(new File(bidLogFile)));
+      }
+      if ( transLogFile != null ) {
+        setCSVTransPriceLog(new FileOutputStream(new File(transLogFile)));
+      }
     } catch ( java.io.IOException e ) {
       e.printStackTrace();
     }

@@ -91,24 +91,30 @@ public class ZIPStrategy extends FixedQuantityStrategyImpl
   }
 
   public void modifyShout( Shout shout, Auction auction ) {
-    super.modifyShout(shout, auction);
-    Shout lastShout = auction.getLastShout();
-    if ( agent.isSeller() ) {
-      sellerStrategy(lastShout);
-      } else {
-      buyerStrategy(lastShout);
-    }
-    currentMargin = learner.act();
-    logger.debug("Bidding with margin " + currentMargin);
-    logger.debug("Agent's private value = " + agent.getPrivateValue());
-    if ( agent.isBuyer() ) {
-      currentPrice = agent.getPrivateValue() * (1 - currentMargin);
-    } else {
-      currentPrice = agent.getPrivateValue() * (1 + currentMargin);
-    }
-    logger.debug("Bidding at " + currentPrice);
-    if ( currentPrice > 0 ) {
-      shout.setPrice(currentPrice);
+    try {
+      super.modifyShout(shout, auction);
+      Shout lastShout = auction.getLastShout();
+      if (agent.isSeller()) {
+        sellerStrategy(lastShout);
+      }
+      else {
+        buyerStrategy(lastShout);
+      }
+      currentMargin = learner.act();
+      logger.debug("Bidding with margin " + currentMargin);
+      logger.debug("Agent's private value = " + agent.getPrivateValue());
+      if (agent.isBuyer()) {
+        currentPrice = agent.getPrivateValue() * (1 - currentMargin);
+      }
+      else {
+        currentPrice = agent.getPrivateValue() * (1 + currentMargin);
+      }
+      logger.debug("Bidding at " + currentPrice);
+      if (currentPrice > 0) {
+        shout.setPrice(currentPrice);
+      }
+    } catch ( ShoutsNotVisibleException e ) {
+      throw new AuctionError("ZIPStrategy can only be used with auctioneers who permit shout visibility");
     }
   }
 

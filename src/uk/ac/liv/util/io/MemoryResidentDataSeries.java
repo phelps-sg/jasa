@@ -91,7 +91,7 @@ public class MemoryResidentDataSeries implements DataWriter, DataSeries {
 
   public double getDatum( int i ) {
     double value = ((TimeSeriesDatum) data.get(i)).getValue();
-    if ( Double.isInfinite(value) ) {
+    if ( Double.isNaN(value) || Double.isInfinite(value) ) {
       return 0;
     } else {
       return value;
