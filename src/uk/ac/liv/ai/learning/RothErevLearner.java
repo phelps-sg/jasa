@@ -52,42 +52,42 @@ public class RothErevLearner implements
   /**
    * The number of choices available to make at each iteration.
    */
-  int k;
+  protected int k;
 
   /**
    * The recency parameter.
    */
-  double r;
+  protected double r;
 
   /**
    * The experimentation parameter.
    */
-  double e;
+  protected double e;
 
   /**
    * The scaling parameter.
    */
-  double s1;
+  protected double s1;
 
   /**
    * Propensity for each possible action.
    */
-  double q[];
+  protected double q[];
 
   /**
    * Probabilities for each possible action.
    */
-  DiscreteProbabilityDistribution p;
+  protected DiscreteProbabilityDistribution p;
 
   /**
    * The current iteration.
    */
-  int iteration;
+  protected int iteration;
 
   /**
    * The last action chosen.
    */
-  int lastAction;
+  protected int lastAction;
 
   static final int    DEFAULT_K   = 100;
   static final double DEFAULT_R   = 0.1;
