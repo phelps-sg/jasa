@@ -11,7 +11,7 @@ define(`BUYER_CAPACITY', ENV_VAR(`$GP_CB', 10))
 define(`POPULATION_SIZE', 50)
 define(`NUM_GENERATIONS', 1000)
 
-define(`CONF_RESULTS', `experimental_data/results/preliminary/gpcoevolve')
+define(`CONF_RESULTS', `../experimental_data/results/preliminary/gpcoevolve')
 
 define(`PARAM_SUMMARY', `NUM_SELLERS-NUM_BUYERS-SELLER_CAPACITY-BUYER_CAPACITY')
 
