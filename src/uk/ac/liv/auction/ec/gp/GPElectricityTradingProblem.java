@@ -267,13 +267,18 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
       randomizePrivateValues();
     }
 
+    resetTraders();
+
+    auction.reset();
+  }
+
+
+  protected void resetTraders() {
     Iterator traders = allTraders.iterator();
     while ( traders.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
       trader.reset();
     }
-
-    auction.reset();
   }
 
 
@@ -352,20 +357,6 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
   }
 
 
-  public static void main( String[] args ) {
-    ec.Evolve.main(new String[] {"-file", DEFAULT_PARAM_FILE});
-  }
-
-
-  public static EvolutionState make() {
-    return make(DEFAULT_PARAM_FILE);
-  }
-
-
-  public static EvolutionState make( String parameterFile ) {
-    return ec.Evolve.make( new String[] { "-file", parameterFile } );
-  }
-
 
   protected void registerTraders() {
 
@@ -406,6 +397,21 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
     }
 
     return result;
+  }
+
+
+  public static void main( String[] args ) {
+    ec.Evolve.main(new String[] {"-file", DEFAULT_PARAM_FILE});
+  }
+
+
+  public static EvolutionState make() {
+    return make(DEFAULT_PARAM_FILE);
+  }
+
+
+  public static EvolutionState make( String parameterFile ) {
+    return ec.Evolve.make( new String[] { "-file", parameterFile } );
   }
 
 

@@ -40,50 +40,56 @@ import uk.ac.liv.ec.gp.GPBestStatistics;
  *
  */
 
-public class CoEvolveAuctionStatistics extends GPBestStatistics {
+public class CoEvolveAuctionStatistics extends CoEvolveStrategyStatistics {
 
-  public void postEvaluationStatistics( final EvolutionState state ) {
 
-    findBestOfGeneration(1);
-    GPAuctioneer auctioneer = (GPAuctioneer) best[0];
+  public void postEvaluationStatistics( EvolutionState state ) {
 
-    println("");
-    println("Best auctioneer of generation " + state.generation );
-    println("=====================================");
+    super.postEvaluationStatistics(state);
 
-    println("Pricing rule:");
-    printIndividual(auctioneer);
+    if ( best[0] instanceof GPAuctioneer ) {
 
-    println("\nMarket statistics:");
-    println(auctioneer.getMarketStats().toString());
-    println();
+      GPAuctioneer auctioneer = (GPAuctioneer) best[0];
 
-    StatsMarketDataLogger logger = auctioneer.getLogStats();
-    println("Bid price: " + logger.getBidPriceStats());
-    println();
-    println("Ask price: " + logger.getAskPriceStats());
-    println();
-    println("Bid quote: " + logger.getBidQuoteStats());
-    println();
-    println("Ask quote: " + logger.getAskQuoteStats());
-    println();
-    println("Trans price: " + logger.getTransPriceStats());
+      println("");
+      println("Best auctioneer of generation " + state.generation );
+      println("=====================================");
 
-    println();
-    println("Strategies participating in best auction of generation " + state.generation);
-    println("========================================================");
-    println();
+      println("Pricing rule:");
+      printIndividual(auctioneer);
 
-    Iterator strategies = auctioneer.getStrategies().iterator();
-    while ( strategies.hasNext() ) {
-      GPTradingStrategy strategy = (GPTradingStrategy) strategies.next();
-      printIndividual(strategy);
+      println("\nMarket statistics:");
+      println(auctioneer.getMarketStats().toString());
       println();
-      println("Price stats for trader: " + strategy.getPriceStats());
+
+      StatsMarketDataLogger logger = auctioneer.getLogStats();
+      println("Bid price: " + logger.getBidPriceStats());
       println();
-      println("Misbehaved? " + strategy.misbehaved());
+      println("Ask price: " + logger.getAskPriceStats());
       println();
-      println("-------------");
+      println("Bid quote: " + logger.getBidQuoteStats());
+      println();
+      println("Ask quote: " + logger.getAskQuoteStats());
+      println();
+      println("Trans price: " + logger.getTransPriceStats());
+
+      println();
+      println("Strategies participating in best auction of generation " + state.generation);
+      println("========================================================");
+      println();
+
+      Iterator strategies = auctioneer.getStrategies().iterator();
+      while ( strategies.hasNext() ) {
+        GPTradingStrategy strategy = (GPTradingStrategy) strategies.next();
+        printIndividual(strategy);
+        println();
+        println("Price stats for trader: " + strategy.getPriceStats());
+        println();
+        println("Misbehaved? " + strategy.misbehaved());
+        println();
+        println("-------------");
+
+      }
 
     }
   }
