@@ -74,7 +74,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected FixedQuantityStrategy[] sellerStrategies;
   protected FixedQuantityStrategy[] buyerStrategies;
 
-  protected DataWriter dataFile, distributionFile, iterResults;
+  protected DataWriter dataFile, distributionFile, iterResults, strategyData;
 
   protected ElectricityStats stats;
 
@@ -87,6 +87,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected String paramSummary;
 
   protected boolean collectIterData = false;
+  
+  protected boolean collectStrategyData = false;
 
   protected StandardRandomizer randomizer;
 
@@ -138,6 +140,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_STRATEGY = "strategy";
   static final String P_STATS = "stats";
   static final String P_ITER_DATA = "iterdata";
+  static final String P_STRATEGY_DATA = "strategydata";
   static final String P_RANDOMIZER = "randomizer";
 
 
@@ -168,6 +171,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     collectIterData =
         parameters.getBoolean(base.push(P_ITER_DATA), null, collectIterData);
+
+    collectStrategyData =
+        parameters.getBoolean(base.push(P_STRATEGY_DATA), null, collectStrategyData);
 
     iterations =
       parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
@@ -254,6 +260,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       simulation.run();
 
     } catch ( Exception e ) {
+      logger.error(e.getMessage());
       e.printStackTrace();
       throw new Error(e.getMessage());
     }
@@ -330,17 +337,27 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     initIterResults(outputDir + "/iter-" + paramSummary + "-" + auctioneerK+".csv");
 
     resetVariables();
+    
+    String strategyDataFile = null;
+    if ( collectStrategyData ) {
+      strategyDataFile = outputDir + "/strategy-" + paramSummary + "-k" + auctioneerK;
+    }
 
     for( int i=0; i<iterations; i++ ) {
 
       randomizer.randomizePrivateValues(randomizedPrivateValues, i);
       randomizer.setStrategyPRNGseeds(prngSeeds, i);
+      
+      if ( collectStrategyData ) {
+        initStrategyData(strategyDataFile + "-" + i);
+      }
 
       auction.reset();
       auction.run();
       
       calculateStatistics();
       dumpIterResults();
+      dumpStrategyData();
     }
 
   }
@@ -474,6 +491,23 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       iterResults.newData(stats.calculateEquilibriumPrice());
     }
   }
+  
+  
+  protected void dumpStrategyData() {
+    if ( collectStrategyData ) {
+      Iterator i = auction.getTraderIterator();
+      while ( i.hasNext() ) {
+        ElectricityTrader t = (ElectricityTrader) i.next();
+        Strategy s = t.getStrategy();
+        if ( s instanceof AdaptiveStrategy ) {
+          Learner l = ((AdaptiveStrategy) s).getLearner();
+          if ( l instanceof RothErevLearner ) {
+            ((RothErevLearner) l).dumpDistribution(strategyData);
+          }
+        }
+      }
+    }
+  }
 
 
   protected void initIterResults( String filename ) throws FileNotFoundException {
@@ -481,6 +515,14 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       FileOutputStream iterOut = new FileOutputStream(filename);
       iterResults = new CSVWriter(iterOut, ITERRESULTS_NUM_COLUMNS);
     }
+  }
+  
+  protected void initStrategyData( String filename ) throws FileNotFoundException {    
+    AdaptiveStrategy s = (AdaptiveStrategy) buyerStrategies[0];
+    RothErevLearner l = (RothErevLearner) s.getLearner();
+    int numColumns = l.getK();
+    FileOutputStream strategyDataOut = new FileOutputStream(filename);
+    strategyData = new CSVWriter(strategyDataOut, numColumns);   
   }
 
 

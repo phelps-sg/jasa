@@ -320,6 +320,10 @@ public class RothErevLearner implements
   public int getK() {
     return k;
   }
+  
+  public double getProbability( int i ) {
+    return p.getProbability(i);
+  }
     
   public String toString() {
     return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1 + ")";

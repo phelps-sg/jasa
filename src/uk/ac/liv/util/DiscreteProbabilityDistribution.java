@@ -54,32 +54,51 @@ public class DiscreteProbabilityDistribution
   static Logger logger = Logger.getLogger(DiscreteProbabilityDistribution.class);
 
 
+  /**
+   *  Construct a new distribution with k
+   *  possible events.
+   *
+   *  @param k The number of possible events for this random variable
+   */
   public DiscreteProbabilityDistribution( int k ) {
     this.k = k;
     p = new double[k];
   }
 
+  /**
+   *  Set the probability of the ith event.
+   *
+   *  @param i The event 
+   *  @param probability The probability of event i occuring
+   */
   public void setProbability( int i, double probability ) {
     p[i] = probability;
   }
 
+  /**
+   *  Get the probability of the ith event.
+   *
+   *  @param i The event
+   */
   public double getProbability( int i ) {
     return p[i];
   }
 
+  /**
+   *  Generate a random event according to the probability distribution.
+   *
+   *  @return An integer value representing one of the possible events.
+   */
   public int generateRandomEvent() {
     double rand = randGenerator.nextDouble();
     double cummProb = 0;
     for( int i=0; i<k; i++ ) {
-      cummProb += p[i];
+      cummProb += p[i];      
       if ( rand < cummProb ) {
         return i;
       }
     }
-    throw new ProbabilityError();    
-    //logger.warn("generateRandomEvent(): probabilities do not sum to 1");
-    //reset();
-    //return randGenerator.nextInt(k);   
+    throw new ProbabilityError();      
   }
 
   public void reset() {
@@ -93,6 +112,12 @@ public class DiscreteProbabilityDistribution
   }
   
   
+  /**
+   *  Compute the expected value of the random variable
+   *  defined by this distribution.
+   *
+   *  @return The expected value of the distribution 
+   */  
   public double computeMean() {
     double total = 0;
     for( int i=0; i<k; i++ ) {
@@ -101,7 +126,12 @@ public class DiscreteProbabilityDistribution
     return total;      
   }
   
-  
+  /**
+   *  Compute the minimum value of the random variable
+   *  defined by this distribution.
+   *
+   *  @return The minimum integer value
+   */
   public int computeMin() {
     for( int i=0; i<k; i++ ) {
       if ( p[i] > 0 ) {
@@ -111,6 +141,12 @@ public class DiscreteProbabilityDistribution
     throw new ProbabilityError();    
   }
   
+  /**
+   *  Compute the maximum value of the random variable
+   *  defined by this distribution.
+   *
+   *  @return The maximum integer value 
+   */  
   public int computeMax() {
     for( int i=k-1; i>=0; i-- ) {
       if ( p[i] > 0 ) {
@@ -123,12 +159,13 @@ public class DiscreteProbabilityDistribution
   public void computeStats( CummulativeStatCounter stats ) {  
   }
   
-  
+
   public class ProbabilityError extends Error {
-    
+
     public ProbabilityError() {
       super("Probabilities do not sum to 1");
     }
+    
   }
 
 }

@@ -14,10 +14,12 @@
 electricity.maxrounds = 1000
 
 # Number of samples per value of k
-electricity.iterations = 10000
+electricity.iterations = 1000
 
 # Output data
 electricity.outputdir = results/electricity/test
+
+electricity.strategydata = true
 
 # Use random private values
 electricity.randomizer = uk.ac.liv.auction.electricity.StandardRandomizer

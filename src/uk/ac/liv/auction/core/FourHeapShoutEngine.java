@@ -351,7 +351,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   public List getMatchedShouts() {
     LinkedList result = new LinkedList();
     while ( ! sIn.isEmpty() ) {
-      Debug.assertTrue("count(bIn) != count(sIn)", ! bIn.isEmpty());
+      //Debug.assertTrue("count(bIn) != count(sIn)", ! bIn.isEmpty());
       Shout sInTop = (Shout) sIn.removeFirst();
       Shout bInTop = (Shout) bIn.removeFirst();
       int nS = sInTop.getQuantity();
