@@ -155,7 +155,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
   public boolean acceptDeal( double price, int quantity ) {
     Debug.assertTrue(isSeller);
-    return price > privateValue;
+    return price >= privateValue;
   }
 
   public double getProfits() {
