@@ -191,5 +191,4 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public LinkedList getStrategies() { return strategies; }
   public Auction getAuction() { return auction; }
 
-
 }

@@ -59,6 +59,16 @@ public abstract class AuctionImpl extends Observable implements Auction {
   Shout lastShout;
 
   /**
+   * The last bid placed in the auction.
+   */
+  Shout lastBid;
+  
+  /**
+   * The last ask placed in the auction.
+   */ 
+  Shout lastAsk;
+  
+  /**
    * Flag indicating whether the auction is currently closed.
    */
   boolean closed;
@@ -100,6 +110,8 @@ public abstract class AuctionImpl extends Observable implements Auction {
 
   protected void initialise() {
     lastShout = null;
+    lastBid = null;
+    lastAsk = null;
     closed = false;
   }
 
@@ -187,6 +199,37 @@ public abstract class AuctionImpl extends Observable implements Auction {
     shout.makeChildless();
   }
 
+  /**
+   *  Handle a new shout in the auction.
+   *
+   *  @param shout  The new shout in the auction.
+   */
+  public void newShout( Shout shout ) throws AuctionException {
+    if ( closed() ) {
+      throw new AuctionClosedException("Auction " + name + " is closed.");
+    }   
+    if ( shout == null ) {
+      throw new IllegalShoutException("null shout");
+    }
+    auctioneer.newShout(shout);
+    recordShout(shout);
+    
+    notifyObservers();
+  }
+  
+  protected void recordShout( Shout shout ) {
+    if ( lastShout == null ) lastShout = new Shout();    
+    lastShout.copyFrom(shout);
+    if ( shout.isAsk() ) {
+      if ( lastAsk == null ) lastAsk = new Shout();
+      lastAsk.copyFrom(shout);      
+    } else {
+      if ( lastBid == null ) lastBid = new Shout();
+      lastBid.copyFrom(shout);      
+    } 
+  }
+  
+  
   public void printState() {
     auctioneer.printState();
   }

@@ -44,11 +44,6 @@ public interface Auctioneer extends QuoteProvider {
    */
   public void clear();
 
-  /**
-   * Get a quote for the auction.
-   */
-  //public MarketQuote getQuote();
-
 
   /**
    * Code for handling a new shout in the auction.
@@ -72,10 +67,12 @@ public interface Auctioneer extends QuoteProvider {
   public void printState();
 
   /**
-   * Reset state
+   * Specify which auction we are the auctioneer for.
    */
-  public void reset();
-
   public void setAuction( Auction auction );
-
+ 
+  /**
+   * Find out which auction we are the auctioneer for.
+   */
+  public Auction getAuction();
 }

@@ -19,6 +19,7 @@ package uk.ac.liv.auction.core;
 import uk.ac.liv.auction.agent.TraderAgent;
 
 import uk.ac.liv.util.BinaryHeap;
+import uk.ac.liv.util.Resetable;
 
 import java.util.HashMap;
 
@@ -33,7 +34,7 @@ import java.io.PrintStream;
  * @author Steve Phelps
  */
 
-public abstract class AbstractAuctioneer implements Auctioneer {
+public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
 
   /**
    * The auction container for this auctioneer.
@@ -136,6 +137,11 @@ public abstract class AbstractAuctioneer implements Auctioneer {
     this.auction = auction;
   }
 
+  /** Find out which auction we are the auctioneer for.
+   */
+  public Auction getAuction() {
+    return auction;
+  }  
 
 }
 

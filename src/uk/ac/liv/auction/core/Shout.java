@@ -190,4 +190,11 @@ public class Shout implements Comparable, Cloneable, Serializable {
     child = null;
   }
 
+  public void copyFrom( Shout other ) {
+    setPrice(other.getPrice());
+    setAgent(other.getAgent());
+    setQuantity(other.getQuantity());
+    child = null;
+  }
+  
 }

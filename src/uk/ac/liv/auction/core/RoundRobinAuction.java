@@ -22,6 +22,7 @@ import uk.ac.liv.util.io.CSVWriter;
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Debug;
+import uk.ac.liv.util.Resetable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -106,9 +107,12 @@ public class RoundRobinAuction extends AuctionImpl
    * The current number of traders in the auction.
    */
   int numTraders;
+  
 
+  
   static final String P_MAXIMUM_ROUNDS = "maximumrounds";
 
+  
   /**
    * Construct a new auction in the stopped state, with no traders, no shouts,
    * and no auctioneer.
@@ -192,6 +196,20 @@ public class RoundRobinAuction extends AuctionImpl
   public int getAge() {
     return round;
   }
+  
+  /**
+   * Get the last bid placed in the auction.
+   */
+  public Shout getLastBid() {
+    return lastBid;
+  }
+  
+  /**
+   * Get the last ask placed in the auction.
+   */ 
+  public Shout getLastAsk() {
+    return lastAsk;
+  }
 
   /**
    * Runs the auction.
@@ -225,21 +243,13 @@ public class RoundRobinAuction extends AuctionImpl
     auctioneer.endOfAuctionProcessing();
   }
 
-  /**
-   *  Handle a new shout in the auction.
-   *
-   *  @param shout  The new shout in the auction.
-   */
-  public void newShout( Shout shout ) throws AuctionException {
-    if ( closed() ) {
-      throw new AuctionClosedException("Auction " + name + " is closed.");
-    }
-    lastShout = shout;
-    logger.updateShoutLog(round, shout);
-    auctioneer.newShout(shout);
-    notifyObservers();
-  }
 
+  public void newShout( Shout shout ) throws AuctionException {
+    super.newShout(shout);
+    logger.updateShoutLog(round, shout);
+  }
+  
+  
   public void changeShout( Shout shout ) throws AuctionException {
     removeShout(shout);
     newShout(shout);
@@ -278,7 +288,7 @@ public class RoundRobinAuction extends AuctionImpl
     super.reset();
 
     if ( auctioneer != null ) {
-      auctioneer.reset();
+      ((Resetable) auctioneer).reset();
     }
 
     if ( logger != null ) {
