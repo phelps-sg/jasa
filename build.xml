@@ -12,7 +12,6 @@
    <property name="jsciPath" value="${javaLibPath}/JSci/classes/core.jar:${javaLibPath}/JSci/classes/xtra.jar:${javaLibPath}/JSci/sci.jar:${javaLibPath}/JSci/JSciBeans.jar"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj"/>
    <property name="rngpackLoc" value="${javaLibPath}/rngpack/rngpack.jar"/>
-   <property name="poolitLoc" value="${javaLibPath}/poolit/poolit.jar"/>
    <property name="junitLoc" value="${javaLibPath}/junit/junit.jar"/>
    <property name="skijLoc" value="${javaLibPath}/skij.jar"/>
    <property name="log4jLoc" value="${javaLibPath}/log4j.jar"/>
@@ -21,7 +20,6 @@
    <path id="project.classpath">
      <pathelement path="${jsciPath}"/>
      <pathelement location="${ecjLoc}"/>
-     <pathelement location="${poolitLoc}"/>
      <pathelement location="${junitLoc}"/>
      <pathelement location="${skijLoc}"/>
      <pathelement location="${rngpackLoc}"/>

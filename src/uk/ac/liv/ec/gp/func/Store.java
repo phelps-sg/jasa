@@ -20,7 +20,7 @@ import ec.*;
 
 import uk.ac.liv.ec.gp.*;
 
-import uk.ac.liv.util.FastLong;
+import uk.ac.liv.util.UntypedLong;
 
 
 public class Store extends GPNode {
@@ -29,7 +29,7 @@ public class Store extends GPNode {
                       ADFStack stack, GPIndividual individual, Problem problem ) {
 
     children[0].eval(state, thread, input, stack, individual, problem);
-    long address = ((FastLong) ((GPGenericData) input).data).longValue();
+    long address = ((UntypedLong) ((GPGenericData) input).data).longValue();
 
     children[1].eval(state, thread, input, stack, individual, problem);
     GPGenericData data = (GPGenericData) input;

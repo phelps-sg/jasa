@@ -20,9 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.ascentphase.poolit.*;
-import org.ascentphase.poolit.poolers.*;
-
 /**
  * <p>
  * A BinaryHeap that can perform search and removal operations
@@ -104,37 +101,17 @@ class IndexMap {
 
   HashMap map = new HashMap();
 
-  static Pooler intPool = null;
-
-
-  public IndexMap( int poolSize ) {
-    map = new HashMap();
-    if ( intPool == null ) {
-      try {
-        intPool = new FixedPooler(MutableIntWrapper.class, poolSize);
-      } catch ( CreateException e ) {
-        e.printStackTrace();
-        throw new Error(e.getMessage());
-      }
-    }
-  }
 
   public IndexMap() {
-    this(FastBinaryHeap.indexPoolSize);
+    map = new HashMap();    
   }
 
   public void associate( Object key, int index ) {
     MutableIntWrapper indexWrapper = (MutableIntWrapper) map.get(key);
     if ( indexWrapper != null ) {
       indexWrapper.value = index;
-    } else {
-      try {
-        indexWrapper = (MutableIntWrapper) intPool.fetch();
-      } catch ( FetchException e ) {
-        System.err.println("WARNING " + getClass() + ":");
-        e.printStackTrace();
-        indexWrapper = new MutableIntWrapper();
-      }
+    } else {      
+      indexWrapper = new MutableIntWrapper();
       indexWrapper.value = index;
       map.put(key, indexWrapper);
     }
@@ -142,8 +119,7 @@ class IndexMap {
 
   public void forget( Object key ) {
     MutableIntWrapper indexWrapper = (MutableIntWrapper) map.get(key);
-    if ( indexWrapper != null ) {
-      intPool.release(indexWrapper);
+    if ( indexWrapper != null ) {      
       map.remove(key);
     }
   }
@@ -156,11 +132,7 @@ class IndexMap {
     return indexWrapper.intValue();
   }
 
-  public void clear() {
-    Iterator i = map.entrySet().iterator();
-    while ( i.hasNext() ) {
-      intPool.release((MutableIntWrapper) ((Map.Entry) i.next()).getValue());
-    }
+  public void clear() {    
     map.clear();
   }
 

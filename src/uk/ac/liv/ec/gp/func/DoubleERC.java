@@ -96,7 +96,7 @@ public class DoubleERC extends ERC {
                     Problem problem ) {
 
     GPGenericData generic = (GPGenericData) input;
-    generic.data = FastDouble.newFastDouble(value);
+    generic.data = new UntypedDouble(value);
   }
 
 }

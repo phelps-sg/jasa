@@ -18,12 +18,12 @@ package uk.ac.liv.ec.gp.func;
 import ec.gp.*;
 import ec.*;
 
-import uk.ac.liv.util.FastLong;
+import uk.ac.liv.util.UntypedLong;
 
 public class One extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPGenericData) input).data = FastLong.newFastLong(1L);
+    ((GPGenericData) input).data = new UntypedLong(1L);
   }
 
   public String toString() {

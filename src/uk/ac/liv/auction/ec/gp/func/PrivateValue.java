@@ -20,7 +20,7 @@ import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
 
-import uk.ac.liv.util.FastDouble;
+import uk.ac.liv.util.UntypedDouble;
 
 /**
  * <p>Title: JASA</p>
@@ -35,7 +35,7 @@ import uk.ac.liv.util.FastDouble;
 public class PrivateValue extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPGenericData) input).data = FastDouble.newFastDouble(((GPTradingStrategy) individual).getPrivateValue());
+    ((GPGenericData) input).data = new UntypedDouble(((GPTradingStrategy) individual).getPrivateValue());
   }
 
   public String toString() {

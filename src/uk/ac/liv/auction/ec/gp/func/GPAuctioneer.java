@@ -105,8 +105,7 @@ public class GPAuctioneer extends GPIndividualCtx
     clearBid.copyFrom(bid);
     clearAsk.copyFrom(ask);
     assert clearBid.getPrice() >= clearAsk.getPrice();
-    FastNumber result = evaluateNumberTree(0);
-    result.release();
+    Number result = evaluateNumberTree(0);    
     if ( misbehaved ) {
       return 0;
     }

@@ -20,15 +20,12 @@ import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
 
-import uk.ac.liv.util.FastDouble;
-
 
 public class AskPrice extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
     GPAuctioneer auctioneer = (GPAuctioneer) individual;
-    ((GPGenericData) input).data =
-      FastDouble.newFastDouble(auctioneer.clearAsk.getPrice());
+    ((GPGenericData) input).data = new Double(auctioneer.clearAsk.getPrice());      
   }
 
   public String toString() {

@@ -18,7 +18,7 @@ package uk.ac.liv.ec.gp.func;
 import ec.gp.*;
 import ec.*;
 
-import uk.ac.liv.util.FastNumber;
+import uk.ac.liv.util.UntypedNumber;
 
 public abstract class GPArithmeticBinaryOperator extends GPNode {
 
@@ -26,16 +26,14 @@ public abstract class GPArithmeticBinaryOperator extends GPNode {
                      ADFStack stack, GPIndividual individual, Problem problem ) {
 
     children[0].eval(state, thread, input, stack, individual, problem);
-    FastNumber op1 = (FastNumber) ((GPGenericData) input).data;
+    UntypedNumber op1 = (UntypedNumber) ((GPGenericData) input).data;
 
     children[1].eval(state, thread, input, stack, individual, problem);
-    FastNumber op2 = (FastNumber) ((GPGenericData) input).data;
+    UntypedNumber op2 = (UntypedNumber) ((GPGenericData) input).data;
 
-    ((GPGenericData) input).data = arithmeticOperator(op1, op2);
-    op1.release();
-    op2.release();
+    ((GPGenericData) input).data = arithmeticOperator(op1, op2);    
   }
 
-  public abstract FastNumber arithmeticOperator( FastNumber op1, FastNumber op2 );
+  public abstract UntypedNumber arithmeticOperator( UntypedNumber op1, UntypedNumber op2 );
 
 }

@@ -17,8 +17,6 @@ package uk.ac.liv.ec.gp.func;
 
 import ec.gp.*;
 
-import uk.ac.liv.util.Pooled;
-
 
 public class GPGenericData extends GPData {
 
@@ -35,11 +33,7 @@ public class GPGenericData extends GPData {
 
   public GPGenericData safeCopy() {
     GPGenericData copy = new GPGenericData();
-    if ( data instanceof Pooled ) {
-      copy.data = ((Pooled) data).newCopy();
-    } else {
-      copyTo(copy);
-    }
+    copyTo(copy);
     return copy;
   }
 

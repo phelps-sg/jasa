@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 import uk.ac.liv.ec.gp.func.*;
-import uk.ac.liv.util.FastNumber;
 
 import java.io.Serializable;
 
@@ -64,16 +63,15 @@ public class GPIndividualCtx extends GPIndividual implements Serializable {
     context.getStack().reset();
   }
 
-  public FastNumber evaluateNumberTree( int treeNumber ) {
+  public Number evaluateNumberTree( int treeNumber ) {
     misbehaved = false;
-    GPGenericData input = GPGenericDataPool.fetch();
+    GPGenericData input = new GPGenericData();
     try {
       evaluateTree(treeNumber, input);
     } catch ( ArithmeticException e ) {
       misbehaved = true;
-    }
-    GPGenericDataPool.release(input);
-    return (FastNumber) input.data;
+    }    
+    return (Number) input.data;
   }
 
   public GPTree getTree( int treeNumber ) {

@@ -85,7 +85,7 @@ public class GPTradingStrategy extends GPIndividualCtx
   public Shout modifyShout( Shout shout, Auction auction ) {
     currentAuction = (RoundRobinAuction) auction;
     double price = Double.NaN;
-    FastNumber result = evaluateNumberTree(0);
+    Number result = evaluateNumberTree(0);
     if ( !misbehaved ) {
       price = result.doubleValue();
     } else {
@@ -97,8 +97,7 @@ public class GPTradingStrategy extends GPIndividualCtx
     }
     currentShout = ShoutFactory.getFactory().create(agent, quantity, price,
                                                       agent.isBuyer());
-    priceStats.newData(price);
-    result.release();
+    priceStats.newData(price);    
     return currentShout;
   }
 

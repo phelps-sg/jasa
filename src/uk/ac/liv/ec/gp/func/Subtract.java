@@ -18,12 +18,12 @@ package uk.ac.liv.ec.gp.func;
 import ec.gp.*;
 import ec.*;
 
-import uk.ac.liv.util.FastNumber;
+import uk.ac.liv.util.UntypedNumber;
 
 
 public class Subtract extends GPArithmeticBinaryOperator {
 
-  public FastNumber arithmeticOperator( FastNumber op1, FastNumber op2 ) {
+  public UntypedNumber arithmeticOperator( UntypedNumber op1, UntypedNumber op2 ) {
     return op1.subtract(op2);
   }
 

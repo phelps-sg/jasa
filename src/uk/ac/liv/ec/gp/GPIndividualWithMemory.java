@@ -15,10 +15,7 @@
 
 package uk.ac.liv.ec.gp;
 
-import uk.ac.liv.ec.gp.func.GPGenericDataPool;
 import uk.ac.liv.ec.gp.func.GPGenericData;
-
-import uk.ac.liv.util.Pooled;
 
 
 /**
@@ -38,13 +35,7 @@ public class GPIndividualWithMemory extends GPIndividualCtx  {
 
   public void set( long address, GPGenericData newData ) {
     int mapped = mapAddress(address);
-    GPGenericData existing = memory[mapped];
-    if ( existing != null ) {
-      if ( existing.data instanceof Pooled ) {
-        ((Pooled) existing.data).release();
-      }
-      GPGenericDataPool.release(existing);
-    }
+    GPGenericData existing = memory[mapped];    
     memory[mapped] = newData.safeCopy();
   }
 

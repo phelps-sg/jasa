@@ -28,16 +28,16 @@ package uk.ac.liv.util;
  *
  */
 
-public abstract class FastNumber extends Number
-    implements Comparable, Pooled {
+public abstract class UntypedNumber extends Number
+    implements Comparable {
 
-  public abstract FastNumber multiply( FastNumber other );
+  public abstract UntypedNumber multiply( UntypedNumber other );
 
-  public abstract FastNumber add( FastNumber other );
+  public abstract UntypedNumber add( UntypedNumber other );
 
-  public abstract FastNumber subtract( FastNumber other );
+  public abstract UntypedNumber subtract( UntypedNumber other );
 
-  public abstract FastNumber divide( FastNumber other );
+  public abstract UntypedNumber divide( UntypedNumber other );
 
   public Object newCopy() {
     try {

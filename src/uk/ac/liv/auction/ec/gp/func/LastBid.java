@@ -20,7 +20,7 @@ import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
 
-import uk.ac.liv.util.FastDouble;
+import uk.ac.liv.util.UntypedDouble;
 
 import uk.ac.liv.auction.core.*;
 
@@ -39,7 +39,7 @@ public class LastBid extends GPNode {
       else {
         price = lastBid.getPrice();
       }
-      ( (GPGenericData) input).data = FastDouble.newFastDouble(price);
+      ( (GPGenericData) input).data = new UntypedDouble(price);
     } catch ( ShoutsNotVisibleException e ) {
       throw new AuctionError("This function can only be used with auctioneers who permit shout visibility");
     }

@@ -25,83 +25,71 @@ package uk.ac.liv.util;
  *
  */
 
-public class FastLong extends FastNumber {
+public class UntypedLong extends UntypedNumber {
 
   long primitiveValue;
 
-  public FastLong() {
+  public UntypedLong() {
     this(0L);
   }
 
-  public static FastLong newFastLong( long value ) {
-    return FastLongPool.fetch(value);
-  }
-
-  public void release() {
-    FastLongPool.release(this);
-  }
-
-
-  protected FastLong( Long value ) {
+  public UntypedLong( Long value ) {
     this(value.longValue());
   }
 
-  protected FastLong( long value ) {
+  public UntypedLong( long value ) {
     primitiveValue = value;
   }
 
-  protected void setValue( long value ) {
-    primitiveValue = value;
-  }
 
-  public FastNumber add( FastNumber other ) {
-    if ( other instanceof FastLong ) {
-      return newFastLong( primitiveValue + other.longValue() );
-    } else if ( other instanceof FastDouble ) {
-      return FastDoublePool.fetch(doubleValue() + other.doubleValue());
+  public UntypedNumber add( UntypedNumber other ) {
+    if ( other instanceof UntypedLong ) {
+      return new UntypedLong( primitiveValue + other.longValue() );
+    } else if ( other instanceof UntypedDouble ) {
+      return new UntypedDouble(doubleValue() + other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
-  public FastNumber multiply( FastNumber other ) {
-    if ( other instanceof FastLong ) {
-      return newFastLong( primitiveValue * other.longValue() );
-    } else if ( other instanceof FastDouble ) {
-      return FastDoublePool.fetch(doubleValue() * other.doubleValue());
+  public UntypedNumber multiply( UntypedNumber other ) {
+    if ( other instanceof UntypedLong ) {
+      return new UntypedLong( primitiveValue * other.longValue() );
+    } else if ( other instanceof UntypedDouble ) {
+      return new UntypedDouble(doubleValue() * other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
-  public FastNumber subtract( FastNumber other ) {
-  if ( other instanceof FastLong ) {
-      return newFastLong( primitiveValue - other.longValue() );
-    } else if ( other instanceof FastDouble ) {
-      return FastDoublePool.fetch(doubleValue() - other.doubleValue());
+  public UntypedNumber subtract( UntypedNumber other ) {
+  if ( other instanceof UntypedLong ) {
+      return new UntypedLong( primitiveValue - other.longValue() );
+    } else if ( other instanceof UntypedDouble ) {
+      return new UntypedDouble(doubleValue() - other.doubleValue());
     } else {
       throw new IllegalArgumentException();
     }
   }
 
-  public FastNumber divide( FastNumber other ) {
+  public UntypedNumber divide( UntypedNumber other ) {
     return opResult( doubleValue() / other.doubleValue() );
   }
 
-  protected FastNumber opResult( double tempResult ) {
+  protected UntypedNumber opResult( double tempResult ) {
     long intResult = Math.round(tempResult);
     if ( intResult == tempResult ) {
-      return newFastLong(intResult);
+      return new UntypedLong(intResult);
     } else {
-      return FastDoublePool.fetch(tempResult);
+      return new UntypedDouble(tempResult);
     }
   }
 
 
   public int compareTo( Object other ) {
-    if ( other instanceof FastLong ) {
+    if ( other instanceof UntypedLong ) {
       long l0 = primitiveValue;
-      long l1 = ((FastLong) other).longValue();
+      long l1 = ((UntypedLong) other).longValue();
       if ( l0 < l1 ) {
         return -1;
       } else if ( l0 > l1 ) {
@@ -109,9 +97,9 @@ public class FastLong extends FastNumber {
       } else {
         return 0;
       }
-    } else if ( other instanceof FastDouble ) {
+    } else if ( other instanceof UntypedDouble ) {
       double d0 = doubleValue();
-      double d1 = ((FastDouble) other).doubleValue();
+      double d1 = ((UntypedDouble) other).doubleValue();
       if ( d0 < d1 ) {
         return -1;
       } else if ( d0 > d1 ) {
@@ -146,10 +134,10 @@ public class FastLong extends FastNumber {
   }
 
   public boolean equals( Object other ) {
-    if ( other instanceof FastLong ) {
-      return primitiveValue == ((FastLong) other).longValue();
-    } else if ( other instanceof FastNumber ) {
-      return doubleValue() == ((FastNumber) other).doubleValue();
+    if ( other instanceof UntypedLong ) {
+      return primitiveValue == ((UntypedLong) other).longValue();
+    } else if ( other instanceof UntypedNumber ) {
+      return doubleValue() == ((UntypedNumber) other).doubleValue();
     } else {
       return super.equals(other);
     }

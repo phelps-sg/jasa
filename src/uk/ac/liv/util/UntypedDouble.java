@@ -25,36 +25,37 @@ package uk.ac.liv.util;
  *
  */
 
-public class FastDouble extends FastNumber {
+public class UntypedDouble extends UntypedNumber {
 
   double primitiveValue;
 
-  public FastDouble() {
+  public UntypedDouble() {
     this(Double.NaN);
   }
 
-  public static FastDouble newFastDouble( double value ) {
-    return FastDoublePool.fetch(value);
+  public UntypedDouble( Double value ) {
+    this(value.doubleValue());
   }
 
-  public void release() {
-    FastDoublePool.release(this);
+  public UntypedDouble( double value ) {
+    primitiveValue = value;
   }
 
-  public FastNumber add( FastNumber other ) {
-    return newFastDouble(primitiveValue + other.doubleValue());
+
+  public UntypedNumber add( UntypedNumber other ) {
+    return new UntypedDouble(primitiveValue + other.doubleValue());
   }
 
-  public FastNumber multiply( FastNumber other ) {
-    return newFastDouble(primitiveValue * other.doubleValue());
+  public UntypedNumber multiply( UntypedNumber other ) {
+    return new UntypedDouble(primitiveValue * other.doubleValue());
   }
 
-  public FastNumber subtract( FastNumber other ) {
-    return newFastDouble(primitiveValue - other.doubleValue());
+  public UntypedNumber subtract( UntypedNumber other ) {
+    return new UntypedDouble(primitiveValue - other.doubleValue());
   }
 
-  public FastNumber divide( FastNumber other ) {
-    return newFastDouble(primitiveValue / other.doubleValue());
+  public UntypedNumber divide( UntypedNumber other ) {
+    return new UntypedDouble(primitiveValue / other.doubleValue());
   }
 
   public int intValue() {
@@ -91,8 +92,8 @@ public class FastDouble extends FastNumber {
   }
 
   public boolean equals( Object other ) {
-    if ( other instanceof FastNumber ) {
-      return doubleValue() == ((FastNumber) other).doubleValue();
+    if ( other instanceof UntypedNumber ) {
+      return doubleValue() == ((UntypedNumber) other).doubleValue();
     } else {
       return super.equals(other);
     }
@@ -103,14 +104,6 @@ public class FastDouble extends FastNumber {
   }
 
   protected void setValue( double value ) {
-    primitiveValue = value;
-  }
-
-  protected FastDouble( Double value ) {
-    this(value.doubleValue());
-  }
-
-  protected FastDouble( double value ) {
     primitiveValue = value;
   }
 

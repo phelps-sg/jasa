@@ -17,7 +17,6 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.ShoutPool;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.AuctionClosedException;
@@ -229,8 +228,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   public void requestShout( Auction auction ) {
     try {
       if ( currentShout != null ) {
-        auction.removeShout(currentShout);
-        ShoutPool.release(currentShout);
+        auction.removeShout(currentShout);        
       }
       currentShout = strategy.modifyShout(currentShout, auction);
       if ( active() && currentShout != null ) {

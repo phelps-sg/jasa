@@ -91,7 +91,7 @@ public class LongERC extends ERC {
                     Problem problem ) {
 
     GPGenericData generic = (GPGenericData) input;
-    generic.data = FastLong.newFastLong(value);
+    generic.data = new UntypedLong(value);
   }
 
 }

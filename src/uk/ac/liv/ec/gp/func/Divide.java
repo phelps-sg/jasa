@@ -15,14 +15,14 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import uk.ac.liv.util.FastNumber;
+import uk.ac.liv.util.UntypedNumber;
 
 import ec.gp.*;
 
 
 public class Divide extends GPArithmeticBinaryOperator {
 
-  public FastNumber arithmeticOperator( FastNumber op1, FastNumber op2 ) {
+  public UntypedNumber arithmeticOperator( UntypedNumber op1, UntypedNumber op2 ) {
     return op1.divide(op2);
   }
 

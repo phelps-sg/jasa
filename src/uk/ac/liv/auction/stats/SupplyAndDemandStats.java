@@ -77,8 +77,7 @@ public class SupplyAndDemandStats extends DirectRevelationStats
 
   public void generateReport() {
     writeSupplyStats();
-    writeDemandStats();
-    releaseShouts();
+    writeDemandStats();    
   }
 
   public void calculate() {
@@ -122,12 +121,6 @@ public class SupplyAndDemandStats extends DirectRevelationStats
       asks.add(copyOfShout);
     }
     super.enumerateTruthfulShout(shout);
-  }
-
-  protected void releaseShouts() {
-    super.releaseShouts();
-//    releaseShouts(bids.iterator());
-//    releaseShouts(asks.iterator());
   }
 
   public void initialise() {

@@ -255,7 +255,7 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
-      Shout truth = ShoutPool.fetch(trader, trader.getCapacity(),
+      Shout truth = ShoutFactory.getFactory().create(trader, trader.getCapacity(),
                                     trader.getPrivateValue(auction), trader.isBuyer());
       shouts.add(truth);
       try {
@@ -271,8 +271,7 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     Iterator shoutIterator = shouts.iterator();
     while ( shoutIterator.hasNext() ) {
       Shout s = (Shout) shoutIterator.next();
-      auctioneer.removeShout(s);
-      ShoutPool.release(s);
+      auctioneer.removeShout(s);      
     }
 
   }

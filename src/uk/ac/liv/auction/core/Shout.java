@@ -208,8 +208,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
   void makeChildless() {
     if ( child != null ) {
-      child.makeChildless();
-      ShoutPool.release(child);
+      child.makeChildless();      
       child = null;
     }
   }

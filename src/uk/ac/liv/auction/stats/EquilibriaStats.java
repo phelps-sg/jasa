@@ -83,8 +83,7 @@ public class EquilibriaStats extends DirectRevelationStats
       equilibriaFound = true;
       matchedShouts = shoutEngine.getMatchedShouts();
       calculateEquilibriaQuantity();
-    }
-    releaseShouts();
+    }    
   }
   
   protected void calculateEquilibriaQuantity() {

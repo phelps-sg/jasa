@@ -20,13 +20,13 @@ import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
 
-import uk.ac.liv.util.FastDouble;
+import uk.ac.liv.util.UntypedDouble;
 
 
 public class LastProfit extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPGenericData) input).data = FastDouble.newFastDouble(((GPTradingStrategy) individual).getLastProfit());
+    ((GPGenericData) input).data = new UntypedDouble(((GPTradingStrategy) individual).getLastProfit());
   }
 
   public String toString() {

@@ -77,15 +77,3 @@ class UnpooledShoutFactory extends ShoutFactory {
   }
   
 }
-
-class PooledShoutFactory extends ShoutFactory {
-
-  public PooledShoutFactory() {
-  }
-
-  public Shout create( TraderAgent agent, int quantity, double price,
-                        boolean isBid ) {
-     return ShoutPool.fetch(agent, quantity, price, isBid);   
-  }
-
-}

@@ -23,7 +23,7 @@ import uk.ac.liv.ec.gp.func.*;
 import uk.ac.liv.auction.core.QuoteProvider;
 import uk.ac.liv.auction.core.MarketQuote;
 
-import uk.ac.liv.util.FastDouble;
+import uk.ac.liv.util.UntypedDouble;
 
 
 public class QuoteBidPrice extends GPNode {
@@ -31,7 +31,7 @@ public class QuoteBidPrice extends GPNode {
   public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
     QuoteProvider qp = (QuoteProvider) individual;
     MarketQuote quote = qp.getQuote();
-    ((GPGenericData) input).data = FastDouble.newFastDouble(quote.getBid());
+    ((GPGenericData) input).data = new UntypedDouble(quote.getBid());
   }
 
   public String toString() {
