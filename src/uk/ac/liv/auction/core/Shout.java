@@ -71,6 +71,11 @@ public class Shout implements Comparable, Cloneable, Serializable {
   protected Shout child = null;
 
   /**
+   * Indicates whether or not this shout has resulted in a transaction.
+   */
+  protected boolean accepted = false;
+
+  /**
    * Used to allocate each agent with a unique id.
    */
   static IdAllocator idAllocator = new IdAllocator();
@@ -97,12 +102,14 @@ public class Shout implements Comparable, Cloneable, Serializable {
   public TraderAgent getAgent() { return agent; }
   public boolean isBid() { return isBid; }
   public boolean isAsk() { return ! isBid; }
+  public boolean accepted() { return accepted; }
 
   public void setQuantity( int quantity ) { this.quantity = quantity; }
   public void setPrice( double price ) { this.price = price; }
   public void setSelling() { this.isBid = false; }
   public void setBuying() { this.isBid = true; }
   public void setIsBid( boolean isBid ) { this.isBid = isBid; }
+  public void setAccepted( boolean accepted ) { this.accepted = accepted; }
   protected void setAgent( TraderAgent agent ) { this.agent = agent; }
 
   public boolean satisfies( Shout other ) {

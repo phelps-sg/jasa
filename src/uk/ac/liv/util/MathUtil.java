@@ -30,4 +30,9 @@ public class MathUtil {
   public static double diffSq( double x, double y ) {
     return squared(x) - squared(y);
   }
+
+  public static boolean approxEqual( double x, double y, double error ) {
+    return Math.abs(x-y) <= error;
+  }
+
 }

@@ -53,7 +53,6 @@ public abstract class AbstractStrategy implements
 
   public void modifyShout( Shout shout, Auction auction ) {
     shout.setIsBid(agent.isBuyer());
-    shout.setQuantity(agent.determineQuantity(auction));
   }
 
   public void initialise() {

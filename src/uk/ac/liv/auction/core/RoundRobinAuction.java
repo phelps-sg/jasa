@@ -189,12 +189,13 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
 
-  public void clear( Shout winningShout, TraderAgent buyer,
-                      TraderAgent seller, double price, int quantity ) {
-    RoundRobinTrader rrBuyer = (RoundRobinTrader) buyer;
-    RoundRobinTrader rrSeller = (RoundRobinTrader) seller;
-    rrBuyer.informOfSeller(winningShout, rrSeller, price, quantity);
-    updateTransPriceLog(round, winningShout, price, quantity);
+  public void clear( Shout ask, Shout bid, double price ) {
+    RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
+    RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
+    buyer.informOfSeller(ask, seller, price, ask.getQuantity());
+    ask.setAccepted(true);
+    bid.setAccepted(true);
+    updateTransPriceLog(round, ask, price, ask.getQuantity());
   }
 
   /**

@@ -97,7 +97,7 @@ public class GPAuctioneer extends GPIndividualCtx
       Shout ask = (Shout) i.next();
       double price = determineClearingPrice(bid, ask);
       if ( !misbehaved ) {
-        auction.clear(ask, bid.getAgent(), ask.getAgent(), price, ask.getQuantity());
+        auction.clear(ask, bid, price);
       }
     }
   }

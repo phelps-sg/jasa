@@ -24,7 +24,7 @@ import test.uk.ac.liv.auction.agent.TestTrader;
 
 public class AuctioneerTest extends TestCase {
 
-  ContinuousDoubleAuctioneer auctioneer;
+  KDoubleAuctioneer auctioneer;
   RoundRobinAuction auction;
   TestTrader trader1, trader2, trader3, trader4, trader5;
 
@@ -35,7 +35,7 @@ public class AuctioneerTest extends TestCase {
 
   public void setUp() {
     auction = new RoundRobinAuction("unit test auction");
-    auctioneer = new ContinuousDoubleAuctioneer(auction, 0);
+    auctioneer = new KDoubleAuctioneer(auction, 0);
     auction.setAuctioneer(auctioneer);
 
     trader1 = new TestTrader(this, 30, 1000);

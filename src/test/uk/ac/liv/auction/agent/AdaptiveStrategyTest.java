@@ -40,7 +40,7 @@ public class AdaptiveStrategyTest extends TestCase {
 
   public void testActionsAndRewards() {
     RoundRobinAuction auction = new RoundRobinAuction("test auction");
-    Auctioneer auctioneer = new ContinuousDoubleAuctioneer(auction);
+    Auctioneer auctioneer = new KDoubleAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(NUM_ROUNDS);
     ZITraderAgent agent = new ZITraderAgent(10, 100, false);

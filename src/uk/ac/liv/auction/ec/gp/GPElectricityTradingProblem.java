@@ -378,7 +378,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
 
   protected Auctioneer assignAuctioneer( Vector[] group ) {
     if ( auctioneer == null ) {
-      auctioneer = new ContinuousDoubleAuctioneer(auction, 0.5);
+      auctioneer = new KDoubleAuctioneer(auction, 0.5);
     }
     return auctioneer;
   }

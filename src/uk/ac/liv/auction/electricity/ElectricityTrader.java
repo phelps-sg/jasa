@@ -110,8 +110,10 @@ public class ElectricityTrader extends AbstractTraderAgent {
     lastProfit = 0;
   }
 
-  public void informOfBuyer( double price, int quantity ) {
-    Debug.assertTrue(isSeller);
+  public void informOfBuyer( RoundRobinTrader seller, double price,
+                               int quantity ) {
+
+    super.informOfBuyer(seller, price, quantity);
 
     // Reward the learning algorithm according to profits made.
     lastProfit = quantity * (price - privateValue);
@@ -124,7 +126,8 @@ public class ElectricityTrader extends AbstractTraderAgent {
 
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                                double price, int quantity) {
-    Debug.assertTrue(!isSeller);
+
+     super.informOfSeller(winningShout, seller, price, quantity);
 
     // Reward the learning algorithm according to profits made
     lastProfit = quantity * (privateValue - price);
@@ -133,10 +136,10 @@ public class ElectricityTrader extends AbstractTraderAgent {
       return;
     }
 
-    ElectricityTrader trader = (ElectricityTrader) seller;
-    if ( trader.acceptDeal(price, quantity) ) {
+    ElectricityTrader sellerAgent = (ElectricityTrader) seller;
+    if ( sellerAgent.acceptDeal(price, quantity) ) {
       profits += lastProfit;
-      trader.informOfBuyer(price,quantity);
+      sellerAgent.informOfBuyer(this, price, quantity);
     }
   }
 

@@ -26,7 +26,7 @@ import test.uk.ac.liv.auction.agent.TestTrader;
 
 public class RoundRobinAuctionTest extends TestCase {
 
-  ContinuousDoubleAuctioneer auctioneer;
+  KDoubleAuctioneer auctioneer;
   RoundRobinAuction auction;
   TestTrader[] traders;
 
@@ -65,7 +65,7 @@ public class RoundRobinAuctionTest extends TestCase {
   }
 
   public void setUp() {
-    auctioneer = new ContinuousDoubleAuctioneer(auction, 0);
+    auctioneer = new KDoubleAuctioneer(auction, 0);
     setUpTraders();
     setUpAuction();
   }

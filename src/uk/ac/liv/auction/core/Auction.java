@@ -62,8 +62,7 @@ public interface Auction extends QuoteProvider {
   /**
    * Handle a single clearing operation between two traders
    */
-  public void clear( Shout ask, TraderAgent buyer, TraderAgent seller,
-                       double price, int quantity );
+  public void clear( Shout ask, Shout bid, double price);
 
   /**
    * Get the age of the auction in unspecified units

@@ -137,6 +137,8 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   protected boolean randomPrivateValue;
   protected double maxPrivateValue;
 
+  protected boolean lastShoutAccepted = false;
+
   /**
    * The current shout for this trader.
    */
@@ -243,6 +245,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   }
 
   public synchronized void purchaseFrom(AbstractTraderAgent  seller, int quantity, double price) {
+    seller.informOfBuyer(this, price, quantity);
     giveFunds(seller, price*quantity);
     stock += seller.deliver(quantity, price);
     lastProfit = quantity * (privateValue-price);
@@ -293,6 +296,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     funds = initialFunds;
     lastProfit = 0;
     profits = 0;
+    lastShoutAccepted = false;
     if ( currentShout == null ) {
       currentShout = new Shout(this);
     }
@@ -376,5 +380,19 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     return copy;
   }
 
+  public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
+                               double price,  int quantity ) {
+
+     lastShoutAccepted = true;
+  }
+
+  public void informOfBuyer( RoundRobinTrader buyer,
+                             double price, int quantity ) {
+    lastShoutAccepted = true;
+  }
+
+  public boolean lastShoutAccepted() {
+    return lastShoutAccepted;
+  }
 
 }

@@ -93,7 +93,7 @@ public class JASAAuctionProxy extends JASAProxy implements Auction {
     throw new java.lang.UnsupportedOperationException("Method printState() not yet implemented.");
   }
 
-  public void clear(Shout ask, TraderAgent buyer, TraderAgent seller, double price, int quantity) {
+  public void clear( Shout ask, Shout bid, double price ) {
     /**@todo Implement this uk.ac.liv.auction.core.Auction method*/
     throw new java.lang.UnsupportedOperationException("Method clear() not yet implemented.");
   }

@@ -84,8 +84,7 @@ public abstract class KAuctioneer extends AbstractAuctioneer
       Shout bid = (Shout) i.next();
       Shout ask = (Shout) i.next();
       double price = determineClearingPrice(bid, ask);
-      auction.clear(ask, bid.getAgent(), ask.getAgent(), price,
-                     ask.getQuantity());
+      auction.clear(ask, bid, price);
     }
   }
 

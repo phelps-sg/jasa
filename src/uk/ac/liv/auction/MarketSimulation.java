@@ -27,6 +27,7 @@ import uk.ac.liv.ai.learning.Learner;
 import uk.ac.liv.ai.learning.StochasticLearner;
 
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Seedable;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
   protected long prngSeed;
 
   public static final String P_AUCTION = "auction";
-  public static final String P_NUM_AGENT_TYPES = "numagenttypes";
+  public static final String P_NUM_AGENT_TYPES = "n";
   public static final String P_NUM_AGENTS = "numagents";
   public static final String P_AGENT_TYPE = "agenttype";
   public static final String P_AGENTS = "agents";
@@ -169,8 +170,10 @@ public class MarketSimulation implements Parameterizable, Runnable,
       stats.setAuction(auction);
     }
 
-    int numAgentTypes = parameters.getInt(base.push(P_NUM_AGENT_TYPES),
+    int numAgentTypes = parameters.getInt(base.push(P_AGENT_TYPE).push("n"),
                                            null, 1);
+
+    logger.debug("Number of agent types = " + numAgentTypes);
 
     for( int t=0; t<numAgentTypes; t++ ) {
 
@@ -178,6 +181,9 @@ public class MarketSimulation implements Parameterizable, Runnable,
       Parameter agentParam = typeParam.push(P_AGENTS);
 
       int numAgents = parameters.getInt(typeParam.push(P_NUM_AGENTS), null, 0);
+
+      logger.debug("Registering " + numAgents + " agents of type " + t);
+
       for( int i=0; i<numAgents; i++ ) {
 
       	RoundRobinTrader agent =
@@ -227,6 +233,9 @@ public class MarketSimulation implements Parameterizable, Runnable,
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
       Strategy s = agent.getStrategy();
+      if ( s instanceof Seedable ) {
+        ((Seedable) s).setSeed(prng.nextLong());
+      }
       if ( s instanceof AdaptiveStrategy ) {
         Learner l = ((AdaptiveStrategy) s).getLearner();
         if ( l instanceof StochasticLearner ) {

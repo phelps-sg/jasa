@@ -72,6 +72,11 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
     }
   }
 
+  public void informOfBuyer( RoundRobinTrader buyer, double price,
+                               int quantity ) {
+      throw new IllegalArgumentException("method not implemented");
+  }
+
   public AID getSenderAID() {
     return sender.getAID();
   }

@@ -70,4 +70,7 @@ public interface RoundRobinTrader extends TraderAgent, Resetable {
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                                         double price, int quantity );
 
+  public void informOfBuyer( RoundRobinTrader buyer,
+                             double price, int quantity );
+
 }

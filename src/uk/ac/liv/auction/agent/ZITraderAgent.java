@@ -117,9 +117,9 @@ public class ZITraderAgent extends AbstractTraderAgent {
    */
   public void informOfSeller( Shout winningShout, RoundRobinTrader seller,
                                   double price, int quantity) {
+    super.informOfSeller(winningShout, seller, price, quantity);
     AbstractTraderAgent agent = (AbstractTraderAgent) seller;
     purchaseFrom(agent, quantity, price);
-    lastShoutSuccessful = true;
   }
 
   public void purchaseFrom( AbstractTraderAgent seller, int quantity, double price ) {

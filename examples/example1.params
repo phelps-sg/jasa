@@ -1,7 +1,8 @@
 simulation.auction = uk.ac.liv.auction.core.RoundRobinAuction
 simulation.auction.maximumrounds = 200
-simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+u
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 simulation.auction.auctioneer.pricing.k = 0.5
 
 # Get cummulative stats
@@ -19,18 +20,30 @@ simulation.agenttype.n = 2
 
 # 1st population- 5000 sellers bidding random markups
 simulation.agenttype.0 = uk.ac.liv.auction.agent.ZITraderAgent
-simulation.agenttype.0.numagents = 5000
-simulation.agenttype.0.initialtradeentitlement = 1000
-simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
-simulation.agenttype.0.strategy.maxmarkup = 100
+simulation.agenttype.0.numagents = 50
+simulation.agenttype.0.randomprivatevalue = true
+simulation.agenttype.0.maxprivatevalue = 1000
+simulation.agenttype.0.initialtradeentitlement = 100000
+simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.ZIPStrategy
+simulation.agenttype.0.strategy.scaling = 1
+simulation.agenttype.0.strategy.quantity = 1
+simulation.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
+simulation.agenttype.0.strategy.learner.momentum = 0.2
+simulation.agenttype.0.strategy.learner.learningrate = 0.5
 simulation.agenttype.0.isseller = true
 
 # 2nd population- 5000 buyers using the Roth-Erev learning algorithm
 simulation.agenttype.1 = uk.ac.liv.auction.agent.ZITraderAgent
-simulation.agenttype.1.numagents = 5000
-simulation.agenttype.1.initialtradeentitlement = 1000
-simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
-simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+simulation.agenttype.1.numagents = 50
+simulation.agenttype.1.randomprivatevalue = true
+simulation.agenttype.1.maxprivatevalue = 1000
+simulation.agenttype.1.initialtradeentitlement = 100000
+simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.ZIPStrategy
+simulation.agenttype.1.strategy.scaling = 1
+simulation.agenttype.1.strategy.quantity = 1
+simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
+simulation.agenttype.1.strategy.learner.momentum = 0.2
+simulation.agenttype.1.strategy.learner.learningrate = 0.5
 simulation.agenttype.1.isseller = false
 
 # log4j configuration
