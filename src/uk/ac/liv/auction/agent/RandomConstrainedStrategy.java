@@ -91,5 +91,10 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
   public void setSeed( long seed ) {
     randGenerator.setSeed(seed);
   }
+  
+  public String toString() {
+    return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:" + 
+              quantity + ")";
+  }
 
 }
