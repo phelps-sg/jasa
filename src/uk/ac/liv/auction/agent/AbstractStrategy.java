@@ -19,7 +19,6 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.ShoutFactory;
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 
 /**

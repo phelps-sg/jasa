@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.electricity;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.LinkedList;
 
 import ec.util.Parameter;

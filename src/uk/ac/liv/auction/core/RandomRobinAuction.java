@@ -19,8 +19,6 @@ import uk.ac.liv.auction.agent.RoundRobinTrader;
 
 import uk.ac.liv.util.Seedable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import ec.util.MersenneTwisterFast;   // Fast random number generator
 

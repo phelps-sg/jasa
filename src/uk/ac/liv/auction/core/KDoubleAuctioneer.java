@@ -15,15 +15,6 @@
 
 package uk.ac.liv.auction.core;
 
-import java.util.Iterator;
-import java.util.List;
-
-import uk.ac.liv.util.Debug;
-import uk.ac.liv.util.Parameterizable;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
 import java.io.Serializable;
 
 /**

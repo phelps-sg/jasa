@@ -16,10 +16,9 @@
 package test.uk.ac.liv.util;
 
 import junit.framework.*;
-import junit.extensions.*;
+
 import uk.ac.liv.util.*;
-import java.util.Vector;
-import java.util.HashMap;
+
 import java.util.Random;
 import java.util.Iterator;
 import java.util.LinkedList;

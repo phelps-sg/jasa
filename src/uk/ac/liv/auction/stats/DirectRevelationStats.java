@@ -25,10 +25,6 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import huyd.poolit.*;
-
-import uk.ac.liv.util.io.DataWriter;
-
 import java.util.*;
 
 import java.io.Serializable;

@@ -22,9 +22,6 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;

@@ -16,14 +16,7 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.*;
-
-import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.*;
-
-import ec.util.ParameterDatabase;
-import ec.util.Parameter;
-
-import java.io.*;
 
 /**
  * @author Steve Phelps

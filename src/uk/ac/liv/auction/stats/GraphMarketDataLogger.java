@@ -15,7 +15,6 @@
 
 package uk.ac.liv.auction.stats;
 
-import JSci.awt.AbstractGraphModel;
 import JSci.awt.Graph2DModel;
 import JSci.awt.GraphDataEvent;
 import JSci.awt.GraphDataListener;
@@ -28,8 +27,6 @@ import uk.ac.liv.util.Resetable;
 
 import uk.ac.liv.util.io.DataWriter;
 import uk.ac.liv.util.io.DataSeriesWriter;
-
-import java.util.Vector;
 
 import javax.swing.event.EventListenerList;
 

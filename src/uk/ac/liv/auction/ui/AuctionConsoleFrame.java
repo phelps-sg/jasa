@@ -16,8 +16,6 @@
 package uk.ac.liv.auction.ui;
 
 import JSci.swing.JLineGraph;
-import JSci.awt.Graph2DModel;
-import JSci.awt.DefaultGraph2DModel;
 import JSci.swing.JGraphLayout;
 
 import uk.ac.liv.auction.core.*;

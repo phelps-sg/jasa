@@ -71,9 +71,21 @@ import org.apache.log4j.PropertyConfigurator;
 public class MarketSimulation implements Parameterizable, Runnable,
                                           Serializable {
 
+  /**
+   * The auction used in this simulation.
+   */
   protected RoundRobinAuction auction;
 
+  /**
+   * The meta PRNG seed used to generate all other PRNG seeds
+   * in the simulation.
+   */
   protected long prngSeed;
+
+  /**
+   * The PRNG used to generate all PRNG seeds in the simulation.
+   */
+  protected MersenneTwisterFast seeds;
 
   public static final String P_AUCTION = "auction";
   public static final String P_NUM_AGENT_TYPES = "n";
@@ -173,7 +185,8 @@ public class MarketSimulation implements Parameterizable, Runnable,
       }
     }
 
-    seedAgents();
+    logger.info("seed = " + prngSeed);
+    seedObjects();
 
     logger.info("done.");
   }
@@ -201,23 +214,35 @@ public class MarketSimulation implements Parameterizable, Runnable,
 
 
   protected void seedAgents() {
-    logger.info("seed = " + prngSeed);
-    MersenneTwisterFast prng = new MersenneTwisterFast(prngSeed);
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
       Strategy s = agent.getStrategy();
       if ( s instanceof Seedable ) {
-        ((Seedable) s).setSeed(prng.nextLong());
+        ((Seedable) s).setSeed(seeds.nextLong());
       }
       if ( s instanceof AdaptiveStrategy ) {
         Learner l = ((AdaptiveStrategy) s).getLearner();
         if ( l instanceof StochasticLearner ) {
-          ((StochasticLearner) l).setSeed(prng.nextLong());
+          ((StochasticLearner) l).setSeed(seeds.nextLong());
         }
       }
       agent.reset();
     }
+  }
+
+
+  protected void seedAuction() {
+    if ( auction instanceof Seedable ) {
+      ((Seedable) auction).setSeed(seeds.nextLong());
+    }
+  }
+
+
+  protected void seedObjects() {
+    seeds = new MersenneTwisterFast(prngSeed);
+    seedAgents();
+    seedAuction();
   }
 
 }

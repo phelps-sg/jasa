@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.agent.jade;
 
 import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.util.Parameterizable;
 

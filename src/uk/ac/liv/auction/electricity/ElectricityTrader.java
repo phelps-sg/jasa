@@ -22,13 +22,7 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.agent.FixedQuantityStrategy;
 
-import uk.ac.liv.ai.learning.NPTRothErevLearner;
-import uk.ac.liv.ai.learning.RothErevLearner;
-import uk.ac.liv.ai.learning.StimuliResponseLearner;
-
 import uk.ac.liv.util.Debug;
-import uk.ac.liv.util.IdAllocator;
-import uk.ac.liv.util.Resetable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;

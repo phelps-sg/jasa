@@ -17,8 +17,6 @@ package uk.ac.liv.auction.agent.jade;
 
 import java.awt.*;
 import javax.swing.*;
-import java.beans.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;

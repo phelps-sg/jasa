@@ -19,8 +19,6 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
-import uk.ac.liv.util.Resetable;
-
 /**
  * The interface used to log market-data on an auction as it progresses.
  * Different implementations of this interface can be used to record

@@ -15,39 +15,22 @@
 
 package uk.ac.liv.auction.agent.jade;
 
-import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.core.*;
-
-import uk.ac.liv.util.Parameterizable;
-
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import jade.core.*;
 
-import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 
-import jade.content.*;
-import jade.content.onto.OntologyException;
-import jade.content.lang.Codec;
-
-import jade.proto.*;
 
 import jade.wrapper.PlatformController;
 import jade.wrapper.AgentController;
 
 import jade.lang.acl.*;
 
-import jade.content.lang.sl.*;
-
-import jade.domain.FIPAAgentManagement.*;
-import jade.domain.*;
-
 import java.io.*;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 
 /**

@@ -16,9 +16,6 @@
 
 package uk.ac.liv.auction.agent;
 
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
 import uk.ac.liv.auction.core.*;
 
 /**

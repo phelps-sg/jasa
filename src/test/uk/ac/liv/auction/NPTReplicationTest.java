@@ -19,13 +19,9 @@ import test.uk.ac.liv.ai.learning.RothErevLearnerTest;
 
 import junit.framework.*;
 
-import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
 import uk.ac.liv.ai.learning.NPTRothErevLearner;
-import uk.ac.liv.util.CummulativeStatCounter;
-
-import ec.util.MersenneTwisterFast;
 
 import java.util.*;
 

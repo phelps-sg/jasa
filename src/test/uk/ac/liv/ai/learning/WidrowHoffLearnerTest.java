@@ -19,7 +19,6 @@ import junit.framework.*;
 
 import uk.ac.liv.ai.learning.WidrowHoffLearner;
 
-import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.MathUtil;
 
 public class WidrowHoffLearnerTest extends TestCase {

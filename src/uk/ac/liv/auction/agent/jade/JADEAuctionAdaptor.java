@@ -14,8 +14,6 @@
  */
 
 package uk.ac.liv.auction.agent.jade;
-
-import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 
 import jade.core.*;
@@ -24,22 +22,9 @@ import jade.core.behaviours.*;
 
 import jade.content.*;
 
-import jade.proto.*;
-
-import jade.wrapper.PlatformController;
-import jade.wrapper.AgentController;
-
 import jade.lang.acl.*;
 
-import jade.content.lang.sl.*;
-
-import jade.domain.FIPAAgentManagement.*;
-import jade.domain.*;
-
 import uk.ac.liv.util.Parameterizable;
-
-import ec.util.ParameterDatabase;
-import ec.util.Parameter;
 
 import org.apache.log4j.Logger;
 

@@ -21,7 +21,6 @@ import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
 
 import java.io.PrintStream;
-import java.io.OutputStream;
 
 import java.util.Observable;
 

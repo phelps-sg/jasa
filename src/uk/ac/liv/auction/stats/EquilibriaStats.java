@@ -20,19 +20,8 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.util.Debug;
-import uk.ac.liv.util.Resetable;
-
-import ec.util.ParameterDatabase;
-import ec.util.Parameter;
-
-import huyd.poolit.*;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
 
 import java.util.*;
-
-import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 

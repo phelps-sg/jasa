@@ -15,8 +15,6 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.agent.TraderAgent;
-
 /**
  * The interface used by agents to interact with an auction.
  *

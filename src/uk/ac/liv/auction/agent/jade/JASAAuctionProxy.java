@@ -18,7 +18,6 @@ package uk.ac.liv.auction.agent.jade;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.AuctionException;
-import uk.ac.liv.auction.agent.TraderAgent;
 import uk.ac.liv.auction.core.MarketQuote;
 
 import jade.core.Agent;

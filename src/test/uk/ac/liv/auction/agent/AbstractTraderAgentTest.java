@@ -17,9 +17,6 @@ package test.uk.ac.liv.auction.agent;
 
 import junit.framework.*;
 
-import uk.ac.liv.auction.agent.RoundRobinTrader;
-import uk.ac.liv.auction.core.*;
-
 
 public class AbstractTraderAgentTest extends TestCase {
 

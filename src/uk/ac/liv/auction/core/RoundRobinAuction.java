@@ -24,10 +24,7 @@ import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
-import uk.ac.liv.util.io.CSVWriter;
-import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.CummulativeStatCounter;
 

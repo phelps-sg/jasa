@@ -15,20 +15,15 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.agent.TraderAgent;
-
 import uk.ac.liv.util.BinaryHeap;
 import uk.ac.liv.util.FastBinaryHeap;
 import uk.ac.liv.util.QueueDisassembler;
-import uk.ac.liv.util.PriorityQueue;
 import uk.ac.liv.util.Debug;
 
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Iterator;
 
-import java.io.PrintStream;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;

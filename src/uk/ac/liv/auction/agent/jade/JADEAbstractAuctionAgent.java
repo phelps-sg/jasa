@@ -15,24 +15,12 @@
 
 package uk.ac.liv.auction.agent.jade;
 
-import uk.ac.liv.auction.agent.*;
-
-import uk.ac.liv.auction.core.*;
-
 import jade.core.*;
-
-import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SenderBehaviour;
 
 import jade.content.*;
 import jade.content.onto.OntologyException;
 import jade.content.lang.Codec;
-
-import jade.proto.*;
-
-import jade.wrapper.PlatformController;
-import jade.wrapper.AgentController;
 
 import jade.lang.acl.*;
 

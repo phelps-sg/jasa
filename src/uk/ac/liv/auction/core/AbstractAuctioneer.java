@@ -15,15 +15,7 @@
 
 package uk.ac.liv.auction.core;
 
-
-import uk.ac.liv.auction.agent.TraderAgent;
-
-import uk.ac.liv.util.BinaryHeap;
 import uk.ac.liv.util.Resetable;
-
-import java.util.HashMap;
-
-import java.io.PrintStream;
 
 import org.apache.log4j.Logger;
 
