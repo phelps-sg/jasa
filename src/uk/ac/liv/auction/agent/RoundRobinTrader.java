@@ -17,7 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.util.Resetable;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
 /**
@@ -38,7 +38,7 @@ public interface RoundRobinTrader extends TraderAgent, Resetable {
    *
    * @param auction The auction in which to trade
    */
-  public void requestShout( RoundRobinAuction auction );
+  public void requestShout( Auction auction );
 
   /**
    * This method is used to notify a buyer that one of its bids has been successful.

@@ -177,7 +177,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   /**
    * Default trading behaviour for agents.
    */
-  public void requestShout( RoundRobinAuction auction ) {
+  public void requestShout( Auction auction ) {
     try {
       auction.removeShout(currentShout);
       strategy.modifyShout(currentShout, auction);

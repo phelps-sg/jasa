@@ -106,7 +106,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
     lastProfit = 0;
   }
 
-  public void requestShout( RoundRobinAuction auction ) {
+  public void requestShout( Auction auction ) {
     super.requestShout(auction);
     lastProfit = 0;
   }
