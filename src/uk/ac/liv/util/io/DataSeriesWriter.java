@@ -16,7 +16,7 @@
 
 package uk.ac.liv.util.io;
 
-import JSci.awt.DefaultGraph2DModel;
+import javax.swing.table.AbstractTableModel;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -54,7 +54,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class DataSeriesWriter extends DefaultGraph2DModel.DataSeries
+public class DataSeriesWriter extends AbstractTableModel
     implements DataWriter, Serializable {
 
   protected boolean isVisible = true;
@@ -68,7 +68,7 @@ public class DataSeriesWriter extends DefaultGraph2DModel.DataSeries
   static Logger logger = Logger.getLogger(DataSeriesWriter.class);
 
   public DataSeriesWriter() {
-    super( new double[] {}, new double[] {} );
+    super();
   }
 
   public void newData( int datum ) {
@@ -136,7 +136,23 @@ public class DataSeriesWriter extends DefaultGraph2DModel.DataSeries
       return value;
     }
   }
-
+  
+  public int getColumnCount () {
+    return 2;
+  }
+  
+  public int getRowCount () {
+    return data.size();
+  }
+  
+  public Object getValueAt ( int rowIndex, int columnIndex) {
+    if ( columnIndex == 0 ) {
+      return new Integer(rowIndex);
+    } else {
+      return new Double(getDatum(rowIndex));
+    }
+  }
+  
   public void flush() {
   }
 
