@@ -237,7 +237,7 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
   public void requestShout( Auction auction ) {
     try {
       currentShout = strategy.modifyShout(currentShout, auction);
-      if ( active() ) {
+      if ( active() && currentShout != null ) {
         auction.newShout(currentShout);
       } else {
         logger.debug(this + ": inactive");

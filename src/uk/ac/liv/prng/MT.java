@@ -1,9 +1,3 @@
-package uk.ac.liv.prng;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-import edu.cornell.lassp.houle.RngPack.RanMT;
-
-
 /*
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2003 Steve Phelps
@@ -18,6 +12,13 @@ import edu.cornell.lassp.houle.RngPack.RanMT;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
+
+package uk.ac.liv.prng;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+import edu.cornell.lassp.houle.RngPack.RanMT;
+
 
 public class MT extends PRNGFactory {
 

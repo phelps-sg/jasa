@@ -1,8 +1,3 @@
-package uk.ac.liv.prng;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-import edu.cornell.lassp.houle.RngPack.Ranlux;
-
 
 /*
  * JASA Java Auction Simulator API
@@ -18,6 +13,14 @@ import edu.cornell.lassp.houle.RngPack.Ranlux;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
+
+package uk.ac.liv.prng;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+import edu.cornell.lassp.houle.RngPack.Ranlux;
+
+
 
 public class Lux extends PRNGFactory {
 

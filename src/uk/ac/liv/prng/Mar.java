@@ -1,7 +1,3 @@
-package uk.ac.liv.prng;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-import edu.cornell.lassp.houle.RngPack.Ranmar;
 
 /*
  * JASA Java Auction Simulator API
@@ -17,6 +13,13 @@ import edu.cornell.lassp.houle.RngPack.Ranmar;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
+
+package uk.ac.liv.prng;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+import edu.cornell.lassp.houle.RngPack.Ranmar;
+
 
 public class Mar extends PRNGFactory {
 

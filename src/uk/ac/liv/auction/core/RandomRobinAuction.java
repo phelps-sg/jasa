@@ -50,7 +50,7 @@ public class RandomRobinAuction extends RoundRobinAuction
     Object[] candidates = activeTraders.toArray();
     int numCandidates = candidates.length;
     for( int i=0; i<numTraders; i++ ) {
-      int choice = randGenerator.choose(numCandidates);
+      int choice = randGenerator.choose(numCandidates-1);
       RoundRobinTrader trader = (RoundRobinTrader) candidates[choice];
       candidates[choice] = candidates[numCandidates-1];
       numCandidates--;
