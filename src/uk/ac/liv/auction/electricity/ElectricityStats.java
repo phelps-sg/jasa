@@ -33,6 +33,16 @@ import uk.ac.liv.auction.agent.*;
 
 
 /**
+ * <p>
+ * Calculate the market-power and efficiency variables described in
+ * </p>
+ * <p>
+ * "Markert Power and Efficiency in a Computational Electricity Market
+ * with Discriminatory Double-Auction Pricing"
+ * Nicolaisen, J.; Petrov, V.; and Tesfatsion, L.
+ * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
+ * </p>
+ *
  * @author Steve Phelps
  */
 
@@ -65,6 +75,9 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     calculate();
   }
 
+  public ElectricityStats() {
+  }
+
   /**
    * @deprecated
    */
@@ -81,9 +94,9 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
+
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
-    standardStats.setAuction(auction);
   }
 
 
@@ -91,62 +104,21 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     calculate(false);
   }
 
+
   public void calculate() {
     calculate(true);
   }
 
-  protected void calculateEquilibria() {
-    if ( standardStats == null ) {
-      standardStats = new EquilibriaStats(auction);
-      standardStats.calculate();
-    } else {
-      standardStats.recalculate();
-    }
-  }
-
-  protected void zeroTotals() {
-    sellerCap = 0;
-    buyerCap = 0;
-    pBA = 0;
-    pSA = 0;
-    numBuyers = 0;
-    numSellers = 0;
-  }
-
-  protected void zeroEquilibriumTotals() {
-    pSCE = 0;
-    pBCE = 0;
-  }
-
-  public double calculateEquilibriumPrice() {
-    return (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2;
-  }
-
-  public double equilibriumProfits( AbstractTraderAgent trader ) {
-    double surplus = 0;
-    if ( trader.isSeller() ) {
-      surplus = equilibPrice - trader.getPrivateValue();
-    } else {
-      surplus = trader.getPrivateValue() - equilibPrice;
-    }
-    return auction.getAge() * equilibQuant(trader, equilibPrice) * surplus;
-  }
-
-  protected double getProfits( AbstractTraderAgent trader ) {
-    return ((ElectricityTrader) trader).getProfits();
-  }
-
-  protected double getCapacity( AbstractTraderAgent trader ) {
-    return ((ElectricityTrader) trader).getCapacity();
-  }
 
   protected void calculate( boolean equilibrium ) {
+
     zeroTotals();
     if ( equilibrium ) {
       calculateEquilibria();
       zeroEquilibriumTotals();
+      equilibPrice = calculateEquilibriumPrice();
     }
-    equilibPrice = calculateEquilibriumPrice();
+
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent trader = (AbstractTraderAgent) i.next();
@@ -166,12 +138,66 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
         }
       }
     }
+
     rCon = numSellers / numBuyers;
     rCap = (double) buyerCap / (double) sellerCap;
     mPB = (pBA - pBCE) / pBCE;
     mPS = (pSA - pSCE) / pSCE;
     eA = (pBA + pSA) / (pBCE + pSCE) * 100;
   }
+
+
+  protected void calculateEquilibria() {
+    if ( standardStats == null ) {
+      standardStats = new EquilibriaStats(auction);
+      standardStats.calculate();
+    } else {
+      standardStats.recalculate();
+    }
+  }
+
+
+  protected void zeroTotals() {
+    sellerCap = 0;
+    buyerCap = 0;
+    pBA = 0;
+    pSA = 0;
+    numBuyers = 0;
+    numSellers = 0;
+  }
+
+
+  protected void zeroEquilibriumTotals() {
+    pSCE = 0;
+    pBCE = 0;
+  }
+
+
+  public double calculateEquilibriumPrice() {
+    return (standardStats.getMinPrice() + standardStats.getMaxPrice()) / 2;
+  }
+
+
+  public double equilibriumProfits( AbstractTraderAgent trader ) {
+    double surplus = 0;
+    if ( trader.isSeller() ) {
+      surplus = equilibPrice - trader.getPrivateValue();
+    } else {
+      surplus = trader.getPrivateValue() - equilibPrice;
+    }
+    return auction.getAge() * equilibQuant(trader, equilibPrice) * surplus;
+  }
+
+
+  protected double getProfits( AbstractTraderAgent trader ) {
+    return ((ElectricityTrader) trader).getProfits();
+  }
+
+
+  protected double getCapacity( AbstractTraderAgent trader ) {
+    return ((ElectricityTrader) trader).getCapacity();
+  }
+
 
   public double equilibQuant( AbstractTraderAgent t, double price ) {
     double privateValue = t.getPrivateValue();
@@ -213,6 +239,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   }
 
 }
+
 
 class ElectricityMetaStats extends MetaMarketStats {
 
