@@ -61,6 +61,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   protected int iterations = 100;
 
   protected int auctioneerKSamples = 10;
+  
+  protected double minK = 0;
+  
+  protected double maxK = 1;
+  
+  protected double deltaK = 0.01;
 
   protected int numBuyers, numSellers;
   protected int buyerCapacity, sellerCapacity;
@@ -95,6 +101,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_OUTPUTDIR = "outputdir";
   static final String P_ELECTRICITY = "electricity";
   static final String P_AUCTIONEERKSAMPLES = "ksamples";
+  static final String P_KMIN = "k0";
+  static final String P_KMAX = "k1";
+  static final String P_KDELTA = "kdelta";
   static final String P_AUCTIONEER = "auctioneer";
   static final String P_CB = "cb";
   static final String P_CS = "cs";
@@ -123,6 +132,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     auctioneerKSamples =
         parameters.getIntWithDefault(base.push(P_AUCTIONEERKSAMPLES),
                                           null, auctioneerKSamples);
+    
+    minK = parameters.getDoubleWithDefault(base.push(P_KMIN), null, minK);
+    maxK = parameters.getDoubleWithDefault(base.push(P_KMAX), null, maxK);
+    deltaK = parameters.getDoubleWithDefault(base.push(P_KDELTA), null, deltaK);
 
     collectIterData =
         parameters.getBoolean(base.push(P_ITER_DATA), null, collectIterData);
@@ -268,14 +281,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     randomizedPrivateValues =
         randomizer.generateRandomizedPrivateValues(numTraders, iterations);
 
-    for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {            
+    for( double k=minK; k<maxK; k+=deltaK ) {            
 
-      double auctioneerK = kMultiple/(double) auctioneerKSamples;
+      experiment(k, randomizedPrivateValues, prngSeeds);
       
-      experiment(auctioneerK, randomizedPrivateValues, prngSeeds);
-      
-      reportSummary(auctioneerK);      
-      recordVariables(auctioneerK);
+      reportSummary(k);      
+      recordVariables(k);
     }
 
     dataFile.close();
@@ -316,7 +327,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     variables = new CummulativeStatCounter[] {
       efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
-      sMPBN, sMPSN, equilibPrice, pBCE, reMean, reStdev 
+      sMPBN, sMPSN, pBCE, pSCE, equilibPrice, reMean, reStdev 
     };
     
     Debug.assertTrue("CSV file not configured with correct number of columns",
