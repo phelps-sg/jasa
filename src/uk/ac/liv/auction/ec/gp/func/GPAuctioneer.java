@@ -45,9 +45,12 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
 
   protected Auction auction;
 
-  protected MarketQuote currentQuote = new MarketQuote(Double.NaN, Double.NaN);
+  protected MarketQuote currentQuote = null;
 
   protected Shout clearBid, clearAsk;
+  
+  protected Shout lastBid = new Shout();
+  protected Shout lastAsk = new Shout();
 
   /**
    * The market statistics for the last auction run by this auctioneer.
@@ -69,15 +72,13 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     super();
   }
 
+  
   public void reset() {
     shoutEngine.reset();
     misbehaved = false;
   }
 
-  public void endOfRoundProcessing() {
-    clear();
-  }
-
+  
   public MarketQuote getQuote() {
     if ( currentQuote == null ) {
       generateQuote();
@@ -85,6 +86,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     return currentQuote;
   }
 
+  
   public synchronized void clear() {
     List shouts = shoutEngine.getMatchedShouts();
     Iterator i = shouts.iterator();
@@ -96,6 +98,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     }
   }
 
+  
   public double determineClearingPrice( Shout bid, Shout ask ) {
     clearBid = bid;
     clearAsk = ask;
@@ -110,30 +113,49 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
     }
     return result.doubleValue();
   }
+  
+  
+  protected double bidQuote() {
+    return Shout.maxPrice(shoutEngine.getHighestMatchedAsk(),
+                           shoutEngine.getHighestUnmatchedBid());
+  }
+  
+  protected double askQuote() {      
+    return Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
+                           shoutEngine.getLowestMatchedBid());
+  }            
+                     
 
   public void generateQuote() {
+      
+    if ( currentQuote == null ) {
+      currentQuote = new MarketQuote(askQuote(),bidQuote());
+    }
 
-    currentQuote.setBid(
-      Shout.maxPrice(shoutEngine.getHighestMatchedAsk(),
-                     shoutEngine.getHighestUnmatchedBid()) );
-
-    currentQuote.setAsk(
-      Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
-                     shoutEngine.getLowestMatchedBid()) );
-
+    currentQuote.setBid(bidQuote());  
+    currentQuote.setAsk(askQuote());    
   }
 
+  
   public synchronized void newShout( Shout shout ) throws IllegalShoutException {
     if ( ! shout.isValid() ) {
       throw new IllegalShoutException("Malformed shout");
     }
     if ( shout.isBid() ) {
+      lastBid.copyFrom(shout);
       shoutEngine.newBid(shout);
     } else {
+      lastAsk.copyFrom(shout);
       shoutEngine.newAsk(shout);
     }
   }
 
+  
+  public void endOfRoundProcessing() {
+    clear();
+  }
+
+  
   public void endOfAuctionProcessing() {
     // Do nothing
   }
@@ -141,15 +163,24 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public Shout getCurrentShout() {
     return currentShout;
   }
+  
+  public Shout getLastBid() {
+    return lastBid;
+  }
+  
+  public Shout getLastAsk() {
+    return lastAsk;
+  }
 
   public synchronized void removeShout( Shout shout ) {
     shoutEngine.removeShout(shout);
   }
-
+  
   public synchronized void printState() {
     shoutEngine.printState();
   }
 
+  
   public void setMarketStats( CummulativeStatCounter stats ) { this.stats = stats; }
   public void setLogStats( StatsMarketDataLogger logger ) { this.logger = logger; }
   public void setStrategies( LinkedList strategies ) { this.strategies = strategies; }

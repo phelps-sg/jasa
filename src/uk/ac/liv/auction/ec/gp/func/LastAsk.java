@@ -20,18 +20,21 @@ import ec.*;
 
 import uk.ac.liv.ec.gp.func.*;
 
-import uk.ac.liv.util.FastLong;
+import uk.ac.liv.util.FastDouble;
 
 
-public class AuctionAge extends GPNode {
+public class LastAsk extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, 
                       ADFStack stack, GPIndividual individual, Problem problem ) {
+    GPTradingStrategy strategy = (GPTradingStrategy) individual;
+    GPAuctioneer auctioneer = 
+      (GPAuctioneer) strategy.getAuction().getAuctioneer();
     ((GPGenericData) input).data = 
-      FastLong.newFastLong(((GPTradingStrategy) individual).getAuction().getAge());
+      FastDouble.newFastDouble(auctioneer.getLastAsk().getPrice());
   }
 
   public String toString() {
-    return "AuctionAge";
+    return "LastAsk";
   }
 }

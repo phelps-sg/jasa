@@ -47,11 +47,11 @@ public class GPTradingStrategy extends GPIndividualCtx
 
   int quantity = 1;
 
-  Auction currentAuction = null;
+  RoundRobinAuction currentAuction = null;
 
   CummulativeStatCounter priceStats = new CummulativeStatCounter("priceStats");
 
-
+  
   public void setAgent( AbstractTraderAgent agent ) {
     this.agent = agent;
   }
@@ -68,7 +68,7 @@ public class GPTradingStrategy extends GPIndividualCtx
     return agent.getPrivateValue();
   }
 
-  public Auction getAuction() {
+  public RoundRobinAuction getAuction() {
     return currentAuction;
   }
 
@@ -78,7 +78,7 @@ public class GPTradingStrategy extends GPIndividualCtx
 
   public void modifyShout( Shout shout, Auction auction ) {
     currentShout = shout;
-    currentAuction = auction;
+    currentAuction = (RoundRobinAuction) auction;
     double price = Double.NaN;
     FastNumber result = evaluateNumberTree(0);
     if ( !misbehaved ) {
