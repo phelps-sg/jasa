@@ -18,10 +18,6 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.Seeder;
-import uk.ac.liv.util.Prototypeable;
-
 import uk.ac.liv.prng.PRNGFactory;
 
 import ec.util.ParameterDatabase;
@@ -53,7 +49,7 @@ import java.io.Serializable;
  */
 
 public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
-                                        implements Seedable, Serializable {
+                                        implements Serializable {
 
   protected double maxMarkup = DEFAULT_MARKUP;
 
@@ -101,14 +97,6 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     super.setup(parameters, base);
     maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP),
                                                   null, maxMarkup);
-  }
-
-  public void setSeed( long seed ) {
-    prng = PRNGFactory.getFactory().create(seed);
-  }
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
   }
 
   public String toString() {

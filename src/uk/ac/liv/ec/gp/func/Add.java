@@ -15,9 +15,6 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import ec.gp.*;
-import ec.*;
-
 import uk.ac.liv.util.UntypedNumber;
 
 

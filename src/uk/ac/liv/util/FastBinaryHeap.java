@@ -17,8 +17,6 @@ package uk.ac.liv.util;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * <p>

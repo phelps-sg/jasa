@@ -15,8 +15,6 @@
 
 package uk.ac.liv.ec.gp.func;
 
-import ec.gp.*;
-
 import uk.ac.liv.util.UntypedNumber;
 
 public class Multiply extends GPArithmeticBinaryOperator {

@@ -21,8 +21,6 @@ import java.util.Random;
 
 import junit.framework.*;
 
-import ec.util.MersenneTwisterFast;
-
 /**
  * @author Steve Phelps
  * @version $Revision$

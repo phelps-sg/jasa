@@ -15,8 +15,6 @@
 
 package uk.ac.liv.ai.learning;
 
-import uk.ac.liv.util.io.DataWriter;
-
 /**
  * A learner that learns a discrete number of different actions.
  *

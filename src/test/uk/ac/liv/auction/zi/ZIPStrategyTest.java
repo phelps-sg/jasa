@@ -22,7 +22,6 @@ import uk.ac.liv.auction.zi.ZITraderAgent;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.*;
 
-import uk.ac.liv.ai.learning.Learner;
 import uk.ac.liv.ai.learning.WidrowHoffLearner;
 
 import org.apache.log4j.Logger;

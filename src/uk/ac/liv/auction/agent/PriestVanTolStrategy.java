@@ -18,18 +18,6 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.Seeder;
-import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Prototypeable;
-
-import uk.ac.liv.prng.PRNGFactory;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
-
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;

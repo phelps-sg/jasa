@@ -15,13 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.ai.learning.Learner;
-import uk.ac.liv.ai.learning.DiscreteLearner;
-
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
-
-import uk.ac.liv.util.Parameterizable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;

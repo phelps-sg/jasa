@@ -20,7 +20,6 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.io.DataSeriesWriter;
-import uk.ac.liv.util.io.DataWriter;
 
 import JSci.awt.*;
 import JSci.swing.*;

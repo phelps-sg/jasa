@@ -25,9 +25,6 @@ import uk.ac.liv.auction.agent.FixedQuantityStrategy;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import java.io.Serializable;
-
-
 /**
  * <p>
  * An adaptive trader, trading in a simulated Elecitricty market.  Agents

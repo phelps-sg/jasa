@@ -23,7 +23,6 @@ import java.io.*;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class CSVReader  {

@@ -17,14 +17,11 @@ package uk.ac.liv.auction.ec.gp.func;
 
 import java.io.Serializable;
 
-import ec.gp.*;
-import ec.*;
 import ec.util.*;
 
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.ec.gp.func.*;
 import uk.ac.liv.ec.gp.*;
 
 import uk.ac.liv.util.*;

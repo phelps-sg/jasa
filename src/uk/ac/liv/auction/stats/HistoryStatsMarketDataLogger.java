@@ -17,7 +17,6 @@ package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.ShoutsNotVisibleException;

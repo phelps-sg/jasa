@@ -17,14 +17,9 @@ package uk.ac.liv.auction.ec.gp.func;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.StatsMarketDataLogger;
-import uk.ac.liv.auction.electricity.ElectricityStats;
-
-import ec.gp.*;
-import ec.*;
 
 import uk.ac.liv.util.*;
 
-import uk.ac.liv.ec.gp.func.GPGenericData;
 import uk.ac.liv.ec.gp.*;
 
 import java.util.*;

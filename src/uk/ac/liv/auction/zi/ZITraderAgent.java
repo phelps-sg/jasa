@@ -18,11 +18,6 @@ package uk.ac.liv.auction.zi;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.Seeder;
-
-import uk.ac.liv.prng.PRNGFactory;
-
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
@@ -228,14 +223,6 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     return strategy.determineQuantity(auction);
   }
   
-  public void setSeed( long seed ) {
-    prng = PRNGFactory.getFactory().create(seed);
-  }
-  
-  public void seed( Seeder seeder ) {
-    super.seed(seeder);
-    setSeed(seeder.nextSeed());
-  }
 
   public String toString() {
     return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " valuer:" + valuer + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";

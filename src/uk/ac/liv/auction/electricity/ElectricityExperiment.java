@@ -32,7 +32,6 @@ import ec.util.ParameterDatabase;
 import java.util.*;
 import java.io.*;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.Logger;
 
 /**
@@ -309,7 +308,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
     auction.setMaximumRounds(maxRounds);
 
-    long[][] prngSeeds = randomizer.generatePRNGseeds(numTraders, iterations);
+    randomizer.generatePRNGseeds(iterations);
 
     double[][] randomizedPrivateValues = null;
 
@@ -318,7 +317,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
     for( double k=minK; k<=maxK; k+=deltaK ) {
 
-      experiment(k, randomizedPrivateValues, prngSeeds);
+      experiment(k, randomizedPrivateValues);
 
       reportSummary(k);
       recordVariables(k);
@@ -329,8 +328,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 
   public void experiment( double auctioneerK,
-                            double[][] randomizedPrivateValues,
-                            long[][] prngSeeds ) throws FileNotFoundException {
+                            double[][] randomizedPrivateValues ) throws FileNotFoundException {
 
     ((ParameterizablePricing) auctioneer).setK(auctioneerK);
     auction.reset();
@@ -351,8 +349,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
     for( int i=0; i<iterations; i++ ) {
 
       randomizer.randomizePrivateValues(randomizedPrivateValues, i);
-      randomizer.setStrategyPRNGseeds(prngSeeds, i);
-
+      
       if ( collectStrategyData ) {
         initStrategyData(strategyDataFile + "-" + i);
       }

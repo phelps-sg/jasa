@@ -26,7 +26,6 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import java.io.Serializable;
 
 /**
  * <p>

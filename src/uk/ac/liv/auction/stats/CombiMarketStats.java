@@ -22,8 +22,6 @@ import java.util.Iterator;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import uk.ac.liv.auction.core.MarketQuote;
-import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import uk.ac.liv.util.Parameterizable;

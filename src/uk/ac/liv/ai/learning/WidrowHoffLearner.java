@@ -16,20 +16,14 @@
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.io.DataWriter;
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Resetable;
-import uk.ac.liv.util.Seeder;
-import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.Prototypeable;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import java.io.Serializable;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 /**
  * An implementation of the Widrow-Hoff learning algorithm 
@@ -40,7 +34,7 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
  */
 
 public class WidrowHoffLearner extends AbstractLearner
-    implements Seedable, MimicryLearner, Prototypeable, Serializable {
+    implements MimicryLearner, Prototypeable, Serializable {
 
   /**
    * The learning rate.
@@ -56,12 +50,6 @@ public class WidrowHoffLearner extends AbstractLearner
    * The current amount of adjustment to the output.
    */
   protected double delta;
-
-  /**
-   * A PRNG for initialising the learning algorithm with randomly chosen
-   * values for the momentum and learningRate parameters.
-   */
-  protected RandomElement paramPRNG = PRNGFactory.getFactory().create();
 
   public static final double DEFAULT_LEARNING_RATE = 0.1;
 
@@ -116,14 +104,6 @@ public class WidrowHoffLearner extends AbstractLearner
     currentOutput = 0;
   }
 
-  public void setSeed( long seed ) {
-    paramPRNG = PRNGFactory.getFactory().create(seed);
-  }
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
-  }
-
   public void reset() {
     initialise();
   }
@@ -138,7 +118,7 @@ public class WidrowHoffLearner extends AbstractLearner
 
 
   public void randomInitialise() {
-    learningRate = paramPRNG.uniform(0.1, 0.4);       
+    learningRate = GlobalPRNG.getInstance().uniform(0.1, 0.4);       
   }
 
   public String toString() {

@@ -21,8 +21,6 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
-import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.Seeder;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;

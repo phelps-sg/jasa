@@ -18,7 +18,6 @@ package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
-import uk.ac.liv.util.Seeder;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;

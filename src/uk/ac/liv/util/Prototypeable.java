@@ -15,9 +15,6 @@
 
 package uk.ac.liv.util;
 
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
 /**
  * @author Steve Phelps
  * @version $Revision$

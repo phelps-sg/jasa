@@ -19,9 +19,6 @@ import ec.gp.*;
 import ec.EvolutionState;
 import ec.Problem;
 
-import java.util.HashMap;
-import java.util.ArrayList;
-
 import uk.ac.liv.ec.gp.func.*;
 
 import java.io.Serializable;

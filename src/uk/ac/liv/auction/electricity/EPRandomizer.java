@@ -18,14 +18,6 @@ package uk.ac.liv.auction.electricity;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.Seeder;
-
-import uk.ac.liv.prng.PRNGFactory;
-
-import java.util.*;
-
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
@@ -46,8 +38,7 @@ public class EPRandomizer extends StandardRandomizer {
   }
 
   public void setup(ParameterDatabase parameters, Parameter base) {
-    super.setup(parameters, base);
-    equilibPricePRNG = PRNGFactory.getFactory().create(nextSeed());
+    super.setup(parameters, base);    
   }
 
 

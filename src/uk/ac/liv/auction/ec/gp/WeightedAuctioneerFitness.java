@@ -18,8 +18,6 @@ package uk.ac.liv.auction.ec.gp;
 import uk.ac.liv.util.CummulativeStatCounter;
 
 import ec.simple.SimpleFitness;
-import ec.*;
-import ec.util.*;
 
 public class WeightedAuctioneerFitness extends SimpleFitness
     implements AuctioneerFitness {

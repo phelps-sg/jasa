@@ -17,26 +17,13 @@ package uk.ac.liv.auction.ec.gp;
 
 import java.util.*;
 
-import java.io.*;
-
 import ec.*;
-import ec.gp.*;
-import ec.gp.koza.*;
 import ec.util.*;
 import ec.simple.*;
 
-import uk.ac.liv.ec.coevolve.*;
-
 import uk.ac.liv.util.*;
-import uk.ac.liv.util.io.*;
 
-import uk.ac.liv.ec.gp.*;
-
-import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.electricity.*;
-import uk.ac.liv.auction.stats.*;
-import uk.ac.liv.auction.ec.gp.func.*;
 
 /**
  * Use GP to evolve auctioneers against non-GP strategies.

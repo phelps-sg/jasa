@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.ec.gp.func;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
 
 /**
  * @author Steve Phelps

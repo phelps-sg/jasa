@@ -1,17 +1,7 @@
 package uk.ac.liv.auction.ec.gp;
 
-import java.io.*;
-
-import java.util.*;
-
 import ec.*;
-import ec.gp.*;
-import ec.gp.koza.*;
-import ec.util.*;
 
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.stats.*;
-import uk.ac.liv.auction.electricity.ElectricityTrader;
 import uk.ac.liv.auction.ec.gp.func.*;
 import uk.ac.liv.ec.gp.GPBestStatistics;
 

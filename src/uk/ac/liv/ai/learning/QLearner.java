@@ -17,7 +17,6 @@ package uk.ac.liv.ai.learning;
 
 import java.io.Serializable;
 
-import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.DataWriter;

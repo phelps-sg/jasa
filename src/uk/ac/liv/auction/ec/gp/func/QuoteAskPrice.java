@@ -19,7 +19,6 @@ import ec.gp.*;
 import ec.*;
 
 import uk.ac.liv.auction.core.QuoteProvider;
-import uk.ac.liv.auction.core.MarketQuote;
 
 import uk.ac.liv.ec.gp.func.*;
 

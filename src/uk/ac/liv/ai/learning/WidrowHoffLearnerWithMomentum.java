@@ -15,6 +15,8 @@
  
 package uk.ac.liv.ai.learning;
 
+import uk.ac.liv.prng.GlobalPRNG;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -40,6 +42,6 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 
   public void randomInitialise() {
     super.randomInitialise();
-    momentum = paramPRNG.uniform(0.1, 0.4);       
+    momentum = GlobalPRNG.getInstance().uniform(0.1, 0.4);       
   }
 }

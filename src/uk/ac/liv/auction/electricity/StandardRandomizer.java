@@ -19,8 +19,10 @@ package uk.ac.liv.auction.electricity;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.*;
-import uk.ac.liv.ai.learning.*;
+
 import uk.ac.liv.util.*;
+
+import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 
 import java.util.*;
@@ -34,25 +36,22 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
 import org.apache.log4j.Logger;
 
 public class StandardRandomizer
-    implements Parameterizable, Serializable, Seedable, Seeder {
+    implements Parameterizable, Serializable {
 
   protected RoundRobinAuction auction;
-
-  protected long seed = System.currentTimeMillis();
 
   protected double minPrivateValue = 30;
 
   protected double maxPrivateValue = 1000;
 
-  protected RandomElement privValuePRNG;
-
-  protected RandomElement metaPRNG;
-
   protected ElectricityExperiment experiment;
+  
+  protected RandomElement privValuePRNG;
+  
+  protected long[] seeds;
 
   static Logger logger = Logger.getLogger(StandardRandomizer.class);
-
-  static final String P_SEED = "seed";
+  
   static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
   static final String P_MINPRIVATEVALUE = "minprivatevalue";
 
@@ -62,14 +61,10 @@ public class StandardRandomizer
     setExperiment(experiment);
   }
 
-  public StandardRandomizer() {
-    metaPRNG = PRNGFactory.getFactory().create(seed);
+  public StandardRandomizer() {    
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-
-    seed = (long)
-        parameters.getIntWithDefault(base.push(P_SEED), null, (int) seed);
 
     minPrivateValue =
         parameters.getDoubleWithDefault(base.push(P_MINPRIVATEVALUE), null,
@@ -77,9 +72,7 @@ public class StandardRandomizer
     maxPrivateValue =
         parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null,
                                         maxPrivateValue);
-
-    metaPRNG = PRNGFactory.getFactory().create(seed);
-    privValuePRNG = PRNGFactory.getFactory().create(nextSeed());
+    
   }
 
   public void setExperiment( ElectricityExperiment experiment ) {
@@ -88,7 +81,7 @@ public class StandardRandomizer
   }
 
   public double randomValue( RandomElement prng, double min, double max ) {
-    return min + (max - min) * prng.raw();
+    return prng.uniform(min, max);
   }
 
   public double randomPrivateValue( double min, double max ) {
@@ -108,26 +101,12 @@ public class StandardRandomizer
     }
   }
 
-  public void setSeed( long seed ) {
-    metaPRNG = PRNGFactory.getFactory().create(seed);
-    privValuePRNG = PRNGFactory.getFactory().create(nextSeed());
-  }
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
-  }
-
-  public long nextSeed() {
-    return metaPRNG.choose(0, Integer.MAX_VALUE);
-  }
-
-
-
   protected double[][] generateRandomizedPrivateValues( int numTraders,
                                                          int numIterations ) {
     double[][] values = new double[numIterations][numTraders];
     EquilibriaStats stats = new EquilibriaStats(auction);
     for( int i=0; i<numIterations; i++ ) {
+    	privValuePRNG = PRNGFactory.getFactory().create(seeds[i]);
       do {
         Iterator traders = auction.getTraderIterator();
         for( int t=0; t<numTraders; t++ ) {
@@ -143,31 +122,19 @@ public class StandardRandomizer
   }
 
 
-  protected long[][] generatePRNGseeds( int numTraders, int numIterations ) {
-    long[][] seeds = new long[numTraders][numIterations];
-    logger.info("PRNG seed = " + seed);
-    for( int t=0; t<numTraders; t++ ) {
-      for( int i=0; i<numIterations; i++ ) {
-        seeds[t][i] = nextSeed();
-      }
-    }
-    return seeds;
+  protected void generatePRNGseeds( int numIterations ) {
+    seeds = new long[numIterations];
+    long currentSeed = GlobalPRNG.getInstance().choose(1,1023);    
+    for( int i=0; i<numIterations; i++ ) {
+    	seeds[i] = currentSeed;
+    	currentSeed += GlobalPRNG.getInstance().choose(1,1023);    	      
+    }    
   }
 
-
-  protected void setStrategyPRNGseeds( long[][] seeds, int iteration ) {
-    Iterator i = auction.getTraderIterator();
-    int traderNumber = 0;
-    while ( i.hasNext() ) {
-      setSeed(seeds[traderNumber++][iteration]);
-      ElectricityTrader t = (ElectricityTrader) i.next();
-      t.seed(this);
-    }
-  }
 
   public String toString() {
     return "(" + getClass() + " minPrivateValue:" + minPrivateValue
-              + " maxPrivateValue:" + maxPrivateValue + " seed:" + seed + ")";
+              + " maxPrivateValue:" + maxPrivateValue +  ")";
   }
 
 }

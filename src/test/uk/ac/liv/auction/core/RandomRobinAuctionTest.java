@@ -18,9 +18,6 @@ package test.uk.ac.liv.auction.core;
 import junit.framework.*;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.RoundRobinTrader;
-
-import test.uk.ac.liv.auction.agent.TestTrader;
 
 
 public class RandomRobinAuctionTest extends RoundRobinAuctionTest {

@@ -15,11 +15,8 @@
 
 package uk.ac.liv.prng;
 
-import uk.ac.liv.prng.*;
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.Resetable;
-
-import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
 

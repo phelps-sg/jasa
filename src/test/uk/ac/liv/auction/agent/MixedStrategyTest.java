@@ -17,13 +17,9 @@ package test.uk.ac.liv.auction.agent;
 
 import junit.framework.*;
 
-import test.uk.ac.liv.PRNGTestSeeds;
-
 import uk.ac.liv.auction.zi.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
-
-import uk.ac.liv.ai.learning.Learner;
 
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 

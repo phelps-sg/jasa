@@ -16,18 +16,11 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
-import uk.ac.liv.auction.core.RoundRobinAuction;
-
-import uk.ac.liv.util.CummulativeStatCounter;
-import uk.ac.liv.util.MutableDoubleWrapper;
-import uk.ac.liv.util.Resetable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import java.util.*;
-
-import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 

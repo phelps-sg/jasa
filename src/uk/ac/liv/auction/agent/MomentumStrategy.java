@@ -21,10 +21,7 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.ai.learning.MimicryLearner;
 import uk.ac.liv.ai.learning.Learner;
 
-import uk.ac.liv.util.Seeder;
-import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Prototypeable;
 
 import uk.ac.liv.prng.PRNGFactory;
 
@@ -42,8 +39,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class MomentumStrategy extends AdaptiveStrategyImpl
-    implements Seedable  {
+public abstract class MomentumStrategy extends AdaptiveStrategyImpl 
+		implements Serializable {
 
   protected MimicryLearner learner;
   
@@ -125,18 +122,6 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
 
   public void endOfRound( Auction auction ) {
     // Do nothing
-  }
-
-  public void setSeed( long seed ) {
-    randGenerator = PRNGFactory.getFactory().create(seed);
-  }
-
-  public void seed( Seeder s ) {
-    logger.debug("seed(" + s + ")");
-    setSeed(s.nextSeed());
-    learner.seed(s);
-//    learner.randomInitialise();
-    logger.debug("learner = " + learner);
   }
 
   public void setLearner( Learner learner ) {

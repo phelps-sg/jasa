@@ -17,9 +17,6 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.RoundRobinTrader;
 
-import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.Seeder;
-
 import uk.ac.liv.prng.PRNGFactory;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;
@@ -34,8 +31,7 @@ import edu.cornell.lassp.houle.RngPack.RandomElement;
  * @version $Revision$
  */
 
-public class RandomRobinAuction extends RoundRobinAuction
-                                  implements Seedable {
+public class RandomRobinAuction extends RoundRobinAuction {
 
   RandomElement randGenerator = PRNGFactory.getFactory().create();
 
@@ -59,12 +55,5 @@ public class RandomRobinAuction extends RoundRobinAuction
     }
   }
 
-  public void setSeed( long seed ) {
-    randGenerator = PRNGFactory.getFactory().create(seed);
-  }
-
-  public void seed( Seeder s ) {
-    setSeed(s.nextSeed());
-  }
 
 }

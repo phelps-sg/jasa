@@ -15,11 +15,6 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.Auction;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
 /**
  * <p>
  * Buyers configured with this valuation policy will receive a unique private

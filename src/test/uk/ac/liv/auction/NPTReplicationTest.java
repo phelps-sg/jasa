@@ -25,8 +25,6 @@ import uk.ac.liv.ai.learning.NPTRothErevLearner;
 
 import java.util.*;
 
-import org.apache.log4j.BasicConfigurator;
-
 /**
  *
  * Attempt an approximate replication of some of the experiments

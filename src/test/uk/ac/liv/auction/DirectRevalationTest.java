@@ -15,17 +15,10 @@
 
 package test.uk.ac.liv.auction;
 
-import test.uk.ac.liv.ai.learning.RothErevLearnerTest;
-
 import junit.framework.*;
 
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.electricity.*;
-import uk.ac.liv.ai.learning.NPTRothErevLearner;
-
-import java.util.*;
-
-import org.apache.log4j.BasicConfigurator;
 
 /**
  *

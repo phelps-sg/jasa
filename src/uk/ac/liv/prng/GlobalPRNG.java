@@ -21,8 +21,6 @@ import edu.cornell.lassp.houle.RngPack.RandomSeedable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import uk.ac.liv.util.Parameterizable;
-
 /**
  * @author Steve Phelps
  * @version $Revision$

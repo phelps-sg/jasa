@@ -15,10 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.util.Resetable;
-
 import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.core.Shout;
 
 /**
  *

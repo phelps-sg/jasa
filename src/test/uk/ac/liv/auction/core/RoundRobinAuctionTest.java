@@ -22,7 +22,6 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.auction.agent.RoundRobinTrader;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 

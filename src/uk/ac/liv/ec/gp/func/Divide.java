@@ -17,9 +17,6 @@ package uk.ac.liv.ec.gp.func;
 
 import uk.ac.liv.util.UntypedNumber;
 
-import ec.gp.*;
-
-
 public class Divide extends GPArithmeticBinaryOperator {
 
   public UntypedNumber arithmeticOperator( UntypedNumber op1, UntypedNumber op2 ) {

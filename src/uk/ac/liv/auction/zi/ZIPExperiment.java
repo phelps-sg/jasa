@@ -20,7 +20,6 @@ import ec.util.ParameterDatabase;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
-import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.MarketSimulation;

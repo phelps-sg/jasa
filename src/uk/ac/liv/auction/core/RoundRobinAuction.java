@@ -36,8 +36,6 @@ import ec.util.ParamClassLoadException;
 
 import java.util.*;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;

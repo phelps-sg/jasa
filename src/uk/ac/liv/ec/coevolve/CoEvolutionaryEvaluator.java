@@ -18,10 +18,7 @@ package uk.ac.liv.ec.coevolve;
 import ec.*;
 import ec.util.*;
 
-import java.util.ArrayList;
 import java.util.Vector;
-
-import uk.ac.liv.ec.gp.GPIndividualCtx;
 
 /**
  * @author Steve Phelps

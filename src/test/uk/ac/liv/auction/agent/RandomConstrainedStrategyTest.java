@@ -29,6 +29,8 @@ import uk.ac.liv.auction.stats.StatsMarketDataLogger;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 
+import uk.ac.liv.prng.GlobalPRNG;
+
 
 public class RandomConstrainedStrategyTest extends TestCase {
 
@@ -52,9 +54,9 @@ public class RandomConstrainedStrategyTest extends TestCase {
   }
 
   public void setUp() {
+  	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
-    testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);
-    testStrategy.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);    
     auction = new RoundRobinAuction();
     auctioneer = new KDoubleAuctioneer(auction);
     auction.setAuctioneer(auctioneer);

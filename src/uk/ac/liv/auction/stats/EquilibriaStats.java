@@ -16,7 +16,6 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.core.*;
 
 import java.util.*;

@@ -21,13 +21,10 @@ import java.util.LinkedList;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import java.io.Serializable;
-
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.*;
 import uk.ac.liv.auction.agent.*;
 
-import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Prototypeable;
 
 import org.apache.log4j.Logger;

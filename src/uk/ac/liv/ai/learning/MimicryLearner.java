@@ -15,8 +15,6 @@
 
 package uk.ac.liv.ai.learning;
 
-import uk.ac.liv.util.Seedable;
-
 /**
  * A learner that attempts to adjust its output to match a training
  * signal.
@@ -25,7 +23,7 @@ import uk.ac.liv.util.Seedable;
  * @version $Revision$
  */
 
-public interface MimicryLearner extends ContinuousLearner, Seedable {
+public interface MimicryLearner extends ContinuousLearner {
 
   /**
    * Provide a training signal to the learning algorithm.

@@ -21,7 +21,6 @@ import junit.framework.*;
 import test.uk.ac.liv.auction.ElectricityTest;
 
 import uk.ac.liv.auction.electricity.ElectricityTrader;
-import uk.ac.liv.auction.electricity.ElectricityStats;
 
 import uk.ac.liv.auction.agent.PureSimpleStrategy;
 

@@ -17,11 +17,8 @@ package test.uk.ac.liv.auction.zi;
 
 import junit.framework.*;
 
-import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.zi.*;
 import uk.ac.liv.auction.core.*;
-
-import uk.ac.liv.ai.learning.Learner;
 
 import java.util.Observer;
 import java.util.Observable;
