@@ -18,7 +18,7 @@
    </target>
 
    <target name="compile" depends="prepare">
-     <javac srcdir="${sourceDir}" destdir="${outputDir}" />
+     <javac srcdir="${sourceDir}" destdir="${outputDir}" debug="on"/>
    </target>
 
    <target name="doc" depends="compile">

@@ -9,7 +9,7 @@ import ec.*;
 
 import uk.ac.liv.util.*;
 
-import uk.ac.liv.ec.gp.func.GPNumberData;
+import uk.ac.liv.ec.gp.func.GPGenericData;
 import uk.ac.liv.ec.gp.*;
 
 import java.util.List;
@@ -68,7 +68,7 @@ public class GPAuctioneer extends GPIndividualCtx implements Auctioneer {
   public double determineClearingPrice( Shout bid, Shout ask ) {
     clearBid = bid;
     clearAsk = ask;
-    GPNumberData input = new GPNumberData();
+    GPGenericData input = new GPGenericData();
     try {
       evaluateTree(0, input);
     } catch ( ArithmeticException e ) {

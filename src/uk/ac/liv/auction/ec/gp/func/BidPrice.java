@@ -11,7 +11,7 @@ import uk.ac.liv.util.GenericDouble;
 public class BidPrice extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
-    ((GPNumberData) input).data = new GenericDouble( new Double(((GPAuctioneer) individual).clearBid.getPrice()) );
+    ((GPGenericData) input).data = new GenericDouble( new Double(((GPAuctioneer) individual).clearBid.getPrice()) );
   }
 
   public String toString() {

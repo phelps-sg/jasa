@@ -110,14 +110,14 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
 
     for( int i=0; traders.hasNext(); i++ ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
-      GPTradingStrategy strategy = (GPTradingStrategy) group[i].get(0);
+      GPTradingStrategy strategy = (GPTradingStrategy) group[i+1].get(0);
       strategy.setGPContext(state, thread, stack, this);
       trader.setStrategy(strategy);
       strategy.setAgent(trader);
       trader.reset();
     }
 
-    GPAuctioneer auctioneer = (GPAuctioneer) group[0].get(1);
+    GPAuctioneer auctioneer = (GPAuctioneer) group[0].get(0);
     auctioneer.setGPContext(state, thread, stack, this);
     auctioneer.setAuction(auction);
     auction.setAuctioneer(auctioneer);
@@ -130,19 +130,32 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     for( int i=0; traders.hasNext(); i++ ) {
       ElectricityTrader trader = (ElectricityTrader) traders.next();
       double profits = trader.getProfits();
-      float fitness = 1000000;
-      if ( profits != 0 ) {
-        fitness = 1 / (float) profits;
+      float fitness = Float.MAX_VALUE;
+      if ( (!Double.isNaN(profits)) ) {
+        fitness = 10000000f - (float) profits;
       }
-      GPIndividual individual = (GPIndividual) group[i].get(0);
+      if ( fitness < 0 ) {
+        fitness = 0;
+      }
+      System.out.println("Fitness for " + trader);
+      System.out.println("profits = " + profits);
+      System.out.println("fitness = " + fitness);
+      GPTradingStrategy individual = (GPTradingStrategy) group[i+1].get(0);
       ((KozaFitness) individual.fitness).setStandardizedFitness(state, fitness);
+      individual.evaluated = true;
     }
 
     ElectricityStats stats = new ElectricityStats(0, 200, auction);
+    System.out.println("Market stats = " + stats);
     float relMarketPower = (float) (Math.abs(stats.mPB) + Math.abs(stats.mPS)) / 2.0f;
-    float fitness = (relMarketPower + 1-((float) stats.eA/100))/2;
-    GPIndividual individual = (GPIndividual) group[0].get(1);
+    float fitness = 1000000;
+    if ( !Float.isInfinite(relMarketPower) && !Double.isNaN(stats.eA) ) {
+      fitness = relMarketPower + 1-((float) stats.eA/100);  //TODO!
+    }
+    System.out.println("Auctioneer fitness = " + fitness);
+    GPIndividual individual = (GPIndividual) group[0].get(0);
     ((KozaFitness) individual.fitness).setStandardizedFitness(state, fitness);
+    individual.evaluated = true;
 
 
   }

@@ -249,9 +249,17 @@ public class RoundRobinAuction extends AuctionImpl
    * overhead of (re)constructing new auction objects.
    */
   public void reset() {
+
     super.reset();
-    auctioneer.reset();
-    logger.reset();
+
+    if ( auctioneer != null ) {
+      auctioneer.reset();
+    }
+
+    if ( logger != null ) {
+      logger.reset();
+    }
+
     Iterator i = getTraderIterator();
     while ( i.hasNext() ) {
       RoundRobinTrader t = (RoundRobinTrader) i.next();

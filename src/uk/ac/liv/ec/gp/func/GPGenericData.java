@@ -14,4 +14,9 @@ public class GPGenericData extends GPData {
     ((GPGenericData) other).data = this.data;
     return other;
   }
+
+  public String toString() {
+    return "(" + getClass() + " data:" + data + ")";
+  }
+
 }

@@ -14,7 +14,10 @@ import uk.ac.liv.util.GenericDouble;
 public class QuoteBidPrice extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
-    ((GPNumberData) input).data = new GenericDouble( new Double(((QuoteProvider) individual).getQuote().getBid()) );
+    QuoteProvider qp = (QuoteProvider) individual;
+    MarketQuote quote = qp.getQuote();
+    Double quoteBidPrice = new Double( quote.getBid() );
+    ((GPGenericData) input).data = new GenericDouble(quoteBidPrice);
   }
 
   public String toString() {

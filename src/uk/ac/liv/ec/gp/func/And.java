@@ -8,18 +8,13 @@ public class And extends GPNode {
   public void eval( EvolutionState state, int thread, GPData input,
                       ADFStack stack, GPIndividual individual, Problem problem ) {
 
-    children[0].eval(state,thread,input,stack,individual,problem);
-    boolean result1 = ((GPBoolData) input).data;
-    if ( ! result1 ) {
-      // short-circuit
-      ((GPBoolData) input).data = false;
-      return;
-    }
+    children[0].eval(state, thread,input,stack,individual,problem);
+    Boolean result1 = (Boolean) ((GPGenericData) input).data;
 
     children[1].eval(state,thread,input,stack,individual,problem);
-    boolean result2 = ((GPBoolData) input).data;
+    Boolean result2 = (Boolean) ((GPGenericData) input).data;
 
-    ((GPBoolData) input).data = result1 && result2;
+    ((GPGenericData) input).data = new Boolean(result1.booleanValue() && result2.booleanValue());
 
   }
 

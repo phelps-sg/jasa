@@ -9,12 +9,12 @@ public class Nand extends GPNode {
                       ADFStack stack, GPIndividual individual, Problem problem ) {
 
     children[0].eval(state, thread, input, stack,individual, problem);
-    boolean arg1 = ((GPBoolData) input).data;
+    boolean arg1 = ((Boolean) ((GPGenericData) input).data).booleanValue();
 
     children[1].eval(state, thread, input, stack, individual, problem);
-    boolean arg2 = ((GPBoolData) input).data;
+    boolean arg2 = ((Boolean) ((GPGenericData) input).data).booleanValue();
 
-    ((GPBoolData) input).data = ! (arg1 && arg2);
+    ((GPGenericData) input).data = new Boolean(! (arg1 && arg2));
 
   }
 

@@ -5,6 +5,8 @@ import uk.ac.liv.auction.core.Shout;
 import ec.gp.*;
 import ec.*;
 
+import uk.ac.liv.ec.gp.func.*;
+
 
 public class IsBid extends GPNode {
 
@@ -12,7 +14,7 @@ public class IsBid extends GPNode {
                     ADFStack stack, GPIndividual individual, Problem problem) {
     GPAuctioneer auctioneer = (GPAuctioneer) individual;
     Shout shout = auctioneer.getCurrentShout();
-    ((GPAuctionData) input).set(shout.isBid());
+    ((GPGenericData) input).data = new Boolean(shout.isBid());
   }
 
   public String toString() {

@@ -2,7 +2,7 @@ package uk.ac.liv.auction.core;
 
 
 
-public interface Auctioneer {
+public interface Auctioneer extends QuoteProvider {
 
   /**
    * Perform any end-of-round auction functions.
@@ -24,7 +24,7 @@ public interface Auctioneer {
   /**
    * Get a quote for the auction.
    */
-  public MarketQuote getQuote();
+  //public MarketQuote getQuote();
 
 
   /**

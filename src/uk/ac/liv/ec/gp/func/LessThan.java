@@ -19,16 +19,18 @@ public class LessThan extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
 
+    GPGenericData tmpArg = new GPGenericData();
+
     // 1st argument
-    children[0].eval(state, thread, input, stack, individual, problem);
-    Comparable op1 = (Comparable) ((GPGenericData) input).data;
+    children[0].eval(state, thread, tmpArg, stack, individual, problem);
+    Comparable op1 = (Comparable) ((GPGenericData) tmpArg).data;
 
     // 2nd argument
-    children[1].eval(state, thread, input, stack, individual, problem);
-    Comparable op2 = (Comparable) ((GPGenericData) input).data;
+    children[1].eval(state, thread, tmpArg, stack, individual, problem);
+    Comparable op2 = (Comparable) ((GPGenericData) tmpArg).data;
 
     // return value
-    ((GPBoolData) input).data = op1.compareTo(op2) < 0;
+    ((GPGenericData) input).data = new Boolean(op1.compareTo(op2) < 0);
   }
 
   public String toString() {

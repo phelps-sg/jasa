@@ -9,9 +9,9 @@ public class Not extends GPNode {
                       ADFStack stack, GPIndividual individual, Problem problem ) {
 
     children[0].eval(state,thread,input,stack,individual,problem);
-    boolean arg0 = ((GPBoolData) input).data;
+    boolean arg0 = ((Boolean) ((GPGenericData) input).data).booleanValue();
 
-    ((GPBoolData) input).data = !arg0;
+    ((GPGenericData) input).data = new Boolean(!arg0);
 
   }
 

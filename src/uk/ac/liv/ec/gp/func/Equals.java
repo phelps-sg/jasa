@@ -19,16 +19,18 @@ public class Equals extends GPNode {
 
   public void eval( EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem ) {
 
+    GPGenericData tmpArg = new GPGenericData();
+
     // 1st argument
-    children[0].eval(state, thread, input, stack, individual, problem);
-    Object op1 = ((GPGenericData) input).data;
+    children[0].eval(state, thread, tmpArg, stack, individual, problem);
+    Object op1 = ((GPGenericData) tmpArg).data;
 
     // 2nd argument
     children[1].eval(state, thread, input, stack, individual, problem);
-    Object op2 = ((GPGenericData) input).data;
+    Object op2 = ((GPGenericData) tmpArg).data;
 
     // return value
-    ((GPBoolData) input).data = op1.equals(op2);
+    ((GPGenericData) input).data = new Boolean(op1.equals(op2));
   }
 
   public String toString() {

@@ -54,15 +54,21 @@ public class GPTradingStrategy extends GPIndividualCtx implements Strategy, Quot
   public void modifyShout( Shout shout, Auction auction ) {
     currentShout = shout;
     currentAuction = auction;
-    GPNumberData input = new GPNumberData();
+    GPGenericData input = new GPGenericData();
     try {
-      evaluateTree(1, input);
+      evaluateTree(0, input);
     } catch ( ArithmeticException e ) {
       System.out.println("Caught: " + e);
       //e.printStackTrace();
     }
-    shout.setPrice( ((GenericNumber) input.data).doubleValue() );
-    shout.setQuantity( quantity );
+    double price = ((GenericNumber) input.data).doubleValue();
+    if ( price > 0 ) {
+      shout.setPrice(price);
+    } else {
+      shout.setPrice(0);
+    }
+    shout.setQuantity( quantity ); //TODO: set depending on capacity
+    shout.setIsBid( agent.isBuyer() );
   }
 
 }

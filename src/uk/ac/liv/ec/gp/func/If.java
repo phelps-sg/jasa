@@ -10,7 +10,7 @@ public class If extends GPNode {
                       ADFStack stack, GPIndividual individual, Problem problem ) {
 
     children[0].eval(state,thread,input,stack,individual,problem);
-    if ( ((GPBoolData) input).data ) {
+    if ( ((Boolean) ((GPGenericData) input).data).booleanValue() ) {
       children[1].eval(state,thread,input,stack,individual,problem);
     }
   }

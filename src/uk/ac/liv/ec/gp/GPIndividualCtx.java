@@ -15,7 +15,7 @@ import ec.Problem;
 
 public class GPIndividualCtx extends GPIndividual {
 
-  GPContext context;
+  GPContext context = new GPContext();
 
   public void setGPContext( EvolutionState state, int thread, ADFStack stack,
                         Problem problem ) {

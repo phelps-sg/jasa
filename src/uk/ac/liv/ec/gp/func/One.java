@@ -10,7 +10,7 @@ public class One extends GPNode {
   static Integer one = new Integer(1);
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
-    ((GPNumberData) input).data = new GenericInteger(one);
+    ((GPGenericData) input).data = new GenericInteger(one);
   }
 
   public String toString() {
