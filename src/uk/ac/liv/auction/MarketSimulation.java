@@ -78,7 +78,8 @@ public class MarketSimulation implements Parameterizable, Runnable {
 
     auction =
       (RoundRobinAuction) parameters.getInstanceForParameterEq(base.push(P_AUCTION),
-                                                               null, RoundRobinAuction.class);
+                                                               null,
+                                                               RoundRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
 
@@ -89,7 +90,10 @@ public class MarketSimulation implements Parameterizable, Runnable {
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
 
-    logger = (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER), null, MarketDataLogger.class);
+    logger =
+        (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
+                                                               null,
+                                                               MarketDataLogger.class);
     auction.setMarketDataLogger(logger);
 
     if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
