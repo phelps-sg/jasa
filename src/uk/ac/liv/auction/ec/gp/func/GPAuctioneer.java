@@ -48,11 +48,11 @@ public class GPAuctioneer extends GPIndividualCtx
 
   protected MarketQuote currentQuote = null;
 
-  protected Shout clearBid = new Shout();
-  protected Shout clearAsk = new Shout();
+  protected Shout.MutableShout clearBid = new Shout.MutableShout();
+  protected Shout.MutableShout clearAsk = new Shout.MutableShout();
 
-  protected Shout lastBid = new Shout();
-  protected Shout lastAsk = new Shout();
+  protected Shout.MutableShout lastBid = new Shout.MutableShout();
+  protected Shout.MutableShout lastAsk = new Shout.MutableShout();
 
   /**
    * The market statistics for the last auction run by this auctioneer.

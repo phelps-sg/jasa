@@ -101,7 +101,7 @@ public class SupplyAndDemandStats extends DirectRevelationStats
   }
 
   protected void enumerateTruthfulShout( Shout shout ) {
-    Shout copyOfShout = new Shout();
+    Shout.MutableShout copyOfShout = new Shout.MutableShout();
     copyOfShout.copyFrom(shout);
     if ( shout.isBid() ) {
       bids.add(copyOfShout);

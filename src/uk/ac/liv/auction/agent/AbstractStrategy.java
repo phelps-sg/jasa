@@ -59,9 +59,6 @@ public abstract class AbstractStrategy implements
 
   public Shout modifyShout( Shout shout, Auction auction ) {
     this.auction = auction;
-    if ( shout != null ) {
-      currentShout.copyFrom(shout);
-    }
     modifyShout(currentShout);
     return ShoutFactory.getFactory().create(currentShout.getAgent(),
                                              currentShout.getQuantity(),

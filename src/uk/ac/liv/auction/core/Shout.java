@@ -191,22 +191,6 @@ public class Shout implements Comparable, Cloneable, Serializable {
     return id;
   }
 
-  protected void makeChildless() {
-    if ( child != null ) {
-      child.makeChildless();
-      ShoutPool.release(child);
-      child = null;
-    }
-  }
-
-  public void copyFrom( Shout other ) {
-    this.price = other.getPrice();
-    this.agent = other.getAgent();
-    this.quantity = other.getQuantity();
-    this.isBid = other.isBid();
-    this.id = other.getId();
-    child = null;
-  }
 
   public int hashCode() {
     return (int) id * getAgent().hashCode();
@@ -218,9 +202,26 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   //
-  // The following methods allow muting of shouts but only by client classes
+  // The following methods allow muting of shouts, but only by classes
   // that are part of the uk.ac.liv.auction.core package.
   //
+
+  void makeChildless() {
+    if ( child != null ) {
+      child.makeChildless();
+      ShoutPool.release(child);
+      child = null;
+    }
+  }
+
+ void copyFrom( Shout other ) {
+    this.price = other.getPrice();
+    this.agent = other.getAgent();
+    this.quantity = other.getQuantity();
+    this.isBid = other.isBid();
+    this.id = other.getId();
+    child = null;
+  }
 
   /**
    * Reduce the quantity of this shout by excess and return a new
@@ -281,24 +282,28 @@ public class Shout implements Comparable, Cloneable, Serializable {
       super();
     }
 
-    public MutableShout(Shout existing) {
+    public MutableShout( Shout existing ) {
       super(existing);
     }
 
-    public void setPrice(double price) {
+    public void setPrice( double price ) {
       super.setPrice(price);
     }
 
-    public void setAgent(TraderAgent agent) {
+    public void setAgent( TraderAgent agent ) {
       super.setAgent(agent);
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity( int quantity ) {
       super.setQuantity(quantity);
     }
 
-    public void setIsBid(boolean isBid) {
+    public void setIsBid( boolean isBid ) {
       super.setIsBid(isBid);
+    }
+
+    public void copyFrom( Shout other ) {
+      super.copyFrom(other);
     }
   }
 
