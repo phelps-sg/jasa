@@ -23,7 +23,7 @@ import uk.ac.liv.ai.learning.Learner;
 
 import uk.ac.liv.util.Parameterizable;
 
-import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.prng.GlobalPRNG;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -46,12 +46,6 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
   
   protected double currentPrice;
   
-  /**
-   * The PRNG used to draw perturbation values
-   */
-  protected static RandomElement randGenerator =
-      PRNGFactory.getFactory().create();
-
   /**
    * A parameter used to scale the randomly drawn price adjustment
    * perturbation values.
@@ -88,7 +82,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
 
     initialise();
     
-    setMargin(0.5 + randGenerator.raw()/2);
+    setMargin(GlobalPRNG.getInstance().uniform(0.5, 1.0));
     
     logger.debug("Initialised with scaling = " + scaling + " and learner = " +
                   learner);
@@ -156,8 +150,9 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
   }
   
   protected double perterb( double price ) {
-    double relative = randGenerator.raw() * scaling;
-    double absolute = randGenerator.raw() * scaling;
+    RandomElement prng = GlobalPRNG.getInstance();
+    double relative = prng.uniform(0, scaling);
+    double absolute = prng.uniform(0, scaling);
     return relative*price + absolute;
   }
 
