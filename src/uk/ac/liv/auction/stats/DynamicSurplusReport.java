@@ -27,7 +27,6 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.util.Resetable;
-//import uk.ac.liv.util.MutableDoubleWrapper;
 
 import org.apache.log4j.Logger;
 
