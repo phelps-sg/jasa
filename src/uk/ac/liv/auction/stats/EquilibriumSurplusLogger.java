@@ -37,6 +37,8 @@ import org.apache.log4j.Logger;
  * theoretical equilibrium. The equilibrium price is recomputed at the end of
  * each day, thus this class can be used to keep track of theoretically
  * available surplus even when supply and demand are changing over time.
+ * Each agent is assumed to be theoretically able to trade the specified 
+ * quantity of units in each day.
  * </p>
  * 
  * @author Steve Phelps
@@ -50,6 +52,10 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
 
   private HashMap surplusTable = new HashMap();
   
+  /**
+   * The quantity that each agent can theoretically trade per day.
+   * This should normally be set equal to agents' trade entitlement.
+   */
   protected int quantity = 1;
   
   public static final String P_QUANTITY = "quantity";
@@ -144,6 +150,13 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   public Map getVariables() {
     return new HashMap();
   }
-
+  
+  public int getQuantity() {
+    return quantity;
+  }
+  
+  public void setQuantity( int quantity ) {
+    this.quantity = quantity;
+  }
 }
 
