@@ -240,6 +240,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     } catch ( IOException e ) {
       e.printStackTrace();
+      throw new Error(e.getMessage());
     }
 
     auction = new RandomRobinAuction("Electricity Auction");
