@@ -374,8 +374,6 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       equilibPrice.newData(ep);
       equilibQty.newData(eq);
 
-      calculateREStats(reMean, reStdev);
-
       dumpIterResults();
     }
 
@@ -430,8 +428,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       variables[i].reset();
     }
   }
-
-
+  
   protected void writeDataFileHeadings() throws IOException {
     CSVWriter headings = new CSVWriter(
             new FileOutputStream(outputDir + "/" + "headings-"
@@ -471,19 +468,6 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 
-  protected void calculateREStats( CummulativeStatCounter reMean,
-                                    CummulativeStatCounter reStdev) {
-    Iterator i = auction.getTraderIterator();
-    AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
-    AdaptiveStrategy s = (AdaptiveStrategy) agent.getStrategy();
-    if ( s.getLearner() instanceof RothErevLearner ) {
-      RothErevLearner l = (RothErevLearner) s.getLearner();
-      CummulativeStatCounter reStats = new CummulativeStatCounter("re");
-      l.computeDistributionStats(reStats);
-      reMean.newData(reStats.getMean());
-      reStdev.newData(reStats.getStdDev());
-    }
-  }
 
 
   protected void initIterResults( String filename ) throws FileNotFoundException {
