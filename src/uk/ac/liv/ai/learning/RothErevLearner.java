@@ -113,9 +113,9 @@ public class RothErevLearner implements
   protected int lastAction;
   
   /**
-   * The total amount of update to the propensity vector on the last iteration.
+   * The total amount of update to the probability vector on the last iteration.
    */
-  protected double deltaQ;
+  protected double deltaP;
 
   static final int    DEFAULT_K   = 100;
   static final double DEFAULT_R   = 0.1;
@@ -211,11 +211,9 @@ public class RothErevLearner implements
    *
    * @param action The last action chosen by the learner
    */
-  protected void updatePropensities( int action, double reward ) {
-    deltaQ = 0;
+  protected void updatePropensities( int action, double reward ) {    
     for( int i=0; i<k; i++ ) {      
       double q1 = (1-r) * q[i] + experience(i,action,reward);
-      deltaQ += Math.abs(q1-q[i]);      
       q[i] = q1;
     }
   }
@@ -228,7 +226,10 @@ public class RothErevLearner implements
     for( int i=0; i<k; i++ ) {
       sigmaQ += q[i];
     }
+    deltaP = 0;
     for( int i=0; i<k; i++ ) {
+      double p1 = q[i] / sigmaQ;
+      deltaP += Math.abs(p.getProbability(i)-p1);
       p.setProbability(i, q[i] / sigmaQ);
     }
   }
@@ -330,7 +331,7 @@ public class RothErevLearner implements
   }
   
   public double getLearningDelta() {
-    return deltaQ;
+    return deltaP;
   }
   
   public double getProbability( int i ) {
@@ -338,7 +339,7 @@ public class RothErevLearner implements
   }
     
   public String toString() {
-    return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1 + ")";
+    return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1 + " learningDelta:" + deltaP + " p:" + p + ")";
   }
 
 }

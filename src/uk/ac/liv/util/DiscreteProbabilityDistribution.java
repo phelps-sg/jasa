@@ -98,7 +98,7 @@ public class DiscreteProbabilityDistribution
         return i;
       }
     }
-    throw new ProbabilityError();      
+    throw new ProbabilityError(this);      
   }
 
   public void reset() {
@@ -138,7 +138,7 @@ public class DiscreteProbabilityDistribution
         return i;
       }
     }
-    throw new ProbabilityError();    
+    throw new ProbabilityError(this);    
   }
   
   /**
@@ -153,17 +153,26 @@ public class DiscreteProbabilityDistribution
         return i;
       }
     }
-    throw new ProbabilityError();    
+    throw new ProbabilityError(this);    
   }
   
   public void computeStats( CummulativeStatCounter stats ) {  
   }
   
+  public String toString() {
+    StringBuffer s = new StringBuffer("(" + getClass());
+    for( int i=0; i<p.length; i++ ) {
+      s.append(" p[" + i + "]:" + p[i]);
+    }
+    s.append(")");
+    return s.toString();
+  }
+  
 
   public class ProbabilityError extends Error {
 
-    public ProbabilityError() {
-      super("Probabilities do not sum to 1");
+    public ProbabilityError( DiscreteProbabilityDistribution p ) {
+      super("Probabilities do not sum to 1: " + p);
     }
     
   }

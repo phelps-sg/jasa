@@ -17,12 +17,12 @@ electricity.maxrounds = 10000
 electricity.iterations = 100
 
 # Output data
-electricity.outputdir = results/electricity/analstrat
+electricity.outputdir = results/electricity/test
 
-electricity.strategydata = true
+electricity.strategydata = false
 
 # Use random private values
-electricity.randomizer = uk.ac.liv.auction.electricity.FixedScheduleRandomizer
+electricity.randomizer = uk.ac.liv.auction.electricity.StandardRandomizer
 
 # Private value range
 electricity.randomizer.minprivatevalue = 10
@@ -32,10 +32,10 @@ electricity.randomizer.maxprivatevalue = 20
 electricity.randomizer.seed = 1726567842
 
 # Number of sellers
-electricity.ns = 30
+electricity.ns = 3
 
 # Number of buyers
-electricity.nb = 30
+electricity.nb = 3
 
 # Buyer capacity
 electricity.cs = 10
@@ -48,20 +48,20 @@ electricity.strategy.buyer = uk.ac.liv.auction.agent.StimuliResponseStrategy
 electricity.strategy.buyer.markupscale = 0.1
 electricity.strategy.buyer.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 electricity.strategy.buyer.learner.r = 0.10
-electricity.strategy.buyer.learner.e = 0.20
+electricity.strategy.buyer.learner.e = 0.05
 electricity.strategy.buyer.learner.k = 100
 electricity.strategy.buyer.learner.x = 1
-electricity.strategy.buyer.learner.s1 = 1
+electricity.strategy.buyer.learner.s1 = 100
 
 # Sellers' strategy
 electricity.strategy.seller = uk.ac.liv.auction.agent.StimuliResponseStrategy
 electricity.strategy.seller.markupscale = 0.1
 electricity.strategy.seller.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 electricity.strategy.seller.learner.r = 0.10
-electricity.strategy.seller.learner.e = 0.20
+electricity.strategy.seller.learner.e = 0.05
 electricity.strategy.seller.learner.k = 100
 electricity.strategy.seller.learner.x = 1
-electricity.strategy.seller.learner.s1 = 1
+electricity.strategy.seller.learner.s1 = 100
 
 # Auction protocol
 electricity.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
@@ -76,7 +76,7 @@ electricity.stats = uk.ac.liv.auction.electricity.ElectricityStats
 
 # log4j configuration
 
-log4j.rootCategory=INFO, stdout, file
+log4j.rootCategory=INFO, stdout 
 
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
