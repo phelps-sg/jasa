@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.MutableShout;
+import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Parameterizable;
@@ -74,7 +74,7 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
     delta = parameters.getDoubleWithDefault(base.push(P_DELTA), null, DEFAULT_DELTA);
   }
 
-  public void modifyShout( MutableShout shout ) {
+  public void modifyShout( Shout.MutableShout shout ) {
     super.modifyShout(shout);
     shout.setPrice(agent.getPrivateValue() + delta);
     shout.setQuantity(quantity);

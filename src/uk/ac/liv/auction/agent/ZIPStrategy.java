@@ -96,7 +96,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
   }
 
-  public void modifyShout( MutableShout shout ) {
+  public void modifyShout( Shout.MutableShout shout ) {
     try {
       super.modifyShout(shout);
       Shout lastShout = auction.getLastShout();

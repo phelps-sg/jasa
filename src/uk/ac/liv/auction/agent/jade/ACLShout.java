@@ -17,7 +17,6 @@
 package uk.ac.liv.auction.agent.jade;
 
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.MutableShout;
 import uk.ac.liv.auction.core.ShoutFactory;
 
 import jade.content.Concept;
@@ -39,16 +38,16 @@ public class ACLShout implements Concept  {
 
   String agentName;
 
-  MutableShout jasaShout;
+  Shout.MutableShout jasaShout;
 
   Agent auctioneer;
 
   public ACLShout() {
-    jasaShout = new MutableShout();
+    jasaShout = new Shout.MutableShout();
   }
 
   public ACLShout( Shout jasaShout ) {
-    this.jasaShout = new MutableShout(jasaShout);
+    this.jasaShout = new Shout.MutableShout(jasaShout);
   }
 
   public void assignJADEAuctioneer( Agent auctioneer ) {
@@ -118,7 +117,7 @@ public class ACLShout implements Concept  {
 
 }
 
-class ShoutWithMutableId extends MutableShout {
+class ShoutWithMutableId extends Shout.MutableShout {
 
   public void setId( long id ) {
     this.id = id;

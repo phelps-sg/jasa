@@ -257,4 +257,32 @@ public class Shout implements Comparable, Cloneable, Serializable {
     this.quantity = quantity;
   }
 
+
+  public static class MutableShout extends Shout {
+
+    public MutableShout() {
+      super();
+    }
+
+    public MutableShout(Shout existing) {
+      super(existing);
+    }
+
+    public void setPrice(double price) {
+      super.setPrice(price);
+    }
+
+    public void setAgent(TraderAgent agent) {
+      super.setAgent(agent);
+    }
+
+    public void setQuantity(int quantity) {
+      super.setQuantity(quantity);
+    }
+
+    public void setIsBid(boolean isBid) {
+      super.setIsBid(isBid);
+    }
+  }
+
 }

@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.MutableShout;
 import uk.ac.liv.auction.core.ShoutFactory;
 import uk.ac.liv.auction.core.Auction;
 
@@ -37,7 +36,7 @@ public abstract class AbstractStrategy implements
 
   protected AbstractTraderAgent agent;
 
-  protected MutableShout currentShout;
+  protected Shout.MutableShout currentShout;
 
   protected Auction auction;
 
@@ -70,13 +69,13 @@ public abstract class AbstractStrategy implements
                                              currentShout.isBid());
   }
 
-  public void modifyShout( MutableShout shout ) {
+  public void modifyShout( Shout.MutableShout shout ) {
     shout.setIsBid(agent.isBuyer());
     shout.setAgent(agent);
   }
 
   public void initialise() {
-    currentShout = new MutableShout();
+    currentShout = new Shout.MutableShout();
   }
 
 }

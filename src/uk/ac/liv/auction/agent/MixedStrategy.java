@@ -129,7 +129,7 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
   }
 
 
-  public void modifyShout( MutableShout shout ) {
+  public void modifyShout( Shout.MutableShout shout ) {
 
     currentStrategy = pureStrategies[probabilities.generateRandomEvent()];
 
