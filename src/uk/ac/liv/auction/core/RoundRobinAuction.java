@@ -576,10 +576,10 @@ public class RoundRobinAuction extends AuctionImpl
       shoutsProcessed = false;
       acceptedShouts.clear();
       requestShouts();
-      updateQuoteLog(round, getQuote());
       round++;  age++;
       sweepDefunctTraders();
       auctioneer.endOfRoundProcessing();
+      updateQuoteLog(round, getQuote());
       informRoundClosed();
       lastShout = null;
     }
