@@ -48,7 +48,7 @@ simulation.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 simulation.agenttype.1.isseller = false
 
 # log4j configuration
-log4j.rootCategory=INFO, stdout
+log4j.rootCategory=DEBUG, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
 log4j.appender.stdout.layout.ConversionPattern=%m%n

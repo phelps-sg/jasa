@@ -45,17 +45,8 @@ import org.apache.log4j.Logger;
  * @author Steve Phelps
  */
 
-public class EquilibriaStats implements MarketStats, Resetable, Serializable {
-
-  /**
-   * The shout engine used to compute equilibrium.
-   */
-  protected FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
-
-  /**
-   * The auction we are computing equilibrium for.
-   */
-  protected RoundRobinAuction auction;
+public class EquilibriaStats extends DirectRevelationStats
+    implements MarketStats {
 
   /**
    * The minimum equilibrium price.
@@ -102,27 +93,14 @@ public class EquilibriaStats implements MarketStats, Resetable, Serializable {
    */
   protected double pSA = 0;
 
-  /**
-   * The truthful shouts of all traders in the auction.
-   */
-  protected ArrayList shouts;
-
   static Logger logger = Logger.getLogger(EquilibriaStats.class);
 
   public EquilibriaStats( RoundRobinAuction auction ) {
-    this();
-    this.auction = auction;
+    super(auction);
   }
 
   public EquilibriaStats() {
-    shouts = new ArrayList();
-  }
-
-  public void setAuction( RoundRobinAuction auction ) {
-    this.auction = auction;
-  }
-
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+    super();
   }
 
   public void recalculate() {
@@ -131,7 +109,7 @@ public class EquilibriaStats implements MarketStats, Resetable, Serializable {
   }
 
   public void calculate() {
-    simulateDirectRevelation();
+    super.calculate();
     Shout hiAsk = shoutEngine.getHighestMatchedAsk();
     Shout loBid = shoutEngine.getLowestMatchedBid();
     if ( hiAsk == null || loBid == null ) {
@@ -142,28 +120,6 @@ public class EquilibriaStats implements MarketStats, Resetable, Serializable {
       equilibriaFound = true;
     }
     releaseShouts();
-  }
-
-  protected void simulateDirectRevelation() {
-    try {
-      Iterator traders = auction.getTraderIterator();
-      while ( traders.hasNext() ) {
-        AbstractTraderAgent trader = (AbstractTraderAgent) traders.next();
-        int quantity = trader.determineQuantity(auction);
-        double value = trader.getPrivateValue();
-        boolean isBid = trader.isBuyer();
-        Shout shout = ShoutPool.fetch(trader, quantity, value, isBid);
-        shouts.add(shout);
-        if ( isBid ) {
-          shoutEngine.newBid(shout);
-        } else {
-          shoutEngine.newAsk(shout);
-        }
-      }
-    } catch ( DuplicateShoutException e ) {
-      e.printStackTrace();
-      throw new Error(e.getMessage());
-    }
   }
 
   protected void calculateQuantitiesAndProfits() {
@@ -180,7 +136,6 @@ public class EquilibriaStats implements MarketStats, Resetable, Serializable {
 
       pSCE += equilibriumProfits(ask.getQuantity(),
                                   (AbstractTraderAgent) ask.getAgent());
-
     }
 
     minQty = qty;
@@ -227,17 +182,8 @@ public class EquilibriaStats implements MarketStats, Resetable, Serializable {
     }
   }
 
-  protected void releaseShouts() {
-    Iterator i = shouts.iterator();
-    while ( i.hasNext() ) {
-      Shout s = (Shout) i.next();
-      ShoutPool.release(s);
-    }
-  }
-
-  public void reset() {
-    shouts.clear();
-    shoutEngine.reset();
+  public void initialise() {
+    super.initialise();
     pBCE = 0;
     pSCE = 0;
   }

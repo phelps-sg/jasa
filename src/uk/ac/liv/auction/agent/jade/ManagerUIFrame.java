@@ -21,7 +21,7 @@ import java.beans.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 
-import uk.ac.liv.auction.core.AuctionConsoleFrame;
+import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 import uk.ac.liv.auction.core.AuctionImpl;
 
 import org.apache.log4j.Logger;

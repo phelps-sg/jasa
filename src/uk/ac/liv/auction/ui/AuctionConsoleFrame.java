@@ -13,11 +13,13 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.core;
+package uk.ac.liv.auction.ui;
 
 import JSci.swing.JLineGraph;
 import JSci.awt.Graph2DModel;
 import JSci.awt.DefaultGraph2DModel;
+
+import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.auction.stats.GraphMarketDataLogger;
 
@@ -50,6 +52,7 @@ public class AuctionConsoleFrame extends JFrame
   protected JLabel roundLabel;
   protected JLabel numTradersLabel;
   protected JButton closeAuctionButton;
+  protected JButton supplyAndDemandButton;
 
   protected DecimalFormat currencyFormatter =
       new DecimalFormat("+000000.00;-000000.00");
@@ -173,6 +176,18 @@ public class AuctionConsoleFrame extends JFrame
         }
     });
 
+    JButton supplyAndDemandButton = new JButton("Graph S/D");
+    c.gridx = 3;
+    c.gridy = 5;
+    c.weightx = 0;
+    gridBag.setConstraints(supplyAndDemandButton, c);
+    contentPane.add(supplyAndDemandButton);
+    supplyAndDemandButton.addActionListener(new ActionListener() {
+      public void actionPerformed( ActionEvent e ) {
+        graphSupplyAndDemand();
+      }
+    });
+
     if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
       JLineGraph graph = new JLineGraph(graphModel);
       graph.setMinimumSize(new Dimension(600,200));
@@ -239,6 +254,13 @@ public class AuctionConsoleFrame extends JFrame
       graphModel.fireDataChanged();
     }
     logger.debug("update() complete");
+  }
+
+  public void graphSupplyAndDemand() {
+    SupplyAndDemandFrame graphFrame =
+        new SupplyAndDemandFrame((RoundRobinAuction) auction);
+    graphFrame.pack();
+    graphFrame.setVisible(true);
   }
 
   /**

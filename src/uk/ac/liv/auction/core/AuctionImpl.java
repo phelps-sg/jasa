@@ -15,8 +15,9 @@
 
 package uk.ac.liv.auction.core;
 
-
 import uk.ac.liv.auction.stats.*;
+
+import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
 import uk.ac.liv.util.IdAllocator;
 import uk.ac.liv.util.Resetable;
