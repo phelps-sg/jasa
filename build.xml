@@ -61,5 +61,13 @@
 	<cvs command="update" cvsRoot=":pserver:anonymous@cvs.jasa.sourceforge.net:/cvsroot/jasa"/>
     </target>
 
+    <target depends="compile" name="test">
+	<java classname="test.uk.ac.liv.auction.AllTests" fork="true">
+        	<classpath>
+			<pathelement path="${classPath}:./classes"/>       
+        	</classpath>
+	</java>
+    </target>	
+
 
 </project>
