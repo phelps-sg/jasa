@@ -289,6 +289,10 @@ public class RothErevLearner extends AbstractLearner implements
     this.e = e;
     validateParams();
   }
+  
+  public void setScaling( double s1 ) {
+    this.s1 = s1;
+  }
 
   /**
    *  Count the number of peaks in the probability distribution.
