@@ -91,8 +91,9 @@ public class EquilibriaStats extends DirectRevelationStats
     quantity = 0;
     Iterator i = matchedShouts.iterator();
     while ( i.hasNext() ) {
-      Shout shout = (Shout) i.next();
-      quantity += shout.getQuantity();
+      Shout ask = (Shout) i.next();
+      Shout bid = (Shout) i.next();
+      quantity += ask.getQuantity();
     }
   }
 
