@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.util.Prototypeable;
+
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
@@ -28,7 +30,7 @@ import uk.ac.liv.auction.core.Auction;
  * @version $Revision$
  */
 
-public interface Strategy {
+public interface Strategy extends Prototypeable {
 
   /**
    * Modify the trader's current shout according to the trading strategy

@@ -44,16 +44,22 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
+ * <p>
  * An application to generate a heuristic payoff matrix according to the
  * Walsh-et-al approximation technique.  This is described in the
  * following paper.  Note that this class is highly experimental and
  * is not guaranteed to generate accurate results.
+ * </p>
  *
+ * <p>
  * "Analysing Complex Strategic Interactions in Multi-Agent Systems"
  * W. Walsh, R. Das, G. Tesauro, J.O. Kephart
+ * </p>
  *
+ * <p>
  * This code was written independently from the authors of the above paper,
  * and any errors in the implementation are my own.
+ * </p>
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -297,6 +303,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       stats.calculate();
     }
   }
+
 
   protected void resetValuations() {
     Iterator i = auction.getTraderIterator();

@@ -82,13 +82,25 @@ import org.apache.log4j.Logger;
  * <font size=-1>int >= 0</font></td>
  * <td valign=top>(the number of auction rounds)</td><tr>
  *
+ * <tr><td valign=top><i>base</i><tt>.maximumdays</tt><br>
+ * <font size=-1>int >= 0</font></td>
+ * <td valign=top>(the number of days in the auction)</td><tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.lengthofday</tt><br>
+ * <font size=-1>int >= 0</font></td>
+ * <td valign=top>(the maximum number of rounds in a trading day)</td><tr>
+ *
  * <tr><td valign=top><i>base</i><tt>.auctioneer</tt><br>
- * <font size=-1>class</font></td>
+ * <font size=-1>class, inherits uk.ac.liv.auction.core.Auctioneer</font></td>
  * <td valign=top>(the auction protocol to use)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.logger</tt><br>
- * <font size=-1>class</font></td>
+ * <font size=-1>class, inherits uk.ac.liv.auction.stats.MarketDataLogger</font></td>
  * <td valign=top>(the MarketDataLogger to use)</td><tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.stats</tt><br>
+ * <font size=-1>class, inherits uk.ac.liv.auction.stats.MarketStats</font></td>
+ * <td valign=top>(the MarketStats to use)</td><tr>
  *
  * <tr><td valign=top><i>base</i><tt>.name</tt><br>
  * <font size=-1>string</font></td>
@@ -144,6 +156,9 @@ public class RoundRobinAuction extends AuctionImpl
    */
   protected boolean shoutsProcessed;
 
+  /**
+   * Flag indicating whether the auction is currently running.
+   */
   protected boolean isRunning;
 
   /**
@@ -502,7 +517,7 @@ public class RoundRobinAuction extends AuctionImpl
 
     } catch ( AuctionClosedException e ) {
       e.printStackTrace();
-      throw new Error(e);
+      throw new AuctionError(e);
     }
 
     informAuctionClosed();

@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import ec.gp.*;
 import ec.*;
+import ec.util.*;
 
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
@@ -39,7 +40,8 @@ import uk.ac.liv.util.*;
  */
 
 public class GPTradingStrategy extends GPIndividualCtx
-    implements FixedQuantityStrategy, QuoteProvider, Serializable, Resetable {
+    implements Cloneable, FixedQuantityStrategy, QuoteProvider, 
+                Serializable, Resetable {
 
 
   AbstractTraderAgent agent = null;
@@ -53,6 +55,9 @@ public class GPTradingStrategy extends GPIndividualCtx
   CummulativeStatCounter priceStats = new CummulativeStatCounter("priceStats");
 
 
+  public void setup( ParameterDatabase parameters, Parameter base ) {    
+  }
+  
   public void setAgent( AbstractTraderAgent agent ) {
     this.agent = agent;
   }

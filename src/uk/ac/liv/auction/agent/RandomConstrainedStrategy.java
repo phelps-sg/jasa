@@ -20,6 +20,7 @@ import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.Seeder;
+import uk.ac.liv.util.Prototypeable;
 
 import uk.ac.liv.prng.PRNGFactory;
 

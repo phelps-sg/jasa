@@ -55,6 +55,16 @@ public abstract class AbstractStrategy implements
   public void reset() {
     initialise();
   }
+  
+  public Object protoClone() {
+    try {
+      AbstractStrategy copy = (AbstractStrategy) clone();
+      copy.reset();
+      return copy;
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
+  }
 
   public Shout modifyShout( Shout shout, Auction auction ) {
     this.auction = auction;

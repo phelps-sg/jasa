@@ -10,7 +10,7 @@ simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.name = Example 1: electricity k-DA
 simulation.auction.maximumrounds = 10000
 
-# Use a k-CDA auctioneer with clearing occuring every time a new shout arrives
+# Use a k-DA auctioneer 
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 
 # Set the transaction price as a function of individual bid and ask prices

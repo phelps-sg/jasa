@@ -50,8 +50,7 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class StimuliResponseStrategy extends DiscreteLearnerStrategy
-                                       implements Prototypeable {
+public class StimuliResponseStrategy extends DiscreteLearnerStrategy {
 
   /**
    * The learning algorithm to use.

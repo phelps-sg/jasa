@@ -46,7 +46,7 @@ import java.io.Serializable;
  */
 
 public class PureSimpleStrategy extends FixedQuantityStrategyImpl
-                                    implements Prototypeable, Serializable {
+                                    implements Serializable {
 
   protected double margin;
 

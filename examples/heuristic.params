@@ -21,18 +21,16 @@ heuristic.strategy.0 = uk.ac.liv.auction.agent.KaplanStrategy
 heuristic.strategy.0.t = 10
 heuristic.strategy.0.s = 0.1
 
-# Roth-Erev (NPT mods)
+# Truth
 heuristic.strategy.1 = uk.ac.liv.auction.agent.PureSimpleStrategy
 heuristic.strategy.1.delta = 0
-heuristic.strategy.1.markupscale = 1
-heuristic.strategy.1.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
-heuristic.strategy.1.learner.k = 100
 
 # ZIP
 heuristic.strategy.2 = uk.ac.liv.auction.zi.ZIPStrategy
 heuristic.strategy.2.scaling = 0.0001
 heuristic.strategy.2.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 
+# Agent configuration
 heuristic.agent = uk.ac.liv.auction.zi.ZITraderAgent
 heuristic.agent.initialtradeentitlement = 1
 # Dummy valuer
@@ -40,7 +38,7 @@ heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Dummy strategy 
 heuristic.agent.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
-heuristic.auction = uk.ac.liv.auction.core.RoundRobinAuction
+heuristic.auction = uk.ac.liv.auction.core.RandomRobinAuction
 heuristic.auction.lengthofday = 30
 heuristic.auction.maximumdays = 20
 

@@ -30,6 +30,7 @@ import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.Seedable;
+import uk.ac.liv.util.Prototypeable;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -85,6 +86,7 @@ import org.apache.log4j.Logger;
 public abstract class AbstractTraderAgent implements PrivateValueTrader,
                                                       Serializable,
                                                       Parameterizable,
+                                                      Prototypeable,
                                                       Cloneable {
 
   /**
@@ -398,17 +400,18 @@ public abstract class AbstractTraderAgent implements PrivateValueTrader,
     return strategy.determineQuantity(auction);
   }
 
-  public AbstractTraderAgent protoClone() {
+  public Object protoClone() {
     AbstractTraderAgent copy = null;
     try {
-      copy = (AbstractTraderAgent) super.clone();
-      copy.id = idAllocator.nextId();
-      //TODO deep-clone strategy.
-      copy.initialise();
+      copy = (AbstractTraderAgent) clone();      
+      copy.id = idAllocator.nextId();     
+      copy.strategy = (Strategy) ((Prototypeable) strategy).protoClone();
+      copy.reset();
     } catch ( CloneNotSupportedException e ) {
     }
     return copy;
   }
+  
 
   public void informOfSeller( Auction auction, Shout winningShout,
                                RoundRobinTrader seller,

@@ -22,6 +22,10 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
+ * This class writes auction data to the specified DataWriter objects,
+ * and thus can be used to log data to eg, CSV files, a database backend,
+ * etc.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */

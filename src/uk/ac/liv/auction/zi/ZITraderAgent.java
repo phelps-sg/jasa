@@ -110,6 +110,16 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
         parameters.getInt(base.push(P_INITIAL_TRADE_ENTITLEMENT));
     super.setup(parameters, base);
   }
+  
+  public Object protoClone() {   
+    try {
+      ZITraderAgent clone = (ZITraderAgent) clone();
+    clone.reset();
+    return clone;
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
+  }
 
   protected void initialise() {
     super.initialise();
