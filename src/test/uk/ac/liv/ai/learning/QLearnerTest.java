@@ -25,13 +25,15 @@ public class QLearnerTest extends TestCase {
 
   QLearner learner1;
 
+  double score;
+
   static final double EPSILON = 0.05;
   static final double LEARNING_RATE = 0.8;
   static final double DISCOUNT_RATE = 0.9;
 
   static final int NUM_ACTIONS = 10;
   static final int CORRECT_ACTION = 2;
-  static final int NUM_TRIALS = 1000;
+  static final int NUM_TRIALS = 10000;
 
 
   public QLearnerTest( String name ) {
@@ -40,6 +42,7 @@ public class QLearnerTest extends TestCase {
 
   public void setUp() {
     learner1 = new QLearner(1, NUM_ACTIONS, EPSILON, LEARNING_RATE, DISCOUNT_RATE);
+    score = 0;
   }
 
   public void testBestAction() {
@@ -67,10 +70,15 @@ public class QLearnerTest extends TestCase {
     System.out.println("testMinimumScore()");
     CummulativeStatCounter stats = new CummulativeStatCounter("action");
     int correctActions = 0;
+    int bestActionChosen = 0;
     for( int i=0; i<NUM_TRIALS; i++ ) {
       int action = learner1.act();
-      assertTrue(action == learner1.getLastActionChosen());
       stats.newData(action);
+      assertTrue(action == learner1.getLastActionChosen());
+      int bestAction = learner1.bestAction(0);
+      if ( bestAction == action ) {
+        bestActionChosen++;
+      }
       if ( action == CORRECT_ACTION ) {
         learner1.newState(1.0, 0);
         correctActions++;
@@ -80,16 +88,55 @@ public class QLearnerTest extends TestCase {
     }
     System.out.println("final state of learner1 = " + learner1);
     double score = score(correctActions);
+    double bestActionPercent = score(bestActionChosen);
     System.out.println("learner1 score = " + score + "%");
     System.out.println(stats);
+    System.out.println("chose best action " + bestActionPercent + "% of the time.");
     assertTrue(score > 80);
+    assertTrue(1-(bestActionPercent/100) <= EPSILON);
+  }
+
+  public void testStates() {
+    System.out.println("testStates()");
+    int[] correctChoices = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+    int correctActions = 0;
+    learner1.setStatesAndActions(correctChoices.length, NUM_ACTIONS);
+    int s = 0;
+    for( int i=0; i<NUM_TRIALS; i++ ) {
+      int action = learner1.act();
+      double reward = 0;
+      if ( action == correctChoices[s] ) {
+        reward = 1.0;
+        correctActions++;
+        if ( ++s > 9 ) {
+          s = 0;
+        }
+      }
+      learner1.newState(reward, s);
+      assertTrue(learner1.getState() == s);
+    }
+    score = score(correctActions);
+    System.out.println("score = " + score + "%");
+    assertTrue(score >= 70);
+  }
+
+  public void testReset() {
+    System.out.println("testReset()");
+    System.out.println("virgin learner1 = " + learner1);
+    learner1.setSeed(1);
+    testStates();
+    double score1 = score;
+    learner1.setSeed(1);
+    learner1.reset();
+    System.out.println("reseted learner1 = " + learner1);
+    testStates();
+    double score2 = score;
+    assertTrue(score1 == score2);
   }
 
   public double score( int numCorrect ) {
     return ((double) numCorrect / (double) NUM_TRIALS) * 100;
   }
-
-
 
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());

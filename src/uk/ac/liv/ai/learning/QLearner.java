@@ -125,6 +125,10 @@ public class QLearner
         q[s][a] = 0;
       }
     }
+    currentState = 0;
+    previousState = 0;
+    bestAction = 0;
+    lastActionChosen = 0;
   }
 
   public void setStatesAndActions( int numStates, int numActions ) {
@@ -155,6 +159,10 @@ public class QLearner
   public void setState( int newState ) {
     previousState = currentState;
     currentState = newState;
+  }
+
+  public int getState() {
+    return currentState;
   }
 
   public int act() {

@@ -59,7 +59,7 @@
    </target>
 
    <target depends="jar" name="tar">
-   	<tar basedir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/**" tarfile="jasa.tar"/>
+   	<tar basedir="." includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/*.params" tarfile="jasa.tar"/>
 	<gzip src="jasa.tar" zipfile="jasa.tar.gz"/>
     </target>
 
