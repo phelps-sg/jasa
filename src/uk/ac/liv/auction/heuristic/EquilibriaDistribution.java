@@ -174,7 +174,7 @@ public class EquilibriaDistribution  {
 
       org.apache.log4j.PropertyConfigurator.configure(fileName);
 
-      ParameterDatabase parameters = new ParameterDatabase(file);
+      ParameterDatabase parameters = new ParameterDatabase(file, args);
       EquilibriaDistribution ed = new EquilibriaDistribution();
       ed.setup(parameters, new Parameter(P_EQUILIBRIA));
       ed.sampleRDTrajectories();      
