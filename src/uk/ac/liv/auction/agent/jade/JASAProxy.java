@@ -45,4 +45,8 @@ public class JASAProxy {
     return sender.getAID();
   }
 
+  public AID getTargetAID() {
+    return targetJadeID;
+  }
+
 }

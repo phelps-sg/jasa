@@ -60,7 +60,7 @@ public class JASATraderAgentProxy extends JASAProxy implements RoundRobinTrader 
       BidSuccessfulPredicate content = new BidSuccessfulPredicate();
       content.setPrice(price);
       content.setQuantity(quantity);
-      content.setSeller(((JASATraderAgentProxy) seller).getSenderAID().getName());
+      content.setSeller(((JASATraderAgentProxy) seller).getTargetAID().getName());
       JADEAbstractAuctionAgent.sendMessage(sender, msg, content);
     } catch ( Exception e ) {
       e.printStackTrace();

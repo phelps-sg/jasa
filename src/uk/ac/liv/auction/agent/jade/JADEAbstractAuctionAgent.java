@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2003 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -40,6 +40,11 @@ import jade.content.lang.sl.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.*;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
+import uk.ac.liv.util.Parameterizable;
+
 
 public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
 
@@ -67,12 +72,23 @@ public abstract class JADEAbstractAuctionAgent extends jade.core.Agent {
       // Register the ontology used by this application
       getContentManager().registerOntology(AuctionOntology.getInstance());
 
+      examineArguments();
+
       addBehaviours();
 
     } catch ( Exception e ) {
       e.printStackTrace();
     }
 
+  }
+
+  protected void examineArguments() {
+    Object[] args = getArguments();
+    if ( args != null && args.length > 0 ) {
+      ParameterDatabase parameters = (ParameterDatabase) args[0];
+      Parameter base = (Parameter) args[1];
+      ((Parameterizable) this).setup(parameters, base);
+    }
   }
 
   public static void sendMessage( Agent agent, ACLMessage msg,

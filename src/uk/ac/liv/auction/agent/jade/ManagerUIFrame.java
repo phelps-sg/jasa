@@ -26,6 +26,8 @@ public class ManagerUIFrame extends JFrame {
   protected AuctionManager manager;
 
   private JButton start = new JButton();
+  private JPanel jPanel1 = new JPanel();
+  private FlowLayout flowLayout1 = new FlowLayout();
 
   public ManagerUIFrame( AuctionManager manager )  {
     this.manager = manager;
@@ -46,7 +48,11 @@ public class ManagerUIFrame extends JFrame {
         start_actionPerformed(e);
       }
     });
-    this.getContentPane().add(start, BorderLayout.CENTER);
+    jPanel1.setLayout(flowLayout1);
+    this.setTitle("AuctionManager console");
+    this.getContentPane().add(jPanel1, BorderLayout.CENTER);
+    jPanel1.setPreferredSize(new Dimension(300, 200));
+    jPanel1.add(start, null);
   }
 
   void start_actionPerformed(ActionEvent e) {

@@ -1,0 +1,23 @@
+# Maximum number of rounds
+auction.auctioneer.maximumrounds = 10
+
+# Two populations of trader agents
+auction.numagenttypes = 2
+
+# 1st population- 3 sellers bidding random markups
+auction.agenttype.0 = uk.ac.liv.auction.agent.jade.JADEElectricityTrader
+auction.agenttype.0.numagents = 3
+auction.agenttype.0.randomprivatevalue = true
+auction.agenttype.0.strategy.quantity = 10
+auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+auction.agenttype.0.isseller = true
+
+# 2nd population- 3 buyers using the Roth-Erev learning algorithm
+auction.agenttype.1 = uk.ac.liv.auction.agent.jade.JADEElectricityTrader
+auction.agenttype.1.numagents = 3
+auction.agenttype.1.randomprivatevalue = true
+auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+auction.agenttype.1.strategy.quantity = 20
+auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+auction.agenttype.1.isseller = false

@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.agent.jade;
 
 import uk.ac.liv.auction.agent.*;
-
 import uk.ac.liv.auction.core.*;
 
 import jade.core.*;
@@ -37,13 +36,19 @@ import jade.content.lang.sl.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.*;
 
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
+
 /**
  * An adaptor that lets a JASA auction pretend to be a JADE agent.
  *
  * @author Steve Phelps
  */
 
-public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
+public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
+                                 implements Parameterizable {
 
   protected JADEAuction auction;
 
@@ -55,6 +60,8 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
   static final String STATE_FINALISE_ROUND = "FINALISE_ROUND";
   static final String STATE_END = "END";
 
+/// Inner classes for behaviours
+
   class RegistrationBehaviour extends SimpleBehaviour {
 
     boolean finished = false;
@@ -62,6 +69,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
     public RegistrationBehaviour( Agent agent ) {
       super(agent);
     }
+
 
     public void action() {
       try {
@@ -83,7 +91,6 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
             System.out.println("Received non-understood message: " + msg);
           }
         }
-        block();
       } catch ( Exception e ) {
         e.printStackTrace();
         //TODO
@@ -131,6 +138,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
 
   }
 
+
   class ProcessShoutsBehaviour extends SimpleBehaviour {
 
 
@@ -142,7 +150,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
       try {
         System.out.println("auctioneer: processing shouts");
         ACLMessage msg = receive();
-        System.out.println("Got msg " + msg);
+        System.out.println("auctioneer: got msg " + msg);
         if ( msg != null ) {
           ContentElement content = getContentManager().extractContent(msg);
           System.out.println("auctioneer: msg content = " + content);
@@ -182,14 +190,23 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent {
     public void action() {
       System.out.println("Finalising auction round");
       auction.finaliseRound();
+      System.out.println("Auction age = " + auction.getAge());
     }
 
   }
+
+/// end of inner-classes
 
 
   public JADEAuctionAdaptor( JADEAuction auction ) {
     this.auction = auction;
   }
+
+
+  public void setup( ec.util.ParameterDatabase parameters, ec.util.Parameter base ) {
+    auction.setup(parameters, base);
+  }
+
 
   public String getServiceName() {
     return SERVICE_AUCTIONEER;

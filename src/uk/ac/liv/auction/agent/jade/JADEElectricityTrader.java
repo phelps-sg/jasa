@@ -16,17 +16,22 @@
 package uk.ac.liv.auction.agent.jade;
 
 import uk.ac.liv.auction.agent.*;
-
 import uk.ac.liv.auction.electricity.ElectricityTrader;
 
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 /**
- * An ElectricityTrader that is pretending to be a JADE agent
- * through use of the JADETraderAgentAdaptor.
+ * An ElectricityTrader agent that is pretending to be a JADE agent
+ * through use of a JADETraderAgentAdaptor.
  *
  * @author Steve Phelps
  */
 
-public class JADEElectricityTrader extends JADETraderAgentAdaptor {
+public class JADEElectricityTrader extends JADETraderAgentAdaptor
+                                    implements Parameterizable {
 
   public JADEElectricityTrader( int capacity, double privateValue, double fixedCosts,
                                boolean isSeller, Strategy strategy ) {
@@ -37,6 +42,13 @@ public class JADEElectricityTrader extends JADETraderAgentAdaptor {
   public JADEElectricityTrader() {
     this(10, 100, 0, true, null);
     jasaTraderAgent.setStrategy(new RandomConstrainedStrategy(jasaTraderAgent, 100));
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+    System.out.println(this + ": setup... ");
+    ((ElectricityTrader) jasaTraderAgent).setup(parameters, base);
+    System.out.println("done");
+    System.out.println(this + ": jadeTraderAgent = " + jasaTraderAgent);
   }
 
 }

@@ -68,7 +68,7 @@ public class CSVMarketDataLogger implements MarketDataLogger, Parameterizable {
       setCSVQuoteLog( new FileOutputStream(new File(quoteLogFile)) );
       setCSVShoutLog( new FileOutputStream(new File(shoutLogFile)) );
       setCSVTransPriceLog( new FileOutputStream(new File(transLogFile)) );
-    } catch ( java.io.FileNotFoundException e ) {
+    } catch ( java.io.IOException e ) {
       e.printStackTrace();
     }
 

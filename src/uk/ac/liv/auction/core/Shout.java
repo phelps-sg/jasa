@@ -214,6 +214,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
     setPrice(other.getPrice());
     setAgent(other.getAgent());
     setQuantity(other.getQuantity());
+    setIsBid(other.isBid());
     id = other.getId();
     child = null;
   }

@@ -2,6 +2,7 @@
 <project basedir="." default="compile" name="JASA">
     <property file="build.ant.properties"/>
    <target name="init">
+      <property name="build.compiler" value="modern"/>
       <property name="sourceDir" value="src"/>
       <property name="outputDir" value="classes"/>
       <property name="projectName" value="JASA"/>
@@ -33,7 +34,7 @@
    </target>
 
    <target depends="prepareOutput" name="compile">
-      <javac debug="on" destdir="${outputDir}" srcdir="${sourceDir}">
+      <javac debug="on" destdir="${outputDir}" srcdir="${sourceDir}" deprecation="on">
         <classpath>
             <pathelement path="${classPath}"/>       
         </classpath>

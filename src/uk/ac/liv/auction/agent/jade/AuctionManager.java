@@ -16,8 +16,12 @@
 package uk.ac.liv.auction.agent.jade;
 
 import uk.ac.liv.auction.agent.*;
-
 import uk.ac.liv.auction.core.*;
+
+import uk.ac.liv.util.Parameterizable;
+
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
 
 import jade.core.*;
 
@@ -40,6 +44,9 @@ import jade.content.lang.sl.*;
 import jade.domain.FIPAAgentManagement.*;
 import jade.domain.*;
 
+import java.io.*;
+
+
 /**
  * A JADE agent for starting an auction simulation.
  */
@@ -48,13 +55,86 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
   AID auctioneerAID = null;
 
+  PlatformController container;
+
+  static final String P_AUCTION = "auction";
+  static final String P_NUM_AGENT_TYPES = "numagenttypes";
+  static final String P_NUM_AGENTS = "numagents";
+  static final String P_AGENT_TYPE = "agenttype";
+  static final String P_AGENTS = "agents";
+  static final String P_AUCTIONEER = "auctioneer";
+
+  static final String DEFAULT_PARAMETER_FILE = "examples/jade.params";
+
+
   public AuctionManager() {
   }
+
 
   protected void setup() {
     super.setup();
     activateUI();
   }
+
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    try {
+
+      System.out.print("Setup.. ");
+
+      container = getContainerController();
+
+      Object[] auctioneerArguments = new Object[2];
+      auctioneerArguments[0] = parameters;
+      auctioneerArguments[1] = base.push(P_AUCTIONEER);
+      AgentController auctioneerController =
+          container.createNewAgent("auctioneer",
+          JADERandomRobinAuctioneer.class.getName(),
+          auctioneerArguments);
+
+      auctioneerController.start();
+
+      auctioneerAID = findAuctioneer();
+
+      int numAgentTypes = parameters.getInt(base.push(P_NUM_AGENT_TYPES), null, 1);
+
+      for( int t=0; t<numAgentTypes; t++ ) {
+
+        Parameter typeParam = base.push(P_AGENT_TYPE).push(""+t);
+        Parameter agentParam = typeParam.push(P_AGENTS);
+
+        int numAgents = parameters.getInt(typeParam.push(P_NUM_AGENTS), null, 0);
+        for( int i=0; i<numAgents; i++ ) {
+
+          JADETraderAgentAdaptor dummyAgent =
+                   (JADETraderAgentAdaptor) parameters.getInstanceForParameter(typeParam, null,
+                   JADETraderAgentAdaptor.class);
+
+          try {
+            Object[] agentParameters = new Object[2];
+            agentParameters[0] = parameters;
+            agentParameters[1] = typeParam;
+            String agentClassName = dummyAgent.getClass().getName();
+            System.out.println("Attempting to start trader agent with class name " + agentClassName);
+            AgentController agentController =
+                container.createNewAgent("trader-" + i + "-" + t, agentClassName,
+                agentParameters);
+            agentController.start();
+          } catch ( Exception e ) {
+            e.printStackTrace();
+            throw new Error(e.getMessage());
+          }
+
+        }
+      }
+      System.out.println("done.");
+    } catch ( Exception e ) {
+      e.printStackTrace();
+      throw new Error(e.getMessage());
+    }
+  }
+
 
   public void activateUI() {
     System.out.println("auction manager activating UI");
@@ -65,9 +145,11 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
     ui.setVisible(true);
   }
 
+
   public String getServiceName() {
     return "AUCTION_MANAGER";
   }
+
 
   public void startAuction() {
     try {
@@ -83,30 +165,43 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
     }
   }
 
+
   public void addBehaviours() {
     addBehaviour( new OneShotBehaviour() {
       public void action() {
         try {
-
-          PlatformController container = getContainerController();
-          AgentController auctioneerController =
-              container.createNewAgent("auctioneer", "uk.ac.liv.auction.agent.jade.JADERandomRobinAuctioneer", null);
-          AgentController trader1Controller =
-              container.createNewAgent("trader1", "uk.ac.liv.auction.agent.jade.JADEElectricityTrader", null);
-
-          auctioneerController.start();
-          trader1Controller.start();
-
-          auctioneerAID = findAuctioneer();
-/*
-          ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-          msg.addReceiver(auctioneerAID);
-          StartAuctionAction content = new StartAuctionAction();
-          JADEAbstractAuctionAgent.sendMessage(myAgent, msg, content); */
+          setupFromParameterFile();
         } catch ( Exception e ) {
           e.printStackTrace();
         }
       }
     } );
   }
+
+
+  public void setupFromParameterFile() {
+    System.out.println(this + ": setting up... ");
+    Object[] arguments = getArguments();
+    String parameterFileName = DEFAULT_PARAMETER_FILE;
+    if ( arguments != null && arguments.length >= 1 ) {
+      parameterFileName = (String) arguments[0];
+    }
+    System.out.println("Using parameter file " + parameterFileName);
+    File paramFile = new File(parameterFileName);
+    if ( ! paramFile.canRead() ) {
+      System.err.println("Cannot read parameter file " + parameterFileName);
+      throw new Error("Cannot read parameter file " + parameterFileName);
+    }
+
+    try {
+      ParameterDatabase parameters = new ParameterDatabase(paramFile);
+      setup(parameters, new Parameter(P_AUCTION));
+      System.out.println("done.");
+    } catch ( IOException e ) {
+      e.printStackTrace();
+      throw new Error(e.getMessage());
+    }
+
+  }
+
 }
