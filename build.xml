@@ -85,7 +85,7 @@
 	<loadproperties srcFile="${versionFile}"/>
 	<property name="versionStr" value="${majorVersion}.${minorVersion}"/>
    	<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
-		<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,examples/*.params,lib/**" prefix="jasa-${versionStr}">
+		<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params,lib/**" prefix="jasa-${versionStr}">
                   <exclude name="src/uk/ac/liv/ec/**"/>
                   <exclude name="src/test/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
@@ -152,7 +152,7 @@
        <propertyfile
             file="${versionFile}" comment="Build version info">
             <entry key="buildDate" type="date" value="now"/>
-            <entry key="buildNum" default="0" type="int" operation="+" value="0"/>
+            <entry key="buildNum" default="0" type="int" operation="+" value="1"/>
 	    <entry key="buildHost" type="string" value="${hostname}"/>
         </propertyfile>
 </target>
