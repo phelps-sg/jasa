@@ -33,6 +33,7 @@ public class GPIndividualWithMemory extends GPIndividualCtx  {
 
   public GPIndividualWithMemory( int memorySize ) {
     this.memorySize = memorySize;
+    memory = new GPGenericData[memorySize];
   }
 
   public void set( long address, GPGenericData newData ) {

@@ -132,5 +132,17 @@ public class GPTradingStrategy extends GPIndividualWithMemory
     return copy;
   }
 
+  public GPGenericData get( long address ) {
+    // hack to turn nulls into 0
+    GPGenericData result = super.get(address);
+    if ( result == null ) {
+      GPGenericData zero = GPGenericDataPool.fetch();
+      zero.data = FastLong.newFastLong(0L);
+      return zero;
+    } else {
+      return result;
+    }
+  }
+
 }
 
