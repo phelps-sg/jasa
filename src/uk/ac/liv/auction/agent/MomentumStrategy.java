@@ -109,6 +109,9 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     if ( currentMargin < 0 ) {
       logger.debug(this + ": clipping negative margin at 0");
       setMargin(currentMargin = 0);
+    } else if ( currentMargin > 1 ) {
+      logger.debug(this + ": clipping margin at 1.0");
+      setMargin(currentMargin = 1.0);
     }
     adjustMargin();    
     if ( agent.isBuyer() ) {
@@ -116,9 +119,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     } else {
       currentPrice = agent.getPrivateValue(auction) * (1 + currentMargin);
     }      
-    if ( currentPrice > 0 ) {
-      shout.setPrice(currentPrice);
-    }
+    shout.setPrice(currentPrice);
     return super.modifyShout(shout);
   }
 
