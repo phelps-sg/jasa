@@ -25,87 +25,29 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
- * An Auctioneer for a uniform-price, continuous k-double-auction,
- * in which clearing takes place after every round of
- * bidding, and both buyers and sellers can make offers.
- *
- * <p><b>Parameters</b><br></p>
- * <table>
- * <tr><td valign=top><i>base</i><tt>.k</tt><br>
- * <font size=-1>double [0, 1]</font></td>
- * <td valign=top>(the pricing parameter)</td><tr>
- * </table>
- *
  * @author Steve Phelps
  */
 
-public class ContinuousDoubleAuctioneer extends AbstractAuctioneer
-                                            implements
-                                              Parameterizable,
-                                              ParameterizablePricing {
-
-  /**
-   * k is a parameter that determines the clearing price of currently matched shouts.
-   */
-  double k = 1;
+public class ContinuousDoubleAuctioneer extends KAuctioneer {
 
   public ContinuousDoubleAuctioneer() {
-    super();
-  }
-
-  public ContinuousDoubleAuctioneer( Auction auction ) {
-    super(auction);
-  }
-
-  /**
-   * @param auction The auction container for this auctioneer.
-   * @param k The parameter k determines the price at which shouts are cleared.
-   * The price for each clearing is p = ka + (1-k)b, where a is the current global ask price,
-   * and b is the bid price.  Use k = 0 for a Vickrey auction and k = 1 for first price auction.
-   */
-  public ContinuousDoubleAuctioneer( Auction auction, double k ) {
-    this(auction);
-    this.k = k;
+    this(null, 0);
   }
 
   public ContinuousDoubleAuctioneer( double k ) {
-    this();
-    this.k = k;
+    this(null, k);
   }
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    k = parameters.getDoubleWithDefault(base.push("k"), null, 0.5);
+  public ContinuousDoubleAuctioneer( Auction auction, double k ) {
+    this(auction, new UniformPricingPolicy(k));
   }
 
-  public void clear() {
-    double price = determineClearingPrice();
-    List shouts = shoutEngine.getMatchedShouts();
-    Iterator i = shouts.iterator();
-    while ( i.hasNext() ) {
-      Shout bid = (Shout) i.next();  Debug.assertTrue( bid.isBid() );
-      Shout ask = (Shout) i.next();  Debug.assertTrue( ask.isAsk() );
-      auction.clear(ask, bid.getAgent(), ask.getAgent(), price, ask.getQuantity());
-    }
+  public ContinuousDoubleAuctioneer( Auction auction, KPricingPolicy policy ) {
+    super(auction, policy);
   }
 
-  public void setK( double k ) {
-    this.k = k;
-  }
-
-  public double getK() {
-    return k;
-  }
-
-  protected double determineClearingPrice() {
-    return ((1-k) * (double) bidQuote() + k * (double) askQuote());
-  }
-
-  protected double bidQuote() {
-    return Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine.getHighestUnmatchedBid());
-  }
-
-  protected double askQuote() {
-    return Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
+  public ContinuousDoubleAuctioneer( Auction auction ) {
+    this(auction, 0);
   }
 
   public void generateQuote() {

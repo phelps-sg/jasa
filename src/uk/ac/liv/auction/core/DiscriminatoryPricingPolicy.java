@@ -16,19 +16,23 @@
 package uk.ac.liv.auction.core;
 
 /**
- * <p>
- * Auctioneer classes implementing this interface indicate that they
- * support parameterisable pricing rules, as per the k-double-auction
- * variants.
- * </p>
- *
  * @author Steve Phelps
  */
 
-public interface ParameterizablePricing {
+public class DiscriminatoryPricingPolicy extends KPricingPolicy {
 
-  public void setK( double k );
+  public DiscriminatoryPricingPolicy() {
+    this(0);
+  }
 
-  public double getK();
+  public DiscriminatoryPricingPolicy( double k ) {
+    super(k);
+  }
+
+  public double determineClearingPrice( Shout bid, Shout ask,
+                                         MarketQuote clearingQuote ) {
+    return kInterval(ask.getPrice(), bid.getPrice());
+  }
+
 
 }

@@ -49,7 +49,7 @@ import org.apache.log4j.BasicConfigurator;
 
 public abstract class ElectricityTest extends TestCase {
 
-  protected DiscrimPriceCDAAuctioneer auctioneer;
+  protected ContinuousDoubleAuctioneer auctioneer;
 
   protected RandomRobinAuction auction;
 
@@ -122,7 +122,9 @@ public abstract class ElectricityTest extends TestCase {
     this.cs = cs;
     this.cb = cb;
     auction = new RandomRobinAuction("NPTReplicationTest");
-    auctioneer = new DiscrimPriceCDAAuctioneer(auction, 0.5);
+    auctioneer =
+         new ContinuousDoubleAuctioneer(auction,
+                                          new DiscriminatoryPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(MAX_ROUNDS);
     registerTraders(auction, true, ns, cs, sellerValues);

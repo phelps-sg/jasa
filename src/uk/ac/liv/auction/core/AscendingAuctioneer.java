@@ -31,8 +31,7 @@ import org.apache.log4j.Logger;
  *  Auctioneer for standard multi-unit english ascending auction.
  */
 
-public class AscendingAuctioneer extends AbstractAuctioneer
-    implements Parameterizable  {
+public class AscendingAuctioneer extends KAuctioneer {
 
   /**
    * The reservation price.
@@ -58,7 +57,7 @@ public class AscendingAuctioneer extends AbstractAuctioneer
 
   public AscendingAuctioneer( Auction auction, TraderAgent seller,
                                   int quantity, double reservePrice ) {
-    super(auction);
+    super(auction, new UniformPricingPolicy(0));
 
     this.reservePrice = reservePrice;
     this.quantity = quantity;
@@ -82,6 +81,8 @@ public class AscendingAuctioneer extends AbstractAuctioneer
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    super.setup(parameters, base);
 
     quantity = parameters.getInt(base.push(P_QUANTITY), null, 1);
 
@@ -109,32 +110,6 @@ public class AscendingAuctioneer extends AbstractAuctioneer
     shoutEngine.printState();
     clear();
     logger.debug("clearing done.");
-  }
-
-  public void clear() {
-
-    List winners = shoutEngine.getMatchedShouts();
-    Iterator i = winners.iterator();
-    double maxPrice = 0;
-    // disassemble bids from auction, calculating max price
-    // and saving bids for clearing op
-    while ( i.hasNext() ) {
-      Shout winningBid = (Shout) i.next();
-      Shout winningAsk = (Shout) i.next();
-      if ( winningBid.getPrice() > maxPrice ) {
-        maxPrice = winningBid.getPrice();
-      }
-    }
-
-    // now clear all bids at the maximum price
-    i = winners.iterator();
-    while ( i.hasNext() ) {
-      Shout winningBid = (Shout) i.next();
-      Shout winningAsk = (Shout) i.next();
-
-      auction.clear(winningBid, winningBid.getAgent(), seller, maxPrice,
-                     winningBid.getQuantity());
-    }
   }
 
   public void generateQuote() {

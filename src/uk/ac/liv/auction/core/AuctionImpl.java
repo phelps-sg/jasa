@@ -113,9 +113,9 @@ public abstract class AuctionImpl extends Observable
   }
 
   protected void initialise() {
-    lastShout = null;
-    lastBid = null;
-    lastAsk = null;
+    lastShout = new Shout();
+    lastBid = new Shout();
+    lastAsk = new Shout();
     closed = false;
   }
 
@@ -256,13 +256,10 @@ public abstract class AuctionImpl extends Observable
   }
 
   protected void recordShout( Shout shout ) {
-    if ( lastShout == null ) lastShout = new Shout();
     lastShout.copyFrom(shout);
     if ( shout.isAsk() ) {
-      if ( lastAsk == null ) lastAsk = new Shout();
       lastAsk.copyFrom(shout);
     } else {
-      if ( lastBid == null ) lastBid = new Shout();
       lastBid.copyFrom(shout);
     }
   }
