@@ -5,29 +5,47 @@
       <property name="projectName" value="JASA"/>
       <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io" />
       <property name="docDir" value="doc" />
+      <property name="ecjPath" value="/usr/local/java/lib/ecj8" />
+      <property name="poolitPath" value="/usr/local/java/lib/poolit/poolit.jar" />
+      <property name="junitPath" value="/usr/local/java/lib/junit3.7/junit.jar" />
+      <property name="skijPath" value="/usr/local/java/lib/skij.jar" />      
+      <property name="classPath" value="${ecjPath}:${poolitPath}:${junitPath}:${skijPath}" />
    </target>
 
-   <target name="clean" depends="init">
+   <target name="cleanOutput" depends="init">
       <delete dir="${outputDir}" />
+   </target>
+
+   <target name="prepareOutput" depends="cleanOutput">
+      <mkdir dir="${outputDir}" />
+   </target>
+
+   <target name="cleanDoc" depends="init">
       <delete dir="${docDir}" />
    </target>
 
-   <target name="prepare" depends="clean">
-      <mkdir dir="${outputDir}" />
+   <target name="prepareDoc" depends="cleanDoc">
       <mkdir dir="${docDir}" />
    </target>
 
-   <target name="compile" depends="prepare">
-     <javac srcdir="${sourceDir}" destdir="${outputDir}" debug="on"/>
+   <target name="compile" depends="prepareOutput">
+      <javac srcdir="${sourceDir}" destdir="${outputDir}" debug="on">
+        <classpath>
+            <pathelement path="${classPath}" />       
+        </classpath>
+     </javac>
    </target>
 
-   <target name="doc" depends="compile">
+   <target name="doc" depends="compile,prepareDoc">
      <javadoc packagenames="${packages}"
 		sourcepath="${sourceDir}"
 		destdir="${docDir}"
 		author="true"
-		windowtitle="${projectName}"
-	/>
+		windowtitle="${projectName}">
+        <classpath>
+            <pathelement path="${classPath}" />       
+        </classpath>
+     </javadoc>
    </target>
 
    <target name="jar" depends="compile,doc">
@@ -39,7 +57,7 @@
    <target name="tar" depends="jar" >
    	<tar tarfile="jasa.tar"
 		basedir="."
-		includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**,examples/**"
+      includes="jasa.jar,build.xml,readme.html,LICENSE.TXT,doc/**,src/**/*.java,examples/**"
 	/>
 	<gzip src="jasa.tar" zipfile="jasa.tar.gz" />
     </target>
