@@ -4,6 +4,10 @@
 #  S. Phelps, S. Parsons, E. Sklar, P. McBurney
 #  Technical Report ULCS-02-031
 #
+# Run this experiment using the command:
+#
+#  java uk.ac.liv.auction.ElectricityAuctionSimulation examples/electricity.params
+#
 
 # Number of auction rounds
 electricity.maxrounds = 100

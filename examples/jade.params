@@ -1,22 +1,35 @@
+#
+# This parameter file can be used to run a double auction experiment
+# under the JADE agent platform.
+#
+# To run this experiment, use the command:
+#
+#  java jade.Boot -gui manager:uk.ac.liv.auction.agent.jade.AuctionManager
+#
+
 # Maximum number of rounds
 auction.auctioneer.maximumrounds = 10
+
+# The logger to use
 auction.auctioneer.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
 
 # Two populations of trader agents
 auction.numagenttypes = 2
 
-# 1st population- 3 sellers bidding random markups
+# 1st population- 30 sellers bidding using the modified Roth-Erev 
+# learning algorithm
 auction.agenttype.0 = uk.ac.liv.auction.agent.jade.JADEElectricityTrader
-auction.agenttype.0.numagents = 3
+auction.agenttype.0.numagents = 30
 auction.agenttype.0.randomprivatevalue = true
 auction.agenttype.0.strategy.quantity = 10
 auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 auction.agenttype.0.isseller = true
 
-# 2nd population- 3 buyers using the Roth-Erev learning algorithm
+# 2nd population- 30 buyers using the the modified
+#  Roth-Erev learning algorithm
 auction.agenttype.1 = uk.ac.liv.auction.agent.jade.JADEElectricityTrader
-auction.agenttype.1.numagents = 3
+auction.agenttype.1.numagents = 30
 auction.agenttype.1.randomprivatevalue = true
 auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
 auction.agenttype.1.strategy.quantity = 20
