@@ -22,6 +22,7 @@ import uk.ac.liv.util.Resetable;
 
 import java.io.PrintStream;
 
+import java.util.Map;
 import java.util.Observable;
 import java.util.LinkedList;
 import java.util.Iterator;
@@ -311,6 +312,9 @@ public abstract class AuctionImpl extends Observable
     }
   }
 
+  public Map getResults() {
+    return logger.getVariables();
+  }
 
   public String toString() {
     return "(Auction id:" + id + ")";
