@@ -17,13 +17,16 @@ package uk.ac.liv.auction.heuristic;
 
 import java.util.Vector;
 import java.util.Iterator;
+import java.util.List;
 
 import java.io.PrintWriter;
+import java.io.IOException;
 
 import uk.ac.liv.util.Partitioner;
 import uk.ac.liv.util.BaseNIterator;
 
 import uk.ac.liv.util.io.DataWriter;
+import uk.ac.liv.util.io.CSVReader;
 
 import org.apache.log4j.Logger;
 
@@ -132,8 +135,7 @@ public class CompressedPayoffMatrix {
         }
       }
       totalProbability += probability;
-    } 
-    System.out.println("Probability = " + totalProbability);   
+    }     
     return payoffs;
   }
   
@@ -182,6 +184,24 @@ public class CompressedPayoffMatrix {
     } while (  iteration < maxIterations );
   }
   
+  
+  public void importFromCSV( CSVReader in ) throws IOException {
+    List record;
+    while ( (record = in.nextRecord()) != null ) {
+      Iterator fields = record.iterator();
+      int entry[] = new int[numStrategies];
+      for( int s=0; s<numStrategies; s++ ) {
+        Integer n = (Integer) fields.next();
+        entry[s] = n.intValue();
+      }
+      double[] outcome = getCompressedOutcome(entry);
+      for( int s=0; s<numStrategies; s++ ) {
+        Double payoff = (Double) fields.next();
+        outcome[s] = payoff.doubleValue();
+      }      
+    }
+  }
+  
   public void export( DataWriter out ) {
     Iterator entries = compressedEntryIterator();
     while ( entries.hasNext() ) {
@@ -194,7 +214,7 @@ public class CompressedPayoffMatrix {
         out.newData(outcome[i]);
       }
     }
-  }
+  }  
 
   public void exportToGambit( PrintWriter nfgOut ) {
     exportToGambit(nfgOut, "JASA NFG");
