@@ -45,6 +45,7 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.auction.agent.MixedStrategyTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.RandomConstrainedStrategyTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.MomentumStrategyTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.agent.RandomValuerTest.suite());
     
     suite.addTest(test.uk.ac.liv.auction.zi.ZITraderAgentTest.suite());
 

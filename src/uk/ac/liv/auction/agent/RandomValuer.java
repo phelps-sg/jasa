@@ -20,6 +20,9 @@ import uk.ac.liv.auction.event.AuctionEvent;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.Uniform;
+
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
@@ -27,25 +30,27 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
-import cern.jet.random.AbstractContinousDistribution;
-import cern.jet.random.Uniform;
-
 /**
- * A valuation policy in which we randomly determine our valuation
- * across all auctions and all units at initialisation.  Valuations
- * are drawn from a uniform distribution with the specified range.
- *
- * </p><p><b>Parameters</b><br>
+ * A valuation policy in which we randomly determine our valuation across all
+ * auctions and all units at agent-initialisation time. Valuations are drawn
+ * from a uniform distribution with the specified range.
+ * 
+ * </p>
+ * <p>
+ * <b>Parameters </b> <br>
  * <table>
- * <tr><td valign=top><i>base</i><tt>.minvalue</tt><br>
- * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(the minimum valuation)</td></tr>
- *
- * <tr><td valign=top><i>base</i><tt>.maxvalue</tt><br>
- * <font size=-1>double &gt;=0</font></td>
- * <td valign=top>(the maximum valuation)</td><tr>
- * </table>
- *
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.minvalue</tt><br>
+ * <font size=-1>double &gt;= 0 </font></td>
+ * <td valign=top>(the minimum valuation)</td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.maxvalue</tt><br>
+ * <font size=-1>double &gt;=0 </font></td>
+ * <td valign=top>(the maximum valuation)</td>
+ * <tr></table>
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -68,6 +73,9 @@ public class RandomValuer
    */
   protected double maxValue;
   
+  /**
+   * The probability distribution to use for drawing valuations.
+   */
   protected AbstractContinousDistribution distribution;
 
   public static final String P_MINVALUE = "minvalue";
@@ -87,7 +95,7 @@ public class RandomValuer
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     minValue = parameters.getDouble(base.push(P_MINVALUE), null, 0);
-    maxValue = parameters.getDouble(base.push(P_MAXVALUE), null, 0);
+    maxValue = parameters.getDouble(base.push(P_MAXVALUE), null, minValue);
     initialise();
   }
 
@@ -108,6 +116,7 @@ public class RandomValuer
   }
 
   public void initialise() {
+    assert minValue >= 0 && maxValue >= minValue;
     distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
     drawRandomValue();
   }
