@@ -47,7 +47,12 @@ public class GPIndividualWithMemory extends GPIndividualCtx  {
   }
 
   public GPGenericData get( long address ) {
-    return memory[(int) (address % memorySize)].safeCopy();
+    GPGenericData result = memory[(int) (address % memorySize)];
+    if ( result != null ) {
+      return result.safeCopy();
+    } else {
+      return null;
+    }
   }
 
 }
