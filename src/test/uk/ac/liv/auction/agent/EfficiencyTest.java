@@ -27,6 +27,10 @@ import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.util.CummulativeDistribution;
 
 /**
+ * Tests that a given strategy yields a certain minimum benchmark
+ * mean efficiency over many iterations of self-play, and that 
+ * efficiency values fall within the range (0, 1).
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -84,8 +88,7 @@ public abstract class EfficiencyTest extends TestCase {
       auction.reset();
       auction.run();
       SurplusReport surplus = new SurplusReport(auction);
-      surplus.calculate();    
-      //surplus.produceUserOutput();
+      surplus.calculate();          
       System.out.println("Iteration " + i + ": efficiency = " + surplus.getEA());
       if ( !Double.isNaN(surplus.getEA()) ) {
         efficiency.newData(surplus.getEA());

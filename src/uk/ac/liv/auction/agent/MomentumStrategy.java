@@ -33,11 +33,14 @@ import uk.ac.liv.prng.GlobalPRNG;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+//import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
+
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.Uniform;
 
 /**
  * @author Steve Phelps
@@ -62,6 +65,11 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
   protected boolean lastShoutAccepted;
   
   protected double trPrice, trBidPrice, trAskPrice;
+  
+  protected AbstractContinousDistribution initialMarginDistribution =
+    new Uniform(0.5, 1.0, GlobalPRNG.getInstance());
+  
+  protected AbstractContinousDistribution perterbationDistribution;
 
   public static final String P_SCALING = "scaling";
   public static final String P_LEARNER = "learner";
@@ -93,7 +101,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
 
     initialise();
     
-    setMargin(GlobalPRNG.getInstance().uniform(0.5, 1.0));
+    setMargin(initialMarginDistribution.nextDouble());
     
     logger.debug("Initialised with scaling = " + scaling + " and learner = " +
                   learner);
@@ -103,6 +111,8 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
 
   public void initialise() {
     super.initialise();
+    perterbationDistribution = 
+      new Uniform(0, scaling, GlobalPRNG.getInstance());
   }
 
 
@@ -230,10 +240,9 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     learner.train(targetMargin);
   }
   
-  protected double perterb( double price ) {
-    RandomElement prng = GlobalPRNG.getInstance();
-    double relative = prng.uniform(0, scaling);
-    double absolute = prng.uniform(0, scaling);
+  protected double perterb( double price ) {    
+    double relative = perterbationDistribution.nextDouble();
+    double absolute = perterbationDistribution.nextDouble();
     return relative*price + absolute;
   }
 

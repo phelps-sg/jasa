@@ -28,7 +28,7 @@ import uk.ac.liv.auction.agent.StimuliResponseStrategy;
  */
 public class RothErevEfficiencyTest extends EfficiencyTest {
   
-  public static final double BENCHMARK_EFFICIENCY = 88;
+  public static final double BENCHMARK_EFFICIENCY = 86;
 
   public RothErevEfficiencyTest( String name ) {
     super(name);

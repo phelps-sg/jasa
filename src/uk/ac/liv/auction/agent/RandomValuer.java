@@ -27,6 +27,9 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.Uniform;
+
 /**
  * A valuation policy in which we randomly determine our valuation
  * across all auctions and all units at initialisation.  Valuations
@@ -64,6 +67,8 @@ public class RandomValuer
    * The maximum valuation to use.
    */
   protected double maxValue;
+  
+  protected AbstractContinousDistribution distribution;
 
   public static final String P_MINVALUE = "minvalue";
   public static final String P_MAXVALUE = "maxvalue";
@@ -103,6 +108,7 @@ public class RandomValuer
   }
 
   public void initialise() {
+    distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
     drawRandomValue();
   }
 
@@ -127,7 +133,7 @@ public class RandomValuer
   }
 
   public void drawRandomValue() {
-    value = GlobalPRNG.getInstance().uniform(minValue, maxValue);
+    value = distribution.nextDouble();
   }
 
   public String toString() {

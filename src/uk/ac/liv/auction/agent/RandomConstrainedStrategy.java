@@ -25,6 +25,9 @@ import ec.util.Parameter;
 
 import java.io.Serializable;
 
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.Uniform;
+
 /**
  * <p>
  * A trading strategy that in which we bid a different random markup on our
@@ -50,10 +53,12 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
                                         implements Serializable {
 
   protected double maxMarkup = DEFAULT_MARKUP;
+  
+  protected AbstractContinousDistribution markupDistribution;
 
   public static final String P_MAX_MARKUP = "maxmarkup";
 
-  public static final double DEFAULT_MARKUP = 50;
+  public static final double DEFAULT_MARKUP = 50;   
 
   public RandomConstrainedStrategy() {
     this(null, DEFAULT_MARKUP);
@@ -63,11 +68,17 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
                                       double maxMarkup ) {
     super(agent);
     this.maxMarkup = maxMarkup;
+    initialise();
+  }
+  
+  public void initialise() {
+    super.initialise();
+    markupDistribution = new Uniform(0, maxMarkup, GlobalPRNG.getInstance());
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
-
-    double markup = GlobalPRNG.getInstance().uniform(0, maxMarkup);
+    
+    double markup = markupDistribution.nextDouble();
     double price = 0;
     if ( agent.isBuyer() ) {
       price = agent.getValuation(auction) - markup;
@@ -92,6 +103,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     super.setup(parameters, base);
     maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP),
                                                   null, maxMarkup);
+    initialise();
   }
 
   public double getMaxMarkup() {

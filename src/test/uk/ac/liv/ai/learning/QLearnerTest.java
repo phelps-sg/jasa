@@ -108,7 +108,7 @@ public class QLearnerTest extends TestCase {
   }
 
   public void testStates() {
-    logger.info("testStates()");
+    System.out.println("testStates()");
     int[] correctChoices = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
     int correctActions = 0;
     learner1.setStatesAndActions(correctChoices.length, NUM_ACTIONS);
@@ -127,22 +127,25 @@ public class QLearnerTest extends TestCase {
       assertTrue(learner1.getState() == s);
     }
     score = score(correctActions);
-    logger.info("score = " + score + "%");
-    logger.info("learner1 = " + learner1);
+    System.out.println("score = " + score + "%");
+    System.out.println("learner1 = " + learner1);
     assertTrue(score >= 70);
   }
 
   public void testReset() {
-    logger.info("testReset()");
-    logger.info("virgin learner1 = " + learner1);
-    GlobalPRNG.initialiseWithSeed(1);
-    testStates();
-    double score1 = score;
+    System.out.println("testReset()");
+    System.out.println("virgin learner1 = " + learner1);
     GlobalPRNG.initialiseWithSeed(1);
     learner1.reset();
-    logger.info("reseted learner1 = " + learner1);
+    testStates();
+    double score1 = score;
+    System.out.println("score1 = "+ score1);
+    GlobalPRNG.initialiseWithSeed(1);
+    learner1.reset();
+    System.out.println("reseted learner1 = " + learner1);
     testStates();
     double score2 = score;
+    System.out.println("score2 = " + score2);
     assertTrue(score1 == score2);
   }
 

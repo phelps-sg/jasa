@@ -23,6 +23,9 @@ import uk.ac.liv.util.io.DataWriter;
 
 import java.io.Serializable;
 
+import cern.jet.random.Uniform;
+
+
 /**
  * A learner that simply plays a random action on each iteration
  * without any learning.  This is useful for control experiments.
@@ -35,9 +38,12 @@ public class DumbRandomLearner extends AbstractLearner
     implements StimuliResponseLearner, Serializable, Prototypeable {
 
   protected int numActions;
+  
+  protected Uniform distribution;
 
   public DumbRandomLearner( int numActions ) {    
     this.numActions = numActions;
+    distribution = new Uniform(0, 1, GlobalPRNG.getInstance());
   }
   
   public Object protoClone() {
@@ -54,7 +60,7 @@ public class DumbRandomLearner extends AbstractLearner
 
 
   public int act() {
-    return GlobalPRNG.getInstance().choose(numActions);
+    return distribution.nextIntFromTo(0, numActions);
   }
 
   public double getLearningDelta() {

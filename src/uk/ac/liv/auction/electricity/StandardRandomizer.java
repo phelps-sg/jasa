@@ -22,7 +22,6 @@ import uk.ac.liv.auction.stats.*;
 
 import uk.ac.liv.util.*;
 
-import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 
 import java.util.*;
@@ -31,9 +30,12 @@ import java.io.Serializable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+//import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
+
+import cern.jet.random.engine.RandomEngine;
+import cern.jet.random.engine.RandomSeedGenerator;
 
 public class StandardRandomizer
     implements Parameterizable, Serializable {
@@ -46,7 +48,7 @@ public class StandardRandomizer
 
   protected ElectricityExperiment experiment;
   
-  protected RandomElement privValuePRNG;
+  protected RandomEngine privValuePRNG;
   
   protected long[] seeds;
 
@@ -80,8 +82,8 @@ public class StandardRandomizer
     this.auction = experiment.auction;
   }
 
-  public double randomValue( RandomElement prng, double min, double max ) {
-    return prng.uniform(min, max);
+  public double randomValue( RandomEngine prng, double min, double max ) {
+    return min + prng.raw() * (max - min);
   }
 
   public double randomPrivateValue( double min, double max ) {
@@ -124,11 +126,10 @@ public class StandardRandomizer
 
   protected void generatePRNGseeds( int numIterations ) {
     seeds = new long[numIterations];
-    long currentSeed = GlobalPRNG.getInstance().choose(1,1023);    
-    for( int i=0; i<numIterations; i++ ) {
-    	seeds[i] = currentSeed;
-    	currentSeed += GlobalPRNG.getInstance().choose(1,1023);    	      
-    }    
+    RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
+    for ( int i = 0; i < numIterations; i++ ) {
+      seeds[i] = seedGenerator.nextSeed();
+    }
   }
 
 

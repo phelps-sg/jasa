@@ -29,7 +29,9 @@ import uk.ac.liv.util.CummulativeDistribution;
 
 import uk.ac.liv.prng.*;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+//import edu.cornell.lassp.houle.RngPack.RandomElement;
+
+import cern.jet.random.engine.RandomSeedGenerator;
 
 import java.util.*;
 
@@ -67,7 +69,7 @@ public abstract class ElectricityTest extends TestCase {
   protected CummulativeDistribution mPB, mPS, eA;
 
   protected int ns, nb, cs, cb;
-
+  
   static final int ITERATIONS = 100;
   static final int MAX_ROUNDS = 1000;
   static final int K = 40;
@@ -163,9 +165,9 @@ public abstract class ElectricityTest extends TestCase {
 
     seeds = new long[ITERATIONS];
     
-    RandomElement prng = GlobalPRNG.getInstance();
+    RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
     for( int i=0; i<ITERATIONS; i++ ) {      
-    	seeds[i] = (long) prng.choose(0, Integer.MAX_VALUE);      
+    	seeds[i] = (long) seedGenerator.nextSeed();      
     }
     logger.info("done.");
   }
@@ -183,21 +185,7 @@ public abstract class ElectricityTest extends TestCase {
     // Stick with default fixed valuation
   }
 
-  public void randomizePrivateValues( double[] values ) {
-    for( int i=0; i<values.length; i++ ) {
-      values[i] = generateRandomPrivateValue();
-    }
-  }
-
-  public void randomizePrivateValues() {
-    randomizePrivateValues(sellerValues);
-    randomizePrivateValues(buyerValues);
-  }
-
-  public double generateRandomPrivateValue() {
-    return GlobalPRNG.getInstance().uniform(MIN_PRIVATE_VALUE, MAX_PRIVATE_VALUE);
-  }
-
+  
   public void traderReport() {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {

@@ -24,7 +24,9 @@ import uk.ac.liv.util.io.DataWriter;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
-import edu.cornell.lassp.houle.RngPack.RandomElement;
+//import edu.cornell.lassp.houle.RngPack.RandomElement;
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -125,7 +127,9 @@ public class QLearner extends AbstractLearner
    * The best action for the current state
    */
   protected int bestAction;
-
+  
+  protected Uniform randomActionDistribution;
+  
   static final double DEFAULT_EPSILON = 0.2;
   static final double DEFAULT_LEARNING_RATE = 0.5;
   static final double DEFAULT_DISCOUNT_RATE = 0.8;
@@ -174,7 +178,8 @@ public class QLearner extends AbstractLearner
     currentState = 0;
     previousState = 0;
     bestAction = 0;
-    lastActionChosen = 0;
+    lastActionChosen = 0;   
+    randomActionDistribution = new Uniform(GlobalPRNG.getInstance());    
   }
 
 
@@ -223,9 +228,10 @@ public class QLearner extends AbstractLearner
 
 
   public int act() {
-  	RandomElement prng = GlobalPRNG.getInstance();    
-    if ( prng.uniform(0, 1) <= epsilon ) {
-      lastActionChosen = prng.choose(0, numActions-1);
+  	RandomEngine prng = GlobalPRNG.getInstance();    
+    if ( prng.raw() <= epsilon ) {
+      //lastActionChosen = prng.choose(0, numActions-1);
+      lastActionChosen = randomActionDistribution.nextIntFromTo(0, numActions-1);
     } else {
       lastActionChosen = bestAction(currentState);
     }

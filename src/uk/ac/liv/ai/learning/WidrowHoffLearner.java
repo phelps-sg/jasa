@@ -20,6 +20,9 @@ import uk.ac.liv.util.Prototypeable;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.Uniform;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -50,6 +53,9 @@ public class WidrowHoffLearner extends AbstractLearner
    * The current amount of adjustment to the output.
    */
   protected double delta;
+  
+  protected AbstractContinousDistribution randomParamDistribution =
+    new Uniform(0.1, 0.4, GlobalPRNG.getInstance());
 
   public static final double DEFAULT_LEARNING_RATE = 0.1;
 
@@ -118,7 +124,7 @@ public class WidrowHoffLearner extends AbstractLearner
 
 
   public void randomInitialise() {
-    learningRate = GlobalPRNG.getInstance().uniform(0.1, 0.4);       
+    learningRate = randomParamDistribution.nextDouble();       
   }
 
   public double getCurrentOutput() {
