@@ -125,7 +125,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * The bidding strategy for this trader.
    * The default strategy is to bid truthfully for a single unit.
    */
-  protected Strategy strategy = new TruthTellingStrategy(this);
+  protected Strategy strategy = null;
 
   /**
    * The profit made in the last round.
@@ -176,19 +176,19 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * @param isSeller      Whether or not this trader is a seller.
    */
   public AbstractTraderAgent( int stock, double funds, double privateValue,
-                                boolean isSeller, Strategy strategy ) {
+                                boolean isSeller ) {
     id = idAllocator.nextId();
     initialStock = stock;
     initialFunds = funds;
     this.valuer = new FixedValuer(privateValue);
     this.isSeller = isSeller;
-    this.strategy = strategy;
     initialise();
   }
 
   public AbstractTraderAgent( int stock, double funds, double privateValue,
-                                boolean isSeller ) {
-    this(stock, funds, privateValue, isSeller, null);
+                                boolean isSeller, Strategy strategy ) {
+    this(stock, funds, privateValue, isSeller);
+    this.strategy = strategy;
   }
 
   public AbstractTraderAgent( int stock, double funds ) {
