@@ -43,8 +43,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
- * An implementation of the symetric supply and demand ZIP experiment
- * described in
+ * An implementation of Cliff's symetric supply and demand ZIP experiment.
+ * See:
  *
  * <p>
  * "Minimal Intelligence Agents for Bargaining Behaviours in

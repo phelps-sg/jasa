@@ -21,7 +21,6 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.stats.*;
 
 import uk.ac.liv.ai.learning.Learner;
 import uk.ac.liv.ai.learning.StochasticLearner;
@@ -55,7 +54,7 @@ import org.apache.log4j.PropertyConfigurator;
  * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
  * <td valign=top>(the class of auction to use)</td></tr>
  *
- * <tr><td valign=top><i>base</i><tt>.numagenttypes</tt><br>
+ * <tr><td valign=top><i>base</i><tt>.agenttype.</tt><i>n</i><br>
  * <font size=-1>int</font></td>
  * <td valign=top>(the number of different agent types)</td></tr>
  *
@@ -72,12 +71,6 @@ public class MarketSimulation implements Parameterizable, Runnable,
                                           Serializable {
 
   protected RoundRobinAuction auction;
-
-  protected MarketDataLogger marketData;
-
-  protected MarketStats stats;
-
-  protected boolean gatherStats;
 
   protected long prngSeed;
 
