@@ -32,9 +32,11 @@ public interface AuctionReport {
   public void generateReport();
   
   /**
-   *  Returns a Map of all of the variables, such as market efficiency,
-   *  that are produced in the report.  The Map maps variables names
-   *  onto values.
+   * Returns a Map of all of the variables, such as market efficiency, that are
+   * produced in the report. The Map maps variables, represented by objects of
+   * type ReportVariable, onto values, which may be of any class.  
+   * 
+   * @seealso AuctionVariable
    */
   public Map getVariables();
   
