@@ -188,13 +188,20 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
                                                 AbstractTraderAgent.class);
       agents[i].setup(parameters, base.push(P_AGENT));
       agents[i].setIsSeller(false);
-      logger.debug("Configured agent " + agents[i]);
       auction.register(agents[i]);
+      logger.debug("Configured agent " + agents[i]);
     }
 
     resultsFileName =
         parameters.getStringWithDefault(base.push(P_RESULTS), null,
                                          resultsFileName);
+    try {
+      results = new CSVWriter(new FileOutputStream(resultsFileName),
+                               numStrategies * 2);
+    } catch (FileNotFoundException e) {
+      logger.error(e);
+      throw new Error(e);
+    }
 
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + prngSeed + "\n");
@@ -208,13 +215,6 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
 
   public void run() {
-    try {
-      results = new CSVWriter(new FileOutputStream(resultsFileName),
-                              numStrategies * 2);
-    } catch ( FileNotFoundException e ) {
-      logger.error(e);
-      throw new Error(e);
-    }
     Partitioner partitioner = new Partitioner(numAgents, numStrategies);
     while ( partitioner.hasNext() ) {
       int[] partition = (int[]) partitioner.next();

@@ -18,6 +18,9 @@ package uk.ac.liv.auction.stats;
 import java.util.List;
 import java.util.LinkedList;
 
+import ec.util.ParameterDatabase;
+import ec.util.Parameter;
+
 import uk.ac.liv.auction.core.*;
 
 /**
@@ -28,16 +31,20 @@ import uk.ac.liv.auction.core.*;
  * @version $Revision$
  */
 
-public class ListMarketDataLogger implements MarketDataLogger {
+public class ListMarketDataLogger extends AbstractMarketDataLogger {
 
   protected List quoteLog = null;
   protected List transPriceLog = null;
   protected List shoutLog = null;
 
-  protected RoundRobinAuction auction;
 
   public ListMarketDataLogger() {
+    super();
     initialise();
+  }
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
   }
 
   public void setQuoteLog( List quoteLog ) { this.quoteLog = quoteLog; }
@@ -94,16 +101,21 @@ public class ListMarketDataLogger implements MarketDataLogger {
   public void finalReport() {
   }
 
-  public void endOfRound() {
-    // Do nothing
-  }
-
-  public void endOfDay() {
-    // Do nothing
-  }
-
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
   }
+
+  public void roundClosed( Auction auction ) {
+    // Do nothing
+  }
+
+  public void auctionClosed( Auction auction ) {
+    // Do nothing
+  }
+
+  public void endOfDay( Auction auction ) {
+    // Do nothing
+  }
+
 
 }

@@ -161,9 +161,6 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
     }
   }
 
-  public void endOfDay() {
-    //TODO
-  }
 
   public void reset() {
     initialise();

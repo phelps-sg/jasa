@@ -333,7 +333,7 @@ public abstract class GPElectricityTradingProblem extends GPProblem {
       if ( verbose ) {
         System.out.println("Post randomization stats = " + stats);
       }
-    } while ( ! stats.getEquilibriaStats().equilibriaExists() );
+    } while ( ! stats.equilibriaExists() );
   }
 
 

@@ -13,19 +13,16 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.electricity;
+package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.core.*;
 
-public class ParameterizedElectricityStats extends ElectricityStats {
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
+public interface EndOfDayListener extends AuctionEventListener {
 
-  public ParameterizedElectricityStats() {
-    super();
-  }
+  public void endOfDay( Auction auction );
 
-  public double calculateEquilibriumPrice() {
-    double k = ((ParameterizablePricing) auction.getAuctioneer()).getK();
-    return getMinPrice()*k + getMaxPrice()*(1-k);
-  }
 
 }

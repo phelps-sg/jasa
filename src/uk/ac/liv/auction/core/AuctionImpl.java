@@ -23,6 +23,8 @@ import uk.ac.liv.util.Resetable;
 import java.io.PrintStream;
 
 import java.util.Observable;
+import java.util.LinkedList;
+import java.util.Iterator;
 
 
 /**
@@ -87,6 +89,15 @@ public abstract class AuctionImpl extends Observable
    * The optional MarketDataLogger to log data to.
    */
   protected MarketDataLogger logger = null;
+
+  protected LinkedList roundClosedListeners = new LinkedList();
+
+  protected LinkedList endOfDayListeners = new LinkedList();
+
+  protected LinkedList auctionClosedListeners = new LinkedList();
+
+  protected LinkedList[] auctionEventListeners = {
+      roundClosedListeners, endOfDayListeners, auctionClosedListeners };
 
 
   public AuctionImpl( String name, MarketDataLogger logger ) {
@@ -154,6 +165,8 @@ public abstract class AuctionImpl extends Observable
    */
   public void setMarketDataLogger( MarketDataLogger logger ) {
     this.logger = logger;
+    removeAuctionEventListener(logger);
+    addAuctionEventListener(logger);
   }
 
   /**
@@ -237,13 +250,49 @@ public abstract class AuctionImpl extends Observable
    */
   public void addMarketDataLogger( MarketDataLogger newLogger ) {
     MarketDataLogger oldLogger = logger;
-    logger = new CombiMarketDataLogger();
+    setMarketDataLogger(new CombiMarketDataLogger());
     if ( oldLogger != null ) {
       ( (CombiMarketDataLogger) logger).addLogger(oldLogger);
     }
     ((CombiMarketDataLogger) logger).addLogger(newLogger);
   }
 
+
+  public void addAuctionEventListener( AuctionEventListener listener ) {
+    for( int i=0; i<auctionEventListeners.length; i++ ) {
+      auctionEventListeners[i].add(listener);
+    }
+  }
+
+  public void removeAuctionEventListener( AuctionEventListener listener ) {
+    for( int i=0; i<auctionEventListeners.length; i++ ) {
+     auctionEventListeners[i].remove(listener);
+    }
+  }
+
+  public void informAuctionClosed() {
+    Iterator i = auctionClosedListeners.iterator();
+    while (i.hasNext()) {
+      AuctionClosedListener listener = (AuctionClosedListener) i.next();
+      listener.auctionClosed(this);
+    }
+  }
+
+  public void informEndOfDay() {
+    Iterator i = endOfDayListeners.iterator();
+    while (i.hasNext()) {
+      EndOfDayListener listener = (EndOfDayListener) i.next();
+      listener.endOfDay(this);
+    }
+  }
+
+  public void informRoundClosed() {
+    Iterator i = roundClosedListeners.iterator();
+    while (i.hasNext()) {
+      RoundClosedListener listener = (RoundClosedListener) i.next();
+      listener.roundClosed(this);
+    }
+  }
 
 
   public String toString() {

@@ -245,6 +245,7 @@ public class RoundRobinAuction extends AuctionImpl
                                                                  null,
                                                                  MarketDataLogger.class);
       logger.setAuction(this);
+      addAuctionEventListener(logger);
 
     } catch ( ParamClassLoadException e ) {
       logger = null;
@@ -300,7 +301,7 @@ public class RoundRobinAuction extends AuctionImpl
    */
   public void register( TraderAgent trader ) {
     registeredTraders.add(trader);
-    activate(trader);
+    activate((RoundRobinTrader) trader);
   }
 
   /**
@@ -327,42 +328,14 @@ public class RoundRobinAuction extends AuctionImpl
     }
   }
 
+
   public void informAuctionOpen() {
-    Iterator i = activeTraders.iterator();
-    while ( i.hasNext() ) {
-      RoundRobinTrader trader = (RoundRobinTrader) i.next();
-      trader.auctionOpen(this);
-    }
-  }
-
-  public void informAuctionClosed() {
-    Iterator i = registeredTraders.iterator();
-    while ( i.hasNext() ) {
-      RoundRobinTrader trader = (RoundRobinTrader) i.next();
-      trader.auctionClosed(this);
-    }
-  }
-
-  public void informEndOfDay() {
-    Iterator i = registeredTraders.iterator();
-    while ( i.hasNext() ) {
-      RoundRobinTrader trader = (RoundRobinTrader) i.next();
-      trader.endOfDay(this);
-    }
-  }
-
-
-  public void informRoundClosed() {
-    Iterator i = activeTraders.iterator();
-    while ( i.hasNext() ) {
-      RoundRobinTrader trader = (RoundRobinTrader) i.next();
-      trader.roundClosed(this);
-    }
-    if ( logger != null ) {
-      logger.endOfRound();
-    }
-  }
-
+     Iterator i = activeTraders.iterator();
+     while ( i.hasNext() ) {
+       RoundRobinTrader trader = (RoundRobinTrader) i.next();
+       trader.auctionOpen(this);
+     }
+   }
 
 
   /**
@@ -747,6 +720,7 @@ public class RoundRobinAuction extends AuctionImpl
     while ( i.hasNext() ) {
       TraderAgent defunct = (TraderAgent) i.next();
       activeTraders.remove(defunct);
+      removeAuctionEventListener((RoundRobinTrader) defunct);
     }
   }
 
@@ -755,10 +729,20 @@ public class RoundRobinAuction extends AuctionImpl
     numTraders = 0;
     round = 0;
     day = 0;
+
     acceptedShouts.clear();
     defunctTraders.clear();
     activeTraders.clear();
+    for( int i=0; i<auctionEventListeners.length; i++ ) {
+      auctionEventListeners[i].clear();
+    }
+
     activeTraders.addAll(registeredTraders);
+    for( int i=0; i<auctionEventListeners.length; i++ ) {
+      auctionEventListeners[i].addAll(registeredTraders);
+      auctionEventListeners[i].add(logger);
+    }
+
     numTraders = activeTraders.size();
     shoutsProcessed = false;
     paused = false;
@@ -766,8 +750,9 @@ public class RoundRobinAuction extends AuctionImpl
     isRunning = false;
   }
 
-  protected void activate( TraderAgent agent ) {
+  protected void activate( RoundRobinTrader agent ) {
     activeTraders.add(agent);
+    addAuctionEventListener(agent);
     numTraders++;
   }
 
@@ -800,9 +785,6 @@ public class RoundRobinAuction extends AuctionImpl
   protected void endOfDay() {
     log4jLogger.debug("endOfDay()");
     informEndOfDay();
-    if ( logger != null ) {
-      logger.endOfDay();
-    }
     day++;
     log4jLogger.debug("new day = " + day + " of " + maximumDays);
     round = 0;

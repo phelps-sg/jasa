@@ -34,14 +34,15 @@ heuristic.strategy.2.scaling = 0.0001
 heuristic.strategy.2.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 
 heuristic.agent = uk.ac.liv.auction.zi.ZITraderAgent
-heuristic.agent.initialtradeentitlement = 10000
+heuristic.agent.initialtradeentitlement = 1
 # Dummy valuer
-heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomValuer
+heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 # Dummy strategy 
 heuristic.agent.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
 heuristic.auction = uk.ac.liv.auction.core.RoundRobinAuction
-heuristic.auction.maximumrounds = 1000
+heuristic.auction.lengthofday = 300
+heuristic.auction.maximumdays = 20
 
 heuristic.auction.logger = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 

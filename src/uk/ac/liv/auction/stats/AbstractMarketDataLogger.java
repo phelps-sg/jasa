@@ -18,6 +18,7 @@ package uk.ac.liv.auction.stats;
 import java.io.Serializable;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Parameterizable;
 
@@ -49,5 +50,6 @@ public abstract class AbstractMarketDataLogger
     this.auction = auction;
     logger.debug("Set auction to " + auction);
   }
+
 
 }

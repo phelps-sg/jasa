@@ -19,6 +19,9 @@ import uk.ac.liv.util.Resetable;
 
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.RoundClosedListener;
+import uk.ac.liv.auction.core.AuctionClosedListener;
+import uk.ac.liv.auction.core.EndOfDayListener;
 
 /**
  * <p>
@@ -30,7 +33,9 @@ import uk.ac.liv.auction.core.Shout;
  * @version $Revision$
  */
 
-public interface RoundRobinTrader extends TraderAgent, Resetable {
+public interface RoundRobinTrader
+    extends TraderAgent, Resetable,
+     RoundClosedListener,  AuctionClosedListener, EndOfDayListener {
 
  /**
    * Request a shout from this trader.  The trader will perform any bidding activity
@@ -41,33 +46,7 @@ public interface RoundRobinTrader extends TraderAgent, Resetable {
    */
   public void requestShout( Auction auction );
 
-  /**
-   * Inform the trader that the auction is open.
-   *
-   * @param auction The auction that has just opened.
-   */
   public void auctionOpen( Auction auction );
-
-  /**
-   * Inform the trader that the auction is closed.
-   *
-   * @param auction The auction that has just closed.
-   */
-  public void auctionClosed( Auction auction );
-
-  /**
-   * Inform the trader that a trading day has ended.
-   *
-   * @param auction The auction in which a day has ended.
-   */
-  public void endOfDay( Auction auction );
-
-  /**
-   * Inform the trader that the current auction round is closed.
-   *
-   * @param auction The auction in which a round has closed.
-   */
-  public void roundClosed( Auction auction );
 
   /**
    * This method is used by an auction to notify a buyer that one of

@@ -13,19 +13,21 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.electricity;
+package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.core.*;
 
-public class ParameterizedElectricityStats extends ElectricityStats {
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
+public interface RoundClosedListener extends AuctionEventListener {
 
-  public ParameterizedElectricityStats() {
-    super();
-  }
+  /**
+   * Notify us that the current auction round is closed.
+   *
+   * @param auction The auction in which a round has closed.
+   */
+  public void roundClosed( Auction auction );
 
-  public double calculateEquilibriumPrice() {
-    double k = ((ParameterizablePricing) auction.getAuctioneer()).getK();
-    return getMinPrice()*k + getMaxPrice()*(1-k);
-  }
 
 }

@@ -25,6 +25,7 @@ import ec.util.Parameter;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
@@ -131,20 +132,28 @@ public class CombiMarketDataLogger
     }
   }
 
-  public void endOfRound() {
+  public void auctionClosed( Auction auction ) {
+    Iterator i = loggers.iterator();
+    while (  i.hasNext() ) {
+      MarketDataLogger logger = (MarketDataLogger) i.next();
+      logger.auctionClosed(auction);
+    }
+  }
+
+  public void roundClosed( Auction auction ) {
     Iterator i = loggers.iterator();
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.endOfRound();
+      logger.roundClosed(auction);
     }
   }
 
 
-  public void endOfDay() {
+  public void endOfDay( Auction auction ) {
     Iterator i = loggers.iterator();
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.endOfDay();
+      logger.endOfDay(auction);
     }
   }
 

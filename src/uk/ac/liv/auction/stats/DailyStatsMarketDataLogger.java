@@ -16,6 +16,8 @@
 
 package uk.ac.liv.auction.stats;
 
+import uk.ac.liv.auction.core.Auction;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -56,7 +58,7 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
     return ((CummulativeStatCounter[]) dailyStats.get(day))[TRANS_PRICE];
   }
 
-  public void endOfDay() {
+  public void endOfDay( Auction auction ) {
     // Make a copy of the current stats, reset them and record
     try {
       CummulativeStatCounter[] currentStats =

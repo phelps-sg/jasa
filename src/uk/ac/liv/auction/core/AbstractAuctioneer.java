@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.core;
 
 import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Prototypeable;
 
 import org.apache.log4j.Logger;
 
@@ -29,7 +30,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
+public abstract class AbstractAuctioneer
+    implements Auctioneer, Resetable, Prototypeable, Cloneable {
 
   /**
    * The auction container for this auctioneer.
@@ -39,7 +41,7 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
   /**
    * The shout engine for this auction.
    */
-  final protected ShoutEngine shoutEngine = new FourHeapShoutEngine();
+  protected ShoutEngine shoutEngine = new FourHeapShoutEngine();
 
   /**
    * The current quote
@@ -57,6 +59,16 @@ public abstract class AbstractAuctioneer implements Auctioneer, Resetable {
     this.auction = auction;
   }
 
+  public Object protoClone() {
+    try {
+      AbstractAuctioneer clone = (AbstractAuctioneer) clone();
+      clone.shoutEngine = new FourHeapShoutEngine();
+      clone.reset();
+      return clone;
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
+  }
 
   /**
    * Code for handling a new shout in the auction.

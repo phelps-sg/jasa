@@ -116,6 +116,18 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
     dataUpdated();
   }
 
+  public void auctionClosed( Auction auction ) {
+    // Do nothing
+  }
+
+  public void endOfDay( Auction auction ) {
+    // Do nothing
+  }
+
+  public void roundClosed( Auction auction ) {
+    // Do nothing
+  }
+
   public void dataUpdated() {
   }
 
@@ -123,13 +135,6 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
   public void finalReport() {
   }
 
-  public void endOfRound() {
-    // Do nothing
-  }
-
-  public void endOfDay() {
-    // Do nothing
-  }
 
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;

@@ -88,9 +88,9 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
   }
 
 
-  public void endOfRound() {
+  public void roundClosed( Auction auction ) {
 
-    logger.debug("endOfRound()");
+    logger.debug("roundClosed(" + auction + ")");
 
     update(askQuoteLog, askQuoteStats);
     update(bidQuoteLog, bidQuoteStats);
@@ -106,9 +106,6 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
     round++;
   }
 
-  public void endOfDay() {
-    //TODO
-  }
 
 
   protected void update( DataWriter writer, CummulativeStatCounter stats ) {

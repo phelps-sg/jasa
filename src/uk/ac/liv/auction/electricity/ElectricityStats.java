@@ -23,13 +23,12 @@ import ec.util.ParameterDatabase;
 
 import java.io.Serializable;
 
-import uk.ac.liv.util.Resetable;
-
 import uk.ac.liv.auction.core.*;
-
 import uk.ac.liv.auction.stats.*;
-
 import uk.ac.liv.auction.agent.*;
+
+import uk.ac.liv.util.Resetable;
+import uk.ac.liv.util.Prototypeable;
 
 import org.apache.log4j.Logger;
 
@@ -50,12 +49,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class ElectricityStats implements Serializable, Cloneable, MarketStats {
-
-  /**
-   * The auction for which we are calculating market statistics.
-   */
-  protected RoundRobinAuction auction;
+public class ElectricityStats extends EquilibriaStats implements Serializable, Cloneable {
 
   /**
    * The relative concentration of sellers to buyers.
@@ -66,26 +60,6 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
    * The relative generating-capacity of buyers to sellers.
    */
   protected double rCap;
-
-  /**
-   * The profits of the buyers in competitive equilibrium.
-   */
-  protected double pBCE = 0;
-
-  /**
-   * The profits of the sellers in competitive equilibrium.
-   */
-  protected double pSCE = 0;
-
-  /**
-   * The profits of the buyers in the actual auction.
-   */
-  protected double pBA;
-
-  /**
-   * The profits of the sellers in the actual auction.
-   */
-  protected double pSA;
 
   /**
    * The market-power of buyers.
@@ -143,11 +117,6 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   protected int sellerCap;
 
   /**
-   * The equilibrium calculations for this auction.
-   */
-  protected EquilibriaStats equilibStats = null;
-
-  /**
    * The approximated equilibrium price.
    */
   protected double equilibPrice;
@@ -168,25 +137,8 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   public ElectricityStats() {
   }
 
-  /**
-   * @deprecated
-   */
-  public ElectricityStats( long minPrice, long maxPrice, RoundRobinAuction auction ) {
-    this(auction);
-  }
-
-  /**
-   * @deprecated
-   */
-  public void setPriceRange( long minPrice, long maxPrice ) {
-  }
-
   public void setup( ParameterDatabase parameters, Parameter base ) {
-  }
-
-
-  public void setAuction( RoundRobinAuction auction ) {
-    this.auction = auction;
+    super.setup(parameters, base);
   }
 
 
@@ -204,10 +156,7 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     zeroTotals();
     if ( equilibrium ) {
       calculateEquilibria();
-      zeroEquilibriumTotals();
       equilibPrice = calculateEquilibriumPrice();
-      pBCE = equilibStats.getPBCE();
-      pSCE = equilibStats.getPSCE();
     }
 
     auctionAge = calculateAuctionAge();
@@ -218,11 +167,9 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       if ( trader.isSeller() ) {
         numSellers++;
         sellerCap += getCapacity(trader);
-        pSA += getProfits(trader);
       } else {
         numBuyers++;
         buyerCap += getCapacity(trader);
-        pBA += getProfits(trader);
       }
     }
 
@@ -232,17 +179,16 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     mPS = (pSA - pSCE) / pSCE;
     eA = (pBA + pSA) / (pBCE + pSCE) * 100;
 
-    // calculateStrategicMarketPower();
+    calculateStrategicMarketPower();
   }
 
 
   protected void calculateEquilibria() {
-    if ( equilibStats == null ) {
-      equilibStats = new EquilibriaStats(auction);
-      equilibStats.calculate();
-    } else {
-      equilibStats.recalculate();
-    }
+    super.calculate();
+  }
+
+  protected double calculateEquilibriumPrice() {
+    return calculateMidEquilibriumPrice();
   }
 
 
@@ -256,15 +202,6 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
   }
 
 
-  protected void zeroEquilibriumTotals() {
-    pSCE = 0;
-    pBCE = 0;
-  }
-
-
-  public double calculateEquilibriumPrice() {
-    return equilibStats.calculateMidEquilibriumPrice();
-  }
 
 
   public double equilibriumProfits( AbstractTraderAgent trader ) {
@@ -329,13 +266,12 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       + "\n\tpSA:" + pSA + "\n\tpBCE:" + pBCE + "\n\tpSCE:" + pSCE
       + "\n\tpST:" + pST + "\n\tpBT:" + pBT
       + "\n\teA:" + eA
-      + "\n\tequilibStats:" + equilibStats
       + "\n)";
   }
 
   protected void simulateTruthfulBidding() {
-    Auctioneer auctioneer = auction.getAuctioneer();
-    ((Resetable) auctioneer).reset();
+    Auctioneer auctioneer = (Auctioneer)
+        ((Prototypeable) auction.getAuctioneer()).protoClone();
     LinkedList shouts = new LinkedList();
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
@@ -345,6 +281,8 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
       shouts.add(truth);
       try {
         auctioneer.newShout(truth);
+      } catch ( NotAnImprovementOverQuoteException e ) {
+        // do nothing
       } catch ( IllegalShoutException e ) {
         e.printStackTrace();
         throw new Error(e.getMessage());
@@ -464,20 +402,26 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
     return pBCE;
   }
 
-  /**
-   * Get the equilibrium market statistics.
-   */
-  public EquilibriaStats getEquilibriaStats() {
-    return equilibStats;
+  public double getRCAP() {
+    return rCap;
   }
 
+  public double getRCON() {
+    return rCon;
+  }
+
+
   public void generateReport() {
-    getEquilibriaStats().generateReport();
+    super.generateReport();
     logger.info("NPT Auction statistics");
     logger.info("----------------------");
     logger.info("Market efficiency (EA) = " + getEA());
     logger.info("Buyer market-power (MPB) = " + getMPB());
     logger.info("Seller market-power (MPS) = " + getMPS());
+    logger.info("Relative generating capacity (RCAP) = " + getRCAP());
+    logger.info("Relative concentration (RCON) = " + getRCON());
+    logger.info("Strategic buyer market-power (SMPB) = " + getSMPB());
+    logger.info("Strategic seller market-power (SMPS) = " + getSMPS());
   }
 
 }

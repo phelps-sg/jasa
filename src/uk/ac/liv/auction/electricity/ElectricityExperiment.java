@@ -416,9 +416,8 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
     pBCE.newData(stats.getPBCE());
     pSCE.newData(stats.getPSCE());
 
-    EquilibriaStats equilibria = stats.getEquilibriaStats();
-    double ep = (equilibria.getMinPrice() + equilibria.getMaxPrice()) / 2;
-    double eq = (equilibria.getMinQuantity() + equilibria.getMaxQuantity()) / 2;
+    double ep = (stats.getMinPrice() + stats.getMaxPrice()) / 2;
+    double eq = (stats.getMinQuantity() + stats.getMaxQuantity()) / 2;
     equilibPrice.newData(ep);
     equilibQty.newData(eq);
 

@@ -81,6 +81,7 @@ public class EquilibriaStats extends DirectRevelationStats
    */
   protected double pSA = 0;
 
+
   static Logger logger = Logger.getLogger(EquilibriaStats.class);
 
   public EquilibriaStats( RoundRobinAuction auction ) {

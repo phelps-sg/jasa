@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 /**
  * <p>
  * An implementation of MarketStats that can be used configure
- * a combination of different reports
+ * a combination of different reports.
  * </p>
  *
  * <p><b>Parameters</b><br></p>

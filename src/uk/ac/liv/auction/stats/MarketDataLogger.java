@@ -18,6 +18,9 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RoundClosedListener;
+import uk.ac.liv.auction.core.EndOfDayListener;
+import uk.ac.liv.auction.core.AuctionClosedListener;
 
 /**
  * The interface used to log market-data on an auction as it progresses.
@@ -29,7 +32,8 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
  * @author Steve Phelps
  * @version $Revision$
  */
-public interface MarketDataLogger {
+public interface MarketDataLogger
+    extends RoundClosedListener, EndOfDayListener, AuctionClosedListener  {
 
   /**
    * Record the market quote.
@@ -56,10 +60,6 @@ public interface MarketDataLogger {
    * @param shout The shout that was placed in the auction.
    */
   public void updateShoutLog( int time, Shout shout );
-
-  public void endOfRound();
-
-  public void endOfDay();
 
   /**
    * Generate a report on the market data.  Implementing classes

@@ -20,6 +20,7 @@ import java.io.Serializable;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.CummulativeStatCounter;
 import uk.ac.liv.util.Resetable;
@@ -141,11 +142,16 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     }
   }
 
-  public void endOfRound() {
+
+  public void auctionClosed( Auction auction ) {
     // Do nothing
   }
 
-  public void endOfDay() {
+  public void endOfDay( Auction auction ) {
+    // Do nothing
+  }
+
+  public void roundClosed( Auction auction ) {
     // Do nothing
   }
 

@@ -18,6 +18,7 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.Auction;
 
 import java.util.*;
 
@@ -81,7 +82,8 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   }
 
 
-  public void endOfRound() {
+
+  public void roundClosed( Auction auction ) {
     markMatched(asks);
     markMatched(bids);
     if ( getNumberOfTrades() > memorySize ) {
@@ -89,6 +91,13 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
     }
   }
 
+  public void auctionClosed( Auction auction ) {
+    // Do nothing
+  }
+
+  public void endOfDay( Auction auction ) {
+    // Do nothing
+  }
 
   public int getNumberOfTrades() {
     return acceptedShouts.size() / 2;
@@ -159,8 +168,6 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
   }
 
 
-  public void endOfDay() {
-  }
 
 
   public void finalReport() {
