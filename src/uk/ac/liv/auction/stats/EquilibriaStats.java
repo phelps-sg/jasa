@@ -175,7 +175,7 @@ public class EquilibriaStats extends DirectRevelationStats
   }
 
   protected void calculateEquilibriaPriceRange() {
-    shoutEngine.printState();
+//    shoutEngine.printState();
     minPrice = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine.getHighestUnmatchedBid());
     maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
     if ( ! (minPrice <= maxPrice) ) {

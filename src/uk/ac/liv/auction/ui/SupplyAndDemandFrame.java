@@ -89,12 +89,17 @@ public class SupplyAndDemandFrame extends JFrame {
     );
     contentPane.add(updateButton);
 
-    setTitle(TITLE + " for " + auction.getName() + " at time " +
-               auction.getAge());
+    updateTitle();
   }
 
   public void updateGraph() {
     graph.setModel(constructSupplyAndDemandModel());
+    updateTitle();
+  }
+
+  public void updateTitle() {
+    setTitle(TITLE + " for " + auction.getName() + " at time " +
+              auction.getAge());
   }
 
   protected Graph2DModel constructSupplyAndDemandModel() {

@@ -458,6 +458,10 @@ public class RoundRobinAuction extends AuctionImpl
       ((Resetable) logger).reset();
     }
 
+    if ( marketStats != null && marketStats instanceof Resetable ) {
+      ((Resetable) marketStats).reset();
+    }
+
     Iterator i = getTraderIterator();
     while ( i.hasNext() ) {
       RoundRobinTrader t = (RoundRobinTrader) i.next();

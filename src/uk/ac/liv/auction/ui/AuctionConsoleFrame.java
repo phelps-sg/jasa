@@ -51,6 +51,7 @@ public class AuctionConsoleFrame extends JFrame
   protected JLabel lastShoutLabel;
   protected JLabel roundLabel;
   protected JLabel numTradersLabel;
+
   protected JButton closeAuctionButton;
   protected JButton supplyAndDemandButton;
   protected JButton rerunAuctionButton;
@@ -154,7 +155,7 @@ public class AuctionConsoleFrame extends JFrame
     gridBag.setConstraints(roundLabel, c);
     contentPane.add(roundLabel);
 
-    closeAuctionButton = new JButton("Close");
+    closeAuctionButton = new JButton("Stop");
     c.gridx = 1;
     c.gridy = 5;
     c.ipadx = 0;
@@ -197,8 +198,8 @@ public class AuctionConsoleFrame extends JFrame
     });
 
     JButton reportButton = new JButton("Report");
-    c.gridx = 4;
-    c.gridy = 5;
+    c.gridx = 1;
+    c.gridy = 6;
     c.weightx = 0;
     gridBag.setConstraints(reportButton, c);
     contentPane.add(reportButton);
@@ -209,9 +210,9 @@ public class AuctionConsoleFrame extends JFrame
     });
 
 
-    JButton supplyAndDemandButton = new JButton("Graph S/D");
-    c.gridx = 5;
-    c.gridy = 5;
+    JButton supplyAndDemandButton = new JButton("S/D");
+    c.gridx = 2;
+    c.gridy = 6;
     c.weightx = 0;
     gridBag.setConstraints(supplyAndDemandButton, c);
     contentPane.add(supplyAndDemandButton);
@@ -224,6 +225,7 @@ public class AuctionConsoleFrame extends JFrame
     if ( (graphModel = GraphMarketDataLogger.getSingletonInstance()) != null ) {
       JLineGraph graph = new JLineGraph(graphModel);
       graph.setMinimumSize(new Dimension(600,200));
+      graph.setPreferredSize(new Dimension(600,200));
       c.gridx = 0;
       c.gridy = 0;
       c.gridwidth = 7;
