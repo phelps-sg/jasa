@@ -80,12 +80,10 @@ public class DataSeriesWriter extends DefaultGraph2DModel.DataSeries
   }
 
   public void newData( double datum ) {
-    logger.debug("newData(" + datum + ")");
     if ( isXCoordinate ) {
       xCoord = datum;
     } else {
       SeriesDatum d = new SeriesDatum(xCoord, datum);
-      logger.debug("Adding " + d);
       data.add(d);
     }
     isXCoordinate = !isXCoordinate;

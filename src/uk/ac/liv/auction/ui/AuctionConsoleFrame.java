@@ -70,6 +70,8 @@ public class AuctionConsoleFrame extends JFrame
   protected float graphXExtrema = 0f;
   protected GraphMarketDataLogger graphModel;
 
+  protected Font decimalFont = new Font("Monospaced", Font.TRUETYPE_FONT, 10);
+
   protected DecimalFormat currencyFormatter =
       new DecimalFormat("+000000.00;-000000.00");
 
@@ -114,6 +116,7 @@ public class AuctionConsoleFrame extends JFrame
     c.gridy = 1;
     c.weightx = 1;
     gridBag.setConstraints(bidLabel, c);
+    bidLabel.setFont(decimalFont);
     contentPane.add(bidLabel);
 
     JLabel askTextLabel = new JLabel("Ask: ");
@@ -128,6 +131,7 @@ public class AuctionConsoleFrame extends JFrame
     c.gridy = 1;
     c.weightx = 1;
     gridBag.setConstraints(askLabel, c);
+    askLabel.setFont(decimalFont);
     contentPane.add(askLabel);
 
     JLabel lastShoutTextLabel = new JLabel("Last Shout: ");
@@ -141,6 +145,7 @@ public class AuctionConsoleFrame extends JFrame
     c.gridy = 2;
     c.weightx = 1;
     gridBag.setConstraints(lastShoutLabel, c);
+    lastShoutLabel.setFont(decimalFont);
     contentPane.add(lastShoutLabel);
 
     JLabel numTradersTextLabel = new JLabel("Number of traders: ");
@@ -155,6 +160,7 @@ public class AuctionConsoleFrame extends JFrame
     c.gridy = 3;
     c.weightx = 1;
     gridBag.setConstraints(numTradersLabel, c);
+    numTradersLabel.setFont(decimalFont);
     contentPane.add(numTradersLabel);
 
     JLabel roundTextLabel = new JLabel("Round: ");
@@ -169,6 +175,7 @@ public class AuctionConsoleFrame extends JFrame
     c.gridy = 4;
     c.weightx = 1;
     gridBag.setConstraints(roundLabel, c);
+    roundLabel.setFont(decimalFont);
     contentPane.add(roundLabel);
 
     JLabel dayTextLabel = new JLabel("Day: ");
@@ -183,6 +190,7 @@ public class AuctionConsoleFrame extends JFrame
     c.gridy = 4;
     c.weightx = 0;
     gridBag.setConstraints(dayLabel, c);
+    dayLabel.setFont(decimalFont);
     contentPane.add(dayLabel);
 
     closeAuctionButton = new JButton("Stop");
@@ -344,7 +352,7 @@ public class AuctionConsoleFrame extends JFrame
     MarketQuote quote = auction.getQuote();
     currencyFormatter.setMaximumIntegerDigits(6);
     if ( quote != null ) {
-      bidLabel.setText(currencyFormatter.format(((double)quote.getBid())/100));
+      bidLabel.setText(currencyFormatter.format(((double) quote.getBid())/100));
       askLabel.setText(currencyFormatter.format(((double) quote.getAsk())/100));
     }
     Shout lastShout = null;
@@ -375,13 +383,14 @@ public class AuctionConsoleFrame extends JFrame
     logger.debug("update() complete");
   }
 
+
   public void graphSupplyAndDemand() {
     logger.debug("graphSupplyAndDemand()");
     pause();
     new Thread() {
       public void run() {
         SupplyAndDemandFrame graphFrame =
-            new SupplyAndDemandFrame( (RoundRobinAuction) auction);
+            new SupplyAndDemandFrame((RoundRobinAuction) auction);
         graphFrame.pack();
         graphFrame.setVisible(true);
         graphs.add(graphFrame);
@@ -422,17 +431,8 @@ public class AuctionConsoleFrame extends JFrame
           AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
           agent.reset();
         }
-        updateSupplyAndDemandGraphs();
       }
     }.start();
-  }
-
-  public void updateSupplyAndDemandGraphs() {
-    Iterator i = graphs.iterator();
-    while ( i.hasNext() ) {
-      SupplyAndDemandFrame gFrame = (SupplyAndDemandFrame) i.next();
-      gFrame.updateGraph();
-    }
   }
 
   /**
@@ -471,9 +471,6 @@ public class AuctionConsoleFrame extends JFrame
       graph = new JLineGraph(graphModel);
       graphPanel.add(graph, "Graph");
     }
-
-    // Update graphs
-    updateSupplyAndDemandGraphs();
 
     // Start a new auction thread
     auctionRunner = new Thread(auction);
