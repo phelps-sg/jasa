@@ -47,7 +47,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
 public class GPAuctionProblem extends GPCoEvolveAuctionProblem
                                 implements SimpleProblemForm {
 
-  ArrayList strategies;
+  Strategy strategies[];
 
   Vector[] group;
 
@@ -59,14 +59,14 @@ public class GPAuctionProblem extends GPCoEvolveAuctionProblem
     super.setup(state, base);
 
     int numStrategies = numSellers + numBuyers;
-    strategies = new ArrayList(numSellers + numBuyers);
+    strategies = new Strategy[numStrategies];
     for( int i=0; i<numStrategies; i++ ) {
       Parameter strategyBase = base.push(P_STRATEGY+"."+i);
       Strategy s = (Strategy)
         state.parameters.getInstanceForParameter(strategyBase, null,
                                                   Strategy.class);
       ((Parameterizable) s).setup(state.parameters, strategyBase);
-      strategies.add(i, s);
+      strategies[i] = s;      
     }
     group = new Vector[1];
     group[0] = new Vector(1);
@@ -82,7 +82,7 @@ public class GPAuctionProblem extends GPCoEvolveAuctionProblem
 
 
   protected Strategy getStrategy( int i, Vector[] group ) {
-    return (Strategy) strategies.get(i);
+    return strategies[i];
   }
 
 
