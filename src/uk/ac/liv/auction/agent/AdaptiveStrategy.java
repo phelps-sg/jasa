@@ -26,11 +26,23 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 
+/**
+ * A class representing a strategy in which we adapt our bids
+ * using some kind of learning algorithm.
+ *
+ * @author Steve Phelps
+ */
+
 public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
 
-  static final String P_MARKUPSCALE = "markupscale";
+  /**
+   * A scaling factor used to multiply-up the output from
+   * the learning algorithm.
+   */
+  protected double markupScale = 1;
 
-  double markupScale = 1;
+
+  static final String P_MARKUPSCALE = "markupscale";
 
   public AdaptiveStrategy( AbstractTraderAgent agent ) {
     super(agent);
@@ -90,6 +102,9 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
 
   public abstract void calculateReward( Auction auction );
 
+  /**
+   * Get the learning algorithm currently being used by this strategy.
+   */
   public abstract Learner getLearner();
 
 }

@@ -34,7 +34,7 @@ public class DiscreteProbabilityDistribution
     implements Resetable, Serializable {
 
   /**
-   * The probability distribution
+   * The probability distribution.
    */
   protected double p[];
 
@@ -44,7 +44,7 @@ public class DiscreteProbabilityDistribution
   protected int k;
 
   /**
-   * The unform PRNG.
+   * The uniform-distribution PRNG.
    */
   protected MersenneTwisterFast randGenerator = new MersenneTwisterFast();
 

@@ -30,7 +30,7 @@ import java.util.*;
  * @author Steve Phelps
  */
 
-public class MixedStrategy extends FixedQuantityStrategyImpl {
+public class MixedStrategy extends AbstractStrategy {
 
   protected DiscreteProbabilityDistribution probabilities;
 
