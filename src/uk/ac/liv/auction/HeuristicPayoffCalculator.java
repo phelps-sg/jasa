@@ -173,7 +173,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
                                                 AbstractTraderAgent.class);
       agents[i].setup(parameters, base.push(P_BUYER));
       agents[i].setIsSeller(false);
-      logger.debug("Configured seller " + agents[i]);
+      logger.debug("Configured buyer " + agents[i]);
     }
 
     for( int i=numBuyers; i<numAgents; i++ ) {
@@ -182,7 +182,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
                                              AbstractTraderAgent.class);
       agents[i].setup(parameters, base.push(P_SELLER));
       agents[i].setIsSeller(true);
-      logger.debug("Configured buyer " + agents[i]);
+      logger.debug("Configured seller " + agents[i]);
     }
 
     for( int i=0; i<numAgents; i++ ) {

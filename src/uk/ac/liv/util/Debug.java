@@ -17,6 +17,9 @@ package uk.ac.liv.util;
 
 import org.apache.log4j.Logger;
 
+/**
+ * @deprecated
+ */
 public class Debug {
 
   static Logger logger = Logger.getLogger(Debug.class);

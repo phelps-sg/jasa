@@ -20,8 +20,6 @@ import java.util.LinkedList;
 
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.Debug;
-
 /**
  * A utility class for helping auctions to record market data in List
  * collections.
@@ -68,7 +66,7 @@ public class ListMarketDataLogger implements MarketDataLogger {
         transPriceLog.add(new Integer(quantity));
       }
     } catch ( CloneNotSupportedException e ) {
-      Debug.assertTrue("Shouts should be cloneable!", false);
+      throw new AuctionError(e);
     }
   }
 
@@ -79,7 +77,7 @@ public class ListMarketDataLogger implements MarketDataLogger {
         shoutLog.add(shout.clone());
       }
     } catch ( CloneNotSupportedException e ) {
-      Debug.assertTrue("Shouts should be cloneable!", false);
+      throw new AuctionError(e);
     }
   }
 

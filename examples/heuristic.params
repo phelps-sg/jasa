@@ -8,7 +8,7 @@
 
 # Number of games to play per entry in the payoff matrix
 #  (for real experiments should be 2000+)
-heuristic.numsamples = 10
+heuristic.numsamples = 100
 
 # Total number of agents in the game
 heuristic.numagents = 6
@@ -19,32 +19,34 @@ heuristic.strategy.n = 3
 # Kaplan
 heuristic.strategy.0 = uk.ac.liv.auction.agent.KaplanStrategy
 heuristic.strategy.0.t = 10
+heuristic.strategy.0.s = 0.1
 
 # Roth-Erev (NPT mods)
-heuristic.strategy.1 = uk.ac.liv.auction.agent.StimuliResponseStrategy
+heuristic.strategy.1 = uk.ac.liv.auction.agent.PureSimpleStrategy
+heuristic.strategy.1.delta = 0
 heuristic.strategy.1.markupscale = 1
 heuristic.strategy.1.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
 heuristic.strategy.1.learner.k = 100
 
 # ZIP
 heuristic.strategy.2 = uk.ac.liv.auction.zi.ZIPStrategy
-heuristic.strategy.2.scaling = 0.001
+heuristic.strategy.2.scaling = 0.0001
 heuristic.strategy.2.learner = uk.ac.liv.ai.learning.WidrowHoffLearner
 
-# Buyers have valuations in the range (40, 110)
+# Buyers have valuations in the range (80, 150)
 heuristic.buyer = uk.ac.liv.auction.electricity.ElectricityTrader
 heuristic.buyer.capacity = 1
 heuristic.buyer.valuer = uk.ac.liv.auction.agent.RandomValuer
-heuristic.buyer.valuer.minvalue = 40
-heuristic.buyer.valuer.maxvalue = 110
+heuristic.buyer.valuer.minvalue = 80
+heuristic.buyer.valuer.maxvalue = 150
 # Dummy strategy 
 heuristic.buyer.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
-# Sellers have valuations in the range (30, 100)
+# Sellers have valuations in the range (50, 100)
 heuristic.seller = uk.ac.liv.auction.electricity.ElectricityTrader
 heuristic.seller.capacity = 1
 heuristic.seller.valuer = uk.ac.liv.auction.agent.RandomValuer
-heuristic.seller.valuer.minvalue = 30
+heuristic.seller.valuer.minvalue = 50
 heuristic.seller.valuer.maxvalue = 100
 # Dummy strategy
 heuristic.seller.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy

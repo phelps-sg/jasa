@@ -17,7 +17,6 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.agent.TraderAgent;
 
-import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.IdAllocator;
 
 import java.text.DecimalFormat;

@@ -19,7 +19,6 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 
 import ec.util.ParameterDatabase;
@@ -136,8 +135,8 @@ public class DirectRevelationStats implements Resetable, Serializable {
         shoutEngine.newAsk(shout);
        }
     } catch ( DuplicateShoutException e ) {
-      e. printStackTrace();
-      throw new Error(e.getMessage());
+      logger.error(e.getMessage());
+      throw new Error(e);
     }
   }
 

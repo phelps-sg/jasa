@@ -17,8 +17,6 @@
 package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.Debug;
-
 import uk.ac.liv.util.io.DataWriter;
 
 import java.util.*;

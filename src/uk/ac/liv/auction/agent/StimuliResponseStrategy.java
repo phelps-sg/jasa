@@ -21,7 +21,6 @@ import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 
 import ec.util.ParameterDatabase;

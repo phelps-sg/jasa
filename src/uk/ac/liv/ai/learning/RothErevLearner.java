@@ -20,7 +20,6 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.prng.PRNGFactory;
 
-import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Prototypeable;

@@ -18,7 +18,7 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Prototypeable;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -46,9 +46,9 @@ import java.io.Serializable;
  */
 
 public class PureSimpleStrategy extends FixedQuantityStrategyImpl
-                                    implements Serializable {
+                                    implements Prototypeable, Serializable {
 
-  double delta;
+  protected double margin;
 
   static final String P_DELTA = "delta";
 
@@ -56,29 +56,36 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
 
   public PureSimpleStrategy( AbstractTraderAgent agent, double margin, int quantity ) {
     super(agent);
-    if ( agent.isSeller() ) {
-      delta = margin;
-    } else {
-      delta = -margin;
-    }
+    this.margin = margin;
     this.quantity = quantity;
   }
 
   public PureSimpleStrategy() {
     super(null);
-    delta = DEFAULT_DELTA;
+    margin = DEFAULT_DELTA;
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    delta = parameters.getDoubleWithDefault(base.push(P_DELTA), null, DEFAULT_DELTA);
+    margin = parameters.getDoubleWithDefault(base.push(P_DELTA), null, DEFAULT_DELTA);
+  }
+
+  public Object protoClone() {
+    PureSimpleStrategy clone = new PureSimpleStrategy(agent, margin, quantity);
+    return clone;
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
+    double delta;
+    if ( agent.isSeller() ) {
+      delta = margin;
+    } else {
+      delta = -margin;
+    }
     shout.setPrice(agent.getPrivateValue(auction) + delta);
     shout.setQuantity(quantity);
     if ( shout.getPrice() < 0 ) {
-      //shout.setPrice(0);
+      shout.setPrice(0);
     }
     return super.modifyShout(shout);
   }

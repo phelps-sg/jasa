@@ -22,7 +22,6 @@ import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 
 import ec.util.ParameterDatabase;
@@ -34,7 +33,8 @@ import java.io.Serializable;
  * <p>
  * A trading strategy that uses an MDP learning algorithm,
  * such as the Q-learning algorithm, to adapt its trading behaviour in
- * successive auction rounds.
+ * successive auction rounds.  The current market-quote is hashed produce
+ * an integer state value.
  *
  * @author Steve Phelps
  * @version $Revision$

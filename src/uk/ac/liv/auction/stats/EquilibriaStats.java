@@ -19,8 +19,6 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.core.*;
 
-import uk.ac.liv.util.Debug;
-
 import java.util.*;
 
 import org.apache.log4j.Logger;
@@ -170,7 +168,7 @@ public class EquilibriaStats extends DirectRevelationStats
     maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine.getLowestMatchedBid());
     if ( ! (minPrice <= maxPrice) ) {
       shoutEngine.printState();
-      Debug.assertTrue("equilibria price range invalid; minPrice="+minPrice + " maxPrice="+maxPrice,minPrice <= maxPrice);
+      assert minPrice <= maxPrice;
     }
   }
 

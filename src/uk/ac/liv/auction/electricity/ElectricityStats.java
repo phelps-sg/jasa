@@ -23,7 +23,6 @@ import ec.util.ParameterDatabase;
 
 import java.io.Serializable;
 
-import uk.ac.liv.util.Debug;
 import uk.ac.liv.util.Resetable;
 
 import uk.ac.liv.auction.core.*;
@@ -484,15 +483,3 @@ public class ElectricityStats implements Serializable, Cloneable, MarketStats {
 
 }
 
-
-class ElectricityMetaStats extends MetaMarketStats {
-
-  public ElectricityMetaStats( double min, double max, RoundRobinAuction auction  ) {
-    super( (long) min, (long) max, auction);
-  }
-
-  public int quantity( AbstractTraderAgent agent ) {
-    return ((ElectricityTrader) agent).getCapacity();
-  }
-
-}

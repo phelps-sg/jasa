@@ -22,8 +22,6 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
 import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.agent.FixedQuantityStrategy;
 
-import uk.ac.liv.util.Debug;
-
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -117,7 +115,7 @@ public class ElectricityTrader extends AbstractTraderAgent {
    }
 
   public boolean acceptDeal( Auction auction, double price, int quantity ) {
-    Debug.assertTrue(isSeller);
+    assert isSeller;
     return price >= valuer.determineValue(auction);
   }
 

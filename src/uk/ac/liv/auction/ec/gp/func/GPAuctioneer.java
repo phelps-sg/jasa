@@ -19,8 +19,6 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.StatsMarketDataLogger;
 import uk.ac.liv.auction.electricity.ElectricityStats;
 
-import uk.ac.liv.util.Debug;
-
 import ec.gp.*;
 import ec.*;
 
@@ -106,7 +104,7 @@ public class GPAuctioneer extends GPIndividualCtx
   public double determineClearingPrice( Shout bid, Shout ask ) {
     clearBid.copyFrom(bid);
     clearAsk.copyFrom(ask);
-    Debug.assertTrue( clearBid.getPrice() >= clearAsk.getPrice() );
+    assert clearBid.getPrice() >= clearAsk.getPrice();
     FastNumber result = evaluateNumberTree(0);
     result.release();
     if ( misbehaved ) {

@@ -21,8 +21,6 @@ import org.ascentphase.poolit.poolers.*;
 
 import uk.ac.liv.auction.agent.TraderAgent;
 
-import uk.ac.liv.util.Debug;
-
 /**
  * An object pool for Shout objects.  Using this pool Shout objects can be
  * recycled rather than garbage collected, which improves performance.

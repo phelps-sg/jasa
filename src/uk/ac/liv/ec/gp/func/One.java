@@ -20,8 +20,6 @@ import ec.*;
 
 import uk.ac.liv.util.FastLong;
 
-import uk.ac.liv.util.Debug;
-
 public class One extends GPNode {
 
   public void eval(EvolutionState state, int thread, GPData input, ADFStack stack, GPIndividual individual, Problem problem) {
