@@ -26,7 +26,7 @@ import ec.util.ParameterDatabase;
  * </p>
  */
 
-public strictfp interface Parameterizable  {
+public interface Parameterizable  {
 
   /**
    * Initialise this object from a parameter database.
