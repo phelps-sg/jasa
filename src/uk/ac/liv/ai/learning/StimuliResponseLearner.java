@@ -22,14 +22,7 @@ package uk.ac.liv.ai.learning;
  * @author Steve Phelps
  */
 
-public interface StimuliResponseLearner {
-
-  /**
-   * Specify the next action to take.
-   *
-   * @return An integer representing the action to be taken.
-   */
-  public int act();
+public interface StimuliResponseLearner extends Learner {
 
   /**
    * Reward the learning algorithm according to the last action

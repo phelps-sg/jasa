@@ -154,10 +154,11 @@ public class QLearner
   public int act() {
     double e = randGenerator.nextDouble();
     if ( e <= epsilon ) {
-      return randGenerator.nextInt(numActions);
+      lastActionChosen = randGenerator.nextInt(numActions);
     } else {
-      return bestAction(currentState);
+      lastActionChosen = bestAction(currentState);
     }
+    return lastActionChosen;
   }
 
   public void newState( double reward, int newState ) {

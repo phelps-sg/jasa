@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.ai.learning.Learner;
+
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
@@ -90,5 +92,7 @@ public abstract class AdaptiveStrategy extends FixedQuantityStrategyImpl {
   public abstract int act();
 
   public abstract void calculateReward( Auction auction );
+
+  public abstract Learner getLearner();
 
 }

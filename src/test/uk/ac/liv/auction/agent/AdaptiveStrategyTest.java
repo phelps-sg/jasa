@@ -20,6 +20,8 @@ import junit.framework.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.core.*;
 
+import uk.ac.liv.ai.learning.Learner;
+
 
 public class AdaptiveStrategyTest extends TestCase {
 
@@ -84,6 +86,10 @@ class TestStrategy extends AdaptiveStrategy {
 
   public void calculateReward( Auction auction ) {
     rewards++;
+  }
+
+  public Learner getLearner() {
+    return null;
   }
 
 

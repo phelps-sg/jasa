@@ -447,8 +447,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     while ( i.hasNext() ) {
       ElectricityTrader t = (ElectricityTrader) i.next();
       Strategy strategy = t.getStrategy();
-      if ( strategy instanceof StimuliResponseStrategy ) {
-        StimuliResponseLearner learner = ((StimuliResponseStrategy) strategy).getLearner();
+      if ( strategy instanceof AdaptiveStrategy ) {
+        Learner learner = ((AdaptiveStrategy) strategy).getLearner();
         if ( learner instanceof StochasticLearner ) {
           ((StochasticLearner) learner).setSeed(seeds[traderNumber++][iteration]);
         }

@@ -17,7 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
 
-import uk.ac.liv.ai.learning.StimuliResponseLearner;
+import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Debug;
@@ -77,7 +77,7 @@ public class StimuliResponseStrategy extends AdaptiveStrategy {
     ((Resetable) learner).reset();
   }
 
-  public StimuliResponseLearner getLearner() {
+  public Learner getLearner() {
     return learner;
   }
 

@@ -19,7 +19,7 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.MarketQuote;
 
-import uk.ac.liv.ai.learning.MDPLearner;
+import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Debug;
@@ -114,7 +114,7 @@ public class MDPStrategy extends AdaptiveStrategy {
     ((Resetable) learner).reset();
   }
 
-  public MDPLearner getLearner() {
+  public Learner getLearner() {
     return learner;
   }
 

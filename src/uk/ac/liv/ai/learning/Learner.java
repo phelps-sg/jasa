@@ -13,20 +13,23 @@
  * See the GNU General Public License for more details.
  */
 
+
 package uk.ac.liv.ai.learning;
 
 /**
- * Classes implementing this interface implement
- * learning algorithms for markoff descision processes.
+ * Classes implementing this interface indicate that they implement
+ * a learning algorithm.
  *
  * @author Steve Phelps
  */
 
-public interface MDPLearner extends Learner {
+public interface Learner {
 
   /**
-   * The call-back after performing an action.
+   * Specify the next action to take.
+   *
+   * @return An integer representing the action to be taken.
    */
-  public void newState( double reward, int newState );
+  public int act();
 
 }
