@@ -59,9 +59,9 @@ public class HistoricalDataReport extends AbstractAuctionReport
 
   protected int currentMemoryCell = 0;
 
-  protected int[] memoryBids;
+  protected int[] memoryBids = new int[memorySize];
 
-  protected int[] memoryAsks;
+  protected int[] memoryAsks = new int[memorySize];
 
   protected double lowestAskPrice;
 
