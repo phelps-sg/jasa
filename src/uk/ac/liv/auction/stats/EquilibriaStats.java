@@ -164,7 +164,11 @@ public class EquilibriaStats implements MarketStats {
 
   protected PriceQtyTuple findQty( ArrayList curve, PriceQtyTuple tuple ) {
     int i = Collections.binarySearch(curve, tuple, new QuantityComparator());
-    return (PriceQtyTuple) curve.get(i);
+    if ( i >= 0 ) {
+      return (PriceQtyTuple) curve.get(i);
+    } else {
+      return null;
+    }
   }
 
   protected PriceQtyTuple findIntersection( PriceQtyTuple t1, PriceQtyTuple t2,
