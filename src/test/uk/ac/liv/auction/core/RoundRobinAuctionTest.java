@@ -26,8 +26,8 @@ import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 import uk.ac.liv.util.Distribution;
 
-import test.uk.ac.liv.auction.agent.TestTrader;
-import test.uk.ac.liv.auction.agent.TestStrategy;
+import test.uk.ac.liv.auction.agent.MockTrader;
+import test.uk.ac.liv.auction.agent.MockStrategy;
 
 import org.apache.log4j.Logger;
 
@@ -37,7 +37,7 @@ public class RoundRobinAuctionTest extends TestCase {
 
   RoundRobinAuction auction;
 
-  TestTrader[] traders;
+  MockTrader[] traders;
 
   static Logger logger = Logger.getLogger(RoundRobinAuctionTest.class);
 
@@ -47,28 +47,28 @@ public class RoundRobinAuctionTest extends TestCase {
   }
 
   public void setUpTraders () {
-    traders = new TestTrader[3];
+    traders = new MockTrader[3];
 
-    traders[0] = new TestTrader(this, 30, 1000, 500, false);
-    traders[1] = new TestTrader(this, 10, 10000, 500, false);
-    traders[2] = new TestTrader(this, 15, 10000, 725, true);
+    traders[0] = new MockTrader(this, 30, 1000, 500, false);
+    traders[1] = new MockTrader(this, 10, 10000, 500, false);
+    traders[2] = new MockTrader(this, 15, 10000, 725, true);
 
-    TestTrader trader = traders[0];
-    trader.setStrategy( new TestStrategy(
+    MockTrader trader = traders[0];
+    trader.setStrategy( new MockStrategy(
         						new Shout[] { 
         						    new Shout(trader, 1, 500, true),
         						    new Shout(trader, 1, 600, true), 
         						    new Shout(trader, 1, 700, true) } ));
 
     trader = traders[1];
-    trader.setStrategy( new TestStrategy( 
+    trader.setStrategy( new MockStrategy( 
         						new Shout[] {
         							new Shout(trader, 1, 500, true),
         							new Shout(trader, 1, 550, true),
         							new Shout(trader, 1, 750, true) } ));
 
     trader = traders[2];
-    trader.setStrategy( new TestStrategy( 
+    trader.setStrategy( new MockStrategy( 
       						new Shout[] { 
       						    new Shout(trader, 1, 900, false),
       						    new Shout(trader, 1, 950, false), 

@@ -19,7 +19,7 @@ import java.util.*;
 
 import uk.ac.liv.auction.core.*;
 
-import test.uk.ac.liv.auction.agent.TestTrader;
+import test.uk.ac.liv.auction.agent.MockTrader;
 
 import junit.framework.*;
 
@@ -33,7 +33,7 @@ import org.apache.commons.collections.buffer.PriorityBuffer;
 public class FourHeapTest extends TestCase {
 
   TestShoutEngine shoutEngine;
-  TestTrader testTrader;
+  MockTrader testTrader;
   Random randGenerator;
 
   public FourHeapTest( String name ) {
@@ -42,7 +42,7 @@ public class FourHeapTest extends TestCase {
 
   public void setUp() {
     shoutEngine = new TestShoutEngine();
-    testTrader = new TestTrader(this, 0, 0);
+    testTrader = new MockTrader(this, 0, 0);
     randGenerator = new Random();
     org.apache.log4j.BasicConfigurator.configure();
   }

@@ -19,13 +19,13 @@ import junit.framework.*;
 
 import uk.ac.liv.auction.core.*;
 
-import test.uk.ac.liv.auction.agent.TestTrader;
+import test.uk.ac.liv.auction.agent.MockTrader;
 
 public class AuctioneerTest extends TestCase {
 
   KDoubleAuctioneer auctioneer;
   RoundRobinAuction auction;
-  TestTrader trader1, trader2, trader3, trader4, trader5;
+  MockTrader trader1, trader2, trader3, trader4, trader5;
 
 
   public AuctioneerTest( String name ) {
@@ -37,11 +37,11 @@ public class AuctioneerTest extends TestCase {
     auctioneer = new KDoubleAuctioneer(auction, 0);
     auction.setAuctioneer(auctioneer);
 
-    trader1 = new TestTrader(this, 30, 1000, 400, false);
-    trader2 = new TestTrader(this, 10, 10000, 400, false);
-    trader3 = new TestTrader(this, 15, 10000, 1000, true);
-    trader4 = new TestTrader(this, 10, 10000, 1000, true);
-    trader5 = new TestTrader(this, 15, 10000, 1000, true);
+    trader1 = new MockTrader(this, 30, 1000, 400, false);
+    trader2 = new MockTrader(this, 10, 10000, 400, false);
+    trader3 = new MockTrader(this, 15, 10000, 1000, true);
+    trader4 = new MockTrader(this, 10, 10000, 1000, true);
+    trader5 = new MockTrader(this, 15, 10000, 1000, true);
   }
 
   public void testAuction1() {

@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 import org.apache.log4j.Logger;
 
 
-public class TestTrader extends AbstractTraderAgent {
+public class MockTrader extends AbstractTraderAgent {
 
   public Shout lastWinningShout = null;
   public double lastWinningPrice = 0;
@@ -40,12 +40,12 @@ public class TestTrader extends AbstractTraderAgent {
   static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
 
 
-  public TestTrader( TestCase test, int stock, long funds ) {
+  public MockTrader( TestCase test, int stock, long funds ) {
     super(stock, funds);
     this.test = test;
   }
 
-  public TestTrader( TestCase test, int stock, double funds, double privateValue, boolean isSeller ) {
+  public MockTrader( TestCase test, int stock, double funds, double privateValue, boolean isSeller ) {
     super(stock, funds, privateValue, isSeller);
     this.test = test;
   }

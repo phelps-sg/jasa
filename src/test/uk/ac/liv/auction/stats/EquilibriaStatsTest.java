@@ -19,7 +19,7 @@ import java.util.*;
 
 import junit.framework.*;
 
-import test.uk.ac.liv.auction.agent.TestTrader;
+import test.uk.ac.liv.auction.agent.MockTrader;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
@@ -31,7 +31,7 @@ public class EquilibriaStatsTest extends TestCase {
 
   RandomRobinAuction auction;
 
-  TestTrader[] traders;
+  MockTrader[] traders;
 
   Random randGenerator = new Random();
 
@@ -44,9 +44,9 @@ public class EquilibriaStatsTest extends TestCase {
 
   public void setUp() {
     auction = new RandomRobinAuction();
-    traders = new TestTrader[N];
+    traders = new MockTrader[N];
     for( int i=0; i<N; i++ ) {
-      traders[i] = new TestTrader(this, 0, 0, 0, randGenerator.nextBoolean());
+      traders[i] = new MockTrader(this, 0, 0, 0, randGenerator.nextBoolean());
       auction.register(traders[i]);
     }
   }

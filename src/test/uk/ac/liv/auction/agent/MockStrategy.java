@@ -23,7 +23,7 @@ import uk.ac.liv.auction.core.Shout;
  * @version $Revision$
  */
 
-public class TestStrategy extends AbstractStrategy {
+public class MockStrategy extends AbstractStrategy {
 
   protected int currentShout = 0;
   
@@ -31,7 +31,7 @@ public class TestStrategy extends AbstractStrategy {
   
   public boolean lastShoutAccepted;
  
-  public TestStrategy( Shout[] shouts ) {
+  public MockStrategy( Shout[] shouts ) {
     this.shouts = shouts;
   }
   
