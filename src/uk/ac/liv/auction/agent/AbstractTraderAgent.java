@@ -61,6 +61,10 @@ import org.apache.log4j.Logger;
  * <tr><td valign=top><i>base</i><tt>.valuer</tt><br>
  * <font size=-1>class, inherits uk.ac.liv.auction.agent.Valuer</td>
  * <td valign=top>(the valuation policy to use)</td><tr>
+ * 
+ * <tr><td valign-top><i>base</i><tt>.group</tt><br>
+ * <font size=-1>int &gt;= 0</font></td>
+ * <td valign=top>(the group that this agent belongs to)</td><tr>
  *
  * </table>
  *
@@ -132,6 +136,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    */
   protected double profits = 0;
 
+  /**
+   * Did the last shout we place in the auction result in a transaction?
+   */
   protected boolean lastShoutAccepted = false;
 
   /**
@@ -139,8 +146,12 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    */
   protected Shout currentShout;
   
+  /**
+   * The arbitrary grouping that this agent belongs to.
+   */
   protected AgentGroup group = null;
 
+  
   static Logger logger = Logger.getLogger(AbstractTraderAgent.class);
 
   /**
@@ -178,7 +189,7 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
                                 boolean isSeller ) {
     this(stock, funds, privateValue, isSeller, null);
     // Set the default strategy- truth.
-    setStrategy(new PureSimpleStrategy(this, 0, 1));
+    setStrategy(new TruthTellingStrategy(this));
   }
 
   public AbstractTraderAgent( int stock, double funds ) {
@@ -257,11 +268,6 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   }
 
   public void roundClosed( Auction auction ) {
-    //if ( currentShout != null ) {
-      //auction.removeShout(currentShout);
-      //ShoutPool.release(currentShout);
-      //currentShout = null;
-    //}
     strategy.endOfRound(auction);
   }
 
@@ -275,7 +281,6 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
     giveFunds(seller, price*quantity);
     stock += seller.deliver(auction, quantity, price);
     lastProfit = quantity * (valuer.determineValue(auction)-price);
-    //assert lastProfit >= 0;
     profits += lastProfit;
     valuer.consumeUnit(auction);
   }
