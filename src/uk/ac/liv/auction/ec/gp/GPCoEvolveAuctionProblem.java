@@ -50,9 +50,13 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
   protected void postEvaluationStats() {
     // Save a copy of the stats for posterity
 
-    GPAuctioneer auctioneer = (GPAuctioneer) auction.getAuctioneer();
-    auctioneer.setMarketStats(efficiency);
-    auctioneer.setLogStats(logger.newCopy());
+    try {
+      GPAuctioneer auctioneer = (GPAuctioneer) auction.getAuctioneer();
+      auctioneer.setMarketStats((CummulativeStatCounter) efficiency.clone());
+      auctioneer.setLogStats(logger.newCopy());
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e.getMessage());
+    }
 
     super.postEvaluationStats();
   }
@@ -72,7 +76,7 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
   protected void setFitnesses( Vector[] group ) {
     setAuctioneerFitness( (GPIndividual) group[0].get(0));
-    super.initialiseFitnesses();
+    super.setFitnesses(group);
   }
 
 
