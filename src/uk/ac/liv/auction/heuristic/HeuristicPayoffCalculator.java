@@ -73,6 +73,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   
   protected String gambitFileName;  
   
+  protected String rdPlotFileName;
+  
   protected RoundRobinAuction auction;
 
   protected PayoffLogger payoffLogger;
@@ -117,6 +119,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   public static final String P_N = "n";
   public static final String P_RESULTS = "results";
   public static final String P_GAMBITEXPORT = "gambitexport";
+  public static final String P_RDPLOT = "rdplots";
   public static final String P_NUMSAMPLES = "numsamples";
 
   static Logger logger = Logger.getLogger(HeuristicPayoffCalculator.class);
@@ -146,11 +149,20 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       calculator.setup(parameters, new Parameter(P_HEURISTIC));
       calculator.computePayoffMatrix();
       calculator.exportPayoffMatrixToCSV();
-      calculator.exportPayoffMatrixToGambit();            
+      calculator.exportPayoffMatrixToGambit(); 
+      calculator.plotRDFlows();           
 
     } catch ( Exception e ) {
       logger.error(e);
       e.printStackTrace();
+    }
+  }
+  
+  public void plotRDFlows() throws FileNotFoundException {
+    if ( rdPlotFileName != null ) {    
+      CSVWriter rdPlot = new CSVWriter( new FileOutputStream(rdPlotFileName), numStrategies);
+      double p = 1.0/3.0;
+      payoffMatrix.plotRDflow(rdPlot, new double[] {0.2, 0.6, 0.2}, 0.0000001, 100000);
     }
   }
   
@@ -233,6 +245,9 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     
     gambitFileName = 
         parameters.getStringWithDefault(base.push(P_GAMBITEXPORT), null, null);
+        
+    rdPlotFileName =
+        parameters.getStringWithDefault(base.push(P_RDPLOT), null, null);        
       
     logger.info("numAgents = " + numAgents);
     logger.info("numStrategies = " + numStrategies);
