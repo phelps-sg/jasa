@@ -36,15 +36,12 @@ import ec.util.Parameter;
  * </p>
  */
 
-public class StimuliResponseStrategy extends AbstractStrategy
-                                        implements FixedQuantityStrategy {
+public class StimuliResponseStrategy extends FixedQuantityStrategyImpl {
 
   /**
    * The learning algorithm to use.
    */
   StimuliResponseLearner learner;
-
-  int quantity;
 
   static final String P_LEARNER = "learner";
 
@@ -57,6 +54,8 @@ public class StimuliResponseStrategy extends AbstractStrategy
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    super.setup(parameters, base);
 
     learner = (StimuliResponseLearner)
       parameters.getInstanceForParameter(base.push(P_LEARNER),

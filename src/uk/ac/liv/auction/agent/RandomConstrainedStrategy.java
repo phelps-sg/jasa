@@ -29,21 +29,16 @@ import ec.util.MersenneTwisterFast;
  * </p>
  */
 
-public class RandomConstrainedStrategy extends AbstractStrategy
-                                        implements FixedQuantityStrategy {
+public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl {
 
-  double maxMarkup = 50;
-
-  int quantity;
+  protected double maxMarkup = 50;
 
   static MersenneTwisterFast randGenerator =
     new MersenneTwisterFast(System.currentTimeMillis());
 
   static final String P_MAX_MARKUP = "maxmarkup";
 
-
   public RandomConstrainedStrategy() {
-    super();
   }
 
   public RandomConstrainedStrategy( AbstractTraderAgent agent, double maxMarkup ) {
@@ -75,6 +70,7 @@ public class RandomConstrainedStrategy extends AbstractStrategy
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
     maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null, 100);
   }
 

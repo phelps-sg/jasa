@@ -64,6 +64,13 @@ public class MarketSimulation implements Parameterizable, Runnable {
   static final String P_STATS = "stats";
   static final String P_GATHER_STATS = "gatherstats";
 
+  static final String GNU_MESSAGE =
+    "JASA - (C) 2001-2002 Steve Phelps\n" +
+    "JASA comes with ABSOLUTELY NO WARRANTY; see the GNU General Public\n" +
+    "license for more details.  This is free software, and you are welcome\n" +
+    "to redistribute it under certain conditions; see the GNU General Public\n" +
+    "license for more details.\n";
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
     System.out.print("Setup.. ");
 
@@ -93,7 +100,7 @@ public class MarketSimulation implements Parameterizable, Runnable {
       stats =
         (MarketStats) parameters.getInstanceForParameter(base.push(P_STATS),
                                                          null, MarketStats.class);
-      ((Parameterizable) stats).setup(parameters, base.push(P_STATS));
+      //((Parameterizable) stats).setup(parameters, base.push(P_STATS));
       stats.setAuction(auction);
     }
 
@@ -142,7 +149,15 @@ public class MarketSimulation implements Parameterizable, Runnable {
       }
 
       String fileName = args[0];
-      ParameterDatabase parameters = new ParameterDatabase(new File(fileName));
+      File file = new File(fileName);
+      if ( ! file.canRead() ) {
+        System.err.println("Cannot read parameter file " + fileName);
+        System.exit(1);
+      }
+
+      gnuMessage();
+
+      ParameterDatabase parameters = new ParameterDatabase(file);
       MarketSimulation simulation = new MarketSimulation();
       simulation.setup(parameters, new Parameter(P_SIMULATION));
       simulation.run();
@@ -151,5 +166,9 @@ public class MarketSimulation implements Parameterizable, Runnable {
     } catch ( Exception e ) {
       e.printStackTrace();
     }
+  }
+
+  public static void gnuMessage() {
+    System.out.println(GNU_MESSAGE);
   }
 }

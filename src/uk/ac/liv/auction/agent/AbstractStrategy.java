@@ -30,7 +30,6 @@ import uk.ac.liv.util.Resetable;
  */
 public abstract class AbstractStrategy implements
                                         Strategy,
-                                        Parameterizable,
                                         Resetable,
                                         Cloneable {
 
