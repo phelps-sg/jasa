@@ -49,7 +49,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class ElectricityStats extends ProfitStats implements Cloneable {
+public class ElectricityStats extends SurplusStats implements Cloneable {
 
   /**
    * The relative concentration of sellers to buyers.
@@ -99,12 +99,12 @@ public class ElectricityStats extends ProfitStats implements Cloneable {
   /**
    * The number of sellers.
    */
-  protected double numSellers;
+  protected int numSellers;
 
   /**
    * The number of buyers.
    */
-  protected double numBuyers;
+  protected int numBuyers;
 
   /**
    * The total generating-capacity of buyers.

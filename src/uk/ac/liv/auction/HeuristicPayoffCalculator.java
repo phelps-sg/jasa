@@ -204,6 +204,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       throw new Error(e);
     }
 
+    logger.info("numAgents = " + numAgents);
+    logger.info("numStrategies = " + numStrategies);
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + prngSeed + "\n");
 
@@ -254,7 +256,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       auction.addEndOfDayListener(this);
       auction.run();
 
-      payoffLogger.calculate();
+//      payoffLogger.calculate();
+      payoffLogger.finalReport();
 
       for( int i=0; i<numStrategies; i++ ) {
         payoffs[i].newData(payoffLogger.getPayoff(strategies[i].getClass()));

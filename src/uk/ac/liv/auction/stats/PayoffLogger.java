@@ -31,11 +31,18 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
+/**
+ * A MarketDataLogger that keeps track of the ratio of actual
+ * verses theoretical profits for each strategy being played in the
+ * auction.
+ *
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 
+public class PayoffLogger extends EquilibriumSurplusLogger {
 
-public class PayoffLogger extends EquilibriumProfitLogger {
-
-  private HashMap table  = new HashMap();
+  private HashMap table = new HashMap();
 
   protected double totalProfits;
 
@@ -48,6 +55,8 @@ public class PayoffLogger extends EquilibriumProfitLogger {
 
 
   public void calculate() {
+    table.clear();
+    totalProfits = 0;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();

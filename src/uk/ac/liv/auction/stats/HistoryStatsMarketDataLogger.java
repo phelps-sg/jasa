@@ -30,6 +30,9 @@ import uk.ac.liv.util.Resetable;
 import org.apache.log4j.Logger;
 
 /**
+ * A MarketDataLogger that keeps a historical record of the shouts in
+ * the market that lead to the last N transactions.
+ *
  * @author Steve Phelps
  * @version $Revision$
  */

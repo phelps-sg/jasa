@@ -285,12 +285,12 @@ public class RoundRobinAuction extends AuctionImpl
 
 
   public void clear( Shout ask, Shout bid, double price ) {
+    updateTransPriceLog(round, ask, bid, price, ask.getQuantity());
     RoundRobinTrader buyer = (RoundRobinTrader) bid.getAgent();
     RoundRobinTrader seller = (RoundRobinTrader) ask.getAgent();
     buyer.informOfSeller(this, ask, seller, price, ask.getQuantity());
     acceptedShouts.add(ask);
     acceptedShouts.add(bid);
-    updateTransPriceLog(round, ask, bid, price, ask.getQuantity());
   }
 
   /**
@@ -737,7 +737,9 @@ public class RoundRobinAuction extends AuctionImpl
       auctionEventListeners[i].addAll(registeredTraders);
     }
 
-    addAuctionEventListener(logger);
+    if ( logger != null ) {
+      addAuctionEventListener(logger);
+    }
 
     numTraders = activeTraders.size();
     shoutsProcessed = false;

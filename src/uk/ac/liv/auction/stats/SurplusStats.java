@@ -24,11 +24,20 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 /**
+ * A MarketStats report that calculates the actual surplus of buyers
+ * and sellers in the auction verses the theoretical surplus when
+ * trades occur at the equilibrium price.  Note that this report
+ * assumes that the equilibrium price is constant.  To calculate
+ * theoretical surplus with dynamic supply and demand you should configure
+ * an EquilibriumSurplusLogger.
+ *
+ * @see EquilibriumSurplusLogger
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class ProfitStats extends EquilibriaStats {
+public class SurplusStats extends EquilibriaStats {
 
   /**
    * The profits of the buyers in theoretical equilibrium.
@@ -54,14 +63,14 @@ public class ProfitStats extends EquilibriaStats {
 
   protected int maxQty;
 
-  static Logger logger = Logger.getLogger(ProfitStats.class);
+  static Logger logger = Logger.getLogger(SurplusStats.class);
 
 
-  public ProfitStats( RoundRobinAuction auction ) {
+  public SurplusStats( RoundRobinAuction auction ) {
     super(auction);
   }
 
-  public ProfitStats() {
+  public SurplusStats() {
     super();
   }
 
@@ -127,12 +136,34 @@ public class ProfitStats extends EquilibriaStats {
   }
 
 
+  /**
+   * @return The theoretical surplus available to buyers in competitive
+   * equilibrium.
+   */
   public double getPBCE() {
     return pBCE;
   }
 
+  /**
+   * @return The theoretical surplus available to sellers in competitive
+   * equilibrium.
+   */
   public double getPSCE() {
     return pSCE;
+  }
+
+  /**
+   * @return The actual surplus of all buyers in the market.
+   */
+  public double getPBA() {
+    return pBA;
+  }
+
+  /**
+   * @return The actual surplus of all sellers in the market.
+   */
+  public double getPSA() {
+    return pSA;
   }
 
 

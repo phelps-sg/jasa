@@ -6,8 +6,6 @@
 #  java uk.ac.liv.auction.MarketSimulation jasa/examples/example2.params
 #
 
-# Use a RandomShoutAuction giving each agent a 90% probability of being
-# able to bid in each round.
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.shoutprobability = 0.9
 
@@ -15,7 +13,7 @@ simulation.auction.name = Example 2: Uniform-price k-DA
 simulation.auction.maximumrounds = 200
 
 # Use a k-DA auctioneer which will clear the auction after each round
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 # Set a uniform transaction-price based on current market quote.
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 # Set the transaction price halfway between the bid-ask spread.
@@ -49,7 +47,7 @@ simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrat
 simulation.agenttype.0.strategy.maxmarkup = 100
 simulation.agenttype.0.isseller = true
 # Private values will be randomly drawn for each unit that we trade
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Range for private values is (10, 100)
 simulation.agenttype.0.valuer.minvalue = 10
 simulation.agenttype.0.valuer.maxvalue = 100
@@ -61,7 +59,7 @@ simulation.agenttype.1.initialtradeentitlement = 1000
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.agenttype.1.isseller = false
 # Private values will be randomly drawn for each unit that we trade
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
 # Range for private values is (20, 150)
 simulation.agenttype.1.valuer.minvalue = 20
 simulation.agenttype.1.valuer.maxvalue = 150
