@@ -64,7 +64,7 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
   protected RoundRobinAuction auction;
 
-  protected MarketDataLogger marketData;
+  protected DailyStatsMarketDataLogger marketData;
 
   protected MarketStats stats;
 
@@ -90,9 +90,7 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
   protected ZITraderAgent[] sellers;
 
-  protected StatsMarketDataLogger marketDataLogger;
-
-  protected CummulativeStatCounter[] transPriceStats;
+  protected CummulativeStatCounter[] transPriceMean, transPriceStdDev;
 
   protected MersenneTwisterFast paramPRNG = new MersenneTwisterFast();
 
@@ -116,12 +114,7 @@ public class ZIPExperiment implements Parameterizable, Runnable,
   public static final String P_DAYS = "days";
   public static final String P_NUMSAMPLES = "samples";
 
-
-
-
   static Logger logger = Logger.getLogger(ZIPExperiment.class);
-
-
 
   public static void main( String[] args ) {
 
@@ -175,10 +168,6 @@ public class ZIPExperiment implements Parameterizable, Runnable,
         parameters.getDoubleWithDefault(base.push(P_PRIVVALUEINCREMENT),
                                          null, privValueIncrement);
 
-    numDays =
-        parameters.getIntWithDefault(base.push(P_DAYS), null, numDays);
-
-
     numSamples =
         parameters.getIntWithDefault(base.push(P_NUMSAMPLES), null, numSamples);
 
@@ -191,14 +180,16 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
     console = parameters.getBoolean(base.push(P_CONSOLE), null, false);
 
-    marketDataLogger = new StatsMarketDataLogger();
-    auction.addMarketDataLogger(marketDataLogger);
+    marketData = new DailyStatsMarketDataLogger();
+    auction.addMarketDataLogger(marketData);
 
     buyers = new ZITraderAgent[numBuyers];
     sellers = new ZITraderAgent[numSellers];
 
     registerTraders(buyers, false);
     registerTraders(sellers, true);
+
+    numDays = auction.getMaximumDays();
 
     logger.info("seed = " + prngSeed);
     logger.info("privValueRangeMin = " + privValueRangeMin);
@@ -220,17 +211,25 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
 
   public void run() {
-    transPriceStats = new CummulativeStatCounter[numDays];
+    transPriceMean = new CummulativeStatCounter[numDays];
+    transPriceStdDev = new CummulativeStatCounter[numDays];
     for( int day=0; day<numDays; day++ ) {
-      transPriceStats[day] = new CummulativeStatCounter("Transaction price day " + day);
+      transPriceMean[day] = new CummulativeStatCounter("Mean of mean transaction price for day " + day);
+      transPriceStdDev[day] = new CummulativeStatCounter("Mean of stddev of transaction price for day " + day);
     }
     for( int sample=0; sample<numSamples; sample++ ) {
       logger.info("Sample " + sample + "... ");
       selectRandomLearnerParameters();
       auction.run();
-      double meanTransPrice = marketDataLogger.getTransPriceStats().getMean();
       logger.debug("Auction terminated at round " + auction.getAge());
-      marketDataLogger.finalReport();
+      for( int day=0; day<numDays; day++ ) {
+        CummulativeStatCounter stats = marketData.getTransPriceStats(day);
+        if ( stats != null ) {
+          transPriceMean[day].newData(stats.getMean());
+          transPriceStdDev[day].newData(stats.getStdDev());
+        }
+      }
+      marketData.finalReport();
       auction.reset();
 
       logger.info("Sample " + sample + " done.");
@@ -239,6 +238,14 @@ public class ZIPExperiment implements Parameterizable, Runnable,
 
 
   public void report() {
+    for( int day=0; day<numDays; day++ ) {
+      logger.info("Day " + day + " mean of mean tr price: " +
+                    transPriceMean[day].getMean());
+    }
+    for( int day=0; day<numDays; day++ ) {
+      logger.info("Day " + day + " mean of stdev of tr price: " +
+                    transPriceStdDev[day].getMean());
+    }
   }
 
 
@@ -289,6 +296,8 @@ public class ZIPExperiment implements Parameterizable, Runnable,
       WidrowHoffLearner learner = new WidrowHoffLearner(learningRate, momentum);
       strategy.setLearner(learner);
       trader.setStrategy(strategy);
+      logger.debug("Configured agent " + trader + " with momentum " + momentum +
+                    " and learning rate " + learningRate);
     }
   }
 

@@ -103,7 +103,7 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     tradeEntitlement = initialTradeEntitlement;
     quantityTraded = 0;
     dummyShout = new Shout(this);
-    logger.debug("Initialised with tradeEntitlement = " + tradeEntitlement);
+    logger.debug(this + ": initialised.");
   }
 
   public void endOfDay( Auction auction ) {
@@ -112,17 +112,6 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     quantityTraded = 0;
     lastShoutSuccessful = false;
     logger.debug("done.");
-  }
-
-  public void requestShout( Auction auction ) {
-
-    if ( active() ) {
-      super.requestShout(auction);
-    } else {
-      strategy.modifyShout(dummyShout, auction);
-    }
-
-    lastShoutSuccessful = false;
   }
 
   public boolean active() {
@@ -140,14 +129,15 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
   }
 
   public void purchaseFrom( AbstractTraderAgent seller, int quantity, double price ) {
+    logger.debug("purchaseFrom(" + seller + ", " + quantity + ", " + price + ")");
     tradeEntitlement--;
     quantityTraded += quantity;
-    AbstractTraderAgent agent = (AbstractTraderAgent) seller;
-    super.purchaseFrom(agent, quantity, price);
+    super.purchaseFrom(seller, quantity, price);
     //sellUnits(quantity);
   }
 
   public int deliver( int quantity, double price ) {
+    logger.debug("deliver(" + quantity + ", " + price +")");
     lastShoutSuccessful = true;
     tradeEntitlement--;
     quantityTraded += quantity;

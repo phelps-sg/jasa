@@ -37,7 +37,7 @@ package uk.ac.liv.util;
 
 public class IdAllocator {
 
-  long nextId = 0;
+  protected long nextId = 0;
 
   public IdAllocator() {
   }

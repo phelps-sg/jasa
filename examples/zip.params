@@ -3,7 +3,9 @@ simulation.days=10
 simulation.console = false
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.logger = uk.ac.liv.auction.stats.GraphMarketDataLogger
-simulation.auction.maximumrounds = 100
+simulation.auction.maximumrounds = 3000
+simulation.auction.lengthofday = 100
+simulation.auction.maximumdays = 20
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
 u
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy

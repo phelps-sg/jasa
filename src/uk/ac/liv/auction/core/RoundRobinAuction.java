@@ -165,14 +165,19 @@ public class RoundRobinAuction extends AuctionImpl
 
   protected int lengthOfDay = -1;
 
+  protected int day = 0;
+
+  protected int maximumDays = -1;
+
   protected HashSet acceptedShouts = new HashSet();
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
+  public static final String P_MAXIMUM_DAYS = "maximumdays";
   public static final String P_LOGGER = "logger";
   public static final String P_AUCTIONEER = "auctioneer";
   public static final String P_NAME = "name";
   public static final String P_STATS = "stats";
-  public static final String P_LENGTH_OF_DAY = "daylength";
+  public static final String P_LENGTH_OF_DAY = "lengthofday";
 
   static Logger log4jLogger = Logger.getLogger(RoundRobinAuction.class);
 
@@ -199,6 +204,9 @@ public class RoundRobinAuction extends AuctionImpl
 
     maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS),
                                                   null, -1);
+
+    maximumDays = parameters.getIntWithDefault(base.push(P_MAXIMUM_DAYS),
+                                                null, -1);
 
     lengthOfDay = parameters.getIntWithDefault(base.push(P_LENGTH_OF_DAY),
                                                 null, -1);
@@ -338,6 +346,14 @@ public class RoundRobinAuction extends AuctionImpl
     return maximumRounds;
   }
 
+  public int getLengthOfDay() {
+    return lengthOfDay;
+  }
+
+  public int getMaximumDays() {
+    return maximumDays;
+  }
+
   /**
    * Return the number of traders currently active in the auction.
    */
@@ -414,10 +430,6 @@ public class RoundRobinAuction extends AuctionImpl
       sweepDefunctTraders();
       auctioneer.endOfRoundProcessing();
       informRoundClosed();
-      if ( isQuiescent() ) {
-        log4jLogger.debug("Auction is quiescent - closing");
-        close();
-      }
     }
 
     setChanged();
@@ -585,6 +597,7 @@ public class RoundRobinAuction extends AuctionImpl
     super.initialise();
     numTraders = 0;
     round = 0;
+    day = 0;
     acceptedShouts.clear();
     defunctTraders.clear();
     activeTraders.clear();
@@ -613,11 +626,30 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   protected void checkEndOfDay() {
-    if ( lengthOfDay > 0 ) {
-      if ( (round % lengthOfDay) == 0 ) {
-        informEndOfDay();
-        logger.endOfDay();
+    if ( isQuiescent() ) {
+      log4jLogger.debug("Auction quiescent - ending day");
+      endOfDay();
+    } else {
+      if (lengthOfDay > 0) {
+        if ( round >= lengthOfDay ) {
+          log4jLogger.debug("ending day of length " + lengthOfDay +
+                             " at round " + round);
+          endOfDay();
+        }
       }
+    }
+  }
+
+  protected void endOfDay() {
+    log4jLogger.debug("endOfDay()");
+    informEndOfDay();
+    logger.endOfDay();
+    day++;
+    log4jLogger.debug("new day = " + day + " of " + maximumDays);
+    round = 0;
+    if ( day >= maximumDays ) {
+      log4jLogger.debug("exceeded maximum days- closing auction");
+      close();
     }
   }
 

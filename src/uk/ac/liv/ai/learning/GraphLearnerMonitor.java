@@ -26,6 +26,7 @@ import JSci.awt.*;
 import JSci.swing.*;
 
 import javax.swing.*;
+
 /**
  * @author Steve Phelps
  * @version $Revision$

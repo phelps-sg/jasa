@@ -448,6 +448,7 @@ public class AuctionConsoleFrame extends JFrame
   }
 
   public void generateReport() {
+    pause();
     auction.generateReport();
   }
 

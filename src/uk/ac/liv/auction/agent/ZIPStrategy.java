@@ -102,8 +102,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
       Shout lastShout = auction.getLastShout();
       if (agent.isSeller()) {
         sellerStrategy(lastShout);
-      }
-      else {
+      } else {
         buyerStrategy(lastShout);
       }
       currentMargin = learner.act();
@@ -147,7 +146,9 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     }
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {
+      logger.debug("last shout was accepted");
       if ( agent.active() && currentPrice <= lastPrice ) {
+        logger.debug("agent is active - raising");
         raiseMargin(lastPrice);
       } else if ( lastShout.isBid() ) {
         if ( currentPrice >= lastPrice ) {
@@ -155,6 +156,7 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
         }
       }
     } else {
+      logger.debug("last shout not accepted");
       if ( lastShout.isAsk() ) {
         if ( currentPrice >= lastPrice ) {
           lowerMargin(lastPrice);
@@ -170,7 +172,9 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     }
     double lastPrice = lastShout.getPrice();
     if ( auction.shoutAccepted(lastShout) ) {
+      logger.debug("last shout was accepted");
       if ( agent.active() && currentPrice >= lastPrice ) {
+        logger.debug("agent is active - raising");
         raiseMargin(lastPrice);
       } else if ( lastShout.isAsk() ) {
         if ( currentPrice <= lastPrice ) {

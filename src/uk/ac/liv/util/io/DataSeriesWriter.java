@@ -63,13 +63,12 @@ public class DataSeriesWriter extends DefaultGraph2DModel.DataSeries
 
   protected double xCoord;
 
-  protected Vector data;
+  protected Vector data = new Vector();
 
   static Logger logger = Logger.getLogger(DataSeriesWriter.class);
 
   public DataSeriesWriter() {
     super( new double[] {}, new double[] {} );
-    data = new Vector();
   }
 
   public void newData( int datum ) {

@@ -35,32 +35,15 @@ import org.apache.log4j.Logger;
  */
 
 public class StatsMarketDataLogger
-  implements MarketDataLogger, Serializable, Cloneable {
+  implements MarketDataLogger, Serializable, Cloneable, Resetable {
 
-  /**
-   * Cummulative statistics on transaction prices.
-   */
-  protected CummulativeStatCounter transPriceStats;
+  protected static final int TRANS_PRICE = 0;
+  protected static final int BID_PRICE = 1;
+  protected static final int ASK_PRICE = 2;
+  protected static final int BID_QUOTE = 3;
+  protected static final int ASK_QUOTE = 4;
 
-  /**
-   * Cummulative statistics on bid prices.
-   */
-  protected CummulativeStatCounter bidPriceStats;
-
-  /**
-   * Cummulative statistics on ask prices.
-   */
-  protected CummulativeStatCounter askPriceStats;
-
-  /**
-   * Cummulative statistics on the bid part of market quotes.
-   */
-  protected CummulativeStatCounter bidQuoteStats;
-
-  /**
-   * Cumulative statistics on the ask part of market quotes.
-   */
-  protected CummulativeStatCounter askQuoteStats;
+  protected CummulativeStatCounter[] stats;
 
   static Logger logger = Logger.getLogger(StatsMarketDataLogger.class);
 
@@ -70,68 +53,58 @@ public class StatsMarketDataLogger
   }
 
   public void updateQuoteLog( int time, MarketQuote quote ) {
-    bidQuoteStats.newData((double) quote.getBid());
-    askQuoteStats.newData((double) quote.getAsk());
+    stats[BID_QUOTE].newData((double) quote.getBid());
+    stats[ASK_QUOTE].newData((double) quote.getAsk());
   }
 
   public void updateTransPriceLog( int time, Shout ask, double price,
                                     int quantity ) {
-    transPriceStats.newData(price);
+    stats[TRANS_PRICE].newData(price);
   }
 
   public void updateShoutLog( int time, Shout shout ) {
     if ( shout.isBid() ) {
-      bidPriceStats.newData(shout.getPrice());
+      stats[BID_PRICE].newData(shout.getPrice());
     } else {
-      askPriceStats.newData(shout.getPrice());
+      stats[ASK_PRICE].newData(shout.getPrice());
     }
   }
 
   public CummulativeStatCounter getTransPriceStats() {
-    return transPriceStats;
+    return stats[TRANS_PRICE];
   }
 
   public CummulativeStatCounter getBidPriceStats() {
-    return bidPriceStats;
+    return stats[BID_PRICE];
   }
 
   public CummulativeStatCounter getAskPriceStats() {
-    return askPriceStats;
+    return stats[ASK_PRICE];
   }
 
   public CummulativeStatCounter getBidQuoteStats() {
-    return bidQuoteStats;
+    return stats[BID_QUOTE];
   }
 
   public CummulativeStatCounter getAskQuoteStats() {
-    return askQuoteStats;
+    return stats[ASK_QUOTE];
   }
 
   public void initialise() {
-
-    transPriceStats =
-      new CummulativeStatCounter("Transaction Price");
-
-    bidPriceStats =
-      new CummulativeStatCounter("Bid Price");
-
-    askPriceStats =
-      new CummulativeStatCounter("Ask Price");
-
-    bidQuoteStats =
-      new CummulativeStatCounter("Bid Quote");
-
-    askQuoteStats =
-      new CummulativeStatCounter("Ask Quote");
+    stats = new CummulativeStatCounter[] {
+     new CummulativeStatCounter("Transaction Price"),
+     new CummulativeStatCounter("Bid Price"),
+     new CummulativeStatCounter("Ask Price"),
+     new CummulativeStatCounter("Bid Quote"),
+     new CummulativeStatCounter("Ask Quote")
+   };
 
   }
 
   public void reset() {
-    transPriceStats.reset();
-    bidPriceStats.reset();
-    askPriceStats.reset();
-    bidQuoteStats.reset();
-    askQuoteStats.reset();
+    for( int i=0; i<stats.length; i++ ) {
+      ((CummulativeStatCounter) stats[i]).reset();
+    }
   }
 
   public Object clone() throws CloneNotSupportedException {
@@ -142,26 +115,22 @@ public class StatsMarketDataLogger
     StatsMarketDataLogger copy = null;
     try {
       copy = (StatsMarketDataLogger) clone();
-      copy.transPriceStats = (CummulativeStatCounter) transPriceStats.clone();
-      copy.bidPriceStats = (CummulativeStatCounter) bidPriceStats.clone();
-      copy.askPriceStats = (CummulativeStatCounter) askPriceStats.clone();
-      copy.bidQuoteStats = (CummulativeStatCounter) bidQuoteStats.clone();
-      copy.askQuoteStats = (CummulativeStatCounter) askQuoteStats.clone();
+      for( int i=0; i<stats.length; i++ ) {
+        copy.stats[i] = (CummulativeStatCounter) stats[i].clone();
+      }
     } catch ( CloneNotSupportedException e ) {
+      logger.error(e.getMessage());
+      e.printStackTrace();
+      throw new Error(e);
     }
     return copy;
   }
 
   public void finalReport() {
-    logger.info("");
-    logger.info("Auction statistics");
-    logger.info("------------------");
-    logger.info("");
-    printStats(transPriceStats);
-    printStats(bidPriceStats);
-    printStats(askPriceStats);
-    printStats(bidQuoteStats);
-    printStats(askQuoteStats);
+    reportHeader();
+    for( int i=0; i<stats.length; i++ ) {
+      printStats(stats[i]);
+    }
   }
 
   public void endOfRound() {
@@ -169,7 +138,14 @@ public class StatsMarketDataLogger
   }
 
   public void endOfDay() {
-    //TODO
+    // Do nothing
+  }
+
+  protected void reportHeader() {
+    logger.info("");
+    logger.info("Auction statistics");
+    logger.info("------------------");
+    logger.info("");
   }
 
   protected void printStats( CummulativeStatCounter stats ) {
