@@ -16,7 +16,7 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 import java.io.Serializable;
 
@@ -33,25 +33,25 @@ public class PriestVanTolStrategy extends MomentumStrategy
   static Logger logger = Logger.getLogger(PriestVanTolStrategy.class);
 
   protected void adjustMargin() {
-    try {
-      double highestBid = auction.getHighestBidPrice();
-      double lowestAsk = auction.getLowestAskPrice();
-      if ( agent.isBuyer() ) {
-        if ( lowestAsk > highestBid && highestBid > 0 ) {
-          adjustMargin(targetMargin(highestBid + perterb(highestBid)));
-        } else if ( agent.active() && lowestAsk < Double.POSITIVE_INFINITY ) {
-          adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
-        }
-      } else {
-        if ( lowestAsk > highestBid && lowestAsk < Double.POSITIVE_INFINITY ) {
-          adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
-        } else if ( agent.active() && highestBid > 0 ) {
-          adjustMargin(targetMargin(highestBid + perterb(highestBid)));
-        }
+    
+    HistoryStatsMarketDataLogger historyStats = auction.getHistoryStats();
+
+    double highestBid = historyStats.getHighestBidPrice();
+    double lowestAsk = historyStats.getLowestAskPrice();
+    if ( agent.isBuyer() ) {
+      if ( lowestAsk > highestBid && highestBid > 0 ) {
+        adjustMargin(targetMargin(highestBid + perterb(highestBid)));
+      } else if ( agent.active() && lowestAsk < Double.POSITIVE_INFINITY ) {
+        adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
       }
-    } catch ( DataUnavailableException e ) {
-      throw new AuctionError(e);
+    } else {
+      if ( lowestAsk > highestBid && lowestAsk < Double.POSITIVE_INFINITY ) {
+        adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
+      } else if ( agent.active() && highestBid > 0 ) {
+        adjustMargin(targetMargin(highestBid + perterb(highestBid)));
+      }
     }
+   
   }
   
 }

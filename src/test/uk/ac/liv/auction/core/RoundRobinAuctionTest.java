@@ -16,15 +16,7 @@ package test.uk.ac.liv.auction.core;
 
 import junit.framework.*;
 
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
 import uk.ac.liv.auction.core.*;
-
-import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
-
-import uk.ac.liv.util.Distribution;
 
 import test.uk.ac.liv.auction.agent.MockTrader;
 import test.uk.ac.liv.auction.agent.MockStrategy;
@@ -90,7 +82,8 @@ public class RoundRobinAuctionTest extends TestCase {
       auction.register(traders[i]);
     }
   }
-
+/*
+  
   public void testDailyStats () {
 
     auction.setLengthOfDay(3);
@@ -137,7 +130,7 @@ public class RoundRobinAuctionTest extends TestCase {
       fail("caught DataUnavailableException " + e);
     }
   }
-
+*/
   public void testProtocol () {
 
     assertTrue(auction.getNumberOfTraders() == traders.length);

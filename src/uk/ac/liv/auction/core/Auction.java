@@ -15,7 +15,8 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.util.Distribution;
+import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 /**
  * The interface used by agents to interact with an auction.
@@ -60,32 +61,6 @@ public interface Auction extends QuoteProvider {
   public Auctioneer getAuctioneer();
 
   /**
-   * Return statistics on yesterday's transaction price.
-   */
-  public Distribution getPreviousDayTransPriceStats()
-      throws DataUnavailableException;
-
-  /**
-   * Calculate the number of unaccepted asks >= price.
-   * If accepted is true then count the number of accepted asks.
-   * If price is negative then count the number of asks < price.
-   */
-  public int getNumberOfAsks( double price, boolean accepted )
-    throws DataUnavailableException;
-
-  /**
-   * Calculate the number of unaccepted bids >= price.
-   * If accepted is true then count the number of accepted bids.
-   * If price is negative then count the number of bids < price.
-   */
-  public int getNumberOfBids( double price, boolean accepted )
-    throws DataUnavailableException;
-
-  public double getHighestBidPrice() throws DataUnavailableException;
-  
-  public double getLowestAskPrice() throws DataUnavailableException;
-  
-  /**
    * Report the state of the auction.
    */
   public void printState();
@@ -122,5 +97,13 @@ public interface Auction extends QuoteProvider {
    * current round of trading.
    */
   public boolean transactionsOccured() throws ShoutsNotVisibleException;
+  
+  public HistoryStatsMarketDataLogger getHistoryStats();
+  
+  public void setHistoryStats( HistoryStatsMarketDataLogger historyStats );
+  
+  public DailyStatsMarketDataLogger getDailyStats();
+  
+  public void setDailyStats( DailyStatsMarketDataLogger dailyStats );
 
 }

@@ -20,7 +20,7 @@ import uk.ac.liv.ec.gp.func.GPGenericData;
 
 import uk.ac.liv.util.UntypedDouble;
 
-import uk.ac.liv.auction.core.DataUnavailableException;
+import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 
 /**
  * @author Steve Phelps
@@ -30,13 +30,11 @@ import uk.ac.liv.auction.core.DataUnavailableException;
 public class LowestAskPrice extends GPSchemeNode {
 
   public void eval( GPGenericData input ) {
-    try {
-      GPTradingStrategy strategy = (GPTradingStrategy)
-        ((GPGenericIndividual) currentIndividual).getGPObject();
-      input.data = new UntypedDouble(strategy.getAuction().getLowestAskPrice());
-    } catch ( DataUnavailableException e ) {
-      throw new Error(e);
-    }
+    GPTradingStrategy strategy = (GPTradingStrategy)
+      ((GPGenericIndividual) currentIndividual).getGPObject();
+    HistoryStatsMarketDataLogger historyStats = 
+      strategy.getAuction().getHistoryStats();
+    input.data =new UntypedDouble(historyStats.getLowestAskPrice());
   }
 
   public String toString() {

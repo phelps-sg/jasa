@@ -25,6 +25,7 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 
 import org.apache.log4j.Logger;
 
@@ -78,6 +79,8 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   protected double s = 0.5;
 
   protected MarketQuote quote;
+  
+  protected DailyStatsMarketDataLogger dailyStats;
 
   public static final String P_T = "t";
   public static final String P_S = "s";
@@ -105,6 +108,10 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   public boolean modifyShout( Shout.MutableShout shout ) {
     super.modifyShout(shout);
     quote = auction.getQuote();
+    dailyStats = auction.getDailyStats();
+    if ( dailyStats == null ) {
+      throw new AuctionError(getClass() + " requires a DailyStatsMarketDataLogger to be configured");
+    }
     if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
       logger.debug("quote = " + quote);
       logger.debug("my priv value = " + agent.getValuation(auction));
@@ -136,12 +143,8 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
     Distribution transPrice = null;
 
-    try {
-      transPrice = auction.getPreviousDayTransPriceStats();
-    } catch ( DataUnavailableException e ) {
-      error(e);
-    }
-
+    transPrice = dailyStats.getPreviousDayTransPriceStats();
+ 
     if ( transPrice == null ) {
       return false;
     }
@@ -168,12 +171,8 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
     Distribution transPrice = null;
 
-    try {
-      transPrice = auction.getPreviousDayTransPriceStats();
-    } catch ( DataUnavailableException e ) {
-      error(e);
-    }
-
+    transPrice = dailyStats.getPreviousDayTransPriceStats();
+ 
     if (agent.isBuyer()) {
       smallSpread =
 //          quote.getAsk() < transPrice.getMax() &&

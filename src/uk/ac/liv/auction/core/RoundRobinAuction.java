@@ -20,15 +20,12 @@ import uk.ac.liv.auction.agent.TraderAgent;
 
 import uk.ac.liv.auction.stats.MarketDataLogger;
 import uk.ac.liv.auction.stats.MarketStats;
-import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
-import uk.ac.liv.auction.stats.HistoryStatsMarketDataLogger;
 import uk.ac.liv.auction.stats.CombiMarketStats;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
-import uk.ac.liv.util.Distribution;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -193,24 +190,7 @@ public class RoundRobinAuction extends AuctionImpl
    * The set of shouts that have been matched in the current round.
    */
   protected HashSet acceptedShouts = new HashSet();
-
-  /**
-   * The optional logger used to calculate statistics for the previous
-   * day's trading.
-   *
-   * @see RoundRobinAuction#getPreviousDayTransPriceStats()
-   */
-  protected DailyStatsMarketDataLogger dailyStats = null;
-
-  /**
-   * The optional logger used to calculate the historical statistics
-   * returned by the getNumberOfBids() and getNumberOfAsks() methods.
-   *
-   * @see RoundRobinAuction#getNumberOfBids(double, boolean)
-   * @see RoundRobinAuction#getNumberOfAsks(double, boolean)
-   */
-  protected HistoryStatsMarketDataLogger historyStats = null;
-
+  
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
   public static final String P_MAXIMUM_DAYS = "maximumdays";
@@ -223,16 +203,6 @@ public class RoundRobinAuction extends AuctionImpl
   public static final String P_NUM_AGENTS = "numagents";
   public static final String P_AGENT_TYPE = "agenttype";
   public static final String P_CONSOLE = "console";
-  
-  public static final String ERROR_DAILYSTATS = 
-      "The auction must be configured " +
-        "with a DailyStatsMarketDataLogger in order " +
-        "to retrieve previous day's statistics";
-  
-  public static final String ERROR_HISTORYSTATS = 
-      "The auction must be configured " +
-          "with a HistoryStatsMarketDataLogger " +
-          "in order to retrieve historical stats";
   
   public static final String ERROR_SHOUTSVISIBLE =
     "Auctioneer does not permit shout inspection";
@@ -498,73 +468,6 @@ public class RoundRobinAuction extends AuctionImpl
   }
 
   /**
-   * Fetch statistics on the previous day's transaction price.
-   * The auction must be configured with a DailyStatsMarketDataLogger
-   * in order for this method to succeed.
-   *
-   * @throws DataUnavailableException  Thrown if the auction does not have
-   *                                   a DailyStatsMarketDataLogger configured.
-   */
-  public Distribution getPreviousDayTransPriceStats()
-      throws DataUnavailableException {
-
-    if ( dailyStats == null ) {
-      throw new DataUnavailableException(ERROR_DAILYSTATS);
-    }
-
-    if ( day == 0 ) {
-      return null;
-    } else {
-      return dailyStats.getTransPriceStats(day - 1);
-    }
-  }
-
-  protected void checkHistoryStats() throws DataUnavailableException {
-    if ( historyStats == null ) {
-      throw new DataUnavailableException(ERROR_HISTORYSTATS);
-    }
-  }
-
-  /**
-   * Calculate the number of unaccepted asks >= price.
-   * If accepted is true then count the number of accepted asks.
-   * If price is negative then count the number of asks < price.
-   *
-   * @throws DataUnavailableException If a HistoryStatsMarketDataLogger
-   * is not configured.
-   */
-  public int getNumberOfAsks( double price, boolean accepted )
-      throws DataUnavailableException {
-    checkHistoryStats();
-    return historyStats.getNumberOfAsks(price, accepted);
-  }
-
-  /**
-    * Calculate the number of unaccepted bids >= price.
-    * If accepted is true then count the number of accepted bids.
-    * If price is negative then count the number of bids < price.
-    *
-    * @throws DataUnavailableException If a HistoryStatsMarketDataLogger
-    * is not configured.
-    */
-
-  public int getNumberOfBids( double price, boolean accepted )
-      throws DataUnavailableException {
-    checkHistoryStats();
-    return historyStats.getNumberOfBids(price, accepted);
-  }
-   
-  public double getHighestBidPrice() throws DataUnavailableException {
-    checkHistoryStats();
-    return historyStats.getHighestBidPrice();
-  }
-  
-  public double getLowestAskPrice() throws DataUnavailableException {
-    checkHistoryStats();
-    return historyStats.getLowestAskPrice();
-  }
-
-  /**
    * Runs the auction.
    */
   public void run() {
@@ -764,14 +667,6 @@ public class RoundRobinAuction extends AuctionImpl
 
   public void setMaximumDays( int maximumDays ) {
     this.maximumDays = maximumDays;
-  }
-
-  public void setDailyStats( DailyStatsMarketDataLogger dailyStats ) {
-    this.dailyStats = dailyStats;
-  }
-
-  public void setHistoryStats( HistoryStatsMarketDataLogger historyStats ) {
-    this.historyStats = historyStats;
   }
 
   /**

@@ -97,7 +97,11 @@ public abstract class AuctionImpl extends Observable
   protected LinkedList[] auctionEventListeners = {
       roundClosedListeners, endOfDayListeners, auctionClosedListeners };
 
-
+  protected HistoryStatsMarketDataLogger historyStats;
+  
+  protected DailyStatsMarketDataLogger dailyStats;
+  
+  
   public AuctionImpl( String name ) {
     id = idAllocator.nextId();
     if ( name != null ) {
@@ -313,6 +317,22 @@ public abstract class AuctionImpl extends Observable
     return logger.getVariables();
   }
 
+  public DailyStatsMarketDataLogger getDailyStats() {
+    return dailyStats;
+  }
+  
+  public void setDailyStats( DailyStatsMarketDataLogger dailyStats ) {
+    this.dailyStats = dailyStats;
+  }
+  
+  public HistoryStatsMarketDataLogger getHistoryStats() {
+    return historyStats;
+  }
+  
+  public void setHistoryStats( HistoryStatsMarketDataLogger historyStats ) {
+    this.historyStats = historyStats;
+  }
+  
   public String toString() {
     return "(Auction id:" + id + ")";
   }
