@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.core;
 
 import uk.ac.liv.util.BinaryHeap;
-import uk.ac.liv.util.Debug;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -190,6 +189,9 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Get the highest unmatched bid.
    */
   public Shout getHighestUnmatchedBid() {
+    if ( bOut.isEmpty() ) {
+      return null;
+    }
     return (Shout) bOut.get();
   }
 
@@ -198,6 +200,9 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Get the lowest matched bid
    */
   public Shout getLowestMatchedBid() {
+    if ( bIn.isEmpty() ) {
+      return null;
+    }
     return (Shout) bIn.get();
   }
 
@@ -205,6 +210,9 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Get the lowest unmatched ask.
    */
   public Shout getLowestUnmatchedAsk() {
+    if ( sOut.isEmpty() ) {
+      return null;
+    }
     return (Shout) sOut.get();
   }
 
@@ -212,6 +220,9 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    * Get the highest matched ask.
    */
   public Shout getHighestMatchedAsk() {
+    if ( sIn.isEmpty() ) {
+      return null;
+    }
     return (Shout) sIn.get();
   }
 

@@ -1,18 +1,35 @@
+# This example demonstrates a uniform-price k-DA with a large number
+# of agents.
+#
+# To run this example, run the following command:
+#
+#  java uk.ac.liv.auction.MarketSimulation jasa/examples/example2.params
+#
+
+# Use a RandomShoutAuction giving each agent a 90% probability of being
+# able to bid in each round.
 simulation.auction = uk.ac.liv.auction.core.RandomShoutAuction
-simulation.auction.name = Example2
 simulation.auction.shoutprobability = 0.9
+
+simulation.auction.name = Example2
 simulation.auction.maximumrounds = 200
+
+# Use a k-DA auctioneer which will clear the auction after each round
 simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+# Set a uniform transaction-price based on current market quote.
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
+# Set the transaction price halfway between the bid-ask spread.
 simulation.auction.auctioneer.pricing.k = 0.5
 
-# Get cummulative stats
+# Configure a combination of two different loggers
 simulation.auction.logger = uk.ac.liv.auction.stats.CombiMarketDataLogger
 simulation.auction.logger.n = 2
+
+# 1st logger collects statistics on the auction as it progresses
 simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
+
+# 2nd logger logs data to a graph on the console
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
-
-
 
 # Show GUI console
 simulation.console = true
@@ -24,33 +41,38 @@ simulation.stats = uk.ac.liv.auction.stats.EquilibriaStats
 # Two populations of agents
 simulation.agenttype.n = 2
 
-# 1st population- 5000 sellers 
+# 1st population- 5000 ZI-C sellers
 simulation.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.0.numagents = 5000
 simulation.agenttype.0.initialtradeentitlement = 1000
 simulation.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.agenttype.0.strategy.maxmarkup = 100
 simulation.agenttype.0.isseller = true
-simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+# Private values will be randomly drawn for each unit that we trade
+simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+# Range for private values is (10, 100)
 simulation.agenttype.0.valuer.minvalue = 10
 simulation.agenttype.0.valuer.maxvalue = 100
 
-# 2nd population- 5000 buyers 
+# 2nd population- 5000 ZI-C buyers
 simulation.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.agenttype.1.numagents = 5000
 simulation.agenttype.1.initialtradeentitlement = 1000
 simulation.agenttype.1.strategy = uk.ac.liv.auction.agent.RandomConstrainedStrategy
 simulation.agenttype.1.isseller = false
-simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+# Private values will be randomly drawn for each unit that we trade
+simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
+# Range for private values is (20, 150)
 simulation.agenttype.1.valuer.minvalue = 20
 simulation.agenttype.1.valuer.maxvalue = 150
 
-# prng configuration
+# PRNG configuration
+#  Use the RanMar algorithm
 simulation.prng = uk.ac.liv.prng.Mar
+#  with the following PRNG seed
 simulation.seed = 4523
 
-
-# log4j configuration
+# log4j configuration - substitute INFO for DEBUG to turn on debugging output
 log4j.rootCategory=INFO, stdout
 log4j.appender.stdout=org.apache.log4j.ConsoleAppender
 log4j.appender.stdout.layout=org.apache.log4j.PatternLayout

@@ -15,12 +15,8 @@
 
 package uk.ac.liv.auction.ui;
 
-import JSci.swing.JLineGraph;
-import JSci.swing.JGraphLayout;
-
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.AbstractTraderAgent;
-
 import uk.ac.liv.auction.stats.GraphMarketDataLogger;
 
 import uk.ac.liv.util.Resetable;
@@ -35,6 +31,9 @@ import java.text.DecimalFormat;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import JSci.swing.JLineGraph;
+import JSci.swing.JGraphLayout;
 
 import org.apache.log4j.Logger;
 

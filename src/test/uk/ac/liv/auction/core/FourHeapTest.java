@@ -102,6 +102,7 @@ public class FourHeapTest extends TestCase {
       }
 
     } catch ( Exception e ) {
+      shoutEngine.printState();
       e.printStackTrace();
       fail();
     }
@@ -141,10 +142,10 @@ class TestShoutEngine extends FourHeapShoutEngine {
       throw new Error("shout heaps not balanced nS="+nS + " nB=" + nB);
     }
 
-    Shout bInTop = (Shout) bIn.peek();
-    Shout sInTop = (Shout) sIn.peek();
-    Shout bOutTop = (Shout) bOut.peek();
-    Shout sOutTop = (Shout) sOut.peek();
+    Shout bInTop = getLowestMatchedBid();
+    Shout sInTop = getHighestMatchedAsk();
+    Shout bOutTop = getHighestUnmatchedBid();
+    Shout sOutTop = getLowestUnmatchedAsk();
 
     checkBalanced(bInTop, bOutTop, "bIn >= bOut");
     checkBalanced(sOutTop, sInTop, "sOut >= sIn");
@@ -170,5 +171,7 @@ class TestShoutEngine extends FourHeapShoutEngine {
     }
     return qty;
   }
+
+
 
 }

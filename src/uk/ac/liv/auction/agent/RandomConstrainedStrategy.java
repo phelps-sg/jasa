@@ -33,7 +33,8 @@ import java.io.Serializable;
 /**
  * <p>
  * A trading strategy that in which we bid a different random markup on our
- * agent's private value in each auction round.
+ * agent's private value in each auction round.  This strategy is often
+ * referred to as Zero Intelligence Constrained (ZI-C) in the literature.
  * </p>
  *
  * </p><p><b>Parameters</b><br>
@@ -53,9 +54,9 @@ import java.io.Serializable;
 public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
                                         implements Seedable, Serializable {
 
-  protected double maxMarkup = 50;
+  protected double maxMarkup = DEFAULT_MARKUP;
 
-  protected RandomElement randGenerator;
+  protected RandomElement prng;
 
   public static final String P_MAX_MARKUP = "maxmarkup";
 
@@ -65,15 +66,16 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     this(null, DEFAULT_MARKUP);
   }
 
-  public RandomConstrainedStrategy( AbstractTraderAgent agent, double maxMarkup ) {
+  public RandomConstrainedStrategy( AbstractTraderAgent agent,
+                                      double maxMarkup ) {
     super(agent);
-    randGenerator = PRNGFactory.getFactory().create();
+    prng = PRNGFactory.getFactory().create();
     this.maxMarkup = maxMarkup;
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
 
-    double markup = randGenerator.raw() * maxMarkup;
+    double markup = prng.raw() * maxMarkup;
     double price = 0;
     if ( agent.isBuyer() ) {
       price = agent.getPrivateValue(auction) - markup;
@@ -96,11 +98,12 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null, 100);
+    maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP),
+                                                  null, maxMarkup);
   }
 
   public void setSeed( long seed ) {
-    randGenerator = PRNGFactory.getFactory().create(seed);
+    prng = PRNGFactory.getFactory().create(seed);
   }
 
   public void seed( Seeder s ) {

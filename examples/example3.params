@@ -12,8 +12,8 @@ simulation.auction.lengthofday = 10
 simulation.auction.maximumdays = 50
 simulation.auction.name = Example3
 
-# Use a double-auction with clearing occuring every time a new shout arrives
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+# Use a double-auction with clearing occuring at the end of each round
+simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
 # Set the transaction price as a function of individual bid and ask prices
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 # Set the transaction price halfway between the bid and the ask price

@@ -90,14 +90,10 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   }
 
   public void endOfRound( Auction auction ) {
+    // Do nothing
   }
 
-  public String toString() {
-    return "(" + getClass() + " s:" + s + " t:" + t + ")";
-  }
-
-
-  protected boolean juicyOffer() {
+  public boolean juicyOffer() {
 
     boolean juicyOffer = false;
 
@@ -129,7 +125,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   }
 
 
-  protected boolean smallSpread() {
+  public boolean smallSpread() {
 
     boolean smallSpread = false;
 
@@ -165,13 +161,19 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   }
 
 
-  protected boolean timeRunningOut() {
+  public boolean timeRunningOut() {
     boolean timeOut = auction.getRemainingTime() < t;
     if ( timeOut ) {
       logger.debug(this + ": time running out");
     }
     return timeOut;
   }
+
+
+  public String toString() {
+    return "(" + getClass() + " s:" + s + " t:" + t + ")";
+  }
+
 
   protected void error( DataUnavailableException e ) {
     logger.error("Auction is not configured with loggers appropriate for this strategy");

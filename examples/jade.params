@@ -28,7 +28,7 @@ auction.auctioneer.logger = uk.ac.liv.auction.stats.StatsMarketDataLogger
 # Two populations of trader agents
 auction.agenttype.n = 2
 
-# 1st population- 50 sellers bidding using the modified Roth-Erev 
+# 1st population- 50 sellers bidding using the modified Roth-Erev
 # learning algorithm
 auction.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
 auction.agenttype.0.numagents = 50
@@ -37,7 +37,9 @@ auction.agenttype.0.valuer.minvalue = 10
 auction.agenttype.0.valuer.maxvalue = 100
 auction.agenttype.0.capacity = 10
 auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+auction.agenttype.0.strategy.markupscale = 1
 auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
+auction.agenttype.0.strategy.learner.k = 100
 auction.agenttype.0.isseller = true
 
 # 2nd population- 50 buyers using the the original
@@ -49,7 +51,9 @@ auction.agenttype.1.valuer.minvalue = 10
 auction.agenttype.1.valuer.maxvalue = 150
 auction.agenttype.1.capacity = 10
 auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+auction.agenttype.1.strategy.markupscale = 1
 auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.NPTRothErevLearner
+auction.agenttype.1.strategy.learner.k = 100
 auction.agenttype.1.isseller = false
 
 # log4j configuration

@@ -255,6 +255,7 @@ public class MarketSimulation implements Parameterizable, Runnable,
     logger.info("Seeding done.\n");
   }
 
+
   public long nextSeed() {
     return seeds.choose(0, Integer.MAX_VALUE);
   }
