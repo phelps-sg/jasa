@@ -30,7 +30,7 @@ import uk.ac.liv.util.Parameterizable;
 import org.apache.log4j.Logger;
 
 /**
- * A report that collects individual statistics for each trading day.
+ * A report that collects price statistics for each trading day.
  *
  * @author Steve Phelps
  * @version $Revision$

@@ -18,6 +18,11 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 /**
+ * A report that lists the ratio of actual to theoretical profits of each
+ * agent group in the auction. 
+ * 
+ * @see uk.ac.liv.auction.agent.AgentGroup
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */

@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A MarketDataLogger that keeps a historical record of the shouts in the market
+ * A report that keeps a historical record of the shouts in the market
  * that lead to the last N transactions. This logger is used to keep historical
  * data that is used by various different trading strategies.
  * </p>

@@ -37,8 +37,8 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A report that keeps cummulative statistics on a number of
- * market variables.
+ * A report that keeps cummulative statistics on bid prices,
+ * ask prices, transaction prices, and market quote prices.
  * </p>
  *
  * @author Steve Phelps

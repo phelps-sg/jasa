@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
  * trades occur at the equilibrium price.  Note that this report
  * assumes that the equilibrium price is constant.  To calculate
  * theoretical surplus with dynamic supply and demand you should configure
- * a DynamicSurplusLogger.
+ * a DynamicSurplusReport.
  *
  * @see DynamicSurplusReport
  *

@@ -27,9 +27,9 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 /**
- * A report that keeps track of the ratio of actual
- * verses theoretical profits for each strategy being played in the
- * auction.
+ * An abstract report that keeps track of the ratio of actual
+ * verses theoretical profits for a particular grouping of agents.
+ * Concrete implementations define 
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -151,8 +151,17 @@ public abstract class PayoffReport extends DynamicSurplusReport
     table.clear();
   }
   
+  /**
+   * Map an agent onto a group.
+   * @param agent	The agent to map from.
+   * @return An object representing the grouping of this agent.
+   */
   public abstract Object getKey( AbstractTradingAgent agent );
 
+  /**
+   * Return user-friendly description of the space of groups.
+   * @return A string describing the grouping of this report.
+   */
   public abstract String getKeyName();
   
   public abstract String getReportText();

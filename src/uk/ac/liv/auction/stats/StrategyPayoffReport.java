@@ -19,6 +19,11 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 
 /**
+ * A report that lists the ratio of actual to theoretical profits of each
+ * strategy being played in the auction. Note that strategies are identified by
+ * their class, so two agents configured with the same class of strategy, but
+ * with different parameters, will be grouped together.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
