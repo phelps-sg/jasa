@@ -27,7 +27,7 @@
 		destdir="${docDir}"
 		author="true"
 		windowtitle="${Name}"
-		bottom="Copyright (c) 2002 Liverpool University. All Rights Reserved"
+		bottom="Copyright (c) Steve Phelps."
 	/>
    </target>
 
@@ -40,7 +40,7 @@
    <target name="tar" depends="jar" >
    	<tar tarfile="jasa.tar"
 		basedir="."
-		includes="jasa.jar,build.xml,doc/**,src/**"
+		includes="jasa.jar,build.xml,readme.html,doc/**,src/**"
 	/>
 	<gzip src="jasa.tar" zipfile="jasa.tar.gz" />
     </target>
