@@ -13,12 +13,11 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction;
+package uk.ac.liv.auction.electricity;
 
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.*;
-import uk.ac.liv.auction.electricity.*;
 
 import uk.ac.liv.ai.learning.*;
 
@@ -30,8 +29,10 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import java.util.*;
-
 import java.io.*;
+
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.Logger;
 
 /**
  * <p>
@@ -54,40 +55,37 @@ import java.io.*;
 
 public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
-  String outputDir = "/tmp";
+  protected String outputDir = "/tmp";
 
-  int maxRounds = 1000;
+  protected int maxRounds = 1000;
 
-  int iterations = 100;
+  protected int iterations = 100;
 
-  int auctioneerKSamples = 10;
+  protected int auctioneerKSamples = 10;
 
-  int numBuyers, numSellers;
-  int buyerCapacity, sellerCapacity;
+  protected int numBuyers, numSellers;
+  protected int buyerCapacity, sellerCapacity;
 
-  int seed = (int) System.currentTimeMillis();
+  protected FixedQuantityStrategy[] sellerStrategies;
+  protected FixedQuantityStrategy[] buyerStrategies;
 
-  FixedQuantityStrategy[] sellerStrategies;
-  FixedQuantityStrategy[] buyerStrategies;
+  protected DataWriter dataFile, distributionFile, iterResults;
 
-  double minPrivateValue = 10;
-  double maxPrivateValue = 50;
+  protected ElectricityStats stats;
 
-  DataWriter dataFile, distributionFile, iterResults;
+  protected RandomRobinAuction auction;
 
-  ElectricityStats stats;
+  protected Auctioneer auctioneer;
 
-  RandomRobinAuction auction;
+  protected StatsMarketDataLogger marketData;
 
-  Auctioneer auctioneer;
+  protected String paramSummary;
 
-  StatsMarketDataLogger marketData;
+  protected boolean collectIterData = false;
 
-  MersenneTwisterFast randGenerator = new MersenneTwisterFast();
+  protected StandardRandomizer randomizer;
 
-  String paramSummary;
-
-  boolean collectIterData = false;
+  static Logger logger = Logger.getLogger(ElectricityAuctionSimulation.class);
 
   static final String DEFAULT_PARAMETER_FILE = "examples/electricity.params";
 
@@ -96,8 +94,6 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_OUTPUTDIR = "outputdir";
   static final String P_ELECTRICITY = "electricity";
   static final String P_AUCTIONEERKSAMPLES = "ksamples";
-  static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
-  static final String P_MINPRIVATEVALUE = "minprivatevalue";
   static final String P_AUCTIONEER = "auctioneer";
   static final String P_CB = "cb";
   static final String P_CS = "cs";
@@ -108,7 +104,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_STRATEGY = "strategy";
   static final String P_STATS = "stats";
   static final String P_ITER_DATA = "iterdata";
-  static final String P_SEED = "seed";
+  static final String P_RANDOMIZER = "randomizer";
+
 
   static final int DATAFILE_NUM_COLUMNS = 35;
 
@@ -127,18 +124,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     collectIterData =
         parameters.getBoolean(base.push(P_ITER_DATA), null, collectIterData);
 
-    minPrivateValue =
-        parameters.getDoubleWithDefault(base.push(P_MINPRIVATEVALUE), null,
-                                            minPrivateValue);
-    maxPrivateValue =
-        parameters.getDoubleWithDefault(base.push(P_MAXPRIVATEVALUE), null,
-                                            maxPrivateValue);
-
     iterations =
       parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
-
-    seed =
-      parameters.getIntWithDefault(base.push(P_SEED), null, seed);
 
     outputDir =
       parameters.getStringWithDefault(base.push(P_OUTPUTDIR), null,
@@ -153,6 +140,13 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         (ElectricityStats) parameters.getInstanceForParameterEq(base.push(P_STATS),
                                                                 null, ElectricityStats.class);
 
+    randomizer =
+        (StandardRandomizer) parameters.getInstanceForParameter(base.push(P_RANDOMIZER),
+                                                                  null,
+                                                                  StandardRandomizer.class);
+    randomizer.setAuction(auction);
+    randomizer.setup(parameters, base.push(P_RANDOMIZER));
+
     numBuyers = parameters.getIntWithDefault(base.push(P_NB), null, 3);
     numSellers = parameters.getIntWithDefault(base.push(P_NS), null, 3);
 
@@ -165,8 +159,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     Parameter buyerStrategyParam = strategyParam.push(P_BUYER_STRATEGY);
     for( int i=0; i<numBuyers; i++ ) {
       buyerStrategies[i] =
-               (FixedQuantityStrategy) parameters.getInstanceForParameter(buyerStrategyParam,
-                                                              null, FixedQuantityStrategy.class);
+               (FixedQuantityStrategy)
+                 parameters.getInstanceForParameter(buyerStrategyParam,
+                                                     null,
+                                                     FixedQuantityStrategy.class);
       ((Parameterizable) buyerStrategies[i]).setup(parameters, buyerStrategyParam);
     }
 
@@ -174,8 +170,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     Parameter sellerStrategyParam = strategyParam.push(P_SELLER_STRATEGY);
     for( int i=0; i<numSellers; i++ ) {
       sellerStrategies[i] =
-               (FixedQuantityStrategy) parameters.getInstanceForParameter(sellerStrategyParam,
-                                                              null, FixedQuantityStrategy.class);
+               (FixedQuantityStrategy)
+                 parameters.getInstanceForParameter(sellerStrategyParam,
+                                                     null,
+                                                     FixedQuantityStrategy.class);
       ((Parameterizable) sellerStrategies[i]).setup(parameters, sellerStrategyParam);
     }
 
@@ -200,6 +198,8 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         System.exit(1);
       }
 
+      org.apache.log4j.PropertyConfigurator.configure(fileName);
+
       ParameterDatabase parameters =
         new ParameterDatabase(new File(fileName), args);
 
@@ -218,15 +218,15 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     try {
 
-      System.out.println("\nUsing global parameters:\n");
-      System.out.println("maxRounds = " + maxRounds);
-      System.out.println("iterations = " + iterations);
-      System.out.println("auctioneer = " + auctioneer);
-      System.out.println("ns = " + numSellers);
-      System.out.println("nb = " + numBuyers);
-      System.out.println("cs = " + sellerCapacity);
-      System.out.println("cb = " + buyerCapacity);
-      System.out.println("stats = " + stats + "\n");
+      logger.info("\nUsing global parameters:\n");
+      logger.info("maxRounds = " + maxRounds);
+      logger.info("iterations = " + iterations);
+      logger.info("auctioneer = " + auctioneer);
+      logger.info("ns = " + numSellers);
+      logger.info("nb = " + numBuyers);
+      logger.info("cs = " + sellerCapacity);
+      logger.info("cb = " + buyerCapacity);
+      logger.info("stats = " + stats + "\n");
 
       experiment(numSellers, numBuyers, sellerCapacity, buyerCapacity);
 
@@ -236,14 +236,16 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 
-  public void experiment( int ns, int nb, int cs, int cb ) throws FileNotFoundException {
+  public void experiment( int ns, int nb, int cs, int cb )
+        throws FileNotFoundException {
 
     try {
       paramSummary = ns + "-" + nb + "-" + cs + "-" + cb;
 
       dataFile = new CSVWriter(
                   new FileOutputStream(outputDir + "/" + "npt-"
-                                        + paramSummary + ".csv"), DATAFILE_NUM_COLUMNS);
+                                        + paramSummary + ".csv"),
+                                            DATAFILE_NUM_COLUMNS);
 
     } catch ( IOException e ) {
       e.printStackTrace();
@@ -262,13 +264,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
     auction.setMaximumRounds(maxRounds);
 
-    long[][] prngSeeds = generatePRNGseeds(ns+nb, iterations);
+    long[][] prngSeeds = randomizer.generatePRNGseeds(ns+nb, iterations);
 
     double[][] randomizedPrivateValues = null;
 
-    randomizedPrivateValues = generateRandomizedPrivateValues(ns+nb,
-                                                                iterations);
-
+    randomizedPrivateValues =
+        randomizer.generateRandomizedPrivateValues(ns+nb, iterations);
 
     for( int kMultiple=0; kMultiple<auctioneerKSamples+1; kMultiple++ ) {
 
@@ -276,9 +277,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       ((ParameterizablePricing) auctioneer).setK(auctioneerK);
       auction.reset();
 
-      System.out.println("\n*** Experiment with parameters");
+      logger.info("\n*** Experiment with parameters");
 
-      System.out.println("k = " + auctioneerK);
+      logger.info("k = " + auctioneerK);
 
       CummulativeStatCounter efficiency = new CummulativeStatCounter("EA");
       CummulativeStatCounter mPB = new CummulativeStatCounter("MPB");
@@ -294,9 +295,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       CummulativeStatCounter sMPS = new CummulativeStatCounter("SMPS");
       CummulativeStatCounter sMPBN = new CummulativeStatCounter("SMPBN");
       CummulativeStatCounter sMPSN = new CummulativeStatCounter("SMPSN");
-      CummulativeStatCounter equilibPrice = new CummulativeStatCounter("equilibPrice");
       CummulativeStatCounter pBCE = new CummulativeStatCounter("PBCE");
       CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
+      CummulativeStatCounter equilibPrice =
+          new CummulativeStatCounter("equilibPrice");
 
       LinkedList variables = new LinkedList();
       variables.add(efficiency);
@@ -325,9 +327,9 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
 
       for( int i=0; i<iterations; i++ ) {
 
-        randomizePrivateValues(randomizedPrivateValues, i);
+        randomizer.randomizePrivateValues(randomizedPrivateValues, i);
 
-        setStrategyPRNGseeds(prngSeeds, i);
+        randomizer.setStrategyPRNGseeds(prngSeeds, i);
 
         auction.reset();
         auction.run();
@@ -358,10 +360,10 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         dumpIterResults();
       }
 
-      System.out.println("\n*** Summary results for: k = " + auctioneerK + " ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
+      logger.info("\n*** Summary results for: k = " + auctioneerK + " ns = " + ns + " nb = " + nb + " cs = " + cs + " cb = " + cb + "\n");
       Iterator i = variables.iterator();
       while ( i.hasNext() ) {
-        System.out.println(i.next());
+        logger.info(i.next());
       }
 
       dataFile.newData(auctioneerK);
@@ -399,83 +401,12 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 
-
-  public double randomPrivateValue() {
-    return minPrivateValue +
-              (maxPrivateValue - minPrivateValue) * randGenerator.nextDouble();
-  }
-
-
-  protected void recordVariable( CummulativeStatCounter variable ) {
-    dataFile.newData(variable.getMean());
-    dataFile.newData(variable.getStdDev());
-  }
-
-
   protected void recordVariables( List variables ) {
     Iterator i = variables.iterator();
     while ( i.hasNext() ) {
-      recordVariable((CummulativeStatCounter) i.next());
-    }
-  }
-
-
-  protected void randomizePrivateValues( double[][] values, int iteration ) {
-
-    Iterator i = auction.getTraderIterator();
-    int traderNumber=0;
-    while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
-      trader.setPrivateValue(values[traderNumber++][iteration]);
-    }
-  }
-
-
-  protected double[][] generateRandomizedPrivateValues( int numTraders,
-                                                         int numIterations ) {
-    double[][] values = new double[numTraders][numIterations];
-    EquilibriaStats stats = new EquilibriaStats(auction);
-    for( int i=0; i<numIterations; i++ ) {
-      do {
-        Iterator traderIterator = auction.getTraderIterator();
-        for( int t=0; t<numTraders; t++ ) {
-          ElectricityTrader trader = (ElectricityTrader) traderIterator.next();
-          double value = randomPrivateValue();
-          trader.setPrivateValue(value);
-          values[t][i] = value;
-        }
-        stats.recalculate();
-      } while ( ! stats.equilibriaExists() );
-    }
-    return values;
-  }
-
-
-  protected long[][] generatePRNGseeds( int numTraders, int numIterations ) {
-    long[][] seeds = new long[numTraders][numIterations];
-    System.out.println("PRNG seed = " + seed);
-    MersenneTwisterFast metaPRNG = new MersenneTwisterFast((int) seed);
-    for( int t=0; t<numTraders; t++ ) {
-      for( int i=0; i<numIterations; i++ ) {
-        seeds[t][i] = (long) metaPRNG.nextInt();
-      }
-    }
-    return seeds;
-  }
-
-
-  protected void setStrategyPRNGseeds( long[][] seeds, int iteration ) {
-    Iterator i = auction.getTraderIterator();
-    int traderNumber = 0;
-    while ( i.hasNext() ) {
-      ElectricityTrader t = (ElectricityTrader) i.next();
-      Strategy strategy = t.getStrategy();
-      if ( strategy instanceof AdaptiveStrategy ) {
-        Learner learner = ((AdaptiveStrategy) strategy).getLearner();
-        if ( learner instanceof StochasticLearner ) {
-          ((StochasticLearner) learner).setSeed(seeds[traderNumber++][iteration]);
-        }
-      }
+      CummulativeStatCounter variable = (CummulativeStatCounter) i.next();
+      dataFile.newData(variable.getMean());
+      dataFile.newData(variable.getStdDev());
     }
   }
 
@@ -492,12 +423,14 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     }
   }
 
+
   protected void initIterResults( String filename ) throws FileNotFoundException {
     if ( collectIterData ) {
       FileOutputStream iterOut = new FileOutputStream(filename);
       iterResults = new CSVWriter(iterOut, 7);
     }
   }
+
 
   public  double mpNormalise( double marketPower ) {
     return 1/(1+Math.abs(marketPower));
