@@ -42,7 +42,7 @@ simulation.agenttype.n = 2
 #  50 electricity sellers with a capacity of 10MWh
 #  using the Roth-Erev strategy
 simulation.agenttype.0 = uk.ac.liv.auction.electricity.ElectricityTrader
-simulation.agenttype.0.numagents = 50
+simulation.agenttype.0.numagents = 100
 simulation.agenttype.0.isseller = true
 # Valuations will be drawn randomly at the start of the auction
 simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
@@ -64,7 +64,7 @@ simulation.agenttype.0.strategy.learner.k = 100
 #  50 electricity buyers
 #  using the modified Roth-Erev strategy
 simulation.agenttype.1 = uk.ac.liv.auction.electricity.ElectricityTrader
-simulation.agenttype.1.numagents = 50
+simulation.agenttype.1.numagents = 100
 simulation.agenttype.1.isseller = false
 # Valuations will be drawn randomly for each unit that we trade
 simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
