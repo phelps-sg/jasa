@@ -79,13 +79,17 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
 
   protected void calculatePayoffs() {
     int totalAgents = auction.getNumberOfRegisteredTraders();
-    double averageSurplus = calculateTotalEquilibriumSurplus() / totalAgents;
+    double averageSurplus = calculateTotalEquilibriumSurplus() / totalAgents;    
     double totalPayoff = 0;
     Iterator i = table.keySet().iterator();
     while ( i.hasNext() ) {
       Class strategyClass = (Class) i.next();
       StrategyStats stats = (StrategyStats) table.get(strategyClass);
-      stats.payoff = ((stats.profits / stats.numAgents)  ) / averageSurplus;
+      if ( averageSurplus != 0 ) {        
+        stats.payoff = ((stats.profits / stats.numAgents)  ) / averageSurplus;
+      } else {
+        stats.payoff = 0;
+      }
     }
   }
 

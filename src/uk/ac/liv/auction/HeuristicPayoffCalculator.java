@@ -291,7 +291,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   }
 
   public void endOfDay( Auction a ) {
-    ensureEquilibriaExists();
+    //ensureEquilibriaExists();
   }
 
   public void ensureEquilibriaExists() {

@@ -53,34 +53,10 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class ZIPStrategy extends AdaptiveStrategyImpl
-    implements Seedable, Serializable, Prototypeable {
+public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 
-  protected double currentMargin;
-
-  protected double currentPrice;
-
-  protected double lastPrice;
-
-  protected MimicryLearner learner;
-  
   public static final String ERROR_SHOUTVISIBILITY = 
     "ZIPStrategy can only be used with auctioneers who permit shout visibility";
-
-  /**
-   * The PRNG used to draw perturbation values
-   */
-  protected static RandomElement randGenerator =
-      PRNGFactory.getFactory().create();
-
-  /**
-   * A parameter used to scale the randomly drawn price adjustment
-   * perturbation values.
-   */
-  protected double scaling = 0.01;
-
-  public static final String P_SCALING = "scaling";
-  public static final String P_LEARNER = "learner";
 
   static Logger logger = Logger.getLogger(ZIPStrategy.class);
 
@@ -93,28 +69,6 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     this(null);
   }
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-
-    super.setup(parameters, base);
-
-    scaling =
-        parameters.getDoubleWithDefault(base.push(P_SCALING), null, scaling);
-
-    learner = (MimicryLearner)
-        parameters.getInstanceForParameter(base.push(P_LEARNER), null,
-                                                   MimicryLearner.class);
-    if ( learner instanceof Parameterizable ) {
-      ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
-    }
-
-    initialise();
-    
-    setMargin(0.5 + randGenerator.raw()/2);
-    
-    logger.debug("Initialised with scaling = " + scaling + " and learner = " +
-                  learner);
-
-  }
 
   public Object protoClone() {
     ZIPStrategy clone = new ZIPStrategy();
@@ -124,70 +78,19 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
     return clone;
   }
 
-
-  public void initialise() {
-    super.initialise();
-  }
-
-
-  public boolean modifyShout( Shout.MutableShout shout ) {
+  protected void adjustMargin() {
     try {
-
-      currentMargin = learner.act();
-      if ( currentMargin < 0 ) {
-        logger.debug(this + ": clipping negative margin at 0");
-        setMargin(currentMargin = 0);
-      }
-      Shout lastShout = auction.getLastShout();
+      Shout lastShout = auction.getLastShout();      
       if ( agent.isSeller() ) {
         sellerStrategy(lastShout);
       } else {
         buyerStrategy(lastShout);
       }      
-      if ( agent.isBuyer() ) {
-        currentPrice = agent.getPrivateValue(auction) * (1 - currentMargin);
-      } else {
-        currentPrice = agent.getPrivateValue(auction) * (1 + currentMargin);
-      }      
-      if ( currentPrice > 0 ) {
-        shout.setPrice(currentPrice);
-      }
-      return super.modifyShout(shout);
-
     } catch ( ShoutsNotVisibleException e ) {
-      logger.error(e.getMessage());
       throw new AuctionError(ERROR_SHOUTVISIBILITY);
     }
   }
-
-  public void endOfRound( Auction auction ) {
-    // Do nothing
-  }
-
-  public void setSeed( long seed ) {
-    randGenerator = PRNGFactory.getFactory().create(seed);
-  }
-
-  public void seed( Seeder s ) {
-    logger.debug("seed(" + s + ")");
-    setSeed(s.nextSeed());
-    learner.seed(s);
-//    learner.randomInitialise();
-    logger.debug("learner = " + learner);
-  }
-
-  public void setLearner( Learner learner ) {
-    this.learner = (MimicryLearner) learner;
-  }
-
-  public Learner getLearner() {
-    return learner;
-  }
-
-  public void setMargin( double margin ) {
-    learner.setOutputLevel(margin);
-  }
-
+  
   
   protected void sellerStrategy( Shout lastShout ) 
       throws ShoutsNotVisibleException {   

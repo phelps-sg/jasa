@@ -22,7 +22,7 @@ import ec.util.ParameterDatabase;
 
 /**
  * <p>
- * Buyers configured with this valuation policy will receive a unique private
+ * Sellers configured with this valuation policy will receive a unique private
  * value from a common set of values starting at <code>minValue</code> and 
  * incrementing by <code>step</code> as each agent is assigned a valuation.
  * </p>
