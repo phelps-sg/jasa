@@ -34,7 +34,7 @@ public class GlobalPRNG {
   protected static RandomEngine prng;
   
   protected static RandomSeedGenerator seedGenerator = 
-    										new RandomSeedGenerator();
+    										new RandomSeedGenerator((int)System.currentTimeMillis(), 1);
 
   protected static long seed;
 
