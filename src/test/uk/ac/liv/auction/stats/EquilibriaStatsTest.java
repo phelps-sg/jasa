@@ -112,6 +112,7 @@ public class EquilibriaStatsTest extends TestCase {
     double mep = ep.calculateMidEquilibriumPrice();
     System.out.println("Mid EP = " + mep);
     assertTrue(MathUtil.approxEqual(mep, correctEP));
+    assertTrue(ep.equilibriaExists());
   }
   
   protected void setValuations( double[] valuations ) {
