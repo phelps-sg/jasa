@@ -75,7 +75,7 @@ public class FourHeapTest extends TestCase {
 
         shoutEngine.newShout(testRemoveShout = randomShout());
         testRemoveShout2 = (Shout) testRemoveShout.clone();
-        testRemoveShout2 = ShoutFactory.getFactory().create(testRemoveShout.getAgent(),
+        testRemoveShout2 = new Shout(testRemoveShout.getAgent(),
                                                              testRemoveShout.getQuantity(),
                                                              testRemoveShout.getPrice(),
                                                              !testRemoveShout.isBid());
