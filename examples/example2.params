@@ -3,7 +3,7 @@
 #
 # To run this example in RePast, run the following command:
 #
-#  java uk.ac.liv.auction.RepastMarketSimulation jasa/examples/example2.params
+#  ant run -Dparams=examples/example2.params
 #
 
 # Use a random-robin auction which will randomise the order in which agents bid

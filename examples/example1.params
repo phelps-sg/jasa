@@ -5,7 +5,7 @@
 #
 # To run this example, run the following command:
 #
-#  java uk.ac.liv.auction.MarketSimulation jasa/examples/example1.params
+#  ant batchrun -Dparams=examples/example1.params
 #
 
 # Perform ten iterations of the experiment

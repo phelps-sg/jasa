@@ -67,7 +67,7 @@ About
 
 <p>
 JASA is a high-performance auction simulator written in JAVA.
-It is designed for performing experiments in computational economics.
+It is designed for performing experiments in agent-based computational economics.
 </p>
 
 <h4>
@@ -83,6 +83,11 @@ High performance
 <p>
 <li>
 Integration with <a href="http://cs.gmu.edu/~eclab/projects/ecj/">ECJ</a> for performing experiments involving evolutionary computing or genetic programming.
+</li>
+
+<p>
+<li>
+Integration with <a href="http://repast.sourceforge.net">RePast</a> for visualising and controlling simulations.
 </li>
 
 <p>
@@ -103,12 +108,6 @@ Pluggable pseudo-random number generators using <a href="http://www.honeylocust.
 
 <p>
 <li>
-Optional real-time graphing of simulation as it progresses
-</li>
-</p>
-
-<p>
-<li>
 Implementations of existing agents, learning algorithms, experiments and
  auction types described in the computational economics literature.
 </li>
@@ -120,9 +119,9 @@ Development Status
 </H3>
 
 <p>
-  This package is currently at alpha.  This code is not
-stable or fully tested.  Please report any bugs, issues or suggestions to <A
-href="mailto:sphelps@csc.liv.ac.uk">Steve Phelps</A>.
+This package is currently at alpha.  This code is not stable or fully tested.
+Please report any bugs, issues or suggestions to <A
+href="mailto:sphelps@csc.liv.ac.uk">Steve Phelps</A>.  
 </p>
 
 <A name="license"></A>
@@ -132,10 +131,11 @@ License
 </A>
 
 <P>
-This software is licensed under the <a href="LICENSE.TXT">GNU General Public License</a>.
-Although it is not an official term of the licensing conditions, you are also expected to cite
-use of this software if you use it in your research.
-</P>
+This software is licensed under the <a href="LICENSE.TXT">GNU General Public
+License</a>.  Although it is not an official term of the licensing conditions,
+you are also expected to cite use of this software if you use it in your
+research.  
+</p>
 
 <A name="downloading"></A>
 <h3>
@@ -162,45 +162,48 @@ Prerequisites
 </h3>
 
 <LI>
-Java JVM 1.4.0 or later
+<a href="http://java.sun.com">Java</a> JVM 1.4.0 or later
 </LI>
 
+<LI>
+<a href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> version 1.6.2 or later.
+
+<A name="dependencies"></A>
+<h3>
+Dependencies
+</h3>
+
 <p>
-JASA also requires the following third-party libraries, all of which
+JASA also ships with the following third-party libraries, all of which
 are available under open-source licenses:
 </p>
 
 
 <li>
-<a href="http://cs.gmu.edu/~eclab/projects/ecj/">ECJ</a> version 10 or later
+<a href="http://cs.gmu.edu/~eclab/projects/ecj/">ECJ</a> version 12
 </li>
 
 <li>
-<a href="http://sourceforge.net/projects/jsci">JSci</a> version 0.91 or later
-</li>
-<li>
-<a href="http://logging.apache.org/log4j">Log4j<a> version 1.2.8 or later
+<a href="http://logging.apache.org/log4j">Log4j<a> version 1.2.8
 </li>
 
 <li>
-<a href="http://www.honeylocust.com/RngPack/">RngPack</a> version 1.1a or later
-</li>
-
-<li>
-<a href="http://www.junit.org">JUnit</a> version 3.81 or later -  (Optional) required for running
+<a href="http://www.junit.org">JUnit</a> version 3.81
 the unit tests</a>
 </li>
 
 <li>
-<a href="http://koala.ilog.fr/shillion/sp/">Scheme package</a> version 1.1 or later - (Optional)
+<a href="http://koala.ilog.fr/shillion/sp/">Scheme package</a> version 1.1
 </li>
 
-<p>
-Optional libraries are required for compilation,
-but are not required for running JASA if the indicated functionality is not being used.
-The core libraries can be downloaded from
-<a href="http://sourceforge.net/project/showfiles.php?group_id=47257&package_id=74370">SourceForge</a>.
-<p>
+<li>
+<a href="http://repast.sourceforge.net">RePast</a> version 2.2
+</li>
+
+<li>
+<a href="http://jakarta.apache.org/commons/collections/">Commons Collections</a> version 3.1
+</li>
+
 
 <A name="installation"></A>
 <h3>
@@ -209,49 +212,9 @@ Installation
 
 <p>
 <li>
-Unpack the distribution into a directory.
-The instructions refer to this directory as JASADIR from here on.
+Simply unpack the distribution into a directory.
+The instructions refer to this directory as <code>JASADIR</code> from here on.
 </li>
-</p>
-
-<p>
-<li>
-Obtain all of the libraries listed in the <a href="prerequisites">prerequisites</a> section,
-and place them in the directory JASADIR/jasa/lib.
-</li>
-</p>
-
-<p>
-<li>
-Set your <code>CLASSPATH</code> environment variable to include the file JASADIR/jasa/jasa.jar,
-and all of the libraries in the directory JASADIR/jasa/lib.  On linux, use the following command (ignoring line breaks):
-</p>
-<p>
-<code>
-export CLASSPATH=$CLASSPATH:JASADIR/jasa/jasa.jar:JASADIR/jasa/lib/ecj:
-JASADIR/jasa/lib/log4j.jar:JASADIR/jasa/lib/JSci/classes/core.jar:
-JASADIR/jasa/lib/JSci/classes/sci.jar:JASADIR/jasa/lib/JSci/classes/xtra.jar:
-JASADIR/jasa/lib/rngpack/rngpack.jar
-</code>
-</p>
-</li>
-</p>
-
-
-<A name="running"></A>
-<h3>
-Running the examples
-</h3>
-
-<p>
-The <code>examples/</code> directory contains several parameter files
-for different example experiments.
-These can be run using the <code>uk.ac.liv.auction.MarketSimulation</code>
-application, e.g.
-<p>
-<code>
-java uk.ac.liv.auction.MarketSimulation JASADIR/jasa/examples/example1.params
-</code>
 </p>
 
 <A name="compiling"></A>
@@ -267,7 +230,22 @@ various third-party class libraries used by JASA either in the CLASSPATH or in
 the directory </code>jasa/lib</code>, however alternative locations can be
 specified by creating a file <code>build.ant.properties</code>.
 </p>
-<hr>
+
+<A name="running"></A>
+<h3>
+Running the examples
+</h3>
+
+<p>
+The <code>examples/</code> directory contains several parameter files
+for different example experiments.
+These can be executed using <a href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> by specifying the target <code>run</code>, and defining a property <code>params</code> specifying the parameter file you want to use for the simulation;
+ e.g. <code>cd</code> into the directory <code>JASADIR</code> and execute the following command:
+<p>
+<code>
+ant run -Dparams=examples/example2.params
+</code>
+</p>
 
 <A name="acknowledgements"></A>
 <h3>

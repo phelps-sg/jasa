@@ -2,7 +2,7 @@
 #
 # To run this example, run the following command:
 #
-#  java uk.ac.liv.auction.RepastMarketSimulation jasa/examples/example1.params
+#  ant run -Dparams=examples/example3.params
 #
 
 # Use a random-robin auction which will randomise the shouting order
