@@ -2,7 +2,6 @@
    <target name="init">
       <property name="sourceDir" value="src"/>
       <property name="outputDir" value="classes" />
-      <property name="classPath" value="/cygwin/home/StevePhelps/java/lib/ecj;/cygwin/home/StevePhelps/java/lib/junit3.7/junit.jar" />
       <property name="projectName" value="JASA"/>
       <property name="packages" value="uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.electricity,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io" />
       <property name="docDir" value="doc" />
@@ -19,7 +18,7 @@
    </target>
 
    <target name="compile" depends="prepare">
-     <javac classpath="${classPath}" srcdir="${sourceDir}" destdir="${outputDir}" />
+     <javac srcdir="${sourceDir}" destdir="${outputDir}" />
    </target>
 
    <target name="doc" depends="compile">
