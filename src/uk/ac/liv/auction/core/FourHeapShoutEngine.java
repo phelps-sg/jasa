@@ -31,6 +31,9 @@ import java.util.Comparator;
 import java.io.PrintStream;
 import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
+
 /**
  * <p>
  * This class provides auction shout management services using the 4-Heap algorithm. See:
@@ -77,6 +80,8 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
   protected static DescendingShoutComparator lessThan =
     new DescendingShoutComparator();
 
+  static Logger logger = Logger.getLogger(FourHeapShoutEngine.class);
+
 
   public FourHeapShoutEngine() {
     initialise();
@@ -117,7 +122,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
    */
   public void printState() {
     //checkBalanced();
-    System.out.println(this.toString());
+    logger.debug(this.toString());
   }
 
 

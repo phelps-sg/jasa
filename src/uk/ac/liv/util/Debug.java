@@ -15,15 +15,18 @@
 
 package uk.ac.liv.util;
 
+import org.apache.log4j.Logger;
 
 public class Debug {
+
+  static Logger logger = Logger.getLogger(Debug.class);
 
   public Debug() {
   }
 
   public static void assertTrue( String message, boolean condition ) {
     if ( ! condition ) {
-      System.err.println("*** ASSERTION FAILED: " + message);
+      logger.error("*** ASSERTION FAILED: " + message);
       throw new Error(message);
     }
   }
@@ -33,6 +36,6 @@ public class Debug {
   }
 
   public static void println( String message ) {
-    System.out.println("DEBUG: " + message);
+    logger.debug(message);
   }
 }

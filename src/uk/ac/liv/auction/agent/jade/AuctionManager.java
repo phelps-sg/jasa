@@ -201,10 +201,12 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
     org.apache.log4j.PropertyConfigurator.configure(parameterFileName);
     logger.debug("Using parameter file " + parameterFileName);
 
+    uk.ac.liv.auction.MarketSimulation.gnuMessage();
+
     try {
       ParameterDatabase parameters = new ParameterDatabase(paramFile);
       setup(parameters, new Parameter(P_AUCTION));
-      logger.info("done.");
+      logger.debug("setup done.");
     } catch ( IOException e ) {
       e.printStackTrace();
       throw new Error(e.getMessage());
