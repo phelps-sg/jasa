@@ -2,14 +2,14 @@
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2002 Steve Phelps
  *
- * This program is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public License as 
- * published by the Free Software Foundation; either version 2 of 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
  * the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
 
@@ -17,6 +17,8 @@ package uk.ac.liv.util;
 
 import java.util.Comparator;
 import java.util.HashMap;
+
+import huyd.poolit.*;
 
 /**
  * <p>
@@ -33,7 +35,8 @@ import java.util.HashMap;
 
 public class FastBinaryHeap extends BinaryHeap {
 
-  protected HashMap map = new HashMap();
+  protected IndexMap map = new IndexMap();
+
 
   public FastBinaryHeap( Comparator comparator ) {
     super(comparator);
@@ -45,12 +48,12 @@ public class FastBinaryHeap extends BinaryHeap {
 
   protected void set( int index, Object x ) {
     super.set(index, x);
-    map.put(x, new Integer(index));
+    map.associate(x, index);
   }
 
   public void insert( Object x ) {
     // Prevent duplicates
-    if ( map.get(x) != null ) {
+    if ( map.getIndex(x) != -1 ) {
       throw new IllegalArgumentException("Duplicates not allowed in FastBinaryHeap");
     }
     super.insert(x);
@@ -60,16 +63,12 @@ public class FastBinaryHeap extends BinaryHeap {
     if ( isEmpty() ) {
       return -1;
     }
-    Integer index = (Integer) map.get(x);
-    if ( index == null ) {
-      return -1;
-    }
-    return index.intValue();
+    return map.getIndex(x);
   }
 
   public Object removeFirst() {
     Object first = super.removeFirst();
-    map.remove(first);
+    map.forget(first);
     return first;
   }
 
@@ -79,8 +78,64 @@ public class FastBinaryHeap extends BinaryHeap {
     }
     Object originalObject = get(index);
     boolean result = super.remove(index);
-    map.remove(originalObject);
+    map.forget(originalObject);
     return result;
   }
 
 }
+
+class IndexMap {
+
+  HashMap map = new HashMap();
+
+  static final int POOL_SIZE = 500000;
+
+  static Pooler intPool = null;
+
+  public IndexMap() {
+    map = new HashMap();
+    if ( intPool == null ) {
+      try {
+        intPool = new FixedPooler(MutableIntWrapper.class, POOL_SIZE);
+      } catch ( CreateException e ) {
+        e.printStackTrace();
+        throw new Error(e.getMessage());
+      }
+    }
+  }
+
+  public void associate( Object key, int index ) {
+    MutableIntWrapper indexWrapper = (MutableIntWrapper) map.get(key);
+    if ( indexWrapper != null ) {
+      indexWrapper.value = index;
+    } else {
+      try {
+        indexWrapper = (MutableIntWrapper) intPool.fetch();
+      } catch ( FetchException e ) {
+        System.err.println("WARNING " + getClass() + ":");
+        e.printStackTrace();
+        indexWrapper = new MutableIntWrapper();
+      }
+      indexWrapper.value = index;
+      map.put(key, indexWrapper);
+    }
+  }
+
+  public void forget( Object key ) {
+    MutableIntWrapper indexWrapper = (MutableIntWrapper) map.get(key);
+    if ( indexWrapper != null ) {
+      intPool.release(indexWrapper);
+      map.remove(key);
+    }
+  }
+
+  public int getIndex( Object key ) {
+    MutableIntWrapper indexWrapper = (MutableIntWrapper) map.get(key);
+    if ( indexWrapper == null ) {
+      return -1;
+    }
+    return indexWrapper.intValue();
+  }
+
+}
+
