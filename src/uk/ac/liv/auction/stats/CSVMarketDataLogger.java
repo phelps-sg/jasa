@@ -135,4 +135,7 @@ public class CSVMarketDataLogger extends DataWriterMarketDataLogger
     // Do nothing
   }
 
+  public void endOfDay() {
+  }
+
 }

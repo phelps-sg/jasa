@@ -59,6 +59,8 @@ public interface MarketDataLogger {
 
   public void endOfRound();
 
+  public void endOfDay();
+
   /**
    * Generate a report on the market data.  Implementing classes
    * may choose to do nothing for this method.

@@ -160,6 +160,10 @@ public class ElectricityTrader extends AbstractTraderAgent {
     return true;
   }
 
+  public void endOfDay( Auction auction ) {
+    reset();
+  }
+
   public String toString() {
     return "(" + getClass() + " id:" + id + " capacity:" + capacity + " privateValue:" + privateValue + " fixedCosts:" + fixedCosts + " profits:" + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit + " strategy:" + strategy + ")";
   }

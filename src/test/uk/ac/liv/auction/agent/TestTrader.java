@@ -96,6 +96,10 @@ public class TestTrader extends AbstractTraderAgent {
     receivedRoundClosed++;
   }
 
+  public void endOfDay( Auction auction ) {
+    //TODO
+  }
+
   public boolean active() {
     return true;
   }

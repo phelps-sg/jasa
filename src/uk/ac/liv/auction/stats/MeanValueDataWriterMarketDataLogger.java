@@ -111,6 +111,10 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
     }
   }
 
+  public void endOfDay() {
+    //TODO
+  }
+
 
   protected void update( DataWriter writer, CummulativeStatCounter stats ) {
     writer.newData(round);

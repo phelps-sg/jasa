@@ -167,6 +167,10 @@ public class StatsMarketDataLogger
     // Do nothing
   }
 
+  public void endOfDay() {
+    //TODO
+  }
+
   protected void printStats( CummulativeStatCounter stats ) {
     stats.log();
     logger.info("");

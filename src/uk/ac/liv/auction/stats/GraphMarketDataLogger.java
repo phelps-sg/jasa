@@ -156,6 +156,10 @@ public class GraphMarketDataLogger extends MeanValueDataWriterMarketDataLogger
     }
   }
 
+  public void endOfDay() {
+    //TODO
+  }
+
 
   class SeriesIterator implements Iterator {
 

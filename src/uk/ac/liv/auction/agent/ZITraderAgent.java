@@ -105,9 +105,12 @@ public class ZITraderAgent extends AbstractTraderAgent implements Serializable {
     logger.debug("Initialised with tradeEntitlement = " + tradeEntitlement);
   }
 
-  public void reset() {
-    // ZITraders do not reset their strategy
-    initialise();
+  public void endOfDay( Auction auction ) {
+    logger.debug("Performing end-of-day processing..");
+    tradeEntitlement = initialTradeEntitlement;
+    quantityTraded = 0;
+    lastShoutSuccessful = false;
+    logger.debug("done.");
   }
 
   public void requestShout( Auction auction ) {

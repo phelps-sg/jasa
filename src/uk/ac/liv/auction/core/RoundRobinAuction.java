@@ -159,6 +159,8 @@ public class RoundRobinAuction extends AuctionImpl
 
   protected boolean pausePending;
 
+  protected int lengthOfDay = -1;
+
 
 
   public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
@@ -166,6 +168,7 @@ public class RoundRobinAuction extends AuctionImpl
   public static final String P_AUCTIONEER = "auctioneer";
   public static final String P_NAME = "name";
   public static final String P_STATS = "stats";
+  public static final String P_LENGTH_OF_DAY = "daylength";
 
   static Logger log4jLogger = Logger.getLogger(RoundRobinAuction.class);
 
@@ -192,6 +195,9 @@ public class RoundRobinAuction extends AuctionImpl
 
     maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS),
                                                   null, -1);
+
+    lengthOfDay = parameters.getIntWithDefault(base.push(P_LENGTH_OF_DAY),
+                                                null, -1);
 
     try {
       logger =
@@ -284,6 +290,14 @@ public class RoundRobinAuction extends AuctionImpl
     }
   }
 
+  public void informEndOfDay() {
+    Iterator i = registeredTraders.iterator();
+    while ( i.hasNext() ) {
+      RoundRobinTrader trader = (RoundRobinTrader) i.next();
+      trader.endOfDay(this);
+    }
+  }
+
 
   public void informRoundClosed() {
     Iterator i = activeTraders.iterator();
@@ -358,6 +372,7 @@ public class RoundRobinAuction extends AuctionImpl
     try {
       while (!closed()) {
         runSingleRound();
+        checkEndOfDay();
         checkPaused();
       }
 
@@ -573,6 +588,15 @@ public class RoundRobinAuction extends AuctionImpl
       paused = true;
     }
     paused = false;
+  }
+
+  protected void checkEndOfDay() {
+    if ( lengthOfDay > 0 ) {
+      if ( (round % lengthOfDay) == 0 ) {
+        informEndOfDay();
+        logger.endOfDay();
+      }
+    }
   }
 
 

@@ -226,25 +226,18 @@ public class ZIPExperiment implements Parameterizable, Runnable,
     for( int sample=0; sample<numSamples; sample++ ) {
       logger.info("Sample " + sample + "... ");
       selectRandomLearnerParameters();
-      for( int day=0; day<numDays; day++ ) {
-        logger.debug("Day " + day + "... ");
-        auction.run();
-        double meanTransPrice = marketDataLogger.getTransPriceStats().getMean();
-        transPriceStats[day].newData(meanTransPrice);
-        logger.debug("Auction terminated at round " + auction.getAge());
-        logger.debug(marketDataLogger.getTransPriceStats());
-        auction.reset();
-        logger.debug("Day " + day + " done.");
-      }
+      auction.run();
+      double meanTransPrice = marketDataLogger.getTransPriceStats().getMean();
+      logger.debug("Auction terminated at round " + auction.getAge());
+      logger.debug(marketDataLogger.getTransPriceStats());
+      auction.reset();
+
       logger.info("Sample " + sample + " done.");
     }
   }
 
 
   public void report() {
-    for( int day=0; day<numDays; day++ ) {
-      logger.info(transPriceStats[day]);
-    }
   }
 
 

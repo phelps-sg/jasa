@@ -98,6 +98,9 @@ public class InteractiveTraderAgent extends AbstractTraderAgent {
   public void roundClosed( Auction auction ) {
   }
 
+  public void endOfDay( Auction auction ) {
+  }
+
   public boolean active() {
     return true;
   }

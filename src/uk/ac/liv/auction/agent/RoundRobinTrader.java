@@ -55,6 +55,13 @@ public interface RoundRobinTrader extends TraderAgent, Resetable {
   public void auctionClosed( Auction auction );
 
   /**
+   * Inform the trader that a trading day has ended.
+   *
+   * @param auction The auction in which a day has ended.
+   */
+  public void endOfDay( Auction auction );
+
+  /**
    * Inform the trader that the current auction round is closed.
    *
    * @param auction The auction in which a round has closed.

@@ -97,4 +97,8 @@ public class ListMarketDataLogger implements MarketDataLogger {
     // Do nothing
   }
 
+  public void endOfDay() {
+    // Do nothing
+  }
+
 }

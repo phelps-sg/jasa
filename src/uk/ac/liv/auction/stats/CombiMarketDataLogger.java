@@ -133,4 +133,14 @@ public class CombiMarketDataLogger
       logger.endOfRound();
     }
   }
+
+
+  public void endOfDay() {
+    Iterator i = loggers.iterator();
+    while ( i.hasNext() ) {
+      MarketDataLogger logger = (MarketDataLogger) i.next();
+      logger.endOfDay();
+    }
+  }
+
 }
