@@ -32,7 +32,19 @@ import org.apache.log4j.Logger;
 
 /**
  * A valuation policy in which we randomly determine our valuation
- * across all auctions and all units at initialisation.
+ * across all auctions and all units at initialisation.  Valuations
+ * are drawn from a uniform distribution with the specified range.
+ *
+ * </p><p><b>Parameters</b><br>
+ * <table>
+ * <tr><td valign=top><i>base</i><tt>.minvalue</tt><br>
+ * <font size=-1>double &gt;= 0</font></td>
+ * <td valign=top>(the minimum valuation)</td></tr>
+ *
+ * <tr><td valign=top><i>base</i><tt>.maxvalue</tt><br>
+ * <font size=-1>double &gt;=0</font></td>
+ * <td valign=top>(the maximum valuation)</td><tr>
+ * </table>
  *
  * @author Steve Phelps
  * @version $Revision$
@@ -42,10 +54,19 @@ import org.apache.log4j.Logger;
 public class RandomValuer extends AbstractSeedable
     implements Valuer, Serializable {
 
+  /**
+   * The current valuation.
+   */
   protected double value;
 
+  /**
+   * The minimum valuation to use.
+   */
   protected double minValue;
 
+  /**
+   * The maximum valuation to use.
+   */
   protected double maxValue;
 
   public static final String P_MINVALUE = "minvalue";
@@ -67,7 +88,7 @@ public class RandomValuer extends AbstractSeedable
     maxValue = parameters.getDouble(base.push(P_MAXVALUE), null, 0);
   }
 
-  public double determineValue( Auction auction ) {
+  public double determineValue( Auction auction ) {    
     return value;
   }
 
@@ -99,7 +120,7 @@ public class RandomValuer extends AbstractSeedable
   }
 
   protected void drawRandomValue() {
-    value = minValue + prng.raw()*(maxValue-minValue);
+    value = prng.uniform(minValue, maxValue);
   }
 
   public String toString() {
