@@ -66,7 +66,7 @@ public class MixedStrategyTest extends TestCase {
     Auctioneer auctioneer = new ContinuousDoubleAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(NUM_ROUNDS);
-    ZITraderAgent agent = new ZITraderAgent(10, 100, false);
+    ZITraderAgent agent = new ZITraderAgent(10, NUM_ROUNDS, false);
     agent.setStrategy(mixedStrategy);
     pureStrategy1.setAgent(agent);
     pureStrategy2.setAgent(agent);
