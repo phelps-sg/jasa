@@ -57,7 +57,7 @@ public abstract class KPricingPolicy implements PricingPolicy, Parameterizable {
   }
 
   public double kInterval( double a, double b ) {
-    return k*a + (1-k)*b;
+    return k*b + (1-k)*a;
   }
 
 }
