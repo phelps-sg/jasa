@@ -9,20 +9,24 @@
    <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng"/>
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
-   <property name="jsciPath" value="${javaLibPath}/JSci/classes/core.jar:${javaLibPath}/JSci/classes/xtra.jar:${javaLibPath}/JSci/sci.jar:${javaLibPath}/JSci/JSciBeans.jar"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj"/>
+   <property name="repastLoc" value="${javaLibPath}/RePast-2.2"/>
    <property name="rngpackLoc" value="${javaLibPath}/rngpack/rngpack.jar"/>
    <property name="junitLoc" value="${javaLibPath}/junit/junit.jar"/>
    <property name="log4jLoc" value="${javaLibPath}/log4j.jar"/>
-   <property name="jadePath" value="${javaLibPath}/jade/lib/jade.jar:${javaLibPath}/jade/lib/jadeTools.jar:${javaLibPath}/jade/lib/iiop.jar:${javaLibPath}/jade/lib/Base64.jar"/>
+   <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
+   <property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.0/commons-collections-3.0.jar"/>
+   <property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/getools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/repast.jar:${repastLoc}/lib/repast.jar:${repastLoc}/lib/trove.jar"/>
+ 
 
    <path id="project.classpath">
-     <pathelement path="${jsciPath}"/>
      <pathelement location="${ecjLoc}"/>
      <pathelement location="${junitLoc}"/>
      <pathelement location="${rngpackLoc}"/>
      <pathelement location="${log4jLoc}"/>     
-     <pathelement path="${jadePath}"/> 
+     <pathelement location="${schemeLoc}"/>     
+     <pathelement location="${collectionsLoc}"/>     
+     <pathelement path="${repastPath}"/>
      <pathelement location="./classes"/>
      <pathelement path="${java.class.path}"/>
    </path>
