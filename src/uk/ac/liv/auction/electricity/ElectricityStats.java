@@ -307,19 +307,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
   }
 
 
-  /**
-   * Get the profits of the buyers in the actual auction.
-   */
-  public double getPBA() {
-    return pBA;
-  }
-
-  /**
-   * Get the profits of the sellers in the actual auction.
-   */
-  public double getPSA() {
-    return pSA;
-  }
 
   /**
    * Get the strategic buyer market-power calculation.
@@ -349,19 +336,6 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     return pBT;
   }
 
-  /**
-   * Get the profits of the sellers in competitive equilibrium.
-   */
-  public double getPSCE() {
-    return pSCE;
-  }
-
-  /**
-   * Get the profits of the buyers in competitive equilibrium.
-   */
-  public double getPBCE() {
-    return pBCE;
-  }
 
   public double getRCAP() {
     return rCap;
