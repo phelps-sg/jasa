@@ -57,6 +57,13 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
     }
     return ((CummulativeDistribution[]) dailyStats.get(day))[TRANS_PRICE];
   }
+  
+  public CummulativeDistribution getPreviousDayTransPriceStats() {
+    if ( auction.getDay() <= 0 ) {
+      return null;
+    }
+    return getTransPriceStats( auction.getDay() - 1 );
+  }
 
   public void endOfDay( Auction auction ) {
     // Make a copy of the current stats, reset them and record
