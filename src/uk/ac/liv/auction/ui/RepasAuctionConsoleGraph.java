@@ -28,10 +28,10 @@ import uchicago.src.sim.analysis.OpenSequenceGraph;
  * @version $Revision$
  */
 
-public class JASAConsoleGraph extends OpenSequenceGraph {
+public class RepasAuctionConsoleGraph extends OpenSequenceGraph {
 
-  public JASAConsoleGraph( String title, SimModel repastModel, 
-      					GraphMarketDataLogger graphModel ) {
+  public RepasAuctionConsoleGraph( String title, SimModel repastModel, 
+      						 GraphMarketDataLogger graphModel ) {
     super(title, repastModel);
     Iterator i = graphModel.getSequenceIterator();
     while ( i.hasNext() ) {
