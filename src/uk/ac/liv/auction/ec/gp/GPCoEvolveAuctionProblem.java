@@ -35,7 +35,7 @@ import uk.ac.liv.auction.ec.gp.func.*;
 
 public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionaryProblem {
 
-  static int NS = 2;
+  static int NS = 3;
   static int NB = 3;
 
   static int CS = 10;
@@ -47,8 +47,8 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
   static final String P_ROUNDS = "maxrounds";
   static final String P_ITERATIONS = "iterations";
 
-//  static final int buyerValues[] = { 36, 17, 12 };
-  static final int buyerValues[] = { 100, 17, 12 };
+  static final int buyerValues[] = { 36, 17, 12 };
+  //static final int buyerValues[] = { 100, 17, 12 };
 
   static final int sellerValues[] = { 35, 16, 11 };
 
@@ -83,14 +83,20 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
     CS = state.parameters.getIntWithDefault(base.push("cs"), null, 10);
     CB = state.parameters.getIntWithDefault(base.push("cb"), null, 10);
 
-    MAX_ROUNDS = state.parameters.getIntWithDefault(base.push("maxrounds"), new Parameter("1000"), 1);
+    MAX_ROUNDS = state.parameters.getIntWithDefault(base.push("maxrounds"), null, 1000);
+
+    System.out.println("NS = " + NS);
+    System.out.println("NB = " + NB);
+    System.out.println("CS = " + CS);
+    System.out.println("CB = " + CB);
+    System.out.println("MAX_ROUNDS = " + MAX_ROUNDS);
 
     String statsFileName = state.parameters.getStringWithDefault(base.push("statsfile"), "coevolve-electricity-stats.csv");
 
     auction = new RandomRobinAuction();
     auction.setMaximumRounds(MAX_ROUNDS);
 
-    allTraders = new ArrayList(10);
+    allTraders = new ArrayList(NS+NB);
     sellers = registerTraders(allTraders, auction, true, NS, CS, sellerValues);
     buyers = registerTraders(allTraders, auction, false, NB, CB, buyerValues);
 
@@ -103,10 +109,20 @@ public class GPCoEvolveAuctionProblem extends GPProblem implements CoEvolutionar
       e.printStackTrace();
     }
 
-    statsOut.newData( new String[] { "generation", "s1", "s2", "s3", "b1", "b2", "b3", "eA",
-                                      "mPB", "mPS", "transPrice", "bidPrice",
-                                      "askPrice", "quoteBidPrice",
-                                      "quoteAskPrice" });
+    // Print headings in CSV output file
+
+    statsOut.newData("generation");
+
+    for( int i=1; i<=NS; i++ ) {
+      statsOut.newData("s" + i);
+    }
+
+    for( int i=1; i<=NB; i++ ) {
+      statsOut.newData("b" + i);
+    }
+
+    statsOut.newData( new String[] {  "eA", "mPB", "mPS", "transPrice", "bidPrice",
+                                      "askPrice", "quoteBidPrice", "quoteAskPrice" });
   }
 
   public void evaluate( EvolutionState state, Vector[] group, int thread ) {
@@ -253,5 +269,7 @@ class GPElectricityTrader extends ElectricityTrader {
       profits += profit;
     }
   }
+
+
 
 }

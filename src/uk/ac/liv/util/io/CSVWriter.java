@@ -2,9 +2,7 @@ package uk.ac.liv.util.io;
 
 import java.util.Iterator;
 
-import java.io.OutputStream;
-import java.io.PrintStream;
-
+import java.io.*;
 
 
 /**
@@ -13,7 +11,7 @@ import java.io.PrintStream;
  * @author Steve Phelps
  */
 
-public class CSVWriter  {
+public class CSVWriter implements Serializable {
 
   PrintStream out;
   int numColumns;
@@ -80,6 +78,14 @@ public class CSVWriter  {
 
   public void close() {
     out.close();
+  }
+
+  private void writeObject(java.io.ObjectOutputStream out)
+     throws IOException {
+  }
+
+  private void readObject(java.io.ObjectInputStream in)
+     throws IOException, ClassNotFoundException {
   }
 
 }

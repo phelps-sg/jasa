@@ -1,5 +1,7 @@
 package uk.ac.liv.util;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * A utility class for cummulative tracking of stats for a series
@@ -23,7 +25,7 @@ package uk.ac.liv.util;
  *
  */
 
-public class CummulativeStatCounter {
+public class CummulativeStatCounter implements Serializable {
 
   /**
    * The number of data in the series so far.

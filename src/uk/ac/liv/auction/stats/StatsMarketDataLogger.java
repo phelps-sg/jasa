@@ -1,5 +1,7 @@
 package uk.ac.liv.auction.stats;
 
+import java.io.Serializable;
+
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 
@@ -13,7 +15,7 @@ import uk.ac.liv.util.CummulativeStatCounter;
  * @author Steve Phelps
  */
 
-public class StatsMarketDataLogger implements MarketDataLogger {
+public class StatsMarketDataLogger implements MarketDataLogger, Serializable {
 
   /**
    * Cummulative statistics on transaction prices.

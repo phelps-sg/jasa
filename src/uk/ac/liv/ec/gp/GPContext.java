@@ -1,5 +1,7 @@
 package uk.ac.liv.ec.gp;
 
+import java.io.Serializable;
+
 import ec.*;
 import ec.gp.*;
 
@@ -12,7 +14,7 @@ import ec.gp.*;
  *
  */
 
-public class GPContext {
+public class GPContext implements Serializable{
 
   EvolutionState state;
   int thread;

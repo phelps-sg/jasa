@@ -1,5 +1,7 @@
 package uk.ac.liv.auction.ec.gp.func;
 
+import java.io.Serializable;
+
 import ec.gp.*;
 import ec.*;
 
@@ -20,7 +22,9 @@ import uk.ac.liv.util.GenericNumber;
  *
  */
 
-public class GPTradingStrategy extends GPIndividualCtx implements Strategy, QuoteProvider {
+public class GPTradingStrategy extends GPIndividualCtx implements Strategy,
+                                                                  QuoteProvider,
+                                                                  Serializable {
 
   AbstractTraderAgent agent = null;
 

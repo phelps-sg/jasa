@@ -7,9 +7,11 @@ import uk.ac.liv.util.Debug;
 
 import java.util.*;
 
+import java.io.Serializable;
 
 
-public class MetaMarketStats {
+
+public class MetaMarketStats implements Serializable {
 
   HashMap supplyCurve = new HashMap();
   HashMap demandCurve = new HashMap();

@@ -1,7 +1,8 @@
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
 
-public class MarketQuote {
+public class MarketQuote implements Serializable {
 
   double ask;
   double bid;

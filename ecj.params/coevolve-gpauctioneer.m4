@@ -2,20 +2,23 @@
 include(`ecj.m4')
 include(`utils.m4')
 
-define(`NUM_SELLERS', 30)
-define(`NUM_BUYERS', 20)
+define(`NUM_SELLERS', 3)
+define(`NUM_BUYERS', 6)
 define(`POPULATION_SIZE', 50)
-define(`NUM_GENERATIONS', 3000)
+define(`NUM_GENERATIONS', 1000)
 
 parent.0 = CONF_ECJHOME/ec/simple/simple.params
 
 eval = uk.ac.liv.ec.coevolve.CoEvolutionaryEvaluator
 
-
 eval.problem = uk.ac.liv.auction.ec.gp.GPCoEvolveAuctionProblem
 eval.problem.maxrounds = 10
 eval.problem.ns = NUM_SELLERS
 eval.problem.nb = NUM_BUYERS
+
+stat = uk.ac.liv.auction.ec.gp.CoEvolveAuctionStatistics
+stat.gather-full = true
+stat.serfilenameprefix = experimental_data/results/preliminary/gpind.data
 
 generations = NUM_GENERATIONS
 checkpoint = false
@@ -164,7 +167,6 @@ select.best.n = 10
 
 
 init = ec.gp.GPInitializer
-stat = ec.gp.koza.KozaStatistics
 
 
 define(`NUM_STRATEGIES', eval(NUM_SELLERS+NUM_BUYERS))

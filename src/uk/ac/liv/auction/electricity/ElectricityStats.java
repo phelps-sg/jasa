@@ -3,6 +3,8 @@ package uk.ac.liv.auction.electricity;
 import java.util.Iterator;
 import java.util.List;
 
+import java.io.Serializable;
+
 import uk.ac.liv.util.Debug;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
@@ -15,7 +17,7 @@ import uk.ac.liv.auction.agent.AbstractTraderAgent;
  * @author Steve Phelps
  */
 
-public class ElectricityStats {
+public class ElectricityStats implements Serializable {
 
   RoundRobinAuction auction;
 
