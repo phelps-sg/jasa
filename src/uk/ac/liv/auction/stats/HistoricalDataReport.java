@@ -24,7 +24,10 @@ import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import java.io.Serializable;
+
 import java.util.*;
+
+import org.apache.commons.collections.bag.TreeBag;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -35,23 +38,23 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A report that keeps a historical record of the shouts in the market
- * that lead to the last N transactions. This logger is used to keep historical
- * data that is used by various different trading strategies.
+ * A report that keeps a historical record of the shouts in the market that lead
+ * to the last N transactions. This logger is used to keep historical data that
+ * is used by various different trading strategies.
  * </p>
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class HistoricalDataReport extends AbstractAuctionReport
-                                           implements Serializable, Resetable {
+public class HistoricalDataReport extends AbstractAuctionReport implements
+    Serializable, Resetable {
 
   protected LinkedList asks = new LinkedList();
 
   protected LinkedList bids = new LinkedList();
 
-  protected ArrayList sortedShouts = new ArrayList();
+  protected TreeBag sortedShouts = new TreeBag();
 
   protected HashSet acceptedShouts = new HashSet();
 
@@ -66,7 +69,7 @@ public class HistoricalDataReport extends AbstractAuctionReport
   protected double lowestAskPrice;
 
   protected double highestBidPrice;
-  
+
   static final String P_MEMORYSIZE = "memorysize";
 
   static Logger logger = Logger.getLogger(HistoricalDataReport.class);
@@ -80,14 +83,11 @@ public class HistoricalDataReport extends AbstractAuctionReport
       memoryBids[i] = 0;
       memoryAsks[i] = 0;
     }
-    //auction.setHistoryStats(this);
   }
-
 
   public void updateTransPriceLog( TransactionExecutedEvent event ) {
     currentMemoryCell = (currentMemoryCell + 1) % memorySize;
-    if ( memoryAsks[currentMemoryCell] > 0
-        || memoryBids[currentMemoryCell] > 0 ) {
+    if ( memoryAsks[currentMemoryCell] > 0 || memoryBids[currentMemoryCell] > 0 ) {
       for ( int i = 0; i < memoryAsks[currentMemoryCell]; i++ ) {
         asks.removeFirst();
       }
@@ -96,7 +96,7 @@ public class HistoricalDataReport extends AbstractAuctionReport
       }
       memoryBids[currentMemoryCell] = 0;
       memoryAsks[currentMemoryCell] = 0;
-      acceptedShouts.clear();
+//      acceptedShouts.clear();
       markMatched(asks);
       markMatched(bids);
     }
@@ -118,7 +118,6 @@ public class HistoricalDataReport extends AbstractAuctionReport
     initialise();
   }
 
-  
   public void updateShoutLog( ShoutPlacedEvent event ) {
     Shout shout = event.getShout();
     addToSortedShouts(shout);
@@ -188,28 +187,16 @@ public class HistoricalDataReport extends AbstractAuctionReport
     return getNumberOfShouts(bids, price, accepted);
   }
 
-  public List getSortedShouts() {
-    return sortedShouts;
+  public Iterator sortedShoutIterator() {
+    return sortedShouts.iterator();
   }
 
   public void addToSortedShouts( Shout shout ) {
-    int size = sortedShouts.size();
-    boolean done = false;
-    int i = 0;
-    while ( i < size && !done ) {
-      if ( ((Shout) sortedShouts.get(i)).getPrice() > shout.getPrice() ) {
-        sortedShouts.add(i, shout);
-        done = true;
-      }
-      i++;
-    }
-    if ( !done ) {
-      sortedShouts.add(shout);
-    }
+    sortedShouts.add(shout);
   }
 
   public int getNumberOfShouts( List shouts, double price, boolean accepted ) {
-    try {
+//    try {
       int numShouts = 0;
       Iterator i = shouts.iterator();
       while ( i.hasNext() ) {
@@ -217,8 +204,8 @@ public class HistoricalDataReport extends AbstractAuctionReport
         if ( (price >= 0 && shout.getPrice() >= price)
             || (price < 0 && shout.getPrice() <= -price) ) {
           if ( accepted ) {
-            if ( auction.shoutAccepted(shout) ) {
-              //          if ( acceptedShouts.contains(shout) ) {
+//            if ( auction.shoutAccepted(shout) ) {
+            if ( acceptedShouts.contains(shout) ) {
               numShouts++;
             }
           } else {
@@ -227,44 +214,23 @@ public class HistoricalDataReport extends AbstractAuctionReport
         }
       }
       return numShouts;
-    } catch ( ShoutsNotVisibleException e ) {
-      throw new AuctionError(e);
-    }
+//    } catch ( ShoutsNotVisibleException e ) {
+//      throw new AuctionError(e);
+//    }
   }
-  
 
   public void produceUserOutput() {
   }
-  
+
   public Map getVariables() {
     return new HashMap();
   }
-  
+
   protected void initialisePriceRanges() {
     highestBidPrice = Double.NEGATIVE_INFINITY;
     lowestAskPrice = Double.POSITIVE_INFINITY;
   }
-
-  protected void deleteOldShouts() {
-    deleteOldShouts(asks);
-    deleteOldShouts(bids);
-    sortedShouts.clear();
-    Iterator i = bids.iterator();
-    while ( i.hasNext() ) {
-      addToSortedShouts((Shout) i.next());
-    }
-    i = asks.iterator();
-    while ( i.hasNext() ) {
-      addToSortedShouts((Shout) i.next());
-    }
-  }
-
-  protected void deleteOldShouts( List shouts ) {
-    while ( !shouts.isEmpty() && !acceptedShouts.contains(shouts.get(0)) ) {
-      shouts.remove(0);
-    }
-  }
-
+  
   protected void markMatched( List shouts ) {
     try {
       Iterator i = shouts.iterator();

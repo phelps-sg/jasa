@@ -121,7 +121,7 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
     
     quote = auction.getQuote();
 
-    List sortedShouts = historyStats.getSortedShouts();
+    Iterator sortedShouts = historyStats.sortedShoutIterator();
 
     boolean changed = false;
     double lastPoint = 0;
@@ -136,10 +136,8 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
       currentP = 1;
     }
 
-    Iterator i = sortedShouts.iterator();
-
-    while ( i.hasNext() ) {
-      Shout nextShout = (Shout) i.next();
+    while ( sortedShouts.hasNext() ) {
+      Shout nextShout = (Shout) sortedShouts.next();
       if ( nextShout.getPrice() > lastPoint ) {
         currentPoint = nextShout.getPrice();
         currentP = calculateProbability(currentPoint);

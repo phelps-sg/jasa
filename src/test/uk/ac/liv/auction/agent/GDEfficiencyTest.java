@@ -28,7 +28,7 @@ import uk.ac.liv.auction.stats.HistoricalDataReport;
  */
 public class GDEfficiencyTest extends EfficiencyTest {
 
-  public static final double BENCHMARK_EFFICIENCY = 90.0;
+  public static final double BENCHMARK_EFFICIENCY = 95.0;
   
   public GDEfficiencyTest( String name ) {
     super(name);
