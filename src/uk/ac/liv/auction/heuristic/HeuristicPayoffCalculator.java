@@ -24,6 +24,7 @@ import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.auction.stats.PayoffLogger;
 import uk.ac.liv.auction.stats.EquilibriaStats;
 import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
+import uk.ac.liv.auction.stats.SurplusStats;
 
 import uk.ac.liv.ai.learning.Learner;
 import uk.ac.liv.ai.learning.StochasticLearner;
@@ -310,13 +311,14 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       payoffLogger.calculate();
 //      payoffLogger.finalReport();
       
-      EquilibriaStats stats = new EquilibriaStats(auction);
+      EquilibriaStats stats = new SurplusStats(auction);
       stats.calculate();
       assert stats.equilibriaExists();
+     
       
       for( int i=0; i<numStrategies; i++ ) {
         double payoff = payoffLogger.getPayoff(strategies[i].getClass());        
-        payoffs[i].newData(payoff);        
+        payoffs[i].newData(payoff);             
       }
 
     }
