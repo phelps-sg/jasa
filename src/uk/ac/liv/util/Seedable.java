@@ -1,6 +1,6 @@
 /*
  * JASA Java Auction Simulator API
- * Copyright (C) 2001-2003 Steve Phelps
+ * Copyright (C) 2001-2004 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -30,5 +30,7 @@ public interface Seedable {
    *  Set the PRNG seed.
    */
   public void setSeed( long seed );
+
+  public void seed( Seeder seeder );
 
 }

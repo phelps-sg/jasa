@@ -13,28 +13,32 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.agent.jade;
 
-import jade.content.Predicate;
+package uk.ac.liv.util;
+
+import edu.cornell.lassp.houle.RngPack.RandomElement;
+
+import uk.ac.liv.prng.PRNGFactory;
 
 /**
- * A predicate representing information a new agent registration in an
- * auction.
+ *
+ * @author Steve Phelps
+ * @version $Revision$
  */
 
-public class RegisterAction implements Predicate {
+public class AbstractSeedable implements Seedable {
 
-  String agent;
+  protected RandomElement prng = PRNGFactory.getFactory().create();
 
-  public RegisterAction() {
+  /**
+   *  Set the PRNG seed.
+   */
+  public void setSeed( long seed ) {
+    prng = PRNGFactory.getFactory().create(seed);
   }
 
-  public void setAgent( String agent ) {
-    this.agent = agent;
-  }
-
-  public String getAgent() {
-    return agent;
+  public void seed( Seeder seeder ) {
+    setSeed(seeder.nextSeed());
   }
 
 }

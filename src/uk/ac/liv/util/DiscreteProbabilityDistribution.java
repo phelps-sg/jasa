@@ -1,6 +1,6 @@
 /*
  * JASA Java Auction Simulator API
- * Copyright (C) 2001-2003 Steve Phelps
+ * Copyright (C) 2001-2004 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -33,8 +33,8 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class DiscreteProbabilityDistribution
-    implements Resetable, Serializable, Seedable {
+public class DiscreteProbabilityDistribution extends AbstractSeedable
+    implements Resetable, Serializable {
 
   /**
    * The probability distribution.
@@ -45,11 +45,6 @@ public class DiscreteProbabilityDistribution
    * The number of possible events for this distribution.
    */
   protected int k;
-
-  /**
-   * The uniform-distribution PRNG.
-   */
-  protected RandomElement randGenerator;
 
   /**
    * The log4j logger.
@@ -66,7 +61,6 @@ public class DiscreteProbabilityDistribution
   public DiscreteProbabilityDistribution( int k ) {
     this.k = k;
     p = new double[k];
-    randGenerator = PRNGFactory.getFactory().create();
   }
 
   /**
@@ -94,7 +88,7 @@ public class DiscreteProbabilityDistribution
    *  @return An integer value representing one of the possible events.
    */
   public int generateRandomEvent() {
-    double rand = randGenerator.raw();
+    double rand = prng.raw();
     double cummProb = 0;
     for( int i=0; i<k; i++ ) {
       cummProb += p[i];
@@ -111,9 +105,6 @@ public class DiscreteProbabilityDistribution
     }
   }
 
-  public void setSeed( long seed ) {
-    randGenerator = PRNGFactory.getFactory().create(seed);
-  }
 
 
   /**

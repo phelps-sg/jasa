@@ -1,6 +1,6 @@
 /*
  * JASA Java Auction Simulator API
- * Copyright (C) 2001-2003 Steve Phelps
+ * Copyright (C) 2001-2004 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -22,6 +22,7 @@ import uk.ac.liv.auction.agent.*;
 import uk.ac.liv.ai.learning.MimicryLearner;
 import uk.ac.liv.ai.learning.Learner;
 
+import uk.ac.liv.util.Seeder;
 import uk.ac.liv.util.Seedable;
 import uk.ac.liv.util.Parameterizable;
 
@@ -135,6 +136,10 @@ public class ZIPStrategy extends AdaptiveStrategyImpl
 
   public void setSeed( long seed ) {
     randGenerator = PRNGFactory.getFactory().create(seed);
+  }
+
+  public void seed( Seeder s ) {
+    setSeed(s.nextSeed());
   }
 
   public void setLearner( Learner learner ) {

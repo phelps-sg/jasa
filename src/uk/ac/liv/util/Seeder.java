@@ -13,28 +13,17 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.agent.jade;
 
-import jade.content.Predicate;
+package uk.ac.liv.util;
 
 /**
- * A predicate representing information a new agent registration in an
- * auction.
+ *
+ * @author Steve Phelps
+ * @version $Revision$
  */
 
-public class RegisterAction implements Predicate {
+public interface Seeder {
 
-  String agent;
-
-  public RegisterAction() {
-  }
-
-  public void setAgent( String agent ) {
-    this.agent = agent;
-  }
-
-  public String getAgent() {
-    return agent;
-  }
+  public long nextSeed();
 
 }
