@@ -64,11 +64,12 @@ public class PayoffLogger extends EquilibriumSurplusLogger {
       Class strategyClass = agent.getStrategy().getClass();
       StrategyStats stats = (StrategyStats) table.get(strategyClass);
       if ( stats == null ) {
-        stats = new StrategyStats();
+        stats = new StrategyStats(1, profits);
+        table.put(strategyClass, stats);
+      } else {
+        stats.profits += profits;
+        stats.numAgents++;
       }
-      stats.profits += profits;
-      stats.numAgents++;
-      table.put(strategyClass, stats);
       totalProfits += profits;
     }
     calculatePayoffs();
@@ -156,5 +157,10 @@ class StrategyStats {
   public double profits = 0;
   public int numAgents = 0;
   public double payoff = 0;
+
+  public StrategyStats( int numAgents, double profits ) {
+    this.numAgents = numAgents;
+    this.profits = profits;
+  }
 
 }
