@@ -21,7 +21,7 @@ package uk.ac.liv.auction;
 
 public class JASAConstants {
   
-  static final int minorVersion = 33;
+  static final int minorVersion = 34;
   
   static final int majorVersion = 0;
 
