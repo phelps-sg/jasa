@@ -47,6 +47,7 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
 
   boolean auctioneerMisbehaved;
 
+
   protected void postEvaluationStats() {
     try {
       GPAuctioneer auctioneer = (GPAuctioneer) auction.getAuctioneer();
@@ -97,7 +98,7 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
     }
 
     fitness.multifitness[0] = efficiencyFitness(efficiency.getMean());
-    fitness.multifitness[1] = (float) efficiency.getMin() / 100;
+    fitness.multifitness[1] = mpFitness(buyerMP.getMean(), sellerMP.getMean());
 //    fitness.multifitness[2] = mpFitness(sellerMP.getMean());
 
     auctioneer.evaluated = true;
@@ -141,6 +142,7 @@ public class GPCoEvolveAuctionProblem extends GPCoEvolveStrategyProblem {
     GPCoEvolveAuctionProblem myobj = (GPCoEvolveAuctionProblem) super.protoClone();
     return myobj;
   }
+
 
   public int getFirstStrategySubpop() {
     return 1;
