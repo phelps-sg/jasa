@@ -239,9 +239,11 @@ public abstract class AuctionImpl extends Observable
    */
   public void addReport( AuctionReport newReport ) {
     AuctionReport oldReport = report;
-    setReport(new CombiAuctionReport());
-    if ( oldReport != null ) {
-      ( (CombiAuctionReport) report).addReport(oldReport);
+    if ( ! (oldReport instanceof CombiAuctionReport) ) {
+      setReport(new CombiAuctionReport());
+      if ( oldReport != null ) {
+        ((CombiAuctionReport) report).addReport(oldReport);
+      }
     }
     ((CombiAuctionReport) report).addReport(newReport);
   }
