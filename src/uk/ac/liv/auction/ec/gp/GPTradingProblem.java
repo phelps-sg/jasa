@@ -167,7 +167,7 @@ public abstract class GPTradingProblem extends GPProblem {
 
   protected void postEvaluationStats() {
     //TODO
-  	surplusLogger.finalReport();
+  	surplusLogger.generateReport();
   }
 
   protected void resetStatCounters() {

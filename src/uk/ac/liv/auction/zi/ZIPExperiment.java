@@ -183,7 +183,7 @@ public class ZIPExperiment extends MarketSimulation {
         }
       }
 
-      marketData.finalReport();
+      marketData.generateReport();
       auction.reset();
 
       logger.info("Sample " + sample + " done.\n");

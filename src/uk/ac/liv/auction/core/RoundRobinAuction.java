@@ -662,7 +662,7 @@ public class RoundRobinAuction extends AuctionImpl
    */
   public void generateReport() {
     if ( logger != null ) {
-      logger.finalReport();
+      logger.generateReport();
     }
     if ( marketStats != null ) {
       marketStats.calculate();
