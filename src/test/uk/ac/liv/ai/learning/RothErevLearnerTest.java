@@ -100,7 +100,7 @@ public class RothErevLearnerTest extends TestCase {
     for( int i=0; i<l.getK(); i++ ) {
       prob += l.getProbability(i);
     }
-    if ( prob > 1.001 ) {
+    if ( prob > 1.001 || prob < 0.999 ) {
       throw new Error("Probabilities should sum to 1");
     }
   }
