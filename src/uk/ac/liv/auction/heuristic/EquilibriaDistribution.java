@@ -23,7 +23,8 @@ import java.util.Iterator;
 import uk.ac.liv.util.MutableIntWrapper;
 import uk.ac.liv.util.MutableDoubleWrapper;
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.AbstractSeedable;
+
+import uk.ac.liv.prng.AbstractSeedable;
 
 import uk.ac.liv.util.io.CSVReader;
 import uk.ac.liv.util.io.CSVWriter;
