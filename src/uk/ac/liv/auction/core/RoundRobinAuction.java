@@ -143,10 +143,15 @@ public class RoundRobinAuction extends AuctionImpl
           (MarketDataLogger) parameters.getInstanceForParameter(base.push(P_LOGGER),
                                                                  null,
                                                                  MarketDataLogger.class);
+      
     } catch ( ParamClassLoadException e ) {
       logger = null;
     }
 
+    if ( logger != null ) {
+      ((Parameterizable) logger).setup(parameters, base.push(P_LOGGER));
+    }
+    
     Auctioneer auctioneer =
       (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
                                                       null, Auctioneer.class);
