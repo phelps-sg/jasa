@@ -124,6 +124,7 @@ public class RepastMarketSimulation
     parameterDescriptors = new Hashtable();
     schedule = new Schedule();
     schedule.scheduleActionBeginning(1, this, "step");
+    schedule.scheduleActionAtEnd(this, "report");
   }
   
   public RepastMarketSimulation() {
@@ -269,9 +270,10 @@ public class RepastMarketSimulation
     // TODO Auto-generated method stub
 
   }
+  
   public void generateNewSeed () {
     // TODO Auto-generated method stub
-
+    logger.debug("Repast is changing the PRNG seed to default");
   }
   
   public IController getController () {
@@ -304,11 +306,12 @@ public class RepastMarketSimulation
   }
   
   public void setController ( IController controller) {
-   this.controller = controller;
+    this.controller = controller;
   }
   
   public void setRngSeed ( long seed) {
-    
+    logger.debug("Repast is changing the PRNG seed to " + seed);
+    logger.warn("PRNG seed changed to " + seed);
     GlobalPRNG.initialiseWithSeed(seed);
   }
   
