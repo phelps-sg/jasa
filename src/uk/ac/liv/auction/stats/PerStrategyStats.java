@@ -33,25 +33,23 @@ import org.apache.log4j.Logger;
 
 
 
-public class PerStrategyStats implements MarketStats, Serializable, Resetable {
+public class PerStrategyStats extends EquilibriaStats {
 
   protected HashMap table  = new HashMap();
 
-  protected RoundRobinAuction auction;
+  protected double totalProfits;
 
   static Logger logger = Logger.getLogger(PerStrategyStats.class);
 
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+    super.setup(parameters, base);
   }
 
-  public void setAuction( RoundRobinAuction auction ) {
-    logger.debug("Setting auction to " + auction);
-    this.auction = auction;
-  }
 
   public void calculate() {
     reset();
+    super.calculate();
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTraderAgent agent = (AbstractTraderAgent) i.next();
@@ -64,7 +62,26 @@ public class PerStrategyStats implements MarketStats, Serializable, Resetable {
       stats.profits += profits;
       stats.numAgents++;
       table.put(strategyClass, stats);
+      totalProfits += profits;
     }
+    calculatePayoffs();
+  }
+
+  protected void calculatePayoffs() {
+    int totalAgents = auction.getNumberOfRegisteredTraders();
+    double averageSurplus = (getPBCE() + getPSCE()) / totalAgents;
+    double totalPayoff = 0;
+    Iterator i = table.keySet().iterator();
+    while ( i.hasNext() ) {
+      Class strategyClass = (Class) i.next();
+      StrategyStats stats = (StrategyStats) table.get(strategyClass);
+      stats.payoff = ((stats.profits / stats.numAgents)  ) / averageSurplus;
+    }
+  }
+
+
+  public double getTotalProfits() {
+    return totalProfits;
   }
 
   public double getProfits( Class strategyClass ) {
@@ -72,6 +89,16 @@ public class PerStrategyStats implements MarketStats, Serializable, Resetable {
         (StrategyStats) table.get(strategyClass);
     if ( stats != null ) {
       return stats.profits;
+    } else {
+      return 0;
+    }
+  }
+
+  public double getPayoff( Class strategyClass ) {
+    StrategyStats stats =
+       (StrategyStats) table.get(strategyClass);
+    if (stats != null) {
+      return stats.payoff;
     } else {
       return 0;
     }
@@ -98,11 +125,14 @@ public class PerStrategyStats implements MarketStats, Serializable, Resetable {
       StrategyStats stats = (StrategyStats) table.get(strategy);
       logger.info(stats.numAgents + " agents playing strategy " +
                    strategy.getName() + "\n\ttotal profits: " + stats.profits +
+                                        "\n\tpayoff: " + stats.payoff +
                    "\n");
     }
+    super.generateReport();
   }
 
   public void reset() {
+    totalProfits = 0;
     table.clear();
   }
 
@@ -113,5 +143,6 @@ class StrategyStats {
 
   public double profits = 0;
   public int numAgents = 0;
+  public double payoff = 0;
 
 }

@@ -14,10 +14,7 @@ simulation.auction.logger.0 = uk.ac.liv.auction.stats.StatsMarketDataLogger
 simulation.auction.logger.1 = uk.ac.liv.auction.stats.GraphMarketDataLogger
 simulation.auction.logger.2 = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 
-simulation.auction.stats = uk.ac.liv.auction.stats.CombiMarketStats
-simulation.auction.stats.n = 2
-simulation.auction.stats.0 = uk.ac.liv.auction.stats.PerStrategyStats
-simulation.auction.stats.1 = uk.ac.liv.auction.stats.EquilibriaStats
+simulation.auction.stats = uk.ac.liv.auction.stats.PerStrategyStats
 
 
 simulation.agenttype.n = 3

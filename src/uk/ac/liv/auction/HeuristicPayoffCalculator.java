@@ -26,21 +26,16 @@ import uk.ac.liv.auction.stats.DailyStatsMarketDataLogger;
 import uk.ac.liv.ai.learning.Learner;
 import uk.ac.liv.ai.learning.StochasticLearner;
 
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.Prototypeable;
-import uk.ac.liv.util.Seedable;
-import uk.ac.liv.util.AbstractSeeder;
-import uk.ac.liv.util.Partitioner;
+import uk.ac.liv.util.*;
+import uk.ac.liv.util.io.CSVWriter;
 
 import uk.ac.liv.prng.PRNGFactory;
 
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
 
 import edu.cornell.lassp.houle.RngPack.RandomElement;
 
@@ -55,6 +50,10 @@ import org.apache.log4j.PropertyConfigurator;
 
 public class HeuristicPayoffCalculator extends AbstractSeeder
     implements  Runnable, Serializable {
+
+  protected String resultsFileName = "/tmp/payoffs.csv";
+
+  protected CSVWriter results;
 
   protected RoundRobinAuction auction;
 
@@ -76,6 +75,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
   protected ParameterDatabase parameters;
 
+  protected RandomElement orderingPrng = PRNGFactory.getFactory().create();
+
   public static final String P_NUMAGENTS = "numagents";
   public static final String P_STRATEGY = "strategy";
   public static final String P_HEURISTIC = "heuristic";
@@ -83,6 +84,8 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
   public static final String P_BUYER = "buyer";
   public static final String P_SELLER = "seller";
   public static final String P_N = "n";
+  public static final String P_RESULTS = "results";
+  public static final String P_NUMSAMPLES = "numsamples";
 
   static Logger logger = Logger.getLogger(HeuristicPayoffCalculator.class);
 
@@ -140,6 +143,7 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
 
     numAgents = parameters.getInt(base.push(P_NUMAGENTS));
+    numSamples = parameters.getInt(base.push(P_NUMSAMPLES));
 
     numStrategies = parameters.getInt(base.push(P_STRATEGY).push(P_N));
     strategies = new Strategy[numStrategies];
@@ -185,6 +189,10 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
       auction.register(agents[i]);
     }
 
+    resultsFileName =
+        parameters.getStringWithDefault(base.push(P_RESULTS), null,
+                                         resultsFileName);
+
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + prngSeed + "\n");
 
@@ -195,6 +203,13 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
 
   public void run() {
+    try {
+      results = new CSVWriter(new FileOutputStream(resultsFileName),
+                              numStrategies * 2);
+    } catch ( FileNotFoundException e ) {
+      logger.error(e);
+      throw new Error(e);
+    }
     Partitioner partitioner = new Partitioner(numAgents, numStrategies);
     while ( partitioner.hasNext() ) {
       int[] partition = (int[]) partitioner.next();
@@ -205,30 +220,59 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
 
   public void calculateExpectedPayoffs( int[] entry ) {
 
-    logger.info("Calculating payoffs for ");
+    logger.info("");
+    logger.info("Calculating expected payoffs for ");
     for( int i=0; i<numStrategies; i++ ) {
       logger.info("\t" + entry[i] + "/" + strategies[i].getClass().getName() + " ");
+      results.newData(entry[i]);
     }
     logger.info("");
 
+    CummulativeStatCounter[] payoffs = new CummulativeStatCounter[numStrategies];
+    for( int i=0; i<numStrategies; i++ ) {
+      payoffs[i] = new CummulativeStatCounter("Payoff for strategy " + strategies[i].getClass().getName());
+    }
+
     for( int sample=0; sample<numSamples; sample++ ) {
-      logger.info("Sample " + sample);
-      logger.info("-----------\n");
+
+      logger.debug("Taking Sample " + sample + ".....\n");
 
       randomlySortAgents();
       assignStrategies(entry);
 
-      auction.reset();
+      do {
+        auction.reset();
+        strategyStats.calculate();
+      } while ( !strategyStats.equilibriaExists() );
+
       auction.run();
       strategyStats.calculate();
-      strategyStats.generateReport();
+
+      for( int i=0; i<numStrategies; i++ ) {
+        payoffs[i].newData(strategyStats.getPayoff(strategies[i].getClass()));
+      }
 
     }
 
+    for( int i=0; i<numStrategies; i++ ) {
+      logger.info("");
+      payoffs[i].log();
+      results.newData(payoffs[i].getMean());
+    }
+
+    results.flush();
   }
 
   protected void randomlySortAgents() {
-    //TODO
+    int numCandidates = numAgents;
+    for (int i = 0; i < numAgents; i++) {
+      int choice = orderingPrng.choose(numCandidates - 1);
+      AbstractTraderAgent agent = agents[choice];
+      agents[choice] = agents[numCandidates - 1];
+      agents[numCandidates - 1] = agent;
+      numCandidates--;
+    }
+
   }
 
   protected void assignStrategies( int[] entry ) {
@@ -263,12 +307,18 @@ public class HeuristicPayoffCalculator extends AbstractSeeder
     }
   }
 
+  public void seed( Seeder seeder ) {
+    super.seed(seeder);
+    orderingPrng = PRNGFactory.getFactory().create(seeder.nextSeed());
+  }
+
 
   protected void seedObjects() {
     logger.info("Seeding objects...");
     seedAgents();
     seedAuction();
     logger.info("Seeding done.\n");
+    seed(this);
   }
 
 
