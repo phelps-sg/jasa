@@ -84,11 +84,10 @@ public class GPTradingStrategy extends GPIndividualCtx
       price = 0;
       //e.printStackTrace();
     }
-    if ( price > 0 ) {
-      shout.setPrice(price);
-    } else {
-      shout.setPrice(0);
-    }
+    if ( price < 0 || Double.isInfinite(price) || Double.isNaN(price)) {
+      price = 0;
+    } 
+    shout.setPrice(price);
     shout.setQuantity(quantity);
     shout.setIsBid(agent.isBuyer());
     priceStats.newData(price);
