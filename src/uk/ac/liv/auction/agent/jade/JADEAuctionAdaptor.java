@@ -41,12 +41,12 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
                                  implements Parameterizable {
 
   protected JADEAuction auction;
-    
+
   RegistrationBehaviour registrationBehaviour;
   RequestShoutsBehaviour requestShoutsBehaviour;
   ProcessShoutsBehaviour processShoutsBehaviour;
   FinaliseRoundBehaviour finaliseRoundBehaviour;
-  
+
   static Logger logger = Logger.getLogger(JADEAuctionAdaptor.class);
 
   public static final String SERVICE_AUCTIONEER = "JASAAuctioneer";
@@ -60,15 +60,15 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
 
   public JADEAuctionAdaptor( JADEAuction auction ) {
     this();
-    this.auction = auction;    
+    this.auction = auction;
   }
-  
+
   public JADEAuctionAdaptor() {
   }
 
 
   public void setup( ec.util.ParameterDatabase parameters, ec.util.Parameter base ) {
-    auction = 
+    auction =
       (JADEAuction) parameters.getInstanceForParameterEq(base, null,
                                                           JADEAuction.class);
     auction.setup(parameters, base);
@@ -78,21 +78,21 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
   public String getServiceName() {
     return SERVICE_AUCTIONEER;
   }
-  
+
   protected void examineArguments() {
     super.examineArguments();
-    Object[] args = getArguments();    
+    Object[] args = getArguments();
     if ( args != null && args.length > 2 ) {
       AuctionManager manager = (AuctionManager) args[2];
       ManagerUIFrame gui = new ManagerUIFrame(manager, auction);
       logger.debug("Setting console to " + gui);
       auction.setConsole(gui);
-      auction.activateGUIConsole();      
+      auction.activateGUIConsole();
     }
   }
-  
+
   public void addBehaviours() {
-      
+
     registrationBehaviour = new RegistrationBehaviour(this);
     requestShoutsBehaviour = new RequestShoutsBehaviour(this);
     processShoutsBehaviour = new ProcessShoutsBehaviour(this);
@@ -105,10 +105,10 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
     auctionFSM.registerState(finaliseRoundBehaviour, STATE_FINALISE_ROUND);
     OneShotBehaviour end = new OneShotBehaviour(this) {
       public void action() {
-        auction.generateReport();        
+        auction.generateReport();
       }
     };
-    
+
     auctionFSM.registerLastState(end, STATE_END);
     auctionFSM.registerDefaultTransition(STATE_REGISTRATION, STATE_REQUEST_SHOUTS);
     auctionFSM.registerDefaultTransition(STATE_REQUEST_SHOUTS, STATE_PROCESS_SHOUTS);
@@ -116,7 +116,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
     auctionFSM.registerDefaultTransition(STATE_FINALISE_ROUND, STATE_REQUEST_SHOUTS);
     auctionFSM.registerTransition(STATE_REQUEST_SHOUTS, STATE_END,
                                   RequestShoutsBehaviour.FSM_EVENT_AUCTION_CLOSED);
-    
+
     addBehaviour(auctionFSM);
   }
 
@@ -129,24 +129,28 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
 
     public RegistrationBehaviour( Agent agent ) {
       super(agent);
-    }    
-    
+    }
+
     public void reset() {
       finished = false;
     }
 
 
     public void action() {
-      try {       
-        ACLMessage msg = receive();
+      try {
+        logger.debug("Waiting for registration/start messages.");
+        ACLMessage msg = blockingReceive();
         if ( msg != null ) {
+          logger.debug("recieved message " + msg);
           if ( msg.getPerformative() == msg.INFORM ) {
             ContentElement content = getContentManager().extractContent(msg);
             if ( content instanceof RegisterAction ) {
+              logger.debug("parsing registration message");
               RegisterAction action = (RegisterAction) content;
               AID traderAID = new AID(action.getAgent(), true);
               auction.register(new JASATraderAgentProxy(traderAID, myAgent));
-              block();
+              logger.debug("registration complete");
+              logger.debug("finished = " + finished);
             } else if ( content instanceof StartAuctionAction ) {
               logger.info("Starting auction");
               finished = true;
@@ -163,7 +167,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
       }
     }
 
-    public boolean done() {      
+    public boolean done() {
       return finished;
     }
 
@@ -185,6 +189,7 @@ public class JADEAuctionAdaptor extends JADEAbstractAuctionAgent
     }
 
     public void action() {
+      logger.debug("initiating auction round");
       try {
         auction.initiateRound();
       } catch ( AuctionClosedException e ) {

@@ -121,6 +121,10 @@ public class AuctionManager extends JADEAbstractAuctionAgent {
 
       logger.info("done.");
 
+      while (  ManagerUIFrame.getSingletonInstance() == null ) {
+         logger.debug("waiting for console to activate");
+      }
+
       ManagerUIFrame.getSingletonInstance().enableStartButton();
 
     } catch ( Exception e ) {
