@@ -232,11 +232,15 @@ public class RothErevLearner extends AbstractLearner implements
    */
   protected void updateProbabilities() {
     double sigmaQ = 0;
-    for( int i=0; i<k; i++ ) {
+    for ( int i = 0; i < k; i++ ) {
       sigmaQ += q[i];
     }
+    if ( sigmaQ <= 10E-10 ) {
+      resetDistributions();
+      return;
+    }
     deltaP = 0;
-    for( int i=0; i<k; i++ ) {
+    for ( int i = 0; i < k; i++ ) {
       double p1 = q[i] / sigmaQ;
       deltaP += MathUtil.diffSq(p.getProbability(i), p1);
       p.setProbability(i, p1);
@@ -267,12 +271,16 @@ public class RothErevLearner extends AbstractLearner implements
     this.q = q;
     updateProbabilities();
   }
-
-  public void initialise() {
+  
+  public void resetDistributions() {
     for( int i=0; i<k; i++ ) {
       q[i] = GlobalPRNG.getInstance().raw();
     }
     updateProbabilities();
+  }
+
+  public void initialise() {
+    resetDistributions();
     iteration = 0;
   }
 
