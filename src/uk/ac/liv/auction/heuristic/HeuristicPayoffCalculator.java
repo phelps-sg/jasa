@@ -34,7 +34,7 @@ import uk.ac.liv.auction.stats.PayoffLogger;
 import uk.ac.liv.auction.stats.EquilibriaStats;
 
 import uk.ac.liv.util.Distribution;
-import uk.ac.liv.util.HeavyweightDistribution;
+import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Prototypeable;
 
@@ -305,7 +305,7 @@ public class HeuristicPayoffCalculator
     Distribution[] payoffs = new Distribution[numStrategies];
     for( int i=0; i<numStrategies; i++ ) {
       payoffs[i] =
-          new HeavyweightDistribution("Payoff for group " + groups[i]);
+          new CummulativeDistribution("Payoff for group " + groups[i]);
     }
 
     assignStrategies(entry);
@@ -327,10 +327,8 @@ public class HeuristicPayoffCalculator
 //      payoffLogger.finalReport();      
       
       for( int i=0; i<numStrategies; i++ ) {
-        double payoff = payoffLogger.getPayoff(groups[i]);  
-        if ( payoff > 0 ) {
-          payoffs[i].newData(payoff);
-        }
+        double payoff = payoffLogger.getPayoff(groups[i]);          
+        payoffs[i].newData(payoff);        
       }
 
     }
@@ -339,7 +337,7 @@ public class HeuristicPayoffCalculator
     for( int i=0; i<numStrategies; i++ ) {
       logger.info("");
       payoffs[i].log();
-      outcome[i] = payoffs[i].getTrimmedMean(0.75);     
+      outcome[i] = payoffs[i].getMean();     
     }
     
   }
