@@ -117,7 +117,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   static final String P_RANDOMIZER = "randomizer";
 
 
-  static final int DATAFILE_NUM_COLUMNS = 39;
+  static final int DATAFILE_NUM_COLUMNS = 41;
 
   
   public ElectricityAuctionSimulation() {
@@ -160,7 +160,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
         (StandardRandomizer) parameters.getInstanceForParameterEq(base.push(P_RANDOMIZER),
                                                                    null,
                                                                    StandardRandomizer.class);
-    randomizer.setAuction(auction);
+    randomizer.setSimulation(this);
     randomizer.setup(parameters, base.push(P_RANDOMIZER));
 
     numBuyers = parameters.getIntWithDefault(base.push(P_NB), null, 3);
@@ -281,7 +281,7 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     randomizedPrivateValues =
         randomizer.generateRandomizedPrivateValues(numTraders, iterations);
 
-    for( double k=minK; k<maxK; k+=deltaK ) {            
+    for( double k=minK; k<=maxK; k+=deltaK ) {            
 
       experiment(k, randomizedPrivateValues, prngSeeds);
       
@@ -322,12 +322,14 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
     CummulativeStatCounter pSCE = new CummulativeStatCounter("PSCE");
     CummulativeStatCounter equilibPrice =
         new CummulativeStatCounter("Equilib Price");
+    CummulativeStatCounter equilibQty =
+        new CummulativeStatCounter("Equilib Qty");
     CummulativeStatCounter reMean = new CummulativeStatCounter("RE mean");
     CummulativeStatCounter reStdev = new CummulativeStatCounter("RE stdev");
 
     variables = new CummulativeStatCounter[] {
       efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
-      sMPBN, sMPSN, pBCE, pSCE, equilibPrice, reMean, reStdev 
+      sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, reMean, reStdev 
     };
     
     Debug.assertTrue("CSV file not configured with correct number of columns",
@@ -363,9 +365,11 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
       pBCE.newData(stats.getPBCE());
       pSCE.newData(stats.getPSCE());
 
-      double ep = (stats.getEquilibriaStats().getMinPrice()
-                             + stats.getEquilibriaStats().getMaxPrice()) / 2;
+      EquilibriaStats equilibria = stats.getEquilibriaStats();
+      double ep = (equilibria.getMinPrice() + equilibria.getMaxPrice()) / 2;
+      double eq = (equilibria.getMinQuantity() + equilibria.getMaxQuantity()) / 2;
       equilibPrice.newData(ep);
+      equilibQty.newData(eq);
 
       calculateREStats(reMean, reStdev);
 
@@ -459,5 +463,3 @@ public class ElectricityAuctionSimulation implements Parameterizable, Runnable {
   }
 
 }
-
-
