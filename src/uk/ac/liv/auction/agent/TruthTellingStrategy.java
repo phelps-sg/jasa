@@ -25,6 +25,13 @@ import uk.ac.liv.auction.core.Shout;
 
 public class TruthTellingStrategy extends FixedQuantityStrategyImpl {
 	
+  public TruthTellingStrategy( AbstractTraderAgent agent ) {
+    super(agent);
+  }
+  
+  public TruthTellingStrategy() {
+    super();
+  }
 	
   public boolean modifyShout( Shout.MutableShout shout ) {    
     shout.setPrice(agent.getValuation(auction));       
