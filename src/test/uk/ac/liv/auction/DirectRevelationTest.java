@@ -36,12 +36,12 @@ import uk.ac.liv.auction.electricity.*;
  * @version $Revision$
  */
 
-public class DirectRevalationTest extends ElectricityTest {
+public class DirectRevelationTest extends ElectricityTest {
 
   public static final double VALUE_MIN = 50;
   public static final double VALUE_MAX = 100;
     
-  public DirectRevalationTest( String name ) {
+  public DirectRevelationTest( String name ) {
     super(name);
     generatePRNGseeds();
   }
@@ -73,7 +73,7 @@ public class DirectRevalationTest extends ElectricityTest {
   }
 
   public static Test suite() {
-    return new TestSuite(DirectRevalationTest.class);
+    return new TestSuite(DirectRevelationTest.class);
   }
 
 }

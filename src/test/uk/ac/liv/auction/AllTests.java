@@ -36,7 +36,7 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.prng.GlobalPRNGTest.suite());
 
     suite.addTest(test.uk.ac.liv.auction.NPTReplicationTest.suite());
-    suite.addTest(test.uk.ac.liv.auction.DirectRevalationTest.suite());
+    suite.addTest(test.uk.ac.liv.auction.DirectRevelationTest.suite());
 
     suite.addTest(test.uk.ac.liv.auction.agent.AbstractTraderAgentTest.suite());
     suite.addTest(test.uk.ac.liv.auction.agent.AdaptiveStrategyTest.suite());
