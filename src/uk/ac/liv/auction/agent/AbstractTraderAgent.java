@@ -124,6 +124,16 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    */
   protected Strategy strategy;
 
+  /**
+   * The profit made in the last round.
+   */
+  protected double lastProfit = 0;
+
+  /**
+   * The total profits to date
+   */
+  protected double profits = 0;
+
   protected boolean randomPrivateValue;
   protected double maxPrivateValue;
 
@@ -233,7 +243,9 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
 
   public synchronized void purchaseFrom(AbstractTraderAgent  seller, int quantity, double price) {
     giveFunds(seller, price*quantity);
-    stock += seller.deliver(quantity);
+    stock += seller.deliver(quantity, price);
+    lastProfit = quantity * (privateValue-price);
+    profits += lastProfit;
   }
 
   public synchronized void giveFunds( AbstractTraderAgent seller, double amount ) {
@@ -256,8 +268,10 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * @param quantity The number of items of stock to transfer
    */
 
-  public synchronized int deliver( int quantity ) {
+  public synchronized int deliver( int quantity, double price ) {
     stock -= quantity;
+    lastProfit = quantity * (price-privateValue);
+    profits += lastProfit;
     return quantity;
   }
 
@@ -276,6 +290,8 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
   protected void initialise() {
     stock = initialStock;
     funds = initialFunds;
+    lastProfit = 0;
+    profits = 0;
     if ( currentShout == null ) {
       currentShout = new Shout(this);
     }
@@ -336,7 +352,11 @@ public abstract class AbstractTraderAgent implements RoundRobinTrader,
    * algorithm.
    */
   public double getLastProfit() {
-    return 0;
+    return lastProfit;
+  }
+
+  public double getProfits() {
+    return profits;
   }
 
   /**

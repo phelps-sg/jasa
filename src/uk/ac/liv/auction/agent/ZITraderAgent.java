@@ -123,11 +123,11 @@ public class ZITraderAgent extends AbstractTraderAgent {
     //sellUnits(quantity);
   }
 
-  public int deliver( int quantity ) {
+  public int deliver( int quantity, double price ) {
     lastShoutSuccessful = true;
     tradeEntitlement--;
     quantityTraded += quantity;
-    return super.deliver(quantity);
+    return super.deliver(quantity, price);
   }
 
   public void sellUnits( int numUnits ) {
@@ -142,7 +142,6 @@ public class ZITraderAgent extends AbstractTraderAgent {
   public int determineQuantity( Auction auction ) {
     return 1;
   }
-
 
   public String toString() {
     return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " privateValue:" + privateValue + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";

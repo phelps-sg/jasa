@@ -42,7 +42,7 @@ public class TestTrader extends AbstractTraderAgent {
     this.test = test;
   }
 
-  public TestTrader( TestCase test, int stock, long funds, long privateValue, boolean isSeller ) {
+  public TestTrader( TestCase test, int stock, double funds, double privateValue, boolean isSeller ) {
     super(stock, funds, privateValue, isSeller);
     this.test = test;
   }
@@ -87,5 +87,10 @@ public class TestTrader extends AbstractTraderAgent {
   public void roundClosed( Auction auction ) {
     receivedRoundClosed++;
   }
+
+  public String toString() {
+    return "(" + getClass() + " id:" + id + " privateValue:" + privateValue + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
+  }
+
 
 }
