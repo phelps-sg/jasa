@@ -33,7 +33,8 @@ import uk.ac.liv.auction.core.AuctionClosedListener;
  * @version $Revision$
  */
 public interface MarketDataLogger
-    extends RoundClosedListener, EndOfDayListener, AuctionClosedListener  {
+    extends AuctionReport, RoundClosedListener, EndOfDayListener, 
+    			AuctionClosedListener  {
 
   /**
    * Record the market quote.
@@ -65,7 +66,7 @@ public interface MarketDataLogger
    * Generate a report on the market data.  Implementing classes
    * may choose to do nothing for this method.
    */
-  public void finalReport();
+  public void generateReport();
 
   public void setAuction( RoundRobinAuction auction );
 

@@ -15,9 +15,11 @@
 
 package uk.ac.liv.auction.stats;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -124,14 +126,24 @@ public class CombiMarketDataLogger
     }
   }
 
-  public void finalReport() {
+  public void generateReport() {
     Iterator i = loggers.iterator();
     while ( i.hasNext() ) {
       MarketDataLogger logger = (MarketDataLogger) i.next();
-      logger.finalReport();
+      logger.generateReport();
     }
   }
 
+  public Map getVariables() {
+    HashMap variableMap = new HashMap();
+    Iterator i = loggers.iterator();
+    while ( i.hasNext() ) {
+      MarketDataLogger logger = (MarketDataLogger) i.next();
+      variableMap.putAll(logger.getVariables());
+    }
+    return variableMap;
+  }
+  
   public void auctionClosed( Auction auction ) {
     Iterator i = loggers.iterator();
     while (  i.hasNext() ) {

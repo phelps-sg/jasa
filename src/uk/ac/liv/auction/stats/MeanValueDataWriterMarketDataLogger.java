@@ -118,7 +118,7 @@ public class MeanValueDataWriterMarketDataLogger extends DataWriterMarketDataLog
   }
 
 
-  public void finalReport() {
+  public void generateReport() {
   }
 
 

@@ -142,12 +142,14 @@ public class EquilibriumSurplusLogger extends AbstractMarketDataLogger
   }
 
   public void endOfDay( Auction auction ) {
-    // Do nothing
   }
-  public void finalReport() {
+  
+  public void generateReport() {
   }
-
-
+  
+  public Map getVariables() {
+    return new HashMap();
+  }
 
 }
 

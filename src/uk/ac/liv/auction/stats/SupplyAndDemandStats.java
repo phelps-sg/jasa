@@ -129,6 +129,10 @@ public class SupplyAndDemandStats extends DirectRevelationStats
     asks.clear();
     bids.clear();
   }
+  
+  public Map getVariables() {
+    return new HashMap();
+  }
 
 
 }

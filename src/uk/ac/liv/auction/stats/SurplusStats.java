@@ -182,5 +182,15 @@ public class SurplusStats extends EquilibriaStats {
                   percentageFormatter.format(eA) + "%");
     logger.info("");
   }
+  
+  public Map getVariables() {
+    HashMap vars = new HashMap();
+    vars.putAll(super.getVariables());
+    vars.put("profit.pbce", new Double(pBCE));
+    vars.put("profit.psce", new Double(pSCE));
+    vars.put("profit.pba", new Double(pBA));
+    vars.put("profit.psa", new Double(pSA));
+    return vars;
+  }
 
 }

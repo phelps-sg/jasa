@@ -15,9 +15,11 @@
 
 package uk.ac.liv.auction.stats;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.Map;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -104,6 +106,16 @@ public class CombiMarketStats
       MarketStats s = (MarketStats) i.next();
       s.generateReport();
     }
+  }
+  
+  public Map getVariables() {
+    HashMap variableMap = new HashMap();
+    Iterator i = stats.iterator();
+    while ( i.hasNext() ) {
+      MarketStats s = (MarketStats) i.next();
+      variableMap.putAll(s.getVariables());
+    }
+    return variableMap;
   }
 
   public void reset() {

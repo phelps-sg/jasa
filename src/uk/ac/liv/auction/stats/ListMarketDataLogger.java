@@ -15,8 +15,10 @@
 
 package uk.ac.liv.auction.stats;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Map;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -98,7 +100,11 @@ public class ListMarketDataLogger extends AbstractMarketDataLogger {
     initialise();
   }
 
-  public void finalReport() {
+  public void generateReport() {
+  }
+  
+  public Map getVariables() {
+    return new HashMap();
   }
 
   public void setAuction( RoundRobinAuction auction ) {

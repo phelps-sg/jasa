@@ -123,7 +123,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger {
   }
 
 
-  public void finalReport() {
+  public void generateReport() {
     calculate();
     logger.info("\nProfits per " + getKeyName());
     logger.info("-----------------------");
@@ -137,7 +137,7 @@ public abstract class PayoffLogger extends EquilibriumSurplusLogger {
                                         "\n\tpayoff: " + stats.payoff +
                    "\n");
     }
-    super.finalReport();
+    super.generateReport();
   }
 
 

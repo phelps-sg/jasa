@@ -16,12 +16,15 @@
 package uk.ac.liv.auction.stats;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 
 import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.Distribution;
 import uk.ac.liv.util.Resetable;
 
 import ec.util.Parameter;
@@ -135,11 +138,20 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
     return copy;
   }
 
-  public void finalReport() {
+  public void generateReport() {
     reportHeader();
     for( int i=0; i<stats.length; i++ ) {
       printStats(stats[i]);
     }
+  }
+  
+  public Map getVariables() {
+    HashMap vars = new HashMap();
+    createReportVars(vars, "askprice", stats[ASK_PRICE]);
+    createReportVars(vars, "bidprice", stats[BID_PRICE]);
+    createReportVars(vars, "askquote", stats[ASK_QUOTE]);
+    createReportVars(vars, "bidquote", stats[BID_QUOTE]);
+    return vars;
   }
 
 
@@ -165,5 +177,12 @@ public class StatsMarketDataLogger extends AbstractMarketDataLogger
   protected void printStats( CummulativeDistribution stats ) {
     stats.log();
     logger.info("");
+  }
+  
+  protected void createReportVars( Map vars, String var, Distribution stats ) {
+    vars.put(var + ".mean", new Double(stats.getMean()));
+    vars.put(var + ".min", new Double(stats.getMin()));
+    vars.put(var + ".max", new Double(stats.getMax()));
+    vars.put(var + ".stdev", new Double(stats.getStdDev()));
   }
 }

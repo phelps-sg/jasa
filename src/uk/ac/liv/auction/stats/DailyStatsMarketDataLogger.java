@@ -75,7 +75,7 @@ public class DailyStatsMarketDataLogger extends StatsMarketDataLogger
     }
   }
 
-  public void finalReport() {
+  public void generateReport() {
     for( int day=0; day<dailyStats.size(); day++ ) {
       CummulativeDistribution[] todaysStats =
           (CummulativeDistribution[]) dailyStats.get(day);

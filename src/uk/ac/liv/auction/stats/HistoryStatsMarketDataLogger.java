@@ -207,7 +207,11 @@ public class HistoryStatsMarketDataLogger extends AbstractMarketDataLogger
 
 
 
-  public void finalReport() {
+  public void generateReport() {
+  }
+  
+  public Map getVariables() {
+    return new HashMap();
   }
 
 

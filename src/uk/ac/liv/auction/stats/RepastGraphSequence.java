@@ -37,7 +37,6 @@ public class RepastGraphSequence implements Sequence, DataWriter {
   
   
   public double getSValue () {
-    // TODO Auto-generated method stub
     if ( Double.isInfinite(lastValue) || Double.isNaN(lastValue) ) {
       return 0;
     } else {

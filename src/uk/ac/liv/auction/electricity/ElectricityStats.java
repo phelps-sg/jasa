@@ -15,8 +15,10 @@
 
 package uk.ac.liv.auction.electricity;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -397,6 +399,16 @@ public class ElectricityStats extends SurplusStats implements Cloneable {
     logger.info("Relative concentration (RCON) =\t" + getRCON());
     logger.info("Strategic buyer market-power (SMPB) =\t" + getSMPB());
     logger.info("Strategic seller market-power (SMPS) =\t" + getSMPS());
+  }
+  
+  public Map getVariables() {
+    HashMap vars = new HashMap();
+    vars.putAll(super.getVariables());
+    vars.put("electricity.mpb", new Double(getMPB()));
+    vars.put("electricity.mps", new Double(getMPS()));
+    vars.put("electricity.rcap", new Double(getRCAP()));
+    vars.put("electricity.rcon", new Double(getRCON()));
+    return vars;
   }
 
 }

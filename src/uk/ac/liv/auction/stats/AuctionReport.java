@@ -12,32 +12,19 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
-
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
-
 /**
- * Classes implementing this interface can be used to generate reports
- * at the end of an auction.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public interface MarketStats extends AuctionReport {
+import java.util.Map;
 
-  /**
-   * Set the auction we are calculating statistics for.
-   *
-   * @param auction The auction to calculate stats for.
-   */
-  public void setAuction( RoundRobinAuction auction );
-
-  /**
-   * Calculate the market statistics.
-   */
-  public void calculate();
-
+public interface AuctionReport {
+  
+  public void generateReport();
+  
+  public Map getVariables();
 
 }

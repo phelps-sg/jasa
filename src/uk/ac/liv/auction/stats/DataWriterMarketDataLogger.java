@@ -15,6 +15,9 @@
 
 package uk.ac.liv.auction.stats;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.util.io.*;
 
@@ -136,7 +139,11 @@ public class DataWriterMarketDataLogger extends AbstractMarketDataLogger {
   }
 
 
-  public void finalReport() {
+  public void generateReport() {
+  }
+  
+  public Map getVariables() {
+    return new HashMap();
   }
 
 

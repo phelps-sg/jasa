@@ -148,5 +148,14 @@ public class EquilibriaStats extends DirectRevelationStats
     logger.info("\n\tprice:\n\t\tmin:\t" + minPrice + "\tmax:\t" + maxPrice);
     logger.info("");
   }
+  
+  public Map getVariables() {
+    HashMap reportVars = new HashMap();
+    reportVars.put("equilibria.found", new Boolean(equilibriaFound));
+    reportVars.put("equilibria.quantity", new Long(quantity));
+    reportVars.put("equilibria.minprice", new Double(minPrice));
+    reportVars.put("equilibria.maxPrice", new Double(maxPrice));
+    return reportVars;
+  }
 
 }

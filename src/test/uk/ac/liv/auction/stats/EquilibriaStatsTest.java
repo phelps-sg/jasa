@@ -300,6 +300,10 @@ class TestEquilibriaStats implements MarketStats {
   public boolean equilibriaExists() {
     return equilibriaFound;
   }
+  
+  public Map getVariables() {
+    return null;
+  }
 
   public String toString() {
     return "(" + getClass() + " equilibriaFound:" + equilibriaFound + " equilibriaMinPrice:" + equilibriaMinPrice + " equilibriaMaxPrice:" + equilibriaMaxPrice + " equilibriaMinQty: " + equilibriaMinQty + " equilibriaMaxQty:" + equilibriaMaxQty + ")";
