@@ -134,7 +134,7 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 
   protected double targetMargin( double price, double absolute, double relative ) {    
     double targetPrice = relative * price + absolute;    
-    double privValue = agent.getPrivateValue(auction);
+    double privValue = agent.getValuation(auction);
     double targetMargin = 0;
     if ( agent.isBuyer() ) {
       targetMargin = (targetPrice - privValue) / privValue;
@@ -148,14 +148,14 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
   }
 
   protected void raiseMargin( double price ) {
-  	RandomElement prng = GlobalPRNG.getInstance();
+    RandomElement prng = GlobalPRNG.getInstance();
     double relative = prng.uniform(1, 1 + scaling);     
     double absolute = prng.uniform(0, scaling); 
     learner.train(targetMargin(price, absolute, relative));
   }
 
   protected void lowerMargin( double price ) { 
-  	RandomElement prng = GlobalPRNG.getInstance();
+    RandomElement prng = GlobalPRNG.getInstance();
     double relative = 1 - prng.uniform(0, scaling);
     double absolute = -1 * prng.uniform(0, scaling); 
     learner.train(targetMargin(price, absolute, relative));
