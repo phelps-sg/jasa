@@ -244,9 +244,7 @@ public class AuctionConsoleFrame extends JFrame
     currencyFormatter.setMaximumIntegerDigits(6);
     if ( quote != null ) {
       updateCurrencyLabel(bidLabel, quote.getBid());
-      updateCurrencyLabel(askLabel, quote.getAsk());
-      bidLabel.setText(currencyFormatter.format(((double) quote.getBid())/100));
-      askLabel.setText(currencyFormatter.format(((double) quote.getAsk())/100));
+      updateCurrencyLabel(askLabel, quote.getAsk());      
     }
     Shout lastShout = null;
     try {
