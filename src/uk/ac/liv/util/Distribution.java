@@ -37,6 +37,13 @@ public interface Distribution {
    */
   public abstract double getMean();
   
+  /**
+   * Get the symetrically trimmed mean of the data. If p is zero then this is
+   * equivalent to the mean. If p is 0.5 then this equivalent to the median.
+   * 
+   * @param p
+   *          The proportion of the distribution to trim from each side.
+   */
   public abstract double getTrimmedMean( double p );
 
   /**

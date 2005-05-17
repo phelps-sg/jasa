@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * </p>
  * <p>
  * <code>
- * CummulativeStatCounter series1 = new CummulativeStatCounter("series1");<br>
+ * Distribution series1 = new CummulativeDistribution("series1");<br>
  * series1.newData(4.5);<br>
  * series1.newData(5.6);<br>
  * series1.newData(9.0);<br>
