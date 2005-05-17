@@ -83,6 +83,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryBids[i] = 0;
       memoryAsks[i] = 0;
     }
+    logger.debug("memorysize = " + memorySize);
   }
 
   public void updateTransPriceLog( TransactionExecutedEvent event ) {
