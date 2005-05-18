@@ -18,12 +18,15 @@ package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
+import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.io.DataWriter;
 
 import java.io.Serializable;
 
 import cern.jet.random.Uniform;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 
 /**
@@ -35,15 +38,22 @@ import cern.jet.random.Uniform;
  */
 
 public class DumbRandomLearner extends AbstractLearner
-    implements StimuliResponseLearner, Serializable, Prototypeable {
+    implements Parameterizable, StimuliResponseLearner, Serializable, 
+    			Prototypeable {
 
   protected int numActions;
   
   protected Uniform distribution;
+  
+  public static final String P_K = "k";
 
   public DumbRandomLearner( int numActions ) {    
     this.numActions = numActions;
     distribution = new Uniform(0, 1, GlobalPRNG.getInstance());
+  }
+  
+  public void setup( ParameterDatabase params, Parameter base ) {
+    numActions = params.getInt(base.push(P_K));
   }
   
   public Object protoClone() {
