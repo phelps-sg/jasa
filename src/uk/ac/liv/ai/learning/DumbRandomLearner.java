@@ -45,7 +45,13 @@ public class DumbRandomLearner extends AbstractLearner
   
   protected Uniform distribution;
   
+  public static final int DEFAULT_NUM_ACTIONS = 10;
+  
   public static final String P_K = "k";
+  
+  public DumbRandomLearner() {
+    this(DEFAULT_NUM_ACTIONS);
+  }
 
   public DumbRandomLearner( int numActions ) {    
     this.numActions = numActions;
@@ -53,7 +59,7 @@ public class DumbRandomLearner extends AbstractLearner
   }
   
   public void setup( ParameterDatabase params, Parameter base ) {
-    numActions = params.getInt(base.push(P_K));
+    numActions = params.getIntWithDefault(base.push(P_K), null, DEFAULT_NUM_ACTIONS);
   }
   
   public Object protoClone() {
