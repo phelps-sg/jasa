@@ -178,7 +178,7 @@ public class DiscreteProbabilityDistribution
   }
 
 
-  public class ProbabilityError extends Error {
+  public static class ProbabilityError extends Error {
 
     public ProbabilityError( DiscreteProbabilityDistribution p ) {
       super("Probabilities do not sum to 1: " + p);
