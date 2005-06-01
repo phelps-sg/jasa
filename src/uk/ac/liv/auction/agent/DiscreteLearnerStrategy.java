@@ -75,7 +75,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     markupScale = parameters.getDoubleWithDefault(base.push(P_MARKUPSCALE),
-                                                   null,1);
+                                                   null, markupScale);
   }
 
   public void endOfRound( Auction auction ) {
