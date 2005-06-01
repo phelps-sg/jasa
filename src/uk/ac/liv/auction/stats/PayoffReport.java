@@ -42,8 +42,6 @@ public abstract class PayoffReport extends DynamicSurplusReport
 
   /**
    * Maps keys representing groups onto the PayoffStats for that group.
-   * 
-   * @seealso PayoffStats
    */
   private HashMap table = new HashMap();
   
