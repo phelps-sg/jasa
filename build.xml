@@ -96,6 +96,23 @@
 	</tar>
     </target>
 
+   <target depends="cleanTar" name="srctar">
+	<loadproperties srcFile="${versionFile}"/>
+	<property name="versionStr" value="${majorVersion}.${minorVersion}"/>
+   	<tar compression="gzip" tarfile="jasa-src-${versionStr}.tar.gz">
+		<tarfileset dir="." includes="${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params" prefix="jasa-${versionStr}">
+                  <exclude name="src/uk/ac/liv/ec/**"/>
+                  <exclude name="src/test/uk/ac/liv/ec/**"/>
+                  <exclude name="src/uk/ac/liv/auction/ec/**"/>
+                  <exclude name="src/test/uk/ac/liv/auction/ec/**"/>
+		  <exclude name="src/uk/ac/liv/auction/heuristic/**"/>
+		  <exclude name="src/test/uk/ac/liv/auction/heuristic/**"/>
+		 </tarfileset>
+	</tar>
+    </target>
+
+
+
     <target name="anoncvspass">
 	    <cvspass cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" password=""/>
 	</target>
