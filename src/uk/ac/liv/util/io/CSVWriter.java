@@ -50,7 +50,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   public static final String P_APPEND = "append";
 
   public CSVWriter( OutputStream out, int numColumns, char seperator ) {
-    this.out = new PrintStream(out);
+    this.out = new PrintStream(new BufferedOutputStream(out));
     this.numColumns = numColumns;
     this.seperator = seperator;
   }
@@ -66,7 +66,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
     try {
       String fileName = parameters.getString(base.push(P_FILENAME), null);
       append = parameters.getBoolean(base.push(P_APPEND), null, append);
-      out = new PrintStream(new FileOutputStream(new File(fileName), append));
+      out = new PrintStream(new BufferedOutputStream(new FileOutputStream(new File(fileName), append)));
       numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null,
           numColumns);
     } catch ( FileNotFoundException e ) {
