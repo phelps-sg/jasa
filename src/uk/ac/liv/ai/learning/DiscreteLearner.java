@@ -25,7 +25,9 @@ package uk.ac.liv.ai.learning;
 public interface DiscreteLearner extends Learner {
 
   /**
-   * Specify the next action to take.
+   * Request that the learner perform an action.   Users of the learning
+   * algorithm should invoke this method on the learner when they
+   * wish to find out which action the learner is currently recommending.
    *
    * @return An integer representing the action to be taken.
    */
