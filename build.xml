@@ -25,7 +25,7 @@
    <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
    <property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.1/commons-collections-3.1.jar"/>
    <property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/geotools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/trove.jar:${repastLoc}/repastj.jar"/>
- 
+   <property name="jfreechartPath" value="${javaLibPath}/jfreechart-0.9.21.jar:${javaLibPath}/jcommon-0.9.7.jar"/>
 
    <path id="project.classpath">
      <pathelement location="${ecjLoc}"/>
@@ -35,6 +35,7 @@
      <pathelement location="${schemeLoc}"/>     
      <pathelement location="${collectionsLoc}"/>     
      <pathelement path="${repastPath}"/>
+     <pathelement path="${jfreechartPath}"/>
      <pathelement location="${outputDir}"/>
      <pathelement location="./jasa.jar"/>
      <pathelement path="${java.class.path}"/>
@@ -145,6 +146,7 @@
 		<arg value="${params}"/>
 	</java>
     </target>
+
 
 <target name="gethostname" description="Stores the current machines hostname in a property named 'hostname'">
   <property environment="env"/>
