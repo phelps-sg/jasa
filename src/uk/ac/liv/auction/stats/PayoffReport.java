@@ -45,8 +45,6 @@ public abstract class PayoffReport extends DynamicSurplusReport
    */
   private HashMap table = new HashMap();
   
-  protected double totalProfits;
-
   static Logger logger = Logger.getLogger(PayoffReport.class);
 
 
@@ -56,10 +54,10 @@ public abstract class PayoffReport extends DynamicSurplusReport
 
 
   public void calculate() {
+    super.calculate();
     int numAgents = auction.getNumberOfRegisteredTraders();
     double averageSurplus = calculateTotalEquilibriumSurplus() / numAgents; 
     table.clear();
-    totalProfits = 0;
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
@@ -77,17 +75,13 @@ public abstract class PayoffReport extends DynamicSurplusReport
         stats.profits += profits;
         stats.numAgents++;
       }
-      stats.recordPayoff(payoff);
-      totalProfits += profits;
+      stats.recordPayoff(payoff);    
     }   
   }
 
 
 
 
-  public double getTotalProfits() {
-    return totalProfits;
-  }
 
   public double getProfits( Object key ) {
     PayoffStats stats =
@@ -163,8 +157,7 @@ public abstract class PayoffReport extends DynamicSurplusReport
   }
   
   public void initialise() {
-    super.initialise();
-    totalProfits = 0;
+    super.initialise();    
     table.clear();
   }
   

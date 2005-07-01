@@ -67,6 +67,8 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
    */
   protected int quantity = 1;
   
+  protected double efficiency;
+  
   public static final String P_QUANTITY = "quantity";
 
   static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
@@ -89,6 +91,11 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
   }
   
   public void calculate() {    
+    efficiency = calculateTotalProfits() / calculateTotalEquilibriumSurplus();
+  }
+  
+  public double getEfficiency() {
+    return efficiency;
   }
 
   public void recalculate( AuctionEvent event  ) {
@@ -118,6 +125,16 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
       totalSurplus += i.value();
     }
     return totalSurplus;
+  }
+  
+  public double calculateTotalProfits() {
+    double totalProfits = 0;
+    Iterator i = auction.getTraderIterator();
+    while ( i.hasNext() ) {
+      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
+      totalProfits += agent.getProfits();
+    }
+    return totalProfits;
   }
 
   /**
