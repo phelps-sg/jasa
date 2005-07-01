@@ -63,4 +63,7 @@ public abstract class KPricingPolicy implements
     return k*b + (1-k)*a;
   }
 
+  public String toString() {
+    return "(" + getClass() + " k:" + k + ")";
+  }
 }
