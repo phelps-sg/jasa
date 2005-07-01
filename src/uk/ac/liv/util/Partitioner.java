@@ -112,7 +112,7 @@ class PartitionerState {
     int m = 1;
     for( int i=0; i<p.length; i++ ) {
       hash += m * p[i];
-      m *= 2;
+      m <<= 1;
     }
     return hash;
   }
