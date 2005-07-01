@@ -110,6 +110,10 @@ public abstract class KAuctioneer extends AbstractAuctioneer
     return Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
                            shoutEngine.getLowestMatchedBid());
   }
+  
+  public String toString() {
+    return "(" + getClass() + " pricingPolicy:" + pricingPolicy + ")";
+  }
 
 
 }
