@@ -19,13 +19,12 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import uk.ac.liv.auction.core.AbstractAuctioneer;
-import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
 import uk.ac.liv.auction.core.IllegalShoutException;
 import uk.ac.liv.auction.core.ContinuousDoubleAuctioneer;
 import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.UniformPricingPolicy;
+
 
 /**
  * @author Steve Phelps
