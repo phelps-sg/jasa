@@ -18,24 +18,29 @@ package test.uk.ac.liv.auction.core;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import uk.ac.liv.auction.core.AbstractAuctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
+import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
 import uk.ac.liv.auction.core.IllegalShoutException;
-import uk.ac.liv.auction.core.KContinuousDoubleAuctioneer;
+import uk.ac.liv.auction.core.ContinuousDoubleAuctioneer;
 import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.UniformPricingPolicy;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
-public class KContinuousDoubleAuctioneerTest extends AuctioneerTest {
+public class ContinuousDoubleAuctioneerTest extends AuctioneerTest {
   
-  public KContinuousDoubleAuctioneerTest( String name ) {
+  public ContinuousDoubleAuctioneerTest( String name ) {
     super(name);
   }
   
   public void setUp() {
     super.setUp();
-    auctioneer = new KContinuousDoubleAuctioneer(auction, 0);
+    auctioneer = new ContinuousDoubleAuctioneer(auction);
+    ((AbstractAuctioneer) auctioneer).setPricingPolicy(new DiscriminatoryPricingPolicy(0));
     auction.setAuctioneer(auctioneer);
   }
   
@@ -67,7 +72,7 @@ public class KContinuousDoubleAuctioneerTest extends AuctioneerTest {
   }
 
   public static Test suite() {
-    return new TestSuite(KContinuousDoubleAuctioneerTest.class);
+    return new TestSuite(ContinuousDoubleAuctioneerTest.class);
   }
   
   public static void main( String[] args ) {

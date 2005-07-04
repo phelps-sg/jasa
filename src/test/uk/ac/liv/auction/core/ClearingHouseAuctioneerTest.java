@@ -19,24 +19,26 @@ import junit.framework.TestSuite;
 
 import uk.ac.liv.auction.core.AbstractAuctioneer;
 import uk.ac.liv.auction.core.IllegalShoutException;
-import uk.ac.liv.auction.core.KDoubleAuctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.core.UniformPricingPolicy;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class KDoubleAuctioneerTest extends AuctioneerTest {
+public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 
-  public KDoubleAuctioneerTest( String name ) {
+  public ClearingHouseAuctioneerTest( String name ) {
     super(name);
   }
   
   public void setUp() {
     super.setUp();
-    auctioneer = new KDoubleAuctioneer(auction, 1);
+    auctioneer = new ClearingHouseAuctioneer(auction);
+    ((AbstractAuctioneer) auctioneer).setPricingPolicy(new UniformPricingPolicy(1));
     auction.setAuctioneer(auctioneer);
   }
   
@@ -85,7 +87,7 @@ public class KDoubleAuctioneerTest extends AuctioneerTest {
     assertTrue( traders[0].lastWinningPrice == 900 );
     assertTrue( traders[1].lastWinningPrice == 900 );
 
-    ((KDoubleAuctioneer) auctioneer).reset();
+    ((ClearingHouseAuctioneer) auctioneer).reset();
     System.out.println("after reseting, quote = " + auctioneer.getQuote());
 
     assertTrue( auctioneer.getQuote().getBid() < 0 );
@@ -178,7 +180,7 @@ public class KDoubleAuctioneerTest extends AuctioneerTest {
   }
 
   public static Test suite() {
-    return new TestSuite(KDoubleAuctioneerTest.class);
+    return new TestSuite(ClearingHouseAuctioneerTest.class);
   }
 
   public static void main( String[] args ) {
