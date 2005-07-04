@@ -23,7 +23,7 @@ import uk.ac.liv.auction.agent.RandomUnconstrainedStrategy;
 import uk.ac.liv.auction.zi.ZITraderAgent;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
-import uk.ac.liv.auction.core.KDoubleAuctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 
 import uk.ac.liv.auction.stats.PriceStatisticsReport;
 
@@ -38,7 +38,7 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
 
   protected ZITraderAgent testAgent;
 
-  protected KDoubleAuctioneer auctioneer;
+  protected ClearingHouseAuctioneer auctioneer;
 
   protected RoundRobinAuction auction;
 
@@ -60,7 +60,7 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
     testStrategy.setMaxPrice(MAX_PRICE);
     testAgent.setStrategy(testStrategy);
     auction = new RoundRobinAuction();
-    auctioneer = new KDoubleAuctioneer(auction);
+    auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     logger = new PriceStatisticsReport();
     auction.setReport(logger);

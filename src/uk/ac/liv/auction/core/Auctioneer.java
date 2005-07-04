@@ -17,6 +17,8 @@ package uk.ac.liv.auction.core;
 
 import java.util.Iterator;
 
+import uk.ac.liv.auction.event.AuctionEventListener;
+
 
 /**
  * <p>
@@ -29,7 +31,7 @@ import java.util.Iterator;
  */
 
 public interface Auctioneer
-    extends QuoteProvider {
+    extends QuoteProvider, AuctionEventListener {
 
   /**
    * Perform the clearing operation for the auction;

@@ -34,6 +34,8 @@ import uk.ac.liv.util.Parameterizable;
 public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
   protected PrintStream out;
+  
+  protected boolean autowrap = true;
 
   protected int numColumns;
 
@@ -46,6 +48,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   static final char DEFAULT_SEPERATOR = '\t';
 
   public static final String P_FILENAME = "filename";
+  public static final String P_AUTOWRAP = "autowrap";
   public static final String P_COLUMNS = "columns";
   public static final String P_APPEND = "append";
 
@@ -54,6 +57,13 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
     this.numColumns = numColumns;
     this.seperator = seperator;
   }
+  
+  public CSVWriter( OutputStream out, char seperator ) {
+    this.out = new PrintStream(new BufferedOutputStream(out));
+    this.autowrap = false;
+    this.seperator = seperator;
+  }
+
 
   public CSVWriter( OutputStream out, int numColumns ) {
     this(out, numColumns, DEFAULT_SEPERATOR);
@@ -67,8 +77,10 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
       String fileName = parameters.getString(base.push(P_FILENAME), null);
       append = parameters.getBoolean(base.push(P_APPEND), null, append);
       out = new PrintStream(new BufferedOutputStream(new FileOutputStream(new File(fileName), append)));
-      numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null,
-          numColumns);
+      autowrap = parameters.getBoolean(base.push(P_AUTOWRAP), null, autowrap);
+      if (autowrap)
+        numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null,
+            numColumns);
     } catch ( FileNotFoundException e ) {
       throw new Error(e);
     }
@@ -87,26 +99,31 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   }
 
   public void newData( Object data ) {
+    prepareColumn();
     out.print(data.toString());
     nextColumn();
   }
 
   public void newData( int data ) {
+    prepareColumn();
     out.print(data);
     nextColumn();
   }
 
   public void newData( long data ) {
+    prepareColumn();
     out.print(data);
     nextColumn();
   }
 
   public void newData( double data ) {
+    prepareColumn();
     out.print(data);
     nextColumn();
   }
 
   public void newData( float data ) {
+    prepareColumn();
     out.print(data);
     nextColumn();
   }
@@ -118,6 +135,12 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
       newData(0);
     }
   }
+  
+  public void endRecord() {
+    if (autowrap)
+      new Error("endRecord() should NOT be invoked when autowrap is enabled.");
+    newLine();
+  }
 
   public void flush() {
     out.flush();
@@ -128,17 +151,30 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   }
 
   public void setNumColumns( int numColumns ) {
+    if (!autowrap)
+      new Error("The number of columns should NOT be set when autowrap is disabled.");
     this.numColumns = numColumns;
+  }
+  
+  protected void prepareColumn() {
+    if (!autowrap)
+      if (currentColumn > 0)
+        out.print(seperator);
   }
 
   protected void nextColumn() {
     currentColumn++;
-    if ( currentColumn < numColumns ) {
-      out.print(seperator);
-    } else {
-      out.println();
-      currentColumn = 0;
-    }
+    if (autowrap)
+      if ( currentColumn < numColumns ) {
+        out.print(seperator);
+      } else {
+        newLine();
+      }
+  }
+  
+  private void newLine() {
+    out.println();
+    currentColumn = 0;    
   }
 
   private void writeObject( java.io.ObjectOutputStream out ) throws IOException {

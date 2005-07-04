@@ -18,8 +18,8 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.util.Resetable;
 
 import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.event.AuctionEventListener;
 
 /**
  * <p>

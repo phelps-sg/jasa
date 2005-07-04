@@ -30,7 +30,7 @@ import java.io.Serializable;
  *  Auctioneer for standard multi-unit english ascending auction.
  */
 
-public class AscendingAuctioneer extends KAuctioneer implements Serializable {
+public class AscendingAuctioneer extends AbstractAuctioneer implements Serializable {
 
   /**
    * The reservation price.
@@ -56,11 +56,13 @@ public class AscendingAuctioneer extends KAuctioneer implements Serializable {
 
   public AscendingAuctioneer( Auction auction, TradingAgent seller,
                                   int quantity, double reservePrice ) {
-    super(auction, new UniformPricingPolicy(0));
+    super(auction);
 
     this.reservePrice = reservePrice;
     this.quantity = quantity;
     this.seller = seller;
+    
+    setPricingPolicy(new UniformPricingPolicy(0));
 
     initialise();
   }

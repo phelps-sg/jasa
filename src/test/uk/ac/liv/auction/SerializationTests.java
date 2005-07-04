@@ -19,9 +19,12 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import uk.ac.liv.auction.agent.TruthTellingStrategy;
+import uk.ac.liv.auction.core.AbstractAuctioneer;
 import uk.ac.liv.auction.core.AuctionClosedException;
-import uk.ac.liv.auction.core.KDoubleAuctioneer;
+import uk.ac.liv.auction.core.Auctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.UniformPricingPolicy;
 import uk.ac.liv.auction.electricity.ElectricityTrader;
 import uk.ac.liv.auction.zi.ZITraderAgent;
 
@@ -45,7 +48,9 @@ public class SerializationTests extends TestCase {
   public void setUp() {
     
     auction = new RoundRobinAuction("serialized auction");
-    auction.setAuctioneer( new KDoubleAuctioneer(auction, 0.5));
+    Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
+    ((AbstractAuctioneer)auctioneer).setPricingPolicy(new UniformPricingPolicy(0.5));
+    auction.setAuctioneer(auctioneer);
     
     ZITraderAgent seller1 = new ZITraderAgent(10, 1, true);
     seller1.setStrategy(new TruthTellingStrategy(seller1));

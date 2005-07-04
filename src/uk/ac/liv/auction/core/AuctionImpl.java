@@ -251,6 +251,7 @@ public abstract class AuctionImpl extends Observable
 
   public void addListener( LinkedList listeners, AuctionEventListener listener ) {
     assert listener != null;
+        
     if ( !listeners.contains(listener) ) {
       listeners.add(listener);
     }

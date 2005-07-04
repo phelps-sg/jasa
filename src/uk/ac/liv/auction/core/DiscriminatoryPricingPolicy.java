@@ -17,31 +17,66 @@ package uk.ac.liv.auction.core;
 
 import java.io.Serializable;
 
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
+
 /**
- * A pricing policy in which we set the transaction price in the
- * interval between the ask price and the bid price as determined by the
- * parameter k.
- *
+ * <p>
+ * A pricing policy in which we set the transaction price in the interval
+ * between the matched prices as determined by the parameter k.
+ * </p>
+ * 
+ * <p>
+ * <b>Parameters </b> <br>
+ * </p>
+ * 
+ * <table>
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.inorder</tt><br>
+ * <font size=-1>boolean </font></td>
+ * <td valign=top>(if true, the interval will be [first shout, second shout];
+ * otherwise [ask, bid])</td>
+ * <tr></table>
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DiscriminatoryPricingPolicy extends KPricingPolicy
-                                          implements Serializable {
+public class DiscriminatoryPricingPolicy extends KPricingPolicy implements
+    Serializable {
+
+  private static final String P_INORDER = "inorder";
+
+  private boolean inOrder;
 
   public DiscriminatoryPricingPolicy() {
     this(0);
   }
 
-  public DiscriminatoryPricingPolicy( double k ) {
+  public DiscriminatoryPricingPolicy(double k) {
     super(k);
   }
 
-  public double determineClearingPrice( Shout bid, Shout ask,
-                                         MarketQuote clearingQuote ) {
-    assert bid.getPrice() >= ask.getPrice();                                         
-    return kInterval(ask.getPrice(), bid.getPrice());
+  public void setup(ParameterDatabase parameters, Parameter base) {
+    super.setup(parameters, base);
+
+    inOrder = parameters.getBoolean(base.push(P_INORDER), null, false);
   }
 
+  public double determineClearingPrice(Shout bid, Shout ask,
+      MarketQuote clearingQuote) {
+    assert bid.getPrice() >= ask.getPrice();
+
+    if (inOrder) {
+      if (bid.getId() > ask.getId())
+        // ask comes first
+        return kInterval(ask.getPrice(), bid.getPrice());
+      else
+        // bid comes first
+        return kInterval(bid.getPrice(), ask.getPrice());
+    } else {
+      return kInterval(ask.getPrice(), bid.getPrice());
+    }
+  }
 
 }

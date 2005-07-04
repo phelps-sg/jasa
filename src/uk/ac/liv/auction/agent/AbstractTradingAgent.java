@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.AuctionError;
-import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
@@ -26,6 +25,7 @@ import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
 
 import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;

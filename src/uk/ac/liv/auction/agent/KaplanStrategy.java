@@ -204,7 +204,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
     return smallSpread;
   }
-
+  
 
   public boolean timeRunningOut() {
     boolean timeOut = auction.getRemainingTime() < t;

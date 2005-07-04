@@ -22,11 +22,13 @@ import test.uk.ac.liv.PRNGTestSeeds;
 import uk.ac.liv.auction.agent.DailyRandomValuer;
 import uk.ac.liv.auction.agent.TruthTellingStrategy;
 
-import uk.ac.liv.auction.core.AuctionEventListener;
-import uk.ac.liv.auction.core.KDoubleAuctioneer;
+import uk.ac.liv.auction.core.AbstractAuctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.core.UniformPricingPolicy;
 
 import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 
 import uk.ac.liv.auction.stats.EquilibriumReport;
@@ -50,7 +52,7 @@ import junit.framework.TestSuite;
 public class EquilibriumSurplusLoggerTest extends TestCase 
 				implements AuctionEventListener {
   
-  protected KDoubleAuctioneer auctioneer;
+  protected ClearingHouseAuctioneer auctioneer;
   
   protected RandomRobinAuction auction;
   
@@ -79,7 +81,8 @@ public class EquilibriumSurplusLoggerTest extends TestCase
 
   public void initWithParams( int ns, int nb, int tradeEnt ) {
     auction = new RandomRobinAuction(getName());
-    auctioneer = new KDoubleAuctioneer(auction, 0.5);
+    auctioneer = new ClearingHouseAuctioneer(auction);
+    ((AbstractAuctioneer) auctioneer).setPricingPolicy(new UniformPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);
     auction.setMaximumDays(MAX_DAYS);
     auction.setLengthOfDay(DAY_LEN);

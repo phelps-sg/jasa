@@ -16,9 +16,11 @@
 package test.uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.AuctionClosedException;
+import uk.ac.liv.auction.core.AbstractAuctioneer;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.KDoubleAuctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
+import uk.ac.liv.auction.core.UniformPricingPolicy;
 
 
 import junit.framework.*;
@@ -70,7 +72,9 @@ public class AbstractTraderAgentTest extends TestCase {
     
     
     auction = new RoundRobinAuction();
-    auction.setAuctioneer(new KDoubleAuctioneer(0.5));
+    AbstractAuctioneer auctioneer = new ClearingHouseAuctioneer(auction);
+    auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
+    auction.setAuctioneer(auctioneer);
     auction.register(trader1);
     auction.register(trader2);
   }

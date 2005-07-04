@@ -37,7 +37,7 @@ public class ZIPStrategyTest extends TestCase {
 
   RoundRobinAuction auction;
 
-  KDoubleAuctioneer auctioneer;
+  ClearingHouseAuctioneer auctioneer;
 
   AuctionReport marketDataLogger;
 
@@ -67,7 +67,7 @@ public class ZIPStrategyTest extends TestCase {
 
   public void setUp() {
     auction = new RandomRobinAuction();
-    auctioneer = new KDoubleAuctioneer(auction);
+    auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(NUM_ROUNDS);
     marketDataLogger = new PriceStatisticsReport();

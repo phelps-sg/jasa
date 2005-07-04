@@ -36,7 +36,7 @@ import uk.ac.liv.util.CummulativeDistribution;
  */
 public abstract class EfficiencyTest extends TestCase {
   
-  protected KAuctioneer auctioneer;
+  protected AbstractAuctioneer auctioneer;
   
   protected RoundRobinAuction auction;
   
@@ -59,7 +59,7 @@ public abstract class EfficiencyTest extends TestCase {
   }
   
   protected void assignAuctioneer() {
-    auctioneer = new KContinuousDoubleAuctioneer();
+    auctioneer = new ContinuousDoubleAuctioneer();
     auctioneer.setPricingPolicy( new DiscriminatoryPricingPolicy(0.5) );
     auction.setAuctioneer(auctioneer);
   }

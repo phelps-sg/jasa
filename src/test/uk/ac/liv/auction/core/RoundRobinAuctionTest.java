@@ -74,7 +74,8 @@ public class RoundRobinAuctionTest extends TestCase {
   }	
 
   public void setUp () {
-    auctioneer = new KDoubleAuctioneer(auction, 1);
+    auctioneer = new ClearingHouseAuctioneer(auction);
+    ((AbstractAuctioneer) auctioneer).setPricingPolicy(new UniformPricingPolicy(1));
     setUpTraders();
     setUpAuction();
   }

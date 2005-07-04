@@ -75,6 +75,7 @@ public interface Auction extends QuoteProvider {
    */
   public int getRound();
   public int getDay();
+  public int getAge();
 
   /**
    * Get the remaining time in the current trading day (period).

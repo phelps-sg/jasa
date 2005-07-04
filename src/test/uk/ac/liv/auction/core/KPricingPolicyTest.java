@@ -16,7 +16,7 @@ package test.uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
 import uk.ac.liv.auction.core.UniformPricingPolicy;
-import uk.ac.liv.auction.core.KDoubleAuctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.stats.EquilibriumReport;
 
@@ -36,7 +36,7 @@ import junit.framework.TestSuite;
 
 public class KPricingPolicyTest extends TestCase {
 
-  KDoubleAuctioneer auctioneer;
+  ClearingHouseAuctioneer auctioneer;
   
   RoundRobinAuction auction;
   
@@ -48,7 +48,7 @@ public class KPricingPolicyTest extends TestCase {
   
   public void setUp() {
     auction = new RoundRobinAuction();
-    auctioneer = new KDoubleAuctioneer(auction);
+    auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     
     agents = new MockTrader[4];

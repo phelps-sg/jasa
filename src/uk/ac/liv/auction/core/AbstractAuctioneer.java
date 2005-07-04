@@ -17,11 +17,17 @@ package uk.ac.liv.auction.core;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
 
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Prototypeable;
 
 import org.apache.log4j.Logger;
+
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 
 /**
@@ -34,7 +40,7 @@ import org.apache.log4j.Logger;
  */
 
 public abstract class AbstractAuctioneer
-    implements Serializable, Auctioneer, Resetable, Prototypeable, Cloneable {
+    implements Serializable, Auctioneer, Resetable, Prototypeable, Cloneable, Parameterizable {
 
   /**
    * The auction container for this auctioneer.
@@ -52,6 +58,14 @@ public abstract class AbstractAuctioneer
   protected MarketQuote currentQuote = null;
 
   static Logger logger = Logger.getLogger(AbstractAuctioneer.class);
+
+  
+  protected MarketQuote clearingQuote;
+
+  protected PricingPolicy pricingPolicy;
+
+  public static final String P_PRICING = "pricing";
+
 
 
   public AbstractAuctioneer() {
@@ -73,6 +87,22 @@ public abstract class AbstractAuctioneer
       throw new Error(e);
     }
   }
+  
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    pricingPolicy = (PricingPolicy)
+        parameters.getInstanceForParameterEq(base.push(P_PRICING), null,
+                                              PricingPolicy.class);
+
+    if (pricingPolicy instanceof Parameterizable)
+      ((Parameterizable)pricingPolicy).setup(parameters, base.push(P_PRICING));
+
+  }
+  
+  public void setPricingPolicy( PricingPolicy pricingPolicy ) {
+    this.pricingPolicy = pricingPolicy;
+  }
+
 
   /**
    * Code for handling a new shout in the auction.
@@ -173,7 +203,34 @@ public abstract class AbstractAuctioneer
     shoutEngine.reset();
   }
 
+  public void clear() {
+    clearingQuote = new MarketQuote(askQuote(), bidQuote());
+    List shouts = shoutEngine.getMatchedShouts();
+    Iterator i = shouts.iterator();
+    while (i.hasNext()) {
+      Shout bid = (Shout) i.next();
+      Shout ask = (Shout) i.next();
+      double price = determineClearingPrice(bid, ask);
+      auction.clear(ask, bid, price);
+    }
+  }
 
+  public double determineClearingPrice( Shout bid, Shout ask ) {
+    return pricingPolicy.determineClearingPrice(bid, ask, clearingQuote);
+  }
+
+  protected double bidQuote() {
+    return Shout.maxPrice(shoutEngine.getHighestMatchedAsk(),
+                           shoutEngine.getHighestUnmatchedBid());
+  }
+
+  protected double askQuote() {
+    return Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
+                           shoutEngine.getLowestMatchedBid());
+  }
+  
+  public void eventOccurred(AuctionEvent event) {
+  }
 }
 
 

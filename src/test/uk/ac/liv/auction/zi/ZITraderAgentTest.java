@@ -32,7 +32,7 @@ public class ZITraderAgentTest extends TestCase  {
 
   RoundRobinAuction auction;
 
-  KDoubleAuctioneer auctioneer;
+  ClearingHouseAuctioneer auctioneer;
 
   static final int NUM_ROUNDS = 1000;
 
@@ -57,7 +57,7 @@ public class ZITraderAgentTest extends TestCase  {
     auction = new RoundRobinAuction("ZIPStrategyTest auction");
     auction.register(buyer);
     auction.register(seller);
-    auctioneer = new KDoubleAuctioneer(auction);
+    auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(NUM_ROUNDS);
   }

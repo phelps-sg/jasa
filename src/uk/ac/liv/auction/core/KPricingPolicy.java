@@ -23,15 +23,24 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
- * Abstract superclass for auctioneer pricing policies parameterised by
- * k.
- *
+ * Abstract superclass for auctioneer pricing policies parameterised by k.
+ * 
+ * <p>
+ * <b>Parameters </b> <br>
+ * </p>
+ * <table>
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.k</tt><br>
+ * <font size=-1>0 <=int <=1 </font></td>
+ * <td valign=top>(determining a value in a given price range)</td>
+ * <tr></table>
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class KPricingPolicy implements 
-	Serializable, PricingPolicy, Parameterizable {
+public abstract class KPricingPolicy implements Serializable, PricingPolicy,
+    Parameterizable {
 
   protected double k;
 
@@ -41,17 +50,16 @@ public abstract class KPricingPolicy implements
     this(0);
   }
 
-  public KPricingPolicy( double k ) {
+  public KPricingPolicy(double k) {
     this.k = k;
   }
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+  public void setup(ParameterDatabase parameters, Parameter base) {
 
     k = parameters.getDoubleWithDefault(base.push(P_K), null, 0);
   }
 
-
-  public void setK( double k ) {
+  public void setK(double k) {
     this.k = k;
   }
 
@@ -59,11 +67,12 @@ public abstract class KPricingPolicy implements
     return k;
   }
 
-  public double kInterval( double a, double b ) {
-    return k*b + (1-k)*a;
+  public double kInterval(double a, double b) {
+    return k * b + (1 - k) * a;
   }
 
   public String toString() {
     return "(" + getClass() + " k:" + k + ")";
   }
+
 }

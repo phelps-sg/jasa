@@ -17,8 +17,8 @@ package uk.ac.liv.auction.stats;
 
 import java.util.Map;
 
-import uk.ac.liv.auction.core.AuctionEventListener;
 import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.event.AuctionEventListener;
 
 /**
  * An object capable of producing a report at the end of an auction.

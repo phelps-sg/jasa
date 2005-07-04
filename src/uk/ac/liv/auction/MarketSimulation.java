@@ -61,11 +61,7 @@ import org.apache.log4j.Logger;
  * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
  * <td valign=top>(the class of auction to use)</td></tr>
  * 
- * <tr><td valign=top><i>base</i><tt>iterations</tt><br>
- * <font size=-1>int</font></td>
- * <td valign=top>(the number of repetitions of this experiment to sample)</td></tr>
- * 
- * <tr><td valign=top><i>base</i><tt>w</tt><br>
+ * <tr><td valign=top><i>base</i><tt>.iterations</tt><br>
  * <font size=-1>int</font></td>
  * <td valign=top>(the number of repetitions of this experiment to sample)</td></tr>
  * 

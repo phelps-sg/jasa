@@ -131,9 +131,8 @@ public abstract class ElectricityTest extends TestCase {
     this.cs = cs;
     this.cb = cb;
     auction = new RandomRobinAuction("NPTReplicationTest");
-    auctioneer =
-         new KDoubleAuctioneer(auction,
-                                          new DiscriminatoryPricingPolicy(0.5));
+    auctioneer = new ClearingHouseAuctioneer(auction);
+    ((AbstractAuctioneer)auctioneer).setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(MAX_ROUNDS);
     registerTraders(auction, true, ns, cs, sellerValues);
