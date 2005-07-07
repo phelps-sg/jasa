@@ -99,6 +99,10 @@ public abstract class AbstractAuctioneer
 
   }
   
+  public PricingPolicy getPricingPolicy() {
+    return pricingPolicy;
+  }
+  
   public void setPricingPolicy( PricingPolicy pricingPolicy ) {
     this.pricingPolicy = pricingPolicy;
   }

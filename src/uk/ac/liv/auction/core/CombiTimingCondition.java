@@ -19,6 +19,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 import uk.ac.liv.util.Parameterizable;
@@ -37,7 +39,7 @@ import uk.ac.liv.util.Parameterizable;
  *
  */
 
-public class CombiTimingCondition extends TimingCondition implements Parameterizable {
+public class CombiTimingCondition extends TimingCondition implements Parameterizable, AuctionClosingCondition, DayEndingCondition {
   
   private static final String P_NUM = "n";
   private static final String P_RELATION = "relation";
@@ -48,6 +50,8 @@ public class CombiTimingCondition extends TimingCondition implements Parameteriz
   public static final int AND = 1;
   
   protected int relation;
+  
+  private static Logger logger = Logger.getLogger(CombiTimingCondition.class);
 
 
   public CombiTimingCondition() {
@@ -61,11 +65,11 @@ public class CombiTimingCondition extends TimingCondition implements Parameteriz
   public void setup(ParameterDatabase parameters, Parameter base) {
     int numConditions = parameters.getInt(base.push(P_NUM), null, 0);
     
-    String s = parameters.getStringWithDefault(base.push(P_RELATION), null, "AND");
-    if (s == null || s.length() == 0 || s.equalsIgnoreCase("AND"))
-      relation = AND;
-    else
+    String s = parameters.getStringWithDefault(base.push(P_RELATION), null, "OR");
+    if (s == null || s.length() == 0 || s.equalsIgnoreCase("OR"))
       relation = OR;
+    else
+      relation = AND;
 
     for( int i=0; i<numConditions; i++ ) {
       TimingCondition condition = (TimingCondition)
@@ -103,6 +107,7 @@ public class CombiTimingCondition extends TimingCondition implements Parameteriz
     Iterator i = conditionIterator();
     while ( i.hasNext() ) {
       TimingCondition condition = (TimingCondition) i.next();
+      
       if (relation == AND)
         isClosing = isClosing && condition.eval();
       else // if relation == OR

@@ -158,7 +158,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    GlobalPRNG.setup(parameters, base.push(P_PRNG));
+    GlobalPRNG.setup(parameters, base);
 
     DATAFILE_NUM_COLUMNS = variables.length*4 + 1;
 
@@ -188,7 +188,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
     auctioneer =
       (Auctioneer) parameters.getInstanceForParameter(base.push(P_AUCTIONEER),
-                                                      null, ParameterizablePricing.class);
+                                                      null, AbstractAuctioneer.class);
     ((Parameterizable) auctioneer).setup(parameters, base.push(P_AUCTIONEER));
 
     stats =
@@ -330,7 +330,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
   public void experiment( double auctioneerK,
                             double[][] randomizedPrivateValues ) throws FileNotFoundException {
 
-    ((ParameterizablePricing) auctioneer).setK(auctioneerK);
+    ((KPricingPolicy) ((AbstractAuctioneer)auctioneer).getPricingPolicy()).setK(auctioneerK);
     auction.reset();
 
     logger.info("\n*** Experiment with parameters");
