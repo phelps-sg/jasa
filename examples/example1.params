@@ -23,14 +23,15 @@ simulation.writer.filename = results.csv
 
 # Use a random-robin auction which will randomise the order in which agents bid
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.name = Example 1: discriminatory-price electricity k-DA
+simulation.auction.name = Example 1: discriminatory-price electricity CH
 
 # The auction will close after 100 rounds (or "ticks")
-simulation.auction.maximumrounds = 100
+simulation.auction.closing = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
+simulation.auction.closing.maximumrounds = 100
 
-# Use a k-DA auctioneer- clearing will occur at the end of each
+# Use a clearing house auctioneer - clearing will occur at the end of each
 #  round after every agent has had a chance to place a shout
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ClearingHouseAuctioneer
 
 # Set the transaction price as a function of individual bid and ask prices
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy

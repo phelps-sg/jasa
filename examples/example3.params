@@ -8,13 +8,15 @@
 # Use a random-robin auction which will randomise the shouting order
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 
-simulation.auction.maximumdays = 1000
-simulation.auction.lengthofday = 5
+simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+simulation.auction.closing.maximumdays = 1000
+simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+simulation.auction.dayending.lengthofday = 5
 
 simulation.auction.name = Example 3: Dynamic supply and demand
 
-# Use a double-auction with clearing occuring at the end of each round
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+# Use a clearing house auctioneer with clearing occuring at the end of each round
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ClearingHouseAuctioneer
 
 # Set the transaction price as a function of individual bid and ask prices
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy

@@ -7,14 +7,17 @@
 #
 
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.lengthofday = 20
-simulation.auction.maximumdays = 1000
+simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+simulation.auction.closing.maximumdays = 1000
+simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+simulation.auction.dayending.lengthofday = 20
+
 simulation.auction.name = Example 4: CDA with Zip/RothErev/Kaplan 
 simulation.auction.console = true
 
 # Use a continuous double-auction with prices set halfway between bid
 # and ask price.
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 simulation.auction.auctioneer.pricing.k = 0.5
 

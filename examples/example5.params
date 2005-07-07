@@ -1,12 +1,25 @@
+# This example demonstrates ZIP markets
+#
+# To run this example, use the following command:
+#
+#  ant run -Dparams=examples/example5.params
+#
 
 
 simulation.console = false
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.name = ZIP Experiment
-simulation.auction.maximumrounds = 10000
-simulation.auction.lengthofday = 10
-simulation.auction.maximumdays = 20
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+
+simulation.auction.closing = uk.ac.liv.auction.core.CombiTimingCondition
+simulation.auction.closing.n = 2
+simulation.auction.closing.0 = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+simulation.auction.closing.0.maximumdays = 20
+simulation.auction.closing.1 = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
+simulation.auction.closing.1.maximumrounds = 10000
+simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+simulation.auction.dayending.lengthofday = 10
+
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 simulation.auction.auctioneer.pricing.k = 0.5
 simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport

@@ -7,7 +7,12 @@
 #
 # Run this experiment using the command:
 #
-#  java uk.ac.liv.auction.electricity.ElectricityAuctionSimulation examples/electricity.params
+#  java uk.ac.liv.auction.electricity.ElectricityExperiment examples/electricity.params
+# 
+# or
+# 
+#  ant customrun -Dmain=uk.ac.liv.auction.electricity.ElectricityExperiment
+#       -Dparams=examples/electricity.params
 #
 
 # Number of auction rounds
@@ -62,7 +67,7 @@ electricity.strategy.seller.learner.x = 1
 electricity.strategy.seller.learner.s1 = 1
 
 # Auction protocol
-electricity.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+electricity.auctioneer = uk.ac.liv.auction.core.ClearingHouseAuctioneer
 electricity.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 
 # Number of different k values 

@@ -1,5 +1,5 @@
 #
-# Compute heuristic payoff matrix for 20 agent / 3 strategy k-CDA game.
+# Compute heuristic payoff matrix for 20 agent / 3 strategy CDA game.
 #
 # Run using:
 #
@@ -39,13 +39,15 @@ heuristic.agent.valuer = uk.ac.liv.auction.agent.RandomScheduleValuer
 heuristic.agent.strategy = uk.ac.liv.auction.agent.PureSimpleStrategy
 
 heuristic.auction = uk.ac.liv.auction.core.RandomRobinAuction
-heuristic.auction.lengthofday = 30
-heuristic.auction.maximumdays = 20
+simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+simulation.auction.closing.maximumdays = 20
+simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+simulation.auction.dayending.lengthofday = 30
 
 heuristic.auction.logger = uk.ac.liv.auction.stats.DailyStatsMarketDataLogger
 
 # Use a k-CDA (clearing after every new shout) with k=0.5
-heuristic.auction.auctioneer = uk.ac.liv.auction.core.KContinuousDoubleAuctioneer
+heuristic.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
 heuristic.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 heuristic.auction.auctioneer.pricing.k = 0.5
 

@@ -8,16 +8,17 @@
 
 # Use a random-robin auction which will randomise the order in which agents bid
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
-simulation.auction.name = Example 2: Uniform-price k-DA
+simulation.auction.name = Example 2: Uniform-price CH
 
 # The auction will close after 1000 rounds (or "ticks")
-simulation.auction.maximumrounds = 10000
+simulation.auction.closing = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
+simulation.auction.closing.maximumrounds = 10000
 
 # Show GUI console
 simulation.auction.console = true
 
-# Use a k-DA auctioneer which will clear the auction after each round
-simulation.auction.auctioneer = uk.ac.liv.auction.core.KDoubleAuctioneer
+# Use a clearing house auctioneer which will clear the auction after each round
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ClearingHouseAuctioneer
 # Set a uniform transaction-price based on current market quote.
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.UniformPricingPolicy
 # Set the transaction price halfway between the bid-ask spread.
