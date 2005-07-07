@@ -1,0 +1,147 @@
+#
+# This example demonstrates a non-interactive batch experiment sets
+# involving ten iterations of a discriminatory-price CDA.
+#
+# To run this example, run the following command:
+#
+#  ant batchrun -Dparams=examples/example8.params
+#
+
+##################################################################
+# 
+# case enumerations
+#
+# note: it is assumed that there are two groups of agents, sellers and buyers.
+
+simulation.caseenum.n = 5
+
+simulation.caseenum.0.name = groupsize
+simulation.caseenum.0.case = uk.ac.liv.auction.config.GroupSize
+simulation.caseenum.0.parameters = 10
+
+simulation.caseenum.1.name = ratio
+simulation.caseenum.1.case = uk.ac.liv.auction.config.Ratio
+simulation.caseenum.1.parameters = 1:1
+
+simulation.caseenum.2.name = strategy
+simulation.caseenum.2.case = uk.ac.liv.auction.config.StrategyCombo
+simulation.caseenum.2.parameters = \
+        uk.ac.liv.auction.config.strategy.ZIC uk.ac.liv.auction.config.strategy.ZIC, \
+        uk.ac.liv.auction.config.strategy.ZIP uk.ac.liv.auction.config.strategy.ZIP, \
+        uk.ac.liv.auction.config.strategy.TT uk.ac.liv.auction.config.strategy.TT, \
+        uk.ac.liv.auction.config.strategy.PS uk.ac.liv.auction.config.strategy.PS, \
+        uk.ac.liv.auction.config.strategy.Kaplan uk.ac.liv.auction.config.strategy.Kaplan, \
+        uk.ac.liv.auction.config.strategy.RE uk.ac.liv.auction.config.strategy.RE, \
+        uk.ac.liv.auction.config.strategy.GD uk.ac.liv.auction.config.strategy.GD
+
+
+simulation.caseenum.3.name = sellerschedule
+simulation.caseenum.3.case = uk.ac.liv.auction.config.Schedule
+simulation.caseenum.3.case.isseller = true
+simulation.caseenum.3.parameters = uk.ac.liv.auction.config.schedule.Random
+
+simulation.caseenum.4.name = buyerschedule
+simulation.caseenum.4.case = uk.ac.liv.auction.config.Schedule
+simulation.caseenum.4.case.isseller = false
+simulation.caseenum.4.parameters = uk.ac.liv.auction.config.schedule.Random
+
+
+###############################################################################
+
+# Perform ten iterations of the experiment
+simulation.iterations = 10
+
+# Write the results of each iteration to the following 
+#  comma-separated-variables (CSV) file
+simulation.writer = uk.ac.liv.util.io.CSVWriter
+simulation.writer.filename = cda-10-1_1-x-x-10.csv
+
+# Use a random-robin auction which will randomise the order in which agents bid
+simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
+simulation.auction.name = Example 8: discriminatory-price CDA
+
+# The auction will close after 100 rounds (or "ticks")
+#simulation.auction.maximumrounds = 100
+simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+simulation.auction.closing.maximumdays = 10
+simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+simulation.auction.dayending.lengthofday = 10
+
+# Use a k-DA auctioneer- clearing will occur at the end of each
+#  round after every agent has had a chance to place a shout
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+
+# Set the transaction price as a function of the market quote
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+
+# Set the transaction price halfway between the bid and the ask price
+simulation.auction.auctioneer.pricing.k = 0.5
+
+# Configure a combination of two different loggers
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
+simulation.auction.report.n = 3
+
+# needed at least by Kaplan
+simulation.auction.report.0 = uk.ac.liv.auction.stats.DailyStatsReport
+
+# 
+simulation.auction.report.1 = uk.ac.liv.auction.stats.SurplusReport
+
+# needed at least by PvT and GD
+simulation.auction.report.2 = uk.ac.liv.auction.stats.HistoricalDataReport
+simulation.auction.report.2.memorysize = 50
+
+# Do not show the GUI console, as this is a batch experiment
+simulation.auction.console = false
+
+# Two populations of agents
+simulation.auction.agenttype.n = 2
+
+# 1st population- ZI-C sellers
+simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.auction.agenttype.0.numagents = 5
+simulation.auction.agenttype.0.initialtradeentitlement = 1
+
+simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.RandomUnconstrainedStrategy
+
+simulation.auction.agenttype.0.isseller = true
+# Valuations (limit prices) will be drawn randomly when agents are initialised
+simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.RandomValuer
+# Range for valuations is (110, 200)
+simulation.auction.agenttype.0.valuer.minvalue = 80
+simulation.auction.agenttype.0.valuer.maxvalue = 150
+simulation.auction.agenttype.0.capacity = 1
+
+# 2nd population- ZI-C buyers
+simulation.auction.agenttype.1 = uk.ac.liv.auction.zi.ZITraderAgent
+simulation.auction.agenttype.1.numagents = 2
+simulation.auction.agenttype.1.initialtradeentitlement = 1
+
+simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.GDStrategy
+simulation.auction.agenttype.1.strategy.maxprice = 150
+
+simulation.auction.agenttype.1.isseller = false
+# Valuations (limit prices) will be drawn randomly when agents are initialised
+simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.RandomValuer
+# Range for valuations is (120, 250)
+simulation.auction.agenttype.1.valuer.minvalue = 80
+simulation.auction.agenttype.1.valuer.maxvalue = 150
+simulation.auction.agenttype.1.capacity = 1
+
+# PRNG configuration
+#  use the Mersenne Twister algorithm
+simulation.prng = uk.ac.liv.prng.MT
+#  with the following PRNG seed
+simulation.seed = 1298
+
+# log4j configuration - substitute INFO for DEBUGO to turn on debugging output
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n
+
+log4j.appender.dfile=org.apache.log4j.FileAppender
+log4j.appender.dfile.file=debug.log
+log4j.appender.dfile.append=false
+log4j.appender.dfile.layout=org.apache.log4j.PatternLayout
+log4j.appender.dfile.layout.ConversionPattern=%c: %m%n

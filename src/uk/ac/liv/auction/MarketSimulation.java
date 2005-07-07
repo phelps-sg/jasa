@@ -19,6 +19,7 @@ import ec.util.ParamClassLoadException;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import uk.ac.liv.auction.config.CaseEnumConfig;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.stats.ReportVariable;
 
@@ -46,8 +47,9 @@ import org.apache.log4j.Logger;
  * The main JASA application class.  This application takes as an argument
  * the name of a parameter file describing an auction experiment, and
  * proceeds to run that experiment.  This application can be used to
- * run many iterations of an experiment in batch-mode, in contrast to
- * the interactive mode provided by RepastMarketSimulation.
+ * run many iterations of an experiment in batch-mode, or even many iterations
+ * of several experiments with different settings, in contrast to the 
+ * interactive mode provided by RepastMarketSimulation.
  * 
  * @see RepastMarketSimulation
  * 
@@ -95,7 +97,7 @@ public class MarketSimulation implements Serializable, Runnable {
    */
   protected DataWriter resultsFile = null;
 
-  
+  public static final String P_CASEENUM = "caseenum";
   public static final String P_AUCTION = "auction";
   public static final String P_SIMULATION = "simulation";
   public static final String P_ITERATIONS = "iterations";
@@ -124,14 +126,54 @@ public class MarketSimulation implements Serializable, Runnable {
       org.apache.log4j.PropertyConfigurator.configure(fileName);
 
       ParameterDatabase parameters = new ParameterDatabase(file, args);
-      MarketSimulation simulation = new MarketSimulation();
-      simulation.setup(parameters, new Parameter(P_SIMULATION));
-      simulation.run();
-
+      Parameter base = new Parameter(P_SIMULATION);
+      
+      CaseEnumConfig caseEnumConfig = new CaseEnumConfig();
+      caseEnumConfig.setup(parameters, base.push(P_CASEENUM));
+      
+      if (caseEnumConfig.getCaseEnumNum() == 0) {
+        runSingleExperimentSet(parameters, base);
+      } else {
+        runBatchExperimentSet(parameters, base, caseEnumConfig);
+      }
     } catch ( Exception e ) {
       logger.error(e);
       e.printStackTrace();
     }
+  }
+  
+  private static void runSingleExperimentSet(ParameterDatabase parameters, 
+      Parameter base) throws Exception {
+    
+    MarketSimulation simulation = new MarketSimulation();
+    simulation.setup(parameters, base);
+    simulation.run();    
+  }
+  
+  private static void runBatchExperimentSet(ParameterDatabase parameters, 
+      Parameter base, CaseEnumConfig caseEnumConfig) throws Exception {
+
+    while (true) {
+
+      caseEnumConfig.apply(parameters, base.push(P_AUCTION));
+
+      // run simulation under the current combination of cases
+      String s = "*   " + caseEnumConfig.getCurrentDesc() + "   *";
+      String stars = "";
+      for (int i = 0; i < s.length(); i++)
+        stars += "*";
+      logger.info("\n");
+      logger.info(stars);
+      logger.info(s);
+      logger.info(stars);
+      logger.info("\n");
+
+      runSingleExperimentSet(parameters, base);
+      
+      if (!caseEnumConfig.next())
+        break;
+    }
+
   }
 
 
