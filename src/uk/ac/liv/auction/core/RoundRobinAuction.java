@@ -182,6 +182,11 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    */
   protected HashSet acceptedShouts = new HashSet();
 
+  protected TimingCondition closingCondition;
+
+  protected TimingCondition dayEndingCondition;
+
+  
   public static final String P_REPORT = "report";
 
   public static final String P_AUCTIONEER = "auctioneer";
@@ -207,10 +212,6 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
 
   static Logger logger = Logger.getLogger(RoundRobinAuction.class);
-
-  private TimingCondition closingCondition;
-
-  private TimingCondition dayEndingCondition;
 
   /**
    * Construct a new auction in the stopped state, with no traders, no shouts,
