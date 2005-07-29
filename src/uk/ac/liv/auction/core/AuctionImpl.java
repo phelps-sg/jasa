@@ -15,7 +15,16 @@
 
 package uk.ac.liv.auction.core;
 
-import uk.ac.liv.auction.event.*;
+import uk.ac.liv.auction.event.AuctionEventListener;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AgentPolledEvent;
+import uk.ac.liv.auction.event.AuctionClosedEvent;
+import uk.ac.liv.auction.event.AuctionOpenEvent;
+import uk.ac.liv.auction.event.EndOfDayEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
+
 
 import uk.ac.liv.auction.stats.AuctionReport;
 import uk.ac.liv.auction.stats.CombiAuctionReport;
