@@ -45,10 +45,6 @@ import ec.util.ParameterDatabase;
 public class DiscriminatoryPricingPolicy extends KPricingPolicy implements
     Serializable {
 
-  private static final String P_INORDER = "inorder";
-
-  private boolean inOrder;
-
   public DiscriminatoryPricingPolicy() {
     this(0);
   }
@@ -59,24 +55,13 @@ public class DiscriminatoryPricingPolicy extends KPricingPolicy implements
 
   public void setup(ParameterDatabase parameters, Parameter base) {
     super.setup(parameters, base);
-
-    inOrder = parameters.getBoolean(base.push(P_INORDER), null, false);
   }
 
   public double determineClearingPrice(Shout bid, Shout ask,
       MarketQuote clearingQuote) {
     assert bid.getPrice() >= ask.getPrice();
-
-    if (inOrder) {
-      if (bid.getId() > ask.getId())
-        // ask comes first
-        return kInterval(ask.getPrice(), bid.getPrice());
-      else
-        // bid comes first
-        return kInterval(bid.getPrice(), ask.getPrice());
-    } else {
-      return kInterval(ask.getPrice(), bid.getPrice());
-    }
+ 
+    return kInterval(ask.getPrice(), bid.getPrice());    
   }
 
 }
