@@ -18,7 +18,6 @@ package uk.ac.liv.auction.stats;
 import java.util.Map;
 
 import uk.ac.liv.auction.core.RoundRobinAuction;
-
 import uk.ac.liv.auction.event.AuctionEventListener;
 
 /**

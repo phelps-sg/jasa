@@ -23,7 +23,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class ZIP  extends Case {
+public class ZIP implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.PriestVanTolStrategy";
 	private static final String LearnerClassName = "uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum";

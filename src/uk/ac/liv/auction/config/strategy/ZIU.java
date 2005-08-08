@@ -23,7 +23,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class ZIU  extends Case {
+public class ZIU implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.RandomUnconstrainedStrategy";
 

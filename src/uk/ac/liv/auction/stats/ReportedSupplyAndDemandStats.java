@@ -69,7 +69,7 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 
 
   protected void enumerateTruthfulShout( Shout truthfulShout ) {
-    super.enumerateTruthfulShout(truthfulShout);
+    //super.enumerateTruthfulShout(truthfulShout);
     AbstractTradingAgent agent = (AbstractTradingAgent) truthfulShout
         .getAgent();
     Shout actualShout = agent.getCurrentShout();

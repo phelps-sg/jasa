@@ -21,51 +21,66 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-
 /**
- * @author jniu
+ * Defines the schedule of a type of agents, i.e. their valuer.
+ *
+ * <p><b>Parameters</b><br>
+ * 
+ * <table>
+ * 
+ * <tr><td valign=top><i>base</i><tt>.isseller</tt><br>
+ * <font size=-1> boolean </font></td>
+ * <td valign=top>(specifies which type of agents to be affected)</td></tr>
+ * 
+ * </table>
+ * 
+ * @author Jinzhong Niu
  * @version $Revision$
  */
-public class Schedule extends ParameterBasedCase implements Parameterizable {
-	
-	static Logger logger = Logger.getLogger(Schedule.class);
+public class Schedule implements ParameterBasedCase, Parameterizable {
 
-	private Case c;
-	private boolean isSeller;
-	
-    private static final String P_ISSELLER = "isseller";
-	
-	public Schedule() {
-	}
+  static Logger logger = Logger.getLogger(Schedule.class);
 
-	/* 
-     * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase, ec.util.Parameter)
-     */
-    public void setup(ParameterDatabase parameters, Parameter base) {
-        isSeller = parameters.getBoolean(base.push(P_ISSELLER), null, true);
+  private Case c;
+
+  private boolean isSeller;
+
+  
+  // TODO: uses a number to specify which group of agents to be affected
+  private static final String P_ISSELLER = "isseller";
+
+  public Schedule() {
+  }
+
+  /*
+   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+   *      ec.util.Parameter)
+   */
+  public void setup(ParameterDatabase parameters, Parameter base) {
+    isSeller = parameters.getBoolean(base.push(P_ISSELLER), null, true);
+  }
+
+  public void setParameter(String param) {
+    try {
+      c = (Case) Class.forName(param).newInstance();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+      logger.error(e.toString());
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+      logger.error(e.toString());
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+      logger.error(e.toString());
     }
-    
-    public void setParameter(String param) {
-        try {
-            c = (Case)Class.forName(param).newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
-        }
-    }
-	
-	public String toString() {
-		return c.toString();
-	}
-	
-	public void apply(ParameterDatabase pdb, Parameter base) {
-	    int index = isSeller ? 0 : 1;
-	    c.apply(pdb, base.push("agenttype."+index+".valuer"));
-	}
+  }
+
+  public String toString() {
+    return c.toString();
+  }
+
+  public void apply(ParameterDatabase pdb, Parameter base) {
+    int index = isSeller ? 0 : 1;
+    c.apply(pdb, base.push("agenttype." + index + ".valuer"));
+  }
 }

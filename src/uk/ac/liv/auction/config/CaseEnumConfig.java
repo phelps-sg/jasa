@@ -23,21 +23,57 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 /**
+ * The class initializing a set of different auction settings - a combination of 
+ * properties each taking one or more values.
+ * 
+ * <p><b>Parameters</b><br>
+ *
+ * <table>
+ *
+ * <tr><td valign=top><i>base</i><tt>.n</tt><br>
+ * <font size=-1> int </font></td>
+ * <td valign=top>(the number of CaseEnums to generate a set of different auction
+ * )</td></tr>
+ * 
+ * <tr><td valign=top><i>base</i><tt>.i</tt><br>
+ * <font size=-1> classname inherits uk.ac.liv.auction.config.CaseEnum </font></td>
+ * <td valign=top>(the enumeration of different values of a property to generate
+ * a set of different auctions)</td></tr>
+ * 
+ * </table>
+ *
  * @author Jinzhong Niu
  * @version $Revision$
  */
 public class CaseEnumConfig implements Parameterizable {
+  
+  private static CaseEnumConfig instance = null;
 
   static Logger logger = Logger.getLogger(CaseEnumConfig.class);
 
   public static final String P_N = "n";
 
-  private static CaseEnum varieties[];
 
+  /**
+   * All the <code>CaseEnum</code> to produce combinations.
+   */
+  protected static CaseEnum varieties[];
+
+  /**
+   * The current combination of <code>Case</code>s.
+   */
   protected static Case combo[];
 
   protected String title;
 
+  public CaseEnumConfig() {
+    instance = this;
+  }
+  
+  public static CaseEnumConfig getInstance() {
+    return instance;
+  }
+  
   /*
    * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
    *      ec.util.Parameter)
@@ -54,6 +90,7 @@ public class CaseEnumConfig implements Parameterizable {
         varieties[i] = (CaseEnum) parameters.getInstanceForParameterEq(base
             .push(String.valueOf(i)), null, CaseEnum.class);
       } else {
+        // ParameterBasedCaseEnum is default
         varieties[i] = new ParameterBasedCaseEnum();
       }
       

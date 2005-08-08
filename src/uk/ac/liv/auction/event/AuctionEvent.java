@@ -35,11 +35,20 @@ public abstract class AuctionEvent {
    * The time at which this event occurred.
    */
   protected int time;
+  
+  /**
+   * The physical time at which this event occurred.
+   */
+  
+  protected long pTime;
+  
+  
 
   
   public AuctionEvent( Auction auction, int time ) {
     this.auction = auction;    
     this.time = time;
+    this.pTime = System.currentTimeMillis();
   }
   
   /**
@@ -47,6 +56,10 @@ public abstract class AuctionEvent {
    */
   public Auction getAuction() {
     return auction;
+  }
+  
+  public long getPhysicalTime() {
+    return pTime;
   }
 
 }

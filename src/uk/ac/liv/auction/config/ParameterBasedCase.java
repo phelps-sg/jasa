@@ -15,11 +15,18 @@
 package uk.ac.liv.auction.config;
 
 /**
+ * A value case of an auction property that can be initialized with a string
+ * argument.
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public abstract class ParameterBasedCase extends Case {
-    
-    public abstract void setParameter(String param);
+public interface ParameterBasedCase extends Case {
+
+  /**
+   * @param param the string that is used to initialize the value case of an 
+   * auction property.
+   */
+  public abstract void setParameter(String param);
 
 }

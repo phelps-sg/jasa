@@ -59,6 +59,16 @@ import org.apache.log4j.Logger;
  *
  * <table>
  *
+ * <tr><td valign=top><i>base</i><tt>.caseenum</tt><br>
+ * <font size=-1></font></td>
+ * <td valign=top>(the parameter base for uk.ac.liv.auction.config.CaseEnumConfig to
+ * set up a set of different auctions to run)</td></tr>
+ * 
+ * <tr><td valign=top><i>base</i><tt>.caseenum.i</tt><br>
+ * <font size=-1> classname inherits uk.ac.liv.auction.config.CaseEnum </font></td>
+ * <td valign=top>(the enumeration of different values of a property to generate
+ * a set of different auction settings)</td></tr>
+ * 
  * <tr><td valign=top><i>base</i><tt>.auction</tt><br>
  * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
  * <td valign=top>(the class of auction to use)</td></tr>
@@ -95,7 +105,7 @@ public class MarketSimulation implements Serializable, Runnable {
    * If running more than one iteration, then write batch statistics
    * to this DataWriter.
    */
-  protected DataWriter resultsFile = null;
+  protected static DataWriter resultsFile = null;
 
   public static final String P_CASEENUM = "caseenum";
   public static final String P_AUCTION = "auction";
@@ -128,6 +138,18 @@ public class MarketSimulation implements Serializable, Runnable {
       ParameterDatabase parameters = new ParameterDatabase(file, args);
       Parameter base = new Parameter(P_SIMULATION);
       
+      try {
+        resultsFile = 
+          (DataWriter) 
+          	parameters.getInstanceForParameter(base.push(P_WRITER), null, 
+          	    								DataWriter.class);
+        if ( resultsFile instanceof Parameterizable ) {
+          ((Parameterizable) resultsFile).setup(parameters, base.push(P_WRITER));
+        }
+      } catch ( ParamClassLoadException e ) {
+        resultsFile = null;
+      }
+      
       CaseEnumConfig caseEnumConfig = new CaseEnumConfig();
       caseEnumConfig.setup(parameters, base.push(P_CASEENUM));
       
@@ -136,6 +158,11 @@ public class MarketSimulation implements Serializable, Runnable {
       } else {
         runBatchExperimentSet(parameters, base, caseEnumConfig);
       }
+      
+      if (resultsFile != null) {
+        resultsFile.close();
+      }
+
     } catch ( Exception e ) {
       logger.error(e);
       e.printStackTrace();
@@ -196,18 +223,6 @@ public class MarketSimulation implements Serializable, Runnable {
     
     verbose = parameters.getBoolean(base.push(P_VERBOSE), null, verbose);
     
-    try {
-      resultsFile = 
-        (DataWriter) 
-        	parameters.getInstanceForParameter(base.push(P_WRITER), null, 
-        	    								DataWriter.class);
-      if ( resultsFile instanceof Parameterizable ) {
-        ((Parameterizable) resultsFile).setup(parameters, base.push(P_WRITER));
-      }
-    } catch ( ParamClassLoadException e ) {
-      resultsFile = null;
-    }
-
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
     
@@ -245,6 +260,7 @@ public class MarketSimulation implements Serializable, Runnable {
         logger.info("done.\n");        
       }      
     }
+        
     finalReport(resultsStats);
   }
   
@@ -294,6 +310,10 @@ public class MarketSimulation implements Serializable, Runnable {
       if ( resultsFile != null ) {
         resultsFile.newData(value);
       }
+    }
+    
+    if (resultsFile != null) {
+      resultsFile.flush();
     }
   }
 

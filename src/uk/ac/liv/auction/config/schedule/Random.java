@@ -19,12 +19,12 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
- * Random supply/demand schedule.
+ * Random supply/demand schedule, i.e. uk.ac.liv.auction.agent.RandomValuer.
  * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class Random extends Case {
+public class Random implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.RandomValuer";
 		

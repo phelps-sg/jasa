@@ -47,6 +47,10 @@ public abstract class AbstractAuctionReport
     this.auction = auction;
     logger.debug("Set auction to " + auction);
   }
+  
+  public RoundRobinAuction getAuction() {
+    return auction;
+  }
 
 
 }

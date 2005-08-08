@@ -20,39 +20,41 @@ import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
 /**
- * A resettable enumeration. That's all the cases can be repeatedly
- * enumerated. Once the enumeration is done, it can be restarted again.
+ * A resettable enumeration. That's all the cases can be repeatedly enumerated.
+ * Once the enumeration is done, it can be restarted again.
  * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
 public abstract class CaseEnum implements Parameterizable {
-    
-    private String name;
-    
-    public CaseEnum() {
-    }
-    
-    public void setup(ParameterDatabase pdb, Parameter base) {        
-    }
-	
-    /**
-     * @return Returns the name.
-     */
-    public String getName() {
-        return name;
-    }
-    /**
-     * @param name The name to set.
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public abstract void reset();
-    	
-	public abstract boolean moreCases();
-	
-	public abstract Case nextCase();
-	
+
+  private String name;
+
+  public CaseEnum() {
+  }
+
+  public void setup(ParameterDatabase pdb, Parameter base) {
+  }
+
+  /**
+   * @return Returns the name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @param name
+   *          The name to set.
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public abstract void reset();
+
+  public abstract boolean moreCases();
+
+  public abstract Case nextCase();
+
 }

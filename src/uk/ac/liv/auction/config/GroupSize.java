@@ -17,29 +17,31 @@ package uk.ac.liv.auction.config;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-
 /**
+ * Defines the unit size of agents participating an auction, together with
+ * Ratio, determining the populations of each type of agents.
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class GroupSize extends ParameterBasedCase {
-	
-	public static final String P_GROUPSIZE = "groupsize";
-	
-	private int size;
-	
-	public GroupSize() {
-	}
-	
-	public void setParameter(String param) {
-		this.size = Integer.parseInt(param);
-	}
-	
-	public String toString() {
-		return String.valueOf(size);
-	}
-	
-	public void apply(ParameterDatabase pdb, Parameter base) {
-		pdb.set(base.push(P_GROUPSIZE), String.valueOf(size));
-	}
+public class GroupSize implements ParameterBasedCase {
+
+  public static final String P_GROUPSIZE = "groupsize";
+
+  private int size;
+
+  public GroupSize() {
+  }
+
+  public void setParameter(String param) {
+    this.size = Integer.parseInt(param);
+  }
+
+  public String toString() {
+    return String.valueOf(size);
+  }
+
+  public void apply(ParameterDatabase pdb, Parameter base) {
+    pdb.set(base.push(P_GROUPSIZE), String.valueOf(size));
+  }
 }

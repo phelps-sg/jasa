@@ -23,7 +23,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class GD  extends Case {
+public class GD implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.GDStrategy";
 	

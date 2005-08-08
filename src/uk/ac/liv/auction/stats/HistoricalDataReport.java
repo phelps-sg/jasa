@@ -196,6 +196,15 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     sortedShouts.add(shout);
   }
 
+  /**
+   * 
+   * @param shouts
+   * @param price
+   *        the sign of price controls whether higher shouts or lower shouts are needed
+   * @param accepted
+   * @return
+   *        the number of shouts that meet the specified condition
+   */
   public int getNumberOfShouts( List shouts, double price, boolean accepted ) {
     int numShouts = 0;
     Iterator i = shouts.iterator();

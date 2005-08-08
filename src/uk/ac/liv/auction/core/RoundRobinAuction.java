@@ -24,6 +24,7 @@ import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import uk.ac.liv.auction.stats.AuctionReport;
+import uk.ac.liv.auction.stats.ReportVariableBoard;
 
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
 
@@ -568,6 +569,8 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
       addAuctionEventListener(t);
       t.reset();
     }
+    
+    ReportVariableBoard.getInstance().reset();
   }
 
   /**

@@ -25,7 +25,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class ND  extends Case {
+public class ND implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.BuyerIntervalValuer";
 		

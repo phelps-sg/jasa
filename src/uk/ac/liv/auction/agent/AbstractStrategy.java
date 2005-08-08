@@ -30,6 +30,9 @@ import uk.ac.liv.util.Resetable;
  * that provides skeleton functionality for making trading
  * decisions.
  * </p>
+ * 
+ * @author Steve Phelps
+ * @version $Revision$
  */
 public abstract class AbstractStrategy implements
 								Serializable,

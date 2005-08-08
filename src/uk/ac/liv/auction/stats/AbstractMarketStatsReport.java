@@ -30,6 +30,7 @@ public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof AuctionClosedEvent ) {
       calculate();
+      ReportVariableBoard.getInstance().reportValues(getVariables(), event);
     }
   }
   

@@ -70,11 +70,12 @@ public class TrueSupplyAndDemandStats extends SupplyAndDemandStats {
   protected void enumerateTruthfulShout( Shout shout ) {
     Shout.MutableShout copyOfShout = new Shout.MutableShout();
     copyOfShout.copyFrom(shout);
-    if ( shout.isBid() ) {
-      bids.add(copyOfShout);
-    } else {
-      asks.add(copyOfShout);
-    }
+
+      if (shout.isBid()) {
+        bids.add(copyOfShout);
+      } else {
+        asks.add(copyOfShout);
+      }
     super.enumerateTruthfulShout(shout);
   }
 

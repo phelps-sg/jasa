@@ -24,7 +24,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class PS  extends Case {
+public class PS implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.PureSimpleStrategy";
 

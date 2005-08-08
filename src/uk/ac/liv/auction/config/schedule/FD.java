@@ -25,7 +25,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class FD  extends Case {
+public class FD implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.FixedValuer";
 

@@ -77,7 +77,7 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer implements
     }
   }
   
-  private void askNotAnImprovementException()
+  protected void askNotAnImprovementException()
       throws NotAnImprovementOverQuoteException {
     if ( askException == null ) {
       // Only construct a new exception the once (for improved performance)
@@ -86,7 +86,7 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer implements
     throw askException;
   }
 
-  private void bidNotAnImprovementException()
+  protected void bidNotAnImprovementException()
       throws NotAnImprovementOverQuoteException {
     if ( bidException == null ) {
       // Only construct a new exception the once (for improved performance)
@@ -98,9 +98,9 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer implements
   /**
    * Reusable exceptions for performance
    */
-  private static NotAnImprovementOverQuoteException askException = null;
-  private static NotAnImprovementOverQuoteException bidException = null;
+  protected static NotAnImprovementOverQuoteException askException = null;
+  protected static NotAnImprovementOverQuoteException bidException = null;
 
 
-  private static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
+  protected static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
 }

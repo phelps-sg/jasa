@@ -18,6 +18,7 @@ package uk.ac.liv.auction.core;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
+import org.jfree.data.time.TimePeriodValue;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -25,10 +26,12 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
+import uk.ac.liv.auction.stats.ReportVariableBoard;
+import uk.ac.liv.auction.stats.ReportVariableBoardUpdater;
 
 /**
  * <p>
- * An auctioneer for a k-double-auction with continuous clearing and equlibrium
+ * An auctioneer for a double auction with continuous clearing and equlibrium
  * price estimation.
  * </p>
  * 
@@ -69,6 +72,9 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
   protected double k = 0.5;
 
   public static final String P_K = "k";
+  
+  public static final String EST_EQUILIBRIUM_PRICE = "estimated.equilibrium.price";
+  public static final String EST_EQUILIBRIUM_PRICE_DEVIATION = "estimated.equilibrium.price.deviation";
 
   public ContinuousDoubleAuctioneerEE() {
     this(null);
@@ -106,45 +112,23 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
     }
   }
   
-  private void askNotAnImprovementException()
-      throws NotAnImprovementOverQuoteException {
-    if (askException == null) {
-      // Only construct a new exception the once (for improved performance)
-      askException = new NotAnImprovementOverQuoteException(DISCLAIMER);
-    }
-    throw askException;
-    
-  }
-
-  private void bidNotAnImprovementException()
-      throws NotAnImprovementOverQuoteException {
-    if (bidException == null) {
-      // Only construct a new exception the once (for improved performance)
-      bidException = new NotAnImprovementOverQuoteException(DISCLAIMER);
-    }
-    throw bidException;
-  }
-
-  /**
-   * Reusable exceptions for performance
-   */
-  private static NotAnImprovementOverQuoteException askException = null;
-
-  private static NotAnImprovementOverQuoteException bidException = null;
-
-  private static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see uk.ac.liv.auction.event.AuctionEventListener#eventOccurred(uk.ac.liv.auction.event.AuctionEvent)
-   */
   public void eventOccurred(AuctionEvent event) {
+    
     if (event instanceof TransactionExecutedEvent) {
       Shout ask = ((TransactionExecutedEvent) event).getAsk();
       Shout bid = ((TransactionExecutedEvent) event).getBid();
       expectedLowestBid = expectedHighestAsk = k * bid.getPrice() + (1 - k)
           * ask.getPrice();
+
+      ReportVariableBoard.getInstance().reportValue(EST_EQUILIBRIUM_PRICE,
+          expectedLowestBid, event);
+
+      double equ = ((TimePeriodValue) ReportVariableBoard.getInstance()
+          .getValue(ReportVariableBoardUpdater.EQUIL_PRICE)).getValue()
+          .doubleValue();
+      ReportVariableBoard.getInstance().reportValue(
+          EST_EQUILIBRIUM_PRICE_DEVIATION,
+          Math.abs(expectedLowestBid - equ) * 100 / equ, event);
     }
   }
 }

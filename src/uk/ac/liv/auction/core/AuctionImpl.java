@@ -199,6 +199,10 @@ public abstract class AuctionImpl extends Observable
     return name;
   }
 
+  public long getId() {
+    return id;
+  }
+
   public void removeShout( Shout shout ) {
     // Remove this shout and all of its children.
     for( Shout s = shout; s != null; s = s.getChild() ) {

@@ -23,7 +23,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class Kaplan extends Case {
+public class Kaplan implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.KaplanStrategy";
 

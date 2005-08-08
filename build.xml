@@ -13,7 +13,7 @@
    <property name="versionTemplate" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.template"/>
    <property name="versionSrc" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.java"/>
 
-   <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.agent.jade,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event"/>
+   <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event,uk.ac.liv.auction.config,uk.ac.liv.auction.config.schedule,uk.ac.liv.auction.config.strategy"/>
 
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
@@ -25,7 +25,7 @@
    <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
    <property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.1/commons-collections-3.1.jar"/>
    <property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/geotools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/trove.jar:${repastLoc}/repastj.jar"/>
-   <property name="jfreechartPath" value="${javaLibPath}/jfreechart-0.9.21.jar:${javaLibPath}/jcommon-0.9.7.jar"/>
+   <property name="jfreechartPath" value="${javaLibPath}/jfreechart-1.0.0-rc1.jar:${javaLibPath}/jcommon-1.0.0-rc1.jar"/>
 
    <path id="project.classpath">
      <pathelement location="${ecjLoc}"/>
@@ -142,6 +142,15 @@
 
     <target name="run">
 	<java classname="uk.ac.liv.auction.RepastMarketSimulation" fork="true">
+		<classpath refid="project.classpath"/>
+		<arg value="${params}"/>
+	</java>
+    </target>
+
+
+    <target name="customrun">
+        <echo message="The main class is ${main}."/>
+	<java classname="${main}" fork="true">
 		<classpath refid="project.classpath"/>
 		<arg value="${params}"/>
 	</java>

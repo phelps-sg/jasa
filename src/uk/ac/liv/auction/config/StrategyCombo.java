@@ -20,60 +20,62 @@ import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-
 /**
+ * A shortcut to define strategies each for one agent group.
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class StrategyCombo extends ParameterBasedCase implements Parameterizable {
+public class StrategyCombo implements ParameterBasedCase, Parameterizable {
 
-	static Logger logger = Logger.getLogger(StrategyCombo.class);
+  static Logger logger = Logger.getLogger(StrategyCombo.class);
 
-	private Case cases[];
-		
-	public StrategyCombo() {
-	}
+  private Case cases[];
 
-	/* 
-     * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase, ec.util.Parameter)
-     */
-    public void setup(ParameterDatabase parameters, Parameter base) {
+  public StrategyCombo() {
+  }
+
+  /*
+   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+   *      ec.util.Parameter)
+   */
+  public void setup(ParameterDatabase parameters, Parameter base) {
+  }
+
+  public void setParameter(String param) {
+    String classes[] = param.split("\\s");
+    cases = new Case[classes.length];
+    try {
+      for (int i = 0; i < cases.length; i++) {
+        cases[i] = (Case) Class.forName(classes[i]).newInstance();
+      }
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+      logger.error(e.toString());
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+      logger.error(e.toString());
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+      logger.error(e.toString());
     }
-    
-    public void setParameter(String param) {
-        String classes[] = param.split("\\s");
-        cases = new Case[classes.length];
-        try {
-            for (int i=0; i<cases.length; i++) {
-                cases[i] = (Case)Class.forName(classes[i]).newInstance();
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
-        }
+  }
+
+  public String toString() {
+    String s = "";
+    for (int i = 0; i < cases.length; i++) {
+      if (i == 0) {
+        s += cases[i].toString();
+      } else {
+        s += "|" + cases[i].toString();
+      }
     }
-	
-	public String toString() {
-	    String s = "";
-	    for (int i=0; i<cases.length; i++) {
-	        if (i==0) {
-	            s += cases[i].toString();
-	        } else {
-	            s += "|"+cases[i].toString();
-	        }
-	    }
-		return s;
-	}
-	
-	public void apply(ParameterDatabase pdb, Parameter base) {
-	    for (int i=0; i<cases.length; i++) {
-	        cases[i].apply(pdb, base.push("agenttype."+i+".strategy"));
-	    }
-	}
+    return s;
+  }
+
+  public void apply(ParameterDatabase pdb, Parameter base) {
+    for (int i = 0; i < cases.length; i++) {
+      cases[i].apply(pdb, base.push("agenttype." + i + ".strategy"));
+    }
+  }
 }

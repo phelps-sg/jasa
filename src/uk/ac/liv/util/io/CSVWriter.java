@@ -19,9 +19,12 @@ import java.util.Iterator;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.Parameterizable;
 
 /**
@@ -43,7 +46,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
   protected char seperator = DEFAULT_SEPERATOR;
   
-  protected boolean append = false;
+  protected boolean append = true;
 
   static final char DEFAULT_SEPERATOR = '\t';
 
@@ -51,6 +54,9 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
   public static final String P_AUTOWRAP = "autowrap";
   public static final String P_COLUMNS = "columns";
   public static final String P_APPEND = "append";
+  
+  static Logger logger = Logger.getLogger(CSVWriter.class);
+
 
   public CSVWriter( OutputStream out, int numColumns, char seperator ) {
     this.out = new PrintStream(new BufferedOutputStream(out));
@@ -67,6 +73,10 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
   public CSVWriter( OutputStream out, int numColumns ) {
     this(out, numColumns, DEFAULT_SEPERATOR);
+  }
+  
+  public CSVWriter( OutputStream out ) {
+    this(out, DEFAULT_SEPERATOR);
   }
 
   public CSVWriter() {
@@ -135,6 +145,15 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
       newData(0);
     }
   }
+  
+  public void setAutowrap(boolean autowrap) {
+    this.autowrap = autowrap;
+  }
+
+  public void setAppend(boolean append) {
+    this.append = append;
+  }
+
   
   public void endRecord() {
     if (autowrap)

@@ -23,7 +23,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class SM  extends Case {
+public class SM implements Case {
 	
 	private static final String ClassName = "uk.ac.liv.auction.agent.SimpleMomentumStrategy";
 	private static final String LearnerClassName = "uk.ac.liv.ai.learning.WidrowHoffLearner";
