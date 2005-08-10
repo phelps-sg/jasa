@@ -15,25 +15,21 @@
 
 package uk.ac.liv.auction.stats;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.jfree.data.time.TimePeriodValue;
 
 import uk.ac.liv.auction.config.CaseEnumConfig;
+
 import uk.ac.liv.auction.core.*;
+
 import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
+
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.*;
 

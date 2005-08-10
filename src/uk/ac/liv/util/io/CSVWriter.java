@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.Parameterizable;
 
 /**

@@ -26,7 +26,6 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.ui.UserFrame;
 
