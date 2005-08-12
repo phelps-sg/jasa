@@ -68,7 +68,7 @@ public class GlobalPRNGTest extends TestCase {
     int numPerms = 0;
     Iterator i = hist.keySet().iterator();
     while ( i.hasNext() ) {
-      Permutation perm = (Permutation) i.next();
+      Permutation perm = (Permutation) i.next();      
       numPerms++;
     }
     System.out.println("num permutations = " + numPerms);
