@@ -15,8 +15,6 @@ package uk.ac.liv.auction.ui;
 
 import javax.swing.*;
 
-import org.apache.log4j.Logger;
-
 import uk.ac.liv.util.ObjectConverter;
 import uk.ac.liv.util.Parameterizable;
 
@@ -97,13 +95,11 @@ public class UserFrame extends JFrame implements Parameterizable {
 
   public static final String P_ICON = "icon";
 
-  private Parameter base;
-
-  private static Logger logger = Logger.getLogger(UserFrame.class);
+//  private static Logger logger = Logger.getLogger(UserFrame.class);
 
   public void setup(ParameterDatabase parameters, Parameter base) {
 
-    this.base = base;
+//    this.base = base;
 
     setTitle(parameters.getStringWithDefault(base.push(P_TITLE), ""));
 

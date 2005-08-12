@@ -27,7 +27,7 @@ import ec.util.Parameter;
  */
 public class NS implements Case {
 	
-	private static final String ClassName = "uk.ac.liv.auction.agent.SellerIntervalValuer";
+//	private static final String ClassName = "uk.ac.liv.auction.agent.SellerIntervalValuer";
 		
 	public String toString() {
 		return "NS";

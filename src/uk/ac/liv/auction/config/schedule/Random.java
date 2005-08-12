@@ -26,7 +26,7 @@ import ec.util.ParameterDatabase;
  */
 public class Random implements Case {
 	
-	private static final String ClassName = "uk.ac.liv.auction.agent.RandomValuer";
+//	private static final String ClassName = "uk.ac.liv.auction.agent.RandomValuer";
 		
 	public String toString() {
 		return "Random";

@@ -19,8 +19,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 import uk.ac.liv.util.Parameterizable;
@@ -51,7 +49,7 @@ public class CombiTimingCondition extends TimingCondition implements Parameteriz
   
   protected int relation;
   
-  private static Logger logger = Logger.getLogger(CombiTimingCondition.class);
+//  private static Logger logger = Logger.getLogger(CombiTimingCondition.class);
 
 
   public CombiTimingCondition() {
