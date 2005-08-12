@@ -265,7 +265,7 @@ public class QLearner extends AbstractLearner
 
 
   public int bestAction( int state ) {
-    double payoff = maxQ(state);
+    maxQ(state);
     return bestAction;
   }
 
@@ -316,6 +316,10 @@ public class QLearner extends AbstractLearner
 
   public double getLearningRate() {
     return learningRate;
+  }
+  
+  public void setLearningRate( double learningRate ) {
+    this.learningRate = learningRate;
   }
   
   public int getNumActions() {
