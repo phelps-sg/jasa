@@ -75,9 +75,9 @@ public class StatelessQLearner extends AbstractLearner
       parameters.getInt(base.push(QLearner.P_NUM_ACTIONS), null);
     
     qLearner.setStatesAndActions(1, numActions);
-    
+    qLearner.setLearningRate(learningRate);
     qLearner.setEpsilon(epsilon);
-    qLearner.setDiscountRate(discountRate);
+    qLearner.setDiscountRate(discountRate);    
   }
 
   
