@@ -101,7 +101,7 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
       double value = ((TimePeriodValue) ReportVariableBoard
           .getInstance().getValue(ReportVariableBoardUpdater.EQUIL_PRICE)).getValue().doubleValue();
       Marker marker = FreeChartMarker.createMarker(value, Color.black, "EE");
-      logger.info("Equilibriuim: "+value);
+      logger.debug("Equilibriuim: "+value);
       truePlot.clearRangeMarkers();
       truePlot.addRangeMarker(marker);
 
@@ -131,7 +131,7 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
     if (tpValue != null) {
       double value = tpValue.getValue().doubleValue();
       Marker marker = FreeChartMarker.createMarker(value, Color.black, "EE");
-      logger.info("Marker: " + value);
+      logger.debug("Estimated equilibrium price : " + value);
       reportedPlot.clearRangeMarkers();
       reportedPlot.addRangeMarker(marker);
     }

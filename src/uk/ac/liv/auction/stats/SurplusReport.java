@@ -18,13 +18,17 @@ package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.event.AuctionClosedEvent;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import java.util.*;
 
 import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
-
+import org.jfree.data.time.Millisecond;
+import org.jfree.data.time.TimePeriodValue;
 
 /**
  * A report that calculates the actual surplus of buyers

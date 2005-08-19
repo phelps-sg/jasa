@@ -15,21 +15,26 @@
 
 package uk.ac.liv.auction.stats;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.jfree.data.time.TimePeriodValue;
 
 import uk.ac.liv.auction.config.CaseEnumConfig;
-
 import uk.ac.liv.auction.core.*;
-
 import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
-
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.*;
 
@@ -62,6 +67,10 @@ public class ReportVariableWriterReport implements AuctionReport, Parameterizabl
    * The auction we are keeping statistics on.
    */
   protected RoundRobinAuction auction;
+  
+  static DecimalFormat formatter =
+    new DecimalFormat("+#########0.000;-#########.000");
+
 
   public ReportVariableWriterReport() {
   }
@@ -78,23 +87,24 @@ public class ReportVariableWriterReport implements AuctionReport, Parameterizabl
     
     if (!initialized) {
 
-      try {
+      if (parameters.getBoolean(base.push(P_AUCTION_LOG), null, true)) {
         auctionLog = new InternalRVWriterReport();
         auctionLog.setup(parameters, base.push(P_AUCTION_LOG));
-      } catch (ParamClassLoadException e) {
+      } else {
         auctionLog = null;
       }
 
-      try {
+      if (parameters.getBoolean(base.push(P_DAY_LOG), null, true)) {
         dayLog = new InternalRVWriterReport();
         dayLog.setup(parameters, base.push(P_DAY_LOG));
-      } catch (ParamClassLoadException e) {
+      } else {
         dayLog = null;
       }
-      try {
+      
+      if (parameters.getBoolean(base.push(P_ROUND_LOG), null, true)) {
         roundLog = new InternalRVWriterReport();
         roundLog.setup(parameters, base.push(P_ROUND_LOG));
-      } catch (ParamClassLoadException e) {
+      } else {
         roundLog = null;
       }
 
@@ -114,7 +124,10 @@ public class ReportVariableWriterReport implements AuctionReport, Parameterizabl
     }
   }
    
-  
+  /**
+   * Generats the CSV file header, i.e. field names in the first lines. 
+   *
+   */
   public void generateHeader() {
     
     if (!initialized) {
@@ -154,7 +167,13 @@ public class ReportVariableWriterReport implements AuctionReport, Parameterizabl
     }   
   }
   
-  private void generateCaseEnumHeader(CSVWriter writer) {
+  /**
+   * Generates the names of fields in the CSV file header for auction 
+   * properties configured by CaseEnum to define different auctions.
+   * @param writer
+   *        the CSV file to which data will be output 
+   */
+  private static void generateCaseEnumHeader(CSVWriter writer) {
     if (CaseEnumConfig.getInstance() != null) {
       CaseEnumConfig ceConfig = CaseEnumConfig.getInstance();
       for (int i=0; i<ceConfig.getCaseEnumNum(); i++) {
@@ -163,7 +182,13 @@ public class ReportVariableWriterReport implements AuctionReport, Parameterizabl
     }
   }
   
-  private void generateCaseCombination(CSVWriter writer) {
+  /**
+   * Outputs the values of fields to the starting columns in a line for 
+   * auction properties configured by CaseEnum to define different auctions.  
+   * @param writer
+   *        the CSV file to which data will be output 
+   */
+  private static void generateCaseCombination(CSVWriter writer) {
     if (CaseEnumConfig.getInstance() != null) {
       CaseEnumConfig ceConfig = CaseEnumConfig.getInstance();
       for (int i=0; i<ceConfig.getCaseEnumNum(); i++) {
@@ -172,6 +197,7 @@ public class ReportVariableWriterReport implements AuctionReport, Parameterizabl
     }
   }
 
+  
   public void updateRoundLog(RoundClosedEvent event) {
     if (roundLog != null) {
       generateCaseCombination(roundLog);
@@ -250,7 +276,11 @@ public class ReportVariableWriterReport implements AuctionReport, Parameterizabl
       for (int i=0; i<varNames.length; i++) {
         tpValue = ReportVariableBoard.getInstance().getValue(varNames[i]);
         if (tpValue != null) {
-          newData(tpValue.getValue());
+          if (tpValue.getValue() instanceof Double) {
+            newData(formatter.format(((Double)tpValue.getValue()).doubleValue()));
+          } else {
+            newData(tpValue.getValue());
+          }
         } else {
           newData(-1);
         }
