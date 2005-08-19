@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import org.apache.commons.collections.bag.TreeBag;
+import org.apache.commons.collections.list.TreeList;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -49,7 +50,7 @@ import org.apache.log4j.Logger;
 
 public class HistoricalDataReport extends AbstractAuctionReport implements
     Serializable, Resetable {
-
+  
   protected LinkedList asks = new LinkedList();
 
   protected LinkedList bids = new LinkedList();
@@ -69,10 +70,19 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   protected double lowestAskPrice;
 
   protected double highestBidPrice;
+  
+  protected boolean useShortCut = true;
 
   static final String P_MEMORYSIZE = "memorysize";
+  static final String P_USESHORTCUT = "useshortcut";
 
   static Logger logger = Logger.getLogger(HistoricalDataReport.class);
+  
+  
+  public HistoricalDataReport() {
+    counter = new TraverseCounter();
+  }
+  
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null,
@@ -84,16 +94,23 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryAsks[i] = 0;
     }
     logger.debug("memorysize = " + memorySize);
+    
+    useShortCut = parameters.getBoolean(base.push(P_USESHORTCUT), null, useShortCut);
+    
   }
 
   public void updateTransPriceLog( TransactionExecutedEvent event ) {
+    Object o;
     currentMemoryCell = (currentMemoryCell + 1) % memorySize;
     if ( memoryAsks[currentMemoryCell] > 0 || memoryBids[currentMemoryCell] > 0 ) {
       for ( int i = 0; i < memoryAsks[currentMemoryCell]; i++ ) {
-        asks.removeFirst();
+        o = asks.removeFirst();
+        sortedShouts.remove(o);
       }
+
       for ( int i = 0; i < memoryBids[currentMemoryCell]; i++ ) {
-        bids.removeFirst();
+        o = bids.removeFirst();
+        sortedShouts.remove(o);
       }
       memoryBids[currentMemoryCell] = 0;
       memoryAsks[currentMemoryCell] = 0;
@@ -101,6 +118,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       markMatched(asks);
       markMatched(bids);
     }
+    if (useShortCut) counter.setValid(false);
   }
 
   public void initialise() {
@@ -113,6 +131,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryAsks[i] = 0;
     }
     initialisePriceRanges();
+    if (useShortCut) counter.setValid(false);
   }
 
   public void reset() {
@@ -120,6 +139,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public void updateShoutLog( ShoutPlacedEvent event ) {
+    
     Shout shout = event.getShout();
     addToSortedShouts(shout);
     if ( shout.isAsk() ) {
@@ -135,6 +155,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         highestBidPrice = shout.getPrice();
       }
     }
+    if (useShortCut) counter.setValid(false);
   }
 
   public void roundClosed( AuctionEvent event ) {
@@ -144,6 +165,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     //   deleteOldShouts();
     //}
     initialisePriceRanges();
+    if (useShortCut) counter.setValid(false);
   }
 
   public void eventOccurred( AuctionEvent event ) {
@@ -189,6 +211,12 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public Iterator sortedShoutIterator() {
+    if (useShortCut) {
+	    if (counter.isValid())
+	      counter.restart();
+	    else
+	      counter.reset();
+    }
     return sortedShouts.iterator();
   }
 
@@ -206,6 +234,53 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
    *        the number of shouts that meet the specified condition
    */
   public int getNumberOfShouts( List shouts, double price, boolean accepted ) {
+    
+    int shortcut = -1;
+
+    if (useShortCut) {
+      if (accepted) {
+        if (shouts == asks) {
+          if (price >= 0) {
+            counter.updateNumOfAcceptedAsksAbove(price);
+            shortcut = counter.getNumOfAcceptedAsksAbove();
+          } else {
+            counter.updateNumOfAsksBelow(-price);
+            counter.updateNumOfRejectedAsksBelow(-price);
+            shortcut = counter.getNumOfAsksBelow() - counter.getNumOfRejectedAsksBelow();
+          }
+        } else {
+          if (price >= 0) {
+            counter.updateNumOfBidsAbove(price);
+            counter.updateNumOfRejectedBidsAbove(price);
+            shortcut = counter.getNumOfBidsAbove() - counter.getNumOfRejectedBidsAbove();
+          } else {
+            counter.updateNumOfAcceptedBidsBelow(-price);
+            shortcut = counter.getNumOfAcceptedBidsBelow();
+          }
+        }
+      } else {
+        if (shouts == asks) {
+          if (price >= 0) {
+            // never arrive here
+            throw new Error("There is a bug. You should never be here!");
+          } else {
+            counter.updateNumOfAsksBelow(-price);
+            shortcut = counter.getNumOfAsksBelow();
+          }
+        } else {
+          if (price >= 0) {
+            counter.updateNumOfBidsAbove(price);
+            shortcut = counter.getNumOfBidsAbove();
+          } else {
+            // never arrive here
+            throw new Error("There is a bug. You should never be here!");
+          }
+        }
+      }
+      assert shortcut >= 0;
+      return shortcut;
+    }
+    
     int numShouts = 0;
     Iterator i = shouts.iterator();
     while ( i.hasNext() ) {
@@ -221,6 +296,24 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         }
       }
     }
+    
+//    if (numShouts != shortcut) {
+//      logger.info(shortcut + " - " + numShouts);
+//      logger.info("access " + (accepted ? "accepted " : "")
+//          + ((shouts == asks) ? "asks" : "bids") + " at " + (int) (price)
+//          + " with length=" + shouts.size());
+//      if (shouts == asks) {
+//        logger.info(counter.sortedAsks);
+//        logger.info(counter.sortedAcceptedAsks);
+//        logger.info(counter.sortedRejectedAsks);
+//      } else {
+//        logger.info(counter.sortedBids);
+//        logger.info(counter.sortedAcceptedBids);
+//        logger.info(counter.sortedRejectedBids);
+//      }
+//      logger.info("********************************************************");
+//    }
+    
     return numShouts;
   }
 
@@ -256,6 +349,277 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   public String toString() {
     return "(" + getClass() + " auction:" + auction + " memorySize:"
         + memorySize + " bids:" + bids + " asks:" + asks + ")";
+  }
+  
+  private TraverseCounter counter;
+  private static final Error CounterInvalid = new Error("Attempting to access invalid traverse counter in HistoricalDataReport");
+ 
+  class TraverseCounter {
+    
+    private boolean valid;
+
+    protected TreeList sortedAsks;
+    protected TreeList sortedBids;
+    protected TreeList sortedAcceptedAsks;
+    protected TreeList sortedAcceptedBids;
+    protected TreeList sortedRejectedAsks;
+    protected TreeList sortedRejectedBids;
+
+    protected int numOfAsksBelow;
+    protected int numOfBidsAbove;
+    protected int numOfAcceptedAsksAbove;
+    protected int numOfAcceptedBidsBelow;
+    protected int numOfRejectedAsksBelow;
+    protected int numOfRejectedBidsAbove;
+
+    protected ListIterator asksI;
+    protected ListIterator bidsI;
+    protected ListIterator acceptedAsksI;
+    protected ListIterator acceptedBidsI;
+    protected ListIterator rejectedAsksI;
+    protected ListIterator rejectedBidsI;
+
+    
+    public void reset() {
+      
+      sortedAsks = new SortedTreeList("sortedAsks", asks);
+      sortedBids = new SortedTreeList("sortedBids", bids);
+      
+      sortedAcceptedAsks = new SortedTreeList("sortedAcceptedAsks");
+      sortedAcceptedBids = new SortedTreeList("sortedAcceptedBids");
+      sortedRejectedAsks = new SortedTreeList("sortedRejectedAsks");
+      sortedRejectedBids = new SortedTreeList("sortedRejectedBids");
+      
+      Shout s;
+
+      Iterator i = asks.iterator();
+      while (i.hasNext()) {
+        s = (Shout) i.next();
+        if (acceptedShouts.contains(s)) {
+          sortedAcceptedAsks.add(s);
+        } else {
+          sortedRejectedAsks.add(s);
+        }
+      }
+
+      i = bids.iterator();
+      while (i.hasNext()) {
+        s = (Shout) i.next();
+        if (acceptedShouts.contains(s)) {
+          sortedAcceptedBids.add(s);
+        } else {
+          sortedRejectedBids.add(s);
+        }
+      }
+      
+      restart();
+    }
+
+    public void restart() {
+      valid = true;
+
+      asksI = sortedAsks.listIterator();
+      bidsI = sortedBids.listIterator();      
+      acceptedAsksI = sortedAcceptedAsks.listIterator();
+      acceptedBidsI = sortedAcceptedBids.listIterator();
+      rejectedAsksI = sortedRejectedAsks.listIterator();
+      rejectedBidsI = sortedRejectedBids.listIterator();
+
+      numOfBidsAbove = sortedBids.size();      
+      numOfAsksBelow = 0;
+      numOfAcceptedAsksAbove = sortedAcceptedAsks.size();
+      numOfAcceptedBidsBelow = 0;
+      numOfRejectedAsksBelow = 0;
+      numOfRejectedBidsAbove = sortedRejectedBids.size();
+    }
+    
+
+    public void updateNumOfAsksBelow(double price) {
+      while (asksI.hasNext())
+        if (((Shout)asksI.next()).getPrice() <= price)
+          numOfAsksBelow++;
+        else {
+          try {
+            asksI.previous();
+          } catch (Exception e) {
+            logger.info(e);
+            asksI.previous();
+          }
+          break;
+        }
+    }
+
+    public void updateNumOfBidsAbove(double price) {
+      while (bidsI.hasNext())
+        if (((Shout)bidsI.next()).getPrice() < price)
+          numOfBidsAbove--;
+        else {
+          try{
+            bidsI.previous();
+          } catch (Exception e) {
+            logger.info(e);
+            bidsI.previous();
+          }
+          break;
+        }
+    }
+
+    public void updateNumOfAcceptedAsksAbove(double price) {
+      while (acceptedAsksI.hasNext())
+        if (((Shout)acceptedAsksI.next()).getPrice() < price)
+          numOfAcceptedAsksAbove--;
+        else {
+          try{
+            acceptedAsksI.previous();
+          } catch (Exception e) {
+            logger.info(e);
+            acceptedAsksI.previous();
+          }
+          break;
+        }
+    }
+    
+    public void updateNumOfAcceptedBidsBelow(double price) {
+      while (acceptedBidsI.hasNext())
+        if (((Shout)acceptedBidsI.next()).getPrice() <= price)
+          numOfAcceptedBidsBelow++;
+        else {
+          // NOTE: due to a possible bug in TreeList, NullPointerException may be
+          // thrown. Simply doing it again seems working fine.
+          try {
+            acceptedBidsI.previous();
+          } catch (Exception e) {
+            logger.info(e);
+            acceptedBidsI.previous();
+          }
+          break;
+        }
+    }
+    
+    public void updateNumOfRejectedAsksBelow(double price) {
+      while (rejectedAsksI.hasNext())
+        if (((Shout)rejectedAsksI.next()).getPrice() <= price)
+          numOfRejectedAsksBelow++;
+        else {
+          try{
+            rejectedAsksI.previous();
+          } catch (Exception e) {
+            logger.info(e);
+            rejectedAsksI.previous();
+          }
+          break;
+        }
+    }
+    
+    public void updateNumOfRejectedBidsAbove(double price) {
+      while (rejectedBidsI.hasNext())
+        if (((Shout)rejectedBidsI.next()).getPrice() < price)
+          numOfRejectedBidsAbove--;
+        else {
+          try {
+            rejectedBidsI.previous();
+          } catch (Exception e) {
+            logger.info(e);
+            rejectedBidsI.previous();
+          }
+          break;
+        }
+    }
+
+    public void setValid(boolean valid) {
+      this.valid = valid;
+    }
+    
+    public boolean isValid() {
+      return valid;
+    }
+
+    /**
+     * @return Returns the numOfAsksBelow.
+     */
+    public int getNumOfAsksBelow() {
+      if (!valid) throw CounterInvalid;
+      return numOfAsksBelow;
+    }
+    /**
+     * @return Returns the numOfBidsAbove.
+     */
+    public int getNumOfBidsAbove() {
+      if (!valid) throw CounterInvalid;
+      return numOfBidsAbove;
+    }
+    /**
+     * @return Returns the numOfAcceptedAsksAbove.
+     */
+    public int getNumOfAcceptedAsksAbove() {
+      if (!valid) throw CounterInvalid;
+      return numOfAcceptedAsksAbove;
+    }
+    /**
+     * @return Returns the numOfAcceptedBidsBelow.
+     */
+    public int getNumOfAcceptedBidsBelow() {
+      if (!valid) throw CounterInvalid;
+      return numOfAcceptedBidsBelow;
+    }
+    /**
+     * @return Returns the numOfRejectedAsksBelow.
+     */
+    public int getNumOfRejectedAsksBelow() {
+      if (!valid) throw CounterInvalid;
+      return numOfRejectedAsksBelow;
+    }
+    /**
+     * @return Returns the numOfRejectedBidsAbove.
+     */
+    public int getNumOfRejectedBidsAbove() {
+      if (!valid) throw CounterInvalid;
+      return numOfRejectedBidsAbove;
+    }
+  }
+    
+  static class SortedTreeList extends TreeList {
+    private String name;
+    
+    public SortedTreeList(String name) {
+      this.name = name;
+    }
+    
+    public SortedTreeList(String name, Collection c) {
+      super(c);
+      this.name = name;
+    }
+    
+    public boolean add(Object o) {
+      insert(0, size()-1, o);
+      return true;
+    }
+    
+    private void insert(int b, int e, Object o) {
+      if (b > e)
+        add(b, o);
+      else {
+        int c = ((Comparable)o).compareTo(get((b+e)/2));
+        
+        if (c == 1)
+          insert(1+((b+e)/2), e, o);
+        else if (c == -1)
+          insert(b, ((b+e)/2)-1, o);
+        else
+          add((b+e)/2, o);
+      }
+      
+    }
+
+    public String toString() {
+      String s = "[";
+      ListIterator iterator = listIterator();
+      while (iterator.hasNext()) {
+        s += (int)((Shout)iterator.next()).getPrice() + " "; 
+      }
+      s += "] "+name+"(size="+size()+")";
+      return s;
+    }
   }
 
 }

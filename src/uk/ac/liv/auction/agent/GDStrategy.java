@@ -208,18 +208,35 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
     
     double pvalue = agent.getValuation(auction);
 
-    double denom = (-6 * a1 * a1 * a2 * a2) + (4 * a1 * a1 * a1 * a2)
-        + (4 * a1 * a2 * a2 * a2) + (-1 * a1 * a1 * a1 * a1)
-        + (-1 * a2 * a2 * a2 * a2);
-    double alpha3 = (2 * ((a1 * (p1 - p2)) + (a2 * (p2 - p1)))) / denom;
-    double alpha2 = (3 * ((a1 * a1 * (p2 - p1)) + (a2 * a2 * (p1 - p2))))
-        / denom;
-    double alpha1 = (6 * (p1 - p2) * ((a1 * a1 * a2) - (a1 * a2 * a2))) / denom;
-    double alpha0 = ((p1 * ((4 * a1 * a2 * a2 * a2) + (-3 * a1 * a1 * a2 * a2) + (-1
-        * a2 * a2 * a2 * a2))) + (p2 * ((4 * a1 * a1 * a1 * a2)
-        + (-3 * a1 * a1 * a2 * a2) + (-1 * a1 * a1 * a1 * a1))))
-        / denom;
+//    double denom = (-6 * a1 * a1 * a2 * a2) + (4 * a1 * a1 * a1 * a2)
+//        + (4 * a1 * a2 * a2 * a2) + (-1 * a1 * a1 * a1 * a1)
+//        + (-1 * a2 * a2 * a2 * a2);
+//    double alpha3 = (2 * ((a1 * (p1 - p2)) + (a2 * (p2 - p1)))) / denom;
+//    double alpha2 = (3 * ((a1 * a1 * (p2 - p1)) + (a2 * a2 * (p1 - p2))))
+//        / denom;
+//    double alpha1 = (6 * (p1 - p2) * ((a1 * a1 * a2) - (a1 * a2 * a2))) / denom;
+//    double alpha0 = ((p1 * ((4 * a1 * a2 * a2 * a2) + (-3 * a1 * a1 * a2 * a2) + (-1
+//        * a2 * a2 * a2 * a2))) + (p2 * ((4 * a1 * a1 * a1 * a2)
+//        + (-3 * a1 * a1 * a2 * a2) + (-1 * a1 * a1 * a1 * a1))))
+//        / denom;
+    double a11 = a1 * a1;
+    double a1111 = a11 * a11;
+    double a22 = a2 * a2;
+    double a2222 = a22 * a22;
+    double a1122 = a11 * a22;
+    double a12 = a1 * a2;
+    double a1112 = a11 * a12;
+    double a1222 = a12 * a22;
+    double p12 = p1 - p2;
 
+    double denom = (-6 * a1122) + 4 * (a1112 + a1222) - a1111 - a2222;
+    double alpha3 = (2 * ((a1 - a2) * p12)) / denom;
+    double alpha2 = (3 * (a22 - a11) * p12) / denom;
+    double alpha1 = (6 * p12 * (a12 * (a1 - a2))) / denom;
+    double alpha0 = ((p1 * ((4 * a1222) - 3 * a1122 - a2222))
+        + (p2 * ((4 * a1112) - 3 * a1122 - a1111))) / denom;
+//
+//    
     int temp_maxPoint = 0;
     double temp = 0;
 
