@@ -43,6 +43,12 @@ import org.apache.log4j.Logger;
  * to the last N transactions. This logger is used to keep historical data that
  * is used by various different trading strategies.
  * </p>
+ * <p>
+ * Since GDStrategy uses this report to compute the number of shouts above or below
+ * a certain price, which leads to slow simulation, a shortcut counter class is
+ * introduced to speed up GDStrategy's queries based on the pattern of prices of
+ * concern. To make this more versatile, later refactoring is needed.
+ * </p>
  * 
  * @author Steve Phelps
  * @version $Revision$
@@ -351,6 +357,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         + memorySize + " bids:" + bids + " asks:" + asks + ")";
   }
   
+  /** 
+   * The quicker mechanism to count the number of certain shouts for GDStrategy. 
+   */
   private TraverseCounter counter;
   private static final Error CounterInvalid = new Error("Attempting to access invalid traverse counter in HistoricalDataReport");
  
@@ -371,6 +380,13 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     protected int numOfAcceptedBidsBelow;
     protected int numOfRejectedAsksBelow;
     protected int numOfRejectedBidsAbove;
+
+    protected double priceForAsksBelow;
+    protected double priceForBidsAbove;
+    protected double priceForAcceptedAsksAbove;
+    protected double priceForAcceptedBidsBelow;
+    protected double priceForRejectedAsksBelow;
+    protected double priceForRejectedBidsAbove;
 
     protected ListIterator asksI;
     protected ListIterator bidsI;
@@ -431,10 +447,20 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       numOfAcceptedBidsBelow = 0;
       numOfRejectedAsksBelow = 0;
       numOfRejectedBidsAbove = sortedRejectedBids.size();
+
+      priceForBidsAbove = -1;      
+      priceForAsksBelow = -1;
+      priceForAcceptedAsksAbove = -1;
+      priceForAcceptedBidsBelow = -1;
+      priceForRejectedAsksBelow = -1;
+      priceForRejectedBidsAbove = -1;
     }
     
 
     public void updateNumOfAsksBelow(double price) {
+    	assert priceForAsksBelow <= price;
+    	priceForAsksBelow = price;    	
+    	    	
       while (asksI.hasNext())
         if (((Shout)asksI.next()).getPrice() <= price)
           numOfAsksBelow++;
@@ -450,6 +476,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
 
     public void updateNumOfBidsAbove(double price) {
+    	assert priceForBidsAbove <= price;
+    	priceForBidsAbove = price;
+    	
       while (bidsI.hasNext())
         if (((Shout)bidsI.next()).getPrice() < price)
           numOfBidsAbove--;
@@ -465,6 +494,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
 
     public void updateNumOfAcceptedAsksAbove(double price) {
+    	assert priceForAcceptedAsksAbove <= price;
+    	priceForAcceptedAsksAbove = price;
+    	
       while (acceptedAsksI.hasNext())
         if (((Shout)acceptedAsksI.next()).getPrice() < price)
           numOfAcceptedAsksAbove--;
@@ -480,6 +512,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
     
     public void updateNumOfAcceptedBidsBelow(double price) {
+    	assert priceForAcceptedBidsBelow <= price;
+    	priceForAcceptedBidsBelow = price;
+    	
       while (acceptedBidsI.hasNext())
         if (((Shout)acceptedBidsI.next()).getPrice() <= price)
           numOfAcceptedBidsBelow++;
@@ -497,6 +532,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
     
     public void updateNumOfRejectedAsksBelow(double price) {
+    	assert priceForRejectedAsksBelow <= price;
+    	priceForRejectedAsksBelow = price;
+    	
       while (rejectedAsksI.hasNext())
         if (((Shout)rejectedAsksI.next()).getPrice() <= price)
           numOfRejectedAsksBelow++;
@@ -512,6 +550,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
     
     public void updateNumOfRejectedBidsAbove(double price) {
+    	assert priceForRejectedBidsAbove <= price;
+    	priceForRejectedBidsAbove = price;
+    	
       while (rejectedBidsI.hasNext())
         if (((Shout)rejectedBidsI.next()).getPrice() < price)
           numOfRejectedBidsAbove--;
@@ -578,6 +619,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
   }
     
+  /**
+   * a tree-based sorted list, which can enable increasing queries
+   * about shout counting.
+   */
   static class SortedTreeList extends TreeList {
     private String name;
     
@@ -590,11 +635,26 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       this.name = name;
     }
     
+    /**
+     * adds <code>o</code> into the list maintaining its sorted 
+     * nature.
+     * 
+     * @param o
+     * @return always returns true
+     */
     public boolean add(Object o) {
       insert(0, size()-1, o);
       return true;
     }
     
+    /**
+     * inserts <code>o</code> into the segment from <code>b</code>
+     * to <code>e</code> inclusively at both ends.
+     * 
+     * @param b
+     * @param e
+     * @param o
+     */
     private void insert(int b, int e, Object o) {
       if (b > e)
         add(b, o);
@@ -611,6 +671,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       
     }
 
+    /**
+     * for debug purpose.
+     */
     public String toString() {
       String s = "[";
       ListIterator iterator = listIterator();
