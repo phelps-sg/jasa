@@ -15,7 +15,6 @@
 
 package uk.ac.liv.util;
 
-
 /**
  * <p>
  * A simple wrapper for a primitive <code>int</code> value which is publically
@@ -24,6 +23,9 @@ package uk.ac.liv.util;
  */
 public class MutableIntWrapper {
 
+  /**
+   * @uml.property name="value"
+   */
   public int value;
 
   public MutableIntWrapper() {

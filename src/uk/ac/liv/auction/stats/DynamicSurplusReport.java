@@ -38,44 +38,56 @@ import gnu.trove.TObjectDoubleIterator;
  * A report that keeps track of the surplus available to each agent in
  * theoretical equilibrium. The equilibrium price is recomputed at the end of
  * each day, thus this class can be used to keep track of theoretically
- * available surplus even when supply and demand are changing over time.
- * Each agent is assumed to be hypothetically able to trade the specified 
- * quantity of units in each day.
+ * available surplus even when supply and demand are changing over time. Each
+ * agent is assumed to be hypothetically able to trade the specified quantity of
+ * units in each day.
  * </p>
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DynamicSurplusReport extends AbstractMarketStatsReport
-    implements Resetable {
+public class DynamicSurplusReport extends AbstractMarketStatsReport implements
+    Resetable {
 
   /**
    * The report used to calculate the equilibrium price.
+   * 
+   * @uml.property name="equilibriaStats"
+   * @uml.associationEnd
    */
   protected EquilibriumReport equilibriaStats;
 
   /**
-   * Total theoretically available profits per agent.
-   * This table maps AbstractTradingAgent keys onto double values. 
+   * Total theoretically available profits per agent. This table maps
+   * AbstractTradingAgent keys onto double values.
+   * 
+   * @uml.property name="surplusTable"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
    */
   private TObjectDoubleHashMap surplusTable = new TObjectDoubleHashMap();
-  
+
   /**
-   * The quantity that each agent can theoretically trade per day.
-   * This should normally be set equal to agents' trade entitlement.
+   * The quantity that each agent can theoretically trade per day. This should
+   * normally be set equal to agents' trade entitlement.
+   * 
+   * @uml.property name="quantity"
    */
   protected int quantity = 1;
-  
+
+  /**
+   * @uml.property name="efficiency"
+   */
   protected double efficiency;
-  
+
   public static final String P_QUANTITY = "quantity";
 
   static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    quantity = 
-      parameters.getIntWithDefault(base.push(P_QUANTITY), null, quantity);
+    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), null,
+        quantity);
   }
 
   public void setAuction( RoundRobinAuction auction ) {
@@ -89,35 +101,38 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
       recalculate(event);
     }
   }
-  
-  public void calculate() {    
+
+  public void calculate() {
     efficiency = calculateTotalProfits() / calculateTotalEquilibriumSurplus();
   }
-  
+
+  /**
+   * @uml.property name="efficiency"
+   */
   public double getEfficiency() {
     return efficiency;
   }
 
-  public void recalculate( AuctionEvent event  ) {
-    
+  public void recalculate( AuctionEvent event ) {
+
     equilibriaStats.recalculate();
     double ep = equilibriaStats.calculateMidEquilibriumPrice();
-   
+
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
       double surplus = equilibriumSurplus(agent, ep, quantity);
       updateStats(agent, surplus);
     }
-    
+
   }
 
   public double getEquilibriumProfits( AbstractTradingAgent agent ) {
-    return surplusTable.get(agent);    
+    return surplusTable.get(agent);
   }
 
   public double calculateTotalEquilibriumSurplus() {
-    double totalSurplus = 0;    
+    double totalSurplus = 0;
     TObjectDoubleIterator i = surplusTable.iterator();
     while ( i.hasNext() ) {
       i.advance();
@@ -126,7 +141,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
     }
     return totalSurplus;
   }
-  
+
   public double calculateTotalProfits() {
     double totalProfits = 0;
     Iterator i = auction.getTraderIterator();
@@ -141,8 +156,8 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
    * Increment the surplus available to the specified agent by the specified
    * amount.
    */
-  protected void updateStats( AbstractTradingAgent agent, double lastSurplus ) {    
-    if ( ! surplusTable.adjustValue(agent, lastSurplus) ) {
+  protected void updateStats( AbstractTradingAgent agent, double lastSurplus ) {
+    if ( !surplusTable.adjustValue(agent, lastSurplus) ) {
       surplusTable.put(agent, lastSurplus);
     }
   }
@@ -159,17 +174,17 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
    *          The hypothetical quantity that this agent is able to trade in any
    *          given day.
    */
-  protected double equilibriumSurplus( AbstractTradingAgent agent, 
-      									double ep, int quantity ) {
+  protected double equilibriumSurplus( AbstractTradingAgent agent, double ep,
+      int quantity ) {
     double surplus;
     if ( agent.isSeller() ) {
       surplus = (ep - agent.getValuation(auction)) * quantity;
     } else {
       surplus = (agent.getValuation(auction) - ep) * quantity;
-    }  
-    if ( surplus >= 0 ) {      
+    }
+    if ( surplus >= 0 ) {
       return surplus;
-    } else {  
+    } else {
       return 0;
     }
   }
@@ -182,20 +197,24 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport
     initialise();
   }
 
-  
   public void produceUserOutput() {
   }
-  
+
   public Map getVariables() {
     return new HashMap();
   }
-  
+
+  /**
+   * @uml.property name="quantity"
+   */
   public int getQuantity() {
     return quantity;
   }
-  
+
+  /**
+   * @uml.property name="quantity"
+   */
   public void setQuantity( int quantity ) {
     this.quantity = quantity;
   }
 }
-

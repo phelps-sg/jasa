@@ -55,8 +55,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class RandomValuer 
-    implements ValuationPolicy, Serializable {
+public class RandomValuer implements ValuationPolicy, Serializable {
 
   /**
    * The current valuation.
@@ -72,13 +71,14 @@ public class RandomValuer
    * The maximum valuation to use.
    */
   protected double maxValue;
-  
+
   /**
    * The probability distribution to use for drawing valuations.
    */
   protected AbstractContinousDistribution distribution;
 
   public static final String P_MINVALUE = "minvalue";
+
   public static final String P_MAXVALUE = "maxvalue";
 
   static Logger logger = Logger.getLogger(RandomValuer.class);
@@ -92,23 +92,22 @@ public class RandomValuer
     initialise();
   }
 
-
   public void setup( ParameterDatabase parameters, Parameter base ) {
     minValue = parameters.getDouble(base.push(P_MINVALUE), null, 0);
     maxValue = parameters.getDouble(base.push(P_MAXVALUE), null, minValue);
     initialise();
   }
 
-  public double determineValue( Auction auction ) {   
-    assert minValue >= 0 && maxValue >= minValue && 
-    			value >= minValue && value <= maxValue;
+  public double determineValue( Auction auction ) {
+    assert minValue >= 0 && maxValue >= minValue && value >= minValue
+        && value <= maxValue;
     return value;
   }
 
   public void consumeUnit( Auction auction ) {
     // Do nothing
   }
-  
+
   public void eventOccurred( AuctionEvent event ) {
     // Do nothing
   }
@@ -117,7 +116,7 @@ public class RandomValuer
     initialise();
   }
 
-  public void initialise() {    
+  public void initialise() {
     distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
     drawRandomValue();
   }
@@ -137,18 +136,18 @@ public class RandomValuer
   public double getMinValue() {
     return minValue;
   }
-  
+
   public double getCurrentValuation() {
     return value;
   }
 
-  public void drawRandomValue() {    
+  public void drawRandomValue() {
     value = distribution.nextDouble();
   }
 
   public String toString() {
-    return "(" + getClass() + " minValue:" + minValue + " maxValue:" +
-             maxValue + " value:" + value + ")";
+    return "(" + getClass() + " minValue:" + minValue + " maxValue:" + maxValue
+        + " value:" + value + ")";
   }
 
 }

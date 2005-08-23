@@ -28,37 +28,39 @@ import ec.util.ParameterDatabase;
 
 /**
  * <p>
- * An adaptive trader, trading in a simulated Elecitricty market.  Agents
- * of this type have a fixed generating capacity, and they trade units
- * equal to their capacity in each round of the auction.
+ * An adaptive trader, trading in a simulated Elecitricty market. Agents of this
+ * type have a fixed generating capacity, and they trade units equal to their
+ * capacity in each round of the auction.
  * </p>
- *
+ * 
  * <p>
  * For further details, see:
  * </p>
  * <p>
- * "Market Power and Efficiency in a Computational Electricity Market
- * with Discriminatory Double-Auction Pricing"
- * Nicolaisen, J.; Petrov, V.; and Tesfatsion, L.
- * in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
+ * "Market Power and Efficiency in a Computational Electricity Market with
+ * Discriminatory Double-Auction Pricing" Nicolaisen, J.; Petrov, V.; and
+ * Tesfatsion, L. in IEEE Trans. on Evol. Computation, Vol. 5, No. 5. 2001
  * </p>
- *
+ * 
  * <p>
- * This code was written by Steve Phelps in an attempt to replicate
- * the results in the above paper.  This work was carried out independently
- * from the original authors.  Any corrections to this code are
- * welcome.
+ * This code was written by Steve Phelps in an attempt to replicate the results
+ * in the above paper. This work was carried out independently from the original
+ * authors. Any corrections to this code are welcome.
  * </p>
- *
- * <p><b>Parameters</b><br></p>
+ * 
+ * <p>
+ * <b>Parameters</b><br>
+ * </p>
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.capacity</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.capacity</tt><br>
  * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the generating capacity of the agent)</td><tr>
- *
+ * <td valign=top>(the generating capacity of the agent)</td>
+ * <tr>
+ * 
  * </table>
-
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -67,21 +69,24 @@ public class ElectricityTrader extends AbstractTradingAgent {
 
   /**
    * The capacity of this trader in MWh
+   * 
+   * @uml.property name="capacity"
    */
   protected int capacity;
 
   /**
    * The fixed costs for this trader.
+   * 
+   * @uml.property name="fixedCosts"
    */
   protected double fixedCosts;
 
   static final String P_CAPACITY = "capacity";
+
   static final String P_FIXED_COSTS = "fixedcosts";
 
-
   public ElectricityTrader( int capacity, double privateValue,
-                              double fixedCosts, boolean isSeller,
-                              Strategy strategy ) {
+      double fixedCosts, boolean isSeller, Strategy strategy ) {
     super(0, 0, privateValue, isSeller, strategy);
     this.capacity = capacity;
     this.fixedCosts = fixedCosts;
@@ -89,13 +94,13 @@ public class ElectricityTrader extends AbstractTradingAgent {
   }
 
   public ElectricityTrader( int capacity, double privateValue,
-                              double fixedCosts, boolean isSeller ) {
+      double fixedCosts, boolean isSeller ) {
     super(0, 0, privateValue, isSeller);
     this.capacity = capacity;
     this.fixedCosts = fixedCosts;
     initialise();
   }
-  
+
   public ElectricityTrader() {
     this(0, 0, 0, false);
   }
@@ -103,7 +108,8 @@ public class ElectricityTrader extends AbstractTradingAgent {
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     capacity = parameters.getInt(base.push(P_CAPACITY));
-    fixedCosts = parameters.getDoubleWithDefault(base.push(P_FIXED_COSTS), null, 0);
+    fixedCosts = parameters.getDoubleWithDefault(base.push(P_FIXED_COSTS),
+        null, 0);
     initialise();
   }
 
@@ -119,21 +125,22 @@ public class ElectricityTrader extends AbstractTradingAgent {
     lastProfit = 0;
   }
 
-
   public void informOfSeller( Auction auction, Shout winningShout,
-                                   TradingAgent seller,
-                                   double price, int quantity) {
-     super.informOfSeller(auction, winningShout, seller, price, quantity);
-     if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) ) {
-       purchaseFrom(auction, (ElectricityTrader) seller, quantity, price);
-     }
-   }
+      TradingAgent seller, double price, int quantity ) {
+    super.informOfSeller(auction, winningShout, seller, price, quantity);
+    if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) ) {
+      purchaseFrom(auction, (ElectricityTrader) seller, quantity, price);
+    }
+  }
 
   public boolean acceptDeal( Auction auction, double price, int quantity ) {
     assert isSeller;
     return price >= valuer.determineValue(auction);
   }
 
+  /**
+   * @uml.property name="capacity"
+   */
   public int getCapacity() {
     return capacity;
   }
@@ -143,31 +150,33 @@ public class ElectricityTrader extends AbstractTradingAgent {
   }
 
   public double equilibriumProfits( Auction auction, double equilibriumPrice,
-                                     int quantity ) {
+      int quantity ) {
     double surplus = 0;
     if ( isSeller ) {
       surplus = equilibriumPrice - getValuation(auction);
     } else {
       surplus = getValuation(auction) - equilibriumPrice;
     }
-    //TODO
-    if (surplus < 0) {
+    // TODO
+    if ( surplus < 0 ) {
       surplus = 0;
     }
     return auction.getRound() * quantity * surplus;
   }
-
 
   public boolean active() {
     return true;
   }
 
   public void endOfDay( AuctionEvent event ) {
-    //reset();
+    // reset();
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " capacity:" + capacity + " valuer:" + valuer + " fixedCosts:" + fixedCosts + " profits:" + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit + " strategy:" + strategy + ")";
+    return "(" + getClass() + " id:" + id + " capacity:" + capacity
+        + " valuer:" + valuer + " fixedCosts:" + fixedCosts + " profits:"
+        + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit
+        + " strategy:" + strategy + ")";
   }
 
 }

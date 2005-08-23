@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
@@ -31,34 +30,43 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 /**
- * This class computes the hypothetical auction state when all agents
- * bid at their private valuation, ie when all agents bid truthfully.
- * This can be used, for example, for equilibrium calculations.
- *
+ * This class computes the hypothetical auction state when all agents bid at
+ * their private valuation, ie when all agents bid truthfully. This can be used,
+ * for example, for equilibrium calculations.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class DirectRevelationReport extends AbstractMarketStatsReport implements Resetable, Serializable {
+public abstract class DirectRevelationReport extends AbstractMarketStatsReport
+    implements Resetable, Serializable {
 
   /**
    * The auction state after forced direct revelation.
+   * 
+   * @uml.property name="shoutEngine"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
 
   /**
    * The auction we are computing stats for.
+   * 
+   * @uml.property name="auction"
+   * @uml.associationEnd
    */
   protected RoundRobinAuction auction;
 
   /**
    * The truthful shouts of all traders in the auction.
+   * 
+   * @uml.property name="shouts"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.core.Shout"
    */
   protected ArrayList shouts;
 
-
   static Logger logger = Logger.getLogger(DirectRevelationReport.class);
-
 
   public DirectRevelationReport( RoundRobinAuction auction ) {
     this();
@@ -69,6 +77,9 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport i
     shouts = new ArrayList();
   }
 
+  /**
+   * @uml.property name="auction"
+   */
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
   }
@@ -76,14 +87,13 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport i
   public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
-
   public void calculate() {
     initialise();
     simulateDirectRevelation();
   }
 
   /**
-   *  Update the auction state with a truthful shout from each trader.
+   * Update the auction state with a truthful shout from each trader.
    */
   protected void simulateDirectRevelation() {
     Iterator traders = auction.getTraderIterator();
@@ -98,13 +108,10 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport i
     }
   }
 
-
-
   public void initialise() {
     shouts.clear();
     shoutEngine.reset();
   }
-
 
   public void reset() {
     initialise();
@@ -112,8 +119,9 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport i
 
   /**
    * Process a truthful shout from an agent
-   *
-   * @param shout The truthful shout
+   * 
+   * @param shout
+   *          The truthful shout
    */
   protected void enumerateTruthfulShout( Shout shout ) {
     try {
@@ -121,13 +129,11 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport i
         shoutEngine.newBid(shout);
       } else {
         shoutEngine.newAsk(shout);
-       }
+      }
     } catch ( DuplicateShoutException e ) {
       logger.error(e.getMessage());
       throw new Error(e);
     }
   }
-
-
 
 }

@@ -33,90 +33,115 @@ import ec.util.ParameterDatabase;
 /**
  * a JFreeChart graph that can be included in a FreeChartReport.
  * 
- * <p><b>Parameters</b><br>
- *
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.name</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.name</tt><br>
  * <font size=-1> string </font></td>
- * <td valign=top></td></tr>
+ * <td valign=top></td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.width</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.width</tt><br>
  * <font size=-1> int </font></td>
- * <td valign=top>(the width of the graph and 350 by default)</td></tr>
+ * <td valign=top>(the width of the graph and 350 by default)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.height</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.height</tt><br>
  * <font size=-1> int </font></td>
- * <td valign=top>(the height of the graph and 300 by default)</td></tr>
+ * <td valign=top>(the height of the graph and 300 by default)</td>
+ * </tr>
  * 
  * </table>
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public abstract class FreeChartGraph extends JPanel implements AuctionEventListener {
+public abstract class FreeChartGraph extends JPanel implements
+    AuctionEventListener {
 
   static Logger logger = Logger.getLogger(FreeChartGraph.class);
 
   public static final String P_NAME = "name";
 
   public static final String P_X = "x";
+
   public static final String P_Y = "y";
+
   public static final String P_WIDTH = "width";
+
   public static final String P_HEIGHT = "height";
 
+  /**
+   * @uml.property name="report"
+   * @uml.associationEnd inverse="graphs:uk.ac.liv.auction.stats.FreeChartReport"
+   */
   private FreeChartReport report;
 
+  /**
+   * @uml.property name="jfreechart"
+   * @uml.associationEnd
+   */
   private JFreeChart jfreechart;
-  
+
+  /**
+   * @uml.property name="chartPanel"
+   * @uml.associationEnd
+   */
   private ChartPanel chartPanel;
 
   public FreeChartGraph() {
     setLayout(new BorderLayout());
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
 
     setName(parameters.getStringWithDefault(base.push(P_NAME), "Name here"));
 
-    setPreferredSize(new Dimension(parameters.getIntWithDefault(base.push(P_WIDTH), null, 350),
-        parameters.getIntWithDefault(base.push(P_HEIGHT), null, 300)));
+    setPreferredSize(new Dimension(parameters.getIntWithDefault(base
+        .push(P_WIDTH), null, 350), parameters.getIntWithDefault(base
+        .push(P_HEIGHT), null, 300)));
 
     setupChart(parameters, base);
 
   }
-  
-  protected abstract void setupChart(ParameterDatabase parameters, Parameter base);
 
-  
-  public void eventOccurred(AuctionEvent event) {
+  protected abstract void setupChart( ParameterDatabase parameters,
+      Parameter base );
+
+  public void eventOccurred( AuctionEvent event ) {
   }
 
   public JFreeChart getChart() {
     return jfreechart;
   }
-  
-  public void setChart(JFreeChart chart) {
+
+  public void setChart( JFreeChart chart ) {
     jfreechart = chart;
 
-    if (chartPanel != null) {
+    if ( chartPanel != null ) {
       remove(chartPanel);
     }
-    
-    chartPanel = new ChartPanel(getChart());    
+
+    chartPanel = new ChartPanel(getChart());
     chartPanel.setRangeZoomable(true);
     chartPanel.setDomainZoomable(true);
     add(chartPanel, BorderLayout.CENTER);
   }
-  
-  public void setName(String name) {
+
+  public void setName( String name ) {
     super.setName(name);
-    if (getChart() != null)
+    if ( getChart() != null )
       getChart().setTitle(name);
   }
 
   /**
    * @return Returns the report.
+   * @uml.property name="report"
    */
   public FreeChartReport getReport() {
     return report;
@@ -125,8 +150,9 @@ public abstract class FreeChartGraph extends JPanel implements AuctionEventListe
   /**
    * @param report
    *          The report to set.
+   * @uml.property name="report"
    */
-  public void setReport(FreeChartReport report) {
+  public void setReport( FreeChartReport report ) {
     this.report = report;
   }
 }

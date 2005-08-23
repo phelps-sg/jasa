@@ -21,9 +21,9 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A utility class for cummulative tracking of stats for a series
- * of doubles.  Moments are incremented dynamically, rather than keeping
- * the actual cases in memory.
+ * A utility class for cummulative tracking of stats for a series of doubles.
+ * Moments are incremented dynamically, rather than keeping the actual cases in
+ * memory.
  * </p>
  * <p>
  * Example usage:
@@ -40,41 +40,53 @@ import org.apache.log4j.Logger;
  * System.out.println("And now the standard deviation = " + series1.getStdDev());<br>
  * </code>
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class CummulativeDistribution implements 
-    Serializable, Cloneable, Resetable, Distribution {
+public class CummulativeDistribution implements Serializable, Cloneable,
+    Resetable, Distribution {
 
   /**
    * The number of data in the series so far.
+   * 
+   * @uml.property name="n"
    */
   protected int n;
 
   /**
    * The cummulative total of all numbers in the series so far.
+   * 
+   * @uml.property name="total"
    */
   protected double total;
 
   /**
    * The total of the squares of all numbers in the series so far.
+   * 
+   * @uml.property name="totalSq"
    */
   protected double totalSq;
 
   /**
    * The minimum so far.
+   * 
+   * @uml.property name="min"
    */
   protected double min;
 
   /**
    * The maximum so far.
+   * 
+   * @uml.property name="max"
    */
   protected double max;
 
   /**
    * The name of this series.
+   * 
+   * @uml.property name="varName"
    */
   protected String varName;
 
@@ -103,7 +115,7 @@ public class CummulativeDistribution implements
   public void newData( double i ) {
     n++;
     total += i;
-    totalSq += i*i;
+    totalSq += i * i;
     if ( i > max ) {
       max = i;
     }
@@ -114,6 +126,8 @@ public class CummulativeDistribution implements
 
   /**
    * Get the number of items in the series.
+   * 
+   * @uml.property name="n"
    */
   public int getN() {
     return n;
@@ -130,7 +144,7 @@ public class CummulativeDistribution implements
    * Get the variance of the data about origin.
    */
   public double getVariance( double origin ) {
-    return Math.abs(totalSq/n - origin*origin);
+    return Math.abs(totalSq / n - origin * origin);
   }
 
   /**
@@ -163,6 +177,8 @@ public class CummulativeDistribution implements
 
   /**
    * Get the minimum datum.
+   * 
+   * @uml.property name="min"
    */
   public double getMin() {
     return min;
@@ -170,16 +186,20 @@ public class CummulativeDistribution implements
 
   /**
    * Get the maximum datum.
+   * 
+   * @uml.property name="max"
    */
   public double getMax() {
     return max;
   }
-  
+
   /**
    * Get the total of the data
+   * 
+   * @uml.property name="total"
    */
   public double getTotal() {
-  	return total;
+    return total;
   }
 
   public Object clone() throws CloneNotSupportedException {
@@ -195,9 +215,9 @@ public class CummulativeDistribution implements
   }
 
   public String toString() {
-    return "(" + getClass() + " varName:" + varName + " n:" + n + " mean:" +
-             getMean() + " stdev:" + getStdDev() + " min:" + min + " max:" +
-             max + ")";
+    return "(" + getClass() + " varName:" + varName + " n:" + n + " mean:"
+        + getMean() + " stdev:" + getStdDev() + " min:" + min + " max:" + max
+        + ")";
   }
 
   public void log() {
@@ -208,7 +228,7 @@ public class CummulativeDistribution implements
     logger.info("\tmean:\t" + getMean());
     logger.info("\tstdev:\t" + getStdDev());
   }
-  
+
   public void combine( Distribution other ) {
     CummulativeDistribution d = (CummulativeDistribution) other;
     min = Math.min(this.min, d.min);
@@ -217,7 +237,7 @@ public class CummulativeDistribution implements
     total += d.total;
     totalSq += d.totalSq;
   }
-  
+
   public double getTrimmedMean( double p ) {
     if ( p > 0 ) {
       throw new Error("method not implemented for p > 0");

@@ -37,27 +37,35 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A report that keeps cummulative statistics on bid prices,
- * ask prices, transaction prices, and market quote prices.
+ * A report that keeps cummulative statistics on bid prices, ask prices,
+ * transaction prices, and market quote prices.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class PriceStatisticsReport extends AbstractAuctionReport
-   implements Serializable, Cloneable, Resetable {
+public class PriceStatisticsReport extends AbstractAuctionReport implements
+    Serializable, Cloneable, Resetable {
 
+  /**
+   * @uml.property name="stats"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   protected CummulativeDistribution[] stats;
 
   static Logger logger = Logger.getLogger(PriceStatisticsReport.class);
 
   protected static final int TRANS_PRICE = 0;
+
   protected static final int BID_PRICE = 1;
+
   protected static final int ASK_PRICE = 2;
+
   protected static final int BID_QUOTE = 3;
+
   protected static final int ASK_QUOTE = 4;
-  
+
   public PriceStatisticsReport() {
     initialise();
   }
@@ -67,15 +75,15 @@ public class PriceStatisticsReport extends AbstractAuctionReport
 
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof RoundClosedEvent ) {
-      roundClosed((RoundClosedEvent) event);      
+      roundClosed((RoundClosedEvent) event);
     } else if ( event instanceof TransactionExecutedEvent ) {
       updateTransPriceLog((TransactionExecutedEvent) event);
     } else if ( event instanceof ShoutPlacedEvent ) {
       updateShoutLog((ShoutPlacedEvent) event);
     }
   }
-  
-  public void roundClosed( RoundClosedEvent event ) { 
+
+  public void roundClosed( RoundClosedEvent event ) {
     MarketQuote quote = event.getAuction().getQuote();
     stats[BID_QUOTE].newData((double) quote.getBid());
     stats[ASK_QUOTE].newData((double) quote.getAsk());
@@ -116,17 +124,16 @@ public class PriceStatisticsReport extends AbstractAuctionReport
 
   public void initialise() {
     stats = new CummulativeDistribution[] {
-     new CummulativeDistribution("Transaction Price"),
-     new CummulativeDistribution("Bid Price"),
-     new CummulativeDistribution("Ask Price"),
-     new CummulativeDistribution("Bid Quote"),
-     new CummulativeDistribution("Ask Quote")
-   };
+        new CummulativeDistribution("Transaction Price"),
+        new CummulativeDistribution("Bid Price"),
+        new CummulativeDistribution("Ask Price"),
+        new CummulativeDistribution("Bid Quote"),
+        new CummulativeDistribution("Ask Quote") };
 
   }
 
   public void reset() {
-    for( int i=0; i<stats.length; i++ ) {
+    for ( int i = 0; i < stats.length; i++ ) {
       ((CummulativeDistribution) stats[i]).reset();
     }
   }
@@ -139,7 +146,7 @@ public class PriceStatisticsReport extends AbstractAuctionReport
     PriceStatisticsReport copy = null;
     try {
       copy = (PriceStatisticsReport) clone();
-      for( int i=0; i<stats.length; i++ ) {
+      for ( int i = 0; i < stats.length; i++ ) {
         copy.stats[i] = (CummulativeDistribution) stats[i].clone();
       }
     } catch ( CloneNotSupportedException e ) {
@@ -152,11 +159,11 @@ public class PriceStatisticsReport extends AbstractAuctionReport
 
   public void produceUserOutput() {
     reportHeader();
-    for( int i=0; i<stats.length; i++ ) {
+    for ( int i = 0; i < stats.length; i++ ) {
       printStats(stats[i]);
     }
   }
-  
+
   public Map getVariables() {
     HashMap vars = new HashMap();
     createReportVars(vars, "askprice", stats[ASK_PRICE]);
@@ -165,8 +172,6 @@ public class PriceStatisticsReport extends AbstractAuctionReport
     createReportVars(vars, "bidquote", stats[BID_QUOTE]);
     return vars;
   }
-
-
 
   protected void reportHeader() {
     logger.info("");
@@ -179,16 +184,16 @@ public class PriceStatisticsReport extends AbstractAuctionReport
     stats.log();
     logger.info("");
   }
-  
+
   protected void createReportVars( Map vars, String var, Distribution stats ) {
     vars.put(makeVar(var, "mean"), new Double(stats.getMean()));
     vars.put(makeVar(var, "min"), new Double(stats.getMin()));
     vars.put(makeVar(var, "max"), new Double(stats.getMax()));
     vars.put(makeVar(var, "stdev"), new Double(stats.getStdDev()));
   }
-  
+
   protected ReportVariable makeVar( String varName, String moment ) {
-    return new ReportVariable("pricestats." + varName + "." + moment, 
-         					 varName + " distribution " + moment);
+    return new ReportVariable("pricestats." + varName + "." + moment, varName
+        + " distribution " + moment);
   }
 }

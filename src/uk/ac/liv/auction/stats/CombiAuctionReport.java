@@ -34,28 +34,39 @@ import uk.ac.liv.util.Resetable;
  * <p>
  * A report that combines several different reports.
  * </p>
- *
- * <p><b>Parameters</b><br></p>
+ * 
+ * <p>
+ * <b>Parameters</b><br>
+ * </p>
  * <table>
- * <tr><td valign=top><i>base</i><tt>.n</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.n</tt><br>
  * <font size=-1>int &gt;= 1</font></td>
- * <td valign=top>(the number of different loggers to configure)</td><tr>
- * </table>
- *
- *
+ * <td valign=top>(the number of different loggers to configure)</td>
+ * <tr> </table>
+ * 
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class CombiAuctionReport
-    implements AuctionReport, Parameterizable, Resetable {
+public class CombiAuctionReport implements AuctionReport, Parameterizable,
+    Resetable {
 
+  /**
+   * @uml.property name="reports"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.stats.AuctionReport"
+   */
   protected List reports = null;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   protected RoundRobinAuction auction;
 
   public static final String P_NUMLOGGERS = "n";
-
 
   public CombiAuctionReport( List reports ) {
     this.reports = reports;
@@ -69,13 +80,12 @@ public class CombiAuctionReport
 
     int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), null, 1);
 
-    for( int i=0; i<numLoggers; i++ ) {
-      AuctionReport report = (AuctionReport)
-        parameters.getInstanceForParameter(base.push(i+""), null,
-                                            AuctionReport.class);
+    for ( int i = 0; i < numLoggers; i++ ) {
+      AuctionReport report = (AuctionReport) parameters
+          .getInstanceForParameter(base.push(i + ""), null, AuctionReport.class);
       report.setAuction(auction);
       if ( report instanceof Parameterizable ) {
-        ((Parameterizable) report).setup(parameters, base.push(i+""));
+        ((Parameterizable) report).setup(parameters, base.push(i + ""));
       }
       addReport(report);
     }
@@ -87,7 +97,6 @@ public class CombiAuctionReport
   public void addReport( AuctionReport report ) {
     reports.add(report);
   }
-
 
   public void reset() {
     Iterator i = reports.iterator();
@@ -106,7 +115,7 @@ public class CombiAuctionReport
       logger.produceUserOutput();
     }
   }
-  
+
   public Iterator reportIterator() {
     return reports.iterator();
   }
@@ -120,16 +129,18 @@ public class CombiAuctionReport
     }
     return variableMap;
   }
-  
+
   public void eventOccurred( AuctionEvent event ) {
     Iterator i = reports.iterator();
-    while (  i.hasNext() ) {
+    while ( i.hasNext() ) {
       AuctionReport logger = (AuctionReport) i.next();
       logger.eventOccurred(event);
     }
   }
 
-
+  /**
+   * @uml.property name="auction"
+   */
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
     Iterator i = reports.iterator();

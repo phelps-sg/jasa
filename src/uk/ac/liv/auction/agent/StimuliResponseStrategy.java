@@ -28,31 +28,33 @@ import uk.ac.liv.util.Resetable;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-
 /**
  * <p>
- * A trading strategy that uses a stimuli-response learning algorithm,
- * such as the Roth-Erev algorithm, to adapt its trading behaviour in
- * successive auction rounds by using the agent's profits in the last
- * round as a reward signal.
+ * A trading strategy that uses a stimuli-response learning algorithm, such as
+ * the Roth-Erev algorithm, to adapt its trading behaviour in successive auction
+ * rounds by using the agent's profits in the last round as a reward signal.
  * </p>
- *
- * </p><p><b>Parameters</b><br>
- *
+ * 
+ * </p>
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.learner</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.learner</tt><br>
  * <font size=-1>classname, inherits StimuliResponseLearner</font></td>
- * <td valign=top>(the learning algorithm to use)</td></tr>
- *
+ * <td valign=top>(the learning algorithm to use)</td>
+ * </tr>
+ * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class StimuliResponseStrategy extends DiscreteLearnerStrategy 
-							 	implements Serializable {
+public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
+    Serializable {
 
   /**
    * The learning algorithm to use.
@@ -69,28 +71,26 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy
     super();
   }
 
-
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     super.setup(parameters, base);
 
     Parameter learnerParameter = base.push(P_LEARNER);
-    learner = (StimuliResponseLearner)
-      parameters.getInstanceForParameter(learnerParameter, null,
-                                          StimuliResponseLearner.class);
+    learner = (StimuliResponseLearner) parameters.getInstanceForParameter(
+        learnerParameter, null, StimuliResponseLearner.class);
 
     ((Parameterizable) learner).setup(parameters, learnerParameter);
   }
 
   public Object protoClone() {
-  	StimuliResponseStrategy clonedStrategy;
-  	try {
-  		clonedStrategy = (StimuliResponseStrategy) clone();
-  		clonedStrategy.learner =
-				(StimuliResponseLearner) ((Prototypeable) this.learner).protoClone();
-  	} catch ( CloneNotSupportedException e ) {
-  		throw new Error(e);
-  	}
+    StimuliResponseStrategy clonedStrategy;
+    try {
+      clonedStrategy = (StimuliResponseStrategy) clone();
+      clonedStrategy.learner = (StimuliResponseLearner) ((Prototypeable) this.learner)
+          .protoClone();
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
     return clonedStrategy;
   }
 
@@ -116,8 +116,8 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy
   }
 
   public String toString() {
-    return "(" + getClass() + " markupscale:" + markupScale + " learner:" +
-              learner + " quantity:" + quantity + ")";
+    return "(" + getClass() + " markupscale:" + markupScale + " learner:"
+        + learner + " quantity:" + quantity + ")";
   }
 
 }

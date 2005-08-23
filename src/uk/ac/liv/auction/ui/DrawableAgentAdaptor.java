@@ -31,45 +31,59 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
 /**
- * An adaptor that allows an AbstractTraderAgent to be drawn on a 
- * RePast Object2DDisplay.  Each agent is represented by a coloured bar.
- * Profitable buyers are shown as red, and profitable sellers are shown as 
- * blue.  The brighter the colour, the more profitable the agent.  Agents
- * with zero profits are shown as white bars.  The height of the bar represents
- * the current margin offered by the agent; that is, the absolute difference
- * between their current valuation of the commodity on offer and their last
- * shout price.
+ * An adaptor that allows an AbstractTraderAgent to be drawn on a RePast
+ * Object2DDisplay. Each agent is represented by a coloured bar. Profitable
+ * buyers are shown as red, and profitable sellers are shown as blue. The
+ * brighter the colour, the more profitable the agent. Agents with zero profits
+ * are shown as white bars. The height of the bar represents the current margin
+ * offered by the agent; that is, the absolute difference between their current
+ * valuation of the commodity on offer and their last shout price.
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class DrawableAgentAdaptor implements Drawable {
-  
+
+  /**
+   * @uml.property name="agent"
+   * @uml.associationEnd
+   */
   protected AbstractTradingAgent agent;
-  
+
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd readOnly="true"
+   */
   protected Auction auction;
-  
+
+  /**
+   * @uml.property name="colorMap"
+   * @uml.associationEnd
+   */
   protected ColorMap colorMap;
-  
+
   protected static float minProfit = Float.POSITIVE_INFINITY;
-  
+
   protected static float maxProfit = Float.NEGATIVE_INFINITY;
-  
+
   protected static float maxMarkup = Float.NEGATIVE_INFINITY;
-  
+
+  /**
+   * @uml.property name="scale"
+   */
   public float scale = 1000;
-  
+
   public DrawableAgentAdaptor( Auction auction ) {
     this(auction, null);
   }
-  
+
   public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent ) {
     this(auction, agent, null);
   }
-  
-  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent, 
-      						ColorMap colorMap ) {
+
+  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent,
+      ColorMap colorMap ) {
     this.agent = agent;
     this.colorMap = colorMap;
     if ( agent != null ) {
@@ -79,12 +93,12 @@ public class DrawableAgentAdaptor implements Drawable {
       }
     }
   }
-  
+
   public void draw( SimGraphics g ) {
     int cellHeight = 5;
     int cellWidth = 5;
     float price = Math.abs(getLastShoutPrice() - getCurrentValuation());
-    if ( price > DrawableAgentAdaptor.maxMarkup) {
+    if ( price > DrawableAgentAdaptor.maxMarkup ) {
       DrawableAgentAdaptor.maxMarkup = price;
     }
     float profit = getTotalProfits();
@@ -96,7 +110,7 @@ public class DrawableAgentAdaptor implements Drawable {
     }
     float relProfit = profit / DrawableAgentAdaptor.maxProfit;
     float relPrice = price / DrawableAgentAdaptor.maxMarkup;
-    int y =  1 + (int) (relPrice * 4);
+    int y = 1 + (int) (relPrice * 4);
     g.setDrawingParameters(5, y, 1);
     Color color = Color.BLACK;
     if ( colorMap == null ) {
@@ -117,17 +131,17 @@ public class DrawableAgentAdaptor implements Drawable {
     g.setDrawingParameters(5, 5, 5);
     g.drawHollowRect(Color.WHITE);
   }
-  
+
   public int getX() {
     // TODO Auto-generated method stub
     return 0;
   }
-  
+
   public int getY() {
     // TODO Auto-generated method stub
     return 0;
   }
-  
+
   public float getLastProfit() {
     float profit = 0;
     if ( agent != null ) {
@@ -135,7 +149,7 @@ public class DrawableAgentAdaptor implements Drawable {
     }
     return profit;
   }
-  
+
   public float getTotalProfits() {
     float profit = 0;
     if ( agent != null ) {
@@ -143,19 +157,19 @@ public class DrawableAgentAdaptor implements Drawable {
     }
     return profit;
   }
-  
+
   public float getCurrentValuation() {
     float valuation = 0;
     if ( agent != null ) {
       valuation = (float) agent.getValuation(auction);
-    } 
+    }
     return valuation;
   }
-  
+
   public long getId() {
     return agent.getId();
   }
-  
+
   public String getRole() {
     if ( agent.isSeller() ) {
       return "Seller";
@@ -163,7 +177,7 @@ public class DrawableAgentAdaptor implements Drawable {
       return "Buyer";
     }
   }
-  
+
   public float getLastShoutPrice() {
     float price = 0;
     if ( agent != null ) {
@@ -174,11 +188,11 @@ public class DrawableAgentAdaptor implements Drawable {
     }
     return price;
   }
-  
+
   public Object getAgentType() {
     return agent;
   }
-  
+
   public boolean getLastShoutAccepted() {
     return agent.lastShoutAccepted();
   }
@@ -191,7 +205,5 @@ public class DrawableAgentAdaptor implements Drawable {
       return -1;
     }
   }
-  
+
 }
-
-

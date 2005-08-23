@@ -27,28 +27,28 @@ import ec.util.ParameterDatabase;
 import java.io.Serializable;
 
 /**
- * This strategy decorates a component strategy by bidding a fixed
- * proportional markup over the price specified by the underlying component
- * strategy.
+ * This strategy decorates a component strategy by bidding a fixed proportional
+ * markup over the price specified by the underlying component strategy.
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
-                                    implements Serializable, Prototypeable {
+    implements Serializable, Prototypeable {
 
   /**
    * The component strategy to decorate.
    */
   protected Strategy subStrategy;
-  
+
   /**
    * The proportional markup on the sub strategy.
    */
   protected double markup;
-  
+
   public static final String P_SUBSTRATEGY = "substrategy";
+
   public static final String P_MARKUP = "markup";
 
   public MarkupStrategyDecorator() {
@@ -58,9 +58,8 @@ public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     markup = parameters.getDoubleWithDefault(base.push(P_MARKUP), null, 0);
-    subStrategy = (Strategy)
-      parameters.getInstanceForParameter(base.push(P_SUBSTRATEGY), null, 
-          										Strategy.class);
+    subStrategy = (Strategy) parameters.getInstanceForParameter(base
+        .push(P_SUBSTRATEGY), null, Strategy.class);
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
@@ -84,11 +83,11 @@ public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
       return false;
     }
   }
-  
+
   public void endOfRound( Auction auction ) {
-    
+
   }
- 
+
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
     subStrategy.eventOccurred(event);
@@ -98,18 +97,17 @@ public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
     super.setAgent(agent);
     subStrategy.setAgent(agent);
   }
-  
+
   public Object protoClone() {
-  	Object clonedStrategy;
-  	try {
-  		clonedStrategy = this.clone();
-  		((MarkupStrategyDecorator) clonedStrategy).subStrategy = 
-  		  (Strategy) subStrategy.protoClone();
-  	} catch ( CloneNotSupportedException e ) {
-  		throw new Error(e);
-  	}
+    Object clonedStrategy;
+    try {
+      clonedStrategy = this.clone();
+      ((MarkupStrategyDecorator) clonedStrategy).subStrategy = (Strategy) subStrategy
+          .protoClone();
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
     return clonedStrategy;
   }
 
-  
 }

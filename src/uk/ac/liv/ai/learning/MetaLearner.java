@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.ai.learning;
 
 import ec.util.Parameter;
@@ -25,21 +24,33 @@ import uk.ac.liv.util.io.DataWriter;
 import java.io.Serializable;
 
 /**
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class MetaLearner extends AbstractLearner
-     implements StimuliResponseLearner, Parameterizable, Serializable {
+public class MetaLearner extends AbstractLearner implements
+    StimuliResponseLearner, Parameterizable, Serializable {
 
+  /**
+   * @uml.property name="currentLearner"
+   */
   protected int currentLearner;
 
+  /**
+   * @uml.property name="subLearners"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   protected StimuliResponseLearner[] subLearners;
 
+  /**
+   * @uml.property name="masterLearner"
+   * @uml.associationEnd
+   */
   protected StimuliResponseLearner masterLearner;
 
   static final String P_N = "n";
+
   static final String P_MASTER = "master";
 
   public MetaLearner() {
@@ -51,26 +62,25 @@ public class MetaLearner extends AbstractLearner
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    masterLearner = (StimuliResponseLearner)
-      parameters.getInstanceForParameter(base.push(P_MASTER), null,
-                                            StimuliResponseLearner.class);
+    masterLearner = (StimuliResponseLearner) parameters
+        .getInstanceForParameter(base.push(P_MASTER), null,
+            StimuliResponseLearner.class);
     if ( masterLearner instanceof Parameterizable ) {
       ((Parameterizable) masterLearner).setup(parameters, base.push(P_MASTER));
     }
-
 
     int numLearners = parameters.getInt(base.push(P_N), null, 1);
 
     subLearners = new StimuliResponseLearner[numLearners];
 
-    for( int i=0; i<numLearners; i++ ) {
+    for ( int i = 0; i < numLearners; i++ ) {
 
-      StimuliResponseLearner sub = (StimuliResponseLearner)
-        parameters.getInstanceForParameter(base.push(i+""),  null,
-                                            StimuliResponseLearner.class);
+      StimuliResponseLearner sub = (StimuliResponseLearner) parameters
+          .getInstanceForParameter(base.push(i + ""), null,
+              StimuliResponseLearner.class);
 
       if ( sub instanceof Parameterizable ) {
-        ((Parameterizable) sub).setup(parameters, base.push(i+""));
+        ((Parameterizable) sub).setup(parameters, base.push(i + ""));
       }
 
       subLearners[i] = sub;
@@ -96,7 +106,7 @@ public class MetaLearner extends AbstractLearner
   }
 
   public void dumpState( DataWriter out ) {
-    //TODO
+    // TODO
   }
 
 }

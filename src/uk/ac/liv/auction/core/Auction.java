@@ -17,15 +17,9 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.stats.AuctionReport;
 
-
 /**
- * The interface used by agents to interact with an auction.
- *
- * @see AuctionImpl
- *
  * @author Steve Phelps
  * @version $Revision$
- *
  */
 
 public interface Auction extends QuoteProvider {
@@ -50,13 +44,19 @@ public interface Auction extends QuoteProvider {
    */
   public void removeShout( Shout shout );
 
- /**
-  * Return the last shout placed in the auction.
-  */
+  /**
+   * Return the last shout placed in the auction.
+   * 
+   * @uml.property name="lastShout"
+   * @uml.associationEnd
+   */
   public Shout getLastShout() throws ShoutsNotVisibleException;
 
   /**
    * Return the current auctioneer for this auction.
+   * 
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd inverse="auction:uk.ac.liv.auction.core.Auctioneer"
    */
   public Auctioneer getAuctioneer();
 
@@ -74,7 +74,9 @@ public interface Auction extends QuoteProvider {
    * Get the age of the auction in unspecified units
    */
   public int getRound();
+
   public int getDay();
+
   public int getAge();
 
   /**
@@ -88,17 +90,17 @@ public interface Auction extends QuoteProvider {
   public int getNumberOfTraders();
 
   /**
-   * Find out whether the given shout has resulted in a transaction
-   * in the current round of trading.
-   */
-  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException;
-  
-  /**
-   * Determine whether or not any transactions have occured in the
+   * Find out whether the given shout has resulted in a transaction in the
    * current round of trading.
    */
+  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException;
+
+  /**
+   * Determine whether or not any transactions have occured in the current round
+   * of trading.
+   */
   public boolean transactionsOccured() throws ShoutsNotVisibleException;
-  
+
   public AuctionReport getReport( Class reportClass );
 
 }

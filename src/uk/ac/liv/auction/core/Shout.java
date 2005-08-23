@@ -25,16 +25,16 @@ import java.io.Serializable;
 
 /**
  * <p>
- * A class representing a shout in an auction.  A shout may be either a bid
+ * A class representing a shout in an auction. A shout may be either a bid
  * (offer to buy) or an ask (offer to sell).
  * </p>
- *
+ * 
  * <p>
- * Shouts are mutable within this package for performance reasons,
- * hence care should be taken not to rely on, e.g. shouts held in collections
- * remaining constant.
+ * Shouts are mutable within this package for performance reasons, hence care
+ * should be taken not to rely on, e.g. shouts held in collections remaining
+ * constant.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -43,32 +43,45 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
   /**
    * The number of items offered/wanted.
+   * 
+   * @uml.property name="quantity"
    */
   protected int quantity;
 
   /**
    * The price of this offer
+   * 
+   * @uml.property name="price"
    */
   protected double price;
 
   /**
    * The agent placing this offer
+   * 
+   * @uml.property name="agent"
+   * @uml.associationEnd
    */
   protected TradingAgent agent;
 
   /**
-   * True if this shout is a bid.
-   * False if this shout is an ask.
+   * True if this shout is a bid. False if this shout is an ask.
+   * 
+   * @uml.property name="isBid"
    */
   protected boolean isBid;
 
   /**
    * The unique id of this shout
+   * 
+   * @uml.property name="id"
    */
   protected long id = -1;
 
   /**
    * The child of this shout.
+   * 
+   * @uml.property name="child"
+   * @uml.associationEnd
    */
   protected Shout child = null;
 
@@ -77,12 +90,10 @@ public class Shout implements Comparable, Cloneable, Serializable {
    */
   static IdAllocator idAllocator = new IdAllocator();
 
-  static DecimalFormat currencyFormatter =
-      new DecimalFormat("+#########0.00;-#########.00");
+  static DecimalFormat currencyFormatter = new DecimalFormat(
+      "+#########0.00;-#########.00");
 
-
-  public Shout( TradingAgent agent, int quantity, double price, 
-      			boolean isBid ) {
+  public Shout( TradingAgent agent, int quantity, double price, boolean isBid ) {
     this(agent);
     this.quantity = quantity;
     this.price = price;
@@ -91,7 +102,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
   public Shout( Shout existing ) {
     this(existing.getAgent(), existing.getQuantity(), existing.getPrice(),
-          existing.isBid());
+        existing.isBid());
   }
 
   public Shout( TradingAgent agent ) {
@@ -103,11 +114,34 @@ public class Shout implements Comparable, Cloneable, Serializable {
     this.id = idAllocator.nextId();
   }
 
-  public int getQuantity() {  return quantity; }
-  public double getPrice() {  return price; }
-  public TradingAgent getAgent() { return agent; }
-  public boolean isBid() { return isBid; }
-  public boolean isAsk() { return ! isBid; }
+  /**
+   * @uml.property name="quantity"
+   */
+  public int getQuantity() {
+    return quantity;
+  }
+
+  /**
+   * @uml.property name="price"
+   */
+  public double getPrice() {
+    return price;
+  }
+
+  /**
+   * @uml.property name="agent"
+   */
+  public TradingAgent getAgent() {
+    return agent;
+  }
+
+  public boolean isBid() {
+    return isBid;
+  }
+
+  public boolean isAsk() {
+    return !isBid;
+  }
 
   public boolean satisfies( Shout other ) {
     if ( this.isBid() ) {
@@ -139,15 +173,13 @@ public class Shout implements Comparable, Cloneable, Serializable {
     return true;
   }
 
-
   public Object clone() throws CloneNotSupportedException {
     return super.clone();
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " quantity:" + quantity +
-               " price:" + price + " isBid:" + isBid +
-               " agent:" + agent + ")";
+    return "(" + getClass() + " id:" + id + " quantity:" + quantity + " price:"
+        + price + " isBid:" + isBid + " agent:" + agent + ")";
   }
 
   public String toPrettyString() {
@@ -158,17 +190,15 @@ public class Shout implements Comparable, Cloneable, Serializable {
     return currencyFormatter.format(p) + "/" + quantity;
   }
 
-
   public static double maxPrice( Shout s1, Shout s2 ) {
-    return Math.max(price(s1, Double.NEGATIVE_INFINITY),
-                     price(s2, Double.NEGATIVE_INFINITY));
+    return Math.max(price(s1, Double.NEGATIVE_INFINITY), price(s2,
+        Double.NEGATIVE_INFINITY));
   }
 
   public static double minPrice( Shout s1, Shout s2 ) {
-    return Math.min(price(s1, Double.POSITIVE_INFINITY),
-                     price(s2, Double.POSITIVE_INFINITY));
+    return Math.min(price(s1, Double.POSITIVE_INFINITY), price(s2,
+        Double.POSITIVE_INFINITY));
   }
-
 
   private static double price( Shout s, double alt ) {
     if ( s == null ) {
@@ -179,28 +209,30 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   /**
-   * Get the child of this shout.  Shouts have children when they are split().
-   *
+   * Get the child of this shout. Shouts have children when they are split().
+   * 
    * @return The child Shout object, or null if this Shout is childless.
+   * @uml.property name="child"
    */
   public Shout getChild() {
     return child;
   }
 
+  /**
+   * @uml.property name="id"
+   */
   public long getId() {
     return id;
   }
-
 
   public int hashCode() {
     return (int) id; // * getAgent().hashCode();
   }
 
-
-//  public boolean equals( Object other ) {
-//    return id == ((Shout) other).id &&
-//                    getAgent().equals(((Shout) other).getAgent());
-//  }
+  // public boolean equals( Object other ) {
+  // return id == ((Shout) other).id &&
+  // getAgent().equals(((Shout) other).getAgent());
+  // }
 
   //
   // The following methods allow muting of shouts, but only by classes
@@ -209,12 +241,12 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
   void makeChildless() {
     if ( child != null ) {
-      child.makeChildless();      
+      child.makeChildless();
       child = null;
     }
   }
 
- void copyFrom( Shout other ) {
+  void copyFrom( Shout other ) {
     this.price = other.getPrice();
     this.agent = other.getAgent();
     this.quantity = other.getQuantity();
@@ -224,14 +256,15 @@ public class Shout implements Comparable, Cloneable, Serializable {
   }
 
   /**
-   * Reduce the quantity of this shout by excess and return a new
-   * child shout containing the excess quantity.  After a split,
-   * parent shouts keep a reference to their children.
-   *
-   * @param excess The excess quantity
-   *
+   * Reduce the quantity of this shout by excess and return a new child shout
+   * containing the excess quantity. After a split, parent shouts keep a
+   * reference to their children.
+   * 
+   * @param excess
+   *          The excess quantity
+   * 
    */
- Shout split( int excess ) {
+  Shout split( int excess ) {
     quantity -= excess;
     Shout newShout = new Shout(agent, excess, price, isBid);
     child = newShout;
@@ -242,7 +275,7 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
   Shout splat( int excess ) {
     Shout newShout = new Shout(agent, quantity - excess, price, isBid);
-//    Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
+    // Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
     quantity = excess;
     child = newShout;
     assert isValid();
@@ -250,26 +283,38 @@ public class Shout implements Comparable, Cloneable, Serializable {
     return newShout;
   }
 
+  /**
+   * @param isBid
+   * @uml.property name="isBid"
+   */
   void setIsBid( boolean isBid ) {
     this.isBid = isBid;
   }
 
+  /**
+   * @uml.property name="agent"
+   */
   void setAgent( TradingAgent agent ) {
     this.agent = agent;
   }
 
+  /**
+   * @uml.property name="price"
+   */
   void setPrice( double price ) {
     this.price = price;
   }
 
+  /**
+   * @uml.property name="quantity"
+   */
   void setQuantity( int quantity ) {
     this.quantity = quantity;
   }
 
-
   /**
    * A Shout that is publically mutable.
-   *
+   * 
    * @author Steve Phelps
    */
   public static class MutableShout extends Shout {

@@ -18,23 +18,33 @@ package uk.ac.liv.util.io;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
-
 import java.io.*;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-public class CSVReader  {
+public class CSVReader {
 
+  /**
+   * @uml.property name="in"
+   */
   BufferedReader in;
-  char seperator; 
+
+  /**
+   * @uml.property name="seperator"
+   */
+  char seperator;
+
+  /**
+   * @uml.property name="types" multiplicity="(0 -1)" dimension="1"
+   */
   Class[] types;
+
   static final char DEFAULT_SEPERATOR = '\t';
 
-
   public CSVReader( InputStream in, Class[] types, char seperator ) {
-    this.in = new BufferedReader(new InputStreamReader(in));    
+    this.in = new BufferedReader(new InputStreamReader(in));
     this.seperator = seperator;
     this.types = types;
   }
@@ -49,9 +59,9 @@ public class CSVReader  {
     if ( line == null ) {
       return null;
     }
-    StringTokenizer tokens = new StringTokenizer(line,seperator+"");
-    for( int i=0; i<types.length; i++ ) {    
-      String fieldStr = tokens.nextToken();      
+    StringTokenizer tokens = new StringTokenizer(line, seperator + "");
+    for ( int i = 0; i < types.length; i++ ) {
+      String fieldStr = tokens.nextToken();
       record.add(convert(fieldStr, types[i]));
     }
     return (List) record;

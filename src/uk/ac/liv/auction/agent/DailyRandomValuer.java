@@ -19,8 +19,8 @@ import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 
 /**
- * A valuation policy in which we are allocated a new random valuation
- * at the end of each day.
+ * A valuation policy in which we are allocated a new random valuation at the
+ * end of each day.
  * 
  * @author Steve Phelps
  * @version $Revision$
@@ -31,11 +31,11 @@ public class DailyRandomValuer extends RandomValuer {
   public DailyRandomValuer() {
     super();
   }
-  
+
   public DailyRandomValuer( double minValue, double maxValue ) {
-    super(minValue, maxValue); 
+    super(minValue, maxValue);
   }
-  
+
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
     if ( event instanceof EndOfDayEvent ) {

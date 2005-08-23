@@ -25,51 +25,87 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 
+public class MockTrader extends AbstractTradingAgent {
 
-public class MockTrader extends AbstractTradingAgent  {
-
+  /**
+   * @uml.property name="lastWinningShout"
+   * @uml.associationEnd
+   */
   public Shout lastWinningShout = null;
+
+  /**
+   * @uml.property name="lastWinningPrice"
+   */
   public double lastWinningPrice = 0;
+
+  /**
+   * @uml.property name="lastWinningQuantity"
+   */
   public int lastWinningQuantity;
+
+  /**
+   * @uml.property name="receivedAuctionOpen"
+   */
   public boolean receivedAuctionOpen = false;
+
+  /**
+   * @uml.property name="receivedAuctionClosed"
+   */
   public boolean receivedAuctionClosed = false;
+
+  /**
+   * @uml.property name="receivedAuctionClosedAfterAuctionOpen"
+   */
   public boolean receivedAuctionClosedAfterAuctionOpen = false;
+
+  /**
+   * @uml.property name="receivedRoundClosed"
+   */
   public int receivedRoundClosed = 0;
+
+  /**
+   * @uml.property name="receivedRequestShout"
+   */
   public int receivedRequestShout = 0;
+
+  /**
+   * @uml.property name="test"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   TestCase test;
 
   static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
-
 
   public MockTrader( TestCase test, int stock, long funds ) {
     super(stock, funds);
     this.test = test;
   }
 
-  public MockTrader( TestCase test, int stock, double funds, double privateValue, boolean isSeller ) {
+  public MockTrader( TestCase test, int stock, double funds,
+      double privateValue, boolean isSeller ) {
     super(stock, funds, privateValue, isSeller);
     this.test = test;
   }
 
-  public void informOfSeller( Auction auction, Shout winningShout, TradingAgent seller,
-                              double price, int quantity ) {
+  public void informOfSeller( Auction auction, Shout winningShout,
+      TradingAgent seller, double price, int quantity ) {
     super.informOfSeller(auction, winningShout, seller, price, quantity);
     test.assertTrue(((AbstractTradingAgent) seller).isSeller());
-    System.out.println(this + ": winning shout " + winningShout + " at price " + price + " and quantity " + quantity + " and seller: " + seller);
+    System.out.println(this + ": winning shout " + winningShout + " at price "
+        + price + " and quantity " + quantity + " and seller: " + seller);
     lastWinningShout = winningShout;
     lastWinningPrice = price;
     purchaseFrom(auction, (AbstractTradingAgent) seller, quantity, price);
   }
-  
-  
-  public void informOfBuyer( Auction auction, TradingAgent buyer,
-      double price, int quantity ) {
+
+  public void informOfBuyer( Auction auction, TradingAgent buyer, double price,
+      int quantity ) {
     super.informOfBuyer(auction, buyer, price, quantity);
     test.assertTrue(((AbstractTradingAgent) buyer).isBuyer());
     lastWinningPrice = price;
     lastWinningShout = getCurrentShout();
   }
-  
+
   public int determineQuantity( Auction auction ) {
     return 1;
   }
@@ -98,7 +134,7 @@ public class MockTrader extends AbstractTradingAgent  {
   }
 
   public void endOfDay( AuctionEvent event ) {
-    //TODO
+    // TODO
   }
 
   public boolean active() {
@@ -106,14 +142,15 @@ public class MockTrader extends AbstractTradingAgent  {
   }
 
   public double equilibriumProfits( Auction auction, double equilibriumPrice,
-                                     int quantity ) {
-      //TODO
-      return -1;
+      int quantity ) {
+    // TODO
+    return -1;
   }
 
   public String toString() {
-    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:" + funds + " stock:" + stock + ")";
+    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller
+        + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:"
+        + funds + " stock:" + stock + ")";
   }
-
 
 }

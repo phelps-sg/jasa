@@ -31,20 +31,40 @@ import uk.ac.liv.util.CummulativeDistribution;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
-
 public class RandomConstrainedStrategyTest extends TestCase {
 
+  /**
+   * @uml.property name="testStrategy"
+   * @uml.associationEnd
+   */
   protected RandomConstrainedStrategy testStrategy;
 
+  /**
+   * @uml.property name="testAgent"
+   * @uml.associationEnd
+   */
   protected ZITraderAgent testAgent;
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   protected ClearingHouseAuctioneer auctioneer;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   protected RoundRobinAuction auction;
 
+  /**
+   * @uml.property name="logger"
+   * @uml.associationEnd
+   */
   protected PriceStatisticsReport logger;
 
   static final double MAX_MARKUP = 100.0;
+
   static final double PRIV_VALUE = 7.0;
 
   static final int MAX_ROUNDS = 100000;
@@ -54,7 +74,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
   }
 
   public void setUp() {
-  	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
     testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);
     testAgent.setStrategy(testStrategy);
@@ -76,7 +96,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
     CummulativeDistribution askStats = logger.getAskPriceStats();
     assertTrue(approxEqual(askStats.getMin(), PRIV_VALUE));
     assertTrue(approxEqual(askStats.getMax(), MAX_MARKUP + PRIV_VALUE));
-    assertTrue(approxEqual(askStats.getMean(), (MAX_MARKUP/2) + PRIV_VALUE));
+    assertTrue(approxEqual(askStats.getMean(), (MAX_MARKUP / 2) + PRIV_VALUE));
   }
 
   public void testBidFloor() {
@@ -92,7 +112,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
   }
 
   public boolean approxEqual( double x, double y ) {
-    return Math.abs(x-y) < 0.1;
+    return Math.abs(x - y) < 0.1;
   }
 
   public static void main( String[] args ) {
@@ -104,4 +124,3 @@ public class RandomConstrainedStrategyTest extends TestCase {
   }
 
 }
-

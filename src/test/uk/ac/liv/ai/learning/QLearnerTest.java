@@ -20,26 +20,36 @@ import junit.framework.*;
 import test.uk.ac.liv.PRNGTestSeeds;
 
 import uk.ac.liv.prng.GlobalPRNG;
-	
+
 import uk.ac.liv.ai.learning.*;
 
 import uk.ac.liv.util.CummulativeDistribution;
 
 import org.apache.log4j.Logger;
 
-
 public class QLearnerTest extends TestCase {
 
+  /**
+   * @uml.property name="learner1"
+   * @uml.associationEnd
+   */
   QLearner learner1;
 
+  /**
+   * @uml.property name="score"
+   */
   double score;
 
   static final double EPSILON = 0.05;
+
   static final double LEARNING_RATE = 0.8;
+
   static final double DISCOUNT_RATE = 0.9;
 
   static final int NUM_ACTIONS = 10;
+
   static final int CORRECT_ACTION = 2;
+
   static final int NUM_TRIALS = 20000;
 
   static Logger logger = Logger.getLogger(QLearnerTest.class);
@@ -49,9 +59,9 @@ public class QLearnerTest extends TestCase {
   }
 
   public void setUp() {
-  	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     learner1 = new QLearner(1, NUM_ACTIONS, EPSILON, LEARNING_RATE,
-                              DISCOUNT_RATE);    
+        DISCOUNT_RATE);
     score = 0;
     org.apache.log4j.BasicConfigurator.configure();
   }
@@ -61,7 +71,7 @@ public class QLearnerTest extends TestCase {
     System.out.println("testBestAction()");
     CummulativeDistribution stats = new CummulativeDistribution("action");
     int correctActions = 0;
-    for( int i=0; i<NUM_TRIALS; i++ ) {
+    for ( int i = 0; i < NUM_TRIALS; i++ ) {
       int action = learner1.act();
       assertTrue(action == learner1.bestAction(0));
       stats.newData(action);
@@ -82,7 +92,7 @@ public class QLearnerTest extends TestCase {
     CummulativeDistribution stats = new CummulativeDistribution("action");
     int correctActions = 0;
     int bestActionChosen = 0;
-    for( int i=0; i<NUM_TRIALS; i++ ) {
+    for ( int i = 0; i < NUM_TRIALS; i++ ) {
       int action = learner1.act();
       stats.newData(action);
       assertTrue(action == learner1.getLastActionChosen());
@@ -104,7 +114,7 @@ public class QLearnerTest extends TestCase {
     logger.info(stats);
     logger.info("chose best action " + bestActionPercent + "% of the time.");
     assertTrue(score > 80);
-    assertTrue(1-(bestActionPercent/100) <= EPSILON);
+    assertTrue(1 - (bestActionPercent / 100) <= EPSILON);
   }
 
   public void testStates() {
@@ -113,7 +123,7 @@ public class QLearnerTest extends TestCase {
     int correctActions = 0;
     learner1.setStatesAndActions(correctChoices.length, NUM_ACTIONS);
     int s = 3;
-    for( int i=0; i<NUM_TRIALS; i++ ) {
+    for ( int i = 0; i < NUM_TRIALS; i++ ) {
       int action = learner1.act();
       double reward = 0;
       if ( action == correctChoices[s] ) {
@@ -139,7 +149,7 @@ public class QLearnerTest extends TestCase {
     learner1.reset();
     testStates();
     double score1 = score;
-    System.out.println("score1 = "+ score1);
+    System.out.println("score1 = " + score1);
     GlobalPRNG.initialiseWithSeed(1);
     learner1.reset();
     System.out.println("reseted learner1 = " + learner1);

@@ -25,38 +25,41 @@ import ec.util.ParameterDatabase;
 
 import org.apache.log4j.Logger;
 
-
 /**
- * A class representing a strategy in which we adapt our bids
- * using a discrete learning algorithm.
- *
- * </p><p><b>Parameters</b><br>
- *
+ * A class representing a strategy in which we adapt our bids using a discrete
+ * learning algorithm.
+ * 
+ * </p>
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.markupscale</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.markupscale</tt><br>
  * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(scaling factor by which to multiply the output from the learner)</td></tr>
- *
+ * <td valign=top>(scaling factor by which to multiply the output from the
+ * learner)</td>
+ * </tr>
+ * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
-										implements Serializable {
+    implements Serializable {
 
   /**
-   * A scaling factor used to multiply-up the output from
-   * the learning algorithm.
+   * A scaling factor used to multiply-up the output from the learning
+   * algorithm.
    */
   protected double markupScale = 1;
 
   static final String P_MARKUPSCALE = "markupscale";
 
   static Logger logger = Logger.getLogger(DiscreteLearnerStrategy.class);
-
 
   public DiscreteLearnerStrategy( AbstractTradingAgent agent ) {
     super(agent);
@@ -75,7 +78,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     markupScale = parameters.getDoubleWithDefault(base.push(P_MARKUPSCALE),
-                                                   null, markupScale);
+        null, markupScale);
   }
 
   public void endOfRound( Auction auction ) {
@@ -92,12 +95,12 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
     // Now turn the action into a price
     double price;
     if ( agent.isSeller() ) {
-      price = agent.getValuation(auction) + action*markupScale;
+      price = agent.getValuation(auction) + action * markupScale;
     } else {
-      price = agent.getValuation(auction) - action*markupScale;
+      price = agent.getValuation(auction) - action * markupScale;
     }
     if ( price < 0 ) {
-//      logger.debug(this + ": set negative price- clipping at 0");
+      // logger.debug(this + ": set negative price- clipping at 0");
       price = 0;
     }
 
@@ -116,14 +119,13 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
   }
 
   /**
-   *  Generate an action from the learning algorithm.
+   * Generate an action from the learning algorithm.
    */
   public abstract int act();
 
   /**
-   *  Perform learning.
+   * Perform learning.
    */
   public abstract void learn( Auction auction );
-
 
 }

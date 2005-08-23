@@ -32,24 +32,30 @@ import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 /**
  * Defined a data series that is fed with values of some <code>ReportVariable
- * </code> when some auction event occurs.
+ * </code>
+ * when some auction event occurs.
  * 
- * <p><b>Parameters</b><br>
- *
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.var</tt><br>
- * <font size=-1> string </font></td>
- * <td valign=top>(the full name of the <code>ReportVariable</code>)</td></tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.event</tt><br>
- * <font size=-1> event class inheriting <code>uk.ac.liv.auction.event.AuctionEvent</code>
- * </font></td>
- * <td valign=top>(the type of events that trigger sampling of the value of the 
- * <code>ReportVariable</code>)</td></tr>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.var</tt><br>
+ * <font size=-1> string </font></td>
+ * <td valign=top>(the full name of the <code>ReportVariable</code>)</td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.event</tt><br>
+ * <font size=-1> event class inheriting
+ * <code>uk.ac.liv.auction.event.AuctionEvent</code> </font></td>
+ * <td valign=top>(the type of events that trigger sampling of the value of the
+ * <code>ReportVariable</code>)</td>
+ * </tr>
  * 
  * </table>
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
@@ -58,35 +64,45 @@ public class ReportVariableSeries extends FreeChartSeries {
   static Logger logger = Logger.getLogger(ReportVariableSeries.class);
 
   public static final String P_VAR = "var";
+
   public static final String P_EVENT = "event";
-  
+
+  /**
+   * @uml.property name="varName"
+   */
   protected String varName;
+
+  /**
+   * @uml.property name="eventClass"
+   */
   protected Class eventClass;
 
   public ReportVariableSeries() {
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    
+
     varName = parameters.getString(base.push(P_VAR));
-    if (varName == null || varName.length() == 0)
-      logger.error("Name of a ReportVariable must be specified for ReportVariableSeries!");
-    
-    if (getName() == null || getName().length() == 0)
+    if ( varName == null || varName.length() == 0 )
+      logger
+          .error("Name of a ReportVariable must be specified for ReportVariableSeries!");
+
+    if ( getName() == null || getName().length() == 0 )
       setName(varName);
-    
-    if (getSeries() == null) {
+
+    if ( getSeries() == null ) {
       series = new TimeSeries(getName(), Millisecond.class);
     }
-    
-    if (getDataset() == null) {
+
+    if ( getDataset() == null ) {
       dataset = createDataset(series);
     }
-    
+
     try {
-      eventClass = (Class) parameters.getClassForParameter(base.push(P_EVENT), null, AuctionEvent.class);
-    } catch (ParamClassLoadException e) {
+      eventClass = (Class) parameters.getClassForParameter(base.push(P_EVENT),
+          null, AuctionEvent.class);
+    } catch ( ParamClassLoadException e ) {
       eventClass = null;
     }
   }
@@ -94,14 +110,14 @@ public class ReportVariableSeries extends FreeChartSeries {
   /**
    * @param event
    */
-  public void eventOccurred(AuctionEvent event) {
-    if (eventClass == null || eventClass.isInstance(event)) {
+  public void eventOccurred( AuctionEvent event ) {
+    if ( eventClass == null || eventClass.isInstance(event) ) {
       TimePeriodValue tpValue = (TimePeriodValue) ReportVariableBoard
           .getInstance().getValue(varName);
-      if (tpValue != null) {
-        if (getSeries() instanceof TimeSeries) {
-          ((TimeSeries)getSeries()).addOrUpdate((RegularTimePeriod) tpValue.getPeriod(), tpValue
-              .getValue());
+      if ( tpValue != null ) {
+        if ( getSeries() instanceof TimeSeries ) {
+          ((TimeSeries) getSeries()).addOrUpdate((RegularTimePeriod) tpValue
+              .getPeriod(), tpValue.getValue());
         }
       }
     }
@@ -110,19 +126,19 @@ public class ReportVariableSeries extends FreeChartSeries {
   /**
    * @param event
    */
-  public void shoutPlaced(ShoutPlacedEvent event) {
+  public void shoutPlaced( ShoutPlacedEvent event ) {
   }
 
   /**
    * @param event
    */
-  public void transactionExecuted(TransactionExecutedEvent event) {
+  public void transactionExecuted( TransactionExecutedEvent event ) {
   }
 
   /**
    * @param event
    */
-  public void roundClosed(RoundClosedEvent event) {
+  public void roundClosed( RoundClosedEvent event ) {
   }
 
 }

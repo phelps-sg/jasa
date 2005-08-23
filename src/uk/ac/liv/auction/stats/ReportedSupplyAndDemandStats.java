@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
@@ -26,11 +25,11 @@ import java.util.*;
 import org.apache.log4j.Logger;
 
 /**
- * A class to calculate the supply and demand curves and write them
- * to the specified <code>DataWriter</code>s.  This can be used to log
- * data to <code>DataSeriesWriter</code>s, which can then be viewed
- * in a JSci graph or a swing table.
- *
+ * A class to calculate the supply and demand curves and write them to the
+ * specified <code>DataWriter</code>s. This can be used to log data to
+ * <code>DataSeriesWriter</code>s, which can then be viewed in a JSci graph
+ * or a swing table.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -39,25 +38,28 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 
   /**
    * The sorted list of agent's truthful bids (ie buyers' private values).
+   * 
+   * @uml.property name="bids"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.core.Shout"
    */
   protected ArrayList bids = new ArrayList();
 
   /**
    * The sorted list of agents' truthful asks (ie sellers' private values).
+   * 
+   * @uml.property name="asks"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.core.Shout"
    */
   protected ArrayList asks = new ArrayList();
 
-
   static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
 
-
   public ReportedSupplyAndDemandStats( RoundRobinAuction auction,
-      								DataWriter supplyStats,
-      								DataWriter demandStats ) {
+      DataWriter supplyStats, DataWriter demandStats ) {
     super(auction, supplyStats, demandStats);
   }
-  
-
 
   public void writeSupplyStats() {
     writeStats(supplyStats, asks, new AscendingShoutComparator());
@@ -67,9 +69,8 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
     writeStats(demandStats, bids, new DescendingShoutComparator());
   }
 
-
   protected void enumerateTruthfulShout( Shout truthfulShout ) {
-    //super.enumerateTruthfulShout(truthfulShout);
+    // super.enumerateTruthfulShout(truthfulShout);
     AbstractTradingAgent agent = (AbstractTradingAgent) truthfulShout
         .getAgent();
     Shout actualShout = agent.getCurrentShout();
@@ -88,10 +89,9 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
     asks.clear();
     bids.clear();
   }
-  
+
   public Map getVariables() {
     return new HashMap();
   }
-
 
 }

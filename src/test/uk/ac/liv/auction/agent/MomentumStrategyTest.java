@@ -28,75 +28,84 @@ import junit.framework.TestSuite;
 
 public class MomentumStrategyTest extends TestCase {
 
+  /**
+   * @uml.property name="testTrader"
+   * @uml.associationEnd
+   */
   MockTrader testTrader;
-  
+
+  /**
+   * @uml.property name="testStrategy"
+   * @uml.associationEnd
+   */
   MockMomentumStrategy testStrategy;
-  
+
+  /**
+   * @uml.property name="pRIV_VALUE"
+   */
   protected final double PRIV_VALUE = 100;
- 
-  
+
   public MomentumStrategyTest( String arg0 ) {
     super(arg0);
   }
-  
+
   public void setUp() {
     testStrategy = new MockMomentumStrategy();
     testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, true);
     testTrader.setStrategy(testStrategy);
     testStrategy.setAgent(testTrader);
   }
-  
+
   public void testZeroTargetMargin() {
     double margin = testStrategy.targetMargin(PRIV_VALUE);
     assertTrue(margin == 0);
   }
-  
+
   public void testBuyerMargin() {
     testTrader.setIsSeller(false);
     double margin = testStrategy.targetMargin(PRIV_VALUE + 10);
     assertTrue(margin == 10 / PRIV_VALUE);
   }
-  
+
   public void testSellerMargin() {
     testTrader.setIsSeller(true);
     double margin = testStrategy.targetMargin(PRIV_VALUE - 10);
     assertTrue(margin == 10 / PRIV_VALUE);
   }
-  
+
   public void testClipping() {
-    
+
     double margin = -1;
-    
+
     testTrader.setIsSeller(false);
     margin = testStrategy.targetMargin(PRIV_VALUE - 10);
-    assertTrue( margin >= 0 );
-    
+    assertTrue(margin >= 0);
+
     testTrader.setIsSeller(true);
     margin = testStrategy.targetMargin(PRIV_VALUE + 10);
-    assertTrue( margin >= 0 );
+    assertTrue(margin >= 0);
   }
 
-  
-  public static void main ( String[] args) {
+  public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
   }
 
-  public static Test suite () {
+  public static Test suite() {
     return new TestSuite(MomentumStrategyTest.class);
   }
 }
 
 class MockMomentumStrategy extends MomentumStrategy {
-   
+
   protected void adjustMargin() {
     // For a mock strategy do nothing
   }
-  
+
   /**
    * A publically accessible tagetMargin() method.
    */
   public double targetMargin( double price ) {
     return super.targetMargin(price);
   }
-  
+
 }

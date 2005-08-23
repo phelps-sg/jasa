@@ -29,7 +29,7 @@ import uk.ac.liv.util.CummulativeDistribution;
 
 import uk.ac.liv.prng.*;
 
-//import edu.cornell.lassp.houle.RngPack.RandomElement;
+// import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import cern.jet.random.engine.RandomSeedGenerator;
 
@@ -38,26 +38,37 @@ import java.util.*;
 import org.apache.log4j.*;
 
 /**
- *
+ * 
  * Superclass for tests based on
- *
- * "Market Power and Efficiency in a Computational Electricity Market
- * with Discriminatory Double-Auction Pricing"
- * <br>
- * Nicolaisen, Petrov, and Tesfatsion
- * <i>IEEE Transactions on Evolutionary Computation, Vol. 5, No. 5. 2001</I>
+ * 
+ * "Market Power and Efficiency in a Computational Electricity Market with
+ * Discriminatory Double-Auction Pricing" <br>
+ * Nicolaisen, Petrov, and Tesfatsion <i>IEEE Transactions on Evolutionary
+ * Computation, Vol. 5, No. 5. 2001</I>
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public abstract class ElectricityTest extends TestCase {
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   protected Auctioneer auctioneer;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   protected RandomRobinAuction auction;
 
+  /**
+   * @uml.property name="stats"
+   * @uml.associationEnd
+   */
   protected ElectricityStats stats;
 
   protected static double buyerValues[] = { 37, 17, 12 };
@@ -66,21 +77,61 @@ public abstract class ElectricityTest extends TestCase {
 
   protected static long seeds[] = null;
 
-  protected CummulativeDistribution mPB, mPS, eA;
+  /**
+   * @uml.property name="mPB"
+   * @uml.associationEnd
+   */
+  protected CummulativeDistribution mPB;
 
-  protected int ns, nb, cs, cb;
-  
+  /**
+   * @uml.property name="mPS"
+   * @uml.associationEnd
+   */
+  protected CummulativeDistribution mPS;
+
+  /**
+   * @uml.property name="eA"
+   * @uml.associationEnd
+   */
+  protected CummulativeDistribution eA;
+
+  /**
+   * @uml.property name="ns"
+   */
+  protected int ns;
+
+  /**
+   * @uml.property name="nb"
+   */
+  protected int nb;
+
+  /**
+   * @uml.property name="cs"
+   */
+  protected int cs;
+
+  /**
+   * @uml.property name="cb"
+   */
+  protected int cb;
+
   static final int ITERATIONS = 100;
+
   static final int MAX_ROUNDS = 1000;
+
   static final int K = 40;
+
   static final double R = 0.10;
+
   static final double E = 0.20;
+
   static final double S1 = 9;
+
   static final double MIN_PRIVATE_VALUE = 30;
+
   static final double MAX_PRIVATE_VALUE = 100;
 
   static Logger logger = Logger.getLogger(ElectricityTest.class);
-
 
   public ElectricityTest( String name ) {
     super(name);
@@ -89,19 +140,20 @@ public abstract class ElectricityTest extends TestCase {
 
   public void runExperiment() {
     System.out.println("\nAttempting to replicate NPT results with");
-    System.out.println("NS = " + ns + " NB = " + nb + " CS = " + cs + " CB = " + cb);
+    System.out.println("NS = " + ns + " NB = " + nb + " CS = " + cs + " CB = "
+        + cb);
     System.out.println("R = " + R + " E = " + E + " K = " + K + " S1 = " + S1);
     System.out.println("with " + ITERATIONS + " iterations and " + MAX_ROUNDS
-                       + " auction rounds.");
+        + " auction rounds.");
     initStats();
-    for( int i=0; i<ITERATIONS; i++ ) {
+    for ( int i = 0; i < ITERATIONS; i++ ) {
       System.out.println("Iteration " + i);
       auction.reset();
       GlobalPRNG.initialiseWithSeed(seeds[i]);
       auction.run();
       stats.calculate();
       if ( stats.equilibriaExists() ) {
-        updateStats();        
+        updateStats();
         System.out.println("EA = " + stats.getEA());
       } else {
         System.out.println("no equilibrium price");
@@ -132,7 +184,8 @@ public abstract class ElectricityTest extends TestCase {
     this.cb = cb;
     auction = new RandomRobinAuction("NPTReplicationTest");
     auctioneer = new ClearingHouseAuctioneer(auction);
-    ((AbstractAuctioneer)auctioneer).setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+    ((AbstractAuctioneer) auctioneer)
+        .setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(MAX_ROUNDS);
     registerTraders(auction, true, ns, cs, sellerValues);
@@ -140,17 +193,16 @@ public abstract class ElectricityTest extends TestCase {
     stats = new ElectricityStats(auction);
   }
 
-  public void registerTraders( RoundRobinAuction auction,
-                                     boolean areSellers, int num, int capacity,
-                                     double[] values ) {
-   for( int i=0; i<num; i++ ) {
-     double value = values[i % values.length];
-     ElectricityTrader agent =
-       new ElectricityTrader(capacity, value, 0, areSellers);
-     assignStrategy(agent);
-     assignValuer(agent);
-     auction.register(agent);
-   }
+  public void registerTraders( RoundRobinAuction auction, boolean areSellers,
+      int num, int capacity, double[] values ) {
+    for ( int i = 0; i < num; i++ ) {
+      double value = values[i % values.length];
+      ElectricityTrader agent = new ElectricityTrader(capacity, value, 0,
+          areSellers);
+      assignStrategy(agent);
+      assignValuer(agent);
+      auction.register(agent);
+    }
   }
 
   public void generatePRNGseeds() {
@@ -163,10 +215,10 @@ public abstract class ElectricityTest extends TestCase {
     logger.info(this + ": generating PRNG seeds using default seed.. ");
 
     seeds = new long[ITERATIONS];
-    
+
     RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
-    for( int i=0; i<ITERATIONS; i++ ) {      
-    	seeds[i] = (long) seedGenerator.nextSeed();      
+    for ( int i = 0; i < ITERATIONS; i++ ) {
+      seeds[i] = (long) seedGenerator.nextSeed();
     }
     logger.info("done.");
   }
@@ -179,12 +231,11 @@ public abstract class ElectricityTest extends TestCase {
     agent.setStrategy(strategy);
     agent.reset();
   }
-  
+
   public void assignValuer( ElectricityTrader agent ) {
     // Stick with default fixed valuation
   }
 
-  
   public void traderReport() {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {

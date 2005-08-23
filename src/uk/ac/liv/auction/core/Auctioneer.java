@@ -19,35 +19,29 @@ import java.util.Iterator;
 
 import uk.ac.liv.auction.event.AuctionEventListener;
 
-
 /**
- * <p>
- * Classes implementing this interface can serve the role
- * of auctioneer in a round-robin auction.
- * </p>
- *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public interface Auctioneer
-    extends QuoteProvider, AuctionEventListener {
+public interface Auctioneer extends QuoteProvider, AuctionEventListener {
 
   /**
-   * Perform the clearing operation for the auction;
-   * match buyers with sellers and inform the auction
-   * of any deals.
+   * Perform the clearing operation for the auction; match buyers with sellers
+   * and inform the auction of any deals.
    */
   public void clear();
 
   /**
-   * Code for handling a new shout in the auction.
-   * Subclasses should override this method if they wish
-   * to provide different handling for different auction rules.
-   *
-   *  @param shout  The new shout to be processed
-   *
-   *  @exception IllegalShoutException  Thrown if the shout is invalid in some way.
+   * Code for handling a new shout in the auction. Subclasses should override
+   * this method if they wish to provide different handling for different
+   * auction rules.
+   * 
+   * @param shout
+   *          The new shout to be processed
+   * 
+   * @exception IllegalShoutException
+   *              Thrown if the shout is invalid in some way.
    */
   public void newShout( Shout shout ) throws IllegalShoutException;
 
@@ -63,16 +57,21 @@ public interface Auctioneer
 
   /**
    * Specify which auction we are the auctioneer for.
+   * 
+   * @uml.property name="auction"
    */
   public void setAuction( Auction auction );
 
   /**
    * Find out which auction we are the auctioneer for.
+   * 
+   * @uml.property name="auction"
+   * @uml.associationEnd inverse="auctioneer:uk.ac.liv.auction.core.Auction"
    */
   public Auction getAuction();
-  
+
   public Iterator askIterator();
-  
+
   public Iterator bidIterator();
 
   /**
@@ -85,5 +84,5 @@ public interface Auctioneer
   public void endOfAuctionProcessing();
 
   public void endOfDayProcessing();
-  
+
 }

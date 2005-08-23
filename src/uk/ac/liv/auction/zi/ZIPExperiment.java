@@ -33,58 +33,112 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 /**
- * An implementation of Cliff's symetric supply and demand ZIP experiment.
- * See:
- *
+ * An implementation of Cliff's symetric supply and demand ZIP experiment. See:
+ * 
  * <p>
- * "Minimal Intelligence Agents for Bargaining Behaviours in
- * Market-based Environments" Dave Cliff 1997
+ * "Minimal Intelligence Agents for Bargaining Behaviours in Market-based
+ * Environments" Dave Cliff 1997
  * </p>
- *
- * Work is currently in progress to attempt a full replication of the
- * results in the above paper.  Currently JASA is not able to replicate
- * these results.
- *
+ * 
+ * Work is currently in progress to attempt a full replication of the results in
+ * the above paper. Currently JASA is not able to replicate these results.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class ZIPExperiment extends MarketSimulation {
 
+  /**
+   * @uml.property name="marketData"
+   * @uml.associationEnd
+   */
   protected DailyStatsReport marketData;
 
+  /**
+   * @uml.property name="stats"
+   * @uml.associationEnd readOnly="true"
+   */
   protected AuctionReport stats;
 
+  /**
+   * @uml.property name="gatherStats"
+   */
   protected boolean gatherStats;
 
+  /**
+   * @uml.property name="prngSeed"
+   */
   protected long prngSeed;
 
+  /**
+   * @uml.property name="tradeEntitlement"
+   */
   protected int tradeEntitlement = 1;
 
+  /**
+   * @uml.property name="privValueRangeMin"
+   */
   protected double privValueRangeMin = 75;
 
+  /**
+   * @uml.property name="privValueIncrement"
+   */
   protected double privValueIncrement = 25;
 
+  /**
+   * @uml.property name="numDays"
+   */
   protected int numDays = 10;
 
+  /**
+   * @uml.property name="numSellers"
+   */
   protected int numSellers = 11;
 
+  /**
+   * @uml.property name="numBuyers"
+   */
   protected int numBuyers = 11;
 
+  /**
+   * @uml.property name="numSamples"
+   */
   protected int numSamples = 50;
 
-  protected CummulativeDistribution[] transPriceMean, transPriceStdDev;
+  /**
+   * @uml.property name="transPriceMean"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
+  protected CummulativeDistribution[] transPriceMean;
 
+  /**
+   * @uml.property name="transPriceStdDev"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
+  protected CummulativeDistribution[] transPriceStdDev;
+
+  /**
+   * @uml.property name="console"
+   */
   protected boolean console = false;
 
   public static final String P_SIMULATION = "simulation";
+
   public static final String P_STATS = "stats";
+
   public static final String P_GATHER_STATS = "gatherstats";
+
   public static final String P_PRIVVALUERANGEMIN = "privvaluerangemin";
+
   public static final String P_PRIVVALUEINCREMENT = "increment";
+
   public static final String P_NUMBUYERS = "numbuyers";
+
   public static final String P_NUMSELLERS = "numsellers";
+
   public static final String P_DAYS = "days";
+
   public static final String P_NUMSAMPLES = "samples";
 
   static Logger logger = Logger.getLogger(ZIPExperiment.class);
@@ -99,7 +153,7 @@ public class ZIPExperiment extends MarketSimulation {
 
       String fileName = args[0];
       File file = new File(fileName);
-      if ( ! file.canRead() ) {
+      if ( !file.canRead() ) {
         fatalError("Cannot read parameter file " + fileName);
       }
 
@@ -119,25 +173,20 @@ public class ZIPExperiment extends MarketSimulation {
     }
   }
 
-
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     super.setup(parameters, base);
 
-    gatherStats =
-        parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
+    gatherStats = parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
 
+    privValueRangeMin = parameters.getDoubleWithDefault(base
+        .push(P_PRIVVALUERANGEMIN), null, privValueRangeMin);
 
-    privValueRangeMin =
-        parameters.getDoubleWithDefault(base.push(P_PRIVVALUERANGEMIN),
-                                         null, privValueRangeMin);
+    privValueIncrement = parameters.getDoubleWithDefault(base
+        .push(P_PRIVVALUEINCREMENT), null, privValueIncrement);
 
-    privValueIncrement =
-        parameters.getDoubleWithDefault(base.push(P_PRIVVALUEINCREMENT),
-                                         null, privValueIncrement);
-
-    numSamples =
-        parameters.getIntWithDefault(base.push(P_NUMSAMPLES), null, numSamples);
+    numSamples = parameters.getIntWithDefault(base.push(P_NUMSAMPLES), null,
+        numSamples);
 
     marketData = new DailyStatsReport();
     auction.addReport(marketData);
@@ -158,24 +207,25 @@ public class ZIPExperiment extends MarketSimulation {
 
   }
 
-
   public void run() {
     transPriceMean = new CummulativeDistribution[numDays];
     transPriceStdDev = new CummulativeDistribution[numDays];
 
-    for( int day=0; day<numDays; day++ ) {
-      transPriceMean[day] = new CummulativeDistribution("Mean of mean transaction price for day " + day);
-      transPriceStdDev[day] = new CummulativeDistribution("Mean of stddev of transaction price for day " + day);
+    for ( int day = 0; day < numDays; day++ ) {
+      transPriceMean[day] = new CummulativeDistribution(
+          "Mean of mean transaction price for day " + day);
+      transPriceStdDev[day] = new CummulativeDistribution(
+          "Mean of stddev of transaction price for day " + day);
     }
 
-    for( int sample=0; sample<numSamples; sample++ ) {
+    for ( int sample = 0; sample < numSamples; sample++ ) {
 
       logger.info("\nSample " + sample + "... ");
       initialiseAgents();
       auction.run();
       logger.debug("Auction terminated at round " + auction.getRound());
 
-      for( int day=0; day<numDays; day++ ) {
+      for ( int day = 0; day < numDays; day++ ) {
         CummulativeDistribution stats = marketData.getTransPriceStats(day);
         if ( stats != null ) {
           transPriceMean[day].newData(stats.getMean());
@@ -190,24 +240,21 @@ public class ZIPExperiment extends MarketSimulation {
     }
   }
 
-
   public void report() {
-    for( int day=0; day<numDays; day++ ) {
-      logger.info("Day " + day + " mean of mean tr price: " +
-                    transPriceMean[day].getMean());
+    for ( int day = 0; day < numDays; day++ ) {
+      logger.info("Day " + day + " mean of mean tr price: "
+          + transPriceMean[day].getMean());
     }
-    for( int day=0; day<numDays; day++ ) {
-      logger.info("Day " + day + " mean of stdev of tr price: " +
-                    transPriceStdDev[day].getMean());
+    for ( int day = 0; day < numDays; day++ ) {
+      logger.info("Day " + day + " mean of stdev of tr price: "
+          + transPriceStdDev[day].getMean());
     }
   }
-
 
   protected static void fatalError( String message ) {
     System.err.println(message);
     System.exit(1);
   }
-
 
   protected void initialiseAgents() {
     double momentum = 0.1 + GlobalPRNG.getInstance().raw() * 0.4;
@@ -215,12 +262,11 @@ public class ZIPExperiment extends MarketSimulation {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
-      WidrowHoffLearnerWithMomentum l =
-          (WidrowHoffLearnerWithMomentum)
-            ((AdaptiveStrategy) trader.getStrategy()).getLearner();
-      l.setLearningRate(learningRate);      
+      WidrowHoffLearnerWithMomentum l = (WidrowHoffLearnerWithMomentum) ((AdaptiveStrategy) trader
+          .getStrategy()).getLearner();
+      l.setLearningRate(learningRate);
       l.setMomentum(momentum);
-//      l.randomInitialise();
+      // l.randomInitialise();
       trader.reset();
     }
   }
@@ -231,7 +277,7 @@ public class ZIPExperiment extends MarketSimulation {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
-      if (trader.isBuyer()) {
+      if ( trader.isBuyer() ) {
         logger.debug("Setting priv value of " + trader + " to " + buyerValue);
         trader.setPrivateValue(buyerValue);
         buyerValue += privValueIncrement;

@@ -18,15 +18,19 @@ package uk.ac.liv.util;
 import java.util.Iterator;
 
 /**
- * An iterator that destructively iterates over a PriorityQueue,
- * that is each item that is returned is removed from the top of the heap.
- *
+ * An iterator that destructively iterates over a PriorityQueue, that is each
+ * item that is returned is removed from the top of the heap.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class QueueDisassembler implements Iterator {
 
+  /**
+   * @uml.property name="queue"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   private PriorityQueue queue;
 
   public QueueDisassembler( PriorityQueue queue ) {
@@ -34,7 +38,7 @@ public class QueueDisassembler implements Iterator {
   }
 
   public boolean hasNext() {
-    return ! queue.isEmpty();
+    return !queue.isEmpty();
   }
 
   public Object next() {

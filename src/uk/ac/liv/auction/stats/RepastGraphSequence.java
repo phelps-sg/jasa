@@ -22,21 +22,27 @@ import uk.ac.liv.util.io.DataWriter;
 
 /*
  * @author Steve Phelps
+ * 
  * @version $Revision$
  */
 
 public class RepastGraphSequence implements Sequence, DataWriter {
 
+  /**
+   * @uml.property name="lastValue"
+   */
   protected double lastValue;
-  
+
+  /**
+   * @uml.property name="name"
+   */
   protected String name;
-  
+
   public RepastGraphSequence( String name ) {
     this.name = name;
   }
-  
-  
-  public double getSValue () {
+
+  public double getSValue() {
     if ( Double.isInfinite(lastValue) || Double.isNaN(lastValue) ) {
       return 0;
     } else {
@@ -44,51 +50,49 @@ public class RepastGraphSequence implements Sequence, DataWriter {
     }
   }
 
-  
-  public void newData ( double data ) {
+  public void newData( double data ) {
     lastValue = data;
   }
-  
+
+  /**
+   * @uml.property name="name"
+   */
   public String getName() {
     return name;
   }
-  
-  public void close () {    
+
+  public void close() {
   }
-  
-  
-  public void flush () {
+
+  public void flush() {
   }
-  
-  
-  public void newData ( boolean data ) {
-   
+
+  public void newData( boolean data ) {
+
   }
-  
-  
-  public void newData ( float data ) {
+
+  public void newData( float data ) {
     newData(data);
   }
-  
-  
-  public void newData ( int data ) {
-    
+
+  public void newData( int data ) {
+
   }
-  
-  public void newData ( Iterator i ) {
-     
+
+  public void newData( Iterator i ) {
+
   }
-  
-  public void newData ( long data ) {
-    
+
+  public void newData( long data ) {
+
   }
-  
-  public void newData ( Object data ) {
+
+  public void newData( Object data ) {
     // TODO Auto-generated method stub
 
   }
-  
-  public void newData ( Object[] data ) {
+
+  public void newData( Object[] data ) {
     // TODO Auto-generated method stub
 
   }

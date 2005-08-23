@@ -30,67 +30,78 @@ import uk.ac.liv.util.io.DataWriter;
  */
 
 public class RepastGraphWriter implements DataWriter, Parameterizable {
-  
+
+  /**
+   * @uml.property name="graphSequence"
+   * @uml.associationEnd
+   */
   protected RepastGraphSequence graphSequence;
-  
+
+  /**
+   * @uml.property name="name"
+   */
   protected String name;
-  
+
   public static final String P_NAME = "name";
-  
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
     name = parameters.getString(base.push(P_NAME));
     graphSequence = new RepastGraphSequence(name);
     RepastMarketSimulation.getModelSingleton().addGraphSequence(graphSequence);
   }
-  
+
   public void close() {
     // TODO Auto-generated method stub
 
   }
-  
+
   public void flush() {
     // TODO Auto-generated method stub
 
   }
-  
+
   public void newData( boolean data ) {
     // TODO Auto-generated method stub
 
   }
-  
+
   public void newData( double data ) {
     graphSequence.newData(data);
   }
-  
+
   public void newData( float data ) {
     // TODO Auto-generated method stub
 
   }
-  
+
   public void newData( int data ) {
     // TODO Auto-generated method stub
 
   }
-  
+
   public void newData( Iterator i ) {
     // TODO Auto-generated method stub
 
   }
-  
+
   public void newData( long data ) {
     // TODO Auto-generated method stub
 
   }
+
   public void newData( Object data ) {
     // TODO Auto-generated method stub
 
   }
-  
+
   public void newData( Object[] data ) {
     // TODO Auto-generated method stub
 
   }
-  
+
+  /**
+   * @uml.property name="graphSequence"
+   */
   public RepastGraphSequence getGraphSequence() {
     return graphSequence;
   }

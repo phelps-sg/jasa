@@ -28,34 +28,38 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * Class for "Zero Intelligence" (ZI) trader agents.
- * Agents of this type have a finite trade entitlement, which determines
- * how many units they are able to trade in a given trading period.
- * ZITraderAgents become inactive once their intitial trade
- * entitlement is used up, and their trade entitlement is restored
- * at the end of each day.
+ * Class for "Zero Intelligence" (ZI) trader agents. Agents of this type have a
+ * finite trade entitlement, which determines how many units they are able to
+ * trade in a given trading period. ZITraderAgents become inactive once their
+ * intitial trade entitlement is used up, and their trade entitlement is
+ * restored at the end of each day.
  * </p>
  * See:
  * </p>
  * <p>
- * "Minimal Intelligence Agents for Bargaining Behaviours in
- * Market-based Environments" Dave Cliff 1997.
+ * "Minimal Intelligence Agents for Bargaining Behaviours in Market-based
+ * Environments" Dave Cliff 1997.
  * </p>
  * <p>
- * and "An experimental study of competitive market behaviour",
- * Smith, V.L. 1962 in The Journal of Political Economy, vol 70.
+ * and "An experimental study of competitive market behaviour", Smith, V.L. 1962
+ * in The Journal of Political Economy, vol 70.
  * </p>
- *
- * <p><b>Parameters</b><br></p>
+ * 
+ * <p>
+ * <b>Parameters</b><br>
+ * </p>
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.initialtradeentitlement</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.initialtradeentitlement</tt><br>
  * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of units of commodity that this agent is allowed to trade)</td><tr>
- *
+ * <td valign=top>(the number of units of commodity that this agent is allowed
+ * to trade)</td>
+ * <tr>
+ * 
  * </table>
- *
-
+ * 
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -63,28 +67,41 @@ import org.apache.log4j.Logger;
 public class ZITraderAgent extends AbstractTradingAgent implements Serializable {
 
   /**
-   * The number of units this agent is entitlted to trade in this trading period.
+   * The number of units this agent is entitlted to trade in this trading
+   * period.
+   * 
+   * @uml.property name="tradeEntitlement"
    */
   protected int tradeEntitlement;
 
   /**
    * The initial value of tradeEntitlement
+   * 
+   * @uml.property name="initialTradeEntitlement"
    */
   protected int initialTradeEntitlement;
 
   /**
    * Flag indicating whether the last shout resulted in a transaction.
+   * 
+   * @uml.property name="lastShoutSuccessful"
    */
   protected boolean lastShoutSuccessful;
 
   /**
    * The number of units traded to date
+   * 
+   * @uml.property name="quantityTraded"
    */
   protected int quantityTraded = 0;
-  
+
+  /**
+   * @uml.property name="isActive"
+   */
   protected boolean isActive = true;
 
   public static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
+
   public static final String P_ACTIVATION_PROBABILITY = "activationprobability";
 
   static Logger logger = Logger.getLogger(ZITraderAgent.class);
@@ -94,39 +111,39 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
   }
 
   public ZITraderAgent( int stock, double funds, double privateValue,
-                          int tradeEntitlement, boolean isSeller ) {
+      int tradeEntitlement, boolean isSeller ) {
     super(stock, funds, privateValue, isSeller);
     this.initialTradeEntitlement = tradeEntitlement;
     initialise();
   }
 
-  public ZITraderAgent( double privateValue, int tradeEntitlement, boolean isSeller ) {
+  public ZITraderAgent( double privateValue, int tradeEntitlement,
+      boolean isSeller ) {
     this(0, 0, privateValue, tradeEntitlement, isSeller);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    
-    initialTradeEntitlement =
-        parameters.getInt(base.push(P_INITIAL_TRADE_ENTITLEMENT));
-    
+
+    initialTradeEntitlement = parameters.getInt(base
+        .push(P_INITIAL_TRADE_ENTITLEMENT));
+
     super.setup(parameters, base);
   }
-  
-  
-  public Object protoClone() {   
+
+  public Object protoClone() {
     try {
       ZITraderAgent clone = (ZITraderAgent) clone();
-    clone.reset();
-    return clone;
+      clone.reset();
+      return clone;
     } catch ( CloneNotSupportedException e ) {
       throw new Error(e);
     }
   }
-  
+
   public void requestShout( Auction auction ) {
     if ( tradeEntitlement <= 0 ) {
       isActive = false;
-    } 
+    }
     super.requestShout(auction);
   }
 
@@ -144,7 +161,7 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     super.endOfDay(event);
     tradeEntitlement = initialTradeEntitlement;
     isActive = true;
-    //quantityTraded = 0;
+    // quantityTraded = 0;
     lastShoutSuccessful = false;
     logger.debug("done.");
   }
@@ -152,24 +169,23 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
   public boolean active() {
     return isActive;
   }
-  
 
   /**
    * Default behaviour for winning ZI bidders is to purchase unconditionally.
    */
   public void informOfSeller( Auction auction, Shout winningShout,
-                                  TradingAgent seller,
-                                  double price, int quantity) {
+      TradingAgent seller, double price, int quantity ) {
     super.informOfSeller(auction, winningShout, seller, price, quantity);
     AbstractTradingAgent agent = (AbstractTradingAgent) seller;
     if ( price > valuer.determineValue(auction) ) {
-      logger.debug("Unprofitable transaction, price=" + price + ", shout=" + winningShout);
+      logger.debug("Unprofitable transaction, price=" + price + ", shout="
+          + winningShout);
     }
     purchaseFrom(auction, agent, quantity, price);
   }
 
   public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
-                             int quantity, double price ) {
+      int quantity, double price ) {
     tradeEntitlement--;
     quantityTraded += quantity;
     super.purchaseFrom(auction, seller, quantity, price);
@@ -182,29 +198,29 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     return super.deliver(auction, quantity, price);
   }
 
-
   public double equilibriumProfits( Auction auction, double equilibriumPrice,
-                                      int quantity ) {
+      int quantity ) {
     double surplus = 0;
     if ( isSeller ) {
       surplus = equilibriumPrice - getValuation(auction);
-    }
-    else {
+    } else {
       surplus = getValuation(auction) - equilibriumPrice;
     }
-    //TODO
-    if (surplus < 0) {
+    // TODO
+    if ( surplus < 0 ) {
       surplus = 0;
     }
     return auction.getDay() * initialTradeEntitlement * surplus;
   }
-
 
   public void sellUnits( Auction auction, int numUnits ) {
     stock -= numUnits;
     funds += numUnits * valuer.determineValue(auction);
   }
 
+  /**
+   * @uml.property name="quantityTraded"
+   */
   public int getQuantityTraded() {
     return quantityTraded;
   }
@@ -212,27 +228,39 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
   public int determineQuantity( Auction auction ) {
     return strategy.determineQuantity(auction);
   }
-  
 
+  /**
+   * @uml.property name="tradeEntitlement"
+   */
   public int getTradeEntitlement() {
     return tradeEntitlement;
   }
-  
+
+  /**
+   * @uml.property name="tradeEntitlement"
+   */
   public void setTradeEntitlement( int tradeEntitlement ) {
     this.tradeEntitlement = tradeEntitlement;
   }
-  
+
+  /**
+   * @uml.property name="initialTradeEntitlement"
+   */
   public int getInitialTradeEntitlement() {
     return initialTradeEntitlement;
   }
-  
+
+  /**
+   * @uml.property name="initialTradeEntitlement"
+   */
   public void setInitialTradeEntitlement( int initialTradeEntitlement ) {
     this.initialTradeEntitlement = initialTradeEntitlement;
   }
-  
-  public String toString() {
-    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller + " valuer:" + valuer + " strategy:" + strategy + " tradeEntitlement:" + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
-  }
 
+  public String toString() {
+    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller
+        + " valuer:" + valuer + " strategy:" + strategy + " tradeEntitlement:"
+        + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
+  }
 
 }

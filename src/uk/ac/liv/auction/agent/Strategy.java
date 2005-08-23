@@ -23,10 +23,10 @@ import uk.ac.liv.auction.event.AuctionEventListener;
 
 /**
  * <p>
- * Classes implementing this interface define trading strategies
- * for round-robin traders.
+ * Classes implementing this interface define trading strategies for round-robin
+ * traders.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -34,11 +34,13 @@ import uk.ac.liv.auction.event.AuctionEventListener;
 public interface Strategy extends Prototypeable, AuctionEventListener {
 
   /**
-   * Modify the trader's current shout according to the trading strategy
-   * being implemented.
-   *
-   * @param shout   The shout to be updated
-   * @param auction The auction in which this strategy is being employed
+   * Modify the trader's current shout according to the trading strategy being
+   * implemented.
+   * 
+   * @param shout
+   *          The shout to be updated
+   * @param auction
+   *          The auction in which this strategy is being employed
    * @return The new shout, or null if no shout is to be placed.
    */
   public Shout modifyShout( Shout shout, Auction auction );

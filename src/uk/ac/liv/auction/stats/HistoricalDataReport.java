@@ -18,6 +18,7 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.ShoutsNotVisibleException;
+
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
@@ -44,10 +45,10 @@ import org.apache.log4j.Logger;
  * is used by various different trading strategies.
  * </p>
  * <p>
- * Since GDStrategy uses this report to compute the number of shouts above or below
- * a certain price, which leads to slow simulation, SortedView and IncreasingQueryAccelerator 
- * are introduced to speed up GDStrategy's queries based on the pattern of prices of
- * concern.
+ * Since GDStrategy uses this report to compute the number of shouts above or
+ * below a certain price, which leads to slow simulation, SortedView and
+ * IncreasingQueryAccelerator are introduced to speed up GDStrategy's queries
+ * based on the pattern of prices of concern.
  * </p>
  * <p>
  * <b>Parameters </b> <br>
@@ -60,7 +61,7 @@ import org.apache.log4j.Logger;
  * 
  * </table>
  * 
-
+ * 
  * 
  * @author Steve Phelps
  * @version $Revision$
@@ -68,7 +69,7 @@ import org.apache.log4j.Logger;
 
 public class HistoricalDataReport extends AbstractAuctionReport implements
     Serializable, Resetable {
-  
+
   protected LinkedList asks = new LinkedList();
 
   protected LinkedList bids = new LinkedList();
@@ -88,17 +89,17 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   protected double lowestAskPrice;
 
   protected double highestBidPrice;
-  
+
   static final String P_MEMORYSIZE = "memorysize";
 
   static Logger logger = Logger.getLogger(HistoricalDataReport.class);
-  
+
   protected SortedView view;
+
   protected IncreasingQueryAccelerator accelerator;
-  
+
   public HistoricalDataReport() {
   }
-  
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null,
@@ -110,7 +111,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryAsks[i] = 0;
     }
     logger.debug("memorysize = " + memorySize);
-    
+
   }
 
   public void updateTransPriceLog( TransactionExecutedEvent event ) {
@@ -128,11 +129,12 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       }
       memoryBids[currentMemoryCell] = 0;
       memoryAsks[currentMemoryCell] = 0;
-//      acceptedShouts.clear();
+      // acceptedShouts.clear();
       markMatched(asks);
       markMatched(bids);
     }
-    if (view != null) view.reset();
+    if ( view != null )
+      view.reset();
   }
 
   public void initialise() {
@@ -145,7 +147,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryAsks[i] = 0;
     }
     initialisePriceRanges();
-    if (view != null) view.reset();
+    if ( view != null )
+      view.reset();
   }
 
   public void reset() {
@@ -153,7 +156,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public void updateShoutLog( ShoutPlacedEvent event ) {
-    
+
     Shout shout = event.getShout();
     addToSortedShouts(shout);
     if ( shout.isAsk() ) {
@@ -169,17 +172,19 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         highestBidPrice = shout.getPrice();
       }
     }
-    if (view != null) view.reset();
+    if ( view != null )
+      view.reset();
   }
 
   public void roundClosed( AuctionEvent event ) {
     markMatched(asks);
     markMatched(bids);
-    //    if ( getNumberOfTrades() > memorySize ) {
-    //   deleteOldShouts();
-    //}
+    // if ( getNumberOfTrades() > memorySize ) {
+    // deleteOldShouts();
+    // }
     initialisePriceRanges();
-    if (view != null) view.reset();
+    if ( view != null )
+      view.reset();
   }
 
   public void eventOccurred( AuctionEvent event ) {
@@ -236,13 +241,13 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
    * 
    * @param shouts
    * @param price
-   *        the sign of price controls whether higher shouts or lower shouts are needed
+   *          the sign of price controls whether higher shouts or lower shouts
+   *          are needed
    * @param accepted
-   * @return
-   *        the number of shouts that meet the specified condition
+   * @return the number of shouts that meet the specified condition
    */
   public int getNumberOfShouts( List shouts, double price, boolean accepted ) {
-        
+
     int numShouts = 0;
     Iterator i = shouts.iterator();
     while ( i.hasNext() ) {
@@ -258,7 +263,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         }
       }
     }
-    
+
     return numShouts;
   }
 
@@ -273,7 +278,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     highestBidPrice = Double.NEGATIVE_INFINITY;
     lowestAskPrice = Double.POSITIVE_INFINITY;
   }
-  
+
   protected void markMatched( List shouts ) {
     try {
       Iterator i = shouts.iterator();
@@ -295,65 +300,69 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     return "(" + getClass() + " auction:" + auction + " memorySize:"
         + memorySize + " bids:" + bids + " asks:" + asks + ")";
   }
-  
+
   public SortedView getSortedView() {
-  	if (view == null) {
-  		view = new SortedView();
-  	}
-  	
-  	return view;
-  }
-  
-  public void disableSortedView() {
-  	disableIncreasingQueryAccelerator();
-  	view = null;  	
-  }
-  
-  public IncreasingQueryAccelerator getIncreasingQueryAccelerator() {
-  	if (accelerator == null)
-  		accelerator = new IncreasingQueryAccelerator(getSortedView());
-  	
-  	return accelerator;
-  }
-  
-  public void disableIncreasingQueryAccelerator() {
-  	accelerator = null;
+    if ( view == null ) {
+      view = new SortedView();
+    }
+
+    return view;
   }
 
-  
+  public void disableSortedView() {
+    disableIncreasingQueryAccelerator();
+    view = null;
+  }
+
+  public IncreasingQueryAccelerator getIncreasingQueryAccelerator() {
+    if ( accelerator == null )
+      accelerator = new IncreasingQueryAccelerator(getSortedView());
+
+    return accelerator;
+  }
+
+  public void disableIncreasingQueryAccelerator() {
+    accelerator = null;
+  }
+
   /**
    * a class providing sorted lists of shouts.
-   *
+   * 
    */
   public class SortedView extends Observable {
 
     protected TreeList sortedAsks;
+
     protected TreeList sortedBids;
+
     protected TreeList sortedAcceptedAsks;
+
     protected TreeList sortedAcceptedBids;
+
     protected TreeList sortedRejectedAsks;
+
     protected TreeList sortedRejectedBids;
 
     public SortedView() {
-    	initialize();
+      initialize();
     }
-    
+
     public void initialize() {
-      
+
       sortedAsks = new SortedTreeList("sortedAsks", asks);
       sortedBids = new SortedTreeList("sortedBids", bids);
-      
+
       sortedAcceptedAsks = new SortedTreeList("sortedAcceptedAsks");
       sortedAcceptedBids = new SortedTreeList("sortedAcceptedBids");
       sortedRejectedAsks = new SortedTreeList("sortedRejectedAsks");
       sortedRejectedBids = new SortedTreeList("sortedRejectedBids");
-      
+
       Shout s;
-      
+
       Iterator i = asks.iterator();
-      while (i.hasNext()) {
+      while ( i.hasNext() ) {
         s = (Shout) i.next();
-        if (acceptedShouts.contains(s)) {
+        if ( acceptedShouts.contains(s) ) {
           sortedAcceptedAsks.add(s);
         } else {
           sortedRejectedAsks.add(s);
@@ -361,332 +370,344 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       }
 
       i = bids.iterator();
-      while (i.hasNext()) {
+      while ( i.hasNext() ) {
         s = (Shout) i.next();
-        if (acceptedShouts.contains(s)) {
+        if ( acceptedShouts.contains(s) ) {
           sortedAcceptedBids.add(s);
         } else {
           sortedRejectedBids.add(s);
         }
       }
-      
+
       setChanged();
       notifyObservers();
     }
-    
+
     public void reset() {
-    	initialize();
+      initialize();
     }
-    
+
     public TreeList getSortedAsks() {
-    	return sortedAsks;
+      return sortedAsks;
     }
-    
+
     public TreeList getSortedBids() {
-    	return sortedBids;
+      return sortedBids;
     }
-    
+
     public TreeList getSortedAcceptedAsks() {
-    	return sortedAcceptedAsks;
+      return sortedAcceptedAsks;
     }
-    
+
     public TreeList getSortedAcceptedBids() {
-    	return sortedAcceptedBids;
+      return sortedAcceptedBids;
     }
-    
+
     public TreeList getSortedRejectedAsks() {
-    	return sortedRejectedAsks;
+      return sortedRejectedAsks;
     }
-    
+
     public TreeList getSortedRejectedBids() {
-    	return sortedRejectedBids;
+      return sortedRejectedBids;
     }
 
   }
-  
 
   /**
-   * a class to speed up queries from GDStrategy regarding the number of shouts above or below a 
-   * certain price. It is designed based on the pattern of increasing prices queried about.
+   * a class to speed up queries from GDStrategy regarding the number of shouts
+   * above or below a certain price. It is designed based on the pattern of
+   * increasing prices queried about.
    * 
    */
   public class IncreasingQueryAccelerator implements Observer {
-  	
+
     protected ListIterator asksI;
+
     protected ListIterator bidsI;
+
     protected ListIterator acceptedAsksI;
+
     protected ListIterator acceptedBidsI;
+
     protected ListIterator rejectedAsksI;
+
     protected ListIterator rejectedBidsI;
 
     protected int numOfAsksBelow;
+
     protected int numOfBidsAbove;
+
     protected int numOfAcceptedAsksAbove;
+
     protected int numOfAcceptedBidsBelow;
+
     protected int numOfRejectedAsksBelow;
+
     protected int numOfRejectedBidsAbove;
 
     protected double priceForAsksBelow;
+
     protected double priceForBidsAbove;
+
     protected double priceForAcceptedAsksAbove;
+
     protected double priceForAcceptedBidsBelow;
+
     protected double priceForRejectedAsksBelow;
+
     protected double priceForRejectedBidsAbove;
-    
-		private SortedView view;
-  	
-  	public IncreasingQueryAccelerator(SortedView view) {
-  		this.view = view;
-  		view.addObserver(this);
-  		reset();  		
-  	}
 
-  	/*
-  	 * resets all the iterations and counting variables when the underlying sorted
-  	 * view changes. 
-  	 */
-		public void update(Observable o, Object arg) {
-			reset();
-		}
+    private SortedView view;
 
-  	public void reset() {
-			resetForAsksBelow();
-			resetForBidsAbove();
-			resetForAcceptedAsksAbove();
-			resetForAcceptedBidsBelow();
-			resetForRejectedAsksBelow();
-			resetForRejectedBidsAbove();
-		}
+    public IncreasingQueryAccelerator( SortedView view ) {
+      this.view = view;
+      view.addObserver(this);
+      reset();
+    }
 
-  	protected void resetForAsksBelow() {
-			asksI = view.getSortedAsks().listIterator();
-			numOfAsksBelow = 0;
-			priceForAsksBelow = -1;
-  	}
-  	  	
-  	protected void resetForBidsAbove() {
-			bidsI = view.getSortedBids().listIterator();
-			numOfBidsAbove = view.getSortedBids().size();
-			priceForBidsAbove = -1;
-  	}
+    /*
+     * resets all the iterations and counting variables when the underlying
+     * sorted view changes.
+     */
+    public void update( Observable o, Object arg ) {
+      reset();
+    }
 
-  	protected void resetForAcceptedAsksAbove() {
-			acceptedAsksI = view.getSortedAcceptedAsks().listIterator();
-			numOfAcceptedAsksAbove = view.getSortedAcceptedAsks().size();
-			priceForAcceptedAsksAbove = -1;
-  	}
-  	
-  	protected void resetForAcceptedBidsBelow() {
-			acceptedBidsI = view.getSortedAcceptedBids().listIterator();
-			numOfAcceptedBidsBelow = 0;
-			priceForAcceptedBidsBelow = -1;
-  	}
-  	
-  	protected void resetForRejectedAsksBelow() {
-			rejectedAsksI = view.getSortedRejectedAsks().listIterator();
-			numOfRejectedAsksBelow = 0;
-			priceForRejectedAsksBelow = -1;
-  	}
-  	
-  	protected void resetForRejectedBidsAbove() {
-			rejectedBidsI = view.getSortedRejectedBids().listIterator();
-			numOfRejectedBidsAbove = view.getSortedRejectedBids().size();
-			priceForRejectedBidsAbove = -1;
-  	}
-  	
-    public int getNumOfAsksBelow(double price) {
-    	if (priceForAsksBelow > price)
-    		resetForAsksBelow();
-    	priceForAsksBelow = price;    	
-    	    	
-      while (asksI.hasNext())
-        if (((Shout)asksI.next()).getPrice() <= price)
+    public void reset() {
+      resetForAsksBelow();
+      resetForBidsAbove();
+      resetForAcceptedAsksAbove();
+      resetForAcceptedBidsBelow();
+      resetForRejectedAsksBelow();
+      resetForRejectedBidsAbove();
+    }
+
+    protected void resetForAsksBelow() {
+      asksI = view.getSortedAsks().listIterator();
+      numOfAsksBelow = 0;
+      priceForAsksBelow = -1;
+    }
+
+    protected void resetForBidsAbove() {
+      bidsI = view.getSortedBids().listIterator();
+      numOfBidsAbove = view.getSortedBids().size();
+      priceForBidsAbove = -1;
+    }
+
+    protected void resetForAcceptedAsksAbove() {
+      acceptedAsksI = view.getSortedAcceptedAsks().listIterator();
+      numOfAcceptedAsksAbove = view.getSortedAcceptedAsks().size();
+      priceForAcceptedAsksAbove = -1;
+    }
+
+    protected void resetForAcceptedBidsBelow() {
+      acceptedBidsI = view.getSortedAcceptedBids().listIterator();
+      numOfAcceptedBidsBelow = 0;
+      priceForAcceptedBidsBelow = -1;
+    }
+
+    protected void resetForRejectedAsksBelow() {
+      rejectedAsksI = view.getSortedRejectedAsks().listIterator();
+      numOfRejectedAsksBelow = 0;
+      priceForRejectedAsksBelow = -1;
+    }
+
+    protected void resetForRejectedBidsAbove() {
+      rejectedBidsI = view.getSortedRejectedBids().listIterator();
+      numOfRejectedBidsAbove = view.getSortedRejectedBids().size();
+      priceForRejectedBidsAbove = -1;
+    }
+
+    public int getNumOfAsksBelow( double price ) {
+      if ( priceForAsksBelow > price )
+        resetForAsksBelow();
+      priceForAsksBelow = price;
+
+      while ( asksI.hasNext() )
+        if ( ((Shout) asksI.next()).getPrice() <= price )
           numOfAsksBelow++;
         else {
           try {
             asksI.previous();
-          } catch (Exception e) {
+          } catch ( Exception e ) {
             logger.info(e);
             asksI.previous();
           }
           break;
         }
-      
+
       return numOfAsksBelow;
     }
 
-    public int getNumOfBidsAbove(double price) {
-    	if (priceForBidsAbove > price)
-    		resetForBidsAbove();
-    	priceForBidsAbove = price;
-    	
-      while (bidsI.hasNext()) {
-        if (((Shout)bidsI.next()).getPrice() < price)
+    public int getNumOfBidsAbove( double price ) {
+      if ( priceForBidsAbove > price )
+        resetForBidsAbove();
+      priceForBidsAbove = price;
+
+      while ( bidsI.hasNext() ) {
+        if ( ((Shout) bidsI.next()).getPrice() < price )
           numOfBidsAbove--;
         else {
-          try{
+          try {
             bidsI.previous();
-          } catch (Exception e) {
+          } catch ( Exception e ) {
             logger.info(e);
             bidsI.previous();
           }
           break;
         }
       }
-      
+
       return numOfBidsAbove;
     }
 
-    public int getNumOfAcceptedAsksAbove(double price) {
-    	if (priceForAcceptedAsksAbove > price)
-    		resetForAcceptedAsksAbove();
-    	priceForAcceptedAsksAbove = price;
-    	
-      while (acceptedAsksI.hasNext())
-        if (((Shout)acceptedAsksI.next()).getPrice() < price)
+    public int getNumOfAcceptedAsksAbove( double price ) {
+      if ( priceForAcceptedAsksAbove > price )
+        resetForAcceptedAsksAbove();
+      priceForAcceptedAsksAbove = price;
+
+      while ( acceptedAsksI.hasNext() )
+        if ( ((Shout) acceptedAsksI.next()).getPrice() < price )
           numOfAcceptedAsksAbove--;
         else {
-          try{
+          try {
             acceptedAsksI.previous();
-          } catch (Exception e) {
+          } catch ( Exception e ) {
             logger.info(e);
             acceptedAsksI.previous();
           }
           break;
         }
-      
+
       return numOfAcceptedAsksAbove;
     }
-    
-    public int getNumOfAcceptedBidsBelow(double price) {
-    	if (priceForAcceptedBidsBelow > price)
-    		resetForAcceptedBidsBelow();
-    	priceForAcceptedBidsBelow = price;
-    	
-      while (acceptedBidsI.hasNext())
-        if (((Shout)acceptedBidsI.next()).getPrice() <= price)
+
+    public int getNumOfAcceptedBidsBelow( double price ) {
+      if ( priceForAcceptedBidsBelow > price )
+        resetForAcceptedBidsBelow();
+      priceForAcceptedBidsBelow = price;
+
+      while ( acceptedBidsI.hasNext() )
+        if ( ((Shout) acceptedBidsI.next()).getPrice() <= price )
           numOfAcceptedBidsBelow++;
         else {
-          // NOTE: due to a possible bug in TreeList, NullPointerException may be
+          // NOTE: due to a possible bug in TreeList,
+          // NullPointerException may be
           // thrown. Simply doing it again seems working fine.
           try {
             acceptedBidsI.previous();
-          } catch (Exception e) {
+          } catch ( Exception e ) {
             logger.info(e);
             acceptedBidsI.previous();
           }
           break;
         }
-      
+
       return numOfAcceptedBidsBelow;
     }
-    
-    public int getNumOfRejectedAsksBelow(double price) {
-    	if (priceForRejectedAsksBelow > price)
-    		resetForRejectedAsksBelow();
-    	priceForRejectedAsksBelow = price;
-    	
-      while (rejectedAsksI.hasNext())
-        if (((Shout)rejectedAsksI.next()).getPrice() <= price)
+
+    public int getNumOfRejectedAsksBelow( double price ) {
+      if ( priceForRejectedAsksBelow > price )
+        resetForRejectedAsksBelow();
+      priceForRejectedAsksBelow = price;
+
+      while ( rejectedAsksI.hasNext() )
+        if ( ((Shout) rejectedAsksI.next()).getPrice() <= price )
           numOfRejectedAsksBelow++;
         else {
-          try{
+          try {
             rejectedAsksI.previous();
-          } catch (Exception e) {
+          } catch ( Exception e ) {
             logger.info(e);
             rejectedAsksI.previous();
           }
           break;
         }
-      
+
       return numOfRejectedAsksBelow;
     }
-    
-    public int getNumOfRejectedBidsAbove(double price) {
-    	if (priceForRejectedBidsAbove > price)
-    		resetForRejectedBidsAbove();
-    	priceForRejectedBidsAbove = price;
-    	
-      while (rejectedBidsI.hasNext())
-        if (((Shout)rejectedBidsI.next()).getPrice() < price)
+
+    public int getNumOfRejectedBidsAbove( double price ) {
+      if ( priceForRejectedBidsAbove > price )
+        resetForRejectedBidsAbove();
+      priceForRejectedBidsAbove = price;
+
+      while ( rejectedBidsI.hasNext() )
+        if ( ((Shout) rejectedBidsI.next()).getPrice() < price )
           numOfRejectedBidsAbove--;
         else {
           try {
             rejectedBidsI.previous();
-          } catch (Exception e) {
+          } catch ( Exception e ) {
             logger.info(e);
             rejectedBidsI.previous();
           }
           break;
         }
-      
+
       return numOfRejectedBidsAbove;
-    }  	
+    }
   }
-    
+
   /**
-   * a tree-based sorted list, which can enable increasing queries
-   * about shout counting.
+   * a tree-based sorted list, which can enable increasing queries about shout
+   * counting.
    */
   static class SortedTreeList extends TreeList {
     private String name;
-    
-    public SortedTreeList(String name) {
+
+    public SortedTreeList( String name ) {
       this.name = name;
     }
-    
-    public SortedTreeList(String name, Collection c) {
+
+    public SortedTreeList( String name, Collection c ) {
       super(c);
       this.name = name;
     }
-    
+
     /**
-     * adds <code>o</code> into the list maintaining its sorted 
-     * nature.
+     * adds <code>o</code> into the list maintaining its sorted nature.
      * 
      * @param o
      * @return always returns true
      */
-    public boolean add(Object o) {
-      insert(0, size()-1, o);
+    public boolean add( Object o ) {
+      insert(0, size() - 1, o);
       return true;
     }
-    
+
     /**
-     * inserts <code>o</code> into the segment from <code>b</code>
-     * to <code>e</code> inclusively at both ends.
+     * inserts <code>o</code> into the segment from <code>b</code> to
+     * <code>e</code> inclusively at both ends.
      * 
      * @param b
      * @param e
      * @param o
      */
-    private void insert(int b, int e, Object o) {
-      if (b > e)
+    private void insert( int b, int e, Object o ) {
+      if ( b > e )
         add(b, o);
       else {
-        int c = ((Comparable)o).compareTo(get((b+e)/2));
-        
-        if (c == 1)
-          insert(1+((b+e)/2), e, o);
-        else if (c == -1)
-          insert(b, ((b+e)/2)-1, o);
+        int c = ((Comparable) o).compareTo(get((b + e) / 2));
+
+        if ( c == 1 )
+          insert(1 + ((b + e) / 2), e, o);
+        else if ( c == -1 )
+          insert(b, ((b + e) / 2) - 1, o);
         else
-          add((b+e)/2, o);
+          add((b + e) / 2, o);
       }
-      
+
     }
 
-    /**
-     * for debug purpose.
-     */
     public String toString() {
       String s = "[";
       ListIterator iterator = listIterator();
-      while (iterator.hasNext()) {
-        s += ((Shout)iterator.next()).getPrice() + " "; 
+      while ( iterator.hasNext() ) {
+        s += ((Shout) iterator.next()).getPrice() + " ";
       }
-      s += "] "+name+"(size="+size()+")";
-      return s;
+      s += "] ";
+      return "(" + getClass() + s + "name: " + name + " size: " + size() + ")";
     }
   }
 

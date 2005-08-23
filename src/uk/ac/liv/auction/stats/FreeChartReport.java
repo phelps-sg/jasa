@@ -39,23 +39,31 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.ui.RefineryUtilities;
 
 /**
- *  A report that logs data to JFreeChart graphs.
+ * A report that logs data to JFreeChart graphs.
  * 
- * <p><b>Parameters</b><br></p>
+ * <p>
+ * <b>Parameters</b><br>
+ * </p>
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.name</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.name</tt><br>
  * <font size=-1>string</font></td>
- * <td valign=top></td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.graph.n</tt><br>
+ * <td valign=top></td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.graph.n</tt><br>
  * <font size=-1>int</font></td>
- * <td valign=top>(the number of JFreeChart graphs to generate)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.savetofile</tt><br>
+ * <td valign=top>(the number of JFreeChart graphs to generate)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.savetofile</tt><br>
  * <font size=-1>boolean</font></td>
- * <td valign=top>(whether to save graphs into files as jpg pictures)</td><tr>
- *
+ * <td valign=top>(whether to save graphs into files as jpg pictures)</td>
+ * <tr>
+ * 
  * </table>
  * 
  * @author Jinzhong Niu
@@ -75,16 +83,28 @@ public class FreeChartReport extends AbstractAuctionReport implements
 
   public static final String P_SAVETOFILE = "savetofile";
 
+  /**
+   * @uml.property name="saveToFile"
+   */
   private boolean saveToFile = false;
 
+  /**
+   * @uml.property name="frame"
+   * @uml.associationEnd
+   */
   private UserFrame frame;
 
+  /**
+   * @uml.property name="graphs"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     inverse="report:uk.ac.liv.auction.stats.FreeChartGraph"
+   */
   private FreeChartGraph graphs[];
 
   public FreeChartReport() {
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
 
     frame = new UserFrame();
     frame.setup(parameters, base);
@@ -92,24 +112,25 @@ public class FreeChartReport extends AbstractAuctionReport implements
     graphs = new FreeChartGraph[parameters.getInt(base.push(P_GRAPH)
         .push(P_NUM))];
 
-    for (int i = 0; i < graphs.length; i++) {
+    for ( int i = 0; i < graphs.length; i++ ) {
       graphs[i] = (FreeChartGraph) parameters.getInstanceForParameterEq(base
           .push(P_GRAPH).push(String.valueOf(i)), null, FreeChartGraph.class);
       graphs[i].setReport(this);
       graphs[i].setup(parameters, base.push(P_GRAPH).push(String.valueOf(i)));
     }
-    
-    saveToFile = parameters.getBoolean(base.push(P_SAVETOFILE), null, saveToFile);
+
+    saveToFile = parameters.getBoolean(base.push(P_SAVETOFILE), null,
+        saveToFile);
 
     JPanel canvas = new JPanel();
 
-    if (graphs.length > 2)
+    if ( graphs.length > 2 )
       canvas.setLayout(new GridLayout(0, 1, 5, 5));
     else
       canvas.setLayout(new GridLayout(0, 1, 5, 5));
 
-    JPanel p; 
-    for (int i = 0; i < graphs.length; i++) {
+    JPanel p;
+    for ( int i = 0; i < graphs.length; i++ ) {
       p = new JPanel();
       p.setLayout(new BorderLayout());
       p.add(BorderLayout.CENTER, graphs[i]);
@@ -118,13 +139,13 @@ public class FreeChartReport extends AbstractAuctionReport implements
 
     JScrollPane scrollP = new JScrollPane(canvas);
     frame.setContentPane(scrollP);
-    //frame.pack();
+    // frame.pack();
     RefineryUtilities.centerFrameOnScreen(frame);
     frame.setVisible(true);
   }
 
-  public void eventOccurred(AuctionEvent event) {
-    for (int i = 0; i < graphs.length; i++) {
+  public void eventOccurred( AuctionEvent event ) {
+    for ( int i = 0; i < graphs.length; i++ ) {
       graphs[i].eventOccurred(event);
     }
   }
@@ -133,20 +154,23 @@ public class FreeChartReport extends AbstractAuctionReport implements
     logger.info("");
     logger.info("Auction statistics");
     logger.info("------------------");
-    if (saveToFile) {
+    if ( saveToFile ) {
       File file = null;
       String name = null;
-      for(int i = 0; i < graphs.length; i++){
-        name = graphs[i].getChart().getTitle().getText().replace(File.separatorChar, '_')+".jpg";
+      for ( int i = 0; i < graphs.length; i++ ) {
+        name = graphs[i].getChart().getTitle().getText().replace(
+            File.separatorChar, '_')
+            + ".jpg";
         file = new File(name);
         try {
-          ChartUtilities.saveChartAsJPEG(file, graphs[i].getChart(), graphs[i].getWidth(), graphs[i].getHeight());
-        } catch (IOException e) {
+          ChartUtilities.saveChartAsJPEG(file, graphs[i].getChart(), graphs[i]
+              .getWidth(), graphs[i].getHeight());
+        } catch ( IOException e ) {
           logger.info(e);
         }
       }
     } else {
-      logger.info("Output of "+getClass()+" is empty.");
+      logger.info("Output of " + getClass() + " is empty.");
     }
   }
 

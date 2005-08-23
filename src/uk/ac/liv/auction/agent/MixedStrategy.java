@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
@@ -32,59 +31,65 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 /**
- * A class representing a mixed strategy.
- * A mixed strategy is a strategy in which we play a number of pure strategies
- * with different probabilities on each auction round.
- *
- * <p><b>Parameters</b><br>
- *
+ * A class representing a mixed strategy. A mixed strategy is a strategy in
+ * which we play a number of pure strategies with different probabilities on
+ * each auction round.
+ * 
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base.</i><tt>n</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base.</i><tt>n</tt><br>
  * <font size=-1>int &gt;= 1</font></td>
- * <td valign=top>(the number of pure strategies)</td></tr>
- *
- * <tr><td valign=top><i>base.<i>i</i><br>
+ * <td valign=top>(the number of pure strategies)</td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base.<i>i</i><br>
  * <font size=-1>classname, inherits uk.ac.liv.auction.agent.Strategy</font></td>
- * <td valign=top>(the class for pure strategy #<i>i</i>)</td></tr>
- *
- * <tr><td valign=top><i>base.<i>i</i>.<tt>prob</tt><br>
+ * <td valign=top>(the class for pure strategy #<i>i</i>)</td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base.<i>i</i>.<tt>prob</tt><br>
  * <font size=-1>double [0, 1]</font></td>
- * <td valign=top>(the probability of playing pure strategy #<i>i</i>)</td></tr>
- *
+ * <td valign=top>(the probability of playing pure strategy #<i>i</i>)</td>
+ * </tr>
+ * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class MixedStrategy extends AbstractStrategy implements Parameterizable,
-                                                                Resetable,                                                                
-                                                                Serializable {
+    Resetable, Serializable {
 
   /**
-   *  The probabilities for playing each strategy
+   * The probabilities for playing each strategy
    */
   protected DiscreteProbabilityDistribution probabilities;
 
   /**
-   *  The pure strategy components
+   * The pure strategy components
    */
   protected AbstractStrategy pureStrategies[];
 
   /**
-   *  The strategy currently being played
-    */
+   * The strategy currently being played
+   */
   protected AbstractStrategy currentStrategy;
 
   static final String P_N = "n";
+
   static final String P_PROBABILITY = "prob";
 
   static Logger logger = Logger.getLogger(MixedStrategy.class);
 
-
   public MixedStrategy( DiscreteProbabilityDistribution probabilities,
-                          AbstractStrategy[] pureStrategies ) {
+      AbstractStrategy[] pureStrategies ) {
     this();
     this.pureStrategies = pureStrategies;
     this.probabilities = probabilities;
@@ -101,17 +106,16 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
     probabilities = new DiscreteProbabilityDistribution(numStrategies);
 
-    for( int i=0; i<numStrategies; i++ ) {
-      AbstractStrategy s = (AbstractStrategy)
-        parameters.getInstanceForParameter(base.push(i+""), null,
-                                            Strategy.class);
+    for ( int i = 0; i < numStrategies; i++ ) {
+      AbstractStrategy s = (AbstractStrategy) parameters
+          .getInstanceForParameter(base.push(i + ""), null, Strategy.class);
       if ( s instanceof Parameterizable ) {
-        ((Parameterizable) s).setup(parameters, base.push(i+""));
+        ((Parameterizable) s).setup(parameters, base.push(i + ""));
       }
       pureStrategies[i] = s;
 
-      double probability = parameters.getDouble(base.push(i+P_PROBABILITY),
-                                                  null, 0);
+      double probability = parameters.getDouble(base.push(i + P_PROBABILITY),
+          null, 0);
       probabilities.setProbability(i, probability);
     }
 
@@ -121,11 +125,10 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
     pureStrategies.addAll(pureStrategies);
   }
 
-
-  public void setProbabilityDistribution( DiscreteProbabilityDistribution probabilities ) {
+  public void setProbabilityDistribution(
+      DiscreteProbabilityDistribution probabilities ) {
     this.probabilities = probabilities;
   }
-
 
   public boolean modifyShout( Shout.MutableShout shout ) {
 
@@ -133,7 +136,6 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
     return currentStrategy.modifyShout(shout);
   }
-
 
   public void endOfRound( Auction auction ) {
     currentStrategy.endOfRound(auction);
@@ -145,7 +147,7 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
   public void reset() {
     probabilities.reset();
-    for( int i=0; i<pureStrategies.length; i++ ) {
+    for ( int i = 0; i < pureStrategies.length; i++ ) {
       ((Resetable) pureStrategies[i]).reset();
     }
   }
@@ -155,5 +157,3 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
   }
 
 }
-
-

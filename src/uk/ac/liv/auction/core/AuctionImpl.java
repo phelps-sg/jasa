@@ -25,7 +25,6 @@ import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
-
 import uk.ac.liv.auction.stats.AuctionReport;
 import uk.ac.liv.auction.stats.CombiAuctionReport;
 
@@ -41,22 +40,20 @@ import java.util.Observable;
 import java.util.LinkedList;
 import java.util.Iterator;
 
-
 /**
- * An abstract implementation of Auction that provides basic
- * logging facilities.
- *
+ * An abstract implementation of Auction that provides basic logging facilities.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class AuctionImpl extends Observable
-                                    implements Auction, 
-                                    			Serializable,
-                                    			Resetable {
+public abstract class AuctionImpl extends Observable implements Auction,
+    Serializable, Resetable {
 
   /**
    * The name of this auction.
+   * 
+   * @uml.property name="name"
    */
   protected String name;
 
@@ -66,59 +63,81 @@ public abstract class AuctionImpl extends Observable
   static IdAllocator idAllocator = new IdAllocator();
 
   /**
-   * A unique id for this auction.  It's main use is in debugging.
+   * A unique id for this auction. It's main use is in debugging.
+   * 
+   * @uml.property name="id"
    */
   protected long id;
 
   /**
    * The last shout placed in the auction.
+   * 
+   * @uml.property name="lastShout"
+   * @uml.associationEnd
    */
   protected Shout lastShout;
 
   /**
    * The last bid placed in the auction.
+   * 
+   * @uml.property name="lastBid"
+   * @uml.associationEnd
    */
   protected Shout lastBid;
 
   /**
    * The last ask placed in the auction.
+   * 
+   * @uml.property name="lastAsk"
+   * @uml.associationEnd
    */
   protected Shout lastAsk;
 
   /**
    * Flag indicating whether the auction is currently closed.
+   * 
+   * @uml.property name="closed"
    */
   protected boolean closed;
 
-
   /**
-   * The plugable auction rules to use for this auction,
-   * e.g. AscendingAuctioneer.
+   * The plugable auction rules to use for this auction, e.g.
+   * AscendingAuctioneer.
+   * 
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
    */
   protected Auctioneer auctioneer = null;
 
   /**
    * The optional MarketDataLogger to log data to.
+   * 
+   * @uml.property name="report"
+   * @uml.associationEnd
    */
   protected AuctionReport report = null;
 
+  /**
+   * @uml.property name="eventListeners"
+   * @uml.associationEnd multiplicity="(0 -1)" ordering="true"
+   *                     elementType="uk.ac.liv.auction.event.AuctionEventListener"
+   *                     qualifier="eventClass:java.lang.Class java.util.List"
+   */
   protected HashMap eventListeners = new HashMap();
-  
-  
-  private static final Class[] allEvents = 
-  	{ RoundClosedEvent.class, AuctionOpenEvent.class, AuctionClosedEvent.class,
-        EndOfDayEvent.class, TransactionExecutedEvent.class, 
-        ShoutPlacedEvent.class, AgentPolledEvent.class }; 
-  
-  
+
+  private static final Class[] allEvents = { RoundClosedEvent.class,
+      AuctionOpenEvent.class, AuctionClosedEvent.class, EndOfDayEvent.class,
+      TransactionExecutedEvent.class, ShoutPlacedEvent.class,
+      AgentPolledEvent.class };
+
   public AuctionImpl( String name ) {
     id = idAllocator.nextId();
     if ( name != null ) {
       this.name = name;
     } else {
       this.name = "Auction " + id;
-    }    
-    //initialise();
+    }
+    // initialise();
   }
 
   public AuctionImpl() {
@@ -132,20 +151,25 @@ public abstract class AuctionImpl extends Observable
     closed = false;
   }
 
-  public void reset() {    
+  public void reset() {
     initialise();
     eventListeners.clear();
   }
 
+  /**
+   * @uml.property name="auctioneer"
+   */
   public void setAuctioneer( Auctioneer auctioneer ) {
     this.auctioneer = auctioneer;
     auctioneer.setAuction(this);
   }
 
+  /**
+   * @uml.property name="auctioneer"
+   */
   public Auctioneer getAuctioneer() {
     return auctioneer;
   }
-
 
   public boolean closed() {
     return closed;
@@ -158,7 +182,9 @@ public abstract class AuctionImpl extends Observable
     closed = true;
   }
 
-
+  /**
+   * @uml.property name="lastShout"
+   */
   public Shout getLastShout() throws ShoutsNotVisibleException {
     if ( !auctioneer.shoutsVisible() ) {
       throw new ShoutsNotVisibleException();
@@ -168,6 +194,8 @@ public abstract class AuctionImpl extends Observable
 
   /**
    * Assign a data logger
+   * 
+   * @uml.property name="report"
    */
   public void setReport( AuctionReport logger ) {
     this.report = logger;
@@ -177,6 +205,8 @@ public abstract class AuctionImpl extends Observable
 
   /**
    * Get the current data logger
+   * 
+   * @uml.property name="report"
    */
   public AuctionReport getReport() {
     return report;
@@ -184,8 +214,10 @@ public abstract class AuctionImpl extends Observable
 
   /**
    * Change the name of this auction.
-   *
-   * @param name The new name of the auction.
+   * 
+   * @param name
+   *          The new name of the auction.
+   * @uml.property name="name"
    */
   public void setName( String name ) {
     this.name = name;
@@ -195,29 +227,36 @@ public abstract class AuctionImpl extends Observable
     return auctioneer.getQuote();
   }
 
+  /**
+   * @uml.property name="name"
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * @uml.property name="id"
+   */
   public long getId() {
     return id;
   }
 
   public void removeShout( Shout shout ) {
     // Remove this shout and all of its children.
-    for( Shout s = shout; s != null; s = s.getChild() ) {
+    for ( Shout s = shout; s != null; s = s.getChild() ) {
       auctioneer.removeShout(s);
-//      if ( s != shout ) {
-//        ShoutPool.release(s);
-//      }
+      // if ( s != shout ) {
+      // ShoutPool.release(s);
+      // }
     }
     shout.makeChildless();
   }
 
   /**
-   *  Handle a new shout in the auction.
-   *
-   *  @param shout  The new shout in the auction.
+   * Handle a new shout in the auction.
+   * 
+   * @param shout
+   *          The new shout in the auction.
    */
   public void newShout( Shout shout ) throws AuctionException {
     if ( closed() ) {
@@ -228,7 +267,7 @@ public abstract class AuctionImpl extends Observable
     }
     recordShout(shout);
     auctioneer.newShout(shout);
-   
+
     notifyObservers();
   }
 
@@ -241,19 +280,19 @@ public abstract class AuctionImpl extends Observable
     }
   }
 
-
   public void printState() {
     auctioneer.printState();
   }
 
   /**
    * Add a new market data logger.
-   *
-   * @param newReport  The new logger to add.
+   * 
+   * @param newReport
+   *          The new logger to add.
    */
   public void addReport( AuctionReport newReport ) {
     AuctionReport oldReport = report;
-    if ( ! (oldReport instanceof CombiAuctionReport) ) {
+    if ( !(oldReport instanceof CombiAuctionReport) ) {
       setReport(new CombiAuctionReport());
       if ( oldReport != null ) {
         ((CombiAuctionReport) report).addReport(oldReport);
@@ -264,26 +303,26 @@ public abstract class AuctionImpl extends Observable
 
   public void addListener( LinkedList listeners, AuctionEventListener listener ) {
     assert listener != null;
-        
+
     if ( !listeners.contains(listener) ) {
       listeners.add(listener);
     }
   }
 
   public void addAuctionEventListener( AuctionEventListener listener ) {
-    for( int i=0; i<allEvents.length; i++ ) {
+    for ( int i = 0; i < allEvents.length; i++ ) {
       addAuctionEventListener(allEvents[i], listener);
     }
   }
-  
+
   public void removeAuctionEventListener( AuctionEventListener listener ) {
-    for( int i=0; i<allEvents.length; i++ ) {
+    for ( int i = 0; i < allEvents.length; i++ ) {
       removeAuctionEventListener(allEvents[i], listener);
     }
   }
 
   public void addAuctionEventListener( Class eventClass,
-      								AuctionEventListener listener ) {
+      AuctionEventListener listener ) {
     LinkedList listenerList = (LinkedList) eventListeners.get(eventClass);
     if ( listenerList == null ) {
       listenerList = new LinkedList();
@@ -292,16 +331,14 @@ public abstract class AuctionImpl extends Observable
     listenerList.add(listener);
   }
 
-  
   public void removeAuctionEventListener( Class eventClass,
-      								AuctionEventListener listener ) {
+      AuctionEventListener listener ) {
     LinkedList listenerList = (LinkedList) eventListeners.get(eventClass);
     if ( listenerList != null ) {
       listenerList.remove(listener);
     }
   }
-  
-  
+
   protected void fireEvent( AuctionEvent event ) {
     List listeners = (List) eventListeners.get(event.getClass());
     if ( listeners != null ) {
@@ -314,22 +351,21 @@ public abstract class AuctionImpl extends Observable
   }
 
   public void informAuctionClosed() {
-    fireEvent( new AuctionClosedEvent(this, getRound()) );
+    fireEvent(new AuctionClosedEvent(this, getRound()));
   }
 
   public void informEndOfDay() {
-    fireEvent( new EndOfDayEvent(this, getRound()) );
+    fireEvent(new EndOfDayEvent(this, getRound()));
   }
 
-
   public void informAuctionOpen() {
-    fireEvent( new AuctionOpenEvent(this, getRound()) );
+    fireEvent(new AuctionOpenEvent(this, getRound()));
   }
 
   /**
-   * Return a Map of all of the variables in all of the reports configured
-   * for this auction.   The Map maps report variables, represented as
-   * objects of type ReportVariable onto their values.
+   * Return a Map of all of the variables in all of the reports configured for
+   * this auction. The Map maps report variables, represented as objects of type
+   * ReportVariable onto their values.
    * 
    * @see uk.ac.liv.auction.stats.ReportVariable
    */
@@ -340,7 +376,7 @@ public abstract class AuctionImpl extends Observable
       return new HashMap();
     }
   }
-  
+
   public AuctionReport getReport( Class reportClass ) {
     if ( report != null ) {
       if ( report.getClass().equals(reportClass) ) {
@@ -357,13 +393,9 @@ public abstract class AuctionImpl extends Observable
     }
     return null;
   }
- 
-  
+
   public String toString() {
     return "(Auction id:" + id + ")";
   }
-
-
-  
 
 }

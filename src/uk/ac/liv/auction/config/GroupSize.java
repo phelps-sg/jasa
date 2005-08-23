@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.config;
 
 import ec.util.Parameter;
@@ -28,12 +29,15 @@ public class GroupSize implements ParameterBasedCase {
 
   public static final String P_GROUPSIZE = "groupsize";
 
+  /**
+   * @uml.property name="size"
+   */
   private int size;
 
   public GroupSize() {
   }
 
-  public void setParameter(String param) {
+  public void setParameter( String param ) {
     this.size = Integer.parseInt(param);
   }
 
@@ -41,7 +45,7 @@ public class GroupSize implements ParameterBasedCase {
     return String.valueOf(size);
   }
 
-  public void apply(ParameterDatabase pdb, Parameter base) {
+  public void apply( ParameterDatabase pdb, Parameter base ) {
     pdb.set(base.push(P_GROUPSIZE), String.valueOf(size));
   }
 }

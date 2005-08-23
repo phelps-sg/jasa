@@ -29,6 +29,10 @@ public class RothErevLearnerTest extends TestCase {
 
   static final int CORRECT_ACTION = 2;
 
+  /**
+   * @uml.property name="learner1"
+   * @uml.associationEnd
+   */
   NPTRothErevLearner learner1;
 
   public RothErevLearnerTest( String name ) {
@@ -36,7 +40,7 @@ public class RothErevLearnerTest extends TestCase {
   }
 
   public void setUp() {
-  	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 100.0);
   }
 
@@ -45,7 +49,7 @@ public class RothErevLearnerTest extends TestCase {
     System.out.println("testBasic()");
     CummulativeDistribution stats = new CummulativeDistribution("action");
     int correctActions = 0;
-    for( int i=0; i<100; i++ ) {
+    for ( int i = 0; i < 100; i++ ) {
       int action = learner1.act();
       stats.newData(action);
       if ( action == CORRECT_ACTION ) {
@@ -76,12 +80,12 @@ public class RothErevLearnerTest extends TestCase {
     System.out.println("\ntestDistribution()");
     double q[] = { 55, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
     CummulativeDistribution action1Data = new CummulativeDistribution("action1");
-    for( int r=0; r<10000; r++ ) {
+    for ( int r = 0; r < 10000; r++ ) {
       learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 1);
       learner1.setPropensities(q);
       CummulativeDistribution choiceData = new CummulativeDistribution("choice");
       int action1Chosen = 0;
-      for( int i=0; i<100; i++ ) {
+      for ( int i = 0; i < 100; i++ ) {
         int choice = learner1.act();
         choiceData.newData(choice);
         action1Chosen = 0;
@@ -92,19 +96,18 @@ public class RothErevLearnerTest extends TestCase {
       }
     }
     System.out.println(action1Data);
-    assertTrue( action1Data.getMean() <= 0.57 && action1Data.getMean() >= 0.53 );
+    assertTrue(action1Data.getMean() <= 0.57 && action1Data.getMean() >= 0.53);
   }
 
   public static void checkProbabilities( RothErevLearner l ) {
-    double prob=0;
-    for( int i=0; i<l.getK(); i++ ) {
+    double prob = 0;
+    for ( int i = 0; i < l.getK(); i++ ) {
       prob += l.getProbability(i);
     }
     if ( prob > 1.001 || prob < 0.999 ) {
       throw new Error("Probabilities should sum to 1");
     }
   }
-
 
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());

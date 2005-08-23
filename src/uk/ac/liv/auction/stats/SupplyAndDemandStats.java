@@ -35,44 +35,51 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 
   /**
    * The DataWriter to write the supply curve to.
+   * 
+   * @uml.property name="supplyStats"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected DataWriter supplyStats;
 
   /**
    * The DataWriter to write the demand curve to.
+   * 
+   * @uml.property name="demandStats"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected DataWriter demandStats;
 
   /**
    * Constructor.
-   *
-   * @param auction       The auction to compute supply and demand stats for.
-   * @param supplyStats   The DataWriter to write the supply curve to.
-   * @param demandStats   The DataWriter to write the demand curve to.
+   * 
+   * @param auction
+   *          The auction to compute supply and demand stats for.
+   * @param supplyStats
+   *          The DataWriter to write the supply curve to.
+   * @param demandStats
+   *          The DataWriter to write the demand curve to.
    */
   public SupplyAndDemandStats( RoundRobinAuction auction,
-                                DataWriter supplyStats,
-                                DataWriter demandStats) {
+      DataWriter supplyStats, DataWriter demandStats ) {
     super(auction);
     this.supplyStats = supplyStats;
     this.demandStats = demandStats;
   }
 
-
   public void produceUserOutput() {
     writeSupplyStats();
-    writeDemandStats();    
+    writeDemandStats();
   }
 
   public Map getVariables() {
     return new HashMap();
   }
-  
+
   public abstract void writeSupplyStats();
+
   public abstract void writeDemandStats();
 
-  public void writeStats( DataWriter stats, List shouts,
-                           Comparator comparator ) {
+  public void writeStats( DataWriter stats, List shouts, Comparator comparator ) {
     int qty = 0, qty1 = 0;
     if ( shouts.isEmpty() ) {
       return;

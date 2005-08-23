@@ -21,36 +21,42 @@ import uk.ac.liv.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * <p>
- * An abstract implementation of AuctionReport that provides
- * functionality common to all reports.
+ * An abstract implementation of AuctionReport that provides functionality
+ * common to all reports.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class AbstractAuctionReport
-     implements AuctionReport, Parameterizable {
+public abstract class AbstractAuctionReport implements AuctionReport,
+    Parameterizable {
 
   static Logger logger = Logger.getLogger(AbstractAuctionReport.class);
 
   /**
    * The auction we are keeping statistics on.
+   * 
+   * @uml.property name="auction"
+   * @uml.associationEnd
    */
   protected RoundRobinAuction auction;
 
-
+  /**
+   * @uml.property name="auction"
+   */
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
     logger.debug("Set auction to " + auction);
   }
-  
+
+  /**
+   * @uml.property name="auction"
+   */
   public RoundRobinAuction getAuction() {
     return auction;
   }
-
 
 }

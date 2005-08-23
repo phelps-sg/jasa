@@ -13,33 +13,27 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
+
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.event.AuctionClosedEvent;
-import uk.ac.liv.auction.event.AuctionEvent;
-import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import java.util.*;
 
 import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
-import org.jfree.data.time.Millisecond;
-import org.jfree.data.time.TimePeriodValue;
 
 /**
- * A report that calculates the actual surplus of buyers
- * and sellers in the auction verses the theoretical surplus when
- * trades occur at the equilibrium price.  Note that this report
- * assumes that the equilibrium price is constant.  To calculate
- * theoretical surplus with dynamic supply and demand you should configure
- * a DynamicSurplusReport.
- *
+ * A report that calculates the actual surplus of buyers and sellers in the
+ * auction verses the theoretical surplus when trades occur at the equilibrium
+ * price. Note that this report assumes that the equilibrium price is constant.
+ * To calculate theoretical surplus with dynamic supply and demand you should
+ * configure a DynamicSurplusReport.
+ * 
  * @see DynamicSurplusReport
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -48,64 +42,76 @@ public class SurplusReport extends EquilibriumReport {
 
   /**
    * The profits of the buyers in theoretical equilibrium.
+   * 
+   * @uml.property name="pBCE"
    */
   protected double pBCE = 0;
 
   /**
    * The profits of the sellers in theoretical equilibrium.
+   * 
+   * @uml.property name="pSCE"
    */
   protected double pSCE = 0;
 
   /**
    * The actual profits of the buyers.
+   * 
+   * @uml.property name="pBA"
    */
   protected double pBA = 0;
 
   /**
    * The actual profits of the sellers.
+   * 
+   * @uml.property name="pSA"
    */
   protected double pSA = 0;
 
   /**
    * Global market efficiency.
+   * 
+   * @uml.property name="eA"
    */
   protected double eA;
-  
+
+  /**
+   * @uml.property name="mPB"
+   */
   protected double mPB;
-  
+
+  /**
+   * @uml.property name="mPS"
+   */
   protected double mPS;
 
-  public static final ReportVariable VAR_MPB =
-    new ReportVariable("surplus.mpb", "The market-power of buyers");
-  
-  public static final ReportVariable VAR_MPS =
-    new ReportVariable("surplus.mps", "The market-power of sellers");
-  
-  
-  private DecimalFormat percentageFormatter =
-      new DecimalFormat("#00.00");
-  
-  public static final ReportVariable VAR_EA =
-    new ReportVariable("surplus.ea", "Market efficiency");
-  
-  public static final ReportVariable VAR_PBA = 
-    new ReportVariable("surplus.pba",
-        				"Profits of buyers in the actual auction");
-  
-  public static final ReportVariable VAR_PSA = 
-    new ReportVariable("surplus.psa",
-        				"Profits of sellers in the actual auction");
-  
-  public static final ReportVariable VAR_PBCE = 
-    new ReportVariable("surplus.pbce",
-        				"Profits of buyers in competitive equilibrium");
-  
-  public static final ReportVariable VAR_PSCE = 
-    new ReportVariable("surplus.psce", 
-        				"Profits of sellers in competitive equilibrium");
+  public static final ReportVariable VAR_MPB = new ReportVariable(
+      "surplus.mpb", "The market-power of buyers");
+
+  public static final ReportVariable VAR_MPS = new ReportVariable(
+      "surplus.mps", "The market-power of sellers");
+
+  /**
+   * @uml.property name="percentageFormatter"
+   */
+  private DecimalFormat percentageFormatter = new DecimalFormat("#00.00");
+
+  public static final ReportVariable VAR_EA = new ReportVariable("surplus.ea",
+      "Market efficiency");
+
+  public static final ReportVariable VAR_PBA = new ReportVariable(
+      "surplus.pba", "Profits of buyers in the actual auction");
+
+  public static final ReportVariable VAR_PSA = new ReportVariable(
+      "surplus.psa", "Profits of sellers in the actual auction");
+
+  public static final ReportVariable VAR_PBCE = new ReportVariable(
+      "surplus.pbce", "Profits of buyers in competitive equilibrium");
+
+  public static final ReportVariable VAR_PSCE = new ReportVariable(
+      "surplus.psce", "Profits of sellers in competitive equilibrium");
 
   static Logger logger = Logger.getLogger(SurplusReport.class);
-
 
   public SurplusReport( RoundRobinAuction auction ) {
     super(auction);
@@ -116,31 +122,30 @@ public class SurplusReport extends EquilibriumReport {
   }
 
   public void calculate() {
-    super.calculate();    
+    super.calculate();
     if ( matchedShouts != null ) {
       Iterator i = matchedShouts.iterator();
       while ( i.hasNext() ) {
         Shout bid = (Shout) i.next();
-        Shout ask = (Shout) i.next();      
+        Shout ask = (Shout) i.next();
 
         pBCE += equilibriumProfits(bid.getQuantity(),
-                                    (AbstractTradingAgent) bid.getAgent());
+            (AbstractTradingAgent) bid.getAgent());
 
         pSCE += equilibriumProfits(ask.getQuantity(),
-                                    (AbstractTradingAgent) ask.getAgent());
+            (AbstractTradingAgent) ask.getAgent());
 
       }
     }
 
     calculateActualProfits();
-    
+
     eA = (pBA + pSA) / (pBCE + pSCE) * 100;
-    
+
     mPB = (pBA - pBCE) / pBCE;
     mPS = (pSA - pSCE) / pSCE;
-    
-  }
 
+  }
 
   protected void calculateActualProfits() {
     pSA = 0;
@@ -158,19 +163,19 @@ public class SurplusReport extends EquilibriumReport {
 
   public double equilibriumProfits( int quantity, AbstractTradingAgent trader ) {
     return trader.equilibriumProfits(auction, calculateMidEquilibriumPrice(),
-                                       quantity);
+        quantity);
   }
-
 
   public void initialise() {
     super.initialise();
     pBCE = 0;
-    pSCE = 0;  
+    pSCE = 0;
   }
 
   /**
    * @return The theoretical surplus available to buyers in competitive
-   * equilibrium.
+   *         equilibrium.
+   * @uml.property name="pBCE"
    */
   public double getPBCE() {
     return pBCE;
@@ -178,7 +183,8 @@ public class SurplusReport extends EquilibriumReport {
 
   /**
    * @return The theoretical surplus available to sellers in competitive
-   * equilibrium.
+   *         equilibrium.
+   * @uml.property name="pSCE"
    */
   public double getPSCE() {
     return pSCE;
@@ -186,6 +192,7 @@ public class SurplusReport extends EquilibriumReport {
 
   /**
    * @return The actual surplus of all buyers in the market.
+   * @uml.property name="pBA"
    */
   public double getPBA() {
     return pBA;
@@ -193,14 +200,16 @@ public class SurplusReport extends EquilibriumReport {
 
   /**
    * @return The actual surplus of all sellers in the market.
+   * @uml.property name="pSA"
    */
   public double getPSA() {
     return pSA;
   }
 
-
   /**
    * Get the buyer market-power calculation.
+   * 
+   * @uml.property name="mPB"
    */
   public double getMPB() {
     return mPB;
@@ -208,19 +217,24 @@ public class SurplusReport extends EquilibriumReport {
 
   /**
    * Get the seller market-power calculation.
+   * 
+   * @uml.property name="mPS"
    */
   public double getMPS() {
     return mPS;
   }
-  
+
+  /**
+   * @uml.property name="eA"
+   */
   public double getEA() {
     return eA;
   }
-  
+
   public String toString() {
-    return "(" + getClass() + " equilibriaFound:" + equilibriaFound +
-           " minPrice:" + minPrice + " maxPrice:" + maxPrice +          
-           " pBCE:" + pBCE + " pSCE:" + pSCE + ")";
+    return "(" + getClass() + " equilibriaFound:" + equilibriaFound
+        + " minPrice:" + minPrice + " maxPrice:" + maxPrice + " pBCE:" + pBCE
+        + " pSCE:" + pSCE + ")";
   }
 
   public void produceUserOutput() {
@@ -238,11 +252,11 @@ public class SurplusReport extends EquilibriumReport {
     logger.info("\tBuyer market-power:\t" + mPB);
     logger.info("\tSeller market-power:\t" + mPS);
     logger.info("");
-    logger.info("\tAllocative efficiency:\t" + 
-                  percentageFormatter.format(eA) + "%");
+    logger.info("\tAllocative efficiency:\t" + percentageFormatter.format(eA)
+        + "%");
     logger.info("");
   }
-  
+
   public Map getVariables() {
     HashMap vars = new HashMap();
     vars.putAll(super.getVariables());

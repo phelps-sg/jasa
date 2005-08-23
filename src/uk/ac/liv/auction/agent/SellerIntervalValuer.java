@@ -18,60 +18,60 @@ package uk.ac.liv.auction.agent;
 /**
  * <p>
  * Sellers configured with this valuation policy will receive a unique private
- * value from a common set of values starting at <code>minValue</code> and 
+ * value from a common set of values starting at <code>minValue</code> and
  * incrementing by <code>step</code> as each agent is assigned a valuation.
  * </p>
- *
+ * 
  * @version $Revision$
  * @author Steve Phelps
  */
 
 public class SellerIntervalValuer extends IntervalValuer {
-   
+
   /**
    * The minimum valuation that any buyer will receive.
    */
   protected static double minValue;
-  
+
   /**
    * The increment in valuation to use
    */
   protected static double step;
-  
+
   protected static double nextValue;
-  
+
   protected static boolean firstValue = true;
-  
+
   protected boolean firstValue() {
     return firstValue;
-  }  
-  
+  }
+
   protected double getMinValue() {
     return minValue;
   }
-  
+
   protected double getNextValue() {
     return nextValue;
   }
-  
+
   protected double getStep() {
     return step;
   }
-  
+
   protected void setFirstValue( boolean firstValue ) {
     this.firstValue = firstValue;
   }
-  
+
   protected void setMinValue( double value ) {
     this.minValue = value;
   }
-  
+
   protected void setNextValue( double value ) {
     this.nextValue = value;
   }
-  
+
   protected void setStep( double step ) {
     this.step = step;
   }
-  
+
 }

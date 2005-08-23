@@ -25,7 +25,7 @@ import ec.util.ParameterDatabase;
 import java.io.Serializable;
 
 /**
- * This strategy bids at the specified percentage markup over the agent's 
+ * This strategy bids at the specified percentage markup over the agent's
  * current valuation.
  * 
  * @author Steve Phelps
@@ -33,14 +33,14 @@ import java.io.Serializable;
  */
 
 public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
-                                    implements Serializable, Prototypeable {
+    implements Serializable, Prototypeable {
 
   protected double markup;
 
   public static final String P_MARKUP = "markup";
 
   public ProportionalMarkupStrategy( AbstractTradingAgent agent, double markup,
-      								int quantity ) {
+      int quantity ) {
     super(agent);
     this.markup = markup;
     this.quantity = quantity;
@@ -57,12 +57,12 @@ public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
   }
 
   public Object protoClone() {
-  	Object clonedStrategy;
-  	try {
-  		clonedStrategy = this.clone();
-  	} catch ( CloneNotSupportedException e ) {
-  		throw new Error(e);
-  	}
+    Object clonedStrategy;
+    try {
+      clonedStrategy = this.clone();
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
     return clonedStrategy;
   }
 
@@ -84,6 +84,5 @@ public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
   public void endOfRound( Auction auction ) {
     // Do nothing
   }
-  
 
 }

@@ -21,21 +21,19 @@ import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.event.AuctionEventListener;
 
 /**
- * An object capable of producing a report at the end of an auction.
- * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface AuctionReport extends AuctionEventListener {
-  
+
   /**
    * Produce the final report for the user. Implementors can do whatever they
    * see fit, for example by writing a report on stdout, or they may choose to
    * do nothing.
    */
   public void produceUserOutput();
-  
+
   /**
    * Returns a Map of all of the variables that are produced in the report. The
    * Map maps variables, represented by objects of type ReportVariable, onto
@@ -43,11 +41,12 @@ public interface AuctionReport extends AuctionEventListener {
    * report then an empty Map is returned.
    * 
    * @see ReportVariable
+   * @uml.property name="variables"
    */
   public Map getVariables();
-  
+
   /**
-   *  Specify the auction to be used when generating the report.
+   * Specify the auction to be used when generating the report.
    */
   public void setAuction( RoundRobinAuction auction );
 

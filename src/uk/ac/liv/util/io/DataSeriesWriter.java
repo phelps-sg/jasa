@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.util.io;
 
 import javax.swing.table.AbstractTableModel;
@@ -27,20 +26,20 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A data writer that stores data in a memory-resident data structure
- * that can also be used as a data series model for a JSci graph,
- * or a table model for a swing JTable component.
+ * A data writer that stores data in a memory-resident data structure that can
+ * also be used as a data series model for a JSci graph, or a table model for a
+ * swing JTable component.
  * </p>
- *
+ * 
  * <p>
- * Each datum written to the DataWriter is one half a 2-dimensional
- * coordinate.  The first datum is typically a time value.
+ * Each datum written to the DataWriter is one half a 2-dimensional coordinate.
+ * The first datum is typically a time value.
  * </p>
- *
+ * 
  * <p>
  * Example usage:
  * </p>
- *
+ * 
  * <code>
  * DataSeriesWriter timeSeries = new DataSeriesWriter();<br>
  * for( int t=0; t&lt;1000; t++ ) {<br>
@@ -48,21 +47,35 @@ import org.apache.log4j.Logger;
  *   timeSeries.newData(getValue(t));<br>
  * }<br>
  * </code>
- *
- *
+ * 
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DataSeriesWriter extends AbstractTableModel
-    implements DataWriter, Serializable {
+public class DataSeriesWriter extends AbstractTableModel implements DataWriter,
+    Serializable {
 
+  /**
+   * @uml.property name="isVisible"
+   */
   protected boolean isVisible = true;
 
+  /**
+   * @uml.property name="isXCoordinate"
+   */
   protected boolean isXCoordinate = true;
 
+  /**
+   * @uml.property name="xCoord"
+   */
   protected double xCoord;
 
+  /**
+   * @uml.property name="data"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.util.io.SeriesDatum"
+   */
   protected Vector data = new Vector();
 
   static Logger logger = Logger.getLogger(DataSeriesWriter.class);
@@ -102,21 +115,21 @@ public class DataSeriesWriter extends AbstractTableModel
   }
 
   public float getCoord( int datum, int dimension ) {
-    switch( dimension ) {
-      case 0:
-        return getXCoord(datum);
-      case 1:
-        return getYCoord(datum);
-      default:
-        throw new Error("Invalid dimension- " + dimension);
+    switch ( dimension ) {
+    case 0:
+      return getXCoord(datum);
+    case 1:
+      return getYCoord(datum);
+    default:
+      throw new Error("Invalid dimension- " + dimension);
     }
   }
 
   public float getXCoord( int datum ) {
-    if ( datum > data.size()-1 ) {
+    if ( datum > data.size() - 1 ) {
       return 0f;
     } else {
-      return (float) ( (SeriesDatum) data.get(datum)).getX();
+      return (float) ((SeriesDatum) data.get(datum)).getX();
     }
   }
 
@@ -128,7 +141,7 @@ public class DataSeriesWriter extends AbstractTableModel
     SeriesDatum datum = (SeriesDatum) data.get(i);
     double value = 0;
     if ( datum != null ) {
-      value = ( (SeriesDatum) data.get(i)).getY();
+      value = ((SeriesDatum) data.get(i)).getY();
     }
     if ( Double.isNaN(value) || Double.isInfinite(value) ) {
       return 0;
@@ -136,23 +149,23 @@ public class DataSeriesWriter extends AbstractTableModel
       return value;
     }
   }
-  
-  public int getColumnCount () {
+
+  public int getColumnCount() {
     return 2;
   }
-  
-  public int getRowCount () {
+
+  public int getRowCount() {
     return data.size();
   }
-  
-  public Object getValueAt ( int rowIndex, int columnIndex) {
+
+  public Object getValueAt( int rowIndex, int columnIndex ) {
     if ( columnIndex == 0 ) {
       return new Integer(rowIndex);
     } else {
       return new Double(getDatum(rowIndex));
     }
   }
-  
+
   public void flush() {
   }
 
@@ -163,25 +176,28 @@ public class DataSeriesWriter extends AbstractTableModel
     return data.size();
   }
 
-
-  public void newData(Iterator i) {
-    /**@todo Implement this uk.ac.liv.util.io.DataWriter method*/
-    throw new java.lang.UnsupportedOperationException("Method newData() not yet implemented.");
+  public void newData( Iterator i ) {
+    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+    throw new java.lang.UnsupportedOperationException(
+        "Method newData() not yet implemented.");
   }
 
-  public void newData(Object[] data) {
-    /**@todo Implement this uk.ac.liv.util.io.DataWriter method*/
-    throw new java.lang.UnsupportedOperationException("Method newData() not yet implemented.");
+  public void newData( Object[] data ) {
+    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+    throw new java.lang.UnsupportedOperationException(
+        "Method newData() not yet implemented.");
   }
 
-  public void newData(Object data) {
-    /**@todo Implement this uk.ac.liv.util.io.DataWriter method*/
-    throw new java.lang.UnsupportedOperationException("Method newData() not yet implemented.");
+  public void newData( Object data ) {
+    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+    throw new java.lang.UnsupportedOperationException(
+        "Method newData() not yet implemented.");
   }
 
-  public void newData(boolean data) {
-    /**@todo Implement this uk.ac.liv.util.io.DataWriter method*/
-    throw new java.lang.UnsupportedOperationException("Method newData() not yet implemented.");
+  public void newData( boolean data ) {
+    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+    throw new java.lang.UnsupportedOperationException(
+        "Method newData() not yet implemented.");
   }
 
   public String toString() {
@@ -199,8 +215,14 @@ public class DataSeriesWriter extends AbstractTableModel
 
 class SeriesDatum {
 
+  /**
+   * @uml.property name="x"
+   */
   double x;
 
+  /**
+   * @uml.property name="y"
+   */
   double y;
 
   public SeriesDatum( double x, double y ) {
@@ -208,11 +230,33 @@ class SeriesDatum {
     this.y = y;
   }
 
-  public void setX( double x ) { this.x = x; }
-  public void setY( double y ) { this.y = y; }
+  /**
+   * @uml.property name="x"
+   */
+  public void setX( double x ) {
+    this.x = x;
+  }
 
-  public double getX() { return x; }
-  public double getY() { return y; }
+  /**
+   * @uml.property name="y"
+   */
+  public void setY( double y ) {
+    this.y = y;
+  }
+
+  /**
+   * @uml.property name="x"
+   */
+  public double getX() {
+    return x;
+  }
+
+  /**
+   * @uml.property name="y"
+   */
+  public double getY() {
+    return y;
+  }
 
   public String toString() {
     return "(" + getClass() + " x:" + x + " y:" + y + ")";

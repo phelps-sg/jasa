@@ -21,19 +21,21 @@ import uk.ac.liv.util.Parameterizable;
 
 /**
  * The interface for expressing the condition of closing an auction.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
- *
+ * 
  */
 
-public class MaxRoundsDayEndingCondition extends TimingCondition implements Parameterizable, DayEndingCondition {
+public class MaxRoundsDayEndingCondition extends TimingCondition implements
+    Parameterizable, DayEndingCondition {
 
   public static final String P_LENGTH_OF_DAY = "lengthofday";
-  
-  
+
   /**
    * The maximum length in rounds of a trading day
+   * 
+   * @uml.property name="lengthOfDay"
    */
   protected int lengthOfDay = -1;
 
@@ -41,27 +43,33 @@ public class MaxRoundsDayEndingCondition extends TimingCondition implements Para
     this(null);
   }
 
-  public MaxRoundsDayEndingCondition(Auction auction) {
+  public MaxRoundsDayEndingCondition( Auction auction ) {
     super(auction);
   }
 
-  /* 
-   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase, ec.util.Parameter)
+  /*
+   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+   *      ec.util.Parameter)
    */
-  public void setup(ParameterDatabase parameters, Parameter base) {
-    
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
     lengthOfDay = parameters.getIntWithDefault(base.push(P_LENGTH_OF_DAY),
         null, -1);
   }
-  
+
+  /**
+   * @uml.property name="lengthOfDay"
+   */
   public int getLengthOfDay() {
     return lengthOfDay;
   }
 
+  /**
+   * @uml.property name="lengthOfDay"
+   */
   public void setLengthOfDay( int lengthOfDay ) {
     this.lengthOfDay = lengthOfDay;
   }
-
 
   /*
    * @see uk.ac.liv.auction.core.TimingCondition#eval()
@@ -70,9 +78,8 @@ public class MaxRoundsDayEndingCondition extends TimingCondition implements Para
     return getRemainingRounds() <= 0;
   }
 
-  
   public int getRemainingRounds() {
-    if (lengthOfDay > getAuction().getRound())
+    if ( lengthOfDay > getAuction().getRound() )
       return lengthOfDay - getAuction().getRound();
     else
       return 0;

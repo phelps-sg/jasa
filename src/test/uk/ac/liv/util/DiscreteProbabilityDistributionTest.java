@@ -20,73 +20,74 @@ import junit.framework.*;
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 import uk.ac.liv.util.CummulativeDistribution;
 
-/** 
+/**
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class DiscreteProbabilityDistributionTest extends TestCase {
-  
+
+  /**
+   * @uml.property name="p"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   protected DiscreteProbabilityDistribution p[];
-  
+
   static final int NUM_TRIALS = 10000000;
-  
-  static final double probs[][] = {
-      { 0.1, 0.2, 0.4, 0.2, 0.1 },      
-      { 0.2, 0.2, 0.2, 0.2, 0.2 },
-      { 0.25, 0.2, 0.1, 0.2, 0.25 },
-      { 0, 1, 0, 0, 0 },
-      { 1, 0, 0, 0, 0 },
-      { 0, 0, 0, 0, 1 }
-  };
-   
+
+  static final double probs[][] = { { 0.1, 0.2, 0.4, 0.2, 0.1 },
+      { 0.2, 0.2, 0.2, 0.2, 0.2 }, { 0.25, 0.2, 0.1, 0.2, 0.25 },
+      { 0, 1, 0, 0, 0 }, { 1, 0, 0, 0, 0 }, { 0, 0, 0, 0, 1 } };
+
   public DiscreteProbabilityDistributionTest( String name ) {
     super(name);
   }
-  
+
   public void setUp() {
-    p = new DiscreteProbabilityDistribution[probs.length];    
-    for( int i=0; i<probs.length; i++ ) {
+    p = new DiscreteProbabilityDistribution[probs.length];
+    for ( int i = 0; i < probs.length; i++ ) {
       p[i] = new DiscreteProbabilityDistribution(probs[i].length);
-      for( int j=0; j<probs[i].length; j++ ) {
+      for ( int j = 0; j < probs[i].length; j++ ) {
         p[i].setProbability(j, probs[i][j]);
       }
     }
   }
-  
+
   public void testStats() {
-    for( int test=0; test<p.length; test++ ) {
+    for ( int test = 0; test < p.length; test++ ) {
       DiscreteProbabilityDistribution subject = p[test];
-      CummulativeDistribution eventData = new CummulativeDistribution("Event_Data");      
-      for( int trial=0; trial<NUM_TRIALS; trial++ ) {
+      CummulativeDistribution eventData = new CummulativeDistribution(
+          "Event_Data");
+      for ( int trial = 0; trial < NUM_TRIALS; trial++ ) {
         int event = subject.generateRandomEvent();
         eventData.newData(event);
-      }      
+      }
       System.out.println(eventData);
       double mean = subject.computeMean();
-      
-      System.out.println("Testing with subject number " + test + ": " + subject);
-      
-      System.out.println("target mean = " + mean);      
-      assertTrue(approxEqual(eventData.getMean(), mean));      
-      
+
+      System.out
+          .println("Testing with subject number " + test + ": " + subject);
+
+      System.out.println("target mean = " + mean);
+      assertTrue(approxEqual(eventData.getMean(), mean));
+
       double min = (double) subject.computeMin();
       System.out.println("target min = " + min);
-      assertTrue(approxEqual(eventData.getMin(),  min));
-      
+      assertTrue(approxEqual(eventData.getMin(), min));
+
       double max = (double) subject.computeMax();
       System.out.println("target max = " + max);
       assertTrue(approxEqual(eventData.getMax(), max));
-      
+
     }
   }
-  
+
   public boolean approxEqual( double x, double y ) {
-    return Math.abs(x-y) < 0.005;
+    return Math.abs(x - y) < 0.005;
   }
-  
+
   public static void main( String[] args ) {
-    junit.textui.TestRunner.run (suite());
+    junit.textui.TestRunner.run(suite());
   }
 
   public static Test suite() {

@@ -29,47 +29,64 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 public abstract class IntervalValuerTest extends TestCase {
-    
+
+  /**
+   * @uml.property   name="valuer"
+   * @uml.associationEnd   
+   */
   protected IntervalValuer valuer;
-  
+
+  /**
+   * @uml.property   name="paramDb"
+   * @uml.associationEnd   
+   */
   protected ParameterDatabase paramDb;
-  
+
+  /**
+   * @uml.property   name="base"
+   * @uml.associationEnd   
+   */
   protected Parameter base;
-  
+
+  /**
+   * @uml.property   name="auction"
+   * @uml.associationEnd   
+   */
   protected RoundRobinAuction auction;
-  
+
   public static final double MIN_VALUE = 10;
+
   public static final double STEP = 5;
-  
+
   public IntervalValuerTest( String name ) {
     super(name);
   }
-  
+
   public void setUp() {
     valuer = assignValuer();
     paramDb = new ParameterDatabase();
     base = new Parameter("test");
     paramDb.set(base.push(IntervalValuer.P_MINVALUE), MIN_VALUE + "");
-    paramDb.set(base.push(IntervalValuer.P_STEP), STEP + "");    
+    paramDb.set(base.push(IntervalValuer.P_STEP), STEP + "");
     auction = new RoundRobinAuction("test");
   }
-  
+
   public void testStep() {
     double value;
-    
+
     valuer.setup(paramDb, base);
-    
+
     value = valuer.determineValue(auction);
     System.out.println("value = " + value);
     assertTrue(value == MIN_VALUE);
-    
+
     valuer.setup(paramDb, base);
-    
+
     value = valuer.determineValue(auction);
     System.out.println("value = " + value);
     assertTrue(value == MIN_VALUE + STEP);
   }
-  
+
   public abstract IntervalValuer assignValuer();
 
 }

@@ -26,15 +26,19 @@ import ec.util.Parameter;
 import uk.ac.liv.util.Parameterizable;
 
 /**
- *
+ * 
  * An abstract implementation of FixedQuantityStrategy.
- *
- * </p><p><b>Parameters</b><br>
+ * 
+ * </p>
+ * <p>
+ * <b>Parameters</b><br>
  * <table>
- * <tr><td valign=top><i>base</i><tt>.quantity</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.quantity</tt><br>
  * <font size=-1>int &gt;= 0</font></td>
- * <td valign=top>(the quantity to bid for in each auction round)</td></tr>
- *
+ * <td valign=top>(the quantity to bid for in each auction round)</td>
+ * </tr>
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -55,13 +59,14 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), null, quantity);
+    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), null,
+        quantity);
   }
 
   public void setQuantity( int quantity ) {
     this.quantity = quantity;
   }
-  
+
   public int getQuantity() {
     return quantity;
   }

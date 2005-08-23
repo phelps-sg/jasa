@@ -29,33 +29,43 @@ import ec.util.ParameterDatabase;
 import java.io.Serializable;
 
 /**
- * An implementation of the Widrow-Hoff learning algorithm 
- * for 1-dimensional training sets.
- *
+ * An implementation of the Widrow-Hoff learning algorithm for 1-dimensional
+ * training sets.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class WidrowHoffLearner extends AbstractLearner
-    implements MimicryLearner, Prototypeable, Serializable {
+public class WidrowHoffLearner extends AbstractLearner implements
+    MimicryLearner, Prototypeable, Serializable {
 
   /**
    * The learning rate.
+   * 
+   * @uml.property name="learningRate"
    */
   protected double learningRate;
 
   /**
    * The current output level.
+   * 
+   * @uml.property name="currentOutput"
    */
   protected double currentOutput;
 
   /**
    * The current amount of adjustment to the output.
+   * 
+   * @uml.property name="delta"
    */
   protected double delta;
-  
-  protected AbstractContinousDistribution randomParamDistribution =
-    new Uniform(0.1, 0.4, GlobalPRNG.getInstance());
+
+  /**
+   * @uml.property name="randomParamDistribution"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected AbstractContinousDistribution randomParamDistribution = new Uniform(
+      0.1, 0.4, GlobalPRNG.getInstance());
 
   public static final double DEFAULT_LEARNING_RATE = 0.1;
 
@@ -72,7 +82,7 @@ public class WidrowHoffLearner extends AbstractLearner
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    learningRate = parameters.getDouble(base.push(P_LEARNINGRATE), null, 0); 
+    learningRate = parameters.getDouble(base.push(P_LEARNINGRATE), null, 0);
   }
 
   public Object protoClone() {
@@ -114,30 +124,41 @@ public class WidrowHoffLearner extends AbstractLearner
     initialise();
   }
 
+  /**
+   * @uml.property name="learningRate"
+   */
   public void setLearningRate( double learningRate ) {
     this.learningRate = learningRate;
   }
 
+  /**
+   * @uml.property name="learningRate"
+   */
   public double getLearningRate() {
     return learningRate;
   }
 
-
   public void randomInitialise() {
-    learningRate = randomParamDistribution.nextDouble();       
+    learningRate = randomParamDistribution.nextDouble();
   }
 
+  /**
+   * @uml.property name="currentOutput"
+   */
   public double getCurrentOutput() {
     return currentOutput;
   }
-  
+
+  /**
+   * @uml.property name="delta"
+   */
   public double getDelta() {
     return delta;
   }
-  
+
   public String toString() {
-    return ("(" + getClass() + " learningRate:" + learningRate +
-             " delta:" + delta + " currentOutput:" + currentOutput + ")");
+    return ("(" + getClass() + " learningRate:" + learningRate + " delta:"
+        + delta + " currentOutput:" + currentOutput + ")");
   }
 
 }

@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.config;
 
 import ec.util.Parameter;
@@ -29,14 +30,20 @@ public class Ratio implements ParameterBasedCase {
 
   public static final String P_NUMAGENTS = "numagents";
 
+  /**
+   * @uml.property name="s"
+   */
   private int s;
 
+  /**
+   * @uml.property name="b"
+   */
   private int b;
 
   public Ratio() {
   }
 
-  public void setParameter(String param) {
+  public void setParameter( String param ) {
     String values[] = param.split(":");
 
     s = Integer.parseInt(values[0]);
@@ -47,7 +54,7 @@ public class Ratio implements ParameterBasedCase {
     return s + "|" + b;
   }
 
-  public void apply(ParameterDatabase pdb, Parameter base) {
+  public void apply( ParameterDatabase pdb, Parameter base ) {
     int groupsize = pdb.getInt(base.push(GroupSize.P_GROUPSIZE));
     int sellerNum = s * groupsize;
     int buyerNum = b * groupsize;

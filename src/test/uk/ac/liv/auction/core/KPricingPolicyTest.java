@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package test.uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
@@ -36,88 +37,100 @@ import junit.framework.TestSuite;
 
 public class KPricingPolicyTest extends TestCase {
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   ClearingHouseAuctioneer auctioneer;
-  
+
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   RoundRobinAuction auction;
-  
+
+  /**
+   * @uml.property name="agents"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   MockTrader[] agents;
-  
+
   public KPricingPolicyTest( String name ) {
     super(name);
   }
-  
+
   public void setUp() {
     auction = new RoundRobinAuction();
     auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
-    
+
     agents = new MockTrader[4];
-    
+
     agents[0] = new MockTrader(this, 0, 0, 200, false);
     agents[1] = new MockTrader(this, 0, 0, 150, false);
-    
+
     agents[2] = new MockTrader(this, 0, 0, 100, true);
     agents[3] = new MockTrader(this, 0, 0, 50, true);
-    
-    for( int i=0; i<agents.length; i++ ) {
-      agents[i].setStrategy( new TruthTellingStrategy(agents[i]));
+
+    for ( int i = 0; i < agents.length; i++ ) {
+      agents[i].setStrategy(new TruthTellingStrategy(agents[i]));
       auction.register(agents[i]);
     }
-  
+
   }
-  
+
   /**
-   * Test that truthful agents transact at mid equilibrium price
-   * in a k=0.5 CH with uniform clearing.
+   * Test that truthful agents transact at mid equilibrium price in a k=0.5 CH
+   * with uniform clearing.
    */
   public void testUniformPolicyEquilibriumPrice() {
-    
+
     EquilibriumReport eqStats = new EquilibriumReport(auction);
-    auctioneer.setPricingPolicy( new UniformPricingPolicy(0.5) );
+    auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
     auction.setMaximumRounds(1);
     auction.addReport(eqStats);
     auction.run();
-    
+
     eqStats.calculate();
     double ep = eqStats.calculateMidEquilibriumPrice();
-    
+
     for ( int i = 0; i < agents.length; i++ ) {
       assertTrue(MathUtil.approxEqual(ep, agents[i].lastWinningPrice));
     }
   }
-  
-  
+
   public void testPayAsBid() {
-    
-    auctioneer.setPricingPolicy( new DiscriminatoryPricingPolicy(1) );
+
+    auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(1));
     auction.setMaximumRounds(1);
     auction.run();
-    
-    for( int i=0; i<agents.length; i++ ) {
+
+    for ( int i = 0; i < agents.length; i++ ) {
       if ( agents[i].isBuyer() ) {
-        assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i].getValuation(auction)));
+        assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i]
+            .getValuation(auction)));
       }
     }
   }
-  
-  
+
   public void testPayAsAsk() {
-  
-    auctioneer.setPricingPolicy( new DiscriminatoryPricingPolicy(0) );
+
+    auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0));
     auction.setMaximumRounds(1);
     auction.run();
-    
-    for( int i=0; i<agents.length; i++ ) {
+
+    for ( int i = 0; i < agents.length; i++ ) {
       if ( agents[i].isSeller() ) {
-        assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i].getValuation(auction)));
+        assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i]
+            .getValuation(auction)));
       }
     }
   }
-  
+
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
   }
-  
+
   public static Test suite() {
     return new TestSuite(KPricingPolicyTest.class);
   }

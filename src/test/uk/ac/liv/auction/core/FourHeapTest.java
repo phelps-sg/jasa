@@ -32,8 +32,21 @@ import org.apache.commons.collections.buffer.PriorityBuffer;
 
 public class FourHeapTest extends TestCase {
 
+  /**
+   * @uml.property name="shoutEngine"
+   * @uml.associationEnd
+   */
   TestShoutEngine shoutEngine;
+
+  /**
+   * @uml.property name="testTrader"
+   * @uml.associationEnd
+   */
   MockTrader testTrader;
+
+  /**
+   * @uml.property name="randGenerator"
+   */
   Random randGenerator;
 
   public FourHeapTest( String name ) {
@@ -62,23 +75,22 @@ public class FourHeapTest extends TestCase {
 
       Shout testRemoveShout = null, testRemoveShout2 = null;
 
-      for( int round=0; round<700; round++ ) {
+      for ( int round = 0; round < 700; round++ ) {
 
         if ( testRemoveShout != null ) {
-         shoutEngine.removeShout(testRemoveShout);
-         shoutEngine.removeShout(testRemoveShout2);
+          shoutEngine.removeShout(testRemoveShout);
+          shoutEngine.removeShout(testRemoveShout2);
         }
 
-        for( int shout=0; shout<200; shout++ ) {
-          shoutEngine.newShout( randomShout());
+        for ( int shout = 0; shout < 200; shout++ ) {
+          shoutEngine.newShout(randomShout());
         }
 
         shoutEngine.newShout(testRemoveShout = randomShout());
         testRemoveShout2 = (Shout) testRemoveShout.clone();
         testRemoveShout2 = new Shout(testRemoveShout.getAgent(),
-                                                             testRemoveShout.getQuantity(),
-                                                             testRemoveShout.getPrice(),
-                                                             !testRemoveShout.isBid());
+            testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
+            !testRemoveShout.isBid());
         shoutEngine.newShout(testRemoveShout2);
 
         if ( (round & 0x01) > 0 ) {
@@ -91,12 +103,12 @@ public class FourHeapTest extends TestCase {
           matches++;
           Shout bid = (Shout) i.next();
           Shout ask = (Shout) i.next();
-          assertTrue( bid.isBid() );
-          assertTrue( ask.isAsk() );
-          assertTrue( bid.getPrice() >= ask.getPrice() );
-          //System.out.print(bid + "/" + ask + " ");
+          assertTrue(bid.isBid());
+          assertTrue(ask.isAsk());
+          assertTrue(bid.getPrice() >= ask.getPrice());
+          // System.out.print(bid + "/" + ask + " ");
         }
-        //System.out.println("");
+        // System.out.println("");
       }
 
     } catch ( Exception e ) {
@@ -109,7 +121,6 @@ public class FourHeapTest extends TestCase {
 
   }
 
-
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
   }
@@ -119,7 +130,6 @@ public class FourHeapTest extends TestCase {
   }
 
 }
-
 
 class TestShoutEngine extends FourHeapShoutEngine {
 
@@ -137,7 +147,7 @@ class TestShoutEngine extends FourHeapShoutEngine {
     int nB = countQty(bIn);
     if ( nS != nB ) {
       printState();
-      throw new Error("shout heaps not balanced nS="+nS + " nB=" + nB);
+      throw new Error("shout heaps not balanced nS=" + nS + " nB=" + nB);
     }
 
     Shout bInTop = getLowestMatchedBid();
@@ -169,7 +179,7 @@ class TestShoutEngine extends FourHeapShoutEngine {
     }
     return qty;
   }
-  
+
   public void newShout( Shout shout ) throws DuplicateShoutException {
     if ( shout.isAsk() ) {
       newAsk(shout);
@@ -177,7 +187,5 @@ class TestShoutEngine extends FourHeapShoutEngine {
       newBid(shout);
     }
   }
-
-
 
 }

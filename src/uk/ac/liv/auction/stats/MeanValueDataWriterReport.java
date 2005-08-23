@@ -26,47 +26,68 @@ import uk.ac.liv.util.io.*;
 import org.apache.log4j.Logger;
 
 /**
- * This report keeps track of the mean value of each market variable
- * over the course of each round of bidding and logs the mean value
- * to the specified DataWriter objects.
- *
+ * This report keeps track of the mean value of each market variable over the
+ * course of each round of bidding and logs the mean value to the specified
+ * DataWriter objects.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class MeanValueDataWriterReport extends DataWriterReport {
 
+  /**
+   * @uml.property name="askQuoteStats"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected CummulativeDistribution askQuoteStats = new CummulativeDistribution(
+      "Ask Quote");
 
-  protected CummulativeDistribution askQuoteStats =
-      new CummulativeDistribution("Ask Quote");
+  /**
+   * @uml.property name="bidQuoteStats"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected CummulativeDistribution bidQuoteStats = new CummulativeDistribution(
+      "Bid Quote");
 
-  protected CummulativeDistribution bidQuoteStats =
-      new CummulativeDistribution("Bid Quote");
+  /**
+   * @uml.property name="bidStats"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected CummulativeDistribution bidStats = new CummulativeDistribution(
+      "Bid");
 
-  protected CummulativeDistribution bidStats =
-      new CummulativeDistribution("Bid");
+  /**
+   * @uml.property name="askStats"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected CummulativeDistribution askStats = new CummulativeDistribution(
+      "Ask");
 
-  protected CummulativeDistribution askStats =
-      new CummulativeDistribution("Ask");
+  /**
+   * @uml.property name="transPriceStats"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected CummulativeDistribution transPriceStats = new CummulativeDistribution(
+      "Transaction Price");
 
-  protected CummulativeDistribution transPriceStats =
-      new CummulativeDistribution("Transaction Price");
+  /**
+   * @uml.property name="allStats"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
+  protected CummulativeDistribution[] allStats = { askQuoteStats,
+      bidQuoteStats, askStats, bidStats, transPriceStats };
 
-  protected CummulativeDistribution[] allStats = {
-      askQuoteStats, bidQuoteStats, askStats, bidStats, transPriceStats
-  };
-
+  /**
+   * @uml.property name="round"
+   */
   protected int round;
 
-  static Logger logger =
-      Logger.getLogger(MeanValueDataWriterReport.class);
-
+  static Logger logger = Logger.getLogger(MeanValueDataWriterReport.class);
 
   public MeanValueDataWriterReport( DataWriter askQuoteLog,
-                                      DataWriter bidQuoteLog,
-                                      DataWriter bidLog,
-                                      DataWriter askLog,
-                                      DataWriter transPriceLog ) {
+      DataWriter bidQuoteLog, DataWriter bidLog, DataWriter askLog,
+      DataWriter transPriceLog ) {
     super(askQuoteLog, bidQuoteLog, bidLog, askLog, transPriceLog);
   }
 
@@ -74,37 +95,33 @@ public class MeanValueDataWriterReport extends DataWriterReport {
     super();
   }
 
-
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
     if ( event instanceof RoundClosedEvent ) {
       roundClosed((RoundClosedEvent) event);
     }
   }
-  
+
   public void updateQuoteLog( RoundClosedEvent event ) {
     MarketQuote quote = event.getAuction().getQuote();
     askQuoteStats.newData(quote.getAsk());
     bidQuoteStats.newData(quote.getBid());
   }
 
-
   public void updateTransPriceLog( TransactionExecutedEvent event ) {
-     transPriceStats.newData(event.getPrice());
+    transPriceStats.newData(event.getPrice());
   }
-
 
   public void updateShoutLog( ShoutPlacedEvent event ) {
     Shout shout = event.getShout();
-    if (shout.isBid()) {
+    if ( shout.isBid() ) {
       bidStats.newData(shout.getPrice());
     } else {
       askStats.newData(shout.getPrice());
     }
   }
 
-
-  public void roundClosed( RoundClosedEvent event  ) {
+  public void roundClosed( RoundClosedEvent event ) {
 
     logger.debug("roundClosed(" + auction + ")");
 
@@ -114,7 +131,7 @@ public class MeanValueDataWriterReport extends DataWriterReport {
     update(bidLog, bidStats);
     update(transPriceLog, transPriceStats);
 
-    for( int i=0; i<allStats.length; i++ ) {
+    for ( int i = 0; i < allStats.length; i++ ) {
       logger.debug(allStats[i]);
       allStats[i].reset();
     }
@@ -122,16 +139,12 @@ public class MeanValueDataWriterReport extends DataWriterReport {
     round++;
   }
 
-
-
   protected void update( DataWriter writer, CummulativeDistribution stats ) {
-    //writer.newData(round);
+    // writer.newData(round);
     writer.newData(stats.getMean());
   }
 
-
   public void produceUserOutput() {
   }
-
 
 }

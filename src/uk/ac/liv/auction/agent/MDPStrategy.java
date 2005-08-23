@@ -30,18 +30,17 @@ import java.io.Serializable;
 
 /**
  * <p>
- * A trading strategy that uses an MDP learning algorithm,
- * such as the Q-learning algorithm, to adapt its trading behaviour in
- * successive auction rounds.  The current market-quote is hashed to produce
- * an integer state value.
- *
+ * A trading strategy that uses an MDP learning algorithm, such as the
+ * Q-learning algorithm, to adapt its trading behaviour in successive auction
+ * rounds. The current market-quote is hashed to produce an integer state value.
+ * 
  * @author Steve Phelps
  * @version $Revision$
- * </p>
+ *          </p>
  */
 
-public class MDPStrategy extends DiscreteLearnerStrategy
-                                  implements Serializable {
+public class MDPStrategy extends DiscreteLearnerStrategy implements
+    Serializable {
 
   protected MDPLearner learner;
 
@@ -58,15 +57,19 @@ public class MDPStrategy extends DiscreteLearnerStrategy
   protected boolean firstShout = true;
 
   public static final String P_LEARNER = "learner";
+
   public static final String P_QUOTEBINS = "quotebins";
+
   public static final String P_ASKBINSTART = "askbinstart";
+
   public static final String P_ASKBINWIDTH = "askbinwidth";
+
   public static final String P_BIDBINSTART = "bidbinstart";
+
   public static final String P_BIDBINWIDTH = "bidbinwidth";
 
-  public MDPStrategy( AbstractTradingAgent agent,
-                        double askBinStart, double askBinWidth,
-                        double bidBinStart, double bidBinWidth ) {
+  public MDPStrategy( AbstractTradingAgent agent, double askBinStart,
+      double askBinWidth, double bidBinStart, double bidBinWidth ) {
     super(agent);
     this.askBinStart = askBinStart;
     this.askBinWidth = askBinWidth;
@@ -78,15 +81,13 @@ public class MDPStrategy extends DiscreteLearnerStrategy
     super();
   }
 
-
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     super.setup(parameters, base);
 
     Parameter learnerParameter = base.push(P_LEARNER);
-    learner = (MDPLearner)
-      parameters.getInstanceForParameter(learnerParameter, null,
-                                          MDPLearner.class);
+    learner = (MDPLearner) parameters.getInstanceForParameter(learnerParameter,
+        null, MDPLearner.class);
     ((Parameterizable) learner).setup(parameters, learnerParameter);
 
     askBinStart = parameters.getDouble(base.push(P_ASKBINSTART), null, 0);
@@ -95,7 +96,6 @@ public class MDPStrategy extends DiscreteLearnerStrategy
     bidBinWidth = parameters.getDouble(base.push(P_BIDBINWIDTH), null, 0);
     quoteBins = parameters.getInt(base.push(P_QUOTEBINS), null, 1);
   }
-
 
   public int act() {
     return learner.act();
@@ -114,13 +114,13 @@ public class MDPStrategy extends DiscreteLearnerStrategy
     double ask = quote.getAsk();
     int bidBin = 0;
     int askBin = 0;
-    if ( ! Double.isInfinite(bid) ) {
-      bidBin = ((int) ( (bid - bidBinStart) / bidBinWidth)) + 1;
+    if ( !Double.isInfinite(bid) ) {
+      bidBin = ((int) ((bid - bidBinStart) / bidBinWidth)) + 1;
     }
-    if ( ! Double.isInfinite(ask) ) {
-      askBin = ((int) ( (ask - askBinStart) / askBinWidth)) + 1;
+    if ( !Double.isInfinite(ask) ) {
+      askBin = ((int) ((ask - askBinStart) / askBinWidth)) + 1;
     }
-    return bidBin*quoteBins + askBin;
+    return bidBin * quoteBins + askBin;
   }
 
   public void reset() {

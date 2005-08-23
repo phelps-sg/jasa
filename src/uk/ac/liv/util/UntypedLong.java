@@ -19,14 +19,17 @@ package uk.ac.liv.util;
  * <p>
  * Faster version of <code>java.lang.Long</code>.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
- *
+ * 
  */
 
 public class UntypedLong extends UntypedNumber {
 
+  /**
+   * @uml.property name="primitiveValue"
+   */
   long primitiveValue;
 
   public UntypedLong() {
@@ -41,10 +44,9 @@ public class UntypedLong extends UntypedNumber {
     primitiveValue = value;
   }
 
-
   public UntypedNumber add( UntypedNumber other ) {
     if ( other instanceof UntypedLong ) {
-      return new UntypedLong( primitiveValue + other.longValue() );
+      return new UntypedLong(primitiveValue + other.longValue());
     } else if ( other instanceof UntypedDouble ) {
       return new UntypedDouble(doubleValue() + other.doubleValue());
     } else {
@@ -54,7 +56,7 @@ public class UntypedLong extends UntypedNumber {
 
   public UntypedNumber multiply( UntypedNumber other ) {
     if ( other instanceof UntypedLong ) {
-      return new UntypedLong( primitiveValue * other.longValue() );
+      return new UntypedLong(primitiveValue * other.longValue());
     } else if ( other instanceof UntypedDouble ) {
       return new UntypedDouble(doubleValue() * other.doubleValue());
     } else {
@@ -63,8 +65,8 @@ public class UntypedLong extends UntypedNumber {
   }
 
   public UntypedNumber subtract( UntypedNumber other ) {
-  if ( other instanceof UntypedLong ) {
-      return new UntypedLong( primitiveValue - other.longValue() );
+    if ( other instanceof UntypedLong ) {
+      return new UntypedLong(primitiveValue - other.longValue());
     } else if ( other instanceof UntypedDouble ) {
       return new UntypedDouble(doubleValue() - other.doubleValue());
     } else {
@@ -73,7 +75,7 @@ public class UntypedLong extends UntypedNumber {
   }
 
   public UntypedNumber divide( UntypedNumber other ) {
-    return opResult( doubleValue() / other.doubleValue() );
+    return opResult(doubleValue() / other.doubleValue());
   }
 
   protected UntypedNumber opResult( double tempResult ) {
@@ -84,7 +86,6 @@ public class UntypedLong extends UntypedNumber {
       return new UntypedDouble(tempResult);
     }
   }
-
 
   public int compareTo( Object other ) {
     if ( other instanceof UntypedLong ) {
@@ -128,9 +129,8 @@ public class UntypedLong extends UntypedNumber {
     return primitiveValue;
   }
 
-
   public String toString() {
-    return primitiveValue+"";
+    return primitiveValue + "";
   }
 
   public boolean equals( Object other ) {

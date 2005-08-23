@@ -42,6 +42,9 @@ import ec.util.ParameterDatabase;
 public abstract class KPricingPolicy implements Serializable, PricingPolicy,
     Parameterizable {
 
+  /**
+   * @uml.property name="k"
+   */
   protected double k;
 
   public static final String P_K = "k";
@@ -50,24 +53,30 @@ public abstract class KPricingPolicy implements Serializable, PricingPolicy,
     this(0);
   }
 
-  public KPricingPolicy(double k) {
+  public KPricingPolicy( double k ) {
     this.k = k;
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
 
     k = parameters.getDoubleWithDefault(base.push(P_K), null, 0);
   }
 
-  public void setK(double k) {
+  /**
+   * @uml.property name="k"
+   */
+  public void setK( double k ) {
     this.k = k;
   }
 
+  /**
+   * @uml.property name="k"
+   */
   public double getK() {
     return k;
   }
 
-  public double kInterval(double a, double b) {
+  public double kInterval( double a, double b ) {
     return k * b + (1 - k) * a;
   }
 

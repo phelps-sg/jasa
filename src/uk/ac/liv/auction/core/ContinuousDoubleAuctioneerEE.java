@@ -26,9 +26,9 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
+
 import uk.ac.liv.auction.stats.ReportVariableBoard;
 import uk.ac.liv.auction.stats.ReportVariableBoardUpdater;
-import uk.ac.liv.util.CummulativeDistribution;
 
 /**
  * <p>
@@ -66,48 +66,62 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 
   static Logger logger = Logger.getLogger(ContinuousDoubleAuctioneerEE.class);
 
+  /**
+   * @uml.property name="expectedHighestAsk"
+   */
   private double expectedHighestAsk;
 
+  /**
+   * @uml.property name="expectedLowestBid"
+   */
   private double expectedLowestBid;
 
   /**
    * A parameter used to adjust the equilibrium price estimate in the interval
    * between matched bid and ask.
+   * 
+   * @uml.property name="k"
    */
   protected double k = 0.5;
+
   protected double delta = 0;
+
   protected int memorySize = 10;
 
   public static final String P_K = "k";
+
   public static final String P_DELTA = "delta";
+
   public static final String P_MEMORYSIZE = "memorysize";
-  
+
   public static final String EST_EQUILIBRIUM_PRICE = "estimated.equilibrium.price";
+
   public static final String EST_EQUILIBRIUM_PRICE_DEVIATION = "estimated.equilibrium.price.deviation";
-  
+
   FixedLengthQueue memory;
 
   public ContinuousDoubleAuctioneerEE() {
     this(null);
   }
 
-  public ContinuousDoubleAuctioneerEE(Auction auction) {
+  public ContinuousDoubleAuctioneerEE( Auction auction ) {
     super(auction);
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
 
     k = parameters.getDoubleWithDefault(base.push(P_K), null, k);
     assert (0 <= k && k <= 1);
-    
+
     delta = parameters.getDoubleWithDefault(base.push(P_DELTA), null, delta);
     assert (0 <= delta);
-    
-    memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null, memorySize);
+
+    memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null,
+        memorySize);
     assert (0 <= memorySize);
     memory = new FixedLengthQueue(memorySize);
-   
+
   }
 
   protected void initialise() {
@@ -115,37 +129,37 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 
     expectedHighestAsk = Double.POSITIVE_INFINITY;
     expectedLowestBid = 0;
-    
-    if (memory != null) 
+
+    if ( memory != null )
       memory.initialize();
   }
-  
-  public void checkImprovement(Shout shout) throws IllegalShoutException {
+
+  public void checkImprovement( Shout shout ) throws IllegalShoutException {
     super.checkImprovement(shout);
 
-    if (shout.isBid()) {
-      if (shout.getPrice() < expectedLowestBid) {
+    if ( shout.isBid() ) {
+      if ( shout.getPrice() < expectedLowestBid ) {
         bidNotAnImprovementException();
       }
     } else {
-      if (shout.getPrice() > expectedHighestAsk) {
+      if ( shout.getPrice() > expectedHighestAsk ) {
         askNotAnImprovementException();
       }
     }
   }
-  
-  public void eventOccurred(AuctionEvent event) {
-    
+
+  public void eventOccurred( AuctionEvent event ) {
+
     double estimate;
-    
-    if (event instanceof TransactionExecutedEvent) {
+
+    if ( event instanceof TransactionExecutedEvent ) {
       Shout ask = ((TransactionExecutedEvent) event).getAsk();
       Shout bid = ((TransactionExecutedEvent) event).getBid();
       estimate = k * bid.getPrice() + (1 - k) * ask.getPrice();
       memory.newData(estimate);
-      
-      if (memory.count() >= memorySize) {
-//        logger.info("Estimate : "+memory.getMean());
+
+      if ( memory.count() >= memorySize ) {
+        // logger.info("Estimate : "+memory.getMean());
         expectedLowestBid = memory.getMean() - delta;
         expectedHighestAsk = memory.getMean() + delta;
 
@@ -162,45 +176,47 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 
     }
   }
-  
+
   class FixedLengthQueue {
     double list[];
+
     int curIndex;
+
     double sum;
+
     int count;
-    
-    
-    public FixedLengthQueue(int length) {
+
+    public FixedLengthQueue( int length ) {
       assert (length >= 0);
       list = new double[length];
     }
-    
+
     public void initialize() {
-      for (int i=0; i<list.length; i++) {
+      for ( int i = 0; i < list.length; i++ ) {
         list[i] = 0;
       }
       curIndex = 0;
       sum = 0;
       count = 0;
     }
-    
-    public void newData(double value) {
+
+    public void newData( double value ) {
       sum -= list[curIndex];
       list[curIndex] = value;
       sum += value;
-      
+
       curIndex++;
       curIndex %= list.length;
-      
+
       count++;
     }
-    
+
     public int count() {
       return (count >= list.length) ? list.length : count;
     }
-    
+
     public double getMean() {
-      return sum/count();
+      return sum / count();
     }
   }
 }

@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package test.uk.ac.liv.auction;
 
 import java.io.ByteArrayOutputStream;
@@ -25,6 +26,7 @@ import uk.ac.liv.auction.core.Auctioneer;
 import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.UniformPricingPolicy;
+
 import uk.ac.liv.auction.electricity.ElectricityTrader;
 import uk.ac.liv.auction.zi.ZITraderAgent;
 
@@ -38,29 +40,34 @@ import junit.framework.TestSuite;
  */
 
 public class SerializationTests extends TestCase {
-  
+
+  /**
+   * @uml.property   name="auction"
+   * @uml.associationEnd   
+   */
   RoundRobinAuction auction;
-  
+
   public SerializationTests( String name ) {
     super(name);
   }
-  
+
   public void setUp() {
-    
+
     auction = new RoundRobinAuction("serialized auction");
     Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
-    ((AbstractAuctioneer)auctioneer).setPricingPolicy(new UniformPricingPolicy(0.5));
+    ((AbstractAuctioneer) auctioneer)
+        .setPricingPolicy(new UniformPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);
-    
+
     ZITraderAgent seller1 = new ZITraderAgent(10, 1, true);
     seller1.setStrategy(new TruthTellingStrategy(seller1));
-    
+
     ZITraderAgent buyer1 = new ZITraderAgent(5, 1, false);
     buyer1.setStrategy(new TruthTellingStrategy(buyer1));
-    
+
     ElectricityTrader buyer2 = new ElectricityTrader(10, 5, 0, true);
     buyer2.setStrategy(new TruthTellingStrategy(buyer2));
-    
+
     auction.register(buyer1);
     auction.register(buyer2);
     auction.register(seller1);
@@ -74,13 +81,13 @@ public class SerializationTests extends TestCase {
    */
   public void testCanSerializeAuction() {
     System.out.println("\ntestAuctionSerialization()\n");
-    
+
     System.out.print("Testing serialization in initial state.. ");
-    if ( ! canSerialize(auction) ) {
+    if ( !canSerialize(auction) ) {
       fail("cannot serialize auction in initial state");
     }
     System.out.println("done.");
-    
+
     System.out.print("Testing serialization after a single step.. ");
     auction.begin();
     try {
@@ -88,22 +95,22 @@ public class SerializationTests extends TestCase {
     } catch ( AuctionClosedException e ) {
       fail("tried to step through a closed auction");
     }
-    if ( ! canSerialize(auction) ) {
+    if ( !canSerialize(auction) ) {
       fail("cannot serialize auction in initial state");
     }
     System.out.println("done.");
-    
+
     System.out.print("Testing serialization of closed auction.. ");
     auction.close();
-    if ( ! canSerialize(auction) ) {
+    if ( !canSerialize(auction) ) {
       fail("cannot serialize auction in initial state");
     }
     System.out.println("done.");
-    
+
   }
-  
+
   //TODO create unit test to check state after reading object back
-  
+
   public boolean canSerialize( Object o ) {
     try {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -119,12 +126,12 @@ public class SerializationTests extends TestCase {
     return true;
   }
 
-  public static void main ( String[] args) {
+  public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
   }
 
-  public static Test suite () {
+  public static Test suite() {
     return new TestSuite(SerializationTests.class);
   }
-  
+
 }

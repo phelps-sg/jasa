@@ -19,11 +19,16 @@ import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.ai.learning.Learner;
 
-
 class TestLearnerStrategy extends DiscreteLearnerStrategy {
 
+  /**
+   * @uml.property name="actions"
+   */
   public int actions = 0;
 
+  /**
+   * @uml.property name="rewards"
+   */
   public int rewards = 0;
 
   public int act() {
@@ -42,4 +47,3 @@ class TestLearnerStrategy extends DiscreteLearnerStrategy {
   }
 
 }
-

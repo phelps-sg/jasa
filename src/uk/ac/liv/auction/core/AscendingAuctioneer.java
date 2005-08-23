@@ -27,41 +27,50 @@ import org.apache.log4j.Logger;
 import java.io.Serializable;
 
 /**
- *  Auctioneer for standard multi-unit english ascending auction.
+ * Auctioneer for standard multi-unit english ascending auction.
  */
 
-public class AscendingAuctioneer extends AbstractAuctioneer implements Serializable {
+public class AscendingAuctioneer extends AbstractAuctioneer implements
+    Serializable {
 
   /**
    * The reservation price.
+   * 
+   * @uml.property name="reservePrice"
    */
   protected double reservePrice;
 
   /**
    * The seller.
+   * 
+   * @uml.property name="seller"
+   * @uml.associationEnd
    */
   protected TradingAgent seller;
 
   /**
    * The number of items for sale.
+   * 
+   * @uml.property name="quantity"
    */
   int quantity;
 
   public static final String P_RESERVEPRICE = "reserveprice";
+
   public static final String P_QUANTITY = "quantity";
+
   public static final String P_SELLER = "seller";
 
   static Logger logger = Logger.getLogger(AscendingAuctioneer.class);
 
-
   public AscendingAuctioneer( Auction auction, TradingAgent seller,
-                                  int quantity, double reservePrice ) {
+      int quantity, double reservePrice ) {
     super(auction);
 
     this.reservePrice = reservePrice;
     this.quantity = quantity;
     this.seller = seller;
-    
+
     setPricingPolicy(new UniformPricingPolicy(0));
 
     initialise();
@@ -74,12 +83,12 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements Serializa
   public void initialise() {
     super.initialise();
     try {
-     newAsk( new Shout(seller, quantity, 0, false) );
-   } catch ( DuplicateShoutException e ) {
-     throw new AuctionError("Fatal error: invalid auction state on initialisation!");
-   }
+      newAsk(new Shout(seller, quantity, 0, false));
+    } catch ( DuplicateShoutException e ) {
+      throw new AuctionError(
+          "Fatal error: invalid auction state on initialisation!");
+    }
   }
-
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
@@ -89,9 +98,8 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements Serializa
 
     reservePrice = parameters.getDouble(base.push(P_RESERVEPRICE), null, 0);
 
-    seller = (TradingAgent)
-        parameters.getInstanceForParameterEq(base.push(P_SELLER), null,
-                                             TradingAgent.class);
+    seller = (TradingAgent) parameters.getInstanceForParameterEq(base
+        .push(P_SELLER), null, TradingAgent.class);
 
     if ( seller instanceof Parameterizable ) {
       ((Parameterizable) seller).setup(parameters, base.push(P_SELLER));
@@ -100,11 +108,9 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements Serializa
     initialise();
   }
 
-
   public void endOfRoundProcessing() {
     generateQuote();
   }
-
 
   public void endOfAuctionProcessing() {
     logger.debug("Clearing at end of auction..");
@@ -117,9 +123,10 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements Serializa
     currentQuote = new MarketQuote(null, shoutEngine.getLowestMatchedBid());
   }
 
-  public void newShout( Shout shout) throws IllegalShoutException {
+  public void newShout( Shout shout ) throws IllegalShoutException {
     if ( shout.isAsk() ) {
-      throw new IllegalShoutException("asks are not allowed in an ascending auction");
+      throw new IllegalShoutException(
+          "asks are not allowed in an ascending auction");
     }
     // TODO: Additional logic to enforce bid amounts at round nos and/or
     // beat existing bids by certain amount?

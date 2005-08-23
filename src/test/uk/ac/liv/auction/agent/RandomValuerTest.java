@@ -31,41 +31,46 @@ import junit.framework.TestSuite;
  */
 public class RandomValuerTest extends TestCase {
 
+  /**
+   * @uml.property name="valuer"
+   * @uml.associationEnd
+   */
   protected RandomValuer valuer;
-  
+
   public static final double MIN_VALUE = 0;
+
   public static final double MAX_VALUE = 100;
-  
+
   public static final int SAMPLES = (int) 10E7;
-  
+
   public RandomValuerTest( String name ) {
     super(name);
   }
-  
+
   public void setUp() {
     GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     valuer = new RandomValuer(MIN_VALUE, MAX_VALUE);
   }
-  
+
   public void testDistribution() {
     System.out.println("testDistribution()");
     System.out.println("Taking " + SAMPLES + " samples...");
     CummulativeDistribution values = new CummulativeDistribution();
-    for( int i=0; i<SAMPLES; i++ ) {
+    for ( int i = 0; i < SAMPLES; i++ ) {
       valuer.drawRandomValue();
       double value = valuer.getCurrentValuation();
-      values.newData(value);      
-    }    
+      values.newData(value);
+    }
     System.out.println("min = " + values.getMin());
     System.out.println("max = " + values.getMax());
     System.out.println("mean = " + values.getMean());
     System.out.println("stdev = " + values.getStdDev());
     assertTrue(MathUtil.approxEqual(values.getMin(), MIN_VALUE, 10E-3));
     assertTrue(MathUtil.approxEqual(values.getMax(), MAX_VALUE, 10E-3));
-    assertTrue(MathUtil.approxEqual(values.getMean(), MAX_VALUE/2, 10E-3));
+    assertTrue(MathUtil.approxEqual(values.getMean(), MAX_VALUE / 2, 10E-3));
     assertTrue(MathUtil.approxEqual(values.getStdDev(), 28.86, 10E-3));
   }
-  
+
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
   }

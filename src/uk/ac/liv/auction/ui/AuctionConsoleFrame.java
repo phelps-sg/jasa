@@ -22,7 +22,6 @@ import uk.ac.liv.util.Resetable;
 import java.util.Observable;
 import java.util.Observer;
 
-
 import java.text.DecimalFormat;
 
 import javax.swing.*;
@@ -31,41 +30,105 @@ import java.awt.event.*;
 
 import org.apache.log4j.Logger;
 
-
 /**
  * A frame for monitoring and controlling the progress of an auction.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
-public class AuctionConsoleFrame extends JFrame
-    implements Observer, Resetable {
+public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd multiplicity="(1 1)"
+   *                     inverse="guiConsole:uk.ac.liv.auction.core.RoundRobinAuction"
+   */
   protected RoundRobinAuction auction;
 
+  /**
+   * @uml.property name="bidLabel"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JLabel bidLabel;
+
+  /**
+   * @uml.property name="askLabel"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JLabel askLabel;
+
+  /**
+   * @uml.property name="lastShoutLabel"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JLabel lastShoutLabel;
+
+  /**
+   * @uml.property name="roundLabel"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JLabel roundLabel;
+
+  /**
+   * @uml.property name="dayLabel"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JLabel dayLabel;
+
+  /**
+   * @uml.property name="numTradersLabel"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JLabel numTradersLabel;
-  
+
+  /**
+   * @uml.property name="menuBar"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JMenuBar menuBar;
- 
+
+  /**
+   * @uml.property name="resetAgentsButton"
+   * @uml.associationEnd readOnly="true"
+   */
   protected JButton resetAgentsButton;
+
+  /**
+   * @uml.property name="closeAuctionButton"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JButton closeAuctionButton;
+
+  /**
+   * @uml.property name="graphXExtrema"
+   */
   protected float graphXExtrema = 0f;
- 
+
+  /**
+   * @uml.property name="decimalFont"
+   */
   protected Font decimalFont = new Font("Monospaced", Font.TRUETYPE_FONT, 10);
 
-  protected DecimalFormat currencyFormatter =
-      new DecimalFormat("+000000.00;-000000.00");
+  /**
+   * @uml.property name="currencyFormatter"
+   */
+  protected DecimalFormat currencyFormatter = new DecimalFormat(
+      "+000000.00;-000000.00");
 
-  protected DecimalFormat decimalFormatter =
-      new DecimalFormat(" #########;-#########");
+  /**
+   * @uml.property name="decimalFormatter"
+   */
+  protected DecimalFormat decimalFormatter = new DecimalFormat(
+      " #########;-#########");
 
+  /**
+   * @uml.property name="gridBag"
+   */
   protected GridBagLayout gridBag;
 
+  /**
+   * @uml.property name="currentRound"
+   */
   protected int currentRound = 0;
 
   static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);
@@ -74,9 +137,9 @@ public class AuctionConsoleFrame extends JFrame
 
     this.auction = auction;
     Container contentPane = getContentPane();
-    
+
     contentPane.setLayout(new BorderLayout());
-    
+
     JPanel statsPanel = new JPanel();
     gridBag = new GridBagLayout();
     GridBagConstraints c = new GridBagConstraints();
@@ -86,7 +149,7 @@ public class AuctionConsoleFrame extends JFrame
     c.anchor = GridBagConstraints.EAST;
     c.ipady = 0;
     c.ipadx = 0;
-    c.insets = new Insets(5,5,5,5);
+    c.insets = new Insets(5, 5, 5, 5);
 
     JLabel bidTextLabel = new JLabel("Bid: ");
     c.gridx = 0;
@@ -175,45 +238,44 @@ public class AuctionConsoleFrame extends JFrame
     gridBag.setConstraints(dayLabel, c);
     dayLabel.setFont(decimalFont);
     statsPanel.add(dayLabel);
-    
+
     contentPane.add(statsPanel, BorderLayout.CENTER);
-    
+
     JPanel controlPanel = new JPanel();
 
     JButton logAuctionStatusButton = new JButton("Dump");
-    logAuctionStatusButton.setToolTipText("Display the current state of the auction");
+    logAuctionStatusButton
+        .setToolTipText("Display the current state of the auction");
     controlPanel.add(logAuctionStatusButton);
     logAuctionStatusButton.addActionListener(new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          logAuctionStatus();
-        }
+      public void actionPerformed( ActionEvent e ) {
+        logAuctionStatus();
+      }
     });
 
     closeAuctionButton = new JButton("Close");
     closeAuctionButton.setToolTipText("Close the auction");
-   
+
     controlPanel.add(closeAuctionButton);
     closeAuctionButton.addActionListener(new ActionListener() {
-        public void actionPerformed( ActionEvent e ) {
-          closeAuction();
-        }
+      public void actionPerformed( ActionEvent e ) {
+        closeAuction();
+      }
     });
     contentPane.add(controlPanel, BorderLayout.SOUTH);
-    
+
     setAuctionName(name);
     setJMenuBar(menuBar = new AuctionConsoleMenu());
-    
-    rootPane.setPreferredSize(new Dimension(480,180));
+
+    rootPane.setPreferredSize(new Dimension(480, 180));
   }
-
-
 
   public void setAuctionName( String name ) {
     setTitle("Auction Console for " + name);
   }
 
   /**
-   *  Close the auction.
+   * Close the auction.
    */
   public void closeAuction() {
     logger.debug("closeAuction()");
@@ -221,7 +283,7 @@ public class AuctionConsoleFrame extends JFrame
   }
 
   /**
-   *  Log the status of the auction.
+   * Log the status of the auction.
    */
   public void logAuctionStatus() {
     auction.printState();
@@ -231,10 +293,10 @@ public class AuctionConsoleFrame extends JFrame
     if ( Double.isInfinite(price) ) {
       label.setText("      OPEN");
     } else {
-      label.setText(currencyFormatter.format(price/100));
+      label.setText(currencyFormatter.format(price / 100));
     }
   }
-  
+
   public void update( Observable o, Object arg ) {
     logger.debug("update(" + o + ", " + arg + ")");
 
@@ -244,7 +306,7 @@ public class AuctionConsoleFrame extends JFrame
     currencyFormatter.setMaximumIntegerDigits(6);
     if ( quote != null ) {
       updatePriceLabel(bidLabel, quote.getBid());
-      updatePriceLabel(askLabel, quote.getAsk());      
+      updatePriceLabel(askLabel, quote.getAsk());
     }
     Shout lastShout = null;
     try {
@@ -257,18 +319,19 @@ public class AuctionConsoleFrame extends JFrame
       if ( !lastShout.isBid() ) {
         lastPrice = -lastPrice;
       }
-      lastShoutLabel.setText(currencyFormatter.format(((double)lastPrice)/100));
+      lastShoutLabel.setText(currencyFormatter
+          .format(((double) lastPrice) / 100));
     }
     roundLabel.setText(decimalFormatter.format(auction.getRound()));
     dayLabel.setText(decimalFormatter.format(auction.getDay()));
-    numTradersLabel.setText(decimalFormatter.format(auction.getNumberOfTraders()));
+    numTradersLabel.setText(decimalFormatter.format(auction
+        .getNumberOfTraders()));
 
     logger.debug("update() complete");
   }
 
-
   /**
-   *  Activate the frame by popping it up.
+   * Activate the frame by popping it up.
    */
   public void activate() {
     pack();
@@ -276,12 +339,11 @@ public class AuctionConsoleFrame extends JFrame
   }
 
   /**
-   *  Close the frame.
+   * Close the frame.
    */
   public void deactivate() {
     setVisible(false);
   }
-
 
   public void generateReport() {
     new Thread() {
@@ -292,25 +354,31 @@ public class AuctionConsoleFrame extends JFrame
   }
 
   public void reset() {
-    //TODO
+    // TODO
   }
 
-  
+  /**
+   * @author Steve Phelps
+   * @version $Revision$
+   */
   class AuctionConsoleMenu extends JMenuBar {
-    
-    protected JCheckBoxMenuItem viewTrueSupplyAndDemand;    
-    protected JCheckBoxMenuItem viewAuctionState;    
+
+    protected JCheckBoxMenuItem viewTrueSupplyAndDemand;
+
+    protected JCheckBoxMenuItem viewAuctionState;
+
     protected JCheckBoxMenuItem viewReportedSupplyAndDemand;
-    
+
     protected TrueSupplyAndDemandFrame trueSupDemGraph = null;
+
     protected ReportedSupplyAndDemandFrame reportedSupDemGraph = null;
+
     protected AuctionStateFrame auctionStateGraph = null;
-    
+
     public AuctionConsoleMenu() {
       JMenu viewMenu = new JMenu("View");
-      
-      viewTrueSupplyAndDemand = 
-        new JCheckBoxMenuItem("True Supply and Demand");
+
+      viewTrueSupplyAndDemand = new JCheckBoxMenuItem("True Supply and Demand");
       ActionListener viewListener = new ActionListener() {
         public void actionPerformed( ActionEvent event ) {
           toggleTrueSupplyAndDemand();
@@ -318,9 +386,9 @@ public class AuctionConsoleFrame extends JFrame
       };
       viewTrueSupplyAndDemand.addActionListener(viewListener);
       viewMenu.add(viewTrueSupplyAndDemand);
-      
-      viewReportedSupplyAndDemand = 
-        new JCheckBoxMenuItem("Reported Supply and Demand");
+
+      viewReportedSupplyAndDemand = new JCheckBoxMenuItem(
+          "Reported Supply and Demand");
       viewListener = new ActionListener() {
         public void actionPerformed( ActionEvent event ) {
           toggleReportedSupplyAndDemand();
@@ -328,7 +396,7 @@ public class AuctionConsoleFrame extends JFrame
       };
       viewReportedSupplyAndDemand.addActionListener(viewListener);
       viewMenu.add(viewReportedSupplyAndDemand);
-      
+
       viewAuctionState = new JCheckBoxMenuItem("Auction State");
       viewListener = new ActionListener() {
         public void actionPerformed( ActionEvent event ) {
@@ -337,30 +405,28 @@ public class AuctionConsoleFrame extends JFrame
       };
       viewAuctionState.addActionListener(viewListener);
       viewMenu.add(viewAuctionState);
-      
+
       add(viewMenu);
     }
-    
-    
-    
+
     public void toggleTrueSupplyAndDemand() {
       if ( trueSupDemGraph == null ) {
         trueSupDemGraph = new TrueSupplyAndDemandFrame(
             (RoundRobinAuction) auction);
-        
+
         ComponentListener listener = new ComponentListener() {
 
           public void componentHidden( ComponentEvent e ) {
             viewTrueSupplyAndDemand.setSelected(false);
             trueSupDemGraph = null;
           }
-          
+
           public void componentMoved( ComponentEvent e ) {
           }
-          
+
           public void componentResized( ComponentEvent e ) {
           }
-          
+
           public void componentShown( ComponentEvent e ) {
           }
         };
@@ -371,29 +437,28 @@ public class AuctionConsoleFrame extends JFrame
         trueSupDemGraph.close();
       }
     }
-    
+
     public void toggleAuctionState() {
       if ( auctionStateGraph == null ) {
-        auctionStateGraph = new AuctionStateFrame(
-            (RoundRobinAuction) auction);
-        
+        auctionStateGraph = new AuctionStateFrame((RoundRobinAuction) auction);
+
         ComponentListener listener = new ComponentListener() {
 
           public void componentHidden( ComponentEvent e ) {
             viewAuctionState.setSelected(false);
             auctionStateGraph = null;
           }
-          
+
           public void componentMoved( ComponentEvent e ) {
           }
-          
+
           public void componentResized( ComponentEvent e ) {
           }
-          
+
           public void componentShown( ComponentEvent e ) {
           }
         };
-        
+
         auctionStateGraph.addComponentListener(listener);
         auctionStateGraph.open();
         viewAuctionState.setSelected(true);
@@ -406,20 +471,20 @@ public class AuctionConsoleFrame extends JFrame
       if ( reportedSupDemGraph == null ) {
         reportedSupDemGraph = new ReportedSupplyAndDemandFrame(
             (RoundRobinAuction) auction);
-        
+
         ComponentListener listener = new ComponentListener() {
 
           public void componentHidden( ComponentEvent e ) {
             viewReportedSupplyAndDemand.setSelected(false);
             reportedSupDemGraph = null;
           }
-          
+
           public void componentMoved( ComponentEvent e ) {
           }
-          
+
           public void componentResized( ComponentEvent e ) {
           }
-          
+
           public void componentShown( ComponentEvent e ) {
           }
         };
@@ -430,7 +495,6 @@ public class AuctionConsoleFrame extends JFrame
         reportedSupDemGraph.close();
       }
     }
-    
-    
+
   }
 }

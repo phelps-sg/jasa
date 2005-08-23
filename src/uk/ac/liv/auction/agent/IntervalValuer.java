@@ -21,22 +21,23 @@ import ec.util.ParameterDatabase;
 /**
  * <p>
  * Agents configured with this valuation policy will receive a unique private
- * value from a common set of values starting at <code>minValue</code> and 
- * incrementing by <code>step</code> as each agent is assigned a valuation
- * at agent setup time.  This is useful for quickly specifying supply or
- * demand curves with a constant "slope" (step).
+ * value from a common set of values starting at <code>minValue</code> and
+ * incrementing by <code>step</code> as each agent is assigned a valuation at
+ * agent setup time. This is useful for quickly specifying supply or demand
+ * curves with a constant "slope" (step).
  * </p>
- *
+ * 
  * @version $Revision$
  * @author Steve Phelps
  */
 
 public abstract class IntervalValuer extends FixedValuer {
-   
+
   public static final String P_MINVALUE = "minvalue";
+
   public static final String P_STEP = "step";
-  
-  public void setup( ParameterDatabase parameters, Parameter base) {
+
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     setMinValue(parameters.getDouble(base.push(P_MINVALUE), null, 0));
     setStep(parameters.getDouble(base.push(P_STEP), null, 0));
     if ( firstValue() ) {
@@ -44,24 +45,24 @@ public abstract class IntervalValuer extends FixedValuer {
       setFirstValue(false);
     } else {
       setNextValue(getNextValue() + getStep());
-    }  
+    }
     setValue(getNextValue());
   }
-  
+
   protected abstract void setMinValue( double value );
-  
+
   protected abstract double getMinValue();
-  
+
   protected abstract void setStep( double step );
-  
+
   protected abstract double getStep();
-    
+
   protected abstract void setNextValue( double value );
-  
+
   protected abstract double getNextValue();
-  
+
   protected abstract boolean firstValue();
-  
+
   protected abstract void setFirstValue( boolean firstValue );
-  
+
 }

@@ -36,7 +36,7 @@ public interface Distribution {
    * Get the mean of the data.
    */
   public abstract double getMean();
-  
+
   /**
    * Get the symetrically trimmed mean of the data. If p is zero then this is
    * equivalent to the mean. If p is 0.5 then this equivalent to the median.
@@ -90,14 +90,15 @@ public interface Distribution {
    * Combine this distribution with the supplied distribution.
    */
   public void combine( Distribution other );
-  
+
   /**
    * @return The name of the variable.
+   * @uml.property name="name"
    */
   public abstract String getName();
 
   /**
-   * Output the moments of the distribution to the info log.  
+   * Output the moments of the distribution to the info log.
    */
   public abstract void log();
 }

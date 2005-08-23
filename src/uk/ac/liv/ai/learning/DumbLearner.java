@@ -25,14 +25,17 @@ import java.io.Serializable;
 
 /**
  * A learner that chooses the same specified action on every iteration.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DumbLearner extends AbstractLearner implements
-                           DiscreteLearner, Parameterizable, Serializable {
+public class DumbLearner extends AbstractLearner implements DiscreteLearner,
+    Parameterizable, Serializable {
 
+  /**
+   * @uml.property name="action"
+   */
   protected int action;
 
   static final String P_ACTION = "action";
@@ -40,19 +43,24 @@ public class DumbLearner extends AbstractLearner implements
   public DumbLearner() {
   }
 
-  public void setup( ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     action = parameters.getInt(base.push(P_ACTION), null, 0);
   }
 
+  /**
+   * @uml.property name="action"
+   */
   public void setAction( int action ) {
     this.action = action;
   }
 
+  /**
+   * @uml.property name="action"
+   */
   public int getAction() {
     return action;
   }
-
 
   public int act() {
     return action;
@@ -63,12 +71,11 @@ public class DumbLearner extends AbstractLearner implements
   }
 
   public void dumpState( DataWriter out ) {
-    //TODO
+    // TODO
   }
 
   public int getNumberOfActions() {
     return 1;
   }
-
 
 }

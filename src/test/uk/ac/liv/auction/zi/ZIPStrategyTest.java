@@ -28,19 +28,42 @@ import org.apache.log4j.Logger;
 
 import ec.util.MersenneTwisterFast;
 
-
 public class ZIPStrategyTest extends TestCase {
 
+  /**
+   * @uml.property name="buyers"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   ZITraderAgent[] buyers;
 
+  /**
+   * @uml.property name="sellers"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   ZITraderAgent[] sellers;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   RoundRobinAuction auction;
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   ClearingHouseAuctioneer auctioneer;
 
+  /**
+   * @uml.property name="marketDataLogger"
+   * @uml.associationEnd
+   */
   AuctionReport marketDataLogger;
 
+  /**
+   * @uml.property name="prng"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   MersenneTwisterFast prng = new MersenneTwisterFast();
 
   static final int NUM_ROUNDS = 1000;
@@ -50,13 +73,12 @@ public class ZIPStrategyTest extends TestCase {
   static final int TRADE_ENTITLEMENT = 1;
 
   static final int NUM_BUYERS = 11;
+
   static final int NUM_SELLERS = 11;
 
   static final double PRIV_VALUE_RANGE_MIN = 75;
+
   static final double PRIV_VALUE_INCREMENT = 25;
-
-
-
 
   static Logger logger = Logger.getLogger(ZIPStrategyTest.class);
 
@@ -82,7 +104,7 @@ public class ZIPStrategyTest extends TestCase {
   }
 
   public void testReplication() {
-    for( int day=0; day<NUM_DAYS; day++ ) {
+    for ( int day = 0; day < NUM_DAYS; day++ ) {
       logger.debug("Day " + day);
       auction.run();
       auction.generateReport();
@@ -93,10 +115,10 @@ public class ZIPStrategyTest extends TestCase {
 
   public void registerTraders( ZITraderAgent[] traders, boolean areSellers ) {
     double privValue = PRIV_VALUE_RANGE_MIN;
-    for( int i=0; i<traders.length; i++ ) {
+    for ( int i = 0; i < traders.length; i++ ) {
       traders[i] = new ZITraderAgent(privValue, TRADE_ENTITLEMENT, areSellers);
       ZIPStrategy strategy = new ZIPStrategy();
-      double learningRate = 0.1 + prng.nextDouble() * 0.4;   
+      double learningRate = 0.1 + prng.nextDouble() * 0.4;
       WidrowHoffLearner learner = new WidrowHoffLearner(learningRate);
       strategy.setLearner(learner);
       traders[i].setStrategy(strategy);
@@ -104,7 +126,6 @@ public class ZIPStrategyTest extends TestCase {
       privValue += PRIV_VALUE_INCREMENT;
     }
   }
-
 
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());

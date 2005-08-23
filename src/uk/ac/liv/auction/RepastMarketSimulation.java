@@ -57,11 +57,11 @@ import org.apache.log4j.Logger;
  * <p>
  * A RePast model of an auction simulation. This application takes as an
  * argument the name of a parameter file describing an auction experiment, and
- * proceeds to run that experiment interactively using the RePast framework.  
- * For unattended batch experiments, use the MarketSimulation application.
+ * proceeds to run that experiment interactively using the RePast framework. For
+ * unattended batch experiments, use the MarketSimulation application.
  * 
  * @see MarketSimulation
- * </p>
+ *      </p>
  * 
  * <p>
  * <b>Parameters </b> <br>
@@ -81,50 +81,79 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class RepastMarketSimulation extends SimModelImpl
-     implements Serializable {
+public class RepastMarketSimulation extends SimModelImpl implements
+    Serializable {
 
   /**
    * The auction used in this simulation.
+   * 
+   * @uml.property name="auction"
+   * @uml.associationEnd
    */
   protected RoundRobinAuction auction;
-  
+
+  /**
+   * @uml.property name="parameterFileName"
+   */
   protected String parameterFileName;
-  
+
+  /**
+   * @uml.property name="parameterDescriptors"
+   */
   protected Hashtable parameterDescriptors;
-  
+
+  /**
+   * @uml.property name="schedule"
+   * @uml.associationEnd
+   */
   protected Schedule schedule;
-  
+
+  /**
+   * @uml.property name="graph"
+   * @uml.associationEnd
+   */
   protected OpenSequenceGraph graph;
-  
+
+  /**
+   * @uml.property name="displaySurface"
+   * @uml.associationEnd
+   */
   protected DisplaySurface displaySurface;
-  
+
+  /**
+   * @uml.property name="agentSpace"
+   * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.RepastMarketSimulation$AgentSpace"
+   */
   protected AgentSpace agentSpace;
-  
+
+  /**
+   * @uml.property name="auxGraphs"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uchicago.src.sim.analysis.plot.OpenGraph"
+   */
   protected LinkedList auxGraphs = new LinkedList();
-  
+
   protected static RepastMarketSimulation modelSingleton;
 
   public static final String P_AUCTION = "auction";
+
   public static final String P_SIMULATION = "simulation";
 
   static Logger logger = Logger.getLogger("JASA");
 
-
   public static void main( String[] args ) {
-    
+
     SimInit init = new SimInit();
 
     if ( args.length < 1 ) {
       fatalError("You must specify a parameter file");
     }
-    
+
     modelSingleton = new RepastMarketSimulation(args[0]);
 
-    init.loadModel( modelSingleton, null, false);
+    init.loadModel(modelSingleton, null, false);
   }
-  
-  
+
   public RepastMarketSimulation( String parameterFileName ) {
     this.parameterFileName = parameterFileName;
     parameterDescriptors = new Hashtable();
@@ -132,11 +161,11 @@ public class RepastMarketSimulation extends SimModelImpl
     schedule.scheduleActionBeginning(1, this, "step");
     schedule.scheduleActionAtEnd(this, "end");
   }
-  
+
   public RepastMarketSimulation() {
     this(null);
   }
-  
+
   public static RepastMarketSimulation getModelSingleton() {
     return modelSingleton;
   }
@@ -146,9 +175,9 @@ public class RepastMarketSimulation extends SimModelImpl
     try {
 
       gnuMessage();
-      
+
       File file = new File(parameterFileName);
-      if ( ! file.canRead() ) {
+      if ( !file.canRead() ) {
         fatalError("Cannot read parameter file " + parameterFileName);
       }
 
@@ -156,13 +185,12 @@ public class RepastMarketSimulation extends SimModelImpl
 
       ParameterDatabase parameters = new ParameterDatabase(file);
       setup(parameters, new Parameter(P_SIMULATION));
-    
+
     } catch ( Exception e ) {
       logger.error(e);
       e.printStackTrace();
     }
   }
-
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
@@ -170,28 +198,23 @@ public class RepastMarketSimulation extends SimModelImpl
 
     GlobalPRNG.setup(parameters, base);
 
-    auction =
-      (RoundRobinAuction)
-        parameters.getInstanceForParameterEq(base.push(P_AUCTION),
-                                              null,
-                                              RoundRobinAuction.class);
+    auction = (RoundRobinAuction) parameters.getInstanceForParameterEq(base
+        .push(P_AUCTION), null, RoundRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
 
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
-    
+
     logger.debug("Setup complete.");
-    
+
   }
 
-  
   public void begin() {
     buildDisplay();
     auction.begin();
   }
-  
-  
+
   public void step() {
     try {
       auction.step();
@@ -209,116 +232,124 @@ public class RepastMarketSimulation extends SimModelImpl
       }
     }
     displaySurface.updateDisplay();
-    //ProbeUtilities.updateProbePanels();
+    // ProbeUtilities.updateProbePanels();
   }
-  
 
   public void end() {
     auction.end();
     auction.generateReport();
   }
 
-  
   public String getName() {
     return "JASA auction simulation";
   }
-  
-  public String getParameterFileName () {
+
+  /**
+   * @uml.property name="parameterFileName"
+   */
+  public String getParameterFileName() {
     return parameterFileName;
   }
-  
-  public void setParameterFileName ( String parameterFileName) {
+
+  /**
+   * @uml.property name="parameterFileName"
+   */
+  public void setParameterFileName( String parameterFileName ) {
     this.parameterFileName = parameterFileName;
   }
-  
+
+  /**
+   * @uml.property name="schedule"
+   */
   public Schedule getSchedule() {
     return schedule;
   }
-  
-  public String[] getInitParam() {
-    return new String[] {"parameterFileName"};
-  }
 
+  public String[] getInitParam() {
+    return new String[] { "parameterFileName" };
+  }
 
   public static void gnuMessage() {
     System.out.println(JASAVersion.getGnuMessage());
   }
 
-
   protected static void fatalError( String message ) {
     System.err.println("ERROR: " + message);
     System.exit(1);
   }
-  
-  public void generateNewSeed () {
+
+  public void generateNewSeed() {
     GlobalPRNG.generateNewSeed();
     logger.debug("Repast is changing the PRNG seed");
   }
-  
-  
-  public Hashtable getParameterDescriptors () {
+
+  /**
+   * @uml.property name="parameterDescriptors"
+   */
+  public Hashtable getParameterDescriptors() {
     return parameterDescriptors;
   }
-  
-  public String getPropertiesValues () {
+
+  public String getPropertiesValues() {
     return "";
   }
-  
-  public long getRngSeed () {
+
+  public long getRngSeed() {
     return GlobalPRNG.getSeed();
   }
-  
-  public double getTickCount () {
+
+  public double getTickCount() {
     return auction.getAge();
   }
-  
-  
-  public void setRngSeed ( long seed) {
+
+  public void setRngSeed( long seed ) {
     logger.debug("Repast is changing the PRNG seed to " + seed);
     logger.warn("PRNG seed changed to " + seed);
     GlobalPRNG.initialiseWithSeed(seed);
   }
-  
+
   public void addGraphSequence( RepastGraphSequence graphSequence ) {
-    OpenSequenceGraph graph = new OpenSequenceGraph(graphSequence.getName(), this);
+    OpenSequenceGraph graph = new OpenSequenceGraph(graphSequence.getName(),
+        this);
     graph.addSequence(graphSequence.getName(), graphSequence);
     auxGraphs.add(graph);
   }
-  
+
   protected void buildDisplay() {
-    
+
     GraphReport graphLogger;
     if ( (graphLogger = GraphReport.getSingletonInstance()) != null ) {
-      graph = new RepastAuctionConsoleGraph("JASA graph for " + auction.getName(), this, graphLogger);
+      graph = new RepastAuctionConsoleGraph("JASA graph for "
+          + auction.getName(), this, graphLogger);
       graph.display();
     }
-    
+
     Iterator i = auxGraphs.iterator();
     while ( i.hasNext() ) {
       OpenGraph graph = (OpenGraph) i.next();
       graph.display();
     }
-    
-    displaySurface = new DisplaySurface(this, "JASA agents for " + auction.getName());
+
+    displaySurface = new DisplaySurface(this, "JASA agents for "
+        + auction.getName());
     agentSpace = new AgentSpace(auction);
     Object2DDisplay agentDisplay = new Object2DDisplay(agentSpace);
     displaySurface.addDisplayableProbeable(agentDisplay, "agents");
-    displaySurface.setPreferredSize(new Dimension(640,480));
+    displaySurface.setPreferredSize(new Dimension(640, 480));
     displaySurface.display();
     addSimEventListener(displaySurface);
-    
+
     ((Controller) getController()).UPDATE_PROBES = true;
   }
 
-  
   class AgentMatrix implements BaseMatrix {
-    
+
     protected ArrayList agents;
-    
+
     protected int height;
-    
+
     protected int width;
-    
+
     public AgentMatrix( ArrayList agents, int height, int width ) {
       this.agents = agents;
       this.height = height;
@@ -336,53 +367,55 @@ public class RepastMarketSimulation extends SimModelImpl
       }
       return agent;
     }
-    
-    
+
     public int getNumCols() {
       // TODO Auto-generated method stub
       return width;
     }
-    
+
     public int getNumRows() {
       // TODO Auto-generated method stub
       return height;
     }
-    
+
     public void put( int col, int row, Object obj ) {
       // TODO Auto-generated method stub
 
     }
-    
+
     public Object remove( int col, int row ) {
       // TODO Auto-generated method stub
       return null;
     }
-    
+
     public int size() {
       // TODO Auto-generated method stub
       return agents.size();
     }
-    
+
     public void trim() {
       // TODO Auto-generated method stub
 
     }
-    
+
   }
 
-
+  /**
+   * @author Steve Phelps
+   * @version $Revision$
+   */
   class AgentSpace implements Discrete2DSpace {
 
     protected RoundRobinAuction auction;
-    
+
     protected int width;
-    
+
     protected int height;
-    
+
     protected ArrayList agents;
-    
+
     protected AgentMatrix matrix;
-    
+
     public AgentSpace( RoundRobinAuction auction, int width ) {
       this.width = width;
       this.auction = auction;
@@ -395,46 +428,51 @@ public class RepastMarketSimulation extends SimModelImpl
       }
       matrix = new AgentMatrix(agents, width, height);
     }
-    
+
+    /**
+     * @uml.property name="agents"
+     */
     public Collection getAgents() {
       return agents;
     }
-    
+
     public AgentSpace( RoundRobinAuction auction ) {
       this(auction, (int) Math.sqrt(auction.getNumberOfRegisteredTraders()));
     }
-    
+
+    /**
+     * @uml.property name="matrix"
+     */
     public BaseMatrix getMatrix() {
       return matrix;
     }
-    
+
     public Object getObjectAt( int x, int y ) {
       return matrix.get(x, y);
     }
-    
+
     public Dimension getSize() {
       return new Dimension(640, 480);
     }
-    
+
     public int getSizeX() {
       return width;
     }
-    
+
     public int getSizeY() {
       return height;
     }
-    
+
     public double getValueAt( int x, int y ) {
       return 0;
     }
-    
-    public void putObjectAt( int x, int y, Object object) {
+
+    public void putObjectAt( int x, int y, Object object ) {
     }
-    
-    public void putValueAt( int x, int y, double value) {
+
+    public void putValueAt( int x, int y, double value ) {
     }
-    
+
   }
 
 }
-

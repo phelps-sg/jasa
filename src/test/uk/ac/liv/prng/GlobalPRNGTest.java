@@ -34,7 +34,11 @@ import uk.ac.liv.util.MutableIntWrapper;
 
 public class GlobalPRNGTest extends TestCase {
 
-  protected Integer[] p;
+  /**
+ * @uml.property   name="p"
+ * @uml.associationEnd   multiplicity="(0 -1)"
+ */
+protected Integer[] p;
 
   public static final int N = 4;
 
@@ -95,7 +99,10 @@ public class GlobalPRNGTest extends TestCase {
 
 class Permutation {
 
-  Integer[] elements;
+  /**
+ * @uml.property   name="elements" multiplicity="(0 -1)" dimension="1"
+ */
+Integer[] elements;
 
   public Permutation ( Integer[] elements) {
     this.elements = elements;

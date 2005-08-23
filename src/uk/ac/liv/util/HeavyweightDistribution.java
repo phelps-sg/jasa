@@ -32,34 +32,41 @@ import org.apache.log4j.Logger;
 
 public class HeavyweightDistribution extends CummulativeDistribution {
 
+  /**
+   * @uml.property name="data"
+   * @uml.associationEnd
+   */
   protected TDoubleArrayList data;
-  
+
+  /**
+   * @uml.property name="hasChanged"
+   */
   protected boolean hasChanged = false;
-  
+
   private static final int INITIAL_SIZE = 10000;
-  
+
   static Logger logger = Logger.getLogger(HeavyweightDistribution.class);
-  
+
   public HeavyweightDistribution( String name ) {
     super(name);
   }
-  
+
   public HeavyweightDistribution() {
     super();
   }
-  
+
   public void initialise() {
     super.initialise();
-    data = new TDoubleArrayList(INITIAL_SIZE); 
+    data = new TDoubleArrayList(INITIAL_SIZE);
     hasChanged = false;
   }
-  
+
   public void newData( double datum ) {
     super.newData(datum);
     data.add(datum);
     hasChanged = true;
   }
-  
+
   public double getTrimmedMean( double p ) {
     if ( p == 0 ) {
       return getMean();
@@ -74,16 +81,14 @@ public class HeavyweightDistribution extends CummulativeDistribution {
     }
     double trimmedMean = trimmedTotal / (n - trimmedN * 2);
     hasChanged = false;
-    return trimmedMean;    
+    return trimmedMean;
   }
-  
 
   public void combine( Distribution other ) {
-    HeavyweightDistribution d = (HeavyweightDistribution) other;    
-    for( int i=0; i<d.data.size(); i++ ) {
+    HeavyweightDistribution d = (HeavyweightDistribution) other;
+    for ( int i = 0; i < d.data.size(); i++ ) {
       newData(d.data.get(i));
     }
   }
-  
-    
+
 }

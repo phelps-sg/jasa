@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package test.uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.agent.AbstractStrategy;
@@ -25,32 +26,42 @@ import uk.ac.liv.auction.event.RoundClosedEvent;
  * @version $Revision$
  */
 
-public class MockStrategy extends AbstractStrategy  {
+public class MockStrategy extends AbstractStrategy {
 
+  /**
+   * @uml.property name="currentShout"
+   */
   protected int currentShout = 0;
-  
+
+  /**
+   * @uml.property name="shouts"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   public Shout[] shouts;
-  
+
+  /**
+   * @uml.property name="lastShoutAccepted"
+   */
   public boolean lastShoutAccepted;
- 
+
   public MockStrategy( Shout[] shouts ) {
     this.shouts = shouts;
   }
-  
+
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof RoundClosedEvent ) {
       endOfRound(event.getAuction());
     }
   }
-  
-  public void endOfRound ( Auction auction) {
+
+  public void endOfRound( Auction auction ) {
     currentShout++;
   }
-  
+
   public int determineQuantity( Auction auction ) {
     return shouts[currentShout].getQuantity();
   }
-  
+
   public boolean modifyShout( Shout.MutableShout shout ) {
     if ( currentShout >= shouts.length ) {
       return false;

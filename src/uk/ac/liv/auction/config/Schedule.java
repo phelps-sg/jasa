@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.config;
 
 import org.apache.log4j.Logger;
@@ -23,14 +24,17 @@ import ec.util.ParameterDatabase;
 
 /**
  * Defines the schedule of a type of agents, i.e. their valuer.
- *
- * <p><b>Parameters</b><br>
+ * 
+ * <p>
+ * <b>Parameters</b><br>
  * 
  * <table>
  * 
- * <tr><td valign=top><i>base</i><tt>.isseller</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.isseller</tt><br>
  * <font size=-1> boolean </font></td>
- * <td valign=top>(specifies which type of agents to be affected)</td></tr>
+ * <td valign=top>(specifies which type of agents to be affected)</td>
+ * </tr>
  * 
  * </table>
  * 
@@ -41,11 +45,17 @@ public class Schedule implements ParameterBasedCase, Parameterizable {
 
   static Logger logger = Logger.getLogger(Schedule.class);
 
+  /**
+   * @uml.property name="c"
+   * @uml.associationEnd
+   */
   private Case c;
 
+  /**
+   * @uml.property name="isSeller"
+   */
   private boolean isSeller;
 
-  
   // TODO: uses a number to specify which group of agents to be affected
   private static final String P_ISSELLER = "isseller";
 
@@ -56,20 +66,20 @@ public class Schedule implements ParameterBasedCase, Parameterizable {
    * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
    *      ec.util.Parameter)
    */
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     isSeller = parameters.getBoolean(base.push(P_ISSELLER), null, true);
   }
 
-  public void setParameter(String param) {
+  public void setParameter( String param ) {
     try {
       c = (Case) Class.forName(param).newInstance();
-    } catch (InstantiationException e) {
+    } catch ( InstantiationException e ) {
       e.printStackTrace();
       logger.error(e.toString());
-    } catch (IllegalAccessException e) {
+    } catch ( IllegalAccessException e ) {
       e.printStackTrace();
       logger.error(e.toString());
-    } catch (ClassNotFoundException e) {
+    } catch ( ClassNotFoundException e ) {
       e.printStackTrace();
       logger.error(e.toString());
     }
@@ -79,7 +89,7 @@ public class Schedule implements ParameterBasedCase, Parameterizable {
     return c.toString();
   }
 
-  public void apply(ParameterDatabase pdb, Parameter base) {
+  public void apply( ParameterDatabase pdb, Parameter base ) {
     int index = isSeller ? 0 : 1;
     c.apply(pdb, base.push("agenttype." + index + ".valuer"));
   }

@@ -29,44 +29,57 @@ import org.apache.log4j.Logger;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-
 /**
  * An abstract class representing an auctioneer managing shouts in an auction.
  * Different auction rules should be encapsulated in different Auctioneer
  * classes.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class AbstractAuctioneer
-    implements Serializable, Auctioneer, Resetable, Prototypeable, Cloneable, Parameterizable {
+public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
+    Resetable, Prototypeable, Cloneable, Parameterizable {
 
   /**
    * The auction container for this auctioneer.
+   * 
+   * @uml.property name="auction"
+   * @uml.associationEnd
    */
   protected Auction auction;
 
   /**
    * The shout engine for this auction.
+   * 
+   * @uml.property name="shoutEngine"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected ShoutEngine shoutEngine = new FourHeapShoutEngine();
 
   /**
    * The current quote
+   * 
+   * @uml.property name="currentQuote"
+   * @uml.associationEnd
    */
   protected MarketQuote currentQuote = null;
 
   static Logger logger = Logger.getLogger(AbstractAuctioneer.class);
 
-  
+  /**
+   * @uml.property name="clearingQuote"
+   * @uml.associationEnd
+   */
   protected MarketQuote clearingQuote;
 
+  /**
+   * @uml.property name="pricingPolicy"
+   * @uml.associationEnd
+   */
   protected PricingPolicy pricingPolicy;
 
   public static final String P_PRICING = "pricing";
-
-
 
   public AbstractAuctioneer() {
     initialise();
@@ -87,38 +100,44 @@ public abstract class AbstractAuctioneer
       throw new Error(e);
     }
   }
-  
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    pricingPolicy = (PricingPolicy)
-        parameters.getInstanceForParameterEq(base.push(P_PRICING), null,
-                                              PricingPolicy.class);
+    pricingPolicy = (PricingPolicy) parameters.getInstanceForParameterEq(base
+        .push(P_PRICING), null, PricingPolicy.class);
 
-    if (pricingPolicy instanceof Parameterizable)
-      ((Parameterizable)pricingPolicy).setup(parameters, base.push(P_PRICING));
+    if ( pricingPolicy instanceof Parameterizable )
+      ((Parameterizable) pricingPolicy).setup(parameters, base.push(P_PRICING));
 
   }
-  
+
+  /**
+   * @uml.property name="pricingPolicy"
+   */
   public PricingPolicy getPricingPolicy() {
     return pricingPolicy;
   }
-  
+
+  /**
+   * @uml.property name="pricingPolicy"
+   */
   public void setPricingPolicy( PricingPolicy pricingPolicy ) {
     this.pricingPolicy = pricingPolicy;
   }
 
-
   /**
-   * Code for handling a new shout in the auction.
-   * Subclasses should override this method if they wish
-   * to provide different handling for different auction rules.
-   *
-   *  @param shout  The new shout to be processed
-   *
-   *  @exception IllegalShoutException  Thrown if the shout is invalid in some way.
+   * Code for handling a new shout in the auction. Subclasses should override
+   * this method if they wish to provide different handling for different
+   * auction rules.
+   * 
+   * @param shout
+   *          The new shout to be processed
+   * 
+   * @exception IllegalShoutException
+   *              Thrown if the shout is invalid in some way.
    */
   public void newShout( Shout shout ) throws IllegalShoutException {
-    if ( ! shout.isValid() ) {
+    if ( !shout.isValid() ) {
       logger.error("malformed shout: " + shout);
       throw new IllegalShoutException("Malformed shout");
     }
@@ -128,7 +147,6 @@ public abstract class AbstractAuctioneer
       newAsk(shout);
     }
   }
-
 
   /**
    * Handle a request to retract a shout.
@@ -159,11 +177,11 @@ public abstract class AbstractAuctioneer
     }
     return currentQuote;
   }
-  
+
   public Iterator askIterator() {
     return shoutEngine.askIterator();
   }
-  
+
   public Iterator bidIterator() {
     return shoutEngine.bidIterator();
   }
@@ -171,27 +189,32 @@ public abstract class AbstractAuctioneer
   public abstract void generateQuote();
 
   /**
-   * Default rules for handling a new ask.
-   * Subclasses should override this method if they wish to provide
-   * different handling for different auction rules.
-   *
-   * @param ask   The new ask (offer to sell) to process
+   * Default rules for handling a new ask. Subclasses should override this
+   * method if they wish to provide different handling for different auction
+   * rules.
+   * 
+   * @param ask
+   *          The new ask (offer to sell) to process
    */
   protected void newAsk( Shout ask ) throws DuplicateShoutException {
     shoutEngine.newAsk(ask);
   }
 
   /**
-   * Default rules for handling a new bid.
-   * Subclasses should override this method if they wish to provide
-   * different handling for different auction rules.
-   *
-   * @param bid The new bid (offer to buy) to process
+   * Default rules for handling a new bid. Subclasses should override this
+   * method if they wish to provide different handling for different auction
+   * rules.
+   * 
+   * @param bid
+   *          The new bid (offer to buy) to process
    */
   protected void newBid( Shout bid ) throws DuplicateShoutException {
     shoutEngine.newBid(bid);
   }
 
+  /**
+   * @uml.property name="auction"
+   */
   public void setAuction( Auction auction ) {
     this.auction = auction;
   }
@@ -199,10 +222,13 @@ public abstract class AbstractAuctioneer
   /*
    * Find out which auction we are the auctioneer for.
    */
+  /**
+   * @uml.property name="auction"
+   */
   public Auction getAuction() {
     return auction;
   }
-  
+
   public void endOfDayProcessing() {
     shoutEngine.reset();
   }
@@ -211,7 +237,7 @@ public abstract class AbstractAuctioneer
     clearingQuote = new MarketQuote(askQuote(), bidQuote());
     List shouts = shoutEngine.getMatchedShouts();
     Iterator i = shouts.iterator();
-    while (i.hasNext()) {
+    while ( i.hasNext() ) {
       Shout bid = (Shout) i.next();
       Shout ask = (Shout) i.next();
       double price = determineClearingPrice(bid, ask);
@@ -224,17 +250,15 @@ public abstract class AbstractAuctioneer
   }
 
   protected double bidQuote() {
-    return Shout.maxPrice(shoutEngine.getHighestMatchedAsk(),
-                           shoutEngine.getHighestUnmatchedBid());
+    return Shout.maxPrice(shoutEngine.getHighestMatchedAsk(), shoutEngine
+        .getHighestUnmatchedBid());
   }
 
   protected double askQuote() {
-    return Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
-                           shoutEngine.getLowestMatchedBid());
+    return Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(), shoutEngine
+        .getLowestMatchedBid());
   }
-  
-  public void eventOccurred(AuctionEvent event) {
+
+  public void eventOccurred( AuctionEvent event ) {
   }
 }
-
-

@@ -15,9 +15,16 @@
 
 package uk.ac.liv.auction.core;
 
-
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 public interface QuoteProvider {
 
+  /**
+   * @uml.property name="quote"
+   * @uml.associationEnd
+   */
   public MarketQuote getQuote();
 
 }

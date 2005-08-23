@@ -24,26 +24,31 @@ import java.util.Vector;
  * @version $Revision$
  */
 public class FreeChartSeriesCollection {
-    
-    Vector collection;
-    
-    public FreeChartSeriesCollection() {
-        collection = new Vector();
-    }
-    
-    public void addSeries(FreeChartSeries series) {
-        collection.addElement(series);
-    }
-    
-    public int getSeriesCount() {
-        return collection.size();
-    }
-    
-    public FreeChartSeries getSeries(int index) {
-        if (index < 0 || index >= getSeriesCount())
-            return null;
-        
-        return (FreeChartSeries)collection.elementAt(index);
-    }
+
+  /**
+   * @uml.property name="collection"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.stats.FreeChartSeries"
+   */
+  Vector collection;
+
+  public FreeChartSeriesCollection() {
+    collection = new Vector();
+  }
+
+  public void addSeries( FreeChartSeries series ) {
+    collection.addElement(series);
+  }
+
+  public int getSeriesCount() {
+    return collection.size();
+  }
+
+  public FreeChartSeries getSeries( int index ) {
+    if ( index < 0 || index >= getSeriesCount() )
+      return null;
+
+    return (FreeChartSeries) collection.elementAt(index);
+  }
 
 }

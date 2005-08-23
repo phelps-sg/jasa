@@ -26,26 +26,28 @@ import java.io.Serializable;
 
 /**
  * <p>
- * A trading strategy in which we bid a constant mark-up on the agent's
- * private value.
+ * A trading strategy in which we bid a constant mark-up on the agent's private
+ * value.
  * </p>
- *
+ * 
  * <b>Parameters</b><br>
- *
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base.</i><tt>delta</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base.</i><tt>delta</tt><br>
  * <font size=-1>double</font></td>
- * <td valign=top>(the markup over our private valuation to bid for)</td></tr>
- *
+ * <td valign=top>(the markup over our private valuation to bid for)</td>
+ * </tr>
+ * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class PureSimpleStrategy extends FixedQuantityStrategyImpl
-                                    implements Serializable, Prototypeable {
+public class PureSimpleStrategy extends FixedQuantityStrategyImpl implements
+    Serializable, Prototypeable {
 
   protected double margin;
 
@@ -53,7 +55,8 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
 
   static final double DEFAULT_DELTA = 0;
 
-  public PureSimpleStrategy( AbstractTradingAgent agent, double margin, int quantity ) {
+  public PureSimpleStrategy( AbstractTradingAgent agent, double margin,
+      int quantity ) {
     super(agent);
     this.margin = margin;
     this.quantity = quantity;
@@ -66,16 +69,17 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    margin = parameters.getDoubleWithDefault(base.push(P_DELTA), null, DEFAULT_DELTA);
+    margin = parameters.getDoubleWithDefault(base.push(P_DELTA), null,
+        DEFAULT_DELTA);
   }
 
   public Object protoClone() {
-  	Object clonedStrategy;
-  	try {
-  		clonedStrategy = this.clone();
-  	} catch ( CloneNotSupportedException e ) {
-  		throw new Error(e);
-  	}
+    Object clonedStrategy;
+    try {
+      clonedStrategy = this.clone();
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
     return clonedStrategy;
   }
 
@@ -97,7 +101,7 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl
   public void endOfRound( Auction auction ) {
     // Do nothing
   }
-  
+
   public void setMargin( double margin ) {
     this.margin = margin;
   }

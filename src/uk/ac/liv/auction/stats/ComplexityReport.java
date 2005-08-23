@@ -45,27 +45,51 @@ import ec.util.ParameterDatabase;
  */
 
 public class ComplexityReport extends AbstractAuctionReport implements
-                                                              Resetable,
-                                                              Serializable,
-                                                              Parameterizable{
+    Resetable, Serializable, Parameterizable {
 
+  /**
+   * @uml.property name="numStates"
+   */
   protected int numStates = 20;
 
-  protected CummulativeDistribution globalMargin = 
-    new CummulativeDistribution();
+  /**
+   * @uml.property name="globalMargin"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected CummulativeDistribution globalMargin = new CummulativeDistribution();
 
+  /**
+   * @uml.property name="independentHistograms"
+   * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
+   *                     qualifier="agent2:uk.ac.liv.auction.agent.AbstractTradingAgent
+   *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
+   */
   protected HashMap independentHistograms;
-  
+
+  /**
+   * @uml.property name="jointHistograms"
+   * @uml.associationEnd qualifier="new:uk.ac.liv.auction.stats.AgentPair
+   *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
+   */
   protected HashMap jointHistograms;
 
+  /**
+   * @uml.property name="complexitySequence"
+   * @uml.associationEnd
+   */
   protected DataWriter complexitySequence;
 
+  /**
+   * @uml.property name="agents"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
+   */
   protected ArrayList agents;
-  
+
   public static final String P_WRITER = "writer";
+
   public static final String P_NUMSTATES = "numstates";
-  
-  
+
   public ComplexityReport() {
     initialise();
   }
@@ -83,7 +107,7 @@ public class ComplexityReport extends AbstractAuctionReport implements
 
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof ShoutPlacedEvent ) {
-      updateShoutLog( (ShoutPlacedEvent) event);
+      updateShoutLog((ShoutPlacedEvent) event);
     } else if ( event instanceof RoundClosedEvent ) {
       roundClosed(event);
     }
@@ -97,18 +121,18 @@ public class ComplexityReport extends AbstractAuctionReport implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    
-    complexitySequence = 
-      (DataWriter) 
-      	parameters.getInstanceForParameter(base.push(P_WRITER),
-      	    								null, DataWriter.class);
-    
+
+    complexitySequence = (DataWriter) parameters.getInstanceForParameter(base
+        .push(P_WRITER), null, DataWriter.class);
+
     if ( complexitySequence instanceof Parameterizable ) {
-      ((Parameterizable) complexitySequence).setup(parameters, base.push(P_WRITER));
+      ((Parameterizable) complexitySequence).setup(parameters, base
+          .push(P_WRITER));
     }
-    
-    numStates = parameters.getIntWithDefault(base.push(P_NUMSTATES), null, numStates);
-    
+
+    numStates = parameters.getIntWithDefault(base.push(P_NUMSTATES), null,
+        numStates);
+
   }
 
   public void produceUserOutput() {
@@ -117,16 +141,14 @@ public class ComplexityReport extends AbstractAuctionReport implements
   public Map getVariables() {
     return new HashMap();
   }
-  
 
-  
   public void roundClosed( AuctionEvent event ) {
     buildAgentList();
     updateIndependentHistograms();
     updateJointHistograms();
     complexitySequence.newData(calculateTotalIndependenceDistance());
   }
-  
+
   public double calculateTotalIndependenceDistance() {
     double distance = 0;
     for ( int i = 0; i < agents.size(); i++ ) {
@@ -139,7 +161,6 @@ public class ComplexityReport extends AbstractAuctionReport implements
     return distance / ((agents.size() * agents.size()) / 2);
   }
 
-  
   protected void updateJointHistograms() {
     for ( int i = 0; i < agents.size(); i++ ) {
       for ( int j = 0; j < i; j++ ) {
@@ -149,13 +170,13 @@ public class ComplexityReport extends AbstractAuctionReport implements
           int si = state(agent1);
           int sj = state(agent2);
           AgentPair pair = new AgentPair(agent1, agent2);
-          AgentStateHistogram histogram = 
-            (AgentStateHistogram) jointHistograms.get(pair);
+          AgentStateHistogram histogram = (AgentStateHistogram) jointHistograms
+              .get(pair);
           if ( histogram == null ) {
             histogram = new AgentStateHistogram();
             jointHistograms.put(pair, histogram);
           }
-          if ( si == sj ) {          
+          if ( si == sj ) {
             histogram.newState(si);
           } else {
             histogram.nullState();
@@ -165,12 +186,11 @@ public class ComplexityReport extends AbstractAuctionReport implements
     }
   }
 
-  
   protected void updateIndependentHistograms() {
     for ( int i = 0; i < agents.size(); i++ ) {
       AbstractTradingAgent agent = (AbstractTradingAgent) agents.get(i);
-      AgentStateHistogram histogram = 
-        (AgentStateHistogram) independentHistograms.get(agent);
+      AgentStateHistogram histogram = (AgentStateHistogram) independentHistograms
+          .get(agent);
       if ( histogram == null ) {
         histogram = new AgentStateHistogram();
         independentHistograms.put(agent, histogram);
@@ -190,30 +210,30 @@ public class ComplexityReport extends AbstractAuctionReport implements
     }
   }
 
-
   protected double independence( AbstractTradingAgent agent1,
       AbstractTradingAgent agent2 ) {
-    
-    AgentStateHistogram h1 = 
-      (AgentStateHistogram) independentHistograms.get(agent1);
-    AgentStateHistogram h2 = 
-      (AgentStateHistogram) independentHistograms.get(agent2);
 
-    AgentStateHistogram jointHistogram = 
-      (AgentStateHistogram) jointHistograms.get(new AgentPair(agent1, agent2));
+    AgentStateHistogram h1 = (AgentStateHistogram) independentHistograms
+        .get(agent1);
+    AgentStateHistogram h2 = (AgentStateHistogram) independentHistograms
+        .get(agent2);
+
+    AgentStateHistogram jointHistogram = (AgentStateHistogram) jointHistograms
+        .get(new AgentPair(agent1, agent2));
 
     if ( jointHistogram == null ) {
       jointHistogram = new AgentStateHistogram();
     }
-    
+
     double independence = 0;
     for ( int s = 0; s < numStates; s++ ) {
-      
+
       double jointProbability = jointHistogram.getProbability(s);
-      double independentProbability = h1.getProbability(s) * h2.getProbability(s);
-	      
+      double independentProbability = h1.getProbability(s)
+          * h2.getProbability(s);
+
       independence += Math.abs(jointProbability - independentProbability);
-          
+
     }
 
     return independence;
@@ -232,24 +252,21 @@ public class ComplexityReport extends AbstractAuctionReport implements
     return (int) bin;
   }
 
-  
   protected double markup( AbstractTradingAgent agent ) {
 
-    double markup = 
-      Math.abs(agent.getValuation(auction) - 
-          		agent.getCurrentShout().getPrice());
+    double markup = Math.abs(agent.getValuation(auction)
+        - agent.getCurrentShout().getPrice());
 
     return markup;
   }
 
-  
   class AgentStateHistogram {
 
     int[] frequency;
 
     int total = 0;
 
-    public AgentStateHistogram () {
+    public AgentStateHistogram() {
       frequency = new int[numStates];
     }
 
@@ -257,7 +274,7 @@ public class ComplexityReport extends AbstractAuctionReport implements
       frequency[state]++;
       total++;
     }
-    
+
     public void nullState() {
       total++;
     }
@@ -269,17 +286,26 @@ public class ComplexityReport extends AbstractAuctionReport implements
         return (double) frequency[state] / (double) total;
       }
     }
-    
-    
+
   }
 
 }
 
 class AgentPair {
 
-  protected AbstractTradingAgent agent1, agent2;
+  /**
+   * @uml.property name="agent1"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected AbstractTradingAgent agent1;
 
-  public AgentPair ( AbstractTradingAgent agent1, AbstractTradingAgent agent2) {
+  /**
+   * @uml.property name="agent2"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
+  protected AbstractTradingAgent agent2;
+
+  public AgentPair( AbstractTradingAgent agent1, AbstractTradingAgent agent2 ) {
     this.agent1 = agent1;
     this.agent2 = agent2;
   }
@@ -304,4 +330,3 @@ class AgentPair {
   }
 
 }
-

@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.config;
 
 import org.apache.log4j.Logger;
@@ -30,6 +31,10 @@ public class StrategyCombo implements ParameterBasedCase, Parameterizable {
 
   static Logger logger = Logger.getLogger(StrategyCombo.class);
 
+  /**
+   * @uml.property name="cases"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   private Case cases[];
 
   public StrategyCombo() {
@@ -39,23 +44,23 @@ public class StrategyCombo implements ParameterBasedCase, Parameterizable {
    * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
    *      ec.util.Parameter)
    */
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
-  public void setParameter(String param) {
+  public void setParameter( String param ) {
     String classes[] = param.split("\\s");
     cases = new Case[classes.length];
     try {
-      for (int i = 0; i < cases.length; i++) {
+      for ( int i = 0; i < cases.length; i++ ) {
         cases[i] = (Case) Class.forName(classes[i]).newInstance();
       }
-    } catch (InstantiationException e) {
+    } catch ( InstantiationException e ) {
       e.printStackTrace();
       logger.error(e.toString());
-    } catch (IllegalAccessException e) {
+    } catch ( IllegalAccessException e ) {
       e.printStackTrace();
       logger.error(e.toString());
-    } catch (ClassNotFoundException e) {
+    } catch ( ClassNotFoundException e ) {
       e.printStackTrace();
       logger.error(e.toString());
     }
@@ -63,8 +68,8 @@ public class StrategyCombo implements ParameterBasedCase, Parameterizable {
 
   public String toString() {
     String s = "";
-    for (int i = 0; i < cases.length; i++) {
-      if (i == 0) {
+    for ( int i = 0; i < cases.length; i++ ) {
+      if ( i == 0 ) {
         s += cases[i].toString();
       } else {
         s += "|" + cases[i].toString();
@@ -73,8 +78,8 @@ public class StrategyCombo implements ParameterBasedCase, Parameterizable {
     return s;
   }
 
-  public void apply(ParameterDatabase pdb, Parameter base) {
-    for (int i = 0; i < cases.length; i++) {
+  public void apply( ParameterDatabase pdb, Parameter base ) {
+    for ( int i = 0; i < cases.length; i++ ) {
       cases[i].apply(pdb, base.push("agenttype." + i + ".strategy"));
     }
   }

@@ -31,32 +31,38 @@ import uk.ac.liv.util.Parameterizable;
  * @version $Revision$
  */
 
-public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer implements
-    Serializable, Parameterizable {
+public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
+    implements Serializable, Parameterizable {
 
   public static final String P_SHOUTNUMEACHPERIOD = "shoutnumeachperiod";
-  
+
   public static final int DEF_SHOUTNUMEACHPERIOD = 6;
 
+  /**
+   * @uml.property name="shoutNumEachPeriod"
+   */
   private int shoutNumEachPeriod;
 
+  /**
+   * @uml.property name="shoutNum"
+   */
   private int shoutNum;
 
   public PeriodicClearingHouseAuctioneer() {
     this(null);
   }
 
-  public PeriodicClearingHouseAuctioneer(Auction auction) {
+  public PeriodicClearingHouseAuctioneer( Auction auction ) {
     super(auction);
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
 
     shoutNumEachPeriod = parameters.getInt(base.push(P_SHOUTNUMEACHPERIOD),
         null, DEF_SHOUTNUMEACHPERIOD);
 
-    if (shoutNumEachPeriod <= 0)
+    if ( shoutNumEachPeriod <= 0 )
       shoutNumEachPeriod = DEF_SHOUTNUMEACHPERIOD;
 
   }
@@ -66,10 +72,10 @@ public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer imp
     shoutNum = 0;
   }
 
-  public void newShout(Shout shout) throws IllegalShoutException {
+  public void newShout( Shout shout ) throws IllegalShoutException {
     super.newShout(shout);
     shoutNum++;
-    if (shoutNum >= shoutNumEachPeriod) {
+    if ( shoutNum >= shoutNumEachPeriod ) {
       generateQuote();
       clear();
     }

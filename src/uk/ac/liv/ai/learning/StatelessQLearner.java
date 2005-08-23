@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.Parameterizable;
@@ -27,21 +26,25 @@ import java.io.Serializable;
 
 /**
  * A memory-less version of the Q-Learning algorithm.
- *
- * This class implements StimuliResponseLearner instead of
- * MDPLearner, and so can be used in place of, e.g. a RothErevLearner.
- *
- * We use the standard MDP QLearner class, but fool it with this
- * wrapper into thinking that there is only one state.
- *
+ * 
+ * This class implements StimuliResponseLearner instead of MDPLearner, and so
+ * can be used in place of, e.g. a RothErevLearner.
+ * 
+ * We use the standard MDP QLearner class, but fool it with this wrapper into
+ * thinking that there is only one state.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class StatelessQLearner extends AbstractLearner
-    implements StimuliResponseLearner, Parameterizable,
-                Resetable, Serializable, Prototypeable {
+public class StatelessQLearner extends AbstractLearner implements
+    StimuliResponseLearner, Parameterizable, Resetable, Serializable,
+    Prototypeable {
 
+  /**
+   * @uml.property name="qLearner"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   QLearner qLearner;
 
   public StatelessQLearner() {
@@ -49,44 +52,37 @@ public class StatelessQLearner extends AbstractLearner
   }
 
   public StatelessQLearner( int numActions, double epsilon,
-                              double learningRate, double discountRate  ) {
+      double learningRate, double discountRate ) {
 
-    qLearner = new QLearner(1, numActions, epsilon, learningRate,
-                            discountRate);
+    qLearner = new QLearner(1, numActions, epsilon, learningRate, discountRate);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     super.setup(parameters, base);
 
-    double learningRate =
-      parameters.getDoubleWithDefault(base.push(QLearner.P_LEARNING_RATE), null,
-                                      QLearner.DEFAULT_LEARNING_RATE);
+    double learningRate = parameters.getDoubleWithDefault(base
+        .push(QLearner.P_LEARNING_RATE), null, QLearner.DEFAULT_LEARNING_RATE);
 
-    double discountRate =
-      parameters.getDoubleWithDefault(base.push(QLearner.P_DISCOUNT_RATE), null,
-                                      QLearner.DEFAULT_DISCOUNT_RATE);
+    double discountRate = parameters.getDoubleWithDefault(base
+        .push(QLearner.P_DISCOUNT_RATE), null, QLearner.DEFAULT_DISCOUNT_RATE);
 
-    double epsilon =
-      parameters.getDoubleWithDefault(base.push(QLearner.P_EPSILON), null,
-                                      QLearner.DEFAULT_EPSILON);
+    double epsilon = parameters.getDoubleWithDefault(base
+        .push(QLearner.P_EPSILON), null, QLearner.DEFAULT_EPSILON);
 
-    int numActions = 
-      parameters.getInt(base.push(QLearner.P_NUM_ACTIONS), null);
-    
+    int numActions = parameters.getInt(base.push(QLearner.P_NUM_ACTIONS), null);
+
     qLearner.setStatesAndActions(1, numActions);
     qLearner.setLearningRate(learningRate);
     qLearner.setEpsilon(epsilon);
-    qLearner.setDiscountRate(discountRate);    
+    qLearner.setDiscountRate(discountRate);
   }
 
-  
-  
   public int act() {
     return qLearner.act();
   }
 
-  public void reward(double reward) {
+  public void reward( double reward ) {
     qLearner.newState(reward, 0);
   }
 
@@ -101,7 +97,7 @@ public class StatelessQLearner extends AbstractLearner
   public int getNumberOfActions() {
     return qLearner.getNumberOfActions();
   }
-  
+
   public void setNumberOfActions( int n ) {
     qLearner.setStatesAndActions(1, n);
   }
@@ -119,5 +115,5 @@ public class StatelessQLearner extends AbstractLearner
       throw new Error(e);
     }
   }
-  
+
 }

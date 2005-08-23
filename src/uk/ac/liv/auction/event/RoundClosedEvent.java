@@ -25,11 +25,15 @@ import uk.ac.liv.auction.core.Auction;
  */
 
 public class RoundClosedEvent extends AuctionEvent {
-  
+
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd readOnly="true"
+   */
   protected Auction auction;
-  
+
   public RoundClosedEvent( Auction auction, int time ) {
-    super(auction, time);  
+    super(auction, time);
   }
 
   public int getTime() {

@@ -35,39 +35,53 @@ import uk.ac.liv.util.CummulativeDistribution;
  * @version $Revision$
  */
 public abstract class EfficiencyTest extends TestCase {
-  
+
+  /**
+   * @uml.property   name="auctioneer"
+   * @uml.associationEnd   
+   */
   protected AbstractAuctioneer auctioneer;
-  
+
+  /**
+   * @uml.property   name="auction"
+   * @uml.associationEnd   
+   */
   protected RoundRobinAuction auction;
-  
+
+  /**
+   * @uml.property   name="agents"
+   * @uml.associationEnd   multiplicity="(0 -1)"
+   */
   protected ZITraderAgent[] agents;
-  
+
   static final int NS = 6;
+
   static final int NB = 6;
-  
+
   static int ITERATIONS = 200;
-  
+
   static final double MIN_VALUE = 50;
+
   static final double MAX_VALUE = 300;
-  
+
   static final int MAX_DAYS = 100;
+
   static final int DAY_LENGTH = 5;
-  
-  
+
   public EfficiencyTest( String name ) {
     super(name);
   }
-  
+
   protected void assignAuctioneer() {
     auctioneer = new ContinuousDoubleAuctioneer();
-    auctioneer.setPricingPolicy( new DiscriminatoryPricingPolicy(0.5) );
+    auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);
   }
-  
+
   protected void registerTraders() {
     int numAgents = getNumBuyers() + getNumSellers();
     agents = new ZITraderAgent[numAgents];
-    for( int i=0; i<numAgents; i++ ) {
+    for ( int i = 0; i < numAgents; i++ ) {
       agents[i] = new ZITraderAgent();
       agents[i].setInitialTradeEntitlement(1);
       assignStrategy(agents[i]);
@@ -77,65 +91,64 @@ public abstract class EfficiencyTest extends TestCase {
       auction.register(agents[i]);
     }
   }
-  
+
   public void testEfficiency() {
     GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     System.out.println("\ntestEfficiency()");
-    CummulativeDistribution efficiency = 
-      new CummulativeDistribution("efficiency");
+    CummulativeDistribution efficiency = new CummulativeDistribution(
+        "efficiency");
     initialiseExperiment();
-    for( int i=0; i<ITERATIONS; i++ ) {
+    for ( int i = 0; i < ITERATIONS; i++ ) {
       auction.reset();
       auction.run();
       SurplusReport surplus = new SurplusReport(auction);
-      surplus.calculate();          
-      System.out.println("Iteration " + i + ": efficiency = " + surplus.getEA());
+      surplus.calculate();
+      System.out
+          .println("Iteration " + i + ": efficiency = " + surplus.getEA());
       if ( !Double.isNaN(surplus.getEA()) ) {
         efficiency.newData(surplus.getEA());
       }
     }
     double meanEfficiency = efficiency.getMean();
-    
+
     System.out.println("Mean efficiency = " + meanEfficiency);
-    
+
     assertTrue("infinite efficiency", !Double.isInfinite(meanEfficiency));
-    
-    assertTrue("mean efficiency too low", 
-        			meanEfficiency >= getMinMeanEfficiency());
-    
-    assertTrue("max efficiency too high", 
-        			efficiency.getMax() <= 100 + 10E-6);
-    
-    assertTrue("negative efficiency encountered",
-        			efficiency.getMin() >= 0 );
+
+    assertTrue("mean efficiency too low",
+        meanEfficiency >= getMinMeanEfficiency());
+
+    assertTrue("max efficiency too high", efficiency.getMax() <= 100 + 10E-6);
+
+    assertTrue("negative efficiency encountered", efficiency.getMin() >= 0);
   }
-  
+
   protected void initialiseExperiment() {
     initialiseAuction();
     assignAuctioneer();
     registerTraders();
   }
-  
+
   protected void initialiseAuction() {
     auction = new RandomRobinAuction();
     auction.setLengthOfDay(DAY_LENGTH);
     auction.setMaximumDays(MAX_DAYS);
   }
-  
+
   protected int getNumBuyers() {
     return NB;
   }
-  
+
   protected int getNumSellers() {
     return NS;
   }
-  
+
   protected void assignValuationPolicy( AbstractTradingAgent agent ) {
-    agent.setValuationPolicy( new RandomValuer(MIN_VALUE, MAX_VALUE));
+    agent.setValuationPolicy(new RandomValuer(MIN_VALUE, MAX_VALUE));
   }
-  
+
   protected abstract void assignStrategy( AbstractTradingAgent agent );
-  
+
   protected abstract double getMinMeanEfficiency();
 
 }

@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.agent;
 
 import java.io.Serializable;
@@ -33,45 +32,50 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * An implementation of Todd Kaplan's sniping strategy.  Agents using
- * this strategy wait until the last minute before attempting to
- * "steal the bid".  See
+ * An implementation of Todd Kaplan's sniping strategy. Agents using this
+ * strategy wait until the last minute before attempting to "steal the bid". See
  * </p>
  * <p>
- * "Behaviour of trading automata in a computerized double auction market"
- * J. Rust, J. Miller and R. Palmer in "The Double Auction Market:
- * Institutions, Theories and Evidence" 1992, Addison-Wesley
+ * "Behaviour of trading automata in a computerized double auction market" J.
+ * Rust, J. Miller and R. Palmer in "The Double Auction Market: Institutions,
+ * Theories and Evidence" 1992, Addison-Wesley
  * </p>
- *
+ * 
  * <p>
- * Note that you must configure a logger of type DailyStatsMarketDataLogger
- * in order to use this strategy.
+ * Note that you must configure a logger of type DailyStatsMarketDataLogger in
+ * order to use this strategy.
  * </p>
- *
- * </p><p><b>Parameters</b><br>
+ * 
+ * </p>
+ * <p>
+ * <b>Parameters</b><br>
  * <table>
- * <tr><td valign=top><i>base</i><tt>.s</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.s</tt><br>
  * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(the spread factor)</td></tr>
- *
- * <tr><td valign=top><i>base</i><tt>.t</tt><br>
+ * <td valign=top>(the spread factor)</td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.t</tt><br>
  * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(the time factor)</td><tr>
- *
+ * <td valign=top>(the time factor)</td>
+ * <tr>
+ * 
  * </table>
- *
+ * 
  * @see uk.ac.liv.auction.stats.DailyStatsReport
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class KaplanStrategy extends FixedQuantityStrategyImpl
-    implements Serializable, Prototypeable {
+public class KaplanStrategy extends FixedQuantityStrategyImpl implements
+    Serializable, Prototypeable {
 
   /**
-   * The time factor.  Kaplan will bid if the remaining time in
-   * the current period is less than t.
+   * The time factor. Kaplan will bid if the remaining time in the current
+   * period is less than t.
    */
   protected double t = 4;
 
@@ -81,10 +85,11 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   protected double s = 0.5;
 
   protected MarketQuote quote;
-  
+
   protected DailyStatsReport dailyStats;
 
   public static final String P_T = "t";
+
   public static final String P_S = "s";
 
   static Logger logger = Logger.getLogger(KaplanStrategy.class);
@@ -98,15 +103,14 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   }
 
   public Object protoClone() {
-  	Object clone;
-  	try {
-  		clone = clone();
-  	} catch ( CloneNotSupportedException e ) {
-  		throw new Error(e);
-  	}
+    Object clone;
+    try {
+      clone = clone();
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
     return clone;
   }
-  
 
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
@@ -116,10 +120,11 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   }
 
   public void auctionOpen( AuctionOpenEvent event ) {
-    dailyStats = 
-      (DailyStatsReport) event.getAuction().getReport(DailyStatsReport.class);
+    dailyStats = (DailyStatsReport) event.getAuction().getReport(
+        DailyStatsReport.class);
     if ( dailyStats == null ) {
-      throw new AuctionError(getClass() + " requires a DailyStatsReport to be configured");
+      throw new AuctionError(getClass()
+          + " requires a DailyStatsReport to be configured");
     }
   }
 
@@ -158,17 +163,15 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     Distribution transPrice = null;
 
     transPrice = dailyStats.getPreviousDayTransPriceStats();
- 
+
     if ( transPrice == null ) {
       return false;
     }
 
     if ( agent.isBuyer() ) {
-      juicyOffer =
-          quote.getAsk() < transPrice.getMin();
+      juicyOffer = quote.getAsk() < transPrice.getMin();
     } else {
-      juicyOffer =
-          quote.getBid() > transPrice.getMax();
+      juicyOffer = quote.getBid() > transPrice.getMax();
     }
 
     if ( juicyOffer ) {
@@ -178,7 +181,6 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     return juicyOffer;
   }
 
-
   public boolean smallSpread() {
 
     boolean smallSpread = false;
@@ -186,17 +188,16 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
     Distribution transPrice = null;
 
     transPrice = dailyStats.getPreviousDayTransPriceStats();
- 
-    if (agent.isBuyer()) {
+
+    if ( agent.isBuyer() ) {
       smallSpread =
-//          quote.getAsk() < transPrice.getMax() &&
-          ( (quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
+      // quote.getAsk() < transPrice.getMax() &&
+      ((quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
     } else {
       smallSpread =
-//          quote.getBid() > transPrice.getMin() &&
-          ( (quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
+      // quote.getBid() > transPrice.getMin() &&
+      ((quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
     }
-
 
     if ( smallSpread ) {
       logger.debug(this + ": small spread detected");
@@ -204,7 +205,6 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
 
     return smallSpread;
   }
-  
 
   public boolean timeRunningOut() {
     boolean timeOut = auction.getRemainingTime() < t;
@@ -217,18 +217,18 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl
   public double getS() {
     return s;
   }
-  
+
   public double getT() {
     return t;
   }
-  
+
   public String toString() {
     return "(" + getClass() + " s:" + s + " t:" + t + ")";
   }
 
-
   protected void error( DataUnavailableException e ) {
-    logger.error("Auction is not configured with loggers appropriate for this strategy");
+    logger
+        .error("Auction is not configured with loggers appropriate for this strategy");
     logger.error(e.getMessage());
     throw new AuctionError(e);
   }

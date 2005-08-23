@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.AuctionError;
@@ -30,11 +29,11 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class PriestVanTolStrategy extends MomentumStrategy
-    implements Serializable  {
+public class PriestVanTolStrategy extends MomentumStrategy implements
+    Serializable {
 
   static Logger logger = Logger.getLogger(PriestVanTolStrategy.class);
-  
+
   protected HistoricalDataReport historyStats;
 
   public void eventOccurred( AuctionEvent event ) {
@@ -45,14 +44,15 @@ public class PriestVanTolStrategy extends MomentumStrategy
   }
 
   public void auctionOpen( AuctionOpenEvent event ) {
-    historyStats = 
-      (HistoricalDataReport) event.getAuction().getReport(HistoricalDataReport.class);
+    historyStats = (HistoricalDataReport) event.getAuction().getReport(
+        HistoricalDataReport.class);
 
     if ( historyStats == null ) {
-      throw new AuctionError(getClass() + " requires a HistoryStatsMarketDataLogger to be configured");
+      throw new AuctionError(getClass()
+          + " requires a HistoryStatsMarketDataLogger to be configured");
     }
   }
-  
+
   protected void adjustMargin() {
 
     double highestBid = historyStats.getHighestBidPrice();
@@ -70,7 +70,7 @@ public class PriestVanTolStrategy extends MomentumStrategy
         adjustMargin(targetMargin(highestBid + perterb(highestBid)));
       }
     }
-   
+
   }
-  
+
 }

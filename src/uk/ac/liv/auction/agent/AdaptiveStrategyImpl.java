@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
@@ -24,7 +23,7 @@ import uk.ac.liv.auction.core.*;
  */
 
 public abstract class AdaptiveStrategyImpl extends FixedQuantityStrategyImpl
-    implements  AdaptiveStrategy {
+    implements AdaptiveStrategy {
 
   public AdaptiveStrategyImpl( AbstractTradingAgent agent ) {
     super(agent);
@@ -35,9 +34,8 @@ public abstract class AdaptiveStrategyImpl extends FixedQuantityStrategyImpl
   }
 
   public void endOfRound( Auction auction ) {
-//    super.endOfRound(auction);
+    // super.endOfRound(auction);
     getLearner().monitor();
   }
-
 
 }

@@ -17,26 +17,29 @@ package uk.ac.liv.util;
 
 /**
  * Utility class for handing out unique ids.
- *
+ * 
  * A using class wishing to assign unique ids to each of its instances should
  * declare a static member variable:
- *
+ * 
  * <code>
  *   static IdAllocator idAllocator = new IdAllocator();
  * </code>
- *
+ * 
  * In its constructor it should use something like:
- *
+ * 
  * <code>
  *   id = idAllocator.nextId();
  * </code>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class IdAllocator {
 
+  /**
+   * @uml.property name="nextId"
+   */
   protected long nextId = 0;
 
   public IdAllocator() {

@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.event.AuctionEvent;
@@ -31,14 +30,19 @@ import org.apache.log4j.Logger;
 
 /**
  * A report that collects price statistics for each trading day.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DailyStatsReport extends PriceStatisticsReport
-    implements Parameterizable {
+public class DailyStatsReport extends PriceStatisticsReport implements
+    Parameterizable {
 
+  /**
+   * @uml.property name="dailyStats"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.util.CummulativeDistribution"
+   */
   protected Vector dailyStats;
 
   static Logger logger = Logger.getLogger(DailyStatsReport.class);
@@ -49,36 +53,35 @@ public class DailyStatsReport extends PriceStatisticsReport
   }
 
   public void setup( ParameterDatabase params, Parameter base ) {
-    //auction.setDailyStats(this);
+    // auction.setDailyStats(this);
   }
-  
+
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
     if ( event instanceof EndOfDayEvent ) {
-      endOfDay( (EndOfDayEvent) event);
-    }    
+      endOfDay((EndOfDayEvent) event);
+    }
   }
 
   public CummulativeDistribution getTransPriceStats( int day ) {
-    if ( day > dailyStats.size()-1 ) {
+    if ( day > dailyStats.size() - 1 ) {
       return null;
     }
     return ((CummulativeDistribution[]) dailyStats.get(day))[TRANS_PRICE];
   }
-  
+
   public CummulativeDistribution getPreviousDayTransPriceStats() {
     if ( auction.getDay() <= 0 ) {
       return null;
     }
-    return getTransPriceStats( auction.getDay() - 1 );
+    return getTransPriceStats(auction.getDay() - 1);
   }
 
   public void endOfDay( EndOfDayEvent event ) {
     // Make a copy of the current stats, reset them and record
     try {
-      CummulativeDistribution[] currentStats =
-          new CummulativeDistribution[stats.length];
-      for (int i = 0; i < stats.length; i++) {
+      CummulativeDistribution[] currentStats = new CummulativeDistribution[stats.length];
+      for ( int i = 0; i < stats.length; i++ ) {
         currentStats[i] = (CummulativeDistribution) stats[i].clone();
         stats[i].reset();
       }
@@ -91,12 +94,12 @@ public class DailyStatsReport extends PriceStatisticsReport
   }
 
   public void produceUserOutput() {
-    for( int day=0; day<dailyStats.size(); day++ ) {
-      CummulativeDistribution[] todaysStats =
-          (CummulativeDistribution[]) dailyStats.get(day);
+    for ( int day = 0; day < dailyStats.size(); day++ ) {
+      CummulativeDistribution[] todaysStats = (CummulativeDistribution[]) dailyStats
+          .get(day);
       logger.info("Stats for day " + day);
       logger.info("");
-      for( int i=0; i<todaysStats.length; i++ ) {
+      for ( int i = 0; i < todaysStats.length; i++ ) {
         printStats(todaysStats[i]);
       }
     }
@@ -111,6 +114,5 @@ public class DailyStatsReport extends PriceStatisticsReport
     super.reset();
     dailyStats.clear();
   }
-
 
 }

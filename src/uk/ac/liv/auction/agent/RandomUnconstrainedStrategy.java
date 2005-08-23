@@ -32,11 +32,11 @@ import cern.jet.random.Uniform;
 
 /**
  * <p>
- * A trading strategy in which an agent bid regardless its private 
- * value.  This strategy is often referred to as Zero Intelligence
- * Unconstrained (ZI-U) in the literature.
+ * A trading strategy in which an agent bid regardless its private value. This
+ * strategy is often referred to as Zero Intelligence Unconstrained (ZI-U) in
+ * the literature.
  * </p>
- *
+ * 
  * </p>
  * <p>
  * <b>Parameters </b> <br>
@@ -48,7 +48,7 @@ import cern.jet.random.Uniform;
  * <tr>
  * 
  * </table>
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
@@ -59,9 +59,9 @@ public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
   public static final String P_MAXPRICE = "maxprice";
 
   public static final double DEFAULT_MAX_PRICE = 200;
-  
+
   protected double maxPrice;
-    
+
   protected AbstractContinousDistribution distribution;
 
   public RandomUnconstrainedStrategy() {
@@ -91,22 +91,21 @@ public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
   public void endOfRound( Auction auction ) {
     // Do nothing
   }
-  
+
   public void initialise() {
     super.initialise();
-    distribution = new Uniform(0, maxPrice, GlobalPRNG.getInstance()); 
+    distribution = new Uniform(0, maxPrice, GlobalPRNG.getInstance());
   }
 
-  
   public double getMaxPrice() {
     return maxPrice;
   }
-  
+
   public void setMaxPrice( double maxPrice ) {
     this.maxPrice = maxPrice;
     initialise();
   }
-  
+
   public String toString() {
     return "(" + getClass() + " quantity:" + quantity + ")";
   }

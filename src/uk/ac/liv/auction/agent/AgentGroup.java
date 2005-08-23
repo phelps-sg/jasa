@@ -30,29 +30,28 @@ import java.io.Serializable;
  */
 
 public class AgentGroup implements Serializable {
-  
+
   protected String description;
 
   public static final int MAX_GROUPS = 100;
-  
-  
+
   /**
    * A global list of groups indexed by number.
    */
   private static AgentGroup[] groups = new AgentGroup[MAX_GROUPS];
-  
+
   public AgentGroup( String description ) {
     this.description = description;
   }
-  
+
   public String toString() {
     return "(" + getClass() + " description:\"" + description + "\")";
   }
-  
+
   public String getDescription() {
     return description;
   }
-  
+
   /**
    * Get group n
    * 

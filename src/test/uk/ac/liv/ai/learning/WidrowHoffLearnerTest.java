@@ -23,8 +23,15 @@ import uk.ac.liv.util.MathUtil;
 
 public class WidrowHoffLearnerTest extends TestCase {
 
+  /**
+   * @uml.property name="learner1"
+   * @uml.associationEnd
+   */
   WidrowHoffLearner learner1;
 
+  /**
+   * @uml.property name="score"
+   */
   double score;
 
   static final double LEARNING_RATE = 0.8;
@@ -55,7 +62,7 @@ public class WidrowHoffLearnerTest extends TestCase {
   }
 
   protected void train( int iterations ) {
-    for( int i=0; i<iterations; i++ ) {      
+    for ( int i = 0; i < iterations; i++ ) {
       learner1.train(TARGET_VALUE);
       System.out.println("Learning delta = " + learner1.getLearningDelta());
       System.out.println("Current output = " + learner1.act());
@@ -65,7 +72,7 @@ public class WidrowHoffLearnerTest extends TestCase {
   public static Test suite() {
     return new TestSuite(WidrowHoffLearnerTest.class);
   }
-  
+
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
   }

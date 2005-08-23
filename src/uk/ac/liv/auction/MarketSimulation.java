@@ -44,45 +44,58 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * The main JASA application class.  This application takes as an argument
- * the name of a parameter file describing an auction experiment, and
- * proceeds to run that experiment.  This application can be used to
- * run many iterations of an experiment in batch-mode, or even many iterations
- * of several experiments with different settings, in contrast to the 
- * interactive mode provided by RepastMarketSimulation.
+ * The main JASA application class. This application takes as an argument the
+ * name of a parameter file describing an auction experiment, and proceeds to
+ * run that experiment. This application can be used to run many iterations of
+ * an experiment in batch-mode, or even many iterations of several experiments
+ * with different settings, in contrast to the interactive mode provided by
+ * RepastMarketSimulation.
  * 
  * @see RepastMarketSimulation
  * 
  * </p>
- *
- * <p><b>Parameters</b><br>
- *
+ * 
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.caseenum</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.caseenum</tt><br>
  * <font size=-1></font></td>
- * <td valign=top>(the parameter base for uk.ac.liv.auction.config.CaseEnumConfig to
- * set up a set of different auctions to run)</td></tr>
+ * <td valign=top>(the parameter base for
+ * uk.ac.liv.auction.config.CaseEnumConfig to set up a set of different auctions
+ * to run)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.caseenum.i</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.caseenum.i</tt><br>
  * <font size=-1> classname inherits uk.ac.liv.auction.config.CaseEnum </font></td>
- * <td valign=top>(the enumeration of different values of a property to generate
- * a set of different auction settings)</td></tr>
+ * <td valign=top>(the enumeration of different values of a property to
+ * generate a set of different auction settings)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.auction</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.auction</tt><br>
  * <font size=-1>classname inherits uk.ac.liv.auction.core.RoundRobinAuction</font></td>
- * <td valign=top>(the class of auction to use)</td></tr>
+ * <td valign=top>(the class of auction to use)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.iterations</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.iterations</tt><br>
  * <font size=-1>int</font></td>
- * <td valign=top>(the number of repetitions of this experiment to sample)</td></tr>
+ * <td valign=top>(the number of repetitions of this experiment to sample)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.writer</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.writer</tt><br>
  * <font size=-1>classname inherits uk.ac.liv.auction.io.DataWriter</font></td>
- * <td valign=top>(the data writer used to record results if running a batch of experiments)</td></tr>
+ * <td valign=top>(the data writer used to record results if running a batch of
+ * experiments)</td>
+ * </tr>
  * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -91,45 +104,57 @@ public class MarketSimulation implements Serializable, Runnable {
 
   /**
    * The auction used in this simulation.
+   * 
+   * @uml.property name="auction"
+   * @uml.associationEnd
    */
   protected RoundRobinAuction auction;
-  
+
   /**
    * The number of repeatitions of this experiment to sample.
+   * 
+   * @uml.property name="iterations"
    */
   protected int iterations = 0;
-  
-  protected boolean verbose = true;
-  
+
   /**
-   * If running more than one iteration, then write batch statistics
-   * to this DataWriter.
+   * @uml.property name="verbose"
+   */
+  protected boolean verbose = true;
+
+  /**
+   * If running more than one iteration, then write batch statistics to this
+   * DataWriter.
    */
   protected static DataWriter resultsFile = null;
 
   public static final String P_CASEENUM = "caseenum";
-  public static final String P_AUCTION = "auction";
-  public static final String P_SIMULATION = "simulation";
-  public static final String P_ITERATIONS = "iterations";
-  public static final String P_WRITER = "writer";
-  public static final String P_VERBOSE = "verbose";
-  	
-  static Logger logger = Logger.getLogger("JASA");
 
+  public static final String P_AUCTION = "auction";
+
+  public static final String P_SIMULATION = "simulation";
+
+  public static final String P_ITERATIONS = "iterations";
+
+  public static final String P_WRITER = "writer";
+
+  public static final String P_VERBOSE = "verbose";
+
+  static Logger logger = Logger.getLogger("JASA");
 
   public static void main( String[] args ) {
 
     try {
 
       gnuMessage();
-      
+
       if ( args.length < 1 ) {
         fatalError("You must specify a parameter file");
       }
 
       String fileName = args[0];
       File file = new File(fileName);
-      if ( ! file.canRead() ) {
+      if ( !file.canRead() ) {
         fatalError("Cannot read parameter file " + fileName);
       }
 
@@ -137,29 +162,28 @@ public class MarketSimulation implements Serializable, Runnable {
 
       ParameterDatabase parameters = new ParameterDatabase(file, args);
       Parameter base = new Parameter(P_SIMULATION);
-      
+
       try {
-        resultsFile = 
-          (DataWriter) 
-          	parameters.getInstanceForParameter(base.push(P_WRITER), null, 
-          	    								DataWriter.class);
+        resultsFile = (DataWriter) parameters.getInstanceForParameter(base
+            .push(P_WRITER), null, DataWriter.class);
         if ( resultsFile instanceof Parameterizable ) {
-          ((Parameterizable) resultsFile).setup(parameters, base.push(P_WRITER));
+          ((Parameterizable) resultsFile)
+              .setup(parameters, base.push(P_WRITER));
         }
       } catch ( ParamClassLoadException e ) {
         resultsFile = null;
       }
-      
+
       CaseEnumConfig caseEnumConfig = new CaseEnumConfig();
       caseEnumConfig.setup(parameters, base.push(P_CASEENUM));
-      
-      if (caseEnumConfig.getCaseEnumNum() == 0) {
+
+      if ( caseEnumConfig.getCaseEnumNum() == 0 ) {
         runSingleExperimentSet(parameters, base);
       } else {
         runBatchExperimentSet(parameters, base, caseEnumConfig);
       }
-      
-      if (resultsFile != null) {
+
+      if ( resultsFile != null ) {
         resultsFile.close();
       }
 
@@ -168,26 +192,26 @@ public class MarketSimulation implements Serializable, Runnable {
       e.printStackTrace();
     }
   }
-  
-  private static void runSingleExperimentSet(ParameterDatabase parameters, 
-      Parameter base) throws Exception {
-    
+
+  private static void runSingleExperimentSet( ParameterDatabase parameters,
+      Parameter base ) throws Exception {
+
     MarketSimulation simulation = new MarketSimulation();
     simulation.setup(parameters, base);
-    simulation.run();    
+    simulation.run();
   }
-  
-  private static void runBatchExperimentSet(ParameterDatabase parameters, 
-      Parameter base, CaseEnumConfig caseEnumConfig) throws Exception {
 
-    while (true) {
+  private static void runBatchExperimentSet( ParameterDatabase parameters,
+      Parameter base, CaseEnumConfig caseEnumConfig ) throws Exception {
+
+    while ( true ) {
 
       caseEnumConfig.apply(parameters, base.push(P_AUCTION));
 
       // run simulation under the current combination of cases
       String s = "*   " + caseEnumConfig.getCurrentDesc() + "   *";
       String stars = "";
-      for (int i = 0; i < s.length(); i++)
+      for ( int i = 0; i < s.length(); i++ )
         stars += "*";
       logger.info("\n");
       logger.info(stars);
@@ -196,13 +220,12 @@ public class MarketSimulation implements Serializable, Runnable {
       logger.info("\n");
 
       runSingleExperimentSet(parameters, base);
-      
-      if (!caseEnumConfig.next())
+
+      if ( !caseEnumConfig.next() )
         break;
     }
 
   }
-
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
@@ -210,26 +233,22 @@ public class MarketSimulation implements Serializable, Runnable {
 
     GlobalPRNG.setup(parameters, base);
 
-    auction =
-      (RoundRobinAuction)
-        parameters.getInstanceForParameterEq(base.push(P_AUCTION),
-                                              null,
-                                              RoundRobinAuction.class);
+    auction = (RoundRobinAuction) parameters.getInstanceForParameterEq(base
+        .push(P_AUCTION), null, RoundRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
-    
-    iterations = 
-      parameters.getIntWithDefault(base.push(P_ITERATIONS), null, iterations);
-    
+
+    iterations = parameters.getIntWithDefault(base.push(P_ITERATIONS), null,
+        iterations);
+
     verbose = parameters.getBoolean(base.push(P_VERBOSE), null, verbose);
-    
+
     logger.info("prng = " + PRNGFactory.getFactory().getDescription());
     logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
-    
+
     logger.debug("Setup complete.");
   }
-  
-  
+
   public void run() {
     if ( iterations <= 0 ) {
       runSingleExperiment();
@@ -237,8 +256,7 @@ public class MarketSimulation implements Serializable, Runnable {
       runBatchExperiment(iterations);
     }
   }
-  
-  
+
   public void runSingleExperiment() {
     logger.info("Running auction...");
     auction.run();
@@ -246,31 +264,27 @@ public class MarketSimulation implements Serializable, Runnable {
     auction.generateReport();
   }
 
-  
   public void runBatchExperiment( int n ) {
-    HashMap resultsStats = new HashMap();    
-    for( int i=0; i<n; i++ ) {
+    HashMap resultsStats = new HashMap();
+    for ( int i = 0; i < n; i++ ) {
       if ( verbose ) {
-        logger.info("Running experiment " + (i+1) + " of " + n + "... ");
+        logger.info("Running experiment " + (i + 1) + " of " + n + "... ");
       }
       auction.reset();
       auction.run();
       recordResults(auction.getResults(), resultsStats);
       if ( verbose ) {
-        logger.info("done.\n");        
-      }      
+        logger.info("done.\n");
+      }
     }
-        
+
     finalReport(resultsStats);
   }
-  
-  
+
   public static void gnuMessage() {
     System.out.println(JASAVersion.getGnuMessage());
   }
 
-  
-  
   protected void finalReport( Map resultsStats ) {
     logger.info("\nResults");
     logger.info("-------");
@@ -295,11 +309,11 @@ public class MarketSimulation implements Serializable, Runnable {
     while ( i.hasNext() ) {
       ReportVariable var = (ReportVariable) i.next();
       Object value = results.get(var);
-      if ( value instanceof Number) {
+      if ( value instanceof Number ) {
         double v = ((Number) value).doubleValue();
         if ( !Double.isNaN(v) ) {
-          CummulativeDistribution varStats = 
-            (CummulativeDistribution) resultsStats.get(var);
+          CummulativeDistribution varStats = (CummulativeDistribution) resultsStats
+              .get(var);
           if ( varStats == null ) {
             varStats = new CummulativeDistribution(var.toString());
             resultsStats.put(var, varStats);
@@ -311,8 +325,8 @@ public class MarketSimulation implements Serializable, Runnable {
         resultsFile.newData(value);
       }
     }
-    
-    if (resultsFile != null) {
+
+    if ( resultsFile != null ) {
       resultsFile.flush();
     }
   }
@@ -321,7 +335,5 @@ public class MarketSimulation implements Serializable, Runnable {
     System.err.println("ERROR: " + message);
     System.exit(1);
   }
-
-
 
 }

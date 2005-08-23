@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.prng.GlobalPRNG;
@@ -28,40 +27,46 @@ import cern.jet.random.Uniform;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-
 /**
- * A learner that simply plays a random action on each iteration
- * without any learning.  This is useful for control experiments.
- *
+ * A learner that simply plays a random action on each iteration without any
+ * learning. This is useful for control experiments.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class DumbRandomLearner extends AbstractLearner
-    implements Parameterizable, StimuliResponseLearner, Serializable, 
-    			Prototypeable {
+public class DumbRandomLearner extends AbstractLearner implements
+    Parameterizable, StimuliResponseLearner, Serializable, Prototypeable {
 
+  /**
+   * @uml.property name="numActions"
+   */
   protected int numActions;
-  
+
+  /**
+   * @uml.property name="distribution"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected Uniform distribution;
-  
+
   public static final int DEFAULT_NUM_ACTIONS = 10;
-  
+
   public static final String P_K = "k";
-  
+
   public DumbRandomLearner() {
     this(DEFAULT_NUM_ACTIONS);
   }
 
-  public DumbRandomLearner( int numActions ) {    
+  public DumbRandomLearner( int numActions ) {
     this.numActions = numActions;
     distribution = new Uniform(0, 1, GlobalPRNG.getInstance());
   }
-  
+
   public void setup( ParameterDatabase params, Parameter base ) {
-    numActions = params.getIntWithDefault(base.push(P_K), null, DEFAULT_NUM_ACTIONS);
+    numActions = params.getIntWithDefault(base.push(P_K), null,
+        DEFAULT_NUM_ACTIONS);
   }
-  
+
   public Object protoClone() {
     try {
       return this.clone();
@@ -69,11 +74,10 @@ public class DumbRandomLearner extends AbstractLearner
       throw new Error(e);
     }
   }
-  
-  public void reset() {
-    //Do nothing
-  }
 
+  public void reset() {
+    // Do nothing
+  }
 
   public int act() {
     return distribution.nextIntFromTo(0, numActions);
@@ -84,13 +88,13 @@ public class DumbRandomLearner extends AbstractLearner
   }
 
   public void dumpState( DataWriter out ) {
-    //TODO
+    // TODO
   }
 
   public int getNumberOfActions() {
     return numActions;
   }
-  
+
   public void reward( double reward ) {
     // No action
   }

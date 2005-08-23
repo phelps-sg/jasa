@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.*;
@@ -33,7 +32,7 @@ import uk.ac.liv.prng.GlobalPRNG;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-//import edu.cornell.lassp.houle.RngPack.RandomElement;
+// import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import java.io.Serializable;
 
@@ -47,74 +46,70 @@ import cern.jet.random.Uniform;
  * @version $Revision$
  */
 
-public abstract class MomentumStrategy extends AdaptiveStrategyImpl 
-		implements Serializable {
+public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
+    Serializable {
 
   protected MimicryLearner learner;
-  
+
   protected double currentPrice;
-  
+
   protected Shout lastShout;
-  
+
   /**
-   * A parameter used to scale the randomly drawn price adjustment
-   * perturbation values.
+   * A parameter used to scale the randomly drawn price adjustment perturbation
+   * values.
    */
   protected double scaling = 0.01;
 
   protected boolean lastShoutAccepted;
-  
+
   protected double trPrice, trBidPrice, trAskPrice;
-  
-  protected AbstractContinousDistribution initialMarginDistribution =
-    new Uniform(0.5, 1.0, GlobalPRNG.getInstance());
-  
+
+  protected AbstractContinousDistribution initialMarginDistribution = new Uniform(
+      0.5, 1.0, GlobalPRNG.getInstance());
+
   protected AbstractContinousDistribution perterbationDistribution;
 
   public static final String P_SCALING = "scaling";
+
   public static final String P_LEARNER = "learner";
 
   static Logger logger = Logger.getLogger(MomentumStrategy.class);
 
-
   public MomentumStrategy( AbstractTradingAgent agent ) {
     super(agent);
   }
-  
+
   public MomentumStrategy() {
     this(null);
   }
-  
+
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     super.setup(parameters, base);
 
-    scaling =
-        parameters.getDoubleWithDefault(base.push(P_SCALING), null, scaling);
+    scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), null,
+        scaling);
 
-    learner = (MimicryLearner)
-        parameters.getInstanceForParameter(base.push(P_LEARNER), null,
-                                                   MimicryLearner.class);
+    learner = (MimicryLearner) parameters.getInstanceForParameter(base
+        .push(P_LEARNER), null, MimicryLearner.class);
     if ( learner instanceof Parameterizable ) {
       ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
     }
 
     initialise();
-    
+
     setMargin(initialMarginDistribution.nextDouble());
-    
-    logger.debug("Initialised with scaling = " + scaling + " and learner = " +
-                  learner);
+
+    logger.debug("Initialised with scaling = " + scaling + " and learner = "
+        + learner);
 
   }
-
 
   public void initialise() {
     super.initialise();
-    perterbationDistribution = 
-      new Uniform(0, scaling, GlobalPRNG.getInstance());
+    perterbationDistribution = new Uniform(0, scaling, GlobalPRNG.getInstance());
   }
-
 
   public boolean modifyShout( Shout.MutableShout shout ) {
     double currentMargin = learner.act();
@@ -124,40 +119,38 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     } else if ( currentMargin > 1 ) {
       logger.debug(this + ": clipping margin at 1.0");
       setMargin(currentMargin = 1.0);
-    }  
+    }
     currentPrice = calculatePrice(currentMargin);
     shout.setPrice(currentPrice);
     return super.modifyShout(shout);
   }
-  
-  
+
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
     if ( event instanceof TransactionExecutedEvent ) {
       transactionExecuted((TransactionExecutedEvent) event);
-    } else if ( event instanceof ShoutPlacedEvent  ) {
+    } else if ( event instanceof ShoutPlacedEvent ) {
       shoutPlaced((ShoutPlacedEvent) event);
     } else if ( event instanceof AgentPolledEvent ) {
       agentPolled((AgentPolledEvent) event);
     }
   }
-  
+
   protected void agentPolled( AgentPolledEvent event ) {
     auction = event.getAuction();
     if ( event.getAgent() != agent ) {
       adjustMargin();
     }
   }
-  
+
   protected void shoutPlaced( ShoutPlacedEvent event ) {
     lastShout = event.getShout();
     lastShoutAccepted = false;
   }
-  
-  protected void transactionExecuted( TransactionExecutedEvent event ) {    
-    lastShoutAccepted = 
-      	lastShout.isAsk() && event.getAsk().equals(lastShout) ||
-      	lastShout.isBid() && event.getBid().equals(lastShout);
+
+  protected void transactionExecuted( TransactionExecutedEvent event ) {
+    lastShoutAccepted = lastShout.isAsk() && event.getAsk().equals(lastShout)
+        || lastShout.isBid() && event.getBid().equals(lastShout);
     if ( lastShoutAccepted ) {
       trPrice = event.getPrice();
       trBidPrice = event.getBid().getPrice();
@@ -166,9 +159,8 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
   }
 
   public void endOfRound( Auction auction ) {
- 
+
   }
-      
 
   public void setLearner( Learner learner ) {
     this.learner = (MimicryLearner) learner;
@@ -180,49 +172,46 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
 
   public void setMargin( double margin ) {
     learner.setOutputLevel(margin);
-    //currentPrice = calculatePrice(margin);
+    // currentPrice = calculatePrice(margin);
   }
-  
-  
-  
+
   public double getCurrentPrice() {
     return currentPrice;
   }
-  
+
   public Shout getLastShout() {
     return lastShout;
   }
-  
+
   public boolean isLastShoutAccepted() {
     return lastShoutAccepted;
   }
-  
+
   public double getScaling() {
     return scaling;
   }
-  
+
   public double getTrAskPrice() {
     return trAskPrice;
   }
-  
+
   public double getTrBidPrice() {
     return trBidPrice;
   }
-  
+
   public double getTrPrice() {
     return trPrice;
   }
-  
+
   protected double calculatePrice( double margin ) {
     if ( agent.isBuyer() ) {
       return agent.getValuation(auction) * (1 - margin);
     } else {
       return agent.getValuation(auction) * (1 + margin);
-    }      
+    }
   }
 
-  
-  protected double targetMargin( double targetPrice ) {        
+  protected double targetMargin( double targetPrice ) {
     double privValue = agent.getValuation(auction);
     double targetMargin = 0;
     if ( agent.isBuyer() ) {
@@ -230,20 +219,20 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl
     } else {
       targetMargin = (privValue - targetPrice) / privValue;
     }
-    if ( targetMargin < 0 ) {      
+    if ( targetMargin < 0 ) {
       targetMargin = 0;
-    }    
+    }
     return targetMargin;
   }
-  
+
   protected void adjustMargin( double targetMargin ) {
     learner.train(targetMargin);
   }
-  
-  protected double perterb( double price ) {    
+
+  protected double perterb( double price ) {
     double relative = perterbationDistribution.nextDouble();
     double absolute = perterbationDistribution.nextDouble();
-    return relative*price + absolute;
+    return relative * price + absolute;
   }
 
   protected abstract void adjustMargin();

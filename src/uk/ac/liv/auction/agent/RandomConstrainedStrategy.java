@@ -31,53 +31,56 @@ import cern.jet.random.Uniform;
 /**
  * <p>
  * A trading strategy that in which we bid a different random markup on our
- * agent's private value in each auction round.  This strategy is often
- * referred to as Zero Intelligence Constrained (ZI-C) in the literature.
+ * agent's private value in each auction round. This strategy is often referred
+ * to as Zero Intelligence Constrained (ZI-C) in the literature.
  * </p>
- *
- * </p><p><b>Parameters</b><br>
- *
+ * 
+ * </p>
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.maxmarkup</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.maxmarkup</tt><br>
  * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(the maximum markup to bid for)</td></tr>
- *
+ * <td valign=top>(the maximum markup to bid for)</td>
+ * </tr>
+ * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
-                                        implements Serializable {
+    implements Serializable {
 
   protected double maxMarkup = DEFAULT_MARKUP;
-  
+
   protected AbstractContinousDistribution markupDistribution;
 
   public static final String P_MAX_MARKUP = "maxmarkup";
 
-  public static final double DEFAULT_MARKUP = 50;   
+  public static final double DEFAULT_MARKUP = 50;
 
   public RandomConstrainedStrategy() {
     this(null, DEFAULT_MARKUP);
   }
 
-  public RandomConstrainedStrategy( AbstractTradingAgent agent,
-                                      double maxMarkup ) {
+  public RandomConstrainedStrategy( AbstractTradingAgent agent, double maxMarkup ) {
     super(agent);
     this.maxMarkup = maxMarkup;
     initialise();
   }
-  
+
   public void initialise() {
     super.initialise();
     markupDistribution = new Uniform(0, maxMarkup, GlobalPRNG.getInstance());
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
-    
+
     double markup = markupDistribution.nextDouble();
     double price = 0;
     if ( agent.isBuyer() ) {
@@ -101,22 +104,22 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP),
-                                                  null, maxMarkup);
+    maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null,
+        maxMarkup);
     initialise();
   }
 
   public double getMaxMarkup() {
     return maxMarkup;
   }
-  
+
   public void setMaxMarkup( double maxMarkup ) {
     this.maxMarkup = maxMarkup;
   }
-  
+
   public String toString() {
-    return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:" +
-              quantity + ")";
+    return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:"
+        + quantity + ")";
   }
 
 }

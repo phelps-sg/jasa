@@ -27,20 +27,21 @@ import ec.util.ParameterDatabase;
 import java.io.Serializable;
 
 /**
- * A strategy which will bid at the true equilibrium price, if profitable,
- * or bid truthfully otherwise.  Although this is not a realistic strategy,
- * it can be useful for testing and control experiments.
+ * A strategy which will bid at the true equilibrium price, if profitable, or
+ * bid truthfully otherwise. Although this is not a realistic strategy, it can
+ * be useful for testing and control experiments.
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
-                                    implements Serializable, Prototypeable {
+    implements Serializable, Prototypeable {
 
-  public EquilibriumPriceStrategy( AbstractTradingAgent agent, double price, int quantity ) {
+  public EquilibriumPriceStrategy( AbstractTradingAgent agent, double price,
+      int quantity ) {
     super(agent);
-    
+
     this.quantity = quantity;
   }
 
@@ -53,32 +54,31 @@ public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
   }
 
   public Object protoClone() {
-  	Object clonedStrategy;
-  	try {
-  		clonedStrategy = this.clone();
-  	} catch ( CloneNotSupportedException e ) {
-  		throw new Error(e);
-  	}
+    Object clonedStrategy;
+    try {
+      clonedStrategy = this.clone();
+    } catch ( CloneNotSupportedException e ) {
+      throw new Error(e);
+    }
     return clonedStrategy;
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
-    EquilibriumReport eqReport = 
-      new EquilibriumReport((RoundRobinAuction) auction);
+    EquilibriumReport eqReport = new EquilibriumReport(
+        (RoundRobinAuction) auction);
     eqReport.calculate();
     double price = eqReport.calculateMidEquilibriumPrice();
     if ( agent.isBuyer() && price <= agent.getValuation(auction)
-           || agent.isSeller() && price >= agent.getValuation(auction) )  {
+        || agent.isSeller() && price >= agent.getValuation(auction) ) {
       shout.setPrice(price);
     } else {
       shout.setPrice(agent.getValuation(auction));
-    } 
+    }
     return super.modifyShout(shout);
   }
 
   public void endOfRound( Auction auction ) {
     // Do nothing
   }
-  
 
 }

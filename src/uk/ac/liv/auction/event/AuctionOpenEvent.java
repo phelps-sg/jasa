@@ -24,7 +24,7 @@ import uk.ac.liv.auction.core.Auction;
  * @version $Revision$
  */
 public class AuctionOpenEvent extends AuctionEvent {
-  
+
   public AuctionOpenEvent( Auction auction, int time ) {
     super(auction, time);
   }

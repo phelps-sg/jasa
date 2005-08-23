@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.event;
 
 import uk.ac.liv.auction.agent.TradingAgent;
@@ -26,13 +27,20 @@ import uk.ac.liv.auction.core.Auction;
  */
 public class AgentPolledEvent extends AuctionEvent {
 
+  /**
+   * @uml.property name="agent"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected TradingAgent agent;
- 
+
   public AgentPolledEvent( Auction auction, int time, TradingAgent agent ) {
     super(auction, time);
     this.agent = agent;
   }
 
+  /**
+   * @uml.property name="agent"
+   */
   public TradingAgent getAgent() {
     return agent;
   }

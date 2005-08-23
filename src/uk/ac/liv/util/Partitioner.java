@@ -18,29 +18,36 @@ package uk.ac.liv.util;
 import java.util.*;
 
 /**
- * A class that iterates over all numerical partitions of n into k
- * distinct parts including commutative duplications and parts
- * containing zero.
- *
+ * A class that iterates over all numerical partitions of n into k distinct
+ * parts including commutative duplications and parts containing zero.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class Partitioner implements Iterator {
 
+  /**
+   * @uml.property name="stack"
+   * @uml.associationEnd multiplicity="(0 -1)" elementType="[I"
+   */
   protected Stack stack;
 
+  /**
+   * @uml.property name="visitedStates"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.util.PartitionerState"
+   */
   protected HashSet visitedStates;
-
 
   public Partitioner( int n, int k ) {
     stack = new Stack();
     visitedStates = new HashSet();
-    stack.push( new PartitionerState(new int[k], n) );
+    stack.push(new PartitionerState(new int[k], n));
   }
 
   public boolean hasNext() {
-    return ! stack.isEmpty();
+    return !stack.isEmpty();
   }
 
   public Object next() {
@@ -58,10 +65,10 @@ public class Partitioner implements Iterator {
         return state.p;
       }
       int[] p = state.p;
-      for( int i=0; i<p.length; i++ ) {
+      for ( int i = 0; i < p.length; i++ ) {
         int[] p1 = (int[]) p.clone();
         p1[i]++;
-        PartitionerState newState = new PartitionerState(p1, state.n-1);
+        PartitionerState newState = new PartitionerState(p1, state.n - 1);
         if ( !visitedStates.contains(newState) ) {
           stack.push(newState);
           visitedStates.add(newState);
@@ -75,7 +82,7 @@ public class Partitioner implements Iterator {
     Partitioner p = new Partitioner(20, 3);
     while ( p.hasNext() ) {
       int[] partition = (int[]) p.next();
-      for( int i=0; i<partition.length; i++ ) {
+      for ( int i = 0; i < partition.length; i++ ) {
         System.out.print(partition[i] + " ");
       }
       System.out.println("");
@@ -85,8 +92,15 @@ public class Partitioner implements Iterator {
 
 class PartitionerState {
 
+  /**
+   * @uml.property name="n"
+   */
   protected int n;
 
+  /**
+   * @uml.property name="p"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   protected int[] p;
 
   public PartitionerState( int[] p, int n ) {
@@ -99,7 +113,7 @@ class PartitionerState {
     if ( this.n != s.n ) {
       return false;
     }
-    for( int i=0; i<this.p.length; i++ ) {
+    for ( int i = 0; i < this.p.length; i++ ) {
       if ( this.p[i] != s.p[i] ) {
         return false;
       }
@@ -110,7 +124,7 @@ class PartitionerState {
   public int hashCode() {
     int hash = n;
     int m = 1;
-    for( int i=0; i<p.length; i++ ) {
+    for ( int i = 0; i < p.length; i++ ) {
       hash += m * p[i];
       m <<= 1;
     }

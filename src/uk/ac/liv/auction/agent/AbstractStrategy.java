@@ -26,19 +26,15 @@ import uk.ac.liv.util.Resetable;
 
 /**
  * <p>
- * An abstract implementation of the Strategy interface
- * that provides skeleton functionality for making trading
- * decisions.
+ * An abstract implementation of the Strategy interface that provides skeleton
+ * functionality for making trading decisions.
  * </p>
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
-public abstract class AbstractStrategy implements
-								Serializable,
-                                        Strategy,
-                                        Resetable,
-                                        Cloneable {
+public abstract class AbstractStrategy implements Serializable, Strategy,
+    Resetable, Cloneable {
 
   protected AbstractTradingAgent agent;
 
@@ -62,7 +58,7 @@ public abstract class AbstractStrategy implements
   public void reset() {
     initialise();
   }
-  
+
   public Object protoClone() {
     try {
       AbstractStrategy copy = (AbstractStrategy) clone();
@@ -77,7 +73,7 @@ public abstract class AbstractStrategy implements
     this.auction = auction;
     if ( modifyShout(currentShout) ) {
       return new Shout(currentShout.getAgent(), currentShout.getQuantity(),
-          				currentShout.getPrice(), currentShout.isBid());
+          currentShout.getPrice(), currentShout.isBid());
     } else {
       return null;
     }
@@ -98,16 +94,16 @@ public abstract class AbstractStrategy implements
   public void initialise() {
     currentShout = new Shout.MutableShout();
   }
-  
+
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof RoundClosedEvent ) {
       endOfRound(event.getAuction());
     }
   }
-  
+
   public AbstractTradingAgent getAgent() {
     return agent;
   }
-  
+
   public abstract void endOfRound( Auction auction );
 }

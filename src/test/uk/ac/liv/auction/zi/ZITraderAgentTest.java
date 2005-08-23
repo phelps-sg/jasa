@@ -25,13 +25,30 @@ import uk.ac.liv.auction.core.*;
 
 import org.apache.log4j.Logger;
 
+public class ZITraderAgentTest extends TestCase {
 
-public class ZITraderAgentTest extends TestCase  {
+  /**
+   * @uml.property name="buyer"
+   * @uml.associationEnd
+   */
+  ZITraderAgent buyer;
 
-  ZITraderAgent buyer, seller;
+  /**
+   * @uml.property name="seller"
+   * @uml.associationEnd
+   */
+  ZITraderAgent seller;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   RoundRobinAuction auction;
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   ClearingHouseAuctioneer auctioneer;
 
   static final int NUM_ROUNDS = 1000;
@@ -52,8 +69,8 @@ public class ZITraderAgentTest extends TestCase  {
   public void setUp() {
     buyer = new ZITraderAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT, false);
     seller = new ZITraderAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true);
-    buyer.setStrategy( new TruthTellingStrategy(buyer) );
-    seller.setStrategy( new TruthTellingStrategy(seller) );
+    buyer.setStrategy(new TruthTellingStrategy(buyer));
+    seller.setStrategy(new TruthTellingStrategy(seller));
     auction = new RoundRobinAuction("ZIPStrategyTest auction");
     auction.register(buyer);
     auction.register(seller);
@@ -67,39 +84,39 @@ public class ZITraderAgentTest extends TestCase  {
    * trade entitlement has been depleted.
    */
   public void testTradeEntitlement() {
-    
+
     try {
 
       auction.begin();
 
-      assertTrue("Agents not active at start of auction", 
-          buyer.active() && seller.active());
-      
+      assertTrue("Agents not active at start of auction", buyer.active()
+          && seller.active());
+
       for ( int i = 0; i < TRADE_ENTITLEMENT; i++ ) {
         auction.step();
       }
 
-      assertTrue("agents did not trade all their units", 
-          buyer.getQuantityTraded() == TRADE_ENTITLEMENT &&
-           seller.getQuantityTraded() == TRADE_ENTITLEMENT);
+      assertTrue("agents did not trade all their units", buyer
+          .getQuantityTraded() == TRADE_ENTITLEMENT
+          && seller.getQuantityTraded() == TRADE_ENTITLEMENT);
 
       // Agents must still be active after trading their last unit
       // so that reinforcement learning algorithms can still learn from
       // the last trade- v. important if you are only entitled to trade
-      // a single unit.  See BR #1064544.
-      assertTrue("agents not active immediately after trading all units", 
-          		buyer.active() && seller.active());
+      // a single unit. See BR #1064544.
+      assertTrue("agents not active immediately after trading all units", buyer
+          .active()
+          && seller.active());
 
       // Ok, after this step they should be inactive.
       auction.step();
 
-      assertTrue("agents not inactive after trading all units", 
-          			!buyer.active() && !seller.active());
-      
+      assertTrue("agents not inactive after trading all units", !buyer.active()
+          && !seller.active());
+
     } catch ( AuctionClosedException e ) {
       fail(e.getMessage());
     }
-
 
   }
 

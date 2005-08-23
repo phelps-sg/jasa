@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.event;
 
 import uk.ac.liv.auction.core.Auction;
@@ -25,21 +26,27 @@ import uk.ac.liv.auction.core.Shout;
  */
 
 public class ShoutPlacedEvent extends AuctionEvent {
- 
+
   /**
    * The shout that led to this event.
+   * 
+   * @uml.property name="shout"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected Shout shout;
 
   public ShoutPlacedEvent( Auction auction, int time, Shout shout ) {
-    super(auction, time);    
+    super(auction, time);
     this.shout = shout;
   }
-  
+
+  /**
+   * @uml.property name="shout"
+   */
   public Shout getShout() {
     return shout;
   }
-  
+
   public int getTime() {
     return time;
   }

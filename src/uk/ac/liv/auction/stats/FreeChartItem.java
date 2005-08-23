@@ -25,26 +25,34 @@ import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.util.Parameterizable;
 
 /**
- * A class defining the common properties and methods of data series and markers.
+ * A class defining the common properties and methods of data series and
+ * markers.
  * 
- * <p><b>Parameters</b><br>
- *
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.name</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.name</tt><br>
  * <font size=-1> string </font></td>
- * <td valign=top></td></tr>
+ * <td valign=top></td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.axis</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.axis</tt><br>
  * <font size=-1> int </font></td>
- * <td valign=top>(the index of the axis this chart item is associated with)</td></tr>
+ * <td valign=top>(the index of the axis this chart item is associated with)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.renderer</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.renderer</tt><br>
  * <font size=-1> int </font></td>
- * <td valign=top>(the index of the renderer this chart item uses)</td></tr>
+ * <td valign=top>(the index of the renderer this chart item uses)</td>
+ * </tr>
  * 
  * </table>
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
@@ -53,47 +61,77 @@ public class FreeChartItem implements AuctionEventListener, Parameterizable {
   static Logger logger = Logger.getLogger(FreeChartItem.class);
 
   public static final String P_NAME = "name";
+
   public static final String P_AXIS = "axis";
+
   public static final String P_RENDERER = "renderer";
 
+  /**
+   * @uml.property name="name"
+   */
   protected String name;
 
+  /**
+   * @uml.property name="graph"
+   * @uml.associationEnd
+   */
   protected FreeChartGraph graph;
 
+  /**
+   * @uml.property name="axisIndex"
+   */
   protected int axisIndex;
+
+  /**
+   * @uml.property name="rendererIndex"
+   */
   protected int rendererIndex;
 
   public FreeChartItem() {
     name = "";
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     name = parameters.getStringWithDefault(base.push(P_NAME), name);
     axisIndex = parameters.getIntWithDefault(base.push(P_AXIS), null, 0);
-    rendererIndex = parameters.getIntWithDefault(base.push(P_RENDERER), null, 0);
+    rendererIndex = parameters
+        .getIntWithDefault(base.push(P_RENDERER), null, 0);
   }
 
-  public void eventOccurred(AuctionEvent event) {
+  public void eventOccurred( AuctionEvent event ) {
   }
-  
+
+  /**
+   * @uml.property name="axisIndex"
+   */
   public int getAxisIndex() {
     return axisIndex;
   }
-  
+
+  /**
+   * @uml.property name="rendererIndex"
+   */
   public int getRendererIndex() {
     return rendererIndex;
   }
 
+  /**
+   * @uml.property name="name"
+   */
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
+  /**
+   * @uml.property name="name"
+   */
+  public void setName( String name ) {
     this.name = name;
   }
 
   /**
    * @return Returns the graph.
+   * @uml.property name="graph"
    */
   public FreeChartGraph getGraph() {
     return graph;
@@ -102,8 +140,9 @@ public class FreeChartItem implements AuctionEventListener, Parameterizable {
   /**
    * @param graph
    *          The graph to set.
+   * @uml.property name="graph"
    */
-  public void setGraph(FreeChartGraph graph) {
+  public void setGraph( FreeChartGraph graph ) {
     this.graph = graph;
   }
 }

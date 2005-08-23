@@ -21,44 +21,53 @@ import uk.ac.liv.util.Parameterizable;
 
 /**
  * The interface for expressing the condition of closing an auction.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
- *
+ * 
  */
 
-public class MaxDaysAuctionClosingCondition extends TimingCondition implements Parameterizable, AuctionClosingCondition {
+public class MaxDaysAuctionClosingCondition extends TimingCondition implements
+    Parameterizable, AuctionClosingCondition {
 
   public static final String P_MAXIMUM_DAYS = "maximumdays";
-  
-  
+
   /**
    * The maximum number of trading days before the auction closes
+   * 
+   * @uml.property name="maximumDays"
    */
-  
+
   protected int maximumDays = -1;
-  
+
   public MaxDaysAuctionClosingCondition() {
     this(null);
   }
-  
-  public MaxDaysAuctionClosingCondition(Auction auction) {
+
+  public MaxDaysAuctionClosingCondition( Auction auction ) {
     super(auction);
   }
 
-  /* 
-   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase, ec.util.Parameter)
+  /*
+   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+   *      ec.util.Parameter)
    */
-  public void setup(ParameterDatabase parameters, Parameter base) {
-    
-    maximumDays = parameters.getIntWithDefault(base.push(P_MAXIMUM_DAYS),
-        null, -1);
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+
+    maximumDays = parameters.getIntWithDefault(base.push(P_MAXIMUM_DAYS), null,
+        -1);
   }
-  
-  public void setMaximumDays(int maximumDays) {
+
+  /**
+   * @uml.property name="maximumDays"
+   */
+  public void setMaximumDays( int maximumDays ) {
     this.maximumDays = maximumDays;
   }
-  
+
+  /**
+   * @uml.property name="maximumDays"
+   */
   public int getMaximumDays() {
     return maximumDays;
   }
@@ -70,10 +79,8 @@ public class MaxDaysAuctionClosingCondition extends TimingCondition implements P
     return getRemainingDays() <= 0;
   }
 
-
-  
   public int getRemainingDays() {
-    if (maximumDays > getAuction().getDay())
+    if ( maximumDays > getAuction().getDay() )
       return maximumDays - getAuction().getDay();
     else
       return 0;

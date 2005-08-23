@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
- 
+
 package uk.ac.liv.util;
 
 import java.util.Stack;
@@ -25,25 +25,35 @@ import java.util.Iterator;
  */
 
 public class Permutator implements Iterator {
-	
-	protected int[] goal;
-	
-	protected int n;
 
-	protected Stack stack;
-	
-	public Permutator( int[] goal ) {		
-		n = 0;
-		for( int i=0; i < goal.length; i++ ) {
-			n += goal[i];
-		}
+  /**
+   * @uml.property name="goal" multiplicity="(0 -1)" dimension="1"
+   */
+  protected int[] goal;
+
+  /**
+   * @uml.property name="n"
+   */
+  protected int n;
+
+  /**
+   * @uml.property name="stack"
+   * @uml.associationEnd multiplicity="(0 -1)" elementType="[I"
+   */
+  protected Stack stack;
+
+  public Permutator( int[] goal ) {
+    n = 0;
+    for ( int i = 0; i < goal.length; i++ ) {
+      n += goal[i];
+    }
     this.goal = goal;
-    stack = new Stack();    
-    stack.push( new PermutatorState(new int[n], 0) );
-	}
+    stack = new Stack();
+    stack.push(new PermutatorState(new int[n], 0));
+  }
 
   public boolean hasNext() {
-    return ! stack.isEmpty();
+    return !stack.isEmpty();
   }
 
   public Object next() {
@@ -53,33 +63,33 @@ public class Permutator implements Iterator {
   public void remove() {
     throw new IllegalArgumentException("method remove() not implemented");
   }
-  
-	protected int[] permutate() {
-		while ( ! stack.isEmpty() ) {
-			PermutatorState state = (PermutatorState) stack.pop();
+
+  protected int[] permutate() {
+    while ( !stack.isEmpty() ) {
+      PermutatorState state = (PermutatorState) stack.pop();
       if ( state.j == n ) {
         return state.solution;
       }
-			int[] k = new int[goal.length];
-			for( int i=0; i<state.j; i++ ) {
-				k[state.solution[i]]++;
-			}						
-			for( int i=0; i<goal.length; i++ ) {
-				if ( k[i] < goal[i] ) {
-          int[] solution1 = (int[]) state.solution.clone();          
+      int[] k = new int[goal.length];
+      for ( int i = 0; i < state.j; i++ ) {
+        k[state.solution[i]]++;
+      }
+      for ( int i = 0; i < goal.length; i++ ) {
+        if ( k[i] < goal[i] ) {
+          int[] solution1 = (int[]) state.solution.clone();
           solution1[state.j] = i;
-					stack.push(new PermutatorState(solution1, state.j+1));
-				}
-			}
-		}	
-		return null;			
-	}
+          stack.push(new PermutatorState(solution1, state.j + 1));
+        }
+      }
+    }
+    return null;
+  }
 
   public static void main( String[] args ) {
-    Permutator p = new Permutator(new int[] {2, 1, 3});    
+    Permutator p = new Permutator(new int[] { 2, 1, 3 });
     while ( p.hasNext() ) {
       int[] s = (int[]) p.next();
-      for( int i=0; i<s.length; i++ ) {
+      for ( int i = 0; i < s.length; i++ ) {
         System.out.print(s[i] + " ");
       }
       System.out.println("");
@@ -88,14 +98,21 @@ public class Permutator implements Iterator {
 }
 
 class PermutatorState {
- 
+
+  /**
+   * @uml.property name="solution"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   protected int[] solution;
-  
+
+  /**
+   * @uml.property name="j"
+   */
   protected int j;
-  
+
   public PermutatorState( int[] solution, int j ) {
     this.solution = solution;
     this.j = j;
   }
-  
+
 }

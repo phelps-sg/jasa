@@ -31,20 +31,40 @@ import uk.ac.liv.util.CummulativeDistribution;
 
 import uk.ac.liv.prng.GlobalPRNG;
 
-
 public class RandomUnconstrainedStrategyTest extends TestCase {
 
+  /**
+   * @uml.property name="testStrategy"
+   * @uml.associationEnd
+   */
   protected RandomUnconstrainedStrategy testStrategy;
 
+  /**
+   * @uml.property name="testAgent"
+   * @uml.associationEnd
+   */
   protected ZITraderAgent testAgent;
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   protected ClearingHouseAuctioneer auctioneer;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   protected RoundRobinAuction auction;
 
+  /**
+   * @uml.property name="logger"
+   * @uml.associationEnd
+   */
   protected PriceStatisticsReport logger;
 
   static final double MAX_PRICE = 100.0;
+
   static final double PRIV_VALUE = 57.0;
 
   static final int MAX_ROUNDS = 100000;
@@ -54,9 +74,9 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
   }
 
   public void setUp() {
-  	GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
-    testStrategy = new RandomUnconstrainedStrategy(testAgent);    
+    testStrategy = new RandomUnconstrainedStrategy(testAgent);
     testStrategy.setMaxPrice(MAX_PRICE);
     testAgent.setStrategy(testStrategy);
     auction = new RoundRobinAuction();
@@ -72,16 +92,16 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
     System.out.println(getClass() + ": testBidRange()");
     System.out.println("testAgent = " + testAgent);
     System.out.println("testStrategy = " + testStrategy);
-    auction.run();    
+    auction.run();
     CummulativeDistribution askStats = logger.getAskPriceStats();
     System.out.println(askStats);
     assertTrue(approxEqual(askStats.getMin(), 0));
     assertTrue(approxEqual(askStats.getMax(), MAX_PRICE));
-    assertTrue(approxEqual(askStats.getMean(), (MAX_PRICE/2)));
+    assertTrue(approxEqual(askStats.getMean(), (MAX_PRICE / 2)));
   }
 
   public boolean approxEqual( double x, double y ) {
-    return Math.abs(x-y) < 0.1;
+    return Math.abs(x - y) < 0.1;
   }
 
   public static void main( String[] args ) {
@@ -93,4 +113,3 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
   }
 
 }
-

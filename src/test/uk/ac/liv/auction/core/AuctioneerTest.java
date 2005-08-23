@@ -23,10 +23,23 @@ import test.uk.ac.liv.auction.agent.MockTrader;
 
 public abstract class AuctioneerTest extends TestCase {
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   Auctioneer auctioneer;
-  RoundRobinAuction auction;
-  MockTrader[] traders;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
+  RoundRobinAuction auction;
+
+  /**
+   * @uml.property name="traders"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
+  MockTrader[] traders;
 
   public AuctioneerTest( String name ) {
     super(name);
@@ -34,7 +47,7 @@ public abstract class AuctioneerTest extends TestCase {
 
   public void setUp() {
     auction = new RoundRobinAuction("unit test auction");
-   
+
     traders = new MockTrader[5];
     traders[0] = new MockTrader(this, 30, 1000, 1000, false);
     traders[1] = new MockTrader(this, 10, 10000, 1000, false);
@@ -46,27 +59,24 @@ public abstract class AuctioneerTest extends TestCase {
   public void testDelete() {
 
     // round 0
-    Shout testShout = null; 
+    Shout testShout = null;
     try {
-      auctioneer.newShout( new Shout(traders[0], 1, 21, true) );
-      auctioneer.newShout( new Shout(traders[1], 1, 42, true) );
+      auctioneer.newShout(new Shout(traders[0], 1, 21, true));
+      auctioneer.newShout(new Shout(traders[1], 1, 42, true));
       testShout = new Shout(traders[2], 1, 43, false);
       auctioneer.newShout(testShout);
-      auctioneer.newShout( new Shout(traders[3], 1, 23, false) );
-      auctioneer.newShout( new Shout(traders[4], 1, 10, false) );
+      auctioneer.newShout(new Shout(traders[3], 1, 23, false));
+      auctioneer.newShout(new Shout(traders[4], 1, 10, false));
     } catch ( IllegalShoutException e ) {
       fail("invalid IllegalShoutException exception thrown " + e);
       e.printStackTrace();
     }
 
     auctioneer.removeShout(testShout);
-    //auctioneer.endOfRoundProcessing();
+    // auctioneer.endOfRoundProcessing();
 
     auctioneer.printState();
 
   }
 
-
-
 }
-

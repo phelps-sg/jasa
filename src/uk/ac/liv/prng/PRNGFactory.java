@@ -13,10 +13,9 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.prng;
 
-//import edu.cornell.lassp.houle.RngPack.*;
+// import edu.cornell.lassp.houle.RngPack.*;
 
 import cern.jet.random.engine.RandomEngine;
 
@@ -27,10 +26,6 @@ import ec.util.ParamClassLoadException;
 import org.apache.log4j.Logger;
 
 /**
- * Factory for constructing pseudo-random number generators (PRNGs).
- * The default configuration is to use RngPack's implementation of the
- * Mersenne Twister algorithm.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -43,9 +38,8 @@ public abstract class PRNGFactory {
 
   public static void setup( ParameterDatabase parameters, Parameter base ) {
     try {
-      PRNGFactory.currentFactory =
-        (PRNGFactory)
-          parameters.getInstanceForParameter(base, null, PRNGFactory.class);
+      PRNGFactory.currentFactory = (PRNGFactory) parameters
+          .getInstanceForParameter(base, null, PRNGFactory.class);
     } catch ( ParamClassLoadException e ) {
       logger.warn(e.getMessage());
     }
@@ -62,9 +56,9 @@ public abstract class PRNGFactory {
 
   public abstract RandomEngine create( long seed );
 
+  /**
+   * @uml.property name="description"
+   */
   public abstract String getDescription();
 
-
-
 }
-

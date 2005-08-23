@@ -134,7 +134,7 @@ import org.apache.log4j.Logger;
  * 
  * @author Steve Phelps
  * @version $Revision$
- *  
+ * 
  */
 
 public class RoundRobinAuction extends AuctionImpl implements Runnable,
@@ -142,52 +142,87 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
 
   /**
    * The collection of TraderAgents currently taking part in this auction.
+   * 
+   * @uml.property name="activeTraders"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.agent.TradingAgent"
    */
   protected LinkedList activeTraders = new LinkedList();
 
   /**
    * The collection of idle TraderAgents
+   * 
+   * @uml.property name="defunctTraders"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.agent.TradingAgent"
    */
   protected LinkedList defunctTraders = new LinkedList();
 
   /**
    * The collection of all TraderAgents registered in the auction.
+   * 
+   * @uml.property name="registeredTraders"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.agent.TradingAgent"
    */
   protected LinkedList registeredTraders = new LinkedList();
 
   /**
    * The current round.
+   * 
+   * @uml.property name="round"
    */
   protected int round;
 
+  /**
+   * @uml.property name="age"
+   */
   protected int age = 0;
 
   /**
    * Were any shouts processed (received & accepted) in the last round of
    * trading?
+   * 
+   * @uml.property name="shoutsProcessed"
    */
   protected boolean shoutsProcessed;
 
   /**
    * Optional graphical console
+   * 
+   * @uml.property name="guiConsole"
+   * @uml.associationEnd inverse="auction:uk.ac.liv.auction.ui.AuctionConsoleFrame"
    */
   protected AuctionConsoleFrame guiConsole = null;
 
   /**
    * The current trading day (period)
+   * 
+   * @uml.property name="day"
    */
   protected int day = 0;
 
   /**
    * The set of shouts that have been matched in the current round.
+   * 
+   * @uml.property name="acceptedShouts"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   *                     elementType="uk.ac.liv.auction.core.Shout"
    */
   protected HashSet acceptedShouts = new HashSet();
 
+  /**
+   * @uml.property name="closingCondition"
+   * @uml.associationEnd
+   */
   protected TimingCondition closingCondition;
 
+  /**
+   * @uml.property name="dayEndingCondition"
+   * @uml.associationEnd
+   */
   protected TimingCondition dayEndingCondition;
 
-  
   public static final String P_REPORT = "report";
 
   public static final String P_AUCTIONEER = "auctioneer";
@@ -221,7 +256,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * @param name
    *          The name of this auction.
    */
-  public RoundRobinAuction(String name) {
+  public RoundRobinAuction( String name ) {
     super(name);
     initialise();
   }
@@ -230,7 +265,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     this(null);
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
 
     name = parameters.getStringWithDefault(base.push(P_NAME), null, "Auction "
         + id);
@@ -239,40 +274,41 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
       closingCondition = (TimingCondition) parameters.getInstanceForParameter(
           base.push(P_AUCTION_CLOSING), null, AuctionClosingCondition.class);
       closingCondition.setAuction(this);
-    } catch (ParamClassLoadException e) {
+    } catch ( ParamClassLoadException e ) {
       closingCondition = null;
     }
 
-    if (closingCondition != null && closingCondition instanceof Parameterizable) {
+    if ( closingCondition != null
+        && closingCondition instanceof Parameterizable ) {
       ((Parameterizable) closingCondition).setup(parameters, base
           .push(P_AUCTION_CLOSING));
     }
-    
+
     try {
       dayEndingCondition = (TimingCondition) parameters
           .getInstanceForParameter(base.push(P_DAY_ENDING), null,
               DayEndingCondition.class);
       dayEndingCondition.setAuction(this);
-    } catch (ParamClassLoadException e) {
+    } catch ( ParamClassLoadException e ) {
       dayEndingCondition = null;
     }
-    
-    if (dayEndingCondition != null
-        && dayEndingCondition instanceof Parameterizable) {
+
+    if ( dayEndingCondition != null
+        && dayEndingCondition instanceof Parameterizable ) {
       ((Parameterizable) dayEndingCondition).setup(parameters, base
           .push(P_DAY_ENDING));
     }
-    
+
     try {
       report = (AuctionReport) parameters.getInstanceForParameter(base
           .push(P_REPORT), null, AuctionReport.class);
       report.setAuction(this);
       addAuctionEventListener(report);
-    } catch (ParamClassLoadException e) {
+    } catch ( ParamClassLoadException e ) {
       report = null;
     }
 
-    if (report != null && report instanceof Parameterizable) {
+    if ( report != null && report instanceof Parameterizable ) {
       ((Parameterizable) report).setup(parameters, base.push(P_REPORT));
     }
 
@@ -282,7 +318,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     setAuctioneer(auctioneer);
     addAuctionEventListener(auctioneer);
 
-    if (parameters.getBoolean(base.push(P_CONSOLE), null, false)) {
+    if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
       activateGUIConsole();
     }
 
@@ -291,14 +327,14 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
           .getInstanceForParameter(base.push(P_EVENTHANDLER), null,
               AuctionEventListener.class);
       addAuctionEventListener(eventHandler);
-    } catch (ParamClassLoadException e) {
+    } catch ( ParamClassLoadException e ) {
     }
 
     Parameter typeParam = base.push(P_AGENT_TYPE);
 
     int numAgentTypes = parameters.getInt(typeParam.push("n"), null, 1);
 
-    for (int t = 0; t < numAgentTypes; t++) {
+    for ( int t = 0; t < numAgentTypes; t++ ) {
 
       Parameter typeParamT = typeParam.push("" + t);
 
@@ -307,7 +343,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
       logger.info("Configuring agent population " + t + ":\n\t" + numAgents
           + " agents of type " + parameters.getString(typeParamT, null));
 
-      for (int i = 0; i < numAgents; i++) {
+      for ( int i = 0; i < numAgents; i++ ) {
         TradingAgent agent = (TradingAgent) parameters.getInstanceForParameter(
             typeParamT, null, TradingAgent.class);
         ((Parameterizable) agent).setup(parameters, typeParamT);
@@ -320,7 +356,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     initialise();
   }
 
-  public void clear(Shout ask, Shout bid, double trPrice) {
+  public void clear( Shout ask, Shout bid, double trPrice ) {
 
     TradingAgent buyer = (TradingAgent) bid.getAgent();
     TradingAgent seller = (TradingAgent) ask.getAgent();
@@ -344,8 +380,8 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * Determines whether or not the given shout was matched in the current round
    * of trading.
    */
-  public boolean shoutAccepted(Shout shout) throws ShoutsNotVisibleException {
-    if (auctioneer.shoutsVisible()) {
+  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException {
+    if ( auctioneer.shoutsVisible() ) {
       return acceptedShouts.contains(shout);
     } else {
       throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
@@ -357,7 +393,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * round of trading.
    */
   public boolean transactionsOccured() throws ShoutsNotVisibleException {
-    if (auctioneer.shoutsVisible()) {
+    if ( auctioneer.shoutsVisible() ) {
       return !acceptedShouts.isEmpty();
     } else {
       throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
@@ -367,7 +403,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   /**
    * Register a new trader in the auction.
    */
-  public void register(TradingAgent trader) {
+  public void register( TradingAgent trader ) {
     registeredTraders.add(trader);
     activate(trader);
   }
@@ -375,8 +411,8 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   /**
    * Remove a trader from the auction.
    */
-  public void remove(TradingAgent trader) {
-    if (!defunctTraders.contains(trader)) {
+  public void remove( TradingAgent trader ) {
+    if ( !defunctTraders.contains(trader) ) {
       defunctTraders.add(trader);
     }
   }
@@ -387,13 +423,13 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    */
   public void requestShouts() {
     Iterator i = activeTraders.iterator();
-    while (i.hasNext()) {
+    while ( i.hasNext() ) {
       TradingAgent trader = (TradingAgent) i.next();
       requestShout(trader);
     }
   }
 
-  public void requestShout(TradingAgent trader) {
+  public void requestShout( TradingAgent trader ) {
     trader.requestShout(this);
     fireEvent(new AgentPolledEvent(this, getRound(), trader));
   }
@@ -414,15 +450,23 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
 
   /**
    * Get the current round number
+   * 
+   * @uml.property name="round"
    */
   public int getRound() {
     return round;
   }
 
+  /**
+   * @uml.property name="age"
+   */
   public int getAge() {
     return age;
   }
 
+  /**
+   * @uml.property name="day"
+   */
   public int getDay() {
     return day;
   }
@@ -446,7 +490,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    */
   public void run() {
 
-    if (auctioneer == null) {
+    if ( auctioneer == null ) {
       throw new AuctionError("No auctioneer has been assigned for auction "
           + name);
     }
@@ -454,11 +498,11 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     begin();
 
     try {
-      while (!closed) {
+      while ( !closed ) {
         step();
       }
 
-    } catch (AuctionClosedException e) {
+    } catch ( AuctionClosedException e ) {
       throw new AuctionError(e);
     }
 
@@ -481,11 +525,11 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
 
   public void runSingleRound() throws AuctionClosedException {
 
-    if (closed()) {
+    if ( closed() ) {
       throw new AuctionClosedException("Auction " + name + " is closed.");
     }
 
-    if (closingCondition != null && closingCondition.eval()) {
+    if ( closingCondition != null && closingCondition.eval() ) {
       close();
     } else {
       shoutsProcessed = false;
@@ -507,7 +551,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     fireEvent(new RoundClosedEvent(this, round));
   }
 
-  public void newShout(Shout shout) throws AuctionException {
+  public void newShout( Shout shout ) throws AuctionException {
     fireEvent(new ShoutPlacedEvent(this, round, shout));
     super.newShout(shout);
     setChanged();
@@ -515,7 +559,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     shoutsProcessed = true;
   }
 
-  public void changeShout(Shout shout) throws AuctionException {
+  public void changeShout( Shout shout ) throws AuctionException {
     removeShout(shout);
     newShout(shout);
   }
@@ -547,29 +591,29 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
 
     activeTraders.addAll(registeredTraders);
 
-    if (auctioneer != null) {
+    if ( auctioneer != null ) {
       ((Resetable) auctioneer).reset();
       addAuctionEventListener(auctioneer);
     }
 
-    if (report != null) {
-      if (report instanceof Resetable) {
+    if ( report != null ) {
+      if ( report instanceof Resetable ) {
         ((Resetable) report).reset();
       }
       addAuctionEventListener(report);
     }
 
-    if (guiConsole != null) {
+    if ( guiConsole != null ) {
       guiConsole.reset();
     }
 
     Iterator i = getTraderIterator();
-    while (i.hasNext()) {
+    while ( i.hasNext() ) {
       TradingAgent t = (TradingAgent) i.next();
       addAuctionEventListener(t);
       t.reset();
     }
-    
+
     ReportVariableBoard.getInstance().reset();
   }
 
@@ -577,7 +621,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * Generate a report.
    */
   public void generateReport() {
-    if (report != null) {
+    if ( report != null ) {
       report.produceUserOutput();
     }
   }
@@ -588,7 +632,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * performance of the auction.
    */
   public void activateGUIConsole() {
-    if (guiConsole == null) {
+    if ( guiConsole == null ) {
       guiConsole = new AuctionConsoleFrame(this, name);
     }
     guiConsole.activate();
@@ -604,7 +648,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     guiConsole = null;
   }
 
-  public void setConsole(AuctionConsoleFrame console) {
+  public void setConsole( AuctionConsoleFrame console ) {
     this.guiConsole = console;
   }
 
@@ -617,10 +661,10 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    */
   protected void sweepDefunctTraders() {
     Iterator i = defunctTraders.iterator();
-    while (i.hasNext()) {
+    while ( i.hasNext() ) {
       TradingAgent defunct = (TradingAgent) i.next();
       activeTraders.remove(defunct);
-      //removeAuctionEventListener(defunct);
+      // removeAuctionEventListener(defunct);
     }
   }
 
@@ -635,13 +679,13 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     shoutsProcessed = false;
   }
 
-  protected void activate(TradingAgent agent) {
+  protected void activate( TradingAgent agent ) {
     activeTraders.add(agent);
     addAuctionEventListener(agent);
   }
 
   protected void checkEndOfDay() {
-    if (dayEndingCondition != null && dayEndingCondition.eval())
+    if ( dayEndingCondition != null && dayEndingCondition.eval() )
       endDay();
   }
 
@@ -651,7 +695,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   protected void endDay() {
     logger.debug("endDay()");
     day++;
-    //logger.debug("day = " + day + " of " + getMaximumDays());
+    // logger.debug("day = " + day + " of " + getMaximumDays());
     round = 0;
     informEndOfDay();
     auctioneer.endOfDayProcessing();
@@ -665,12 +709,12 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   public int getRemainingTime() {
     TimingCondition cond = getAuctionClosingCondition(MaxRoundsAuctionClosingCondition.class);
 
-    if (cond != null) {
+    if ( cond != null ) {
       return ((MaxRoundsAuctionClosingCondition) cond).getRemainingRounds();
     } else {
       cond = getDayEndingCondition(MaxRoundsDayEndingCondition.class);
 
-      if (cond != null) {
+      if ( cond != null ) {
         return ((MaxRoundsDayEndingCondition) cond).getRemainingRounds();
       } else {
         throw new AuctionError(
@@ -683,14 +727,14 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   public int getLengthOfDay() {
     TimingCondition cond = getDayEndingCondition(MaxRoundsDayEndingCondition.class);
 
-    if (cond != null) {
+    if ( cond != null ) {
       return ((MaxRoundsDayEndingCondition) cond).getLengthOfDay();
     } else {
       return -1;
     }
   }
 
-  public void setLengthOfDay(int lengthOfDay) {
+  public void setLengthOfDay( int lengthOfDay ) {
     MaxRoundsDayEndingCondition cond = new MaxRoundsDayEndingCondition(this);
     cond.setLengthOfDay(lengthOfDay);
     setDayEndingCondition(cond);
@@ -699,14 +743,14 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   public int getMaximumDays() {
     TimingCondition cond = getAuctionClosingCondition(MaxDaysAuctionClosingCondition.class);
 
-    if (cond != null) {
+    if ( cond != null ) {
       return ((MaxDaysAuctionClosingCondition) cond).getMaximumDays();
     } else {
       return -1;
     }
   }
 
-  public void setMaximumRounds(int maximumRounds) {
+  public void setMaximumRounds( int maximumRounds ) {
     MaxRoundsAuctionClosingCondition cond = new MaxRoundsAuctionClosingCondition(
         this);
     cond.setMaximumRounds(maximumRounds);
@@ -716,30 +760,30 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   public int getMaximumRounds() {
     TimingCondition cond = getAuctionClosingCondition(MaxRoundsAuctionClosingCondition.class);
 
-    if (cond != null) {
+    if ( cond != null ) {
       return ((MaxRoundsAuctionClosingCondition) cond).getMaximumRounds();
     } else {
       return -1;
     }
   }
 
-  public void setMaximumDays(int maximumDays) {
+  public void setMaximumDays( int maximumDays ) {
     MaxDaysAuctionClosingCondition cond = new MaxDaysAuctionClosingCondition(
         this);
     cond.setMaximumDays(maximumDays);
     setAuctionClosingCondition(cond);
   }
 
-  private TimingCondition getTimingCondition(TimingCondition cond,
-      Class conditionClass) {
-    if (cond != null) {
-      if (cond.getClass().equals(conditionClass)) {
+  private TimingCondition getTimingCondition( TimingCondition cond,
+      Class conditionClass ) {
+    if ( cond != null ) {
+      if ( cond.getClass().equals(conditionClass) ) {
         return cond;
-      } else if (cond instanceof CombiTimingCondition) {
+      } else if ( cond instanceof CombiTimingCondition ) {
         Iterator i = ((CombiTimingCondition) cond).conditionIterator();
-        while (i.hasNext()) {
+        while ( i.hasNext() ) {
           TimingCondition c = (TimingCondition) i.next();
-          if (c.getClass().equals(conditionClass)) {
+          if ( c.getClass().equals(conditionClass) ) {
             return c;
           }
         }
@@ -749,20 +793,23 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     return null;
   }
 
-  public TimingCondition getAuctionClosingCondition(Class conditionClass) {
+  public TimingCondition getAuctionClosingCondition( Class conditionClass ) {
     return getTimingCondition(closingCondition, conditionClass);
   }
 
-  public TimingCondition getDayEndingCondition(Class conditionClass) {
+  public TimingCondition getDayEndingCondition( Class conditionClass ) {
     return getTimingCondition(dayEndingCondition, conditionClass);
   }
 
-  public void setAuctionClosingCondition(TimingCondition cond) {
+  public void setAuctionClosingCondition( TimingCondition cond ) {
     assert (cond instanceof AuctionClosingCondition);
     closingCondition = cond;
   }
 
-  public void setDayEndingCondition(TimingCondition cond) {
+  /**
+   * @uml.property name="dayEndingCondition"
+   */
+  public void setDayEndingCondition( TimingCondition cond ) {
     assert (cond instanceof DayEndingCondition);
     dayEndingCondition = cond;
   }

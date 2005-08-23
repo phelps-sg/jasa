@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Auction;
@@ -25,14 +24,14 @@ import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.Parameterizable;
 
 /**
- * A commodity valuation policy for RoundRobinTrader agents.  
- *
+ * A commodity valuation policy for RoundRobinTrader agents.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public interface ValuationPolicy 
-	extends Resetable, Parameterizable, AuctionEventListener {
+public interface ValuationPolicy extends Resetable, Parameterizable,
+    AuctionEventListener {
 
   /**
    * Determine the current valuation of commodity in the given auction.
@@ -40,15 +39,14 @@ public interface ValuationPolicy
   public double determineValue( Auction auction );
 
   /**
-   * Recalculate valuation after consumption of the commodity being
-   * traded in the given auction.
+   * Recalculate valuation after consumption of the commodity being traded in
+   * the given auction.
    */
   public void consumeUnit( Auction auction );
-  
+
   /**
    * Recalculate valuation(s) in response to an auction event.
    */
   public void eventOccurred( AuctionEvent event );
-
 
 }

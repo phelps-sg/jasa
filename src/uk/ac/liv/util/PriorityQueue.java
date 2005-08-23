@@ -15,11 +15,17 @@
 
 package uk.ac.liv.util;
 
-
+/**
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 public interface PriorityQueue {
 
   public Object removeFirst();
 
+  /**
+   * @uml.property name="first"
+   */
   public Object getFirst();
 
   public void insert( Object o );

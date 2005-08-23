@@ -29,44 +29,61 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
- * This class writes auction data to the specified DataWriter objects,
- * and thus can be used to log data to eg, CSV files, a database backend,
- * etc.
- *
+ * This class writes auction data to the specified DataWriter objects, and thus
+ * can be used to log data to eg, CSV files, a database backend, etc.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class DataWriterReport extends AbstractAuctionReport {
 
-
   /**
    * output for the ask component of market quotes as time series.
+   * 
+   * @uml.property name="askQuoteLog"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected DataWriter askQuoteLog = null;
 
   /**
    * output for the bid component of market quotes as time series.
+   * 
+   * @uml.property name="bidQuoteLog"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected DataWriter bidQuoteLog = null;
 
   /**
    * output for bid data as time series.
+   * 
+   * @uml.property name="bidLog"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected DataWriter bidLog = null;
 
   /**
    * output for ask data as time series.
+   * 
+   * @uml.property name="askLog"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
   protected DataWriter askLog = null;
 
   /*
    * output for transaction price time series.
    */
+  /**
+   * @uml.property name="transPriceLog"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected DataWriter transPriceLog = null;
 
   /**
    * The auction we are keeping statistics on.
+   * 
+   * @uml.property name="auction"
+   * @uml.associationEnd
    */
   protected RoundRobinAuction auction;
 
@@ -74,34 +91,29 @@ public class DataWriterReport extends AbstractAuctionReport {
     this(null, null, null, null, null);
   }
 
-  public DataWriterReport( DataWriter askQuoteLog,
-                                      DataWriter bidQuoteLog,
-                                      DataWriter bidLog,
-                                      DataWriter askLog,
-                                      DataWriter transPriceLog ) {
-     this.askQuoteLog = askQuoteLog;
-     this.bidQuoteLog = bidQuoteLog;
-     this.askLog = askLog;
-     this.bidLog = bidLog;
-     this.transPriceLog = transPriceLog;
+  public DataWriterReport( DataWriter askQuoteLog, DataWriter bidQuoteLog,
+      DataWriter bidLog, DataWriter askLog, DataWriter transPriceLog ) {
+    this.askQuoteLog = askQuoteLog;
+    this.bidQuoteLog = bidQuoteLog;
+    this.askLog = askLog;
+    this.bidLog = bidLog;
+    this.transPriceLog = transPriceLog;
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
   }
 
-
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof TransactionExecutedEvent ) {
-      updateTransPriceLog( (TransactionExecutedEvent) event );
+      updateTransPriceLog((TransactionExecutedEvent) event);
     } else if ( event instanceof ShoutPlacedEvent ) {
-      updateShoutLog( (ShoutPlacedEvent) event);
+      updateShoutLog((ShoutPlacedEvent) event);
     } else if ( event instanceof RoundClosedEvent ) {
-      updateQuoteLog( (RoundClosedEvent) event);
+      updateQuoteLog((RoundClosedEvent) event);
     }
   }
-  
-  
+
   public void updateQuoteLog( RoundClosedEvent event ) {
     int time = event.getTime();
     MarketQuote quote = event.getAuction().getQuote();
@@ -127,7 +139,7 @@ public class DataWriterReport extends AbstractAuctionReport {
   public void updateShoutLog( ShoutPlacedEvent event ) {
     Shout shout = event.getShout();
     int time = event.getTime();
-    if (shout.isBid()) {
+    if ( shout.isBid() ) {
       if ( bidLog != null ) {
         bidLog.newData(time);
         bidLog.newData(shout.getPrice());
@@ -141,22 +153,21 @@ public class DataWriterReport extends AbstractAuctionReport {
     dataUpdated();
   }
 
-
   public void dataUpdated() {
   }
 
-
   public void produceUserOutput() {
   }
-  
+
   public Map getVariables() {
     return new HashMap();
   }
 
-
+  /**
+   * @uml.property name="auction"
+   */
   public void setAuction( RoundRobinAuction auction ) {
     this.auction = auction;
   }
-
 
 }

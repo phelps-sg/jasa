@@ -20,14 +20,17 @@ import junit.framework.*;
 import uk.ac.liv.auction.zi.*;
 import uk.ac.liv.auction.core.*;
 
-
 public class AdaptiveStrategyTest extends TestCase {
 
+  /**
+   * @uml.property name="strategy"
+   * @uml.associationEnd
+   */
   TestLearnerStrategy strategy;
 
   static final int NUM_ROUNDS = 10;
 
-  public AdaptiveStrategyTest(String name) {
+  public AdaptiveStrategyTest( String name ) {
     super(name);
   }
 
@@ -45,12 +48,13 @@ public class AdaptiveStrategyTest extends TestCase {
     agent.setStrategy(strategy);
     auction.register(agent);
     auction.run();
-    System.out.println("AdaptiveStrategyTest: Testing reward/action cycle count");
+    System.out
+        .println("AdaptiveStrategyTest: Testing reward/action cycle count");
     System.out.println("Number of actions = " + strategy.actions);
     System.out.println("Number of rewards = " + strategy.rewards);
     System.out.println("done.");
-    assertTrue(strategy.actions==NUM_ROUNDS);
-    assertTrue(strategy.rewards==NUM_ROUNDS);
+    assertTrue(strategy.actions == NUM_ROUNDS);
+    assertTrue(strategy.rewards == NUM_ROUNDS);
   }
 
   public void testReset() {

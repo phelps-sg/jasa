@@ -19,10 +19,10 @@ import uk.ac.liv.ai.learning.Learner;
 
 /**
  * <p>
- * Strategies implementing this interface indicate that
- * they are based on a learning algorithm.
+ * Strategies implementing this interface indicate that they are based on a
+ * learning algorithm.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */

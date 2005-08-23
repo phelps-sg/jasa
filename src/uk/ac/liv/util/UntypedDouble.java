@@ -19,14 +19,17 @@ package uk.ac.liv.util;
  * <p>
  * Faster version of <code>java.lang.Double</code>.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
- *
+ * 
  */
 
 public class UntypedDouble extends UntypedNumber {
 
+  /**
+   * @uml.property name="primitiveValue"
+   */
   double primitiveValue;
 
   public UntypedDouble() {
@@ -40,7 +43,6 @@ public class UntypedDouble extends UntypedNumber {
   public UntypedDouble( double value ) {
     primitiveValue = value;
   }
-
 
   public UntypedNumber add( UntypedNumber other ) {
     return new UntypedDouble(primitiveValue + other.doubleValue());
@@ -74,7 +76,6 @@ public class UntypedDouble extends UntypedNumber {
     return (long) primitiveValue;
   }
 
-
   public int compareTo( Object other ) {
     if ( other instanceof Number ) {
       double d1 = ((Number) other).doubleValue();
@@ -106,7 +107,5 @@ public class UntypedDouble extends UntypedNumber {
   protected void setValue( double value ) {
     primitiveValue = value;
   }
-
-
 
 }

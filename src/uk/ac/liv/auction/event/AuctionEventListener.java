@@ -15,14 +15,13 @@
 
 package uk.ac.liv.auction.event;
 
-
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface AuctionEventListener {
-  
+
   public void eventOccurred( AuctionEvent event );
 
 }

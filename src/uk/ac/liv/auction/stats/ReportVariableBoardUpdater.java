@@ -39,8 +39,12 @@ import ec.util.ParameterDatabase;
 public class ReportVariableBoardUpdater extends AbstractAuctionReport {
 
   public static String TRANS_PRICE = "transaction.price";
+
   public static String EQUIL_PRICE = "equilibrium.price";
-  
+
+  /**
+   * @uml.property name="equilPrice"
+   */
   protected double equilPrice;
 
   public void produceUserOutput() {
@@ -50,32 +54,30 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport {
     return new HashMap();
   }
 
-  public void eventOccurred(AuctionEvent event) {
-    if (event instanceof TransactionExecutedEvent) {
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof TransactionExecutedEvent ) {
       ReportVariableBoard.getInstance().reportValue(
           TRANS_PRICE,
           new TimePeriodValue(
               new Millisecond(new Date(event.getPhysicalTime())),
               ((TransactionExecutedEvent) event).getPrice()));
-    } else if (event instanceof AuctionOpenEvent) {
+    } else if ( event instanceof AuctionOpenEvent ) {
       EquilibriumReport eqmReport = new EquilibriumReport(getAuction());
       eqmReport.calculate();
       equilPrice = eqmReport.calculateMidEquilibriumPrice();
       ReportVariableBoard.getInstance().reportValue(
           EQUIL_PRICE,
           new TimePeriodValue(
-              new Millisecond(new Date(event.getPhysicalTime())),
-              equilPrice));
-    } else if (event instanceof AuctionClosedEvent) {
+              new Millisecond(new Date(event.getPhysicalTime())), equilPrice));
+    } else if ( event instanceof AuctionClosedEvent ) {
       ReportVariableBoard.getInstance().reportValue(
           EQUIL_PRICE,
           new TimePeriodValue(
-              new Millisecond(new Date(event.getPhysicalTime())),
-              equilPrice));
+              new Millisecond(new Date(event.getPhysicalTime())), equilPrice));
     }
   }
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
 }

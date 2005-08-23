@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.config;
 
 import org.apache.log4j.Logger;
@@ -43,8 +44,15 @@ public class Strategy implements ParameterBasedCase, Parameterizable {
 
   static Logger logger = Logger.getLogger(Strategy.class);
 
+  /**
+   * @uml.property name="c"
+   * @uml.associationEnd
+   */
   private Case c;
 
+  /**
+   * @uml.property name="isSeller"
+   */
   private boolean isSeller;
 
   private static final String P_ISSELLER = "isseller";
@@ -56,20 +64,20 @@ public class Strategy implements ParameterBasedCase, Parameterizable {
    * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
    *      ec.util.Parameter)
    */
-  public void setup(ParameterDatabase parameters, Parameter base) {
+  public void setup( ParameterDatabase parameters, Parameter base ) {
     isSeller = parameters.getBoolean(base.push(P_ISSELLER), null, true);
   }
 
-  public void setParameter(String param) {
+  public void setParameter( String param ) {
     try {
       c = (Case) Class.forName(param).newInstance();
-    } catch (InstantiationException e) {
+    } catch ( InstantiationException e ) {
       e.printStackTrace();
       logger.error(e.toString());
-    } catch (IllegalAccessException e) {
+    } catch ( IllegalAccessException e ) {
       e.printStackTrace();
       logger.error(e.toString());
-    } catch (ClassNotFoundException e) {
+    } catch ( ClassNotFoundException e ) {
       e.printStackTrace();
       logger.error(e.toString());
     }
@@ -79,7 +87,7 @@ public class Strategy implements ParameterBasedCase, Parameterizable {
     return c.toString();
   }
 
-  public void apply(ParameterDatabase pdb, Parameter base) {
+  public void apply( ParameterDatabase pdb, Parameter base ) {
     int index = isSeller ? 0 : 1;
     c.apply(pdb, base.push("agenttype." + index + ".strategy"));
   }

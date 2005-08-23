@@ -31,20 +31,32 @@ import ec.util.ParameterDatabase;
 
 public class RoundRobinAuctionTest extends TestCase {
 
+  /**
+   * @uml.property name="auctioneer"
+   * @uml.associationEnd
+   */
   Auctioneer auctioneer;
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd
+   */
   RoundRobinAuction auction;
 
+  /**
+   * @uml.property name="traders"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   MockTrader[] traders;
 
   static Logger logger = Logger.getLogger(RoundRobinAuctionTest.class);
 
-  public RoundRobinAuctionTest ( String name) {
+  public RoundRobinAuctionTest( String name ) {
     super(name);
     org.apache.log4j.BasicConfigurator.configure();
   }
 
-  public void setUpTraders () {
+  public void setUpTraders() {
     traders = new MockTrader[3];
 
     traders[0] = new MockTrader(this, 30, 1000, 500, false);
@@ -52,35 +64,30 @@ public class RoundRobinAuctionTest extends TestCase {
     traders[2] = new MockTrader(this, 15, 10000, 725, true);
 
     MockTrader trader = traders[0];
-    trader.setStrategy( new MockStrategy(
-        						new Shout[] { 
-        						    new Shout(trader, 1, 500, true),
-        						    new Shout(trader, 1, 600, true), 
-        						    new Shout(trader, 1, 700, true) } ));
+    trader.setStrategy(new MockStrategy(new Shout[] {
+        new Shout(trader, 1, 500, true), new Shout(trader, 1, 600, true),
+        new Shout(trader, 1, 700, true) }));
 
     trader = traders[1];
-    trader.setStrategy( new MockStrategy( 
-        						new Shout[] {
-        							new Shout(trader, 1, 500, true),
-        							new Shout(trader, 1, 550, true),
-        							new Shout(trader, 1, 750, true) } ));
+    trader.setStrategy(new MockStrategy(new Shout[] {
+        new Shout(trader, 1, 500, true), new Shout(trader, 1, 550, true),
+        new Shout(trader, 1, 750, true) }));
 
     trader = traders[2];
-    trader.setStrategy( new MockStrategy( 
-      						new Shout[] { 
-      						    new Shout(trader, 1, 900, false),
-      						    new Shout(trader, 1, 950, false), 
-      						    new Shout(trader, 1, 725, false) } ));
-  }	
+    trader.setStrategy(new MockStrategy(new Shout[] {
+        new Shout(trader, 1, 900, false), new Shout(trader, 1, 950, false),
+        new Shout(trader, 1, 725, false) }));
+  }
 
-  public void setUp () {
+  public void setUp() {
     auctioneer = new ClearingHouseAuctioneer(auction);
-    ((AbstractAuctioneer) auctioneer).setPricingPolicy(new UniformPricingPolicy(1));
+    ((AbstractAuctioneer) auctioneer)
+        .setPricingPolicy(new UniformPricingPolicy(1));
     setUpTraders();
     setUpAuction();
   }
 
-  public void setUpAuction () {
+  public void setUpAuction() {
     auction = new RoundRobinAuction("Round Robin Test Auction");
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
@@ -90,7 +97,7 @@ public class RoundRobinAuctionTest extends TestCase {
       auction.register(traders[i]);
     }
   }
-  
+
   public void testDailyStats() {
 
     auction.setLengthOfDay(3);
@@ -131,7 +138,7 @@ public class RoundRobinAuctionTest extends TestCase {
 
   }
 
-  public void testProtocol () {
+  public void testProtocol() {
 
     assertTrue(auction.getNumberOfTraders() == traders.length);
     assertTrue(!auction.closed());
@@ -151,14 +158,14 @@ public class RoundRobinAuctionTest extends TestCase {
     }
 
   }
-  
+
   public void testNumberOfTraders() {
     assertTrue(auction.getNumberOfTraders() == traders.length);
     auction.run();
     // check that no traders left active at end of auction.
     assertTrue(auction.getNumberOfTraders() == 0);
   }
-  
+
   public void testClosed() {
     try {
       assertTrue(!auction.closed());
@@ -173,86 +180,84 @@ public class RoundRobinAuctionTest extends TestCase {
     }
   }
 
- 
   /**
    * Test that transactions occur only in the final (3rd) round.
    */
   public void testTransactionsOccured() {
     try {
-      
+
       assertTrue(!auction.transactionsOccured());
       auction.begin();
-      
+
       auction.step();
       assertTrue(!auction.transactionsOccured());
-      
+
       auction.step();
       assertTrue(!auction.transactionsOccured());
-      
+
       auction.step();
       assertTrue(auction.transactionsOccured());
-      
+
     } catch ( AuctionClosedException e ) {
       fail("we tried to step through an auction past its closure");
     } catch ( ShoutsNotVisibleException e ) {
       fail("test is configured incorrectly: we must use an auctioneer that permits shout visibility");
     }
   }
-  
+
   public void testShoutAccepted() {
-    
+
     try {
 
       Shout testBid = new Shout(traders[0], 1, 500, true);
       Shout testAsk = new Shout(traders[2], 1, 300, false);
-      
+
       auction.newShout(testBid);
       assertTrue(!auction.shoutAccepted(testBid));
-     
+
       auction.newShout(testAsk);
       assertTrue(!auction.shoutAccepted(testAsk));
-      
+
       auctioneer.clear();
-      //auction.clear(testAsk, testBid, 400);
-      
+      // auction.clear(testAsk, testBid, 400);
+
       assertTrue(auction.shoutAccepted(testBid));
       assertTrue(auction.shoutAccepted(testAsk));
-      
+
       auction.runSingleRound();
-      
+
       assertTrue(!auction.shoutAccepted(testBid));
       assertTrue(!auction.shoutAccepted(testAsk));
-      
+
     } catch ( AuctionException e ) {
       fail(e.getMessage());
     }
   }
-  
+
   public void testLastShout() {
     try {
 
       Shout testBid = new Shout(traders[0], 1, 500, true);
       Shout testAsk = new Shout(traders[2], 1, 300, false);
-      
-      assertTrue( auction.getLastShout() == null );
-      
+
+      assertTrue(auction.getLastShout() == null);
+
       auction.newShout(testBid);
-      assertTrue( auction.getLastShout().equals(testBid) );
-      
+      assertTrue(auction.getLastShout().equals(testBid));
+
       auction.newShout(testAsk);
-      assertTrue( auction.getLastShout().equals(testAsk) );
-      
+      assertTrue(auction.getLastShout().equals(testAsk));
+
     } catch ( AuctionException e ) {
       fail(e.getMessage());
     }
   }
-  
 
-  public static void main ( String[] args) {
+  public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
   }
 
-  public static Test suite () {
+  public static Test suite() {
     return new TestSuite(RoundRobinAuctionTest.class);
   }
 

@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package test.uk.ac.liv.auction.electricity;
 
 import junit.framework.*;
@@ -27,17 +26,50 @@ import uk.ac.liv.auction.agent.PureSimpleStrategy;
 import uk.ac.liv.util.CummulativeDistribution;
 
 /**
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class ElectricityStatsTest extends ElectricityTest {
 
-  CummulativeDistribution sMPS, sMPB, pSA, pBA, pST, pBT;
+  /**
+   * @uml.property name="sMPS"
+   * @uml.associationEnd
+   */
+  CummulativeDistribution sMPS;
+
+  /**
+   * @uml.property name="sMPB"
+   * @uml.associationEnd
+   */
+  CummulativeDistribution sMPB;
+
+  /**
+   * @uml.property name="pSA"
+   * @uml.associationEnd
+   */
+  CummulativeDistribution pSA;
+
+  /**
+   * @uml.property name="pBA"
+   * @uml.associationEnd
+   */
+  CummulativeDistribution pBA;
+
+  /**
+   * @uml.property name="pST"
+   * @uml.associationEnd
+   */
+  CummulativeDistribution pST;
+
+  /**
+   * @uml.property name="pBT"
+   * @uml.associationEnd
+   */
+  CummulativeDistribution pBT;
 
   static final int NUM_SCHEDULES = 10;
-
 
   public ElectricityStatsTest( String name ) {
     super(name);
@@ -56,17 +88,17 @@ public class ElectricityStatsTest extends ElectricityTest {
   }
 
   public void testSMPrcap1() {
-//    for( double k=0; k<1; k+=0.5 ) {
-//      System.out.println("Testing with k = " + k);
-//      for( int i=0; i<NUM_SCHEDULES; i++ ) {
-//        System.out.println("Schedule " + i);
-//        randomizePrivateValues();
-//        experimentSetup(3, 3, 10, 10);
-//        auctioneer.setK(k);
-//        runExperiment();
-//        checkSMP();
-//      }
-//    }
+    // for( double k=0; k<1; k+=0.5 ) {
+    // System.out.println("Testing with k = " + k);
+    // for( int i=0; i<NUM_SCHEDULES; i++ ) {
+    // System.out.println("Schedule " + i);
+    // randomizePrivateValues();
+    // experimentSetup(3, 3, 10, 10);
+    // auctioneer.setK(k);
+    // runExperiment();
+    // checkSMP();
+    // }
+    // }
   }
 
   public void initStats() {
@@ -81,7 +113,7 @@ public class ElectricityStatsTest extends ElectricityTest {
 
   public void updateStats() {
     super.updateStats();
-//    stats.calculateStrategicMarketPower();
+    // stats.calculateStrategicMarketPower();
     sMPS.newData(stats.getSMPS());
     sMPB.newData(stats.getSMPB());
     pBA.newData(stats.getPBA());
@@ -91,8 +123,8 @@ public class ElectricityStatsTest extends ElectricityTest {
   }
 
   public void assignStrategy( ElectricityTrader agent ) {
-    PureSimpleStrategy strategy =
-      new PureSimpleStrategy(agent, 0, agent.getCapacity());
+    PureSimpleStrategy strategy = new PureSimpleStrategy(agent, 0, agent
+        .getCapacity());
     agent.setStrategy(strategy);
   }
 
@@ -103,6 +135,5 @@ public class ElectricityStatsTest extends ElectricityTest {
   public static Test suite() {
     return new TestSuite(ElectricityStatsTest.class);
   }
-
 
 }

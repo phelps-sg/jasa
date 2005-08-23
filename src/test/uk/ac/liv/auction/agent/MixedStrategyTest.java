@@ -23,22 +23,39 @@ import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 
-
 public class MixedStrategyTest extends TestCase {
 
+  /**
+   * @uml.property name="pureStrategy1"
+   * @uml.associationEnd
+   */
   TestLearnerStrategy pureStrategy1;
+
+  /**
+   * @uml.property name="pureStrategy2"
+   * @uml.associationEnd
+   */
   TestLearnerStrategy pureStrategy2;
 
+  /**
+   * @uml.property name="mixedStrategy"
+   * @uml.associationEnd
+   */
   MixedStrategy mixedStrategy;
 
+  /**
+   * @uml.property name="probabilities"
+   * @uml.associationEnd
+   */
   DiscreteProbabilityDistribution probabilities;
 
   static final int NUM_ROUNDS = 1000;
 
   static final double STRATEGY1_PROBABILITY = 0.30;
+
   static final double STRATEGY2_PROBABILITY = 0.70;
 
-  public MixedStrategyTest(String name) {
+  public MixedStrategyTest( String name ) {
     super(name);
     org.apache.log4j.BasicConfigurator.configure();
   }
@@ -52,13 +69,12 @@ public class MixedStrategyTest extends TestCase {
     pureStrategy2.setQuantity(1);
 
     probabilities = new DiscreteProbabilityDistribution(2);
-    //probabilities.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+    // probabilities.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
     probabilities.setProbability(0, STRATEGY1_PROBABILITY);
     probabilities.setProbability(1, STRATEGY2_PROBABILITY);
 
-    mixedStrategy =
-      new MixedStrategy(probabilities,
-                          new AbstractStrategy[] { pureStrategy1, pureStrategy2 });
+    mixedStrategy = new MixedStrategy(probabilities, new AbstractStrategy[] {
+        pureStrategy1, pureStrategy2 });
 
   }
 
@@ -75,10 +91,11 @@ public class MixedStrategyTest extends TestCase {
     auction.run();
     System.out.println("pureStrategy1 count = " + pureStrategy1.actions);
     System.out.println("pureStrategy2 couint = " + pureStrategy2.actions);
-    assertTrue( Math.abs((STRATEGY1_PROBABILITY * NUM_ROUNDS) - pureStrategy1.actions) < 0.05*NUM_ROUNDS);
-    assertTrue( Math.abs((STRATEGY2_PROBABILITY * NUM_ROUNDS) - pureStrategy2.actions) < 0.05*NUM_ROUNDS);
+    assertTrue(Math.abs((STRATEGY1_PROBABILITY * NUM_ROUNDS)
+        - pureStrategy1.actions) < 0.05 * NUM_ROUNDS);
+    assertTrue(Math.abs((STRATEGY2_PROBABILITY * NUM_ROUNDS)
+        - pureStrategy2.actions) < 0.05 * NUM_ROUNDS);
   }
-
 
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());

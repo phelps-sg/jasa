@@ -31,28 +31,47 @@ import java.util.Observer;
 
 import org.apache.log4j.Logger;
 
-
 /**
- * A frame containing a graph of the supply and demand curves for the
- * specified auction.
- *
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class SupplyAndDemandFrame extends JFrame 
-		implements Observer {
+public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected RoundRobinAuction auction;
 
+  /**
+   * @uml.property name="graph"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected RepastPlot graph;
-  
+
+  /**
+   * @uml.property name="supplyCurve"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected DataSeriesWriter supplyCurve;
-  
+
+  /**
+   * @uml.property name="demandCurve"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected DataSeriesWriter demandCurve;
-  
+
+  /**
+   * @uml.property name="updateButton"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JButton updateButton;
-  
+
+  /**
+   * @uml.property name="autoUpdate"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected JCheckBox autoUpdate;
 
   static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
@@ -66,42 +85,41 @@ public abstract class SupplyAndDemandFrame extends JFrame
 
     graph = new RepastPlot(null);
     plotSupplyAndDemand();
-    
+
     contentPane.add(graph, BorderLayout.CENTER);
-    
+
     JPanel controlPanel = new JPanel();
     updateButton = new JButton("Update");
-    updateButton.addActionListener( new ActionListener() {
+    updateButton.addActionListener(new ActionListener() {
       public void actionPerformed( ActionEvent event ) {
         updateGraph();
       }
     });
     controlPanel.add(updateButton);
-    
+
     autoUpdate = new JCheckBox("Auto Update");
-    autoUpdate.addActionListener( new ActionListener() {
+    autoUpdate.addActionListener(new ActionListener() {
       public void actionPerformed( ActionEvent event ) {
         toggleAutoUpdate();
       }
     });
     controlPanel.add(autoUpdate);
-    
+
     contentPane.add(controlPanel, BorderLayout.SOUTH);
 
     updateTitle();
 
     pack();
   }
-  
-  
+
   protected void toggleAutoUpdate() {
     if ( autoUpdate.isSelected() ) {
       auction.addObserver(this);
     } else {
-      auction.deleteObserver(this);      
+      auction.deleteObserver(this);
     }
   }
-  
+
   public void update( Observable auction, Object o ) {
     updateGraph();
   }
@@ -114,11 +132,11 @@ public abstract class SupplyAndDemandFrame extends JFrame
   }
 
   public void updateTitle() {
-    setTitle(getGraphName() + " for " + auction.getName() + " at time " +
-              auction.getRound());
+    setTitle(getGraphName() + " for " + auction.getName() + " at time "
+        + auction.getRound());
   }
-  
-  public void open() { 
+
+  public void open() {
     pack();
     setVisible(true);
   }
@@ -126,9 +144,16 @@ public abstract class SupplyAndDemandFrame extends JFrame
   public void close() {
     setVisible(false);
   }
-  
+
+  /**
+   * @uml.property name="graphName"
+   */
   public abstract String getGraphName();
-  
+
+  /**
+   * @uml.property name="supplyAndDemandStats"
+   * @uml.associationEnd readOnly="true"
+   */
   public abstract SupplyAndDemandStats getSupplyAndDemandStats();
 
   protected void plotSupplyAndDemand() {
@@ -142,7 +167,7 @@ public abstract class SupplyAndDemandFrame extends JFrame
   }
 
   protected void plotCurve( int seriesIndex, DataSeriesWriter curve ) {
-    for( int i=0; i<curve.length(); i++ ) {
+    for ( int i = 0; i < curve.length(); i++ ) {
       graph.addPoint(seriesIndex, curve.getXCoord(i), curve.getYCoord(i), true);
     }
   }

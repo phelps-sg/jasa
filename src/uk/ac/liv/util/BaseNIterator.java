@@ -12,16 +12,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
- 
+
 package uk.ac.liv.util;
 
 import java.util.Iterator;
 
 /**
  * <p>
- * An iterator that enumerates the base N representation of every 
- * non-negative integer that can be represented within the specified number
- * of digits.
+ * An iterator that enumerates the base N representation of every non-negative
+ * integer that can be represented within the specified number of digits.
  * </p>
  * 
  * @author Steve Phelps
@@ -29,43 +28,55 @@ import java.util.Iterator;
  */
 
 public class BaseNIterator implements Iterator {
-  
+
+  /**
+   * @uml.property name="currentNumber"
+   */
   protected int currentNumber = 0;
-  
+
+  /**
+   * @uml.property name="base"
+   */
   protected int base;
-  
+
+  /**
+   * @uml.property name="numDigits"
+   */
   protected int numDigits;
-  
+
+  /**
+   * @uml.property name="maximumNumber"
+   */
   protected int maximumNumber;
-  
+
   public BaseNIterator( int base, int numDigits ) {
     this.base = base;
-    this.numDigits = numDigits;    
+    this.numDigits = numDigits;
     maximumNumber = ((int) Math.pow(base, numDigits)) - 1;
   }
-  
+
   public Object next() {
     int[] digits = convert();
     currentNumber++;
     return digits;
   }
-  
+
   public boolean hasNext() {
     return currentNumber <= maximumNumber;
   }
-  
+
   public void remove() {
     throw new UnsupportedOperationException();
   }
-  
+
   protected int[] convert() {
     int n = currentNumber;
     int[] digits = new int[numDigits];
-    for( int i=0; i<numDigits; i++ ) {
+    for ( int i = 0; i < numDigits; i++ ) {
       digits[i] = n % base;
       n /= base;
     }
     return digits;
   }
-  
-} 
+
+}

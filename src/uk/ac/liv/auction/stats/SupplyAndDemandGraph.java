@@ -1,4 +1,4 @@
- /*
+/*
  * JASA Java Auction Simulator API
  * Copyright (C) 2001-2005 Steve Phelps
  *
@@ -50,85 +50,124 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 
   static Logger logger = Logger.getLogger(SupplyAndDemandGraph.class);
 
-  DataWriterSeries trueSupply, trueDemand;
-  DataWriterSeries reportedSupply, reportedDemand;
+  /**
+   * @uml.property name="trueSupply"
+   * @uml.associationEnd
+   */
+  DataWriterSeries trueSupply;
+
+  /**
+   * @uml.property name="trueDemand"
+   * @uml.associationEnd
+   */
+  DataWriterSeries trueDemand;
+
+  /**
+   * @uml.property name="reportedSupply"
+   * @uml.associationEnd
+   */
+  DataWriterSeries reportedSupply;
+
+  /**
+   * @uml.property name="reportedDemand"
+   * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.stats.SupplyAndDemandGraph$DataWriterSeries"
+   */
+  DataWriterSeries reportedDemand;
+
+  /**
+   * @uml.property name="combinedPlot"
+   * @uml.associationEnd
+   */
   CombinedRangeXYPlot combinedPlot;
-  XYPlot truePlot, reportedPlot;
+
+  /**
+   * @uml.property name="truePlot"
+   * @uml.associationEnd
+   */
+  XYPlot truePlot;
+
+  /**
+   * @uml.property name="reportedPlot"
+   * @uml.associationEnd
+   */
+  XYPlot reportedPlot;
 
   public SupplyAndDemandGraph() {
   }
 
-  
-  protected void setupChart(ParameterDatabase parameters, Parameter base) {
+  protected void setupChart( ParameterDatabase parameters, Parameter base ) {
     setName("Supply and Demand");
     combinedPlot = new CombinedRangeXYPlot(new NumberAxis("Price"));
     trueSupply = new DataWriterSeries("True Supply");
     trueDemand = new DataWriterSeries("True Demand");
     XYSeriesCollection seriesCollection = new XYSeriesCollection();
-    seriesCollection.addSeries((XYSeries)trueSupply.getSeries());
-    seriesCollection.addSeries((XYSeries)trueDemand.getSeries());
+    seriesCollection.addSeries((XYSeries) trueSupply.getSeries());
+    seriesCollection.addSeries((XYSeries) trueDemand.getSeries());
     XYItemRenderer renderer0 = new StandardXYItemRenderer();
-    truePlot = new XYPlot(seriesCollection, new NumberAxis("Amount"), null, renderer0);
+    truePlot = new XYPlot(seriesCollection, new NumberAxis("Amount"), null,
+        renderer0);
     combinedPlot.add(truePlot);
-    
+
     reportedSupply = new DataWriterSeries("Reported Supply");
     reportedDemand = new DataWriterSeries("Reported Demand");
     seriesCollection = new XYSeriesCollection();
-    seriesCollection.addSeries((XYSeries)reportedSupply.getSeries());
-    seriesCollection.addSeries((XYSeries)reportedDemand.getSeries());      
+    seriesCollection.addSeries((XYSeries) reportedSupply.getSeries());
+    seriesCollection.addSeries((XYSeries) reportedDemand.getSeries());
     XYItemRenderer renderer1 = new StandardXYItemRenderer();
-    reportedPlot = new XYPlot(seriesCollection, new NumberAxis("Amount"), null, renderer1);
+    reportedPlot = new XYPlot(seriesCollection, new NumberAxis("Amount"), null,
+        renderer1);
     renderer1.setSeriesPaint(0, renderer0.getSeriesPaint(0));
     renderer1.setSeriesPaint(1, renderer0.getSeriesPaint(1));
     combinedPlot.add(reportedPlot);
 
     setChart(new JFreeChart(getName(), combinedPlot));
   }
-  
-  
-  public void eventOccurred(AuctionEvent event) {
-    if (event instanceof ShoutPlacedEvent) {
 
-      ((XYSeries)reportedSupply.getSeries()).clear();
-      ((XYSeries)reportedDemand.getSeries()).clear();
+  public void eventOccurred( AuctionEvent event ) {
+    if ( event instanceof ShoutPlacedEvent ) {
+
+      ((XYSeries) reportedSupply.getSeries()).clear();
+      ((XYSeries) reportedDemand.getSeries()).clear();
       ReportedSupplyAndDemandStats rsdStats = new ReportedSupplyAndDemandStats(
           getReport().getAuction(), reportedSupply, reportedDemand);
       rsdStats.calculate();
       rsdStats.produceUserOutput();
 
-    } else if (event instanceof AuctionOpenEvent) {
+    } else if ( event instanceof AuctionOpenEvent ) {
 
-      double value = ((TimePeriodValue) ReportVariableBoard
-          .getInstance().getValue(ReportVariableBoardUpdater.EQUIL_PRICE)).getValue().doubleValue();
+      double value = ((TimePeriodValue) ReportVariableBoard.getInstance()
+          .getValue(ReportVariableBoardUpdater.EQUIL_PRICE)).getValue()
+          .doubleValue();
       Marker marker = FreeChartMarker.createMarker(value, Color.black, "EE");
-      logger.debug("Equilibriuim: "+value);
+      logger.debug("Equilibriuim: " + value);
       truePlot.clearRangeMarkers();
       truePlot.addRangeMarker(marker);
 
       updateTrueDS();
-      
-    } else if (event instanceof TransactionExecutedEvent) {
+
+    } else if ( event instanceof TransactionExecutedEvent ) {
 
       updateTrueDS();
       updateReportedDS();
-    
+
     }
   }
-  
+
   private void updateTrueDS() {
-    ((XYSeries)trueSupply.getSeries()).clear();
-    ((XYSeries)trueDemand.getSeries()).clear();
+    ((XYSeries) trueSupply.getSeries()).clear();
+    ((XYSeries) trueDemand.getSeries()).clear();
     TrueSupplyAndDemandStats tsdStats = new TrueSupplyAndDemandStats(
         getReport().getAuction(), trueSupply, trueDemand);
     tsdStats.calculate();
-    tsdStats.produceUserOutput();    
+    tsdStats.produceUserOutput();
 
   }
-  
+
   private void updateReportedDS() {
     TimePeriodValue tpValue = (TimePeriodValue) ReportVariableBoard
-        .getInstance().getValue(ContinuousDoubleAuctioneerEE.EST_EQUILIBRIUM_PRICE);
-    if (tpValue != null) {
+        .getInstance().getValue(
+            ContinuousDoubleAuctioneerEE.EST_EQUILIBRIUM_PRICE);
+    if ( tpValue != null ) {
       double value = tpValue.getValue().doubleValue();
       Marker marker = FreeChartMarker.createMarker(value, Color.black, "EE");
       logger.debug("Estimated equilibrium price : " + value);
@@ -136,37 +175,38 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
       reportedPlot.addRangeMarker(marker);
     }
   }
-  
+
   public class DataWriterSeries extends FreeChartSeries implements DataWriter {
 
-    public DataWriterSeries(String name) {
+    public DataWriterSeries( String name ) {
       series = new XYSeries(name, false, true);
     }
 
-    public void newData(int datum) {
-        newData((double) datum);
+    public void newData( int datum ) {
+      newData((double) datum);
     }
 
-    public void newData(long datum) {
-        newData((double) datum);
+    public void newData( long datum ) {
+      newData((double) datum);
     }
 
-    public void newData(float datum) {
-        newData((double) datum);
+    public void newData( float datum ) {
+      newData((double) datum);
     }
 
     private double temp;
+
     private boolean dataExpected;
 
-    public void newData(double datum) {
+    public void newData( double datum ) {
 
-        if (dataExpected) {
-            ((XYSeries)getSeries()).add((int)temp, datum);
-        } else {
-            temp = datum;
-        }
+      if ( dataExpected ) {
+        ((XYSeries) getSeries()).add((int) temp, datum);
+      } else {
+        temp = datum;
+      }
 
-        dataExpected = !dataExpected;
+      dataExpected = !dataExpected;
     }
 
     public void flush() {
@@ -175,26 +215,26 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
     public void close() {
     }
 
-    public void newData(Iterator i) {
+    public void newData( Iterator i ) {
       throw newException();
     }
 
-    public void newData(Object[] data) {
+    public void newData( Object[] data ) {
       throw newException();
     }
 
-    public void newData(Object data) {
+    public void newData( Object data ) {
       throw newException();
     }
 
-    public void newData(boolean data) {
-        throw newException();
+    public void newData( boolean data ) {
+      throw newException();
     }
-    
+
     private UnsupportedOperationException newException() {
       return new java.lang.UnsupportedOperationException(
-      "Method newData() not yet implemented.");
+          "Method newData() not yet implemented.");
     }
   }
-  
+
 }

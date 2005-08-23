@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.config;
 
 import org.apache.log4j.Logger;
@@ -63,8 +64,15 @@ public class ParameterBasedCaseEnum extends CaseEnum {
 
   static Logger logger = Logger.getLogger(ParameterBasedCaseEnum.class);
 
+  /**
+   * @uml.property name="cases"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   private ParameterBasedCase cases[];
 
+  /**
+   * @uml.property name="i"
+   */
   private int i;
 
   private static final String P_NAME = "name";
@@ -73,7 +81,7 @@ public class ParameterBasedCaseEnum extends CaseEnum {
 
   private static final String P_PARAMETERS = "parameters";
 
-  public void setup(ParameterDatabase pdb, Parameter base) {
+  public void setup( ParameterDatabase pdb, Parameter base ) {
 
     setName(pdb.getString(base.push(P_NAME)));
 
@@ -84,18 +92,18 @@ public class ParameterBasedCaseEnum extends CaseEnum {
     String params[] = s.split(",");
 
     cases = new ParameterBasedCase[params.length];
-    for (int i = 0; i < cases.length; i++) {
+    for ( int i = 0; i < cases.length; i++ ) {
       try {
         cases[i] = (ParameterBasedCase) c.newInstance();
-      } catch (InstantiationException e) {
+      } catch ( InstantiationException e ) {
         e.printStackTrace();
         logger.error(e.toString());
-      } catch (IllegalAccessException e) {
+      } catch ( IllegalAccessException e ) {
         e.printStackTrace();
         logger.error(e.toString());
       }
 
-      if (cases[i] instanceof Parameterizable) {
+      if ( cases[i] instanceof Parameterizable ) {
         ((Parameterizable) cases[i]).setup(pdb, base.push(P_CASE));
       }
       cases[i].setParameter(params[i].trim());

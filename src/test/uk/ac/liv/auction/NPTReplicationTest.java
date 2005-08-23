@@ -26,17 +26,15 @@ import uk.ac.liv.ai.learning.NPTRothErevLearner;
 import java.util.*;
 
 /**
- *
- * Attempt an approximate replication of some of the experiments
- * described in
- *
- * "Market Power and Efficiency in a Computational Electricity Market
- * with Discriminatory Double-Auction Pricing"
- * <br>
- * Nicolaisen, Petrov, and Tesfatsion
- * <i>IEEE Transactions on Evolutionary Computation, Vol. 5, No. 5. 2001</I>
+ * 
+ * Attempt an approximate replication of some of the experiments described in
+ * 
+ * "Market Power and Efficiency in a Computational Electricity Market with
+ * Discriminatory Double-Auction Pricing" <br>
+ * Nicolaisen, Petrov, and Tesfatsion <i>IEEE Transactions on Evolutionary
+ * Computation, Vol. 5, No. 5. 2001</I>
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -47,7 +45,6 @@ public class NPTReplicationTest extends ElectricityTest {
     super(name);
     generatePRNGseeds();
   }
-
 
   public void testRCAP1_2() {
     experimentSetup(3, 3, 20, 10);
@@ -89,7 +86,8 @@ public class NPTReplicationTest extends ElectricityTest {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ElectricityTrader t = (ElectricityTrader) i.next();
-      NPTRothErevLearner l = (NPTRothErevLearner) ((AdaptiveStrategy) t.getStrategy()).getLearner();
+      NPTRothErevLearner l = (NPTRothErevLearner) ((AdaptiveStrategy) t
+          .getStrategy()).getLearner();
       RothErevLearnerTest.checkProbabilities(l);
     }
   }

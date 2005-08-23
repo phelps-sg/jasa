@@ -12,7 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
- 
+
 package uk.ac.liv.ai.learning;
 
 import ec.util.Parameter;
@@ -25,13 +25,16 @@ import ec.util.ParameterDatabase;
 
 public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 
+  /**
+   * @uml.property name="momentum"
+   */
   protected double momentum;
-  
-  public static final String P_MOMENTUM = "momentum";  
+
+  public static final String P_MOMENTUM = "momentum";
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    momentum = parameters.getDouble(base.push(P_MOMENTUM), null, 0); 
+    momentum = parameters.getDouble(base.push(P_MOMENTUM), null, 0);
   }
 
   public void train( double target ) {
@@ -40,15 +43,21 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 
   public void randomInitialise() {
     super.randomInitialise();
-    momentum = randomParamDistribution.nextDouble();       
+    momentum = randomParamDistribution.nextDouble();
   }
-  
-  public double getMomentum () {
+
+  /**
+   * @uml.property name="momentum"
+   */
+  public double getMomentum() {
     return momentum;
   }
-  
-  public void setMomentum ( double momentum) {
+
+  /**
+   * @uml.property name="momentum"
+   */
+  public void setMomentum( double momentum ) {
     this.momentum = momentum;
   }
-  
+
 }

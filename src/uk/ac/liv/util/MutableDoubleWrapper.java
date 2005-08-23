@@ -15,15 +15,17 @@
 
 package uk.ac.liv.util;
 
-
 /**
  * <p>
- * A simple wrapper for a primitive <code>double</code> value which is publically
- * mutable.
+ * A simple wrapper for a primitive <code>double</code> value which is
+ * publically mutable.
  * </p>
  */
 public class MutableDoubleWrapper {
 
+  /**
+   * @uml.property name="value"
+   */
   public double value;
 
   public MutableDoubleWrapper() {

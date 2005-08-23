@@ -34,94 +34,126 @@ import ec.util.ParameterDatabase;
 
 /**
  * A FreeChartGraph consisting multiple data series or markers.
- *  
- * <p><b>Parameters</b><br>
- *
+ * 
+ * <p>
+ * <b>Parameters</b><br>
+ * 
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.series.n</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.series.n</tt><br>
  * <font size=-1> int </font></td>
- * <td valign=top>(the number of data series included)</td></tr>
+ * <td valign=top>(the number of data series included)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.series.<i>i</i></tt><br>
- * <font size=-1> classname inheriting uk.ac.liv.auction.stats.FreeChartSeries </font></td>
- * <td valign=top>(the type of series)</td></tr>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.series.<i>i</i></tt><br>
+ * <font size=-1> classname inheriting uk.ac.liv.auction.stats.FreeChartSeries
+ * </font></td>
+ * <td valign=top>(the type of series)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.marker.n</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.marker.n</tt><br>
  * <font size=-1> int </font></td>
- * <td valign=top>(the number of markers included)</td></tr>
+ * <td valign=top>(the number of markers included)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.marker.<i>i</i></tt><br>
- * <font size=-1> classname inheriting uk.ac.liv.auction.stats.FreeChartMarker </font></td>
- * <td valign=top>(the type of marker)</td></tr>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.marker.<i>i</i></tt><br>
+ * <font size=-1> classname inheriting uk.ac.liv.auction.stats.FreeChartMarker
+ * </font></td>
+ * <td valign=top>(the type of marker)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.renderer.n</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.renderer.n</tt><br>
  * <font size=-1> int </font></td>
- * <td valign=top>(the number of renderers for data series or markers to use
- * )</td></tr>
+ * <td valign=top>(the number of renderers for data series or markers to use )</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.renderer.<i>i</i></tt><br>
- * <font size=-1> classname inheriting org.jfree.chart.renderer.xy.XYItemRenderer </font></td>
- * <td valign=top>(the type of renderer)</td></tr>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.renderer.<i>i</i></tt><br>
+ * <font size=-1> classname inheriting
+ * org.jfree.chart.renderer.xy.XYItemRenderer </font></td>
+ * <td valign=top>(the type of renderer)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.x</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.x</tt><br>
  * <font size=-1> string </font></td>
- * <td valign=top>(the label for X axis)</td></tr>
+ * <td valign=top>(the label for X axis)</td>
+ * </tr>
  * 
- * <tr><td valign=top><i>base</i><tt>.y</tt><br>
+ * <tr>
+ * <td valign=top><i>base</i><tt>.y</tt><br>
  * <font size=-1> string </font></td>
- * <td valign=top>(the label for Y axis)</td></tr>
+ * <td valign=top>(the label for Y axis)</td>
+ * </tr>
  * 
  * </table>
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
 public class MultipleSeriesGraph extends FreeChartGraph {
-  
+
   public static final String P_SERIES = "series";
+
   public static final String P_MARKER = "marker";
+
   public static final String P_RENDERER = "renderer";
+
   public static final String P_NUM = "n";
 
+  /**
+   * @uml.property name="fcCollections"
+   * @uml.associationEnd multiplicity="(1 1)"
+   */
   protected FreeChartSeriesCollection fcCollections;
-  
+
+  /**
+   * @uml.property name="markers"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   protected FreeChartMarker markers[];
 
+  /**
+   * @uml.property name="datasets"
+   * @uml.associationEnd multiplicity="(0 -1)"
+   */
   private XYDataset datasets[];
-  
+
   public MultipleSeriesGraph() {
     fcCollections = new FreeChartSeriesCollection();
   }
 
-  protected void setupChart(ParameterDatabase parameters, Parameter base) {
-    
+  protected void setupChart( ParameterDatabase parameters, Parameter base ) {
+
     // series
     int num = parameters.getIntWithDefault(base.push(P_SERIES).push(P_NUM),
         null, 0);
     datasets = new XYDataset[num];
-    for (int i = 0; i < num; i++) {
+    for ( int i = 0; i < num; i++ ) {
       fcCollections.addSeries((FreeChartSeries) parameters
-          .getInstanceForParameterEq(base.push(P_SERIES).push(String.valueOf(i)),
-              null, FreeChartSeries.class));
+          .getInstanceForParameterEq(base.push(P_SERIES)
+              .push(String.valueOf(i)), null, FreeChartSeries.class));
       fcCollections.getSeries(i).setGraph(this);
       fcCollections.getSeries(i).setup(parameters,
           base.push(P_SERIES).push(String.valueOf(i)));
       datasets[i] = fcCollections.getSeries(i).getDataset();
     }
-    
+
     // markers
-    num = parameters.getIntWithDefault(base.push(P_MARKER).push(P_NUM),
-        null, 0);
+    num = parameters
+        .getIntWithDefault(base.push(P_MARKER).push(P_NUM), null, 0);
     markers = new FreeChartMarker[num];
-    for (int i = 0; i < num; i++) {
-      markers[i] = (FreeChartMarker) parameters
-      .getInstanceForParameter(base.push(P_MARKER).push(String.valueOf(i)),
-          null, FreeChartMarker.class);
+    for ( int i = 0; i < num; i++ ) {
+      markers[i] = (FreeChartMarker) parameters.getInstanceForParameter(base
+          .push(P_MARKER).push(String.valueOf(i)), null, FreeChartMarker.class);
       markers[i].setGraph(this);
       markers[i].setup(parameters, base.push(P_MARKER).push(String.valueOf(i)));
     }
-
 
     // freechart and xyplot
     String xAxisLabel = parameters.getStringWithDefault(base.push(P_X), "X");
@@ -133,34 +165,37 @@ public class MultipleSeriesGraph extends FreeChartGraph {
     xyplot.setBackgroundPaint(Color.white);
     xyplot.setDomainGridlinePaint(Color.lightGray);
     xyplot.setRangeGridlinePaint(Color.lightGray);
-    xyplot.setAxisOffset(new RectangleInsets(UnitType.ABSOLUTE, 4D, 4D, 4D, 4D));
-    
+    xyplot
+        .setAxisOffset(new RectangleInsets(UnitType.ABSOLUTE, 4D, 4D, 4D, 4D));
+
     // axises
-    int numOfRanges = parameters.getIntWithDefault(base.push(P_Y).push(P_NUM), null, 1);
-    for (int i = 0; i < numOfRanges; i++) {
+    int numOfRanges = parameters.getIntWithDefault(base.push(P_Y).push(P_NUM),
+        null, 1);
+    for ( int i = 0; i < numOfRanges; i++ ) {
       NumberAxis axis = new NumberAxis(parameters.getStringWithDefault(base
           .push(P_Y).push(String.valueOf(i)), "Y " + i));
       xyplot.setRangeAxis(i, axis);
     }
-    
-    for (int i = 0; i < fcCollections.getSeriesCount(); i++) {
+
+    for ( int i = 0; i < fcCollections.getSeriesCount(); i++ ) {
       int axisIndex = fcCollections.getSeries(i).getAxisIndex();
-      if (axisIndex >= 0 && axisIndex < numOfRanges) {
+      if ( axisIndex >= 0 && axisIndex < numOfRanges ) {
         xyplot.setDataset(i, fcCollections.getSeries(i).getDataset());
         xyplot.mapDatasetToRangeAxis(i, axisIndex);
       } else {
-        logger.error("Invaid axis number: "+axisIndex);
+        logger.error("Invaid axis number: " + axisIndex);
       }
     }
 
     // renderers
-    int numOfRenderers = parameters.getIntWithDefault(base.push(P_RENDERER).push(P_NUM), null, 1);
+    int numOfRenderers = parameters.getIntWithDefault(base.push(P_RENDERER)
+        .push(P_NUM), null, 1);
     XYItemRenderer standardRenderer = xyplot.getRenderer();
     int index = 0;
-    for (int i = 0; i < fcCollections.getSeriesCount(); i++) {
+    for ( int i = 0; i < fcCollections.getSeriesCount(); i++ ) {
 
       int rendererIndex = fcCollections.getSeries(i).getRendererIndex();
-      if (rendererIndex < 0 || rendererIndex >= numOfRenderers) {
+      if ( rendererIndex < 0 || rendererIndex >= numOfRenderers ) {
         logger.error("Invaid renderer number: " + rendererIndex);
       }
 
@@ -168,33 +203,34 @@ public class MultipleSeriesGraph extends FreeChartGraph {
         xyplot.setRenderer(i, (XYItemRenderer) parameters
             .getInstanceForParameterEq(base.push(P_RENDERER).push(
                 String.valueOf(rendererIndex)), null, XYItemRenderer.class));
-      } catch (ParamClassLoadException e) {
+      } catch ( ParamClassLoadException e ) {
         xyplot.setRenderer(new StandardXYItemRenderer());
       }
 
       xyplot.getRenderer(i).setSeriesPaint(0,
           standardRenderer.getSeriesPaint(index++));
     }
-    
-    xyplot.getDomainAxis().setUpperMargin(xyplot.getDomainAxis().getUpperMargin()+0.05D);
-    xyplot.getDomainAxis().setLowerMargin(xyplot.getDomainAxis().getLowerMargin()+0.05D);
-    
+
+    xyplot.getDomainAxis().setUpperMargin(
+        xyplot.getDomainAxis().getUpperMargin() + 0.05D);
+    xyplot.getDomainAxis().setLowerMargin(
+        xyplot.getDomainAxis().getLowerMargin() + 0.05D);
+
     xyplot.setDomainCrosshairLockedOnData(true);
     xyplot.setDomainCrosshairVisible(true);
     xyplot.setRangeCrosshairLockedOnData(true);
     xyplot.setRangeCrosshairVisible(true);
   }
-  
-  public void eventOccurred(AuctionEvent event) {
 
-    for (int i = 0; i < fcCollections.getSeriesCount(); i++) {
+  public void eventOccurred( AuctionEvent event ) {
+
+    for ( int i = 0; i < fcCollections.getSeriesCount(); i++ ) {
       fcCollections.getSeries(i).eventOccurred(event);
     }
-    
-    for (int i=0; i<markers.length; i++) {
+
+    for ( int i = 0; i < markers.length; i++ ) {
       markers[i].eventOccurred(event);
     }
   }
-
 
 }

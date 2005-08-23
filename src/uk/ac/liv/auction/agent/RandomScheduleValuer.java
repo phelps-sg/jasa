@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.agent;
 
 import java.io.Serializable;
@@ -21,9 +20,9 @@ import java.io.Serializable;
 import uk.ac.liv.auction.core.Auction;
 
 /**
- * A valuation policy which specifies a randomly-generated series
- * of valuations for each unit of commodity.
- *
+ * A valuation policy which specifies a randomly-generated series of valuations
+ * for each unit of commodity.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */

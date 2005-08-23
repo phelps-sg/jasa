@@ -12,6 +12,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.config;
 
 import uk.ac.liv.util.Parameterizable;
@@ -28,16 +29,20 @@ import ec.util.Parameter;
  */
 public abstract class CaseEnum implements Parameterizable {
 
+  /**
+   * @uml.property name="name"
+   */
   private String name;
 
   public CaseEnum() {
   }
 
-  public void setup(ParameterDatabase pdb, Parameter base) {
+  public void setup( ParameterDatabase pdb, Parameter base ) {
   }
 
   /**
    * @return Returns the name.
+   * @uml.property name="name"
    */
   public String getName() {
     return name;
@@ -46,8 +51,9 @@ public abstract class CaseEnum implements Parameterizable {
   /**
    * @param name
    *          The name to set.
+   * @uml.property name="name"
    */
-  public void setName(String name) {
+  public void setName( String name ) {
     this.name = name;
   }
 

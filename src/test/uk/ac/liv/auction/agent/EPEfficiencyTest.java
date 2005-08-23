@@ -30,8 +30,7 @@ public class EPEfficiencyTest extends EfficiencyTest {
   public EPEfficiencyTest( String name ) {
     super(name);
   }
-  
-  
+
   protected void assignStrategy( AbstractTradingAgent agent ) {
     EquilibriumPriceStrategy strategy = new EquilibriumPriceStrategy();
     agent.setStrategy(strategy);

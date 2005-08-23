@@ -24,9 +24,9 @@ import ec.util.Parameter;
 import java.io.Serializable;
 
 /**
- * A valuation policy in which we maintain a fixed private valuation
- * independent of time or auction.
- *
+ * A valuation policy in which we maintain a fixed private valuation independent
+ * of time or auction.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -55,7 +55,7 @@ public class FixedValuer implements ValuationPolicy, Serializable {
   public void consumeUnit( Auction auction ) {
     // Do nothing
   }
-  
+
   public void eventOccurred( AuctionEvent event ) {
     // Do nothing
   }
@@ -70,6 +70,5 @@ public class FixedValuer implements ValuationPolicy, Serializable {
   public String toString() {
     return "(" + getClass() + " value:" + value + ")";
   }
-
 
 }
