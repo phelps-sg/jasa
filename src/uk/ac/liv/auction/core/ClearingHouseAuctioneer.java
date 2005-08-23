@@ -18,7 +18,7 @@ package uk.ac.liv.auction.core;
 import java.io.Serializable;
 
 /**
- * An auctioneer for a k-double-auction.
+ * An auctioneer for a clearing house auction.
  * The clearing operation is performed at the end of every round.
  *
  * @author Steve Phelps

@@ -179,23 +179,34 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
     //(taken bids below price) + (all asks below price) + (rejected bids above
     // price)
     if ( agent.isBuyer() ) {
-      return ((double) (historyStats.getNumberOfBids(-1 * price, true) + historyStats
-          .getNumberOfAsks(-1 * price, false)))
-          / ((double) (historyStats.getNumberOfBids(-1 * price, true)
-              + historyStats.getNumberOfAsks(-1 * price, false) + (historyStats
-              .getNumberOfBids(price, false) - historyStats.getNumberOfBids(
-              price, true))));
+//      return ((double) (historyStats.getNumberOfBids(-1 * price, true) + historyStats
+//          .getNumberOfAsks(-1 * price, false)))
+//          / ((double) (historyStats.getNumberOfBids(-1 * price, true)
+//              + historyStats.getNumberOfAsks(-1 * price, false) + (historyStats
+//              .getNumberOfBids(price, false) - historyStats.getNumberOfBids(
+//              price, true))));
+    	return (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedBidsBelow(price)
+    			+ historyStats.getIncreasingQueryAccelerator().getNumOfAsksBelow(price))
+    			/ (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedBidsBelow(price)
+        			+ historyStats.getIncreasingQueryAccelerator().getNumOfAsksBelow(price)
+        			+ historyStats.getIncreasingQueryAccelerator().getNumOfRejectedBidsAbove(price));
+  	
     } else {
       //              (taken asks above price) + (all bids above price)
       //-------------------------------------------------------------------------------
       //(taken asks above price) + (all bids above price) + (rejected asks
       // below price)
-      return ((double) (historyStats.getNumberOfAsks(price, true) + historyStats
-          .getNumberOfBids(price, false)))
-          / ((double) (historyStats.getNumberOfAsks(price, true)
-              + historyStats.getNumberOfBids(price, false) + (historyStats
-              .getNumberOfAsks(-1 * price, false) - historyStats.getNumberOfAsks(-1
-              * price, true))));
+//      return ((double) (historyStats.getNumberOfAsks(price, true) + historyStats
+//          .getNumberOfBids(price, false)))
+//          / ((double) (historyStats.getNumberOfAsks(price, true)
+//              + historyStats.getNumberOfBids(price, false) + (historyStats
+//              .getNumberOfAsks(-1 * price, false) - historyStats.getNumberOfAsks(-1
+//              * price, true))));
+    	return (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedAsksAbove(price)
+    			+ historyStats.getIncreasingQueryAccelerator().getNumOfBidsAbove(price))
+    	/ (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedAsksAbove(price)
+    			+ historyStats.getIncreasingQueryAccelerator().getNumOfBidsAbove(price)
+    			+ historyStats.getIncreasingQueryAccelerator().getNumOfRejectedAsksBelow(price));
     }
   }
 

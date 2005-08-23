@@ -45,10 +45,22 @@ import org.apache.log4j.Logger;
  * </p>
  * <p>
  * Since GDStrategy uses this report to compute the number of shouts above or below
- * a certain price, which leads to slow simulation, a shortcut counter class is
- * introduced to speed up GDStrategy's queries based on the pattern of prices of
- * concern. To make this more versatile, later refactoring is needed.
+ * a certain price, which leads to slow simulation, SortedView and IncreasingQueryAccelerator 
+ * are introduced to speed up GDStrategy's queries based on the pattern of prices of
+ * concern.
  * </p>
+ * <p>
+ * <b>Parameters </b> <br>
+ * <table>
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.memorysize</tt><br>
+ * <font size=-1>int > 0 </font></td>
+ * <td valign=top>(the length of most recent history to be recorded)</td>
+ * <tr>
+ * 
+ * </table>
+ * 
+
  * 
  * @author Steve Phelps
  * @version $Revision$
@@ -77,16 +89,14 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
   protected double highestBidPrice;
   
-  protected boolean useShortCut = true;
-
   static final String P_MEMORYSIZE = "memorysize";
-  static final String P_USESHORTCUT = "useshortcut";
 
   static Logger logger = Logger.getLogger(HistoricalDataReport.class);
   
+  protected SortedView view;
+  protected IncreasingQueryAccelerator accelerator;
   
   public HistoricalDataReport() {
-    counter = new TraverseCounter();
   }
   
 
@@ -100,8 +110,6 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryAsks[i] = 0;
     }
     logger.debug("memorysize = " + memorySize);
-    
-    useShortCut = parameters.getBoolean(base.push(P_USESHORTCUT), null, useShortCut);
     
   }
 
@@ -124,7 +132,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       markMatched(asks);
       markMatched(bids);
     }
-    if (useShortCut) counter.setValid(false);
+    if (view != null) view.reset();
   }
 
   public void initialise() {
@@ -137,7 +145,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryAsks[i] = 0;
     }
     initialisePriceRanges();
-    if (useShortCut) counter.setValid(false);
+    if (view != null) view.reset();
   }
 
   public void reset() {
@@ -161,7 +169,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         highestBidPrice = shout.getPrice();
       }
     }
-    if (useShortCut) counter.setValid(false);
+    if (view != null) view.reset();
   }
 
   public void roundClosed( AuctionEvent event ) {
@@ -171,7 +179,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     //   deleteOldShouts();
     //}
     initialisePriceRanges();
-    if (useShortCut) counter.setValid(false);
+    if (view != null) view.reset();
   }
 
   public void eventOccurred( AuctionEvent event ) {
@@ -217,12 +225,6 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public Iterator sortedShoutIterator() {
-    if (useShortCut) {
-	    if (counter.isValid())
-	      counter.restart();
-	    else
-	      counter.reset();
-    }
     return sortedShouts.iterator();
   }
 
@@ -240,53 +242,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
    *        the number of shouts that meet the specified condition
    */
   public int getNumberOfShouts( List shouts, double price, boolean accepted ) {
-    
-    int shortcut = -1;
-
-    if (useShortCut) {
-      if (accepted) {
-        if (shouts == asks) {
-          if (price >= 0) {
-            counter.updateNumOfAcceptedAsksAbove(price);
-            shortcut = counter.getNumOfAcceptedAsksAbove();
-          } else {
-            counter.updateNumOfAsksBelow(-price);
-            counter.updateNumOfRejectedAsksBelow(-price);
-            shortcut = counter.getNumOfAsksBelow() - counter.getNumOfRejectedAsksBelow();
-          }
-        } else {
-          if (price >= 0) {
-            counter.updateNumOfBidsAbove(price);
-            counter.updateNumOfRejectedBidsAbove(price);
-            shortcut = counter.getNumOfBidsAbove() - counter.getNumOfRejectedBidsAbove();
-          } else {
-            counter.updateNumOfAcceptedBidsBelow(-price);
-            shortcut = counter.getNumOfAcceptedBidsBelow();
-          }
-        }
-      } else {
-        if (shouts == asks) {
-          if (price >= 0) {
-            // never arrive here
-            throw new Error("There is a bug. You should never be here!");
-          } else {
-            counter.updateNumOfAsksBelow(-price);
-            shortcut = counter.getNumOfAsksBelow();
-          }
-        } else {
-          if (price >= 0) {
-            counter.updateNumOfBidsAbove(price);
-            shortcut = counter.getNumOfBidsAbove();
-          } else {
-            // never arrive here
-            throw new Error("There is a bug. You should never be here!");
-          }
-        }
-      }
-      assert shortcut >= 0;
-      return shortcut;
-    }
-    
+        
     int numShouts = 0;
     Iterator i = shouts.iterator();
     while ( i.hasNext() ) {
@@ -302,23 +258,6 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         }
       }
     }
-    
-//    if (numShouts != shortcut) {
-//      logger.info(shortcut + " - " + numShouts);
-//      logger.info("access " + (accepted ? "accepted " : "")
-//          + ((shouts == asks) ? "asks" : "bids") + " at " + (int) (price)
-//          + " with length=" + shouts.size());
-//      if (shouts == asks) {
-//        logger.info(counter.sortedAsks);
-//        logger.info(counter.sortedAcceptedAsks);
-//        logger.info(counter.sortedRejectedAsks);
-//      } else {
-//        logger.info(counter.sortedBids);
-//        logger.info(counter.sortedAcceptedBids);
-//        logger.info(counter.sortedRejectedBids);
-//      }
-//      logger.info("********************************************************");
-//    }
     
     return numShouts;
   }
@@ -357,15 +296,36 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         + memorySize + " bids:" + bids + " asks:" + asks + ")";
   }
   
-  /** 
-   * The quicker mechanism to count the number of certain shouts for GDStrategy. 
+  public SortedView getSortedView() {
+  	if (view == null) {
+  		view = new SortedView();
+  	}
+  	
+  	return view;
+  }
+  
+  public void disableSortedView() {
+  	disableIncreasingQueryAccelerator();
+  	view = null;  	
+  }
+  
+  public IncreasingQueryAccelerator getIncreasingQueryAccelerator() {
+  	if (accelerator == null)
+  		accelerator = new IncreasingQueryAccelerator(getSortedView());
+  	
+  	return accelerator;
+  }
+  
+  public void disableIncreasingQueryAccelerator() {
+  	accelerator = null;
+  }
+
+  
+  /**
+   * a class providing sorted lists of shouts.
+   *
    */
-  private TraverseCounter counter;
-  private static final Error CounterInvalid = new Error("Attempting to access invalid traverse counter in HistoricalDataReport");
- 
-  class TraverseCounter {
-    
-    private boolean valid;
+  public class SortedView extends Observable {
 
     protected TreeList sortedAsks;
     protected TreeList sortedBids;
@@ -374,29 +334,11 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     protected TreeList sortedRejectedAsks;
     protected TreeList sortedRejectedBids;
 
-    protected int numOfAsksBelow;
-    protected int numOfBidsAbove;
-    protected int numOfAcceptedAsksAbove;
-    protected int numOfAcceptedBidsBelow;
-    protected int numOfRejectedAsksBelow;
-    protected int numOfRejectedBidsAbove;
-
-    protected double priceForAsksBelow;
-    protected double priceForBidsAbove;
-    protected double priceForAcceptedAsksAbove;
-    protected double priceForAcceptedBidsBelow;
-    protected double priceForRejectedAsksBelow;
-    protected double priceForRejectedBidsAbove;
-
-    protected ListIterator asksI;
-    protected ListIterator bidsI;
-    protected ListIterator acceptedAsksI;
-    protected ListIterator acceptedBidsI;
-    protected ListIterator rejectedAsksI;
-    protected ListIterator rejectedBidsI;
-
+    public SortedView() {
+    	initialize();
+    }
     
-    public void reset() {
+    public void initialize() {
       
       sortedAsks = new SortedTreeList("sortedAsks", asks);
       sortedBids = new SortedTreeList("sortedBids", bids);
@@ -407,7 +349,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       sortedRejectedBids = new SortedTreeList("sortedRejectedBids");
       
       Shout s;
-
+      
       Iterator i = asks.iterator();
       while (i.hasNext()) {
         s = (Shout) i.next();
@@ -428,37 +370,133 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         }
       }
       
-      restart();
-    }
-
-    public void restart() {
-      valid = true;
-
-      asksI = sortedAsks.listIterator();
-      bidsI = sortedBids.listIterator();      
-      acceptedAsksI = sortedAcceptedAsks.listIterator();
-      acceptedBidsI = sortedAcceptedBids.listIterator();
-      rejectedAsksI = sortedRejectedAsks.listIterator();
-      rejectedBidsI = sortedRejectedBids.listIterator();
-
-      numOfBidsAbove = sortedBids.size();      
-      numOfAsksBelow = 0;
-      numOfAcceptedAsksAbove = sortedAcceptedAsks.size();
-      numOfAcceptedBidsBelow = 0;
-      numOfRejectedAsksBelow = 0;
-      numOfRejectedBidsAbove = sortedRejectedBids.size();
-
-      priceForBidsAbove = -1;      
-      priceForAsksBelow = -1;
-      priceForAcceptedAsksAbove = -1;
-      priceForAcceptedBidsBelow = -1;
-      priceForRejectedAsksBelow = -1;
-      priceForRejectedBidsAbove = -1;
+      setChanged();
+      notifyObservers();
     }
     
+    public void reset() {
+    	initialize();
+    }
+    
+    public TreeList getSortedAsks() {
+    	return sortedAsks;
+    }
+    
+    public TreeList getSortedBids() {
+    	return sortedBids;
+    }
+    
+    public TreeList getSortedAcceptedAsks() {
+    	return sortedAcceptedAsks;
+    }
+    
+    public TreeList getSortedAcceptedBids() {
+    	return sortedAcceptedBids;
+    }
+    
+    public TreeList getSortedRejectedAsks() {
+    	return sortedRejectedAsks;
+    }
+    
+    public TreeList getSortedRejectedBids() {
+    	return sortedRejectedBids;
+    }
 
-    public void updateNumOfAsksBelow(double price) {
-    	assert priceForAsksBelow <= price;
+  }
+  
+
+  /**
+   * a class to speed up queries from GDStrategy regarding the number of shouts above or below a 
+   * certain price. It is designed based on the pattern of increasing prices queried about.
+   * 
+   */
+  public class IncreasingQueryAccelerator implements Observer {
+  	
+    protected ListIterator asksI;
+    protected ListIterator bidsI;
+    protected ListIterator acceptedAsksI;
+    protected ListIterator acceptedBidsI;
+    protected ListIterator rejectedAsksI;
+    protected ListIterator rejectedBidsI;
+
+    protected int numOfAsksBelow;
+    protected int numOfBidsAbove;
+    protected int numOfAcceptedAsksAbove;
+    protected int numOfAcceptedBidsBelow;
+    protected int numOfRejectedAsksBelow;
+    protected int numOfRejectedBidsAbove;
+
+    protected double priceForAsksBelow;
+    protected double priceForBidsAbove;
+    protected double priceForAcceptedAsksAbove;
+    protected double priceForAcceptedBidsBelow;
+    protected double priceForRejectedAsksBelow;
+    protected double priceForRejectedBidsAbove;
+    
+		private SortedView view;
+  	
+  	public IncreasingQueryAccelerator(SortedView view) {
+  		this.view = view;
+  		view.addObserver(this);
+  		reset();  		
+  	}
+
+  	/*
+  	 * resets all the iterations and counting variables when the underlying sorted
+  	 * view changes. 
+  	 */
+		public void update(Observable o, Object arg) {
+			reset();
+		}
+
+  	public void reset() {
+			resetForAsksBelow();
+			resetForBidsAbove();
+			resetForAcceptedAsksAbove();
+			resetForAcceptedBidsBelow();
+			resetForRejectedAsksBelow();
+			resetForRejectedBidsAbove();
+		}
+
+  	protected void resetForAsksBelow() {
+			asksI = view.getSortedAsks().listIterator();
+			numOfAsksBelow = 0;
+			priceForAsksBelow = -1;
+  	}
+  	  	
+  	protected void resetForBidsAbove() {
+			bidsI = view.getSortedBids().listIterator();
+			numOfBidsAbove = view.getSortedBids().size();
+			priceForBidsAbove = -1;
+  	}
+
+  	protected void resetForAcceptedAsksAbove() {
+			acceptedAsksI = view.getSortedAcceptedAsks().listIterator();
+			numOfAcceptedAsksAbove = view.getSortedAcceptedAsks().size();
+			priceForAcceptedAsksAbove = -1;
+  	}
+  	
+  	protected void resetForAcceptedBidsBelow() {
+			acceptedBidsI = view.getSortedAcceptedBids().listIterator();
+			numOfAcceptedBidsBelow = 0;
+			priceForAcceptedBidsBelow = -1;
+  	}
+  	
+  	protected void resetForRejectedAsksBelow() {
+			rejectedAsksI = view.getSortedRejectedAsks().listIterator();
+			numOfRejectedAsksBelow = 0;
+			priceForRejectedAsksBelow = -1;
+  	}
+  	
+  	protected void resetForRejectedBidsAbove() {
+			rejectedBidsI = view.getSortedRejectedBids().listIterator();
+			numOfRejectedBidsAbove = view.getSortedRejectedBids().size();
+			priceForRejectedBidsAbove = -1;
+  	}
+  	
+    public int getNumOfAsksBelow(double price) {
+    	if (priceForAsksBelow > price)
+    		resetForAsksBelow();
     	priceForAsksBelow = price;    	
     	    	
       while (asksI.hasNext())
@@ -473,13 +511,16 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
           }
           break;
         }
+      
+      return numOfAsksBelow;
     }
 
-    public void updateNumOfBidsAbove(double price) {
-    	assert priceForBidsAbove <= price;
+    public int getNumOfBidsAbove(double price) {
+    	if (priceForBidsAbove > price)
+    		resetForBidsAbove();
     	priceForBidsAbove = price;
     	
-      while (bidsI.hasNext())
+      while (bidsI.hasNext()) {
         if (((Shout)bidsI.next()).getPrice() < price)
           numOfBidsAbove--;
         else {
@@ -491,10 +532,14 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
           }
           break;
         }
+      }
+      
+      return numOfBidsAbove;
     }
 
-    public void updateNumOfAcceptedAsksAbove(double price) {
-    	assert priceForAcceptedAsksAbove <= price;
+    public int getNumOfAcceptedAsksAbove(double price) {
+    	if (priceForAcceptedAsksAbove > price)
+    		resetForAcceptedAsksAbove();
     	priceForAcceptedAsksAbove = price;
     	
       while (acceptedAsksI.hasNext())
@@ -509,10 +554,13 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
           }
           break;
         }
+      
+      return numOfAcceptedAsksAbove;
     }
     
-    public void updateNumOfAcceptedBidsBelow(double price) {
-    	assert priceForAcceptedBidsBelow <= price;
+    public int getNumOfAcceptedBidsBelow(double price) {
+    	if (priceForAcceptedBidsBelow > price)
+    		resetForAcceptedBidsBelow();
     	priceForAcceptedBidsBelow = price;
     	
       while (acceptedBidsI.hasNext())
@@ -529,10 +577,13 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
           }
           break;
         }
+      
+      return numOfAcceptedBidsBelow;
     }
     
-    public void updateNumOfRejectedAsksBelow(double price) {
-    	assert priceForRejectedAsksBelow <= price;
+    public int getNumOfRejectedAsksBelow(double price) {
+    	if (priceForRejectedAsksBelow > price)
+    		resetForRejectedAsksBelow();
     	priceForRejectedAsksBelow = price;
     	
       while (rejectedAsksI.hasNext())
@@ -547,10 +598,13 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
           }
           break;
         }
+      
+      return numOfRejectedAsksBelow;
     }
     
-    public void updateNumOfRejectedBidsAbove(double price) {
-    	assert priceForRejectedBidsAbove <= price;
+    public int getNumOfRejectedBidsAbove(double price) {
+    	if (priceForRejectedBidsAbove > price)
+    		resetForRejectedBidsAbove();
     	priceForRejectedBidsAbove = price;
     	
       while (rejectedBidsI.hasNext())
@@ -565,58 +619,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
           }
           break;
         }
-    }
-
-    public void setValid(boolean valid) {
-      this.valid = valid;
-    }
-    
-    public boolean isValid() {
-      return valid;
-    }
-
-    /**
-     * @return Returns the numOfAsksBelow.
-     */
-    public int getNumOfAsksBelow() {
-      if (!valid) throw CounterInvalid;
-      return numOfAsksBelow;
-    }
-    /**
-     * @return Returns the numOfBidsAbove.
-     */
-    public int getNumOfBidsAbove() {
-      if (!valid) throw CounterInvalid;
-      return numOfBidsAbove;
-    }
-    /**
-     * @return Returns the numOfAcceptedAsksAbove.
-     */
-    public int getNumOfAcceptedAsksAbove() {
-      if (!valid) throw CounterInvalid;
-      return numOfAcceptedAsksAbove;
-    }
-    /**
-     * @return Returns the numOfAcceptedBidsBelow.
-     */
-    public int getNumOfAcceptedBidsBelow() {
-      if (!valid) throw CounterInvalid;
-      return numOfAcceptedBidsBelow;
-    }
-    /**
-     * @return Returns the numOfRejectedAsksBelow.
-     */
-    public int getNumOfRejectedAsksBelow() {
-      if (!valid) throw CounterInvalid;
-      return numOfRejectedAsksBelow;
-    }
-    /**
-     * @return Returns the numOfRejectedBidsAbove.
-     */
-    public int getNumOfRejectedBidsAbove() {
-      if (!valid) throw CounterInvalid;
+      
       return numOfRejectedBidsAbove;
-    }
+    }  	
   }
     
   /**
@@ -678,7 +683,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       String s = "[";
       ListIterator iterator = listIterator();
       while (iterator.hasNext()) {
-        s += (int)((Shout)iterator.next()).getPrice() + " "; 
+        s += ((Shout)iterator.next()).getPrice() + " "; 
       }
       s += "] "+name+"(size="+size()+")";
       return s;
