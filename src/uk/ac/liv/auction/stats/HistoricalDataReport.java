@@ -94,11 +94,27 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
   static Logger logger = Logger.getLogger(HistoricalDataReport.class);
 
-  protected SortedView view;
-
   protected IncreasingQueryAccelerator accelerator;
+  
+  protected SortedView view;
+  
+  protected Observable observableProxy;
 
   public HistoricalDataReport() {
+  	observableProxy = new Observable(){
+  		public void notifyObservers() {
+  			setChanged();
+  			super.notifyObservers();
+  		}
+  	};
+  }
+  
+  public void addObserver(Observer o) {
+  	observableProxy.addObserver(o);
+  }
+  
+  public void deleteObserver(Observer o) {
+  	observableProxy.deleteObserver(o);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -133,8 +149,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       markMatched(asks);
       markMatched(bids);
     }
-    if ( view != null )
-      view.reset();
+    observableProxy.notifyObservers();
   }
 
   public void initialise() {
@@ -147,8 +162,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       memoryAsks[i] = 0;
     }
     initialisePriceRanges();
-    if ( view != null )
-      view.reset();
+    observableProxy.notifyObservers();
   }
 
   public void reset() {
@@ -172,8 +186,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
         highestBidPrice = shout.getPrice();
       }
     }
-    if ( view != null )
-      view.reset();
+    observableProxy.notifyObservers();
   }
 
   public void roundClosed( AuctionEvent event ) {
@@ -183,8 +196,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     // deleteOldShouts();
     // }
     initialisePriceRanges();
-    if ( view != null )
-      view.reset();
+    observableProxy.notifyObservers();
   }
 
   public void eventOccurred( AuctionEvent event ) {
@@ -300,18 +312,18 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     return "(" + getClass() + " auction:" + auction + " memorySize:"
         + memorySize + " bids:" + bids + " asks:" + asks + ")";
   }
-
+  
   public SortedView getSortedView() {
-    if ( view == null ) {
-      view = new SortedView();
-    }
-
-    return view;
+  	if (view == null)
+  		view = new SortedView();
+  	
+  	return view;
   }
-
+  
   public void disableSortedView() {
-    disableIncreasingQueryAccelerator();
-    view = null;
+  	disableIncreasingQueryAccelerator();
+  	view.destroy();
+  	view = null;
   }
 
   public IncreasingQueryAccelerator getIncreasingQueryAccelerator() {
@@ -322,6 +334,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public void disableIncreasingQueryAccelerator() {
+  	accelerator.destroy();
     accelerator = null;
   }
 
@@ -329,25 +342,35 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
    * a class providing sorted lists of shouts.
    * 
    */
-  public class SortedView extends Observable {
+  public class SortedView extends Observable implements Observer {
 
-    protected TreeList sortedAsks;
+    private TreeList sortedAsks;
 
-    protected TreeList sortedBids;
+    private TreeList sortedBids;
 
-    protected TreeList sortedAcceptedAsks;
+    private TreeList sortedAcceptedAsks;
 
-    protected TreeList sortedAcceptedBids;
+    private TreeList sortedAcceptedBids;
 
-    protected TreeList sortedRejectedAsks;
+    private TreeList sortedRejectedAsks;
 
-    protected TreeList sortedRejectedBids;
+    private TreeList sortedRejectedBids;
+
+    private boolean toBeReset;
 
     public SortedView() {
-      initialize();
+    	HistoricalDataReport.this.addObserver(this);
+    	toBeReset = true;
+    }
+    
+    public void destroy() {
+    		HistoricalDataReport.this.deleteObserver(this);
     }
 
-    public void initialize() {
+
+
+    public void reset() {
+    	
 
       sortedAsks = new SortedTreeList("sortedAsks", asks);
       sortedBids = new SortedTreeList("sortedBids", bids);
@@ -382,32 +405,48 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       setChanged();
       notifyObservers();
     }
+    
+		public void update(Observable o, Object arg) {
+			toBeReset = true;
+			setChanged();
+			notifyObservers();
+		}
+		
+		public void resetIfNeeded() {
+    	if (toBeReset) {
+    		reset();
+      	toBeReset = false;
+    	}
+		}
 
-    public void reset() {
-      initialize();
-    }
-
+    
     public TreeList getSortedAsks() {
+    	resetIfNeeded();
       return sortedAsks;
     }
 
     public TreeList getSortedBids() {
+    	resetIfNeeded();
       return sortedBids;
     }
 
     public TreeList getSortedAcceptedAsks() {
+    	resetIfNeeded();
       return sortedAcceptedAsks;
     }
 
     public TreeList getSortedAcceptedBids() {
+    	resetIfNeeded();
       return sortedAcceptedBids;
     }
 
     public TreeList getSortedRejectedAsks() {
+    	resetIfNeeded();
       return sortedRejectedAsks;
     }
 
     public TreeList getSortedRejectedBids() {
+    	resetIfNeeded();
       return sortedRejectedBids;
     }
 
@@ -457,12 +496,23 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
     protected double priceForRejectedBidsAbove;
 
-    private SortedView view;
+    protected SortedView view;
+
+		private boolean toBeReset;
 
     public IncreasingQueryAccelerator( SortedView view ) {
       this.view = view;
       view.addObserver(this);
-      reset();
+      toBeReset = true;
+    }
+    
+    public IncreasingQueryAccelerator() {
+    	this(new SortedView());
+    }
+    
+    public void destroy() {
+    	if (view != null)
+    		view.deleteObserver(this);
     }
 
     /*
@@ -470,7 +520,14 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
      * sorted view changes.
      */
     public void update( Observable o, Object arg ) {
-      reset();
+    	toBeReset = true;
+    }
+
+    protected void resetIfNeeded() {
+    	if (toBeReset) {
+    		reset();
+      	toBeReset = false;
+    	}
     }
 
     public void reset() {
@@ -517,8 +574,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       numOfRejectedBidsAbove = view.getSortedRejectedBids().size();
       priceForRejectedBidsAbove = -1;
     }
-
+    
     public int getNumOfAsksBelow( double price ) {
+    	resetIfNeeded();
+    	
       if ( priceForAsksBelow > price )
         resetForAsksBelow();
       priceForAsksBelow = price;
@@ -540,6 +599,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
 
     public int getNumOfBidsAbove( double price ) {
+    	resetIfNeeded();
+    	
       if ( priceForBidsAbove > price )
         resetForBidsAbove();
       priceForBidsAbove = price;
@@ -562,7 +623,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
 
     public int getNumOfAcceptedAsksAbove( double price ) {
-      if ( priceForAcceptedAsksAbove > price )
+    	resetIfNeeded();
+
+    	if ( priceForAcceptedAsksAbove > price )
         resetForAcceptedAsksAbove();
       priceForAcceptedAsksAbove = price;
 
@@ -583,6 +646,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
 
     public int getNumOfAcceptedBidsBelow( double price ) {
+    	resetIfNeeded();
+    	
       if ( priceForAcceptedBidsBelow > price )
         resetForAcceptedBidsBelow();
       priceForAcceptedBidsBelow = price;
@@ -607,6 +672,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
 
     public int getNumOfRejectedAsksBelow( double price ) {
+    	resetIfNeeded();
+    	
       if ( priceForRejectedAsksBelow > price )
         resetForRejectedAsksBelow();
       priceForRejectedAsksBelow = price;
@@ -628,6 +695,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
 
     public int getNumOfRejectedBidsAbove( double price ) {
+    	resetIfNeeded();
+    	
       if ( priceForRejectedBidsAbove > price )
         resetForRejectedBidsAbove();
       priceForRejectedBidsAbove = price;
