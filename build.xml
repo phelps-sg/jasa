@@ -17,9 +17,9 @@
 
    <property name="docDir" value="doc"/>
    <property name="javaLibPath" value="./lib"/>
-   <property name="troveLoc" value="${javaLibPath}/trove-1.1b3/lib/trove.jar"/>
+   <property name="troveLoc" value="${javaLibPath}/trove-1.1b4/lib/trove.jar"/>
    <property name="ecjLoc" value="${javaLibPath}/ecj12"/>
-   <property name="repastLoc" value="${javaLibPath}/RePast-3.0/repastj"/>
+   <property name="repastLoc" value="${javaLibPath}/Repast-3.1/RepastJ"/>
    <property name="junitLoc" value="${repastLoc}/lib/junit.jar"/>
    <property name="log4jLoc" value="${repastLoc}/lib/log4j-1.2.8.jar"/>
    <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
