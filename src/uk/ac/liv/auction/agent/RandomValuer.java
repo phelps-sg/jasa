@@ -15,12 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.event.AuctionEvent;
-
 import uk.ac.liv.prng.GlobalPRNG;
 
-import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Uniform;
 
 import ec.util.ParameterDatabase;
@@ -55,28 +51,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class RandomValuer implements ValuationPolicy, Serializable {
-
-  /**
-   * The current valuation.
-   */
-  protected double value;
-
-  /**
-   * The minimum valuation to use.
-   */
-  protected double minValue;
-
-  /**
-   * The maximum valuation to use.
-   */
-  protected double maxValue;
-
-  /**
-   * The probability distribution to use for drawing valuations.
-   */
-  protected AbstractContinousDistribution distribution;
-
+public class RandomValuer extends AbstractRandomValuer implements Serializable {
+ 
   public static final String P_MINVALUE = "minvalue";
 
   public static final String P_MAXVALUE = "maxvalue";
@@ -84,12 +60,11 @@ public class RandomValuer implements ValuationPolicy, Serializable {
   static Logger logger = Logger.getLogger(RandomValuer.class);
 
   public RandomValuer() {
+    super();
   }
 
   public RandomValuer( double minValue, double maxValue ) {
-    this.minValue = minValue;
-    this.maxValue = maxValue;
-    initialise();
+    super(minValue, maxValue);
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -98,56 +73,9 @@ public class RandomValuer implements ValuationPolicy, Serializable {
     initialise();
   }
 
-  public double determineValue( Auction auction ) {
-    assert minValue >= 0 && maxValue >= minValue && value >= minValue
-        && value <= maxValue;
-    return value;
-  }
-
-  public void consumeUnit( Auction auction ) {
-    // Do nothing
-  }
-
-  public void eventOccurred( AuctionEvent event ) {
-    // Do nothing
-  }
-
-  public void reset() {
-    initialise();
-  }
-
   public void initialise() {
     distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
     drawRandomValue();
-  }
-
-  public void setMaxValue( double maxValue ) {
-    this.maxValue = maxValue;
-  }
-
-  public double getMaxValue() {
-    return maxValue;
-  }
-
-  public void setMinValue( double minValue ) {
-    this.minValue = minValue;
-  }
-
-  public double getMinValue() {
-    return minValue;
-  }
-
-  public double getCurrentValuation() {
-    return value;
-  }
-
-  public void drawRandomValue() {
-    value = distribution.nextDouble();
-  }
-
-  public String toString() {
-    return "(" + getClass() + " minValue:" + minValue + " maxValue:" + maxValue
-        + " value:" + value + ")";
   }
 
 }
