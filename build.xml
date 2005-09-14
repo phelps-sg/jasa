@@ -24,7 +24,7 @@
    <property name="log4jLoc" value="${repastLoc}/lib/log4j-1.2.8.jar"/>
    <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
    <property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.1/commons-collections-3.1.jar"/>
-   <property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/geotools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/trove.jar:${repastLoc}/repastj.jar"/>
+   <property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/geotools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/trove.jar:${repastLoc}/repast.jar"/>
    <property name="jfreechartPath" value="${javaLibPath}/jfreechart-1.0.0-rc1.jar:${javaLibPath}/jcommon-1.0.0-rc1.jar"/>
 
    <path id="project.classpath">
