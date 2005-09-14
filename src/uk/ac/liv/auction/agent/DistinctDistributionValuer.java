@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.prng.GlobalPRNG;
 
 import cern.jet.random.Uniform;
@@ -61,6 +63,14 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
     minValue = minValueDist.nextDouble();
     range = rangeDist.nextDouble();
     distribution = new Uniform(minValue, minValue+range, GlobalPRNG.getInstance()); 
+    drawRandomValue();
+  }
+  
+  public void eventOccurred( AuctionEvent event ) {
+    super.eventOccurred(event);
+    if ( event instanceof AuctionOpenEvent ) {
+      drawRandomValue();
+    }
   }
 
 
