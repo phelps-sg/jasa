@@ -67,7 +67,7 @@
    </target>
 
    <target depends="prepareOutput,copysrc" name="compile">
-      <javac debug="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${buildSrc}">
+      <javac debug="on" optimize="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${buildSrc}">
         <classpath refid="project.classpath"/>
      </javac>
    </target>
