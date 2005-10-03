@@ -192,11 +192,11 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
     if ( agent.isBuyer() ) {
       smallSpread =
       // quote.getAsk() < transPrice.getMax() &&
-      ((quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
+      (Math.abs(quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
     } else {
       smallSpread =
       // quote.getBid() > transPrice.getMin() &&
-      ((quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
+      (Math.abs(quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
     }
 
     if ( smallSpread ) {
