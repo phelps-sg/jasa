@@ -33,13 +33,15 @@ import ec.util.ParameterDatabase;
 
 public abstract class IntervalValuer extends FixedValuer {
 
-  public static final String P_MINVALUE = "minvalue";
+  public static final String P_DEF_BASE = "intervalvaluer";
 
+  public static final String P_MINVALUE = "minvalue";
+  
   public static final String P_STEP = "step";
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    setMinValue(parameters.getDouble(base.push(P_MINVALUE), null, 0));
-    setStep(parameters.getDouble(base.push(P_STEP), null, 0));
+    setMinValue(parameters.getDouble(base.push(P_MINVALUE), new Parameter(P_DEF_BASE).push(P_MINVALUE), 0));
+    setStep(parameters.getDouble(base.push(P_STEP), new Parameter(P_DEF_BASE).push(P_STEP), 0));
     if ( firstValue() ) {
       setNextValue(getMinValue());
       setFirstValue(false);
@@ -47,6 +49,10 @@ public abstract class IntervalValuer extends FixedValuer {
       setNextValue(getNextValue() + getStep());
     }
     setValue(getNextValue());
+  }
+  
+  public void reset() {
+  	setFirstValue(true);
   }
 
   protected abstract void setMinValue( double value );

@@ -18,7 +18,6 @@ package uk.ac.liv.auction.core;
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
-import org.jfree.data.time.TimePeriodValue;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
@@ -28,7 +27,7 @@ import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import uk.ac.liv.auction.stats.ReportVariableBoard;
-import uk.ac.liv.auction.stats.ReportVariableBoardUpdater;
+import uk.ac.liv.util.FixedLengthQueue;
 
 /**
  * <p>
@@ -49,10 +48,15 @@ import uk.ac.liv.auction.stats.ReportVariableBoardUpdater;
  * <table>
  * 
  * <tr>
- * <td valign=top><i>base </i> <tt>.k</tt><br>
+ * <td valign=top><i>base </i> <tt>.memorysize</tt><br>
+ * <font size=-1>int >=1 </font></td>
+ * <td valign=top>(how many recent transaction prices memorized to get the average
+ * as the esimated equilibrium)</td>
+ * 
+ * <td valign=top><i>base </i> <tt>.delta</tt><br>
  * <font size=-1>0 <=double <=1 </font></td>
- * <td valign=top>(determining the equilibrium price estimate in the interval
- * between matched ask and bid)</td>
+ * <td valign=top>(relaxing the restriction put by the estimated equilibrium price
+ * )</td>
  * <tr>
  * 
  * </table>
@@ -77,28 +81,28 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
   private double expectedLowestBid;
 
   /**
-   * A parameter used to adjust the equilibrium price estimate in the interval
-   * between matched bid and ask.
+   * A parameter used to adjust the equilibrium price estimate so as to relax
+   * the restriction.
    * 
-   * @uml.property name="k"
+   * @uml.property name="delta"
    */
-  protected double k = 0.5;
-
   protected double delta = 0;
 
-  protected int memorySize = 10;
-
-  public static final String P_K = "k";
-
   public static final String P_DELTA = "delta";
+
+  /**
+   * A parameter used to adjust the number of recent transaction prices to be memorized
+   * so as to compute the average as the equilibrium price estimate
+   * 
+   * @uml.property name="memorySize"
+   */
+  protected int memorySize = 4;
 
   public static final String P_MEMORYSIZE = "memorysize";
 
   public static final String EST_EQUILIBRIUM_PRICE = "estimated.equilibrium.price";
 
-  public static final String EST_EQUILIBRIUM_PRICE_DEVIATION = "estimated.equilibrium.price.deviation";
-
-  FixedLengthQueue memory;
+  protected FixedLengthQueue memory;
 
   public ContinuousDoubleAuctioneerEE() {
     this(null);
@@ -110,9 +114,6 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-
-    k = parameters.getDoubleWithDefault(base.push(P_K), null, k);
-    assert (0 <= k && k <= 1);
 
     delta = parameters.getDoubleWithDefault(base.push(P_DELTA), null, delta);
     assert (0 <= delta);
@@ -150,73 +151,17 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 
   public void eventOccurred( AuctionEvent event ) {
 
-    double estimate;
-
     if ( event instanceof TransactionExecutedEvent ) {
-      Shout ask = ((TransactionExecutedEvent) event).getAsk();
-      Shout bid = ((TransactionExecutedEvent) event).getBid();
-      estimate = k * bid.getPrice() + (1 - k) * ask.getPrice();
-      memory.newData(estimate);
+      memory.newData(((TransactionExecutedEvent)event).getPrice());
 
       if ( memory.count() >= memorySize ) {
-        // logger.info("Estimate : "+memory.getMean());
         expectedLowestBid = memory.getMean() - delta;
         expectedHighestAsk = memory.getMean() + delta;
 
         ReportVariableBoard.getInstance().reportValue(EST_EQUILIBRIUM_PRICE,
             memory.getMean(), event);
-
-        double equ = ((TimePeriodValue) ReportVariableBoard.getInstance()
-            .getValue(ReportVariableBoardUpdater.EQUIL_PRICE)).getValue()
-            .doubleValue();
-        ReportVariableBoard.getInstance().reportValue(
-            EST_EQUILIBRIUM_PRICE_DEVIATION,
-            Math.abs(memory.getMean() - equ) * 100 / equ, event);
       }
 
-    }
-  }
-
-  class FixedLengthQueue {
-    double list[];
-
-    int curIndex;
-
-    double sum;
-
-    int count;
-
-    public FixedLengthQueue( int length ) {
-      assert (length >= 0);
-      list = new double[length];
-    }
-
-    public void initialize() {
-      for ( int i = 0; i < list.length; i++ ) {
-        list[i] = 0;
-      }
-      curIndex = 0;
-      sum = 0;
-      count = 0;
-    }
-
-    public void newData( double value ) {
-      sum -= list[curIndex];
-      list[curIndex] = value;
-      sum += value;
-
-      curIndex++;
-      curIndex %= list.length;
-
-      count++;
-    }
-
-    public int count() {
-      return (count >= list.length) ? list.length : count;
-    }
-
-    public double getMean() {
-      return sum / count();
     }
   }
 }

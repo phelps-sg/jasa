@@ -164,6 +164,11 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
   public void reset() {
     shoutEngine.reset();
+    
+    if ( pricingPolicy instanceof Resetable ) {
+    	((Resetable)pricingPolicy).reset();
+    }
+    
     initialise();
   }
 

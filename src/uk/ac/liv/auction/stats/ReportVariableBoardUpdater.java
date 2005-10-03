@@ -26,6 +26,9 @@ import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
+import uk.ac.liv.util.FixedLengthQueue;
+import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Resetable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -36,19 +39,38 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public class ReportVariableBoardUpdater extends AbstractAuctionReport {
+public class ReportVariableBoardUpdater extends AbstractAuctionReport implements Parameterizable, Resetable {
 
   public static String TRANS_PRICE = "transaction.price";
+  public static String TRANS_ASK_PRICE = "transaction.ask.price";
+  public static String TRANS_BID_PRICE = "transaction.bid.price";
+  
+  public static String TRANS_PRICE_MEAN = "transaction.price.mean";
+
+
+  public static String TRANS_PRICE_SPREAD = "transaction.price.spread";
 
   public static String EQUIL_PRICE = "equilibrium.price";
+  
+  public static String P_TRANS_PRICE_MEMORY = "transpricememory";
 
   /**
    * @uml.property name="equilPrice"
    */
   protected double equilPrice;
-
+  
+  protected FixedLengthQueue transPrices;
+  
   public void produceUserOutput() {
   }
+  
+  public void setup( ParameterDatabase parameters, Parameter base ) {
+  	transPrices = new FixedLengthQueue(parameters.getIntWithDefault(base.push(P_TRANS_PRICE_MEMORY), null, 3));
+  }
+  
+  public void reset() {
+  	transPrices.reset();
+  }  
 
   public Map getVariables() {
     return new HashMap();
@@ -61,6 +83,30 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport {
           new TimePeriodValue(
               new Millisecond(new Date(event.getPhysicalTime())),
               ((TransactionExecutedEvent) event).getPrice()));
+      
+      transPrices.newData(((TransactionExecutedEvent) event).getPrice());
+      ReportVariableBoard.getInstance().reportValue(
+      		TRANS_PRICE_MEAN,
+          new TimePeriodValue(
+              new Millisecond(new Date(event.getPhysicalTime())),
+              transPrices.getMean()));
+      
+      ReportVariableBoard.getInstance().reportValue(
+      		TRANS_PRICE_SPREAD,
+          new TimePeriodValue(
+              new Millisecond(new Date(event.getPhysicalTime())),
+              ((TransactionExecutedEvent) event).getBid().getPrice() - 
+              ((TransactionExecutedEvent) event).getAsk().getPrice()));
+      ReportVariableBoard.getInstance().reportValue(
+          TRANS_ASK_PRICE,
+          new TimePeriodValue(
+              new Millisecond(new Date(event.getPhysicalTime())),
+              ((TransactionExecutedEvent) event).getAsk().getPrice()));
+      ReportVariableBoard.getInstance().reportValue(
+          TRANS_BID_PRICE,
+          new TimePeriodValue(
+              new Millisecond(new Date(event.getPhysicalTime())),
+              ((TransactionExecutedEvent) event).getBid().getPrice()));
     } else if ( event instanceof AuctionOpenEvent ) {
       EquilibriumReport eqmReport = new EquilibriumReport(getAuction());
       eqmReport.calculate();
@@ -75,9 +121,6 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport {
           new TimePeriodValue(
               new Millisecond(new Date(event.getPhysicalTime())), equilPrice));
     }
-  }
-
-  public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
 }

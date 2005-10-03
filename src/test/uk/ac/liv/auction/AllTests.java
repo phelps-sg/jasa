@@ -33,6 +33,7 @@ public class AllTests {
     suite.addTest(test.uk.ac.liv.util.DiscreteProbabilityDistributionTest.suite());
     suite.addTest(test.uk.ac.liv.util.CummulativeDistributionTest.suite());
     suite.addTest(test.uk.ac.liv.util.HeavyweightDistributionTest.suite());
+    suite.addTest(test.uk.ac.liv.util.FixedLengthQueueTest.suite());
     
     suite.addTest(test.uk.ac.liv.prng.GlobalPRNGTest.suite());
 

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
@@ -80,6 +81,8 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
       updateTransPriceLog((TransactionExecutedEvent) event);
     } else if ( event instanceof ShoutPlacedEvent ) {
       updateShoutLog((ShoutPlacedEvent) event);
+    } else if ( event instanceof AuctionClosedEvent ) {
+    	ReportVariableBoard.getInstance().reportValues(getVariables(), event);
     }
   }
 
@@ -129,7 +132,6 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
         new CummulativeDistribution("Ask Price"),
         new CummulativeDistribution("Bid Quote"),
         new CummulativeDistribution("Ask Quote") };
-
   }
 
   public void reset() {
@@ -166,6 +168,7 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 
   public Map getVariables() {
     HashMap vars = new HashMap();
+    createReportVars(vars, "transactionprice", stats[TRANS_PRICE]);
     createReportVars(vars, "askprice", stats[ASK_PRICE]);
     createReportVars(vars, "bidprice", stats[BID_PRICE]);
     createReportVars(vars, "askquote", stats[ASK_QUOTE]);

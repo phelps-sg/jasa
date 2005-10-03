@@ -16,7 +16,7 @@
 package uk.ac.liv.auction.core;
 
 /**
- * @author Steve Phelps
+ * @author Jinzhong Niu
  * @version $Revision$
  */
 public class InOrderPricingPolicy extends DiscriminatoryPricingPolicy {
