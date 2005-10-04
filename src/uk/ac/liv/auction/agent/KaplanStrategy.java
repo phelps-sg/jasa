@@ -77,7 +77,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
    * The time factor. Kaplan will bid if the remaining time in the current
    * period is less than t.
    */
-  protected double t = 4;
+  protected int t = 4;
 
   /**
    * The spread factor.
@@ -98,7 +98,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    t = parameters.getDoubleWithDefault(base.push(P_T), null, t);
+    t = parameters.getIntWithDefault(base.push(P_T), null, t);
     s = parameters.getDoubleWithDefault(base.push(P_S), null, s);
   }
 
@@ -189,14 +189,15 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
 
     transPrice = dailyStats.getPreviousDayTransPriceStats();
 
-    if ( agent.isBuyer() ) {
+    double spread = Math.abs(quote.getAsk() - quote.getBid());    
+    if ( agent.isBuyer() ) {      
       smallSpread =
-      // quote.getAsk() < transPrice.getMax() &&
-      (Math.abs(quote.getBid() - quote.getAsk()) / quote.getAsk()) < s;
+        (transPrice == null || (quote.getAsk() < transPrice.getMax())) &&
+          (spread / quote.getAsk()) < s;
     } else {
       smallSpread =
-      // quote.getBid() > transPrice.getMin() &&
-      (Math.abs(quote.getBid() - quote.getAsk()) / quote.getBid()) < s;
+        (transPrice == null || (quote.getBid() > transPrice.getMin())) &&
+          (spread / quote.getBid()) < s;
     }
 
     if ( smallSpread ) {
@@ -217,11 +218,19 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
   public double getS() {
     return s;
   }
-
+  
+  public void setS( double s ) {
+    this.s = s;
+  }
+  
   public double getT() {
     return t;
   }
-
+  
+  public void setT( int t ) {
+    this.t = t;
+  }
+  
   public String toString() {
     return "(" + getClass() + " s:" + s + " t:" + t + ")";
   }
