@@ -59,8 +59,7 @@ public class McAfeeClearingHouseAuctioneer extends TransparentAuctioneer {
     }
     if ( ! efficientClearing ) {
       a1 = shoutEngine.getLowestMatchedBid().getPrice();
-      b1 = shoutEngine.getHighestMatchedAsk().getPrice();
-      
+      b1 = shoutEngine.getHighestMatchedAsk().getPrice();      
     }
     Iterator matchedShouts = shoutEngine.getMatchedShouts().iterator();
     while ( matchedShouts.hasNext() ) {
@@ -70,7 +69,9 @@ public class McAfeeClearingHouseAuctioneer extends TransparentAuctioneer {
         recordMatch(ask, bid);
         auction.clear(ask, bid, p0);
       } else {
-        auction.clear(ask, bid, a1, b1, ask.getQuantity());
+        if ( bid.getPrice() > a1 ) {
+          auction.clear(ask, bid, a1, b1, ask.getQuantity());
+        }
       }
     }
   }
