@@ -17,6 +17,17 @@ package uk.ac.liv.auction.core;
 
 import java.util.Iterator;
 
+/**
+ * An implementation of the mechanism described in 
+ * 
+ * "A Dominant Strategy Double Auction"
+ * R. Preston McAfee
+ * Journal of Economic Theory Vol 56 pages 434-450
+ * 1992
+ * 
+ * @author Steve Phelps
+ * @version $Revision$
+ */
 public class McAfeeClearingHouseAuctioneer extends TransparentAuctioneer {
 
   protected Account account ;
