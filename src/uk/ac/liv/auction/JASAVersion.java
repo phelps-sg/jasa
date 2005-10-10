@@ -21,15 +21,15 @@ package uk.ac.liv.auction;
 
 public class JASAVersion {
   
-  static final int minorVersion = 35;
+  static final int minorVersion = -1;
   
-  static final int majorVersion = 0;
+  static final int majorVersion = 35;
 
-  static final int buildNumber = 524;
+  static final int buildNumber = -1;
 
-  static final String buildDate = "2005/08/25 18:07";
+  static final String buildDate = "NA";
 
-  static final String buildHost = "mobile.sci.ccny.cuny.edu";
+  static final String buildHost = "Dev";
 
   public static final String GNU_MESSAGE =
     "\n" +
