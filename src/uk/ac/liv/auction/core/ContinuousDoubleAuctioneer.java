@@ -27,15 +27,18 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class ContinuousDoubleAuctioneer extends AbstractAuctioneer implements
-                                                            Serializable {
+public class ContinuousDoubleAuctioneer extends TransparentAuctioneer 
+      implements Serializable {
 
+  protected ZeroFundsAccount account;
+  
   public ContinuousDoubleAuctioneer() {
     this(null);
   }
 
   public ContinuousDoubleAuctioneer( Auction auction ) {
     super(auction);
+    account = new ZeroFundsAccount(this);
     setPricingPolicy(new DiscriminatoryPricingPolicy(0));
   }
 
@@ -45,10 +48,11 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer implements
   }
 
   public void endOfRoundProcessing() {    
+    super.endOfRoundProcessing();
   }
 
   public void endOfAuctionProcessing() {
-    // do nothing
+    super.endOfAuctionProcessing();
   }
 
   public boolean shoutsVisible() {
@@ -75,6 +79,10 @@ public class ContinuousDoubleAuctioneer extends AbstractAuctioneer implements
         askNotAnImprovementException();
       }      
     }
+  }
+  
+  public Account getAccount() {
+    return account;
   }
   
   protected void askNotAnImprovementException()

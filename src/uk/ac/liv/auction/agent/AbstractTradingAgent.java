@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.core.Account;
 import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
@@ -105,7 +106,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   /**
    * The number of items of stock this agent posseses.
    */
-  protected int stock = 0;
+  protected CommodityHolding stock = new CommodityHolding();
 
   /**
    * The initial stock of this agent
@@ -115,7 +116,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   /**
    * The amount of money this agent posseses.
    */
-  protected double funds = 0;
+  protected Account account;
 
   /**
    * The initial amount of money for this agent
@@ -209,6 +210,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
     id = idAllocator.nextId();
     initialStock = stock;
     initialFunds = funds;
+    account = new Account(this, initialFunds);
     this.valuer = new FixedValuer(privateValue);
     this.isSeller = isSeller;
     initialise();
@@ -326,20 +328,23 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   public Shout getCurrentShout() {
     return currentShout;
   }
-
-  public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
-      int quantity, double price ) {
-    seller.informOfBuyer(auction, this, price, quantity);
-    giveFunds(seller, price * quantity);
-    stock += seller.deliver(auction, quantity, price);
-    lastProfit = quantity * (valuer.determineValue(auction) - price);
-    profits += lastProfit;
-    valuer.consumeUnit(auction);
+//
+//  public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
+//      int quantity, double price ) {
+//    seller.informOfBuyer(auction, this, price, quantity);
+//    giveFunds(seller, price * quantity);
+//    stock.add(seller.deliver(auction, quantity, price));
+//    lastProfit = quantity * (valuer.determineValue(auction) - price);
+//    profits += lastProfit;
+//    valuer.consumeUnit(auction);
+//  }
+  
+  public Account getAccount() {
+    return account;
   }
 
   public synchronized void giveFunds( AbstractTradingAgent seller, double amount ) {
-    funds -= amount;
-    seller.pay(amount);
+   account.transfer(seller.getAccount(), amount);
   }
 
   /**
@@ -350,7 +355,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
    *          The total amount of money to give to the seller
    */
   public synchronized void pay( double amount ) {
-    funds += amount;
+    account.credit(amount);
   }
 
   /**
@@ -360,7 +365,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
    *          The number of items of stock to transfer
    */
   public int deliver( Auction auction, int quantity, double price ) {
-    stock -= quantity;
+    stock.remove(quantity);
     lastProfit = quantity * (price - valuer.determineValue(auction));
     if ( lastProfit < 0 ) {
       logger.debug("Negative profit for seller trading at price " + price);
@@ -373,18 +378,19 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   public long getId() {
     return id;
   }
-
+  
   public double getFunds() {
-    return funds;
+    return account.getFunds();
   }
 
+
   public int getStock() {
-    return stock;
+    return stock.getQuantity();
   }
 
   protected void initialise() {
-    stock = initialStock;
-    funds = initialFunds;
+    stock.setQuantity(initialStock);
+    account.setFunds(initialFunds);
     lastProfit = 0;
     profits = 0;
     lastShoutAccepted = false;
@@ -457,15 +463,24 @@ public abstract class AbstractTradingAgent implements TradingAgent,
     }
     return copy;
   }
-
-  public void informOfSeller( Auction auction, Shout winningShout,
-      TradingAgent seller, double price, int quantity ) {
-    lastShoutAccepted = true;
+  
+  public void cashIn( Auction auction, int quantity, double price ) {
+    assert isBuyer();
+    stock.remove(quantity);
+    lastProfit = (getValuation(auction) - price) * quantity;
+    profits += lastProfit;
+    account.credit(lastProfit);
   }
-
-  public void informOfBuyer( Auction auction, TradingAgent buyer, double price,
-      int quantity ) {
+  
+  public void shoutAccepted( Auction auction, Shout shout, double price, 
+                              int quantity ) {
     lastShoutAccepted = true;
+    if ( isBuyer() ) {
+      cashIn(auction, quantity, price);
+    } else {
+      lastProfit = (price - getValuation(auction)) * quantity;
+      profits += lastProfit;
+    }
   }
 
   public boolean lastShoutAccepted() {
@@ -488,6 +503,10 @@ public abstract class AbstractTradingAgent implements TradingAgent,
     this.group = group;
   }
 
+  public CommodityHolding getCommodityHolding() {
+    return stock;
+  }
+  
   public boolean equals( Object other ) {
     return this.id == ((AbstractTradingAgent) other).id;
   }

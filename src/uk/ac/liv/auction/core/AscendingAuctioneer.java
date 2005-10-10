@@ -30,7 +30,7 @@ import java.io.Serializable;
  * Auctioneer for standard multi-unit english ascending auction.
  */
 
-public class AscendingAuctioneer extends AbstractAuctioneer implements
+public class AscendingAuctioneer extends TransparentAuctioneer implements
     Serializable {
 
   /**
@@ -47,6 +47,8 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements
    * @uml.associationEnd
    */
   protected TradingAgent seller;
+  
+  protected Account account;
 
   /**
    * The number of items for sale.
@@ -72,7 +74,8 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements
     this.seller = seller;
 
     setPricingPolicy(new UniformPricingPolicy(0));
-
+    account = new Account(this, 0);
+    
     initialise();
   }
 
@@ -109,10 +112,12 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements
   }
 
   public void endOfRoundProcessing() {
+    super.endOfRoundProcessing();
     generateQuote();
   }
 
   public void endOfAuctionProcessing() {
+    super.endOfAuctionProcessing();
     logger.debug("Clearing at end of auction..");
     shoutEngine.printState();
     clear();
@@ -135,6 +140,10 @@ public class AscendingAuctioneer extends AbstractAuctioneer implements
 
   public boolean shoutsVisible() {
     return true;
+  }
+  
+  public Account getAccount() {
+    return account;
   }
 
 }

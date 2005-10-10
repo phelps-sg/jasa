@@ -169,34 +169,30 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
   public boolean active() {
     return isActive;
   }
-
-  /**
-   * Default behaviour for winning ZI bidders is to purchase unconditionally.
-   */
-  public void informOfSeller( Auction auction, Shout winningShout,
-      TradingAgent seller, double price, int quantity ) {
-    super.informOfSeller(auction, winningShout, seller, price, quantity);
-    AbstractTradingAgent agent = (AbstractTradingAgent) seller;
-    if ( price > valuer.determineValue(auction) ) {
-      logger.debug("Unprofitable transaction, price=" + price + ", shout="
-          + winningShout);
+  
+  public void shoutAccepted( Auction auction, Shout shout, double price, int quantity ) {
+    super.shoutAccepted(auction, shout, price, quantity);
+    if ( (isBuyer() && price > valuer.determineValue(auction)) ||
+            (isSeller() && price < valuer.determineValue(auction)) ) {
+      logger.debug("Unprofitable transaction");
     }
-    purchaseFrom(auction, agent, quantity, price);
+   quantityTraded += quantity;
+   tradeEntitlement -= quantity;
   }
-
-  public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
-      int quantity, double price ) {
-    tradeEntitlement--;
-    quantityTraded += quantity;
-    super.purchaseFrom(auction, seller, quantity, price);
-  }
-
-  public int deliver( Auction auction, int quantity, double price ) {
-    lastShoutSuccessful = true;
-    tradeEntitlement--;
-    quantityTraded += quantity;
-    return super.deliver(auction, quantity, price);
-  }
+//
+//  public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
+//      int quantity, double price ) {
+//    tradeEntitlement--;
+//    quantityTraded += quantity;
+//    super.purchaseFrom(auction, seller, quantity, price);
+//  }
+//
+//  public int deliver( Auction auction, int quantity, double price ) {
+//    lastShoutSuccessful = true;
+//    tradeEntitlement--;
+//    quantityTraded += quantity;
+//    return super.deliver(auction, quantity, price);
+//  }
 
   public double equilibriumProfits( Auction auction, double equilibriumPrice,
       int quantity ) {
@@ -213,9 +209,9 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     return auction.getDay() * initialTradeEntitlement * surplus;
   }
 
-  public void sellUnits( Auction auction, int numUnits ) {
-    stock -= numUnits;
-    funds += numUnits * valuer.determineValue(auction);
+  public void sellUnits( Auction auction, int numUnits ) {    
+    stock.remove(numUnits);
+    account.credit(numUnits * valuer.determineValue(auction));
   }
 
   /**

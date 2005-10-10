@@ -37,6 +37,7 @@ public class QuiescentDayEndingCondition extends TimingCondition implements DayE
    * Returns true if no bidding activity occured in the latest auction round.
    */
   private boolean isQuiescent() {
-    return !((RoundRobinAuction)getAuction()).shoutsProcessed() || getAuction().getNumberOfTraders() == 0;
+    return !(getAuction().shoutsProcessed() || 
+              getAuction().getNumberOfTraders() == 0);
   }
 }

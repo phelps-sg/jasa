@@ -75,23 +75,24 @@ public class AbstractTraderAgentTest extends TestCase {
         new Shout(trader1, 1, TRADER1_VALUE - 100, true) }));
 
     trader2.setStrategy(new MockStrategy(new Shout[] {
-        new Shout(trader1, 1, TRADER1_VALUE + 100, true),
-        new Shout(trader1, 1, TRADER1_VALUE + 50, true),
-        new Shout(trader1, 1, TRADER1_VALUE, true),
-        new Shout(trader1, 1, TRADER1_VALUE + 100, true) }));
+        new Shout(trader2, 1, TRADER2_VALUE + 100, true),
+        new Shout(trader2, 1, TRADER2_VALUE + 50, true),
+        new Shout(trader2, 1, TRADER2_VALUE, true),
+        new Shout(trader2, 1, TRADER2_VALUE + 100, true) }));
 
     auction = new RoundRobinAuction();
     AbstractAuctioneer auctioneer = new ClearingHouseAuctioneer(auction);
     auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);
     auction.register(trader1);
-    auction.register(trader2);
+    auction.register(trader2);   
   }
 
   public void testPurchase() {
     System.out.println("trader1 = " + trader1);
     System.out.println("trader2 = " + trader2);
-    trader1.purchaseFrom(auction, trader2, 5, 1000);
+    trader1.getAccount().transfer(trader2.getAccount(), 5000);
+    trader2.getCommodityHolding().transfer(trader1.getCommodityHolding(), 5);
     System.out.println("after purchase");
     System.out.println("trader1 = " + trader1);
     System.out.println("trader2 = " + trader2);
@@ -99,10 +100,6 @@ public class AbstractTraderAgentTest extends TestCase {
     assertTrue(trader2.getStock() == TRADER2_STOCK - 5);
     assertTrue(trader1.getFunds() == TRADER1_FUNDS - 5000);
     assertTrue(trader2.getFunds() == TRADER2_FUNDS + 5000);
-    assertTrue(trader1.getProfits() == (TRADER1_VALUE - 1000) * 5);
-    assertTrue(trader2.getProfits() == (1000 - TRADER2_VALUE) * 5);
-    assertTrue(trader1.getProfits() == trader1.getLastProfit());
-    assertTrue(trader2.getProfits() == trader2.getLastProfit());
     trader1.reset();
     assertTrue(trader1.getFunds() == TRADER1_FUNDS);
     assertTrue(trader1.getStock() == TRADER1_STOCK);
@@ -126,20 +123,22 @@ public class AbstractTraderAgentTest extends TestCase {
     try {
 
       auction.step();
-      assertTrue(!trader1.lastShoutAccepted());
-      assertTrue(!trader2.lastShoutAccepted());
-
-      auction.step();
       assertTrue(!((MockStrategy) trader1.getStrategy()).lastShoutAccepted);
       assertTrue(!((MockStrategy) trader2.getStrategy()).lastShoutAccepted);
       assertTrue(!trader1.lastShoutAccepted());
       assertTrue(!trader2.lastShoutAccepted());
 
-      auction.step();
+      auction.step();    
       assertTrue(trader1.lastShoutAccepted());
-      trader1.purchaseFrom(auction, trader2, 1, TRADER1_VALUE);
+//      trader1.purchaseFrom(auction, trader2, 1, TRADER1_VALUE);
       assertTrue(trader2.lastShoutAccepted());
 
+      auction.step();
+      assertTrue(((MockStrategy) trader1.getStrategy()).lastShoutAccepted);
+      assertTrue(((MockStrategy) trader2.getStrategy()).lastShoutAccepted);
+      assertTrue(trader1.lastShoutAccepted());
+      assertTrue(trader2.lastShoutAccepted());
+      
       auction.step();
       assertTrue(((MockStrategy) trader1.getStrategy()).lastShoutAccepted);
       assertTrue(((MockStrategy) trader2.getStrategy()).lastShoutAccepted);
@@ -166,13 +165,13 @@ public class AbstractTraderAgentTest extends TestCase {
       assertTrue(trader2.getLastProfit() == 0);
 
       auction.step();
-      assertTrue(trader1.getLastProfit() == 0);
-      assertTrue(trader2.getLastProfit() == 0);
+      assertTrue(trader1.getLastProfit() == 55);
+      assertTrue(trader2.getLastProfit() == 55);
 
       auction.step();
-      trader1.purchaseFrom(auction, trader2, 1, TRADER1_VALUE - 100);
-      assertTrue(trader1.getLastProfit() > 0);
-
+      assertTrue(trader1.getLastProfit() == 55);
+      assertTrue(trader2.getLastProfit() == 55);
+      
       auction.step();
       assertTrue(trader1.getLastProfit() == 0);
       assertTrue(trader2.getLastProfit() == 0);

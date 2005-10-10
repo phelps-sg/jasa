@@ -1,6 +1,6 @@
 /*
  * JASA Java Auction Simulator API
- * Copyright (C) 2001-2005 Steve Phelps
+ * Copyright (C) 2001-2004 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -12,25 +12,23 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
-
 package uk.ac.liv.auction.core;
 
-/**
- * @author Jinzhong Niu
- * @version $Revision$
- */
-public class InOrderPricingPolicy extends DiscriminatoryPricingPolicy {
+import uk.ac.liv.util.MathUtil;
 
-  public double determineClearingPrice( Shout bid, Shout ask,
-                                          MarketQuote clearingQuote ) {
+public class ZeroFundsAccount  extends Account {    
 
-    if ( bid.getId() > ask.getId() ) {
-      // ask comes first
-      return kInterval(ask.getPrice(), bid.getPrice());
-    } else {
-      // bid comes first
-      return kInterval(bid.getPrice(), ask.getPrice());
-    }
-  } 
+  public ZeroFundsAccount( Object owner ) {
+    super(owner, 0);    
+  }
   
+  public ZeroFundsAccount() {
+    super();
+  }
+
+  public void doubleEntry( Account payer, double charge, Account payee, double payment ) {   
+    super.doubleEntry(payer, charge, payee, payment);
+    assert MathUtil.approxEqual(funds, 0);
+  }
+    
 }

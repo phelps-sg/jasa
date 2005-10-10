@@ -405,6 +405,14 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     assert bIn.isEmpty();
     return result;
   }
+    
+  public boolean noMatchedShouts() {
+    return bIn.isEmpty();
+  }
+
+  public boolean noUnmatchedShouts() {
+    return bOut.isEmpty();
+  }
 
   protected void initialise() {
     bIn.clear();

@@ -18,7 +18,6 @@ package uk.ac.liv.auction.electricity;
 import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.event.AuctionEvent;
 
-import uk.ac.liv.auction.agent.TradingAgent;
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.agent.FixedQuantityStrategy;
@@ -124,14 +123,14 @@ public class ElectricityTrader extends AbstractTradingAgent {
     super.requestShout(auction);
     lastProfit = 0;
   }
-
-  public void informOfSeller( Auction auction, Shout winningShout,
-      TradingAgent seller, double price, int quantity ) {
-    super.informOfSeller(auction, winningShout, seller, price, quantity);
-    if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) ) {
-      purchaseFrom(auction, (ElectricityTrader) seller, quantity, price);
-    }
-  }
+//
+//  public void informOfSeller( Auction auction, Shout winningShout,
+//      TradingAgent seller, double price, int quantity ) {
+//    super.informOfSeller(auction, winningShout, seller, price, quantity);
+//    if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) ) {
+//      purchaseFrom(auction, (ElectricityTrader) seller, quantity, price);
+//    }
+//  }
 
   public boolean acceptDeal( Auction auction, double price, int quantity ) {
     assert isSeller;

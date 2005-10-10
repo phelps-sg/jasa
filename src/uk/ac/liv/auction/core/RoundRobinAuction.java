@@ -178,14 +178,8 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * @uml.property name="age"
    */
   protected int age = 0;
-
-  /**
-   * Were any shouts processed (received & accepted) in the last round of
-   * trading?
-   * 
-   * @uml.property name="shoutsProcessed"
-   */
-  protected boolean shoutsProcessed;
+  
+  protected Account account = new Account();
 
   /**
    * Optional graphical console
@@ -203,15 +197,6 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
   protected int day = 0;
 
   /**
-   * The set of shouts that have been matched in the current round.
-   * 
-   * @uml.property name="acceptedShouts"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.core.Shout"
-   */
-  protected HashSet acceptedShouts = new HashSet();
-
-  /**
    * @uml.property name="closingCondition"
    * @uml.associationEnd
    */
@@ -222,6 +207,8 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * @uml.associationEnd
    */
   protected TimingCondition dayEndingCondition;
+  
+  protected boolean shoutsProcessed;
 
   public static final String P_REPORT = "report";
 
@@ -355,25 +342,35 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
 
     initialise();
   }
+  
+  public void clear( Shout ask, Shout bid, double transactionPrice ) {
+    assert ask.getQuantity() == bid.getQuantity();
+    assert transactionPrice >= ask.getPrice();
+    assert transactionPrice <= bid.getPrice();
+    clear(ask, bid, transactionPrice, transactionPrice, ask.getQuantity());
+  }
 
-  public void clear( Shout ask, Shout bid, double trPrice ) {
+  public void clear( Shout ask, Shout bid, double buyerCharge, double sellerPayment, int quantity ) {
 
     TradingAgent buyer = (TradingAgent) bid.getAgent();
     TradingAgent seller = (TradingAgent) ask.getAgent();
 
     assert buyer.isBuyer();
     assert seller.isSeller();
-    assert trPrice >= ask.getPrice();
-    assert trPrice <= bid.getPrice();
-
+   
     TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
-        this, round, ask, bid, trPrice, ask.getQuantity());
+        this, round, ask, bid, buyerCharge, ask.getQuantity());
     fireEvent(transactionEvent);
 
-    buyer.informOfSeller(this, ask, seller, trPrice, ask.getQuantity());
+    auctioneer.getAccount().doubleEntry(buyer.getAccount(), buyerCharge, 
+                                        seller.getAccount(), sellerPayment);    
+    buyer.getCommodityHolding().transfer(seller.getCommodityHolding(), quantity);
+    
+    buyer.shoutAccepted(this, bid, buyerCharge, quantity);
+    seller.shoutAccepted(this, ask, sellerPayment, quantity);    
 
-    acceptedShouts.add(ask);
-    acceptedShouts.add(bid);
+//    acceptedShouts.add(ask);
+//    acceptedShouts.add(bid);
   }
 
   /**
@@ -381,11 +378,12 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * of trading.
    */
   public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException {
-    if ( auctioneer.shoutsVisible() ) {
-      return acceptedShouts.contains(shout);
-    } else {
-      throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
-    }
+//    if ( auctioneer.shoutsVisible() ) {
+//      return acceptedShouts.contains(shout);
+//    } else {
+//      throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
+//    }
+    return auctioneer.shoutAccepted(shout);
   }
 
   /**
@@ -393,11 +391,12 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * round of trading.
    */
   public boolean transactionsOccured() throws ShoutsNotVisibleException {
-    if ( auctioneer.shoutsVisible() ) {
-      return !acceptedShouts.isEmpty();
-    } else {
-      throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
-    }
+//    if ( auctioneer.shoutsVisible() ) {
+//      return !acceptedShouts.isEmpty();
+//    } else {
+//      throw new ShoutsNotVisibleException(ERROR_SHOUTSVISIBLE);
+//    }
+    return auctioneer.transactionsOccurred();
   }
 
   /**
@@ -475,14 +474,14 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * Get the last bid placed in the auction.
    */
   public Shout getLastBid() throws ShoutsNotVisibleException {
-    return lastBid;
+    return auctioneer.getLastBid();
   }
 
   /**
    * Get the last ask placed in the auction.
    */
   public Shout getLastAsk() throws ShoutsNotVisibleException {
-    return lastAsk;
+    return auctioneer.getLastAsk();
   }
 
   /**
@@ -532,8 +531,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     if ( closingCondition != null && closingCondition.eval() ) {
       close();
     } else {
-      shoutsProcessed = false;
-      acceptedShouts.clear();
+      shoutsProcessed = false;      
       requestShouts();
       round++;
       age++;
@@ -585,7 +583,6 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
 
     super.reset();
 
-    acceptedShouts.clear();
     defunctTraders.clear();
     activeTraders.clear();
 

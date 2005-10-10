@@ -69,7 +69,8 @@ public interface Auction extends QuoteProvider {
    * Handle a single clearing operation between two traders
    */
   public void clear( Shout ask, Shout bid, double price );
-
+  public void clear( Shout ask, Shout bid, double buyerCharge, double sellerPayment, int quantity );
+  
   /**
    * Get the age of the auction in unspecified units
    */
@@ -100,6 +101,8 @@ public interface Auction extends QuoteProvider {
    * of trading.
    */
   public boolean transactionsOccured() throws ShoutsNotVisibleException;
+  
+  public boolean shoutsProcessed();
 
   public AuctionReport getReport( Class reportClass );
 

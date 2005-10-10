@@ -19,7 +19,6 @@ import uk.ac.liv.auction.core.*;
 import uk.ac.liv.auction.event.AuctionEvent;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.TradingAgent;
 
 import junit.framework.TestCase;
 
@@ -86,24 +85,34 @@ public class MockTrader extends AbstractTradingAgent {
     super(stock, funds, privateValue, isSeller);
     this.test = test;
   }
+  
+  
+  
 
-  public void informOfSeller( Auction auction, Shout winningShout,
-      TradingAgent seller, double price, int quantity ) {
-    super.informOfSeller(auction, winningShout, seller, price, quantity);
-    test.assertTrue(((AbstractTradingAgent) seller).isSeller());
-    System.out.println(this + ": winning shout " + winningShout + " at price "
-        + price + " and quantity " + quantity + " and seller: " + seller);
-    lastWinningShout = winningShout;
-    lastWinningPrice = price;
-    purchaseFrom(auction, (AbstractTradingAgent) seller, quantity, price);
-  }
+//  public void informOfSeller( Auction auction, Shout winningShout,
+//      TradingAgent seller, double price, int quantity ) {
+//    super.informOfSeller(auction, winningShout, seller, price, quantity);
+//    test.assertTrue(((AbstractTradingAgent) seller).isSeller());
+//    System.out.println(this + ": winning shout " + winningShout + " at price "
+//        + price + " and quantity " + quantity + " and seller: " + seller);
+//    lastWinningShout = winningShout;
+//    lastWinningPrice = price;
+//    purchaseFrom(auction, (AbstractTradingAgent) seller, quantity, price);
+//  }
+//
+//  public void informOfBuyer( Auction auction, TradingAgent buyer, double price,
+//      int quantity ) {
+//    super.informOfBuyer(auction, buyer, price, quantity);
+//    test.assertTrue(((AbstractTradingAgent) buyer).isBuyer());
+//    lastWinningPrice = price;
+//    lastWinningShout = getCurrentShout();
+//  }
 
-  public void informOfBuyer( Auction auction, TradingAgent buyer, double price,
-      int quantity ) {
-    super.informOfBuyer(auction, buyer, price, quantity);
-    test.assertTrue(((AbstractTradingAgent) buyer).isBuyer());
+  public void shoutAccepted( Auction auction, Shout shout, double price, int quantity ) {    
+    super.shoutAccepted(auction, shout, price, quantity);
+    System.out.println(this + ": winning shout " + shout + " at price " + price + " and quantity " + quantity);
+    lastWinningShout = shout;
     lastWinningPrice = price;
-    lastWinningShout = getCurrentShout();
   }
 
   public int determineQuantity( Auction auction ) {
@@ -112,6 +121,7 @@ public class MockTrader extends AbstractTradingAgent {
 
   public void requestShout( Auction auction ) {
     super.requestShout(auction);
+    System.out.println(this + ": placed " + currentShout);
     receivedRequestShout++;
   }
 
@@ -150,7 +160,7 @@ public class MockTrader extends AbstractTradingAgent {
   public String toString() {
     return "(" + getClass() + " id:" + id + " isSeller:" + isSeller
         + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:"
-        + funds + " stock:" + stock + ")";
+        + account + " account:" + account + ")";
   }
 
 }

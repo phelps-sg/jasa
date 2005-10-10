@@ -186,10 +186,11 @@ public abstract class AuctionImpl extends Observable implements Auction,
    * @uml.property name="lastShout"
    */
   public Shout getLastShout() throws ShoutsNotVisibleException {
-    if ( !auctioneer.shoutsVisible() ) {
-      throw new ShoutsNotVisibleException();
-    }
-    return lastShout;
+//    if ( !auctioneer.shoutsVisible() ) {
+//      throw new ShoutsNotVisibleException();
+//    }
+//    return lastShout;
+    return auctioneer.getLastShout();
   }
 
   /**

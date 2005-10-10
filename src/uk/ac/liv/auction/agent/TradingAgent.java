@@ -17,6 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.util.Resetable;
 
+import uk.ac.liv.auction.core.Account;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AuctionEventListener;
@@ -46,6 +47,12 @@ public interface TradingAgent extends Resetable, AuctionEventListener {
   public boolean isBuyer();
 
   public boolean isSeller();
+  
+  public Account getAccount();
+  
+  public CommodityHolding getCommodityHolding();
+  
+  public void shoutAccepted( Auction auction, Shout shout, double price, int quantity );
 
   /**
    * This method is used by an auction to notify a buyer that one of its bids
@@ -56,14 +63,14 @@ public interface TradingAgent extends Resetable, AuctionEventListener {
    * @param price
    *          The price of the goods as determined by the auction
    */
-  public void informOfSeller( Auction auction, Shout winningShout,
-      TradingAgent seller, double price, int quantity );
+//  public void informOfSeller( Auction auction, Shout winningShout,
+//      TradingAgent seller, double price, int quantity );
 
   /**
    * This method is used by a buyer to notify a seller that one of its bids has
    * been successful.
    */
-  public void informOfBuyer( Auction auction, TradingAgent buyer, double price,
-      int quantity );
+//  public void informOfBuyer( Auction auction, TradingAgent buyer, double price,
+//      int quantity );
 
 }

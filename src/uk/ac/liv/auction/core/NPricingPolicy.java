@@ -19,9 +19,6 @@ import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
-import uk.ac.liv.auction.stats.PriceStatisticsReport;
 import uk.ac.liv.util.FixedLengthQueue;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;

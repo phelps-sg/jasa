@@ -16,11 +16,14 @@ package test.uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.agent.KaplanStrategy;
 
-import uk.ac.liv.auction.core.AbstractAuctioneer;
+import uk.ac.liv.auction.core.Account;
 import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.Auctioneer;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.core.TransparentAuctioneer;
+import uk.ac.liv.auction.core.ZeroFundsAccount;
+
 import uk.ac.liv.auction.stats.DailyStatsReport;
 
 import junit.framework.Test;
@@ -129,12 +132,15 @@ public class KaplanStrategyTest extends TestCase {
   
 }
 
-class MockAuctioneer extends AbstractAuctioneer {
+class MockAuctioneer extends TransparentAuctioneer {
 
   protected MarketQuote staticQuote;
   
+  protected ZeroFundsAccount account;
+  
   public MockAuctioneer( MarketQuote staticQuote ) {
-    this.staticQuote = staticQuote;    
+    this.staticQuote = staticQuote; 
+    account = new ZeroFundsAccount(this);
   }
   
   public void generateQuote() {
@@ -142,13 +148,19 @@ class MockAuctioneer extends AbstractAuctioneer {
   }
 
   public void endOfAuctionProcessing() {   
+    super.endOfAuctionProcessing();
   }
 
   public void endOfRoundProcessing() {
+    super.endOfRoundProcessing();
   }
 
   public boolean shoutsVisible() {
     return true;
+  }
+  
+  public Account getAccount() {
+    return account;
   }
   
 }

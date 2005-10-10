@@ -245,6 +245,7 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
     while ( i.hasNext() ) {
       Shout bid = (Shout) i.next();
       Shout ask = (Shout) i.next();
+      recordMatch(ask, bid);
       double price = determineClearingPrice(bid, ask);
       auction.clear(ask, bid, price);
     }
@@ -265,5 +266,15 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
   }
 
   public void eventOccurred( AuctionEvent event ) {
+    // default is do nothing
   }
+  
+  public void endOfAuctionProcessing() {
+    // default is do nothing
+  }
+  
+  public void recordMatch( Shout ask, Shout bid ) {
+    // default is do nothing
+  }
+  
 }

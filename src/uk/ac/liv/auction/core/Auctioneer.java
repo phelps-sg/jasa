@@ -78,11 +78,44 @@ public interface Auctioneer extends QuoteProvider, AuctionEventListener {
    * Return true if the shouts of others are visible.
    */
   public boolean shoutsVisible();
+  
+  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException;
+  
+  public boolean transactionsOccurred() throws ShoutsNotVisibleException;   
 
+  public Shout getLastAsk() throws ShoutsNotVisibleException;
+  
+  public Shout getLastBid() throws ShoutsNotVisibleException;
+  
+  public Shout getLastShout() throws ShoutsNotVisibleException;
+  
+  /**
+   * Perform any auctioneer-specific EndOfRoundEvent processing.
+   * Different auction types are implemented by different auctioneers,
+   * which perform different operations at the end of each round.   
+   */
   public void endOfRoundProcessing();
 
+  /**
+   * Perform any auctioneer-specific EndOfAuctionEvent processing.
+   * Different auction types are implemented by different auctioneers,
+   * which perform different operations at the end of each auction.   
+   */
   public void endOfAuctionProcessing();
 
+
+  /**
+   * Perform any auctioneer-specific EndOfDayEvent processing.
+   * Different auction types are implemented by different auctioneers,
+   * which perform different operations at the end of each day.   
+   */
   public void endOfDayProcessing();
+  
+  /**
+   * Get the account which holds any budget surplus or deficit for the
+   * auctioneer.  This is useful when implementing non-budget-balanced
+   * mechanisms.
+   */
+  public Account getAccount();
 
 }

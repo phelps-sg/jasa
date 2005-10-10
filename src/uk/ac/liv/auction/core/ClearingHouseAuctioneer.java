@@ -25,8 +25,10 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class ClearingHouseAuctioneer extends AbstractAuctioneer implements Serializable {
+public class ClearingHouseAuctioneer extends TransparentAuctioneer implements Serializable {
 
+  protected ZeroFundsAccount account;
+  
   public ClearingHouseAuctioneer() {
     this(null);
   }
@@ -34,6 +36,7 @@ public class ClearingHouseAuctioneer extends AbstractAuctioneer implements Seria
   public ClearingHouseAuctioneer( Auction auction ) {
     super(auction);
     setPricingPolicy(new UniformPricingPolicy(0));
+    account = new ZeroFundsAccount(this);
   }
 
   public void generateQuote() {
@@ -41,16 +44,21 @@ public class ClearingHouseAuctioneer extends AbstractAuctioneer implements Seria
   }
 
   public void endOfRoundProcessing() {
+    super.endOfRoundProcessing();
     generateQuote();
     clear();
   }
 
   public void endOfAuctionProcessing() {
-    // do nothing
+    super.endOfAuctionProcessing();
   }
 
   public boolean shoutsVisible() {
     return true;
+  }
+  
+  public Account getAccount() {
+    return account;
   }
 
 }
