@@ -52,7 +52,17 @@ import org.apache.log4j.Logger;
  */
 
 public class RandomValuer extends AbstractRandomValuer implements Serializable {
- 
+
+  /**
+   * The minimum valuation to use.
+   */
+  protected double minValue;
+
+  /**
+   * The maximum valuation to use.
+   */
+  protected double maxValue;
+
   public static final String P_MINVALUE = "minvalue";
 
   public static final String P_MAXVALUE = "maxvalue";
@@ -64,7 +74,10 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
   }
 
   public RandomValuer( double minValue, double maxValue ) {
-    super(minValue, maxValue);
+    super();
+    this.minValue = minValue;
+    this.maxValue = maxValue;
+    initialise();
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -77,5 +90,23 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
     distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
     drawRandomValue();
   }
+
+  public double getMaxValue() {
+    return maxValue;
+  }
+
+  public void setMaxValue( double maxValue ) {
+    this.maxValue = maxValue;
+  }
+
+  public double getMinValue() {
+    return minValue;
+  }
+
+  public void setMinValue( double minValue ) {
+    this.minValue = minValue;
+  }
+  
+  
 
 }

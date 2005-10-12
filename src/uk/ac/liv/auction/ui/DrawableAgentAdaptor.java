@@ -21,9 +21,9 @@ import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
 
+import uk.ac.liv.auction.agent.AbstractRandomValuer;
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.AdaptiveStrategy;
-import uk.ac.liv.auction.agent.RandomValuer;
 import uk.ac.liv.auction.agent.ValuationPolicy;
 import uk.ac.liv.auction.agent.Strategy;
 
@@ -88,8 +88,8 @@ public class DrawableAgentAdaptor implements Drawable {
     this.colorMap = colorMap;
     if ( agent != null ) {
       ValuationPolicy valuer = agent.getValuationPolicy();
-      if ( valuer instanceof RandomValuer ) {
-        scale = (float) ((RandomValuer) valuer).getMaxValue() / 2;
+      if ( valuer instanceof AbstractRandomValuer ) {
+        scale = (float) ((AbstractRandomValuer) valuer).getMaxValue() / 2;
       }
     }
   }

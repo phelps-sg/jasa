@@ -39,9 +39,10 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
   
   protected double rangeMax;
   
-  protected double minValue;
+  protected static double minValue;
   
-  protected double range;
+  protected static double maxValue;
+  
   
   public static final String P_MINVALUEMIN = "minvaluemin";
   public static final String P_MINVALUEMAX = "minvaluemax";
@@ -61,17 +62,28 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
     Uniform minValueDist = new Uniform(minValueMin, minValueMax, GlobalPRNG.getInstance());
     Uniform rangeDist = new Uniform(rangeMin, rangeMax, GlobalPRNG.getInstance());
     minValue = minValueDist.nextDouble();
-    range = rangeDist.nextDouble();
-    distribution = new Uniform(minValue, minValue+range, GlobalPRNG.getInstance()); 
-    drawRandomValue();
+    maxValue = minValue + rangeDist.nextDouble();
+    distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance()); 
+//    drawRandomValue();
   }
   
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
     if ( event instanceof AuctionOpenEvent ) {
+      distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
       drawRandomValue();
     }
   }
+
+  public  double getMaxValue() {
+    return maxValue;
+  }
+
+
+  public  double getMinValue() {
+    return minValue;
+  }
+
 
 
 }

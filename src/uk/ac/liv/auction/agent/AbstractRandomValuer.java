@@ -34,16 +34,6 @@ public abstract class AbstractRandomValuer
   protected double value;
 
   /**
-   * The minimum valuation to use.
-   */
-  protected double minValue;
-
-  /**
-   * The maximum valuation to use.
-   */
-  protected double maxValue;
-
-  /**
    * The probability distribution to use for drawing valuations.
    */
   protected AbstractContinousDistribution distribution;
@@ -52,19 +42,16 @@ public abstract class AbstractRandomValuer
     
   }
 
-  public AbstractRandomValuer( double minValue, double maxValue ) {
-    this.minValue = minValue;
-    this.maxValue = maxValue;
-    initialise();
-  }
   
   public abstract void setup( ParameterDatabase params, Parameter base );
   
   public abstract void initialise();   
 
-  public double determineValue( Auction auction ) {
-    assert minValue >= 0 && maxValue >= minValue && value >= minValue
-        && value <= maxValue;
+  public abstract double getMaxValue();
+
+  public abstract double getMinValue();
+  
+  public double determineValue( Auction auction ) {    
     return value;
   }
 
@@ -81,21 +68,6 @@ public abstract class AbstractRandomValuer
   }
 
 
-  public void setMaxValue( double maxValue ) {
-    this.maxValue = maxValue;
-  }
-
-  public double getMaxValue() {
-    return maxValue;
-  }
-
-  public void setMinValue( double minValue ) {
-    this.minValue = minValue;
-  }
-
-  public double getMinValue() {
-    return minValue;
-  }
 
   public double getCurrentValuation() {
     return value;
@@ -104,11 +76,5 @@ public abstract class AbstractRandomValuer
   public void drawRandomValue() {
     value = distribution.nextDouble();
   }
-
-  public String toString() {
-    return "(" + getClass() + " minValue:" + minValue + " maxValue:" + maxValue
-        + " value:" + value + ")";
-  }
-
 
 }
