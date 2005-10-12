@@ -4,6 +4,7 @@
 
    <property name="build.compiler" value="modern"/>
    <property name="sourceDir" value="src"/>
+   <property name="testDir" value="test"/>
    <property name="buildDir" value="build"/>
    <property name="buildSrc" value="${buildDir}/src"/>
    <property name="outputDir" value="${buildDir}/classes"/>
@@ -73,7 +74,7 @@
    </target>
 
    <target depends="compile,prepareDoc" name="doc">
-     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}" windowtitle="${projectName}">
+     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}:${testDir}" windowtitle="${projectName}">
         <classpath refid="project.classpath"/>
      </javadoc>
    </target>
@@ -123,7 +124,7 @@
     </target>
 
    <target depends="compile" name="test">
-	   <java classname="test.uk.ac.liv.auction.AllTests" fork="true">
+	   <java classname="uk.ac.liv.auction.AllTests" fork="true">
         	<classpath refid="project.classpath"/>
 		<jvmarg value="-ea"/>
 	   </java>
