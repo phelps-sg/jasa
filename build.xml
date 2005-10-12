@@ -73,13 +73,19 @@
      </javac>
    </target>
 
+   <target depends="compile" name="compiletests">
+     <javac debug="on" optimize="on" deprecation="off" destdir="${outputDir}" source="1.4" srcdir="${testDir}">
+	<classpath refid="project.classpath"/>
+     </javac>
+   </target>
+
    <target depends="compile,prepareDoc" name="doc">
      <javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}:${testDir}" windowtitle="${projectName}">
         <classpath refid="project.classpath"/>
      </javadoc>
    </target>
 
-   <target depends="compile" name="jar">
+   <target depends="compile,compiletests" name="jar">
    	<jar basedir="${outputDir}" jarfile="jasa.jar"/>
    </target>
 
@@ -123,7 +129,7 @@
 	   <cvs command="update" compression="3" cvsRoot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" cvsRsh="rsh"/>
     </target>
 
-   <target depends="compile" name="test">
+   <target depends="compile,compiletests" name="test">
 	   <java classname="uk.ac.liv.auction.AllTests" fork="true">
         	<classpath refid="project.classpath"/>
 		<jvmarg value="-ea"/>
