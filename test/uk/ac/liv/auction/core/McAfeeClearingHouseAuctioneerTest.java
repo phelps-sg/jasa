@@ -15,8 +15,11 @@
 
 package uk.ac.liv.auction.core;
 
+import uk.ac.liv.auction.agent.MockStrategy;
 import uk.ac.liv.auction.agent.MockTrader;
+import junit.framework.Test;
 import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class McAfeeClearingHouseAuctioneerTest extends TestCase {
 
@@ -26,7 +29,7 @@ public class McAfeeClearingHouseAuctioneerTest extends TestCase {
   
   MockTrader[] traders;
   
-  static final int N = 4;
+  static final int N = 6;
   
   public McAfeeClearingHouseAuctioneerTest( String name ) {
     super(name);   
@@ -51,9 +54,130 @@ public class McAfeeClearingHouseAuctioneerTest extends TestCase {
     }
   }
   
+  public void testClearingNoUnmatchedShouts() {
+    traders[0].setIsSeller(false);
+    traders[1].setIsSeller(false);
+    traders[0].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[0], 1, 200, true) }));
+    traders[1].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[1], 1, 150, true) }));   
+    
+    traders[2].setIsSeller(true);
+    traders[3].setIsSeller(true);    
+    traders[2].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[2], 1, 100, false) }));
+    traders[3].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[3], 1, 140, false) }));
+    
+    traders[4].setStrategy( new MockStrategy( new Shout[] {}));    
+    traders[5].setStrategy( new MockStrategy( new Shout[] {}));
+    
+    try {
+      auction.begin();
+      auction.step();
+      
+      assertTrue( !traders[1].lastShoutAccepted() );
+      assertTrue( !traders[3].lastShoutAccepted() );
+      
+      assertTrue( traders[0].lastShoutAccepted() );
+      assertTrue( traders[2].lastShoutAccepted() );
+      
+      assertTrue( "clearing should result in budget surplus",
+                    auctioneer.getAccount().getFunds() > 0);
+      
+    } catch ( AuctionClosedException e ) {
+      fail(e.getMessage());
+    }
+    
+  }
   
-  public static void main( String[] args ) {
+  public void testEfficientClearing() {
+    
+    traders[0].setIsSeller(false);
+    traders[1].setIsSeller(false);
+    traders[0].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[0], 1, 200, true) }));
+    traders[1].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[1], 1, 140, true) }));
+    
+    traders[2].setIsSeller(true);
+    traders[3].setIsSeller(true);    
+    traders[2].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[2], 1, 100, false) }));
+    traders[3].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[3], 1, 150, false) }));
 
+    traders[4].setStrategy( new MockStrategy( new Shout[] {}));    
+    traders[5].setStrategy( new MockStrategy( new Shout[] {}));
+    
+    try {
+      auction.begin();
+      auction.step();
+      
+      assertTrue( !traders[1].lastShoutAccepted() );
+      assertTrue( !traders[3].lastShoutAccepted() );
+      
+      assertTrue( traders[0].lastShoutAccepted() );
+      assertTrue( traders[2].lastShoutAccepted() );
+      
+      assertTrue( "clearing should result in budget balance",
+          auctioneer.getAccount().getFunds() == 0);
+            
+    } catch ( AuctionClosedException e ) {
+      fail(e.getMessage());
+    }
+  }
+  
+  public void testInefficientClearing() {
+    traders[0].setIsSeller(false);
+    traders[1].setIsSeller(false);
+    traders[2].setIsSeller(false);
+    traders[0].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[0], 1, 300, true) }));    
+    traders[1].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[1], 1, 200, true) }));
+    traders[2].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[2], 1, 140, true) }));
+    
+    traders[3].setIsSeller(true);
+    traders[4].setIsSeller(true);
+    traders[5].setIsSeller(true);
+    traders[3].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[3], 1, 50, false) }));    
+    traders[4].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[4], 1, 100, false) }));
+    traders[5].setStrategy( new MockStrategy( new Shout[] {
+        new Shout(traders[5], 1, 1150, false) }));
+    
+    try {
+      auction.begin();
+      auction.step();
+      
+      assertTrue( !traders[5].lastShoutAccepted() );
+      assertTrue( !traders[2].lastShoutAccepted() );
+      assertTrue( !traders[4].lastShoutAccepted() );
+      assertTrue( !traders[5].lastShoutAccepted() );
+      
+      assertTrue( traders[0].lastShoutAccepted() );
+      assertTrue( traders[3].lastShoutAccepted() );
+      assertTrue( traders[0].lastWinningPrice != 300 );
+      assertTrue( traders[3].lastWinningPrice != 50 );
+      
+      assertTrue( "clearing should result in budget surplus",
+          auctioneer.getAccount().getFunds() > 0);
+            
+    } catch ( AuctionClosedException e ) {
+      fail(e.getMessage());
+    }
+  }
+  
+
+  public static Test suite() {
+    return new TestSuite(McAfeeClearingHouseAuctioneerTest.class);
+  }
+
+  public static void main( String[] args ) {
+    junit.textui.TestRunner.run (suite());
   }
 
 }
