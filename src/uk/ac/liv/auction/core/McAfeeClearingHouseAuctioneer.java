@@ -49,7 +49,8 @@ public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
     if ( shoutEngine.noMatchedShouts() ) {
       return;
     }
-    if ( shoutEngine.noUnmatchedShouts() ) {
+    if ( shoutEngine.getHighestUnmatchedBid() == null 
+          || shoutEngine.getLowestUnmatchedAsk() == null ) {
       efficientClearing = false;
     } else {
       a0 = shoutEngine.getHighestUnmatchedBid().getPrice();
