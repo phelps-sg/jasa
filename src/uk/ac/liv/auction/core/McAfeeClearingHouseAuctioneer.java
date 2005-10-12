@@ -28,9 +28,9 @@ import java.util.Iterator;
  * @author Steve Phelps
  * @version $Revision$
  */
-public class McAfeeClearingHouseAuctioneer extends TransparentAuctioneer {
+public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
 
-  protected Account account ;
+  protected Account account;
   
   public McAfeeClearingHouseAuctioneer() {
     this(null);    
@@ -55,7 +55,7 @@ public class McAfeeClearingHouseAuctioneer extends TransparentAuctioneer {
       a0 = shoutEngine.getHighestUnmatchedBid().getPrice();
       b0 = shoutEngine.getLowestUnmatchedAsk().getPrice();      
       p0 = (a0 + b0) / 2;
-      efficientClearing = shoutEngine.getHighestMatchedAsk().getPrice() >= p0 && p0 <= shoutEngine.getLowestMatchedBid().getPrice();
+      efficientClearing = shoutEngine.getHighestMatchedAsk().getPrice() <= p0 && p0 <= shoutEngine.getLowestMatchedBid().getPrice();
     }
     if ( ! efficientClearing ) {
       a1 = shoutEngine.getLowestMatchedBid().getPrice();
@@ -76,16 +76,15 @@ public class McAfeeClearingHouseAuctioneer extends TransparentAuctioneer {
     }
   }
 
-  public void generateQuote() {
-    
-  }
 
   public Account getAccount() {
     return account;
   }
   
   public void reset() {
+    super.reset();
     account.setFunds(0);
   }
+
 
 }
