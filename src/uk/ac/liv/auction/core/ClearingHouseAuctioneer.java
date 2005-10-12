@@ -60,5 +60,5 @@ public class ClearingHouseAuctioneer extends TransparentAuctioneer implements Se
   public Account getAccount() {
     return account;
   }
-
+  
 }
