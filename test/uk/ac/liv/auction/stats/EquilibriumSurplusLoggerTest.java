@@ -225,7 +225,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
       Iterator i = auction.getTraderIterator();
       while ( i.hasNext() ) {
         ZITraderAgent agent = (ZITraderAgent) i.next();
-        if ( agent.isSeller() ) {
+        if ( agent.isSeller(auction) ) {
           agentSurplus = (eqPrice - agent.getValuation(auction))
               * agent.getInitialTradeEntitlement();
         } else {
