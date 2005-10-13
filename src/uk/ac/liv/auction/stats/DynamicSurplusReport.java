@@ -82,6 +82,9 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
   protected double efficiency;
 
   public static final String P_QUANTITY = "quantity";
+  
+  public static final ReportVariable VAR_EFFICIENCY = 
+    new ReportVariable("efficiency", "dynamic market efficiency");
 
   static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
 
@@ -198,10 +201,17 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
   }
 
   public void produceUserOutput() {
-  }
+    logger.info("Surplus Report (Dynamic)");
+    logger.info("------------------------");
+    logger.info("");
+    logger.info("\tefficiency =\t" + efficiency);
+    logger.info("");
+  } 
 
   public Map getVariables() {
-    return new HashMap();
+    HashMap vars = new HashMap();
+    vars.put(VAR_EFFICIENCY, new Double(efficiency));
+    return vars;
   }
 
   /**
