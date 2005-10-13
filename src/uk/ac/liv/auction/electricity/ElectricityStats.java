@@ -167,7 +167,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTradingAgent trader = (AbstractTradingAgent) i.next();
-      if ( trader.isSeller() ) {
+      if ( trader.isSeller(auction) ) {
         numSellers++;
         sellerCap += getCapacity(trader);
       } else {
@@ -215,7 +215,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
   public double equilibQuant( AbstractTradingAgent t, double price ) {
     double privateValue = t.getValuation(auction);
-    if ( t.isBuyer() ) {
+    if ( t.isBuyer(auction) ) {
       if ( price > privateValue ) {
         return 0;
       } else {
@@ -259,7 +259,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
       Shout truth = new Shout(trader, trader.getCapacity(), trader
-          .getValuation(auction), trader.isBuyer());
+          .getValuation(auction), trader.isBuyer(auction));
       shouts.add(truth);
       try {
         auctioneer.newShout(truth);
@@ -287,7 +287,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
     while ( i.hasNext() ) {
       ElectricityTrader trader = (ElectricityTrader) i.next();
       double truthProfits = truthProfits(trader.getLastProfit());
-      if ( trader.isBuyer() ) {
+      if ( trader.isBuyer(auction) ) {
         pBT += truthProfits;
       } else {
         pST += truthProfits;
