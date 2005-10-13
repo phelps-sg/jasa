@@ -30,7 +30,7 @@ import java.util.Iterator;
  */
 public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
 
-  protected Account account;
+  protected ZeroCreditAccount account;
   
   public McAfeeClearingHouseAuctioneer() {
     this(null);    
@@ -38,7 +38,7 @@ public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
 
   public McAfeeClearingHouseAuctioneer( Auction auction ) {
     super(auction);
-    account = new Account(this, 0);
+    account = new ZeroCreditAccount(this);
   }
   
   public void clear() {

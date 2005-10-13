@@ -41,13 +41,13 @@ public class VeracityReport extends AbstractAuctionReport {
   
   public VeracityReport() {
     super();  
-    veracity = new CummulativeDistribution("veracity");
+    veracity = new CummulativeDistribution("Veracity");
   }
 
   public void produceUserOutput() {
     logger.info("");
     logger.info("Veracity report");
-    logger.info("---------------------------");
+    logger.info("---------------");
     logger.info("");
     veracity.log();
     logger.info("");
