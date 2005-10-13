@@ -86,7 +86,7 @@ public abstract class AbstractStrategy implements Serializable, Strategy,
    * @return false if no shout is to be placed at this time
    */
   public boolean modifyShout( Shout.MutableShout shout ) {
-    shout.setIsBid(agent.isBuyer());
+    shout.setIsBid(agent.isBuyer(auction));
     shout.setAgent(agent);
     return true;
   }

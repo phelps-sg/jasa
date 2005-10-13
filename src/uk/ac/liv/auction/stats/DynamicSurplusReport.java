@@ -177,7 +177,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
   protected double equilibriumSurplus( AbstractTradingAgent agent, double ep,
       int quantity ) {
     double surplus;
-    if ( agent.isSeller() ) {
+    if ( agent.isSeller(auction) ) {
       surplus = (ep - agent.getValuation(auction)) * quantity;
     } else {
       surplus = (agent.getValuation(auction) - ep) * quantity;

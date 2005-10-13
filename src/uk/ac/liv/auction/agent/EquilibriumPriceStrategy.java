@@ -68,8 +68,8 @@ public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
         (RoundRobinAuction) auction);
     eqReport.calculate();
     double price = eqReport.calculateMidEquilibriumPrice();
-    if ( agent.isBuyer() && price <= agent.getValuation(auction)
-        || agent.isSeller() && price >= agent.getValuation(auction) ) {
+    if ( agent.isBuyer(auction) && price <= agent.getValuation(auction)
+        || agent.isSeller(auction) && price >= agent.getValuation(auction) ) {
       shout.setPrice(price);
     } else {
       shout.setPrice(agent.getValuation(auction));

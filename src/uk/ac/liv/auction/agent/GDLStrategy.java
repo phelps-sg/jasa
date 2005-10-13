@@ -138,7 +138,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 	// probability of seller's offer is 1 at 0 and 0 at MAX_PRICE
 	// probability of buyer's offer is 0 at 0 and 1 at MAX_PRICE
 
-    if ( !agent.isBuyer() ) {
+    if ( !agent.isBuyer(auction) ) {
       lastP = 1;
       currentP = 1;
     }
@@ -158,7 +158,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 
     currentPoint = MAX_PRICE;
     currentP = 1;
-    if ( !agent.isBuyer() ) {
+    if ( !agent.isBuyer(auction) ) {
       currentP = 0;
     }
     getMax(lastPoint, lastP, currentPoint, currentP);
@@ -178,7 +178,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
     //-------------------------------------------------------------------------------
     //(taken bids below price) + (all asks below price) + (rejected bids above
     // price)
-    if ( agent.isBuyer() ) {
+    if ( agent.isBuyer(auction) ) {
 //      return ((double) (historyStats.getNumberOfBids(-1 * price, true) + historyStats
 //          .getNumberOfAsks(-1 * price, false)))
 //          / ((double) (historyStats.getNumberOfBids(-1 * price, true)
@@ -243,7 +243,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 
     double start = a1;
     double end = a2;
-    if ( agent.isBuyer() ) {
+    if ( agent.isBuyer(auction) ) {
       if ( a2 > pvalue ) {
         end = pvalue;
       }
@@ -255,7 +255,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 
     for ( double i = start; i < end; i++ ) {
       p = p1 + ((p2-p1)*((i-a1)/(a2-a1)));
-      if ( agent.isBuyer() ) {
+      if ( agent.isBuyer(auction) ) {
         temp = p * (pvalue - i);
       } else {
         temp = p * (i - pvalue);

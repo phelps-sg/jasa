@@ -57,7 +57,7 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 
     double highestBid = historyStats.getHighestBidPrice();
     double lowestAsk = historyStats.getLowestAskPrice();
-    if ( agent.isBuyer() ) {
+    if ( agent.isBuyer(auction) ) {
       if ( lowestAsk > highestBid && highestBid > 0 ) {
         adjustMargin(targetMargin(highestBid + perterb(highestBid)));
       } else if ( agent.active() && lowestAsk < Double.POSITIVE_INFINITY ) {

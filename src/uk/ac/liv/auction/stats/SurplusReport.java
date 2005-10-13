@@ -153,7 +153,7 @@ public class SurplusReport extends EquilibriumReport {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-      if ( agent.isSeller() ) {
+      if ( agent.isSeller(auction) ) {
         pSA += agent.getProfits();
       } else {
         pBA += agent.getProfits();

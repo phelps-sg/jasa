@@ -68,7 +68,7 @@ public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
     Shout strategicShout = subStrategy.modifyShout(shout, auction);
     double strategicPrice = strategicShout.getPrice();
     if ( strategicShout != null ) {
-      if ( agent.isSeller() ) {
+      if ( agent.isSeller(auction) ) {
         delta = markup * strategicPrice;
       } else {
         delta = -markup * strategicPrice;

@@ -83,7 +83,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 
     double markup = markupDistribution.nextDouble();
     double price = 0;
-    if ( agent.isBuyer() ) {
+    if ( agent.isBuyer(auction) ) {
       price = agent.getValuation(auction) - markup;
     } else {
       price = agent.getValuation(auction) + markup;

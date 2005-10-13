@@ -116,7 +116,7 @@ public class DrawableAgentAdaptor implements Drawable {
     if ( colorMap == null ) {
       if ( relProfit > 0.01 ) {
         relProfit = 0.4f + 0.6f * relProfit;
-        if ( agent.isBuyer() ) {
+        if ( agent.isBuyer(auction) ) {
           color = new Color(relProfit, 0, 0);
         } else {
           color = new Color(0, 0, relProfit);
@@ -171,7 +171,7 @@ public class DrawableAgentAdaptor implements Drawable {
   }
 
   public String getRole() {
-    if ( agent.isSeller() ) {
+    if ( agent.isSeller(auction) ) {
       return "Seller";
     } else {
       return "Buyer";

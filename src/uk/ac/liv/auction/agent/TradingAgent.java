@@ -44,9 +44,15 @@ public interface TradingAgent extends Resetable, AuctionEventListener {
    */
   public void requestShout( Auction auction );
 
-  public boolean isBuyer();
+  /**
+   * Returns true if the agent is a buyer in the specified auction.
+   */
+  public boolean isBuyer( Auction auction );
 
-  public boolean isSeller();
+  /**
+   * Returns true if the agent is a seller in the specified auction.
+   */
+  public boolean isSeller( Auction auction );
   
   public Account getAccount();
   

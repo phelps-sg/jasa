@@ -172,8 +172,8 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
   
   public void shoutAccepted( Auction auction, Shout shout, double price, int quantity ) {
     super.shoutAccepted(auction, shout, price, quantity);
-    if ( (isBuyer() && price > valuer.determineValue(auction)) ||
-            (isSeller() && price < valuer.determineValue(auction)) ) {
+    if ( (isBuyer(auction) && price > valuer.determineValue(auction)) ||
+            (isSeller(auction) && price < valuer.determineValue(auction)) ) {
       logger.debug("Unprofitable transaction");
     }
    quantityTraded += quantity;

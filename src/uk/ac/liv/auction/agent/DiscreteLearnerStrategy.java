@@ -94,7 +94,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 
     // Now turn the action into a price
     double price;
-    if ( agent.isSeller() ) {
+    if ( agent.isSeller(auction) ) {
       price = agent.getValuation(auction) + action * markupScale;
     } else {
       price = agent.getValuation(auction) - action * markupScale;

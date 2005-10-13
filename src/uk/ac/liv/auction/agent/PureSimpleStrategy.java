@@ -85,7 +85,7 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl implements
 
   public boolean modifyShout( Shout.MutableShout shout ) {
     double delta;
-    if ( agent.isSeller() ) {
+    if ( agent.isSeller(auction) ) {
       delta = margin;
     } else {
       delta = -margin;

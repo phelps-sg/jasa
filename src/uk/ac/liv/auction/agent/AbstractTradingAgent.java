@@ -26,7 +26,6 @@ import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
 
 import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
-import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
@@ -99,9 +98,12 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class AbstractTradingAgent implements TradingAgent,
-    AuctionEventListener, Serializable, Parameterizable, Prototypeable,
-    Cloneable {
+public abstract class AbstractTradingAgent implements 
+                                            TradingAgent,                                      
+                                            Serializable,
+                                            Parameterizable, 
+                                            Prototypeable,   
+                                            Cloneable  {
 
   /**
    * The number of items of stock this agent posseses.
@@ -328,23 +330,14 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   public Shout getCurrentShout() {
     return currentShout;
   }
-//
-//  public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
-//      int quantity, double price ) {
-//    seller.informOfBuyer(auction, this, price, quantity);
-//    giveFunds(seller, price * quantity);
-//    stock.add(seller.deliver(auction, quantity, price));
-//    lastProfit = quantity * (valuer.determineValue(auction) - price);
-//    profits += lastProfit;
-//    valuer.consumeUnit(auction);
-//  }
   
   public Account getAccount() {
     return account;
   }
 
-  public synchronized void giveFunds( AbstractTradingAgent seller, double amount ) {
-   account.transfer(seller.getAccount(), amount);
+  public synchronized void giveFunds( AbstractTradingAgent seller, 
+                                        double amount ) {
+    account.transfer(seller.getAccount(), amount);
   }
 
   /**
@@ -364,16 +357,16 @@ public abstract class AbstractTradingAgent implements TradingAgent,
    * @param quantity
    *          The number of items of stock to transfer
    */
-  public int deliver( Auction auction, int quantity, double price ) {
-    stock.remove(quantity);
-    lastProfit = quantity * (price - valuer.determineValue(auction));
-    if ( lastProfit < 0 ) {
-      logger.debug("Negative profit for seller trading at price " + price);
-    }
-    profits += lastProfit;
-    valuer.consumeUnit(auction);
-    return quantity;
-  }
+//  public int deliver( Auction auction, int quantity, double price ) {
+//    stock.remove(quantity);
+//    lastProfit = quantity * (price - valuer.determineValue(auction));
+//    if ( lastProfit < 0 ) {
+//      logger.debug("Negative profit for seller trading at price " + price);
+//    }
+//    profits += lastProfit;
+//    valuer.consumeUnit(auction);
+//    return quantity;
+//  }
 
   public long getId() {
     return id;
@@ -415,11 +408,11 @@ public abstract class AbstractTradingAgent implements TradingAgent,
     ((FixedValuer) valuer).setValue(privateValue);
   }
 
-  public boolean isSeller() {
+  public boolean isSeller( Auction auction ) {
     return isSeller;
   }
 
-  public boolean isBuyer() {
+  public boolean isBuyer( Auction auction ) {
     return !isSeller;
   }
 
@@ -465,22 +458,23 @@ public abstract class AbstractTradingAgent implements TradingAgent,
   }
   
   public void cashIn( Auction auction, int quantity, double price ) {
-    assert isBuyer();
+    assert isBuyer(auction);
     stock.remove(quantity);
     lastProfit = (getValuation(auction) - price) * quantity;
     profits += lastProfit;
-    account.credit(lastProfit);
+    account.credit(lastProfit);    
   }
   
   public void shoutAccepted( Auction auction, Shout shout, double price, 
                               int quantity ) {
     lastShoutAccepted = true;
-    if ( isBuyer() ) {
+    if ( isBuyer(auction) ) {
       cashIn(auction, quantity, price);
     } else {
       lastProfit = (price - getValuation(auction)) * quantity;
       profits += lastProfit;
     }
+    valuer.consumeUnit(auction);
   }
 
   public boolean lastShoutAccepted() {

@@ -68,7 +68,7 @@ public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
 
   public boolean modifyShout( Shout.MutableShout shout ) {
     double delta;
-    if ( agent.isSeller() ) {
+    if ( agent.isSeller(auction) ) {
       delta = markup * agent.getValuation(auction);
     } else {
       delta = -markup * agent.getValuation(auction);

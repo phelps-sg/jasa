@@ -63,7 +63,7 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 
   
   protected void adjustMargin() {
-    if ( agent.isSeller() ) {
+    if ( agent.isSeller(auction) ) {
       sellerStrategy();
     } else {
       buyerStrategy();

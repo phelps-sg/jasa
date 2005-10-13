@@ -134,9 +134,9 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
     if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
       logger.debug("quote = " + quote);
       logger.debug("my priv value = " + agent.getValuation(auction));
-      logger.debug("isSeller = " + agent.isSeller());
+      logger.debug("isSeller = " + agent.isSeller(auction));
       shout.setPrice(agent.getValuation(auction));
-      if ( agent.isBuyer() ) {
+      if ( agent.isBuyer(auction) ) {
         if ( quote.getAsk() <= agent.getValuation(auction) ) {
           shout.setPrice(quote.getAsk());
         }
@@ -168,7 +168,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
       return false;
     }
 
-    if ( agent.isBuyer() ) {
+    if ( agent.isBuyer(auction) ) {
       juicyOffer = quote.getAsk() < transPrice.getMin();
     } else {
       juicyOffer = quote.getBid() > transPrice.getMax();
@@ -190,7 +190,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
     transPrice = dailyStats.getPreviousDayTransPriceStats();
 
     double spread = Math.abs(quote.getAsk() - quote.getBid());    
-    if ( agent.isBuyer() ) {      
+    if ( agent.isBuyer(auction) ) {      
       smallSpread =
         (transPrice == null || (quote.getAsk() < transPrice.getMax())) &&
           (spread / quote.getAsk()) < s;

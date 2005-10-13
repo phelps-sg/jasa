@@ -101,7 +101,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
       AbstractTradingAgent trader = (AbstractTradingAgent) traders.next();
       int quantity = trader.determineQuantity(auction);
       double value = trader.getValuation(auction);
-      boolean isBid = trader.isBuyer();
+      boolean isBid = trader.isBuyer(auction);
       Shout shout = new Shout(trader, quantity, value, isBid);
       shouts.add(shout);
       enumerateTruthfulShout(shout);

@@ -277,7 +277,7 @@ public class ZIPExperiment extends MarketSimulation {
     Iterator i = auction.getTraderIterator();
     while ( i.hasNext() ) {
       ZITraderAgent trader = (ZITraderAgent) i.next();
-      if ( trader.isBuyer() ) {
+      if ( trader.isBuyer(auction) ) {
         logger.debug("Setting priv value of " + trader + " to " + buyerValue);
         trader.setPrivateValue(buyerValue);
         buyerValue += privValueIncrement;
