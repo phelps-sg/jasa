@@ -69,13 +69,14 @@ public class AllTests {
     suite.addTest(uk.ac.liv.ai.learning.QLearnerTest.suite());
     suite.addTest(uk.ac.liv.ai.learning.WidrowHoffLearnerTest.suite());
 
+    suite.addTest(uk.ac.liv.auction.agent.RandomScheduleValuerTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.KaplanStrategyTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.RothErevEfficiencyTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.EPEfficiencyTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.GDEfficiencyTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.QLearnerEfficiencyTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.PriestVanTolEfficiencyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.RandomScheduleValuerTest.suite());
+    
     
     return suite;
   }
