@@ -351,23 +351,6 @@ public abstract class AbstractTradingAgent implements
     account.credit(amount);
   }
 
-  /**
-   * This method is invoked by a seller on a buyer when it is transfering stock
-   * 
-   * @param quantity
-   *          The number of items of stock to transfer
-   */
-//  public int deliver( Auction auction, int quantity, double price ) {
-//    stock.remove(quantity);
-//    lastProfit = quantity * (price - valuer.determineValue(auction));
-//    if ( lastProfit < 0 ) {
-//      logger.debug("Negative profit for seller trading at price " + price);
-//    }
-//    profits += lastProfit;
-//    valuer.consumeUnit(auction);
-//    return quantity;
-//  }
-
   public long getId() {
     return id;
   }

@@ -179,20 +179,6 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
    quantityTraded += quantity;
    tradeEntitlement -= quantity;
   }
-//
-//  public void purchaseFrom( Auction auction, AbstractTradingAgent seller,
-//      int quantity, double price ) {
-//    tradeEntitlement--;
-//    quantityTraded += quantity;
-//    super.purchaseFrom(auction, seller, quantity, price);
-//  }
-//
-//  public int deliver( Auction auction, int quantity, double price ) {
-//    lastShoutSuccessful = true;
-//    tradeEntitlement--;
-//    quantityTraded += quantity;
-//    return super.deliver(auction, quantity, price);
-//  }
 
   public double equilibriumProfits( Auction auction, double equilibriumPrice,
       int quantity ) {
@@ -209,10 +195,6 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
     return auction.getDay() * initialTradeEntitlement * surplus;
   }
 
-  public void sellUnits( Auction auction, int numUnits ) {    
-    stock.remove(numUnits);
-    account.credit(numUnits * valuer.determineValue(auction));
-  }
 
   /**
    * @uml.property name="quantityTraded"
