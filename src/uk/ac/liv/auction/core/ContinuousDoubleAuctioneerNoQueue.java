@@ -31,7 +31,7 @@ import java.util.List;
 public class ContinuousDoubleAuctioneerNoQueue
     extends ContinuousDoubleAuctioneer implements Serializable {
 
-  public void clear() {
+  public void clear() {    
     clearingQuote = new MarketQuote(askQuote(), bidQuote());
     List shouts = shoutEngine.getMatchedShouts();
     if ( shouts.size() > 0 ) {
@@ -42,7 +42,7 @@ public class ContinuousDoubleAuctioneerNoQueue
       Shout bid = (Shout) i.next();
       Shout ask = (Shout) i.next();
       double price = determineClearingPrice(bid, ask);
-      auction.clear(ask, bid, price);
+      clear(ask, bid, price);
     }
   }
 

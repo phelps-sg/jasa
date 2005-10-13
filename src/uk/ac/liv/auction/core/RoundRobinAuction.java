@@ -355,8 +355,8 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
     TradingAgent buyer = (TradingAgent) bid.getAgent();
     TradingAgent seller = (TradingAgent) ask.getAgent();
 
-    assert buyer.isBuyer();
-    assert seller.isSeller();
+    assert buyer.isBuyer(this);
+    assert seller.isSeller(this);
    
     TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
         this, round, ask, bid, buyerCharge, ask.getQuantity());

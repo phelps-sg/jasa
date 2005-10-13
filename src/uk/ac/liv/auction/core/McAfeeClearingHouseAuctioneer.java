@@ -66,12 +66,11 @@ public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
     while ( matchedShouts.hasNext() ) {
       Shout bid = (Shout) matchedShouts.next();
       Shout ask = (Shout) matchedShouts.next();      
-      if ( efficientClearing ) {
-        recordMatch(ask, bid);
-        auction.clear(ask, bid, p0);
+      if ( efficientClearing ) {       
+        clear(ask, bid, p0);
       } else {
         if ( bid.getPrice() > a1 ) {
-          auction.clear(ask, bid, a1, b1, ask.getQuantity());
+          clear(ask, bid, a1, b1, ask.getQuantity());
         }
       }
     }

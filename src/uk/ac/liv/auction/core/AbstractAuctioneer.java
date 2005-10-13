@@ -244,11 +244,26 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
     Iterator i = shouts.iterator();
     while ( i.hasNext() ) {
       Shout bid = (Shout) i.next();
-      Shout ask = (Shout) i.next();
-      recordMatch(ask, bid);
+      Shout ask = (Shout) i.next();      
       double price = determineClearingPrice(bid, ask);
-      auction.clear(ask, bid, price);
+      clear(ask, bid, price);
     }
+  }
+  
+  protected void clear( Shout ask, Shout bid, double price ) {
+    assert ask.isAsk();
+    assert bid.isBid();
+    recordMatch(ask, bid);
+    auction.clear(ask, bid, price);
+  }
+  
+  public void clear( Shout ask, Shout bid, 
+                        double buyerCharge, double sellerPayment, 
+                        int quantity ) {
+    assert ask.isAsk();
+    assert bid.isBid();
+    recordMatch(ask, bid);
+    auction.clear(ask, bid, buyerCharge, sellerPayment, quantity);
   }
 
   public double determineClearingPrice( Shout bid, Shout ask ) {
