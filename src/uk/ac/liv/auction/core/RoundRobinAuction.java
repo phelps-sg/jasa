@@ -200,7 +200,8 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
    * @uml.property name="closingCondition"
    * @uml.associationEnd
    */
-  protected TimingCondition closingCondition;
+  protected TimingCondition closingCondition = 
+    new NullAuctionClosingCondition();
 
   /**
    * @uml.property name="dayEndingCondition"
@@ -259,14 +260,15 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
 
     try {
       closingCondition = (TimingCondition) parameters.getInstanceForParameter(
-          base.push(P_AUCTION_CLOSING), null, AuctionClosingCondition.class);
-      closingCondition.setAuction(this);
+          base.push(P_AUCTION_CLOSING), null, AuctionClosingCondition.class);      
     } catch ( ParamClassLoadException e ) {
-      closingCondition = null;
+      logger.warn("No parameter specified for " + base.push(P_AUCTION_CLOSING) + 
+                    ": configuring null closing condition");
+      closingCondition = new NullAuctionClosingCondition();      
     }
+    closingCondition.setAuction(this);
 
-    if ( closingCondition != null
-        && closingCondition instanceof Parameterizable ) {
+    if ( closingCondition instanceof Parameterizable ) {
       ((Parameterizable) closingCondition).setup(parameters, base
           .push(P_AUCTION_CLOSING));
     }
@@ -528,7 +530,7 @@ public class RoundRobinAuction extends AuctionImpl implements Runnable,
       throw new AuctionClosedException("Auction " + name + " is closed.");
     }
 
-    if ( closingCondition != null && closingCondition.eval() ) {
+    if ( closingCondition.eval() ) {
       close();
     } else {
       shoutsProcessed = false;      
