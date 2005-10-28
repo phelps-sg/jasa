@@ -25,7 +25,8 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class ClearingHouseAuctioneer extends TransparentAuctioneer implements Serializable {
+public class ClearingHouseAuctioneer extends TransparentAuctioneer 
+  implements Serializable {
 
   protected ZeroFundsAccount account;
   
@@ -53,10 +54,6 @@ public class ClearingHouseAuctioneer extends TransparentAuctioneer implements Se
     super.endOfAuctionProcessing();
   }
 
-  public boolean shoutsVisible() {
-    return true;
-  }
-  
   public Account getAccount() {
     return account;
   }
