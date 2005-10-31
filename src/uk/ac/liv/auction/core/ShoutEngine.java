@@ -31,10 +31,6 @@ public interface ShoutEngine extends uk.ac.liv.util.Resetable {
 
   public void removeShout( Shout shout );
   
-  public boolean noMatchedShouts();
-  
-  public boolean noUnmatchedShouts();
-
   /**
    * Log the current state of the auction.
    */
