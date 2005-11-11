@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.stats;
 
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import uk.ac.liv.auction.event.*;
@@ -93,7 +94,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
         quantity);
   }
 
-  public void setAuction( RoundRobinAuction auction ) {
+  public void setAuction( RandomRobinAuction auction ) {
     super.setAuction(auction);
     equilibriaStats = new EquilibriumReport(auction);
   }

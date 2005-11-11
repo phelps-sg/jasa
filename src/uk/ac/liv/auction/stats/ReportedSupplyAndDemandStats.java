@@ -56,7 +56,7 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 
   static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
 
-  public ReportedSupplyAndDemandStats( RoundRobinAuction auction,
+  public ReportedSupplyAndDemandStats( RandomRobinAuction auction,
       DataWriter supplyStats, DataWriter demandStats ) {
     super(auction, supplyStats, demandStats);
   }

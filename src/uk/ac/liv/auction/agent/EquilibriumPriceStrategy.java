@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
@@ -65,7 +66,7 @@ public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
 
   public boolean modifyShout( Shout.MutableShout shout ) {
     EquilibriumReport eqReport = new EquilibriumReport(
-        (RoundRobinAuction) auction);
+        (RandomRobinAuction) auction);
     eqReport.calculate();
     double price = eqReport.calculateMidEquilibriumPrice();
     if ( agent.isBuyer(auction) && price <= agent.getValuation(auction)

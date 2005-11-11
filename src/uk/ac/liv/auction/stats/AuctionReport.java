@@ -17,6 +17,7 @@ package uk.ac.liv.auction.stats;
 
 import java.util.Map;
 
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.event.AuctionEventListener;
 
@@ -48,6 +49,6 @@ public interface AuctionReport extends AuctionEventListener {
   /**
    * Specify the auction to be used when generating the report.
    */
-  public void setAuction( RoundRobinAuction auction );
+  public void setAuction( RandomRobinAuction auction );
 
 }

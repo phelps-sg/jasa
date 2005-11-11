@@ -24,7 +24,7 @@ import java.util.Map;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.event.AuctionEvent;
 
 import uk.ac.liv.util.Parameterizable;
@@ -64,7 +64,7 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   public static final String P_NUMLOGGERS = "n";
 
@@ -141,7 +141,7 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
   /**
    * @uml.property name="auction"
    */
-  public void setAuction( RoundRobinAuction auction ) {
+  public void setAuction( RandomRobinAuction auction ) {
     this.auction = auction;
     Iterator i = reports.iterator();
     while ( i.hasNext() ) {

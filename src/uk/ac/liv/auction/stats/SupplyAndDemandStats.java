@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.util.io.DataWriter;
 
@@ -59,7 +59,7 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
    * @param demandStats
    *          The DataWriter to write the demand curve to.
    */
-  public SupplyAndDemandStats( RoundRobinAuction auction,
+  public SupplyAndDemandStats( RandomRobinAuction auction,
       DataWriter supplyStats, DataWriter demandStats ) {
     super(auction);
     this.supplyStats = supplyStats;

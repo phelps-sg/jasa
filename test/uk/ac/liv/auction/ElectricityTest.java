@@ -193,7 +193,7 @@ public abstract class ElectricityTest extends TestCase {
     stats = new ElectricityStats(auction);
   }
 
-  public void registerTraders( RoundRobinAuction auction, boolean areSellers,
+  public void registerTraders( RandomRobinAuction auction, boolean areSellers,
       int num, int capacity, double[] values ) {
     for ( int i = 0; i < num; i++ ) {
       double value = values[i % values.length];

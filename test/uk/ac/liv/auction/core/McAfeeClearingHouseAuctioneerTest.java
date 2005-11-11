@@ -25,7 +25,7 @@ public class McAfeeClearingHouseAuctioneerTest extends TestCase {
 
   McAfeeClearingHouseAuctioneer auctioneer;
   
-  RoundRobinAuction auction;
+  RandomRobinAuction auction;
   
   MockTrader[] traders;
   

@@ -46,7 +46,7 @@ public class ZIPStrategyTest extends TestCase {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  RoundRobinAuction auction;
+  RandomRobinAuction auction;
 
   /**
    * @uml.property name="auctioneer"

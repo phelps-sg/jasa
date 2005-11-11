@@ -50,14 +50,6 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
   protected FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
 
   /**
-   * The auction we are computing stats for.
-   * 
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  protected RoundRobinAuction auction;
-
-  /**
    * The truthful shouts of all traders in the auction.
    * 
    * @uml.property name="shouts"
@@ -68,13 +60,13 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 
   static Logger logger = Logger.getLogger(DirectRevelationReport.class);
 
-  public DirectRevelationReport( RoundRobinAuction auction ) {
-    this();
-    this.auction = auction;
+  public DirectRevelationReport( RandomRobinAuction auction ) {
+    super(auction);
+    shouts = new ArrayList();
   }
 
   public DirectRevelationReport() {
-    shouts = new ArrayList();
+    this(null);
   }
 
   /**

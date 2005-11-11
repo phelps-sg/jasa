@@ -15,6 +15,7 @@
 
 package uk.ac.liv.auction.stats;
 
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 
@@ -27,6 +28,14 @@ import uk.ac.liv.auction.event.AuctionEvent;
  */
 public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
 
+  public AbstractMarketStatsReport( RandomRobinAuction auction ) {
+    super(auction);
+  }
+  
+  public AbstractMarketStatsReport() {
+    super();
+  }
+  
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof AuctionClosedEvent ) {
       calculate();

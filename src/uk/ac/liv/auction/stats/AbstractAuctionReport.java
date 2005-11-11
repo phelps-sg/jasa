@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 
 import uk.ac.liv.util.Parameterizable;
 
@@ -42,12 +42,19 @@ public abstract class AbstractAuctionReport implements AuctionReport,
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
+  public AbstractAuctionReport( RandomRobinAuction auction ) {
+    this.auction = auction;
+  }
+  
+  public AbstractAuctionReport() {  
+  }
+  
   /**
    * @uml.property name="auction"
    */
-  public void setAuction( RoundRobinAuction auction ) {
+  public void setAuction( RandomRobinAuction auction ) {
     this.auction = auction;
     logger.debug("Set auction to " + auction);
   }
@@ -55,7 +62,7 @@ public abstract class AbstractAuctionReport implements AuctionReport,
   /**
    * @uml.property name="auction"
    */
-  public RoundRobinAuction getAuction() {
+  public RandomRobinAuction getAuction() {
     return auction;
   }
 

@@ -52,7 +52,7 @@ public abstract class EfficiencyTest extends TestCase {
    * @uml.property   name="auction"
    * @uml.associationEnd   
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   /**
    * @uml.property   name="agents"

@@ -43,7 +43,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
    * @uml.associationEnd multiplicity="(1 1)"
    *                     inverse="guiConsole:uk.ac.liv.auction.core.RoundRobinAuction"
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   /**
    * @uml.property name="bidLabel"
@@ -133,7 +133,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 
   static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);
 
-  public AuctionConsoleFrame( RoundRobinAuction auction, String name ) {
+  public AuctionConsoleFrame( RandomRobinAuction auction, String name ) {
 
     this.auction = auction;
     Container contentPane = getContentPane();

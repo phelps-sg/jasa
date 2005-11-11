@@ -60,7 +60,6 @@ public class AllTests {
     suite.addTest(uk.ac.liv.auction.core.ClearingHouseAuctioneerTest.suite());
     suite.addTest(uk.ac.liv.auction.core.McAfeeClearingHouseAuctioneerTest.suite());
     suite.addTest(uk.ac.liv.auction.core.ContinuousDoubleAuctioneerTest.suite());
-    suite.addTest(uk.ac.liv.auction.core.RoundRobinAuctionTest.suite());
     suite.addTest(uk.ac.liv.auction.core.RandomRobinAuctionTest.suite());
     suite.addTest(uk.ac.liv.auction.core.FourHeapTest.suite());
     suite.addTest(uk.ac.liv.auction.core.KPricingPolicyTest.suite());

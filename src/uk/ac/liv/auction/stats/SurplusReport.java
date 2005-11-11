@@ -113,7 +113,7 @@ public class SurplusReport extends EquilibriumReport {
 
   static Logger logger = Logger.getLogger(SurplusReport.class);
 
-  public SurplusReport( RoundRobinAuction auction ) {
+  public SurplusReport( RandomRobinAuction auction ) {
     super(auction);
   }
 

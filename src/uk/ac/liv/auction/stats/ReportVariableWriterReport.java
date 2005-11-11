@@ -69,7 +69,7 @@ public class ReportVariableWriterReport implements AuctionReport,
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   static DecimalFormat formatter = new DecimalFormat(
       "+#########0.000;-#########.000");
@@ -243,7 +243,7 @@ public class ReportVariableWriterReport implements AuctionReport,
   /**
    * @uml.property name="auction"
    */
-  public void setAuction( RoundRobinAuction auction ) {
+  public void setAuction( RandomRobinAuction auction ) {
     this.auction = auction;
   }
 

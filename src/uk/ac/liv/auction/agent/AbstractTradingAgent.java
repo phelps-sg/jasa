@@ -17,6 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Account;
 import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
@@ -324,7 +325,7 @@ public abstract class AbstractTradingAgent implements
   }
 
   public void auctionClosed( AuctionEvent event ) {
-    ((RoundRobinAuction) event.getAuction()).remove(this);
+    ((RandomRobinAuction) event.getAuction()).remove(this);
   }
 
   public Shout getCurrentShout() {

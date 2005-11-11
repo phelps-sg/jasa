@@ -83,7 +83,7 @@ public class EquilibriumReport extends DirectRevelationReport implements
 
   static Logger logger = Logger.getLogger(EquilibriumReport.class);
 
-  public EquilibriumReport( RoundRobinAuction auction ) {
+  public EquilibriumReport( RandomRobinAuction auction ) {
     super(auction);
   }
 

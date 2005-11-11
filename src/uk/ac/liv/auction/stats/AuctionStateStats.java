@@ -43,7 +43,7 @@ public class AuctionStateStats extends SupplyAndDemandStats  {
    * @param supplyStats   The DataWriter to write the supply curve to.
    * @param demandStats   The DataWriter to write the demand curve to.
    */
-  public AuctionStateStats( RoundRobinAuction auction,
+  public AuctionStateStats( RandomRobinAuction auction,
                                 DataWriter supplyStats,
                                 DataWriter demandStats) {
     super(auction, supplyStats, demandStats);

@@ -142,7 +142,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
   static Logger logger = Logger.getLogger(ElectricityStats.class);
 
-  public ElectricityStats( RoundRobinAuction auction ) {
+  public ElectricityStats( RandomRobinAuction auction ) {
     this.auction = auction;
     calculate();
   }
