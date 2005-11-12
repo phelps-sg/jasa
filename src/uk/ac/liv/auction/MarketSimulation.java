@@ -108,7 +108,7 @@ public class MarketSimulation implements Serializable, Runnable {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   /**
    * The number of repeatitions of this experiment to sample.
@@ -233,8 +233,8 @@ public class MarketSimulation implements Serializable, Runnable {
 
     GlobalPRNG.setup(parameters, base);
 
-    auction = (RoundRobinAuction) parameters.getInstanceForParameterEq(base
-        .push(P_AUCTION), null, RoundRobinAuction.class);
+    auction = (RandomRobinAuction) parameters.getInstanceForParameterEq(base
+        .push(P_AUCTION), null, RandomRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
 

@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.ui;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 
 import uk.ac.liv.auction.stats.AuctionStateStats;
 import uk.ac.liv.auction.stats.SupplyAndDemandStats;
@@ -29,7 +29,7 @@ public class AuctionStateFrame extends SupplyAndDemandFrame {
   
   public static final String TITLE = "Auction State";
 
-  public AuctionStateFrame( RoundRobinAuction auction ) {
+  public AuctionStateFrame( RandomRobinAuction auction ) {
     super(auction);
   }
   

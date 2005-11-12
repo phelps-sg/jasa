@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.ui;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 
 import uk.ac.liv.auction.stats.ReportedSupplyAndDemandStats;
 import uk.ac.liv.auction.stats.SupplyAndDemandStats;
@@ -30,7 +30,7 @@ public class ReportedSupplyAndDemandFrame extends SupplyAndDemandFrame {
   
   public static final String TITLE = "Reported Supply and Demand";
 
-  public ReportedSupplyAndDemandFrame( RoundRobinAuction auction ) {
+  public ReportedSupplyAndDemandFrame( RandomRobinAuction auction ) {
     super(auction);
   }
   

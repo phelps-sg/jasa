@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.RandomRobinAuction;
-import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.stats.EquilibriumReport;

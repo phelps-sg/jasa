@@ -42,7 +42,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
    * @uml.property name="auction"
    * @uml.associationEnd multiplicity="(1 1)"
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   /**
    * @uml.property name="graph"
@@ -76,7 +76,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
   static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
-  public SupplyAndDemandFrame( RoundRobinAuction auction ) {
+  public SupplyAndDemandFrame( RandomRobinAuction auction ) {
 
     this.auction = auction;
     Container contentPane = getContentPane();

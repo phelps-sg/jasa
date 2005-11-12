@@ -24,7 +24,7 @@ import java.util.Map;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
@@ -202,7 +202,7 @@ public class ComplexityReport extends AbstractAuctionReport implements
   protected void buildAgentList() {
     if ( agents == null ) {
       agents = new ArrayList();
-      Iterator i = ((RoundRobinAuction) auction).getTraderIterator();
+      Iterator i = ((RandomRobinAuction) auction).getTraderIterator();
       while ( i.hasNext() ) {
         AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
         agents.add(agent);

@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.ui;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 
 import uk.ac.liv.auction.event.*;
 
@@ -31,7 +31,7 @@ public class TrueSupplyAndDemandFrame extends SupplyAndDemandFrame {
 
   public static final String TITLE = "Supply and Demand Graph";
 
-  public TrueSupplyAndDemandFrame( RoundRobinAuction auction ) {
+  public TrueSupplyAndDemandFrame( RandomRobinAuction auction ) {
     super(auction);
   }
   

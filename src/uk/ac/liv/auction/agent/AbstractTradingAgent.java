@@ -18,7 +18,6 @@ package uk.ac.liv.auction.agent;
 import uk.ac.liv.auction.core.Account;
 import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.RandomRobinAuction;
-import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionException;
@@ -93,7 +92,7 @@ import org.apache.log4j.Logger;
  * 
  * </table>
  * 
- * @see uk.ac.liv.auction.core.RoundRobinAuction
+ * @see uk.ac.liv.auction.core.RandomRobinAuction
  * 
  * @author Steve Phelps
  * @version $Revision$

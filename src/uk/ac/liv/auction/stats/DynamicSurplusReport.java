@@ -16,7 +16,6 @@
 package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.core.RandomRobinAuction;
-import uk.ac.liv.auction.core.RoundRobinAuction;
 
 import uk.ac.liv.auction.event.*;
 

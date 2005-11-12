@@ -72,7 +72,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
   /**
    * @uml.property name="auction"
    */
-  public void setAuction( RoundRobinAuction auction ) {
+  public void setAuction( RandomRobinAuction auction ) {
     this.auction = auction;
   }
 

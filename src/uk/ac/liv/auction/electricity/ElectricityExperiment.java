@@ -155,7 +155,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
    * @uml.property name="auction"
    * @uml.associationEnd multiplicity="(1 1)"
    */
-  protected RoundRobinAuction auction = new RoundRobinAuction("electricity");
+  protected RandomRobinAuction auction = new RandomRobinAuction("electricity");
 
   /**
    * @uml.property name="auctioneer"
@@ -565,7 +565,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
   }
 
-  protected void registerTraders( RoundRobinAuction auction,
+  protected void registerTraders( RandomRobinAuction auction,
       boolean areSellers, int num, int capacity ) {
 
     for ( int i = 0; i < num; i++ ) {

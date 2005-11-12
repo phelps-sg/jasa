@@ -105,7 +105,7 @@ public class CombiTimingCondition extends TimingCondition implements
     return conditions.iterator();
   }
 
-  public void setAuction( RoundRobinAuction auction ) {
+  public void setAuction( RandomRobinAuction auction ) {
     super.setAuction(auction);
     Iterator i = conditionIterator();
     while ( i.hasNext() ) {

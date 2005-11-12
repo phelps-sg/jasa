@@ -85,7 +85,7 @@ public class DataWriterReport extends AbstractAuctionReport {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   public DataWriterReport() {
     this(null, null, null, null, null);
@@ -166,7 +166,7 @@ public class DataWriterReport extends AbstractAuctionReport {
   /**
    * @uml.property name="auction"
    */
-  public void setAuction( RoundRobinAuction auction ) {
+  public void setAuction( RandomRobinAuction auction ) {
     this.auction = auction;
   }
 

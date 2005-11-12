@@ -17,7 +17,7 @@
 package uk.ac.liv.auction.electricity;
 
 import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 
 /**
  * @author Steve Phelps
@@ -30,7 +30,7 @@ public class FinalRoundElectricityStats extends ElectricityStats {
     super();
   }
 
-  public FinalRoundElectricityStats( RoundRobinAuction auction ) {
+  public FinalRoundElectricityStats( RandomRobinAuction auction ) {
     super(auction);
   }
 

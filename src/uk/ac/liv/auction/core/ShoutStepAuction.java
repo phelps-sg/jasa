@@ -27,18 +27,11 @@ import org.apache.log4j.Logger;
  * 
  */
 
-public class ShoutStepAuction extends RoundRobinAuction implements
+public class ShoutStepAuction extends RandomRobinAuction implements
     Serializable {
 
   static Logger logger = Logger.getLogger(ShoutStepAuction.class);
   
-  /**
-   * Construct a new auction in the stopped state, with no traders, no shouts,
-   * and no auctioneer.
-   * 
-   * @param name
-   *          The name of this auction.
-   */
   public ShoutStepAuction( String name ) {
     super(name);
     initialise();
@@ -49,12 +42,19 @@ public class ShoutStepAuction extends RoundRobinAuction implements
   }
   
   public void step() throws AuctionClosedException {
-    if ( endOfRound ) {
-      beginRound();
+    if ( closed() ) {
+      throw new AuctionClosedException("Auction " + name + " is closed.");
     }
-    requestNextShout();
-    if ( endOfRound ) {
-      endRound();
+    if ( closingCondition.eval() ) {
+      close();
+    } else {
+      if ( endOfRound ) {
+        beginRound();
+      }
+      requestNextShout();
+      if ( endOfRound ) {
+        endRound();
+      }
     }
   }
 

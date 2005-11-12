@@ -242,7 +242,7 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
   public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
 
-  static Logger logger = Logger.getLogger(RoundRobinAuction.class);
+  static Logger logger = Logger.getLogger(RandomRobinAuction.class);
 
   /**
    * Construct a new auction in the stopped state, with no traders, no shouts,

@@ -90,7 +90,7 @@ public class RepastMarketSimulation extends SimModelImpl implements
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   /**
    * @uml.property name="parameterFileName"
@@ -198,8 +198,8 @@ public class RepastMarketSimulation extends SimModelImpl implements
 
     GlobalPRNG.setup(parameters, base);
 
-    auction = (RoundRobinAuction) parameters.getInstanceForParameterEq(base
-        .push(P_AUCTION), null, RoundRobinAuction.class);
+    auction = (RandomRobinAuction) parameters.getInstanceForParameterEq(base
+        .push(P_AUCTION), null, RandomRobinAuction.class);
 
     auction.setup(parameters, base.push(P_AUCTION));
 
@@ -406,7 +406,7 @@ public class RepastMarketSimulation extends SimModelImpl implements
    */
   class AgentSpace implements Discrete2DSpace {
 
-    protected RoundRobinAuction auction;
+    protected RandomRobinAuction auction;
 
     protected int width;
 
@@ -416,7 +416,7 @@ public class RepastMarketSimulation extends SimModelImpl implements
 
     protected AgentMatrix matrix;
 
-    public AgentSpace( RoundRobinAuction auction, int width ) {
+    public AgentSpace( RandomRobinAuction auction, int width ) {
       this.width = width;
       this.auction = auction;
       height = auction.getNumberOfRegisteredTraders() / width;
@@ -436,7 +436,7 @@ public class RepastMarketSimulation extends SimModelImpl implements
       return agents;
     }
 
-    public AgentSpace( RoundRobinAuction auction ) {
+    public AgentSpace( RandomRobinAuction auction ) {
       this(auction, (int) Math.sqrt(auction.getNumberOfRegisteredTraders()));
     }
 

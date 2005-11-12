@@ -42,7 +42,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   /**
    * @uml.property name="minPrivateValue"

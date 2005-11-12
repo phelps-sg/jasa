@@ -412,7 +412,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
     public void toggleTrueSupplyAndDemand() {
       if ( trueSupDemGraph == null ) {
         trueSupDemGraph = new TrueSupplyAndDemandFrame(
-            (RoundRobinAuction) auction);
+            (RandomRobinAuction) auction);
 
         ComponentListener listener = new ComponentListener() {
 
@@ -440,7 +440,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 
     public void toggleAuctionState() {
       if ( auctionStateGraph == null ) {
-        auctionStateGraph = new AuctionStateFrame((RoundRobinAuction) auction);
+        auctionStateGraph = new AuctionStateFrame((RandomRobinAuction) auction);
 
         ComponentListener listener = new ComponentListener() {
 
@@ -470,7 +470,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
     public void toggleReportedSupplyAndDemand() {
       if ( reportedSupDemGraph == null ) {
         reportedSupDemGraph = new ReportedSupplyAndDemandFrame(
-            (RoundRobinAuction) auction);
+            (RandomRobinAuction) auction);
 
         ComponentListener listener = new ComponentListener() {
 
