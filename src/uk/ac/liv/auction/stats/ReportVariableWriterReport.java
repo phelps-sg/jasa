@@ -31,6 +31,7 @@ import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.*;
@@ -55,6 +56,8 @@ public class ReportVariableWriterReport implements AuctionReport,
 
   private static String P_ROUND_LOG = "roundlog";
 
+  private static String P_TRANSACTION_LOG = "transactionlog";
+  
   protected static boolean initialized = false;
 
   protected static InternalRVWriterReport auctionLog = null;
@@ -62,6 +65,15 @@ public class ReportVariableWriterReport implements AuctionReport,
   protected static InternalRVWriterReport dayLog = null;
 
   protected static InternalRVWriterReport roundLog = null;
+  
+  protected static InternalRVWriterReport transactionLog = null;
+  
+  /**
+   * Number of transactions that have been executed in the current round.
+   */
+  protected int transactionCount;
+  
+  
 
   /**
    * The auction we are keeping statistics on.
@@ -78,10 +90,12 @@ public class ReportVariableWriterReport implements AuctionReport,
   }
 
   public ReportVariableWriterReport( InternalRVWriterReport auctionLog,
-      InternalRVWriterReport dayLog, InternalRVWriterReport roundLog ) {
+      InternalRVWriterReport dayLog, InternalRVWriterReport roundLog,
+      InternalRVWriterReport transactionLog) {
     ReportVariableWriterReport.auctionLog = auctionLog;
     ReportVariableWriterReport.dayLog = dayLog;
     ReportVariableWriterReport.roundLog = roundLog;
+    ReportVariableWriterReport.transactionLog = transactionLog;
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -109,6 +123,12 @@ public class ReportVariableWriterReport implements AuctionReport,
         roundLog = null;
       }
 
+      if ( parameters.getBoolean(base.push(P_TRANSACTION_LOG), null, true) ) {
+      	transactionLog = new InternalRVWriterReport();
+      	transactionLog.setup(parameters, base.push(P_TRANSACTION_LOG));
+      } else {
+      	transactionLog = null;
+      }
     }
 
   }
@@ -116,12 +136,16 @@ public class ReportVariableWriterReport implements AuctionReport,
   public void eventOccurred( AuctionEvent event ) {
     if ( event instanceof AuctionOpenEvent ) {
       generateHeader();
+      transactionCount = 0;
     } else if ( event instanceof RoundClosedEvent ) {
       updateRoundLog((RoundClosedEvent) event);
+      transactionCount = 0;
     } else if ( event instanceof EndOfDayEvent ) {
       updateDayLog((EndOfDayEvent) event);
     } else if ( event instanceof AuctionClosedEvent ) {
       updateAuctionLog((AuctionClosedEvent) event);
+    } else if ( event instanceof TransactionExecutedEvent ) {
+    	updateTransactionLog((TransactionExecutedEvent) event);
     }
   }
 
@@ -132,7 +156,7 @@ public class ReportVariableWriterReport implements AuctionReport,
   public void generateHeader() {
 
     if ( !initialized ) {
-      String headers[] = { "auction", "day", "round" };
+      String headers[] = { "auction", "day", "round", "transaction" };
 
       if ( auctionLog != null ) {
         generateCaseEnumHeader(auctionLog);
@@ -162,6 +186,16 @@ public class ReportVariableWriterReport implements AuctionReport,
         roundLog.generateHeader();
         roundLog.endRecord();
         roundLog.flush();
+      }
+
+      if ( transactionLog != null ) {
+        generateCaseEnumHeader(transactionLog);
+        for ( int i = 0; i < 4; i++ ) {
+        	transactionLog.newData(headers[i]);
+        }
+        transactionLog.generateHeader();
+        transactionLog.endRecord();
+        transactionLog.flush();
       }
 
       initialized = true;
@@ -199,6 +233,20 @@ public class ReportVariableWriterReport implements AuctionReport,
       }
     }
   }
+
+  public void updateTransactionLog( TransactionExecutedEvent event ) {
+    if ( transactionLog != null ) {
+      generateCaseCombination(transactionLog);
+      transactionLog.newData(auction.getId());
+      transactionLog.newData(auction.getDay());
+      transactionLog.newData(auction.getRound());
+      transactionLog.newData(transactionCount++);
+      transactionLog.update();
+      transactionLog.endRecord();
+      transactionLog.flush();
+    }
+  }
+
 
   public void updateRoundLog( RoundClosedEvent event ) {
     if ( roundLog != null ) {
