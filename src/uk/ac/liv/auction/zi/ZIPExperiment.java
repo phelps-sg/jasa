@@ -265,8 +265,8 @@ public class ZIPExperiment extends MarketSimulation {
       WidrowHoffLearnerWithMomentum l = (WidrowHoffLearnerWithMomentum) ((AdaptiveStrategy) trader
           .getStrategy()).getLearner();
       l.setLearningRate(learningRate);
-      l.setMomentum(1-momentum);
-      // l.randomInitialise();
+      l.setMomentum(momentum);
+//      l.randomInitialise();
       trader.reset();
     }
   }
