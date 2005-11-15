@@ -499,6 +499,13 @@ public abstract class AbstractTradingAgent implements
   public abstract double equilibriumProfits( Auction auction,
       double equilibriumPrice, int quantity );
 
+  
+  // TODO: jniu
+  public double equilibriumProfitsEachDay( Auction auction, double equilibriumPrice,
+      int quantity ) {
+  	return 0;
+  }
+  
   /**
    * Determine whether or not this trader is active. Inactive traders do not
    * place shouts in the auction, but do carry on learning through their
