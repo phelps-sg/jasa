@@ -55,16 +55,16 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 
   protected void adjustMargin() {
 
-    double highestBid = historyStats.getHighestBidPrice();
-    double lowestAsk = historyStats.getLowestAskPrice();
+    double highestBid = historyStats.getHighestUnacceptedBidPrice();
+    double lowestAsk = historyStats.getLowestUnacceptedAskPrice();
     if ( agent.isBuyer(auction) ) {
-      if ( lowestAsk > highestBid && highestBid > 0 ) {
+      if ( !Double.isInfinite(highestBid) ) {
         adjustMargin(targetMargin(highestBid + perterb(highestBid)));
       } else if ( agent.active() && lowestAsk < Double.POSITIVE_INFINITY ) {
         adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
       }
     } else {
-      if ( lowestAsk > highestBid && lowestAsk < Double.POSITIVE_INFINITY ) {
+      if ( !Double.isInfinite(Double.POSITIVE_INFINITY) ) {
         adjustMargin(targetMargin(lowestAsk - perterb(lowestAsk)));
       } else if ( agent.active() && highestBid > 0 ) {
         adjustMargin(targetMargin(highestBid + perterb(highestBid)));

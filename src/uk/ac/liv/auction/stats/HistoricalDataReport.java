@@ -77,7 +77,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   protected TreeBag sortedShouts = new TreeBag();
 
   protected HashSet acceptedShouts = new HashSet();
-
+  
   protected int memorySize = 10;
 
   protected int currentMemoryCell = 0;
@@ -170,7 +170,6 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public void updateShoutLog( ShoutPlacedEvent event ) {
-
     Shout shout = event.getShout();
     addToSortedShouts(shout);
     if ( shout.isAsk() ) {
@@ -216,9 +215,67 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   public double getHighestBidPrice() {
     return highestBidPrice;
   }
-
+  
   public double getLowestAskPrice() {
     return lowestAskPrice;
+  }
+  
+  public double getHighestUnacceptedBidPrice() {
+    Iterator i = bids.iterator();
+    double highestUnacceptedBidPrice = Double.NEGATIVE_INFINITY;
+    while ( i.hasNext() ) {
+      Shout s = (Shout) i.next();
+      if ( !accepted(s) ) {
+        if ( s.getPrice() > highestUnacceptedBidPrice ) {
+          highestUnacceptedBidPrice = s.getPrice();
+        }
+      }
+    }
+    return highestUnacceptedBidPrice;
+  }
+  
+  public double getLowestAcceptedBidPrice() {
+    Iterator i = bids.iterator();
+    double lowestAcceptedBidPrice = Double.POSITIVE_INFINITY;
+    while ( i.hasNext() ) {
+      Shout s = (Shout) i.next();
+      if ( accepted(s) ) {
+        if ( s.getPrice() < lowestAcceptedBidPrice ) {
+          lowestAcceptedBidPrice = s.getPrice();
+        }
+      }
+    }
+    return lowestAcceptedBidPrice;
+    
+  }
+  
+  public double getLowestUnacceptedAskPrice() {
+    Iterator i = asks.iterator();
+    double lowestUnacceptedBidPrice = Double.POSITIVE_INFINITY;
+    while ( i.hasNext() ) {
+      Shout s = (Shout) i.next();
+      if ( !accepted(s) ) {
+        if ( s.getPrice() < lowestUnacceptedBidPrice ) {
+          lowestUnacceptedBidPrice = s.getPrice();
+        }
+      }
+    }
+    return lowestUnacceptedBidPrice;
+  }
+  
+
+  public double getHighestAcceptedAskPrice() {
+    Iterator i = asks.iterator();
+    double highestAcceptedAskPrice = Double.NEGATIVE_INFINITY;
+    while ( i.hasNext() ) {
+      Shout s = (Shout) i.next();
+      if ( accepted(s) ) {
+        if ( s.getPrice() > highestAcceptedAskPrice ) {
+          highestAcceptedAskPrice = s.getPrice();
+        }
+      }
+    }
+    return highestAcceptedAskPrice;
   }
 
   public List getBids() {
@@ -337,6 +394,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   	accelerator.destroy();
     accelerator = null;
   }
+  
 
   /**
    * a class providing sorted lists of shouts.
