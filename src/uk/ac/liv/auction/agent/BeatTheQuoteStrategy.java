@@ -14,6 +14,7 @@
  */
 package uk.ac.liv.auction.agent;
 
+import cern.jet.random.Uniform;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout.MutableShout;
@@ -39,14 +40,16 @@ public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
     if ( agent.isBuyer(auction) ) {
       double p = quote.getAsk();
       if ( !Double.isInfinite(p) && p < agent.getValuation(auction)  ) {
-        shout.setPrice(p + p * GlobalPRNG.getInstance().uniform(0, perterb));
+//        shout.setPrice(p + p * GlobalPRNG.getInstance().uniform(0, perterb));
+      	shout.setPrice(p + p * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
       } else {
         shout.setPrice(agent.getValuation(auction));
       }
     } else {
       double p = quote.getBid();
       if ( !Double.isInfinite(p) && p > agent.getValuation(auction) ) {
-        shout.setPrice(p - p * GlobalPRNG.getInstance().uniform(0, perterb));
+//        shout.setPrice(p - p * GlobalPRNG.getInstance().uniform(0, perterb));
+      	shout.setPrice(p - p * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
       } else {
         shout.setPrice(agent.getValuation(auction));
       }
