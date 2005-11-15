@@ -38,7 +38,7 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
   }
 
   public void train( double target ) {
-    currentOutput = (1 - momentum) * currentOutput + momentum * delta(target);
+    currentOutput = momentum * target + (1-momentum) * delta(target);
   }
 
   public void randomInitialise() {

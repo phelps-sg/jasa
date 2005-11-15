@@ -82,7 +82,7 @@ public class WidrowHoffLearner extends AbstractLearner implements
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    learningRate = parameters.getDouble(base.push(P_LEARNINGRATE), null, 0);
+    learningRate = parameters.getDoubleWithDefault(base.push(P_LEARNINGRATE), null, DEFAULT_LEARNING_RATE);
   }
 
   public Object protoClone() {
