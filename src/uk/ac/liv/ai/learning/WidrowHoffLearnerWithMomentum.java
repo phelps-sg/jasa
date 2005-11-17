@@ -26,23 +26,34 @@ import ec.util.ParameterDatabase;
 public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 
   /**
+   * cumulative discounted delta
+   * 
+   * @uml.property name="gamma"
+   */
+	protected double gamma;
+
+	/**
    * @uml.property name="momentum"
    */
   protected double momentum;
 
-  public static final String P_MOMENTUM = "momentum";
+  public static final String P_MOMENTUM = "momentum";  
+
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
+    gamma = 0;
     momentum = parameters.getDouble(base.push(P_MOMENTUM), null, 0);
   }
 
   public void train( double target ) {
-    currentOutput = momentum * currentOutput + (1-momentum) * delta(target);
+  	gamma = momentum * gamma + (1-momentum) * delta(target);
+    currentOutput += gamma;
   }
 
   public void randomInitialise() {
     super.randomInitialise();
+    gamma = 0;
     momentum = randomParamDistribution.nextDouble();
   }
 
@@ -59,5 +70,4 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
   public void setMomentum( double momentum ) {
     this.momentum = momentum;
   }
-
 }
