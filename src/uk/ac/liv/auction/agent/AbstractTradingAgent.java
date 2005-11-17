@@ -301,8 +301,8 @@ public abstract class AbstractTradingAgent implements
     } else if ( event instanceof EndOfDayEvent ) {
       endOfDay(event);
     }
-    strategy.eventOccurred(event);
     valuer.eventOccurred(event);
+    strategy.eventOccurred(event);
   }
 
   public void roundClosed( AuctionEvent event ) {
@@ -315,11 +315,13 @@ public abstract class AbstractTradingAgent implements
 
   public void auctionOpen( AuctionEvent event ) {
     lastShoutAccepted = false;
-    if ( strategy == null ) {
-      throw new AuctionError("No strategy configured for agent " + this);
-    }
+
     if ( valuer == null ) {
       throw new AuctionError("No valuation policy configured for agent " + this);
+    }
+
+    if ( strategy == null ) {
+      throw new AuctionError("No strategy configured for agent " + this);
     }
   }
 
@@ -375,11 +377,11 @@ public abstract class AbstractTradingAgent implements
 
   public void reset() {
     initialise();
-    if ( strategy != null ) {
-      ((Resetable) strategy).reset();
-    }
     if ( valuer != null ) {
       valuer.reset();
+    }
+    if ( strategy != null ) {
+      ((Resetable) strategy).reset();
     }
   }
 
