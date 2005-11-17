@@ -19,6 +19,7 @@ import uk.ac.liv.auction.core.*;
 
 import uk.ac.liv.auction.event.AgentPolledEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
@@ -66,9 +67,10 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
   protected double trPrice, trBidPrice, trAskPrice;
 
   protected AbstractContinousDistribution initialMarginDistribution = new Uniform(
-      0.5, 1.0, GlobalPRNG.getInstance());
+      0.05, 0.35, GlobalPRNG.getInstance());
 
-  protected AbstractContinousDistribution perterbationDistribution;
+  protected AbstractContinousDistribution relativePerterbationDistribution;
+  protected AbstractContinousDistribution absolutePerterbationDistribution;
 
   public static final String P_SCALING = "scaling";
 
@@ -99,7 +101,6 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 
     initialise();
 
-    setMargin(initialMarginDistribution.nextDouble());
 
     logger.debug("Initialised with scaling = " + scaling + " and learner = "
         + learner);
@@ -108,19 +109,15 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 
   public void initialise() {
     super.initialise();
-    perterbationDistribution = new Uniform(0, scaling, GlobalPRNG.getInstance());
+    relativePerterbationDistribution = new Uniform(0, scaling, GlobalPRNG.getInstance());
+    absolutePerterbationDistribution = new Uniform(0, 0.05, GlobalPRNG.getInstance());
+  }
+
+  private void updateCurrentPrice() {
+  	currentPrice = calculatePrice(learner.act());
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
-    double currentMargin = learner.act();
-    if ( currentMargin < 0 ) {
-      logger.debug(this + ": clipping negative margin at 0");
-      setMargin(currentMargin = 0);
-    } else if ( currentMargin > 1 ) {
-      logger.debug(this + ": clipping margin at 1.0");
-      setMargin(currentMargin = 1.0);
-    }
-    currentPrice = calculatePrice(currentMargin);
     shout.setPrice(currentPrice);
     return super.modifyShout(shout);
   }
@@ -133,6 +130,13 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
       shoutPlaced((ShoutPlacedEvent) event);
     } else if ( event instanceof AgentPolledEvent ) {
       agentPolled((AgentPolledEvent) event);
+    } else if ( event instanceof AuctionOpenEvent ) {
+      if ( agent.isSeller(auction) ) {
+      	setMargin(initialMarginDistribution.nextDouble());
+      } else {
+      	setMargin(-initialMarginDistribution.nextDouble());
+      }
+      updateCurrentPrice();
     }
   }
 
@@ -172,7 +176,6 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 
   public void setMargin( double margin ) {
     learner.setOutputLevel(margin);
-    // currentPrice = calculatePrice(margin);
   }
 
   public double getCurrentPrice() {
@@ -204,34 +207,30 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
   }
 
   protected double calculatePrice( double margin ) {
-    if ( agent.isBuyer(auction) ) {
-      return agent.getValuation(auction) * (1 - margin);
-    } else {
-      return agent.getValuation(auction) * (1 + margin);
-    }
+  	if ( (agent.isBuyer(auction) && margin <= 0.0 && margin >= -1.0 )
+  			|| (agent.isSeller(auction) && margin >= 0.0) ) {
+  		return agent.getValuation(auction) * (1 + margin);
+  	} else {
+  		return currentPrice;
+  	}
   }
 
   protected double targetMargin( double targetPrice ) {
     double privValue = agent.getValuation(auction);
     double targetMargin = 0;
-    if ( agent.isBuyer(auction) ) {
-      targetMargin = (targetPrice - privValue) / privValue;
-    } else {
-      targetMargin = (privValue - targetPrice) / privValue;
-    }
-    if ( targetMargin < 0 ) {
-      targetMargin = 0;
-    }
+    targetMargin = (targetPrice - privValue) / privValue;
+    
     return targetMargin;
   }
 
   protected void adjustMargin( double targetMargin ) {
     learner.train(targetMargin);
+    updateCurrentPrice();
   }
 
   protected double perterb( double price ) {
-    double relative = perterbationDistribution.nextDouble();
-    double absolute = perterbationDistribution.nextDouble();
+    double relative = relativePerterbationDistribution.nextDouble();
+    double absolute = absolutePerterbationDistribution.nextDouble();
     return relative * price + absolute;
   }
 
