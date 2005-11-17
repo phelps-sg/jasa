@@ -356,8 +356,8 @@ public class RepastMarketSimulation extends SimModelImpl implements
       this.width = width;
     }
 
-    public Object get( int x, int y ) {
-      int abs = y * width + x;
+    public Object get( int col, int row ) {
+      int abs = row * width + col;
       if ( abs >= agents.size() ) {
         return new DrawableAgentAdaptor(auction);
       }
@@ -448,7 +448,11 @@ public class RepastMarketSimulation extends SimModelImpl implements
     }
 
     public Object getObjectAt( int x, int y ) {
-      return matrix.get(x, y);
+      // x and y switched to work around a possible
+      // bug in RePast:
+      // x and y are suspected to take value
+      // from the range of the other's.
+      return matrix.get(y, x);
     }
 
     public Dimension getSize() {
