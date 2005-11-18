@@ -89,6 +89,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   protected double lowestAskPrice;
 
   protected double highestBidPrice;
+  
+  protected Shout highestUnacceptedBid;
+
+  protected Shout lowestUnacceptedAsk;
 
   static final String P_MEMORYSIZE = "memorysize";
 
@@ -149,6 +153,14 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       markMatched(asks);
       markMatched(bids);
     }
+    
+    if ( event.getAsk() == lowestUnacceptedAsk ) {
+    	lowestUnacceptedAsk = null;
+    }
+    
+    if ( event.getBid() == highestUnacceptedBid ) {
+    	highestUnacceptedBid = null;
+    }
     observableProxy.notifyObservers();
   }
 
@@ -178,12 +190,24 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       if ( shout.getPrice() < lowestAskPrice ) {
         lowestAskPrice = shout.getPrice();
       }
+      
+      if ( lowestUnacceptedAsk == null
+      		|| lowestUnacceptedAsk.getPrice() > shout.getPrice() ) {
+      	lowestUnacceptedAsk = shout;      	
+      }
     } else {
       bids.add(shout);
       memoryBids[currentMemoryCell]++;
       if ( shout.getPrice() > highestBidPrice ) {
         highestBidPrice = shout.getPrice();
       }
+      
+      if ( highestUnacceptedBid == null 
+      		|| highestUnacceptedBid.getPrice() < shout.getPrice() ) {
+      	highestUnacceptedBid = shout;
+      }
+      
+      	
     }
     observableProxy.notifyObservers();
   }
@@ -221,6 +245,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
   
   public double getHighestUnacceptedBidPrice() {
+  	if ( highestUnacceptedBid != null ) {
+  		return highestUnacceptedBid.getPrice();
+  	}
+  	
     Iterator i = bids.iterator();
     double highestUnacceptedBidPrice = Double.NEGATIVE_INFINITY;
     while ( i.hasNext() ) {
@@ -228,6 +256,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       if ( !accepted(s) ) {
         if ( s.getPrice() > highestUnacceptedBidPrice ) {
           highestUnacceptedBidPrice = s.getPrice();
+          highestUnacceptedBid = s;
         }
       }
     }
@@ -250,13 +279,18 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
   
   public double getLowestUnacceptedAskPrice() {
-    Iterator i = asks.iterator();
+  	if ( lowestUnacceptedAsk != null ) {
+  		return lowestUnacceptedAsk.getPrice();
+  	}
+
+  	Iterator i = asks.iterator();
     double lowestUnacceptedBidPrice = Double.POSITIVE_INFINITY;
     while ( i.hasNext() ) {
       Shout s = (Shout) i.next();
       if ( !accepted(s) ) {
         if ( s.getPrice() < lowestUnacceptedBidPrice ) {
           lowestUnacceptedBidPrice = s.getPrice();
+          lowestUnacceptedAsk  = s;
         }
       }
     }
@@ -346,6 +380,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   protected void initialisePriceRanges() {
     highestBidPrice = Double.NEGATIVE_INFINITY;
     lowestAskPrice = Double.POSITIVE_INFINITY;
+    
+    highestUnacceptedBid = null;
+    lowestUnacceptedAsk = null;
   }
 
   protected void markMatched( List shouts ) {
@@ -371,8 +408,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
   
   public SortedView getSortedView() {
-  	if (view == null)
+  	if (view == null) {
   		view = new SortedView();
+  	}
   	
   	return view;
   }
@@ -384,8 +422,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public IncreasingQueryAccelerator getIncreasingQueryAccelerator() {
-    if ( accelerator == null )
+    if ( accelerator == null ) {
       accelerator = new IncreasingQueryAccelerator(getSortedView());
+    }
 
     return accelerator;
   }
@@ -569,8 +608,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     }
     
     public void destroy() {
-    	if (view != null)
+    	if (view != null) {
     		view.deleteObserver(this);
+    	}
     }
 
     /*
@@ -641,9 +681,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       priceForAsksBelow = price;
 
       while ( asksI.hasNext() )
-        if ( ((Shout) asksI.next()).getPrice() <= price )
+        if ( ((Shout) asksI.next()).getPrice() <= price ) {
           numOfAsksBelow++;
-        else {
+        } else {
           try {
             asksI.previous();
           } catch ( Exception e ) {
@@ -664,9 +704,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       priceForBidsAbove = price;
 
       while ( bidsI.hasNext() ) {
-        if ( ((Shout) bidsI.next()).getPrice() < price )
+        if ( ((Shout) bidsI.next()).getPrice() < price ) {
           numOfBidsAbove--;
-        else {
+        } else {
           try {
             bidsI.previous();
           } catch ( Exception e ) {
@@ -688,9 +728,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       priceForAcceptedAsksAbove = price;
 
       while ( acceptedAsksI.hasNext() )
-        if ( ((Shout) acceptedAsksI.next()).getPrice() < price )
+        if ( ((Shout) acceptedAsksI.next()).getPrice() < price ) {
           numOfAcceptedAsksAbove--;
-        else {
+        } else {
           try {
             acceptedAsksI.previous();
           } catch ( Exception e ) {
@@ -711,9 +751,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       priceForAcceptedBidsBelow = price;
 
       while ( acceptedBidsI.hasNext() )
-        if ( ((Shout) acceptedBidsI.next()).getPrice() <= price )
+        if ( ((Shout) acceptedBidsI.next()).getPrice() <= price ) {
           numOfAcceptedBidsBelow++;
-        else {
+        } else {
           // NOTE: due to a possible bug in TreeList,
           // NullPointerException may be
           // thrown. Simply doing it again seems working fine.
@@ -732,14 +772,15 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     public int getNumOfRejectedAsksBelow( double price ) {
     	resetIfNeeded();
     	
-      if ( priceForRejectedAsksBelow > price )
+      if ( priceForRejectedAsksBelow > price ) {
         resetForRejectedAsksBelow();
+      }
       priceForRejectedAsksBelow = price;
 
       while ( rejectedAsksI.hasNext() )
-        if ( ((Shout) rejectedAsksI.next()).getPrice() <= price )
+        if ( ((Shout) rejectedAsksI.next()).getPrice() <= price ) {
           numOfRejectedAsksBelow++;
-        else {
+        } else {
           try {
             rejectedAsksI.previous();
           } catch ( Exception e ) {
@@ -755,14 +796,15 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
     public int getNumOfRejectedBidsAbove( double price ) {
     	resetIfNeeded();
     	
-      if ( priceForRejectedBidsAbove > price )
+      if ( priceForRejectedBidsAbove > price ) {
         resetForRejectedBidsAbove();
+      }
       priceForRejectedBidsAbove = price;
 
       while ( rejectedBidsI.hasNext() )
-        if ( ((Shout) rejectedBidsI.next()).getPrice() < price )
+        if ( ((Shout) rejectedBidsI.next()).getPrice() < price ) {
           numOfRejectedBidsAbove--;
-        else {
+        } else {
           try {
             rejectedBidsI.previous();
           } catch ( Exception e ) {
@@ -817,12 +859,15 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
       else {
         int c = ((Comparable) o).compareTo(get((b + e) / 2));
 
-        if ( c == 1 )
+        if ( c == 1 ) {
+        	// o has higher price
           insert(1 + ((b + e) / 2), e, o);
-        else if ( c == -1 )
+        } else if ( c == -1 ) {
+        	// o has lower price
           insert(b, ((b + e) / 2) - 1, o);
-        else
+        } else {
           add((b + e) / 2, o);
+        }
       }
 
     }
