@@ -1,0 +1,4 @@
+simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
+simulation.auction.auctioneer.pricing.k = 0.5
+

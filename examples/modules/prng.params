@@ -1,0 +1,6 @@
+# PRNG configuration
+#  Use the 32bit version of the Mersenne Twister algorithm 
+simulation.prng = uk.ac.liv.prng.MT32
+#  with the following PRNG seed
+simulation.seed = 4523
+
