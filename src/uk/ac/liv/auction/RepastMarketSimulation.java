@@ -420,6 +420,8 @@ public class RepastMarketSimulation extends SimModelImpl implements
       this.width = width;
       this.auction = auction;
       height = auction.getNumberOfRegisteredTraders() / width;
+      height += (auction.getNumberOfRegisteredTraders() % width == 0) ? 0 : 1;
+      
       agents = new ArrayList();
       Iterator i = auction.getTraderIterator();
       while ( i.hasNext() ) {
