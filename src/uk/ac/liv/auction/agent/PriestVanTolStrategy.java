@@ -33,8 +33,6 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
     Serializable {
 
   static Logger logger = Logger.getLogger(PriestVanTolStrategy.class);
-
-  protected double p;
   
   protected HistoricalDataReport historyStats;
 
@@ -57,27 +55,38 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 
   protected void adjustMargin() {
 
-    double highestAsk = historyStats.getHighestAcceptedAskPrice();
-    double lowestBid = historyStats.getLowestAcceptedBidPrice();
-    p = (highestAsk + lowestBid) / 2;
-    if ( agent.isBuyer(auction) ) {
-      if ( !Double.isInfinite(p) && p < agent.getValuation(auction) ) {
-        adjustMargin(targetMargin(p));
-      } else if ( agent.active()) {
-        adjustMargin(0);
-      }
-    } else {
-      if ( !Double.isInfinite(Double.POSITIVE_INFINITY) && p > agent.getValuation(auction) ) {
-        adjustMargin(targetMargin(p));
-      } else if ( agent.active()  ) {
-        adjustMargin(0);
-      }
-    }
-
+	  double aMin = historyStats.getLowestUnacceptedAskPrice();	  
+	  double bMax = historyStats.getHighestUnacceptedBidPrice();
+	  
+	  if ( agent.isBuyer(auction) ) {
+		  if ( aMin > bMax ) {
+			  adjustMargin(targetMargin(bMax+perterb(bMax)));
+		  } else {
+			  adjustMargin(targetMargin(aMin+perterb(aMin)));
+		  }
+	  } else {
+		  if ( aMin > bMax ) {
+			  adjustMargin(targetMargin(aMin-perterb(aMin)));
+		  } else {
+			  adjustMargin(targetMargin(bMax-perterb(bMax)));
+		  }
+	  }
   }
   
-  public double getP() {
-    return p;
+  protected double calculatePrice( double margin ) {
+		double price = super.calculatePrice(margin);
+  	if (!agent.active()) {
+			if (agent.isBuyer(auction)) {
+				if (price > currentPrice) {
+					return currentPrice;
+				}
+			} else {
+				if (price < currentPrice) {
+					return currentPrice;
+				}
+			}
+		}
+  		
+  	return price;
   }
-
 }
