@@ -39,13 +39,13 @@ simulation.auction.report.2 = uk.ac.liv.auction.stats.HistoricalDataReport
 simulation.auction.agenttype.n = 2
 
 # 1st population
-simulation.auction.agenttype.0 = uk.ac.liv.auction.agent.PriestVanTolStrategy
+simulation.auction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
 simulation.auction.agenttype.0.numagents = 11
 simulation.auction.agenttype.0.initialtradeentitlement = 10
-simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
+simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.PriestVanTolStrategy
 simulation.auction.agenttype.0.strategy.scaling = 0.05
 simulation.auction.agenttype.0.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
-simulation.auction.agenttype.0.strategy.learner.learningrate = 0.1
+simulation.auction.agenttype.0.strategy.learner.learningrate = 0.3
 simulation.auction.agenttype.0.strategy.learner.momentum = 0.05
 simulation.auction.agenttype.0.isseller = true
 simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.DistinctDistributionValuer
@@ -61,7 +61,7 @@ simulation.auction.agenttype.1.initialtradeentitlement = 10
 simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.PriestVanTolStrategy
 simulation.auction.agenttype.1.strategy.scaling = 0.05
 simulation.auction.agenttype.1.strategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
-simulation.auction.agenttype.1.strategy.learner.learningrate = 0.1
+simulation.auction.agenttype.1.strategy.learner.learningrate = 0.3
 simulation.auction.agenttype.1.strategy.learner.momentum = 0.05
 simulation.auction.agenttype.1.isseller = false
 simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.DistinctDistributionValuer
