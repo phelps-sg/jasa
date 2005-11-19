@@ -43,7 +43,8 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     gamma = 0;
-    momentum = parameters.getDouble(base.push(P_MOMENTUM), null, 0);
+    momentum = parameters.getDouble(base.push(P_MOMENTUM), 
+    		new Parameter(P_DEF_BASE).push(P_MOMENTUM), 0);
   }
 
   public void train( double target ) {

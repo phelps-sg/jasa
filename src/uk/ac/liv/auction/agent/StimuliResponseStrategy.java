@@ -65,6 +65,8 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
    */
   protected StimuliResponseLearner learner = null;
 
+  public static final String P_DEF_BASE = "stimuliresponsestrategy";
+
   public static final String P_LEARNER = "learner";
 
   public StimuliResponseStrategy( AbstractTradingAgent agent ) {
@@ -81,7 +83,8 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
 
     Parameter learnerParameter = base.push(P_LEARNER);
     learner = (StimuliResponseLearner) parameters.getInstanceForParameter(
-        learnerParameter, null, StimuliResponseLearner.class);
+        learnerParameter, new Parameter(P_DEF_BASE).push(P_LEARNER), 
+        StimuliResponseLearner.class);
 
     ((Parameterizable) learner).setup(parameters, learnerParameter);
   }

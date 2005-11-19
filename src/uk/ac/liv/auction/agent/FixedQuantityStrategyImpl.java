@@ -48,6 +48,8 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
 
   int quantity = 1;
 
+  public static final String P_DEF_BASE = "fixedquantitystrategy";
+
   static final String P_QUANTITY = "quantity";
 
   public FixedQuantityStrategyImpl( AbstractTradingAgent agent ) {
@@ -59,8 +61,8 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), null,
-        quantity);
+    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), 
+    		new Parameter(P_DEF_BASE).push(P_QUANTITY), quantity);
   }
 
   public void setQuantity( int quantity ) {

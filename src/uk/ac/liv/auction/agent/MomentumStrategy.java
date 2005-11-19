@@ -72,6 +72,8 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
   protected AbstractContinousDistribution relativePerterbationDistribution;
   protected AbstractContinousDistribution absolutePerterbationDistribution;
 
+  public static final String P_DEF_BASE = "momentumstrategy";
+
   public static final String P_SCALING = "scaling";
 
   public static final String P_LEARNER = "learner";
@@ -90,11 +92,12 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 
     super.setup(parameters, base);
 
-    scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), null,
-        scaling);
+    scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), 
+    		new Parameter(P_DEF_BASE).push(P_SCALING), scaling);
 
-    learner = (MimicryLearner) parameters.getInstanceForParameter(base
-        .push(P_LEARNER), null, MimicryLearner.class);
+    learner = (MimicryLearner) parameters.getInstanceForParameter(
+    		base.push(P_LEARNER), new Parameter(P_DEF_BASE).push(P_LEARNER), 
+        MimicryLearner.class);
     if ( learner instanceof Parameterizable ) {
       ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
     }
@@ -188,6 +191,11 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 
   public boolean isLastShoutAccepted() {
     return lastShoutAccepted;
+  }
+  
+  public void setScaling( double scaling ) {
+  	assert scaling >= 0 && scaling <= 1;
+  	this.scaling = scaling;
   }
 
   public double getScaling() {

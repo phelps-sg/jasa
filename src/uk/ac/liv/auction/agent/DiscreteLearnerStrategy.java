@@ -57,6 +57,8 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
    */
   protected double markupScale = 1;
 
+  public static final String P_DEF_BASE = "discretelearnerstrategy";
+
   static final String P_MARKUPSCALE = "markupscale";
 
   static Logger logger = Logger.getLogger(DiscreteLearnerStrategy.class);
@@ -78,7 +80,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
     markupScale = parameters.getDoubleWithDefault(base.push(P_MARKUPSCALE),
-        null, markupScale);
+    		new Parameter(P_DEF_BASE).push(P_MARKUPSCALE), markupScale);
   }
 
   public void endOfRound( Auction auction ) {

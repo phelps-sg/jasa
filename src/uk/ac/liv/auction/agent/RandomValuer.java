@@ -62,6 +62,8 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
    * The maximum valuation to use.
    */
   protected double maxValue;
+  
+  public static final String P_DEF_BASE = "randomvaluer";
 
   public static final String P_MINVALUE = "minvalue";
 
@@ -81,8 +83,10 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    minValue = parameters.getDouble(base.push(P_MINVALUE), null, 0);
-    maxValue = parameters.getDouble(base.push(P_MAXVALUE), null, minValue);
+    minValue = parameters.getDouble(base, 
+    		new Parameter(P_DEF_BASE).push(P_MINVALUE), 0);
+    maxValue = parameters.getDouble(base.push(P_MAXVALUE), 
+    		new Parameter(P_DEF_BASE).push(P_MAXVALUE), minValue);
     initialise();
   }
 

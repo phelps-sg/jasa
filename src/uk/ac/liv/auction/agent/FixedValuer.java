@@ -34,6 +34,8 @@ import java.io.Serializable;
 public class FixedValuer implements ValuationPolicy, Serializable {
 
   protected double value;
+  
+  public static final String P_DEF_BASE = "fixedvaluer";
 
   public static final String P_VALUE = "value";
 
@@ -45,7 +47,8 @@ public class FixedValuer implements ValuationPolicy, Serializable {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    value = parameters.getDouble(base.push(P_VALUE), null, 0);
+    value = parameters.getDouble(base.push(P_VALUE), 
+    		new Parameter(P_DEF_BASE).push(P_VALUE), 0);
   }
 
   public double determineValue( Auction auction ) {

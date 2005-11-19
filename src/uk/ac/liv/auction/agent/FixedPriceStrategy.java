@@ -34,6 +34,8 @@ public class FixedPriceStrategy extends FixedQuantityStrategyImpl implements
 
   protected double price;
 
+  public static final String P_DEF_BASE = "fixedpricestrategy";
+
   static final String P_PRICE = "price";
 
   public FixedPriceStrategy( AbstractTradingAgent agent, double price,
@@ -49,7 +51,8 @@ public class FixedPriceStrategy extends FixedQuantityStrategyImpl implements
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    price = parameters.getDoubleWithDefault(base.push(P_PRICE), null, 0);
+    price = parameters.getDoubleWithDefault(base.push(P_PRICE), 
+    		new Parameter(P_DEF_BASE).push(P_PRICE), 0);
   }
 
   public Object protoClone() {

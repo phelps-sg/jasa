@@ -43,7 +43,8 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
   
   protected static double maxValue;
   
-  
+  public static final String P_DEF_BASE = "distinctdistributionvaluer";
+
   public static final String P_MINVALUEMIN = "minvaluemin";
   public static final String P_MINVALUEMAX = "minvaluemax";
   public static final String P_RANGEMIN = "rangemin";
@@ -51,10 +52,14 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
   
   
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    minValueMin = parameters.getDouble(base.push(P_MINVALUEMIN), null, 0);
-    minValueMax = parameters.getDouble(base.push(P_MINVALUEMAX), null, minValueMin);
-    rangeMin = parameters.getDouble(base.push(P_RANGEMIN),  null, 0);
-    rangeMax = parameters.getDouble(base.push(P_RANGEMAX), null, rangeMax);
+    minValueMin = parameters.getDouble(base.push(P_MINVALUEMIN), 
+    		new Parameter(P_DEF_BASE).push(P_MINVALUEMIN), 0);
+    minValueMax = parameters.getDouble(base.push(P_MINVALUEMAX), 
+    		new Parameter(P_DEF_BASE).push(P_MINVALUEMAX), minValueMin);
+    rangeMin = parameters.getDouble(base.push(P_RANGEMIN), 
+    		new Parameter(P_DEF_BASE).push(P_RANGEMIN), 0);
+    rangeMax = parameters.getDouble(base.push(P_RANGEMAX), 
+    		new Parameter(P_DEF_BASE).push(P_RANGEMAX), rangeMax);
     initialise();
   }
 

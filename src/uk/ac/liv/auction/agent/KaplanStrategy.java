@@ -88,6 +88,8 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
 
   protected DailyStatsReport dailyStats;
 
+  public static final String P_DEF_BASE = "kaplanstrategy";
+
   public static final String P_T = "t";
 
   public static final String P_S = "s";
@@ -98,8 +100,10 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    t = parameters.getIntWithDefault(base.push(P_T), null, t);
-    s = parameters.getDoubleWithDefault(base.push(P_S), null, s);
+    t = parameters.getIntWithDefault(base.push(P_T), 
+    		new Parameter(P_DEF_BASE).push(P_T), t);
+    s = parameters.getDoubleWithDefault(base.push(P_S), 
+    		new Parameter(P_DEF_BASE).push(P_S), s);
   }
 
   public Object protoClone() {

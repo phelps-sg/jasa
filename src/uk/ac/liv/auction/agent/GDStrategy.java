@@ -77,6 +77,8 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
   
   protected HistoricalDataReport historyStats;
 
+  public static final String P_DEF_BASE = "gdstrategy";
+
   public static final String P_MAXPRICE = "maxprice";
 
   public static double MAX_PRICE = 200;
@@ -87,8 +89,8 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    MAX_PRICE = parameters.getDoubleWithDefault(base.push(P_MAXPRICE), null,
-        MAX_PRICE);
+    MAX_PRICE = parameters.getDoubleWithDefault(base.push(P_MAXPRICE), 
+    		new Parameter(P_DEF_BASE).push(P_MAXPRICE), MAX_PRICE);
   }
 
   public Object protoClone() {

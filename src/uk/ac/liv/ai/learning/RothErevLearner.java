@@ -151,6 +151,8 @@ public class RothErevLearner extends AbstractLearner implements Prototypeable,
   static final double DEFAULT_E = 0.2;
 
   static final double DEFAULT_S1 = 1.0;
+  
+  static final String P_DEF_BASE = "rotherevlearner";
 
   /**
    * Construct a new learner.
@@ -179,10 +181,14 @@ public class RothErevLearner extends AbstractLearner implements Prototypeable,
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    k = parameters.getIntWithDefault(base.push("k"), null, DEFAULT_K);
-    r = parameters.getDoubleWithDefault(base.push("r"), null, DEFAULT_R);
-    e = parameters.getDoubleWithDefault(base.push("e"), null, DEFAULT_E);
-    s1 = parameters.getDoubleWithDefault(base.push("s1"), null, DEFAULT_S1);
+    k = parameters.getIntWithDefault(base.push("k"), 
+    		new Parameter(P_DEF_BASE).push("k"), DEFAULT_K);
+    r = parameters.getDoubleWithDefault(base.push("r"), 
+    		new Parameter(P_DEF_BASE).push("r"), DEFAULT_R);
+    e = parameters.getDoubleWithDefault(base.push("e"), 
+    		new Parameter(P_DEF_BASE).push("e"), DEFAULT_E);
+    s1 = parameters.getDoubleWithDefault(base.push("s1"), 
+    		new Parameter(P_DEF_BASE).push("s1"), DEFAULT_S1);
     validateParams();
     q = new double[k];
     p = new DiscreteProbabilityDistribution(k);

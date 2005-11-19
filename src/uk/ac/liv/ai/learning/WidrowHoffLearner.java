@@ -70,6 +70,9 @@ public class WidrowHoffLearner extends AbstractLearner implements
   public static final double DEFAULT_LEARNING_RATE = 0.1;
 
   public static final String P_LEARNINGRATE = "learningrate";
+  
+  public static final String P_DEF_BASE = "widrowhofflearner";
+
 
   public WidrowHoffLearner( double learningRate ) {
     this.learningRate = learningRate;
@@ -82,7 +85,8 @@ public class WidrowHoffLearner extends AbstractLearner implements
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
-    learningRate = parameters.getDoubleWithDefault(base.push(P_LEARNINGRATE), null, DEFAULT_LEARNING_RATE);
+    learningRate = parameters.getDoubleWithDefault(base.push(P_LEARNINGRATE), 
+    		new Parameter(P_DEF_BASE).push(P_LEARNINGRATE), DEFAULT_LEARNING_RATE);
   }
 
   public Object protoClone() {

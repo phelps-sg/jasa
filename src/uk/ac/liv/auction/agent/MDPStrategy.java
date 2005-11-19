@@ -56,6 +56,8 @@ public class MDPStrategy extends DiscreteLearnerStrategy implements
 
   protected boolean firstShout = true;
 
+  public static final String P_DEF_BASE = "mdpstrategy";
+
   public static final String P_LEARNER = "learner";
 
   public static final String P_QUOTEBINS = "quotebins";
@@ -90,11 +92,16 @@ public class MDPStrategy extends DiscreteLearnerStrategy implements
         null, MDPLearner.class);
     ((Parameterizable) learner).setup(parameters, learnerParameter);
 
-    askBinStart = parameters.getDouble(base.push(P_ASKBINSTART), null, 0);
-    askBinWidth = parameters.getDouble(base.push(P_ASKBINWIDTH), null, 0);
-    bidBinStart = parameters.getDouble(base.push(P_BIDBINSTART), null, 0);
-    bidBinWidth = parameters.getDouble(base.push(P_BIDBINWIDTH), null, 0);
-    quoteBins = parameters.getInt(base.push(P_QUOTEBINS), null, 1);
+    askBinStart = parameters.getDouble(base.push(P_ASKBINSTART), 
+    		new Parameter(P_DEF_BASE).push(P_ASKBINSTART), 0);
+    askBinWidth = parameters.getDouble(base.push(P_ASKBINWIDTH), 
+    		new Parameter(P_DEF_BASE).push(P_ASKBINWIDTH), 0);
+    bidBinStart = parameters.getDouble(base.push(P_BIDBINSTART), 
+    		new Parameter(P_DEF_BASE).push(P_BIDBINSTART), 0);
+    bidBinWidth = parameters.getDouble(base.push(P_BIDBINWIDTH), 
+    		new Parameter(P_DEF_BASE).push(P_BIDBINWIDTH), 0);
+    quoteBins = parameters.getInt(base.push(P_QUOTEBINS), 
+    		new Parameter(P_DEF_BASE).push(P_QUOTEBINS), 1);
   }
 
   public int act() {
