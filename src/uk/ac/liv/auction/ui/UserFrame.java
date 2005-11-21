@@ -135,7 +135,6 @@ public class UserFrame extends JFrame implements Parameterizable {
       }
     });
 
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
     try {
       Image image = ObjectConverter.getImage(parameters.getString(base
           .push(P_ICON)));
