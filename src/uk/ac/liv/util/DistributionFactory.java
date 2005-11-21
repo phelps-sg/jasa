@@ -32,13 +32,16 @@ public abstract class DistributionFactory {
   
   public static final String P_DISTFACTORY = "distribution";
   
+  public static final String P_DEF_BASE = "P_DISTFACTORY";
+  
   static Logger logger = Logger.getLogger(DistributionFactory.class);
 
   public static void setup( ParameterDatabase parameters, Parameter base ) {
     try {
       DistributionFactory.currentFactory =
         (DistributionFactory)
-          parameters.getInstanceForParameter(base.push(P_DISTFACTORY), null, DistributionFactory.class);
+          parameters.getInstanceForParameter(base.push(P_DISTFACTORY), 
+          		new Parameter(P_DEF_BASE), DistributionFactory.class);
     } catch ( ParamClassLoadException e ) {
       logger.warn(e.getMessage());
     }

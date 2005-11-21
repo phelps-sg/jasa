@@ -94,6 +94,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
   protected Shout lowestUnacceptedAsk;
 
+  public static final String P_DEF_BASE = "historicaldatareport";
+  
   static final String P_MEMORYSIZE = "memorysize";
 
   static Logger logger = Logger.getLogger(HistoricalDataReport.class);
@@ -122,8 +124,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null,
-        memorySize);
+    memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), 
+    		new Parameter(P_DEF_BASE).push(P_MEMORYSIZE), memorySize);
     memoryBids = new int[memorySize];
     memoryAsks = new int[memorySize];
     for ( int i = 0; i < memorySize; i++ ) {

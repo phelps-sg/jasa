@@ -32,6 +32,8 @@ import org.apache.log4j.Logger;
 
 public abstract class PRNGFactory {
 
+  public static final String P_DEF_BASE = "prngfactory";
+  
   protected static PRNGFactory currentFactory = new MT();
 
   static Logger logger = Logger.getLogger(PRNGFactory.class);
@@ -39,7 +41,7 @@ public abstract class PRNGFactory {
   public static void setup( ParameterDatabase parameters, Parameter base ) {
     try {
       PRNGFactory.currentFactory = (PRNGFactory) parameters
-          .getInstanceForParameter(base, null, PRNGFactory.class);
+          .getInstanceForParameter(base, new Parameter(P_DEF_BASE), PRNGFactory.class);
     } catch ( ParamClassLoadException e ) {
       logger.warn(e.getMessage());
     }

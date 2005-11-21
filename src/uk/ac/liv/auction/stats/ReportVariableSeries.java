@@ -62,7 +62,7 @@ import uk.ac.liv.auction.event.TransactionExecutedEvent;
 public class ReportVariableSeries extends FreeChartSeries {
 
   static Logger logger = Logger.getLogger(ReportVariableSeries.class);
-
+  
   public static final String P_VAR = "var";
 
   public static final String P_EVENT = "event";

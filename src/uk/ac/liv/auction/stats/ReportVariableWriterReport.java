@@ -50,6 +50,8 @@ import ec.util.ParameterDatabase;
 public class ReportVariableWriterReport implements AuctionReport,
     Parameterizable {
 
+  public static final String P_DEF_BASE = "reportvariablewriterreport";
+	
   private static String P_AUCTION_LOG = "auctionlog";
 
   private static String P_DAY_LOG = "daylog";
@@ -101,29 +103,31 @@ public class ReportVariableWriterReport implements AuctionReport,
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     if ( !initialized ) {
+    	
+    	Parameter defBase = new Parameter(P_DEF_BASE);
 
-      if ( parameters.getBoolean(base.push(P_AUCTION_LOG), null, true) ) {
+      if ( parameters.getBoolean(base.push(P_AUCTION_LOG), defBase.push(P_AUCTION_LOG), true) ) {
         auctionLog = new InternalRVWriterReport();
         auctionLog.setup(parameters, base.push(P_AUCTION_LOG));
       } else {
         auctionLog = null;
       }
 
-      if ( parameters.getBoolean(base.push(P_DAY_LOG), null, true) ) {
+      if ( parameters.getBoolean(base.push(P_DAY_LOG), defBase.push(P_DAY_LOG), true) ) {
         dayLog = new InternalRVWriterReport();
         dayLog.setup(parameters, base.push(P_DAY_LOG));
       } else {
         dayLog = null;
       }
 
-      if ( parameters.getBoolean(base.push(P_ROUND_LOG), null, true) ) {
+      if ( parameters.getBoolean(base.push(P_ROUND_LOG), defBase.push(P_ROUND_LOG), true) ) {
         roundLog = new InternalRVWriterReport();
         roundLog.setup(parameters, base.push(P_ROUND_LOG));
       } else {
         roundLog = null;
       }
 
-      if ( parameters.getBoolean(base.push(P_TRANSACTION_LOG), null, true) ) {
+      if ( parameters.getBoolean(base.push(P_TRANSACTION_LOG), defBase.push(P_TRANSACTION_LOG), true) ) {
       	transactionLog = new InternalRVWriterReport();
       	transactionLog.setup(parameters, base.push(P_TRANSACTION_LOG));
       } else {

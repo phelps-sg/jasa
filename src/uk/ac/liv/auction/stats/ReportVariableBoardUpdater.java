@@ -52,6 +52,8 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
   public static String EQUIL_PRICE = "equilibrium.price";
   
+  public static final String P_DEF_BASE = "reportvariableboardupdater";
+  
   public static String P_TRANS_PRICE_MEMORY = "transpricememory";
 
   /**
@@ -65,7 +67,8 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
   }
   
   public void setup( ParameterDatabase parameters, Parameter base ) {
-  	transPrices = new FixedLengthQueue(parameters.getIntWithDefault(base.push(P_TRANS_PRICE_MEMORY), null, 3));
+  	transPrices = new FixedLengthQueue(parameters.getIntWithDefault(base.push(P_TRANS_PRICE_MEMORY), 
+  			new Parameter(P_DEF_BASE).push(P_TRANS_PRICE_MEMORY), 3));
   }
   
   public void reset() {
