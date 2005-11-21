@@ -80,6 +80,8 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
    * @uml.property name="efficiency"
    */
   protected double efficiency;
+  
+  public static final String P_DEF_BASE = "dynamicsurplusreport";
 
   public static final String P_QUANTITY = "quantity";
   
@@ -89,7 +91,8 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
   static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), null,
+    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), 
+    		new Parameter(P_DEF_BASE).push(P_QUANTITY),
         quantity);
   }
 

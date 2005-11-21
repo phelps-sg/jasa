@@ -85,6 +85,8 @@ public class ComplexityReport extends AbstractAuctionReport implements
    *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
    */
   protected ArrayList agents;
+  
+  public static final String P_DEF_BASE = "complexityreport";
 
   public static final String P_WRITER = "writer";
 
@@ -122,16 +124,18 @@ public class ComplexityReport extends AbstractAuctionReport implements
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+
     complexitySequence = (DataWriter) parameters.getInstanceForParameter(base
-        .push(P_WRITER), null, DataWriter.class);
+        .push(P_WRITER), defBase.push(P_WRITER), DataWriter.class);
 
     if ( complexitySequence instanceof Parameterizable ) {
       ((Parameterizable) complexitySequence).setup(parameters, base
           .push(P_WRITER));
     }
 
-    numStates = parameters.getIntWithDefault(base.push(P_NUMSTATES), null,
-        numStates);
+    numStates = parameters.getIntWithDefault(base.push(P_NUMSTATES), 
+    		defBase.push(P_NUMSTATES), numStates);
 
   }
 

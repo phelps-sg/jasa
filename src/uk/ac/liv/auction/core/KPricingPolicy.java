@@ -48,6 +48,8 @@ public abstract class KPricingPolicy implements Serializable, PricingPolicy,
   protected double k;
 
   public static final String P_K = "k";
+  
+  public static final String P_DEF_BASE = "kpricingpolicy";
 
   public KPricingPolicy() {
     this(0);
@@ -59,7 +61,8 @@ public abstract class KPricingPolicy implements Serializable, PricingPolicy,
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    k = parameters.getDoubleWithDefault(base.push(P_K), null, 0);
+    k = parameters.getDoubleWithDefault(base.push(P_K), 
+    		new Parameter(P_DEF_BASE).push(P_K), 0);
   }
 
   /**

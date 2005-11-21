@@ -103,6 +103,8 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
   public static final String EST_EQUILIBRIUM_PRICE = "estimated.equilibrium.price";
 
   protected FixedLengthQueue memory;
+  
+  public static final String P_DEF_BASE = "cdaee";
 
   public ContinuousDoubleAuctioneerEE() {
     this(null);
@@ -115,11 +117,12 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
   public void setup( ParameterDatabase parameters, Parameter base ) {
     super.setup(parameters, base);
 
-    delta = parameters.getDoubleWithDefault(base.push(P_DELTA), null, delta);
+    delta = parameters.getDoubleWithDefault(base.push(P_DELTA), 
+    		new Parameter(P_DEF_BASE).push(P_DELTA), delta);
     assert (0 <= delta);
 
-    memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), null,
-        memorySize);
+    memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE), 
+    		new Parameter(P_DEF_BASE).push(P_MEMORYSIZE), memorySize);
     assert (0 <= memorySize);
     memory = new FixedLengthQueue(memorySize);
 

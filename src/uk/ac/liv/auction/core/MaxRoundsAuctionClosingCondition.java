@@ -54,7 +54,7 @@ public class MaxRoundsAuctionClosingCondition extends TimingCondition implements
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS),
-        null, -1);
+    		new Parameter(P_DEF_BASE).push(P_MAXIMUM_ROUNDS), -1);
   }
 
   /**

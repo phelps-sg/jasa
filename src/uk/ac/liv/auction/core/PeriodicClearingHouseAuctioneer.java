@@ -38,6 +38,8 @@ public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
 
   public static final int DEF_SHOUTNUMEACHPERIOD = 6;
 
+  public static final String P_DEF_BASE = "pch";
+
   /**
    * @uml.property name="shoutNumEachPeriod"
    */
@@ -60,7 +62,7 @@ public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
     super.setup(parameters, base);
 
     shoutNumEachPeriod = parameters.getInt(base.push(P_SHOUTNUMEACHPERIOD),
-        null, DEF_SHOUTNUMEACHPERIOD);
+        new Parameter(P_DEF_BASE).push(P_SHOUTNUMEACHPERIOD), DEF_SHOUTNUMEACHPERIOD);
 
     if ( shoutNumEachPeriod <= 0 )
       shoutNumEachPeriod = DEF_SHOUTNUMEACHPERIOD;

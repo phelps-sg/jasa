@@ -24,5 +24,7 @@ package uk.ac.liv.auction.core;
  */
 
 public interface AuctionClosingCondition {
+	
+  public static final String P_DEF_BASE = "auctionclosingcondition";
 
 }

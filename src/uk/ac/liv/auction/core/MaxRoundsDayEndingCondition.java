@@ -54,7 +54,7 @@ public class MaxRoundsDayEndingCondition extends TimingCondition implements
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     lengthOfDay = parameters.getIntWithDefault(base.push(P_LENGTH_OF_DAY),
-        null, -1);
+    		new Parameter(P_DEF_BASE).push(P_LENGTH_OF_DAY), -1);
   }
 
   /**

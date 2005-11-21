@@ -50,6 +50,8 @@ import java.io.*;
 public class CSVReport extends DataWriterReport
     implements Parameterizable {
 
+  public static final String P_DEF_BASE = "csvreport";
+  
   static final String P_ASK_QUOTE_LOG_FILE = "askquotelogfile";
   static final String P_BID_QUOTE_LOG_FILE = "bidquotelogfile";
   static final String P_ASK_LOG_FILE = "asklogfile";
@@ -59,16 +61,24 @@ public class CSVReport extends DataWriterReport
   static final int CSV_COLS = 2;
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+  	
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+  	
     String askQuoteLogFile =
-        parameters.getString(base.push(P_ASK_QUOTE_LOG_FILE), null);
+        parameters.getString(base.push(P_ASK_QUOTE_LOG_FILE), 
+        		defBase.push(P_ASK_QUOTE_LOG_FILE));
     String bidQuoteLogFile =
-        parameters.getString(base.push(P_BID_QUOTE_LOG_FILE), null);
+        parameters.getString(base.push(P_BID_QUOTE_LOG_FILE), 
+        		defBase.push(P_BID_QUOTE_LOG_FILE));
     String askLogFile =
-        parameters.getString(base.push(P_ASK_LOG_FILE), null);
+        parameters.getString(base.push(P_ASK_LOG_FILE), 
+        		defBase.push(P_ASK_LOG_FILE));
     String bidLogFile =
-        parameters.getString(base.push(P_BID_LOG_FILE), null);
+        parameters.getString(base.push(P_BID_LOG_FILE), 
+        		defBase.push(P_BID_LOG_FILE));
     String transLogFile =
-        parameters.getString(base.push(P_TRANS_LOG_FILE), null);
+        parameters.getString(base.push(P_TRANS_LOG_FILE), 
+        		defBase.push(P_TRANS_LOG_FILE));
     try {
       if ( askQuoteLogFile != null ) {
         setCSVAskQuoteLog(new FileOutputStream(new File(askQuoteLogFile)));

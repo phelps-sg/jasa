@@ -26,7 +26,7 @@ import uk.ac.liv.auction.event.AuctionEventListener;
  */
 
 public interface AuctionReport extends AuctionEventListener {
-
+	
   /**
    * Produce the final report for the user. Implementors can do whatever they
    * see fit, for example by writing a report on stdout, or they may choose to

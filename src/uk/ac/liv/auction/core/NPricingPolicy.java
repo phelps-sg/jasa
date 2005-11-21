@@ -76,7 +76,8 @@ public class NPricingPolicy implements PricingPolicy, Resetable, Serializable, P
 
 	
   public void setup(ParameterDatabase parameters, Parameter base) {    
-    n = parameters.getIntWithDefault(base.push(P_N), new Parameter(P_DEF_BASE).push(P_N), 1);
+    n = parameters.getIntWithDefault(base.push(P_N), 
+    		new Parameter(P_DEF_BASE).push(P_N), 1);
     initialize();
   }
   

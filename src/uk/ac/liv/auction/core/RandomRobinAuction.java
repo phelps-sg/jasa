@@ -218,6 +218,8 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
   
   protected boolean endOfRound;
 
+  public static final String P_DEF_BASE = "randomrobinauction";
+
   public static final String P_REPORT = "report";
 
   public static final String P_AUCTIONEER = "auctioneer";
@@ -261,13 +263,17 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+  	
+  	Parameter defBase = new Parameter(P_DEF_BASE);
 
     name = parameters.getStringWithDefault(base.push(P_NAME), null, "Auction "
         + id);
 
     try {
       closingCondition = (TimingCondition) parameters.getInstanceForParameter(
-          base.push(P_AUCTION_CLOSING), null, AuctionClosingCondition.class);      
+          base.push(P_AUCTION_CLOSING), 
+          defBase.push(P_AUCTION_CLOSING), 
+          AuctionClosingCondition.class);      
     } catch ( ParamClassLoadException e ) {
       logger.warn("No parameter specified for " + base.push(P_AUCTION_CLOSING) + 
                     ": configuring null closing condition");
@@ -282,7 +288,8 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
     try {
       dayEndingCondition = (TimingCondition) parameters
-          .getInstanceForParameter(base.push(P_DAY_ENDING), null,
+          .getInstanceForParameter(base.push(P_DAY_ENDING), 
+          		defBase.push(P_DAY_ENDING),
               DayEndingCondition.class);
       dayEndingCondition.setAuction(this);
     } catch ( ParamClassLoadException e ) {
@@ -297,7 +304,8 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
     try {
       report = (AuctionReport) parameters.getInstanceForParameter(base
-          .push(P_REPORT), null, AuctionReport.class);
+          .push(P_REPORT), 
+          defBase.push(P_REPORT), AuctionReport.class);
       report.setAuction(this);
       addAuctionEventListener(report);
     } catch ( ParamClassLoadException e ) {
@@ -309,39 +317,44 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
     }
 
     Auctioneer auctioneer = (Auctioneer) parameters.getInstanceForParameter(
-        base.push(P_AUCTIONEER), null, Auctioneer.class);
+        base.push(P_AUCTIONEER), defBase.push(P_AUCTIONEER), Auctioneer.class);
     ((Parameterizable) auctioneer).setup(parameters, base.push(P_AUCTIONEER));
     setAuctioneer(auctioneer);
     addAuctionEventListener(auctioneer);
 
-    if ( parameters.getBoolean(base.push(P_CONSOLE), null, false) ) {
+    if ( parameters.getBoolean(base.push(P_CONSOLE), defBase.push(P_CONSOLE), false) ) {
       activateGUIConsole();
     }
 
     try {
       AuctionEventListener eventHandler = (AuctionEventListener) parameters
-          .getInstanceForParameter(base.push(P_EVENTHANDLER), null,
+          .getInstanceForParameter(base.push(P_EVENTHANDLER), 
+          		defBase.push(P_EVENTHANDLER),
               AuctionEventListener.class);
       addAuctionEventListener(eventHandler);
     } catch ( ParamClassLoadException e ) {
     }
 
     Parameter typeParam = base.push(P_AGENT_TYPE);
+    Parameter defTypeParam = defBase.push(P_AGENT_TYPE);
 
-    int numAgentTypes = parameters.getInt(typeParam.push("n"), null, 1);
+    int numAgentTypes = parameters.getInt(typeParam.push("n"), 
+    		defTypeParam.push("n"), 1);
 
     for ( int t = 0; t < numAgentTypes; t++ ) {
 
       Parameter typeParamT = typeParam.push("" + t);
+      Parameter defTypeParamT = defTypeParam.push("" + t);
 
-      int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS), null, 0);
+      int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS), 
+      		defTypeParamT.push(P_NUM_AGENTS).push(P_NUM_AGENTS), 0);
 
       logger.info("Configuring agent population " + t + ":\n\t" + numAgents
           + " agents of type " + parameters.getString(typeParamT, null));
 
       for ( int i = 0; i < numAgents; i++ ) {
         TradingAgent agent = (TradingAgent) parameters.getInstanceForParameter(
-            typeParamT, null, TradingAgent.class);
+            typeParamT, defTypeParamT, TradingAgent.class);
         ((Parameterizable) agent).setup(parameters, typeParamT);
         register(agent);
       }

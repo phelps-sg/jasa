@@ -24,5 +24,7 @@ package uk.ac.liv.auction.core;
  */
 
 public interface DayEndingCondition {
+	
+  public static final String P_DEF_BASE = "dayendingcondition";
 
 }

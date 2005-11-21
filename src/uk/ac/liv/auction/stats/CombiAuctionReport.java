@@ -66,6 +66,8 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
    */
   protected RandomRobinAuction auction;
 
+  public static final String P_DEF_BASE = "combiauctionreport";
+
   public static final String P_NUMLOGGERS = "n";
 
   public CombiAuctionReport( List reports ) {
@@ -77,12 +79,16 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+  	
+  	Parameter defBase = new Parameter(P_DEF_BASE);
 
-    int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), null, 1);
+    int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), 
+    		defBase.push(P_NUMLOGGERS), 1);
 
     for ( int i = 0; i < numLoggers; i++ ) {
       AuctionReport report = (AuctionReport) parameters
-          .getInstanceForParameter(base.push(i + ""), null, AuctionReport.class);
+          .getInstanceForParameter(base.push(i + ""), 
+          		defBase.push(i + ""), AuctionReport.class);
       report.setAuction(auction);
       if ( report instanceof Parameterizable ) {
         ((Parameterizable) report).setup(parameters, base.push(i + ""));

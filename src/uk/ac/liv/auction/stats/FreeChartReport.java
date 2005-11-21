@@ -75,6 +75,8 @@ public class FreeChartReport extends AbstractAuctionReport implements
 
   static Logger logger = Logger.getLogger(FreeChartReport.class);
 
+  public static final String P_DEF_BASE = "freechartreport";
+  
   public static final String P_NAME = "name";
 
   public static final String P_GRAPH = "graph";
@@ -105,6 +107,8 @@ public class FreeChartReport extends AbstractAuctionReport implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+  	
+  	Parameter defBase = new Parameter(P_DEF_BASE);
 
     frame = new UserFrame();
     frame.setup(parameters, base);
@@ -114,12 +118,14 @@ public class FreeChartReport extends AbstractAuctionReport implements
 
     for ( int i = 0; i < graphs.length; i++ ) {
       graphs[i] = (FreeChartGraph) parameters.getInstanceForParameterEq(base
-          .push(P_GRAPH).push(String.valueOf(i)), null, FreeChartGraph.class);
+          .push(P_GRAPH).push(String.valueOf(i)), 
+          defBase.push(P_GRAPH).push(String.valueOf(i)), FreeChartGraph.class);
       graphs[i].setReport(this);
       graphs[i].setup(parameters, base.push(P_GRAPH).push(String.valueOf(i)));
     }
 
-    saveToFile = parameters.getBoolean(base.push(P_SAVETOFILE), null,
+    saveToFile = parameters.getBoolean(base.push(P_SAVETOFILE), 
+    		defBase.push(P_SAVETOFILE),
         saveToFile);
 
     JPanel canvas = new JPanel();

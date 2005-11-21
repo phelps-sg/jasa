@@ -54,8 +54,8 @@ public class MaxDaysAuctionClosingCondition extends TimingCondition implements
    */
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    maximumDays = parameters.getIntWithDefault(base.push(P_MAXIMUM_DAYS), null,
-        -1);
+    maximumDays = parameters.getIntWithDefault(base.push(P_MAXIMUM_DAYS), 
+    		new Parameter(P_DEF_BASE).push(P_MAXIMUM_DAYS), -1);
   }
 
   /**

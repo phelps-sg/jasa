@@ -26,7 +26,7 @@ package uk.ac.liv.auction.core;
  */
 
 public interface PricingPolicy  {
-
+	
   public double determineClearingPrice( Shout bid, Shout ask,
                                          MarketQuote clearingQuote );
 

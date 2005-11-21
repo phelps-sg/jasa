@@ -65,6 +65,8 @@ public abstract class FreeChartGraph extends JPanel implements
     AuctionEventListener {
 
   static Logger logger = Logger.getLogger(FreeChartGraph.class);
+  
+  public static final String P_DEF_BASE = "freechartgraph";
 
   public static final String P_NAME = "name";
 
@@ -99,12 +101,17 @@ public abstract class FreeChartGraph extends JPanel implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+  	
+  	Parameter defBase = new Parameter(P_DEF_BASE);
 
     setName(parameters.getStringWithDefault(base.push(P_NAME), "Name here"));
 
-    setPreferredSize(new Dimension(parameters.getIntWithDefault(base
-        .push(P_WIDTH), null, 350), parameters.getIntWithDefault(base
-        .push(P_HEIGHT), null, 300)));
+    setPreferredSize(new Dimension(
+    		parameters.getIntWithDefault(base
+        .push(P_WIDTH), defBase.push(P_WIDTH), 350), 
+        parameters.getIntWithDefault(base
+        .push(P_HEIGHT), defBase.push(P_HEIGHT), 300))
+        );
 
     setupChart(parameters, base);
 

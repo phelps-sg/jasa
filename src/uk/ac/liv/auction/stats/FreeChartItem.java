@@ -60,6 +60,8 @@ public class FreeChartItem implements AuctionEventListener, Parameterizable {
 
   static Logger logger = Logger.getLogger(FreeChartItem.class);
 
+  public static final String P_DEF_BASE = "freechartitem";
+  
   public static final String P_NAME = "name";
 
   public static final String P_AXIS = "axis";
@@ -92,10 +94,14 @@ public class FreeChartItem implements AuctionEventListener, Parameterizable {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+
     name = parameters.getStringWithDefault(base.push(P_NAME), name);
-    axisIndex = parameters.getIntWithDefault(base.push(P_AXIS), null, 0);
+    axisIndex = parameters.getIntWithDefault(base.push(P_AXIS), 
+    		defBase.push(P_AXIS), 0);
     rendererIndex = parameters
-        .getIntWithDefault(base.push(P_RENDERER), null, 0);
+        .getIntWithDefault(base.push(P_RENDERER), defBase.push(P_RENDERER), 0);
   }
 
   public void eventOccurred( AuctionEvent event ) {
