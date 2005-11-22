@@ -98,6 +98,8 @@ import ec.util.ParameterDatabase;
  */
 public class MultipleSeriesGraph extends FreeChartGraph {
 
+  public static final String P_DEF_BASE = "multipleseriesgraph";
+  
   public static final String P_SERIES = "series";
 
   public static final String P_MARKER = "marker";
@@ -130,14 +132,19 @@ public class MultipleSeriesGraph extends FreeChartGraph {
 
   protected void setupChart( ParameterDatabase parameters, Parameter base ) {
 
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+
     // series
-    int num = parameters.getIntWithDefault(base.push(P_SERIES).push(P_NUM),
-        null, 0);
+  	Parameter defSeriesBase = defBase.push(P_SERIES);
+
+  	int num = parameters.getIntWithDefault(base.push(P_SERIES).push(P_NUM),
+    		defSeriesBase.push(P_NUM), 0);
     datasets = new XYDataset[num];
     for ( int i = 0; i < num; i++ ) {
       fcCollections.addSeries((FreeChartSeries) parameters
           .getInstanceForParameterEq(base.push(P_SERIES)
-              .push(String.valueOf(i)), null, FreeChartSeries.class));
+              .push(String.valueOf(i)), 
+              defSeriesBase.push(String.valueOf(i)), FreeChartSeries.class));
       fcCollections.getSeries(i).setGraph(this);
       fcCollections.getSeries(i).setup(parameters,
           base.push(P_SERIES).push(String.valueOf(i)));
@@ -145,19 +152,28 @@ public class MultipleSeriesGraph extends FreeChartGraph {
     }
 
     // markers
+  	Parameter defMarkerBase = defBase.push(P_MARKER);
+  	
     num = parameters
-        .getIntWithDefault(base.push(P_MARKER).push(P_NUM), null, 0);
+        .getIntWithDefault(base.push(P_MARKER).push(P_NUM), 
+        		defMarkerBase.push(P_NUM), 0);
     markers = new FreeChartMarker[num];
     for ( int i = 0; i < num; i++ ) {
       markers[i] = (FreeChartMarker) parameters.getInstanceForParameter(base
-          .push(P_MARKER).push(String.valueOf(i)), null, FreeChartMarker.class);
+          .push(P_MARKER).push(String.valueOf(i)), 
+          defMarkerBase.push(String.valueOf(i)), FreeChartMarker.class);
       markers[i].setGraph(this);
       markers[i].setup(parameters, base.push(P_MARKER).push(String.valueOf(i)));
     }
 
     // freechart and xyplot
-    String xAxisLabel = parameters.getStringWithDefault(base.push(P_X), "X");
-    String yAxisLabel = parameters.getStringWithDefault(base.push(P_Y), "Y");
+    Parameter defXAxisBase = defBase.push(P_X);
+    Parameter defYAxisBase = defBase.push(P_Y);
+    
+    String xAxisLabel = parameters.getStringWithDefault(base.push(P_X), 
+    		defXAxisBase, "X");
+    String yAxisLabel = parameters.getStringWithDefault(base.push(P_Y), 
+    		defYAxisBase, "Y");
     setChart(ChartFactory.createTimeSeriesChart(getName(), xAxisLabel,
         yAxisLabel, null, true, true, false));
     XYPlot xyplot = getChart().getXYPlot();
@@ -170,10 +186,11 @@ public class MultipleSeriesGraph extends FreeChartGraph {
 
     // axises
     int numOfRanges = parameters.getIntWithDefault(base.push(P_Y).push(P_NUM),
-        null, 1);
+    		defYAxisBase.push(P_NUM), 1);
     for ( int i = 0; i < numOfRanges; i++ ) {
       NumberAxis axis = new NumberAxis(parameters.getStringWithDefault(base
-          .push(P_Y).push(String.valueOf(i)), "Y " + i));
+          .push(P_Y).push(String.valueOf(i)), 
+          defYAxisBase.push(String.valueOf(i)), "Y " + i));
       xyplot.setRangeAxis(i, axis);
     }
 
@@ -188,8 +205,10 @@ public class MultipleSeriesGraph extends FreeChartGraph {
     }
 
     // renderers
+    Parameter defRenderBase = defBase.push(P_RENDERER);
+    
     int numOfRenderers = parameters.getIntWithDefault(base.push(P_RENDERER)
-        .push(P_NUM), null, 1);
+        .push(P_NUM), defRenderBase.push(P_NUM), 1);
     XYItemRenderer standardRenderer = xyplot.getRenderer();
     int index = 0;
     for ( int i = 0; i < fcCollections.getSeriesCount(); i++ ) {
@@ -202,7 +221,9 @@ public class MultipleSeriesGraph extends FreeChartGraph {
       try {
         xyplot.setRenderer(i, (XYItemRenderer) parameters
             .getInstanceForParameterEq(base.push(P_RENDERER).push(
-                String.valueOf(rendererIndex)), null, XYItemRenderer.class));
+                String.valueOf(rendererIndex)), 
+                defRenderBase.push(String.valueOf(rendererIndex)), 
+                XYItemRenderer.class));
       } catch ( ParamClassLoadException e ) {
         xyplot.setRenderer(new StandardXYItemRenderer());
       }

@@ -1,0 +1,110 @@
+###############
+# learners
+
+rotherevlearner.k = 100
+rotherevlearner.r = 0.1
+rotherevlearner.e = 0.2
+rotherevlearner.s1 = 1.0
+
+widrowhofflearner.learningrate = 0.1
+widrowhofflearner.momentum = 0.1
+
+###############
+# strategies
+
+discretelearnerstrategy.markupscale = 1
+
+#fixedpricestrategy.price = 
+
+fixedquantitystrategy.quantity = 1
+
+kaplanstrategy.t = 4
+kaplanstrategy.s = 0.5
+
+gdstrategy.maxprice = 300
+gdlstrategy.maxprice = 300
+
+momentumstrategy.scaling = 0.05
+momentumstrategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
+
+#stimuliresponsestrategy.learner = 
+
+#mdpstrategy.learner = 
+
+#mixedstrategy.prob = 
+#mixedstrategy.n = 
+
+###############
+# valuers
+
+#fixedvaluer.value = 
+
+randomvaluer.minvalue = 50
+randomvaluer.maxvalue = 200
+
+intervalvaluer.minvalue = 75
+intervalvaluer.step = 25
+
+distinctdistributionvaluer.minvaluemin = 161
+distinctdistributionvaluer.minvaluemax = 260
+distinctdistributionvaluer.rangemin = 90
+distinctdistributionvaluer.rangemax = 100
+
+##############
+# pricing
+
+kpricingpolicy.k = 0.5
+npricingpolicy.n = 4
+
+##############
+# reports
+
+dynamicsurplusreport.quantity = 2
+
+historicaldatareport.memorysize = 10
+
+reportvariableboardupdater.transpricememory = 10
+
+reportvariablewriterreport.auctionlog = false
+reportvariablewriterreport.daylog = false
+reportvariablewriterreport.roundlog = false
+reportvariablewriterreport.transactionlog = false
+
+freechartgraph.width = 800
+freechartgraph.height = 400
+
+##############
+# timing
+
+auctionclosingcondition.maximumdays = 5
+auctionclosingcondition.maximumrounds = 50
+
+dayendingcondition.lengthofday = 10
+
+#############
+# auctioneers
+
+pch.shoutnumeachperiod = 6
+cdaee.memorysize = 4
+
+#############
+# auctions
+
+#randomrobinauction.auctioneer = 
+#randomrobinauction.name = 
+#randomrobinauction.report = 
+#randomrobinauction.stats = 
+#randomrobinauction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+#randomrobinauction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+#randomrobinauction.console = false
+#randomrobinauction.agenttype.n = 2
+#randomrobinauction.agenttype.0 = uk.ac.liv.auction.zi.ZITraderAgent
+#randomrobinauction.agenttype.0.numagents = 6
+#randomrobinauction.agenttype.0.initialtradeentitlement = 10
+#randomrobinauction.agenttype.0.isseller = true
+
+############
+# prng
+
+prngfactory = uk.ac.liv.prng.MT32
+prng.seed = 4523

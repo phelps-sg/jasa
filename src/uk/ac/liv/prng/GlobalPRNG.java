@@ -42,6 +42,8 @@ public class GlobalPRNG {
 
   public static final String P_PRNG = "prng";
   
+  public static final String P_DEF_BASE = P_PRNG;
+  
   static Logger logger = Logger.getLogger(GlobalPRNG.class);
 
   public static void setup( ParameterDatabase parameters, Parameter base ) {
@@ -50,7 +52,8 @@ public class GlobalPRNG {
 
     long defaultSeed = seedGenerator.nextSeed();
 
-    seed = parameters.getLongWithDefault(base.push(P_SEED), null, defaultSeed);
+    seed = parameters.getLongWithDefault(base.push(P_SEED), 
+    		new Parameter(P_DEF_BASE).push(P_SEED), defaultSeed);
 
     prng = PRNGFactory.getFactory().create(seed);
   }

@@ -84,7 +84,7 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
   static final String P_N = "n";
 
-  public static final String P_DEF_BASE = "abstractstrategy";
+  public static final String P_DEF_BASE = "mixedstrategy";
 
   static final String P_PROBABILITY = "prob";
 
@@ -103,8 +103,9 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
-    int numStrategies = parameters.getInt(base.push(P_N), 
-    		new Parameter(P_DEF_BASE).push(P_N), 1);
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+  	
+    int numStrategies = parameters.getInt(base.push(P_N), defBase.push(P_N), 1);
     pureStrategies = new AbstractStrategy[numStrategies];
 
     probabilities = new DiscreteProbabilityDistribution(numStrategies);
@@ -112,14 +113,14 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
     for ( int i = 0; i < numStrategies; i++ ) {
       AbstractStrategy s = (AbstractStrategy) parameters
           .getInstanceForParameter(base.push(i + ""), 
-          		new Parameter(P_DEF_BASE).push(i + ""), Strategy.class);
+          		defBase.push(i + ""), Strategy.class);
       if ( s instanceof Parameterizable ) {
         ((Parameterizable) s).setup(parameters, base.push(i + ""));
       }
       pureStrategies[i] = s;
 
       double probability = parameters.getDouble(base.push(i + P_PROBABILITY),
-      		new Parameter(P_DEF_BASE).push(i + P_PROBABILITY), 0);
+      		defBase.push(i + P_PROBABILITY), 0);
       probabilities.setProbability(i, probability);
     }
 

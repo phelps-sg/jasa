@@ -1,0 +1,5 @@
+
+combiauctionreport.n = 3
+combiauctionreport.0 = uk.ac.liv.auction.stats.DailyStatsReport
+combiauctionreport.1 = uk.ac.liv.auction.stats.SurplusReport
+combiauctionreport.2 = uk.ac.liv.auction.stats.HistoricalDataReport

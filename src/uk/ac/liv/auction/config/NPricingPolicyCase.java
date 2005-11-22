@@ -45,6 +45,6 @@ public class NPricingPolicyCase implements ParameterBasedCase {
   }
 
   public void apply( ParameterDatabase pdb, Parameter base ) {
-    pdb.set(new Parameter(NPricingPolicy.P_DEF_BASE).push(NPricingPolicy.P_N), String.valueOf(n));
+    pdb.set(base.push(NPricingPolicy.P_N), String.valueOf(n));
   }
 }
