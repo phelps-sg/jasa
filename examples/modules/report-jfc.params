@@ -1,3 +1,6 @@
+parent.0 = report.params
+
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
 
 simulation.auction.report.n = 5
 simulation.auction.report.0 = uk.ac.liv.auction.stats.DailyStatsReport
@@ -20,32 +23,22 @@ simulation.auction.report.4.graph.0.renderer.1 = org.jfree.chart.renderer.xy.XYL
 simulation.auction.report.4.graph.0.renderer.2 = org.jfree.chart.renderer.xy.XYAreaRenderer
 simulation.auction.report.4.graph.0.renderer.3 = org.jfree.chart.renderer.xy.XYStepRenderer
 
-simulation.auction.report.4.graph.0.series.n = 5
-simulation.auction.report.4.graph.0.series.0 = uk.ac.liv.auction.stats.ReportViariableSeries
+simulation.auction.report.4.graph.0.series.n = 3
+simulation.auction.report.4.graph.0.series.0 = uk.ac.liv.auction.stats.ReportVariableSeries
 simulation.auction.report.4.graph.0.series.0.axis = 1
 simulation.auction.report.4.graph.0.series.0.renderer = 1
 simulation.auction.report.4.graph.0.series.0.var = surplus.ea
 simulation.auction.report.4.graph.0.series.0.event = uk.ac.liv.event.AuctionClosedEvent
-simulation.auction.report.4.graph.0.series.1 = uk.ac.liv.auction.stats.ReportViariableSeries
-simulation.auction.report.4.graph.0.series.1.axis = 1
-simulation.auction.report.4.graph.0.series.1.renderer = 1
+simulation.auction.report.4.graph.0.series.1 = uk.ac.liv.auction.stats.ReportVariableSeries
+simulation.auction.report.4.graph.0.series.1.axis = 0
+simulation.auction.report.4.graph.0.series.1.renderer = 0
 simulation.auction.report.4.graph.0.series.1.var = transaction.price
 simulation.auction.report.4.graph.0.series.1.event = uk.ac.liv.event.TransactionExecutedEvent
-simulation.auction.report.4.graph.0.series.2 = uk.ac.liv.auction.stats.ReportViariableSeries
+simulation.auction.report.4.graph.0.series.2 = uk.ac.liv.auction.stats.ReportVariableSeries
 simulation.auction.report.4.graph.0.series.2.axis = 0
 simulation.auction.report.4.graph.0.series.2.renderer = 3
 simulation.auction.report.4.graph.0.series.2.var = equilibrium.price
 simulation.auction.report.4.graph.0.series.2.event = uk.ac.liv.event.AuctionEvent
-simulation.auction.report.4.graph.0.series.3 = uk.ac.liv.auction.stats.ReportViariableSeries
-simulation.auction.report.4.graph.0.series.3.axis = 0
-simulation.auction.report.4.graph.0.series.3.renderer = 2
-simulation.auction.report.4.graph.0.series.3.var = transaction.price.mean
-simulation.auction.report.4.graph.0.series.3.event = uk.ac.liv.event.TransactionExecutedEvent
-simulation.auction.report.4.graph.0.series.4 = uk.ac.liv.auction.stats.ReportViariableSeries
-simulation.auction.report.4.graph.0.series.4.axis = 1
-simulation.auction.report.4.graph.0.series.4.renderer = 0
-simulation.auction.report.4.graph.0.series.4.var = equilibrium.coefficient
-simulation.auction.report.4.graph.0.series.4.event = uk.ac.liv.event.TransactionExecutedEvent
 
 simulation.auction.report.4.graph.1 = uk.ac.liv.auction.stats.SupplyAndDemandGraph
 simulation.auction.report.4.graph.1.width = 800
