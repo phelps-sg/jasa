@@ -1,3 +1,4 @@
+parent.0 = timing.params
 
 simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
 simulation.auction.closing.maximumdays = 5

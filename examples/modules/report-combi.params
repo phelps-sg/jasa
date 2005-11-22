@@ -1,5 +1,12 @@
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
 
-combiauctionreport.n = 3
-combiauctionreport.0 = uk.ac.liv.auction.stats.DailyStatsReport
-combiauctionreport.1 = uk.ac.liv.auction.stats.SurplusReport
-combiauctionreport.2 = uk.ac.liv.auction.stats.HistoricalDataReport
+simulation.auction.report.n = 3
+
+simulation.auction.report.0 = uk.ac.liv.auction.stats.DailyStatsReport
+simulation.auction.report.1 = uk.ac.liv.auction.stats.SurplusReport
+simulation.auction.report.2 = uk.ac.liv.auction.stats.HistoricalDataReport
+
+#combiauctionreport.n = 3
+#combiauctionreport.0 = uk.ac.liv.auction.stats.DailyStatsReport
+#combiauctionreport.1 = uk.ac.liv.auction.stats.SurplusReport
+#combiauctionreport.2 = uk.ac.liv.auction.stats.HistoricalDataReport

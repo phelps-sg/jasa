@@ -1,0 +1,4 @@
+parent.0 = valuer.params
+
+simulation.auction.agenttype.0.valuer = uk.ac.liv.auction.agent.DistinctDistributionValuer
+simulation.auction.agenttype.1.valuer = uk.ac.liv.auction.agent.DistinctDistributionValuer

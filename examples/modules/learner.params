@@ -1,0 +1,10 @@
+###############
+# learners
+
+rotherevlearner.k = 100
+rotherevlearner.r = 0.1
+rotherevlearner.e = 0.2
+rotherevlearner.s1 = 1.0
+
+widrowhofflearner.learningrate = 0.1
+widrowhofflearner.momentum = 0.05

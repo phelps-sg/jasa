@@ -1,0 +1,16 @@
+##############
+# reports
+
+dynamicsurplusreport.quantity = 2
+
+historicaldatareport.memorysize = 10
+
+reportvariableboardupdater.transpricememory = 10
+
+reportvariablewriterreport.auctionlog = false
+reportvariablewriterreport.daylog = false
+reportvariablewriterreport.roundlog = false
+reportvariablewriterreport.transactionlog = false
+
+freechartgraph.width = 800
+freechartgraph.height = 400

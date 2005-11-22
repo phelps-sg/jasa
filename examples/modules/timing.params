@@ -1,0 +1,8 @@
+##############
+# timing
+
+auctionclosingcondition.maximumdays = 5
+auctionclosingcondition.maximumrounds = 50
+
+dayendingcondition.lengthofday = 10
+
