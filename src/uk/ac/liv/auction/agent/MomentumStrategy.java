@@ -91,7 +91,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     super.setup(parameters, base);
-
+    
     scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), 
     		new Parameter(P_DEF_BASE).push(P_SCALING), scaling);
 
@@ -114,10 +114,6 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
     super.initialise();
     relativePerterbationDistribution = new Uniform(0, scaling, GlobalPRNG.getInstance());
     absolutePerterbationDistribution = new Uniform(0, 0.05, GlobalPRNG.getInstance());
-  }
-
-  private void updateCurrentPrice() {
-  	currentPrice = calculatePrice(learner.act());
   }
 
   public boolean modifyShout( Shout.MutableShout shout ) {
@@ -214,8 +210,13 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
     return trPrice;
   }
 
+  private void updateCurrentPrice() {
+  	currentPrice = calculatePrice(learner.act());
+  	assert currentPrice > 0;
+  }
+
   protected double calculatePrice( double margin ) {
-  	if ( (agent.isBuyer(auction) && margin <= 0.0 && margin >= -1.0 )
+  	if ( (agent.isBuyer(auction) && margin <= 0.0 && margin > -1.0 )
   			|| (agent.isSeller(auction) && margin >= 0.0) ) {
   		return agent.getValuation(auction) * (1 + margin);
   	} else {

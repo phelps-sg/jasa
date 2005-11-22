@@ -83,10 +83,11 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    minValue = parameters.getDouble(base, 
-    		new Parameter(P_DEF_BASE).push(P_MINVALUE), 0);
-    maxValue = parameters.getDouble(base.push(P_MAXVALUE), 
-    		new Parameter(P_DEF_BASE).push(P_MAXVALUE), minValue);
+  	
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+  	
+    minValue = parameters.getDouble(base.push(P_MINVALUE), defBase.push(P_MINVALUE), 0);
+    maxValue = parameters.getDouble(base.push(P_MAXVALUE), defBase.push(P_MAXVALUE), minValue);
     initialise();
   }
 
