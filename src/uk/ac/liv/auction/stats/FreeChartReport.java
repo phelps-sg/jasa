@@ -17,6 +17,8 @@ package uk.ac.liv.auction.stats;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -71,7 +73,7 @@ import org.jfree.ui.RefineryUtilities;
  */
 
 public class FreeChartReport extends AbstractAuctionReport implements
-    Parameterizable, Serializable, Cloneable {
+    Parameterizable, Serializable, Cloneable, WindowListener {
 
   static Logger logger = Logger.getLogger(FreeChartReport.class);
 
@@ -83,12 +85,20 @@ public class FreeChartReport extends AbstractAuctionReport implements
 
   public static final String P_NUM = "n";
 
+  public static final String P_EXIT = "exit";
+
   public static final String P_SAVETOFILE = "savetofile";
 
   /**
    * @uml.property name="saveToFile"
    */
   private boolean saveToFile = false;
+
+  /**
+   * @uml.property name="exitOnClose"
+   */
+  private boolean exitOnClose = false;
+
 
   /**
    * @uml.property name="frame"
@@ -122,6 +132,13 @@ public class FreeChartReport extends AbstractAuctionReport implements
           defBase.push(P_GRAPH).push(String.valueOf(i)), FreeChartGraph.class);
       graphs[i].setReport(this);
       graphs[i].setup(parameters, base.push(P_GRAPH).push(String.valueOf(i)));
+    }
+
+    exitOnClose = parameters.getBoolean(base.push(P_EXIT), 
+    		defBase.push(P_EXIT),
+        exitOnClose);
+    if (exitOnClose) {
+    	frame.addWindowListener(this);
     }
 
     saveToFile = parameters.getBoolean(base.push(P_SAVETOFILE), 
@@ -184,4 +201,39 @@ public class FreeChartReport extends AbstractAuctionReport implements
     HashMap vars = new HashMap();
     return vars;
   }
+
+  
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowClosing(WindowEvent e) {
+		System.exit(0);
+	}
+
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

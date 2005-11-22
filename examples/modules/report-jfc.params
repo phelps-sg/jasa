@@ -9,6 +9,7 @@ simulation.auction.report.2 = uk.ac.liv.auction.stats.HistoricalDataReport
 simulation.auction.report.3 = uk.ac.liv.auction.stats.ReportVariableBoardUpdater
 
 simulation.auction.report.4 = uk.ac.liv.auction.stats.FreeChartReport
+simulation.auction.report.4.exit = true
 simulation.auction.report.4.graph.n = 2
 simulation.auction.report.4.graph.0 = uk.ac.liv.auction.stats.MultipleSeriesGraph
 
