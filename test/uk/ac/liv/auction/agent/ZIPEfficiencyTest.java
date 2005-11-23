@@ -14,7 +14,10 @@
  */
 package uk.ac.liv.auction.agent;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum;
+import uk.ac.liv.auction.DirectRevelationTest;
 import uk.ac.liv.auction.core.ContinuousDoubleAuctioneer;
 import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
 import uk.ac.liv.auction.zi.ZIPStrategy;
@@ -42,6 +45,7 @@ public class ZIPEfficiencyTest extends EfficiencyTest {
     strategy.setScaling(0.2);
     agent.setStrategy(strategy);
     strategy.setAgent(agent);
+    strategy.initialise();
   }
   
   protected int getInitialTradeEntitlement() {
@@ -51,5 +55,12 @@ public class ZIPEfficiencyTest extends EfficiencyTest {
   protected double getMinMeanEfficiency() {
     return 90.0;
   }
+  
+  public static void main( String[] args ) {
+    junit.textui.TestRunner.run(suite());
+  }
 
+  public static Test suite() {
+    return new TestSuite(ZIPEfficiencyTest.class);
+  }
 }
