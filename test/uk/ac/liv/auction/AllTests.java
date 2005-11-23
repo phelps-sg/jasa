@@ -75,6 +75,7 @@ public class AllTests {
     suite.addTest(uk.ac.liv.auction.agent.GDEfficiencyTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.QLearnerEfficiencyTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.PriestVanTolEfficiencyTest.suite());
+    suite.addTest(uk.ac.liv.auction.agent.ZIPEfficiencyTest.suite());
     
     
     return suite;
