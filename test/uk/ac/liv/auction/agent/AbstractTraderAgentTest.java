@@ -17,7 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.AbstractAuctioneer;
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 import uk.ac.liv.auction.core.UniformPricingPolicy;
@@ -42,7 +42,7 @@ public class AbstractTraderAgentTest extends TestCase {
    * @uml.property   name="auction"
    * @uml.associationEnd   
    */
-  RoundRobinAuction auction;
+  RandomRobinAuction auction;
 
   public static final int TRADER1_STOCK = 0;
 
@@ -80,7 +80,7 @@ public class AbstractTraderAgentTest extends TestCase {
         new Shout(trader2, 1, TRADER2_VALUE, true),
         new Shout(trader2, 1, TRADER2_VALUE + 100, true) }));
 
-    auction = new RoundRobinAuction();
+    auction = new RandomRobinAuction();
     AbstractAuctioneer auctioneer = new ClearingHouseAuctioneer(auction);
     auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
     auction.setAuctioneer(auctioneer);

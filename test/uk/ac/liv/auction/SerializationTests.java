@@ -24,7 +24,7 @@ import uk.ac.liv.auction.core.AbstractAuctioneer;
 import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.Auctioneer;
 import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.UniformPricingPolicy;
 
 import uk.ac.liv.auction.electricity.ElectricityTrader;
@@ -45,7 +45,7 @@ public class SerializationTests extends TestCase {
    * @uml.property   name="auction"
    * @uml.associationEnd   
    */
-  RoundRobinAuction auction;
+  RandomRobinAuction auction;
 
   public SerializationTests( String name ) {
     super(name);
@@ -53,7 +53,7 @@ public class SerializationTests extends TestCase {
 
   public void setUp() {
 
-    auction = new RoundRobinAuction("serialized auction");
+    auction = new RandomRobinAuction("serialized auction");
     Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
     ((AbstractAuctioneer) auctioneer)
         .setPricingPolicy(new UniformPricingPolicy(0.5));
