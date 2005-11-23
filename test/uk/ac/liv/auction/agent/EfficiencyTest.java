@@ -80,7 +80,7 @@ public abstract class EfficiencyTest extends TestCase {
 
   static final int MAX_DAYS = 100;
 
-  static final int DAY_LENGTH = 5;
+  static final int DAY_LENGTH = 20;
 
   public EfficiencyTest( String name ) {
     super(name);
