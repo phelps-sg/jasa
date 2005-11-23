@@ -50,16 +50,37 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
   public static final String P_RANGEMIN = "rangemin";
   public static final String P_RANGEMAX = "rangemax";
   
+  public DistinctDistributionValuer() {
+    super();
+  }
+  
+  public DistinctDistributionValuer( double minValueMin, double minValueMax,
+                                      double rangeMin, double rangeMax ) {
+    this.minValueMin = minValueMin;
+    this.minValueMax = minValueMax;
+    this.rangeMin = rangeMin;    
+  }
   
   public void setup( ParameterDatabase parameters, Parameter base ) {
-    minValueMin = parameters.getDouble(base.push(P_MINVALUEMIN), 
-    		new Parameter(P_DEF_BASE).push(P_MINVALUEMIN), 0);
-    minValueMax = parameters.getDouble(base.push(P_MINVALUEMAX), 
-    		new Parameter(P_DEF_BASE).push(P_MINVALUEMAX), minValueMin);
-    rangeMin = parameters.getDouble(base.push(P_RANGEMIN), 
-    		new Parameter(P_DEF_BASE).push(P_RANGEMIN), 0);
-    rangeMax = parameters.getDouble(base.push(P_RANGEMAX), 
-    		new Parameter(P_DEF_BASE).push(P_RANGEMAX), rangeMax);
+    
+    minValueMin = 
+      parameters.getDouble(base.push(P_MINVALUEMIN), 
+    		                new Parameter(P_DEF_BASE).push(P_MINVALUEMIN), 0.0);
+    
+    minValueMax = 
+      parameters.getDouble(base.push(P_MINVALUEMAX), 
+                            new Parameter(P_DEF_BASE).push(P_MINVALUEMAX), 
+                            minValueMin);
+    
+    rangeMin = 
+      parameters.getDouble(base.push(P_RANGEMIN),     
+                              new Parameter(P_DEF_BASE).push(P_RANGEMIN), 0.0);
+    
+    rangeMax = 
+      parameters.getDouble(base.push(P_RANGEMAX), 
+                            new Parameter(P_DEF_BASE).push(P_RANGEMAX), 
+                            rangeMax);
+    
     initialise();
   }
 
@@ -69,13 +90,12 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
     minValue = minValueDist.nextDouble();
     maxValue = minValue + rangeDist.nextDouble();
     distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance()); 
-//    drawRandomValue();
   }
   
   public void eventOccurred( AuctionEvent event ) {
     super.eventOccurred(event);
-    if ( event instanceof AuctionOpenEvent ) {
-      distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
+    if ( event instanceof AuctionOpenEvent ) {     
+      distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance()); 
       drawRandomValue();
     }
   }
