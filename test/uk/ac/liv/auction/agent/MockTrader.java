@@ -133,7 +133,7 @@ public class MockTrader extends AbstractTradingAgent {
   public void auctionClosed( AuctionEvent event ) {
     super.auctionClosed(event);
     logger.debug(this + ": recieved auctionClosed()");
-    ((RoundRobinAuction) event.getAuction()).remove(this);
+    ((RandomRobinAuction) event.getAuction()).remove(this);
     receivedAuctionClosed = true;
     receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
   }

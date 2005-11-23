@@ -22,7 +22,7 @@ import uk.ac.liv.PRNGTestSeeds;
 import uk.ac.liv.auction.agent.RandomConstrainedStrategy;
 import uk.ac.liv.auction.zi.ZITraderAgent;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
 
 import uk.ac.liv.auction.stats.PriceStatisticsReport;
@@ -55,7 +55,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   /**
    * @uml.property name="logger"
@@ -78,7 +78,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
     testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
     testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);
     testAgent.setStrategy(testStrategy);
-    auction = new RoundRobinAuction();
+    auction = new RandomRobinAuction();
     auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     logger = new PriceStatisticsReport();

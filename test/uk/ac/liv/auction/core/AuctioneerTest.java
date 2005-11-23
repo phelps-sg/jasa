@@ -32,7 +32,7 @@ public abstract class AuctioneerTest extends TestCase {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  RoundRobinAuction auction;
+  RandomRobinAuction auction;
 
   /**
    * @uml.property name="traders"
@@ -45,7 +45,7 @@ public abstract class AuctioneerTest extends TestCase {
   }
 
   public void setUp() {
-    auction = new RoundRobinAuction("unit test auction");
+    auction = new RandomRobinAuction("unit test auction");
 
     traders = new MockTrader[5];
     traders[0] = new MockTrader(this, 30, 1000, 1000, false);

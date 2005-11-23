@@ -79,7 +79,7 @@ public class MixedStrategyTest extends TestCase {
   }
 
   public void testActionsAndRewards() {
-    RoundRobinAuction auction = new RoundRobinAuction("test auction");
+    RandomRobinAuction auction = new RandomRobinAuction("test auction");
     Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
     auction.setMaximumRounds(NUM_ROUNDS);

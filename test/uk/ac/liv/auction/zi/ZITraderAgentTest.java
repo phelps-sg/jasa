@@ -41,7 +41,7 @@ public class ZITraderAgentTest extends TestCase {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  RoundRobinAuction auction;
+  RandomRobinAuction auction;
 
   /**
    * @uml.property name="auctioneer"
@@ -69,7 +69,7 @@ public class ZITraderAgentTest extends TestCase {
     seller = new ZITraderAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true);
     buyer.setStrategy(new TruthTellingStrategy(buyer));
     seller.setStrategy(new TruthTellingStrategy(seller));
-    auction = new RoundRobinAuction("ZIPStrategyTest auction");
+    auction = new RandomRobinAuction("ZIPStrategyTest auction");
     auction.register(buyer);
     auction.register(seller);
     auctioneer = new ClearingHouseAuctioneer(auction);

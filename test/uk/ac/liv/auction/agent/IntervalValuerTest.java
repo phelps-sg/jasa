@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 import uk.ac.liv.auction.agent.IntervalValuer;
 
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -52,7 +52,7 @@ public abstract class IntervalValuerTest extends TestCase {
    * @uml.property   name="auction"
    * @uml.associationEnd   
    */
-  protected RoundRobinAuction auction;
+  protected RandomRobinAuction auction;
 
   public static final double MIN_VALUE = 10;
 
@@ -68,7 +68,7 @@ public abstract class IntervalValuerTest extends TestCase {
     base = new Parameter("test");
     paramDb.set(base.push(IntervalValuer.P_MINVALUE), MIN_VALUE + "");
     paramDb.set(base.push(IntervalValuer.P_STEP), STEP + "");
-    auction = new RoundRobinAuction("test");
+    auction = new RandomRobinAuction("test");
   }
 
   public void testStep() {

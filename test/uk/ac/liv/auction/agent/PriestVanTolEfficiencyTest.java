@@ -18,7 +18,7 @@ package uk.ac.liv.auction.agent;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import uk.ac.liv.ai.learning.WidrowHoffLearner;
+import uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.PriestVanTolStrategy;
@@ -45,7 +45,7 @@ public class PriestVanTolEfficiencyTest extends EfficiencyTest {
   
   protected void assignStrategy( AbstractTradingAgent agent ) {
     PriestVanTolStrategy strategy = new PriestVanTolStrategy();
-    strategy.setLearner( new WidrowHoffLearner() );
+    strategy.setLearner( new WidrowHoffLearnerWithMomentum() );
     agent.setStrategy(strategy);
     strategy.setAgent(agent);
   }

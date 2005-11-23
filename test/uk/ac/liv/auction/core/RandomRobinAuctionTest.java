@@ -89,7 +89,7 @@ public class RandomRobinAuctionTest extends TestCase {
   }
 
   public void setUpAuction() {
-    auction = new RoundRobinAuction("Round Robin Test Auction");
+    auction = new RandomRobinAuction("Round Robin Test Auction");
     auction.setAuctioneer(auctioneer);
     auctioneer.setAuction(auction);
     auction.setMaximumRounds(3);

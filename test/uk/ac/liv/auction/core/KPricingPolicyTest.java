@@ -18,7 +18,8 @@ package uk.ac.liv.auction.core;
 import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
 import uk.ac.liv.auction.core.UniformPricingPolicy;
 import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+
 import uk.ac.liv.auction.stats.EquilibriumReport;
 
 import uk.ac.liv.auction.agent.MockTrader;
@@ -47,7 +48,7 @@ public class KPricingPolicyTest extends TestCase {
    * @uml.property name="auction"
    * @uml.associationEnd
    */
-  RoundRobinAuction auction;
+  RandomRobinAuction auction;
 
   /**
    * @uml.property name="agents"
@@ -60,7 +61,7 @@ public class KPricingPolicyTest extends TestCase {
   }
 
   public void setUp() {
-    auction = new RoundRobinAuction();
+    auction = new RandomRobinAuction();
     auctioneer = new ClearingHouseAuctioneer(auction);
     auction.setAuctioneer(auctioneer);
 
