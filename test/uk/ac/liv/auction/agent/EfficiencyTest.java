@@ -69,6 +69,14 @@ public abstract class EfficiencyTest extends TestCase {
   static final double MIN_VALUE = 50;
 
   static final double MAX_VALUE = 300;
+    
+  static final double MIN_VALUE_MIN = 161;
+  
+  static final double MIN_VALUE_MAX = 260;
+  
+  static final double RANGE_MIN = 90;
+  
+  static final double RANGE_MAX = 100;
 
   static final int MAX_DAYS = 100;
 
@@ -89,7 +97,7 @@ public abstract class EfficiencyTest extends TestCase {
     agents = new ZITraderAgent[numAgents];
     for ( int i = 0; i < numAgents; i++ ) {
       agents[i] = new ZITraderAgent();
-      agents[i].setInitialTradeEntitlement(1);
+      agents[i].setInitialTradeEntitlement(getInitialTradeEntitlement());
       assignStrategy(agents[i]);
       assignValuationPolicy(agents[i]);
       agents[i].setIsSeller(i < getNumSellers());
@@ -149,10 +157,14 @@ public abstract class EfficiencyTest extends TestCase {
     return NS;
   }
 
-  protected void assignValuationPolicy( AbstractTradingAgent agent ) {
-    agent.setValuationPolicy(new RandomValuer(MIN_VALUE, MAX_VALUE));
+  protected void assignValuationPolicy( AbstractTradingAgent agent ) {    
+    agent.setValuationPolicy( new RandomValuer(MIN_VALUE, MAX_VALUE));
   }
 
+  protected int getInitialTradeEntitlement() {
+    return 1;
+  }
+  
   protected abstract void assignStrategy( AbstractTradingAgent agent );
 
   protected abstract double getMinMeanEfficiency();

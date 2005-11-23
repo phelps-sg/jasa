@@ -32,6 +32,8 @@ public class PriestVanTolEfficiencyTest extends EfficiencyTest {
 
   public static final double BENCHMARK_EFFICIENCY = 85.0;
   
+  public static final int TRADE_ENTITLEMENT = 5;
+  
   public PriestVanTolEfficiencyTest( String name ) {
     super(name);
   }
@@ -52,6 +54,10 @@ public class PriestVanTolEfficiencyTest extends EfficiencyTest {
 
   protected double getMinMeanEfficiency() {
     return BENCHMARK_EFFICIENCY;
+  }
+  
+  protected int getInitialTradeEntitlement() {
+    return TRADE_ENTITLEMENT;
   }
 
   public static void main( String[] args ) {
