@@ -19,7 +19,6 @@ import uk.ac.liv.auction.core.Shout.MutableShout;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.stats.HistoricalDataReport;
-import uk.ac.liv.prng.GlobalPRNG;
 
 
 public class EstimatedEPStrategy extends FixedQuantityStrategyImpl {
