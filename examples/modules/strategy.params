@@ -1,6 +1,8 @@
 ###############
 # strategies
 
+parent.0 = learner.params
+
 discretelearnerstrategy.markupscale = 1
 
 #fixedpricestrategy.price = 
