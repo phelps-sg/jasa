@@ -105,13 +105,22 @@ public class IntervalCaseEnum extends CaseEnum {
     Class c = pdb.getInstanceForParameterEq(base.push(P_CASE), null,
         ParameterBasedCase.class).getClass();
 
-    double min = pdb.getDoubleWithDefault(base.push(P_MIN), null, 0);
-    double max = pdb.getDoubleWithDefault(base.push(P_MAX), null, 1);
-    double step = pdb.getDoubleWithDefault(base.push(P_STEP), null, 0.1);
-
-    assert min <= max;
+    int count;
+    Number min, max, step;
+    try {
+    	min = new Integer(pdb.getInt(base.push(P_MIN)));
+    	max = new Integer(pdb.getInt(base.push(P_MAX)));
+    	step = new Integer(pdb.getInt(base.push(P_STEP)));
+    	count = (max.intValue() - min.intValue()) / step.intValue() + 1;
+    } catch (NumberFormatException e) {
+    	min = new Double(pdb.getDoubleWithDefault(base.push(P_MIN), null, 0));
+    	max = new Double(pdb.getDoubleWithDefault(base.push(P_MAX), null, 1));
+    	step = new Double(pdb.getDoubleWithDefault(base.push(P_STEP), null, 0.1));
+    	count = (int) ((max.doubleValue() - min.doubleValue()) / step.doubleValue() + 1);
+    }
     
-    int count = (int)((max - min) / step);
+    assert max.doubleValue() > min.doubleValue();
+    
     cases = new ParameterBasedCase[count];
     for ( int i = 0; i < cases.length; i++ ) {
       try {
@@ -127,7 +136,15 @@ public class IntervalCaseEnum extends CaseEnum {
       if ( cases[i] instanceof Parameterizable ) {
         ((Parameterizable) cases[i]).setup(pdb, base.push(P_CASE));
       }
-      cases[i].setValue(String.valueOf(min + i*step));
+      if ( min instanceof Integer ) {
+      	cases[i].setValue(String.valueOf(min.intValue() + i*step.intValue()));
+      } else {
+      	if (min.doubleValue() + i*step.doubleValue() > max.doubleValue()) {
+      		cases[i].setValue(max.toString());
+      	} else {
+      		cases[i].setValue(String.valueOf(min.doubleValue() + i*step.doubleValue()));
+      	}
+      }
     }
 
     reset();

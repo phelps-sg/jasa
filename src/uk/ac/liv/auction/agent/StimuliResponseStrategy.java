@@ -85,7 +85,7 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
     learner = (StimuliResponseLearner) parameters.getInstanceForParameter(
         learnerParameter, new Parameter(P_DEF_BASE).push(P_LEARNER), 
         StimuliResponseLearner.class);
-
+    
     ((Parameterizable) learner).setup(parameters, learnerParameter);
   }
 
