@@ -123,7 +123,6 @@ public class ReportVariableWriterReport implements AuctionReport,
       if ( parameters.getBoolean(base.push(P_SETTING_LOG), defBase.push(P_SETTING_LOG), true) ) {
       	settingLog = new InternalRVDistributionWriterReport();
       	settingLog.setup(parameters, base.push(P_SETTING_LOG));
-      	CaseEnumConfig.getInstance().addObserver(this);
       } else {
       	settingLog = null;
       }
@@ -158,7 +157,7 @@ public class ReportVariableWriterReport implements AuctionReport,
     }
   }
 
-  public void eventOccurred( AuctionEvent event ) {
+  public void eventOccurred( AuctionEvent event ) { 	
     if ( event instanceof AuctionOpenEvent ) {
       generateHeader();
       transactionCount = 0;
@@ -182,10 +181,10 @@ public class ReportVariableWriterReport implements AuctionReport,
    */
 	public void update(Observable o, Object arg) {
 		assert o == CaseEnumConfig.getInstance();
-		logger.info("update");
 		if ( "start".equals(arg) ) {
 			settingLog.cleanData();
 		} else if ( "end".equals(arg) ) {
+			generateCaseCombination(settingLog);
 			settingLog.outputData();
 			settingLog.endRecord();
 			settingLog.flush();
@@ -447,19 +446,15 @@ public class ReportVariableWriterReport implements AuctionReport,
   	}
   	
   	public void cleanData() {
-  		ReportVariableWriterReport.logger.info("cleanData");
-  		
   		for ( int i=0; i<resultsStats.length; i++ ) {
   			resultsStats[i].reset();  			
   		}
   	}
   	
-  	public void outputData() {
-  		ReportVariableWriterReport.logger.info("outputData");
-  		
+  	public void outputData() {  		
   		for ( int i=0; i<resultsStats.length; i++ ) {
-  			newData(resultsStats[i].getMean());
-  			newData(resultsStats[i].getStdDev());
+  			newData(formatter.format(resultsStats[i].getMean()));
+  			newData(formatter.format(resultsStats[i].getStdDev()));
   		}
   	}  	
   }
