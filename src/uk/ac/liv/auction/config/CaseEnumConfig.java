@@ -160,5 +160,9 @@ public class CaseEnumConfig extends Observable implements Parameterizable {
 
     return title;
   }
+  
+  public void markChanged() {
+  	setChanged();
+  }
 
 }
