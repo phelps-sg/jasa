@@ -17,9 +17,15 @@ package uk.ac.liv.auction.stats;
 
 import java.text.DecimalFormat;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 
+import org.apache.log4j.Logger;
 import org.jfree.data.time.TimePeriodValue;
 
 import uk.ac.liv.auction.config.CaseEnumConfig;
@@ -33,6 +39,7 @@ import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
+import uk.ac.liv.util.CummulativeDistribution;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.*;
 
@@ -48,9 +55,11 @@ import ec.util.ParameterDatabase;
  */
 
 public class ReportVariableWriterReport implements AuctionReport,
-    Parameterizable {
+    Parameterizable, Observer {
 
   public static final String P_DEF_BASE = "reportvariablewriterreport";
+  
+  private static String P_SETTING_LOG = "settinglog";
 	
   private static String P_AUCTION_LOG = "auctionlog";
 
@@ -61,6 +70,8 @@ public class ReportVariableWriterReport implements AuctionReport,
   private static String P_TRANSACTION_LOG = "transactionlog";
   
   protected static boolean initialized = false;
+
+  protected static InternalRVDistributionWriterReport settingLog = null;
 
   protected static InternalRVWriterReport auctionLog = null;
 
@@ -87,13 +98,16 @@ public class ReportVariableWriterReport implements AuctionReport,
 
   static DecimalFormat formatter = new DecimalFormat(
       "+#########0.000;-#########.000");
+  
+  static Logger logger = Logger.getLogger(ReportVariableWriterReport.class);
 
   public ReportVariableWriterReport() {
   }
 
-  public ReportVariableWriterReport( InternalRVWriterReport auctionLog,
-      InternalRVWriterReport dayLog, InternalRVWriterReport roundLog,
-      InternalRVWriterReport transactionLog) {
+  public ReportVariableWriterReport( InternalRVDistributionWriterReport settingLog,
+  		InternalRVWriterReport auctionLog, InternalRVWriterReport dayLog,
+  		InternalRVWriterReport roundLog, InternalRVWriterReport transactionLog) {
+    ReportVariableWriterReport.settingLog = settingLog;
     ReportVariableWriterReport.auctionLog = auctionLog;
     ReportVariableWriterReport.dayLog = dayLog;
     ReportVariableWriterReport.roundLog = roundLog;
@@ -105,6 +119,14 @@ public class ReportVariableWriterReport implements AuctionReport,
     if ( !initialized ) {
     	
     	Parameter defBase = new Parameter(P_DEF_BASE);
+
+      if ( parameters.getBoolean(base.push(P_SETTING_LOG), defBase.push(P_SETTING_LOG), true) ) {
+      	settingLog = new InternalRVDistributionWriterReport();
+      	settingLog.setup(parameters, base.push(P_SETTING_LOG));
+      	CaseEnumConfig.getInstance().addObserver(this);
+      } else {
+      	settingLog = null;
+      }
 
       if ( parameters.getBoolean(base.push(P_AUCTION_LOG), defBase.push(P_AUCTION_LOG), true) ) {
         auctionLog = new InternalRVWriterReport();
@@ -134,7 +156,6 @@ public class ReportVariableWriterReport implements AuctionReport,
       	transactionLog = null;
       }
     }
-
   }
 
   public void eventOccurred( AuctionEvent event ) {
@@ -148,10 +169,29 @@ public class ReportVariableWriterReport implements AuctionReport,
       updateDayLog((EndOfDayEvent) event);
     } else if ( event instanceof AuctionClosedEvent ) {
       updateAuctionLog((AuctionClosedEvent) event);
+      updateSettingLog((AuctionClosedEvent) event);
     } else if ( event instanceof TransactionExecutedEvent ) {
     	updateTransactionLog((TransactionExecutedEvent) event);
     }
   }
+  
+
+  /**
+   * listens to CaseEnumConfig for the start and end of processing each case enumeration
+   * so as to update log of different auction settings.
+   */
+	public void update(Observable o, Object arg) {
+		assert o == CaseEnumConfig.getInstance();
+		logger.info("update");
+		if ( "start".equals(arg) ) {
+			settingLog.cleanData();
+		} else if ( "end".equals(arg) ) {
+			settingLog.outputData();
+			settingLog.endRecord();
+			settingLog.flush();
+		}
+	}
+
 
   /**
    * Generats the CSV file header, i.e. field names in the first lines.
@@ -161,6 +201,13 @@ public class ReportVariableWriterReport implements AuctionReport,
 
     if ( !initialized ) {
       String headers[] = { "auction", "day", "round", "transaction" };
+
+      if ( settingLog != null ) {
+        generateCaseEnumHeader(settingLog);
+        settingLog.generateHeader();
+        settingLog.endRecord();
+        settingLog.flush();
+      }
 
       if ( auctionLog != null ) {
         generateCaseEnumHeader(auctionLog);
@@ -284,6 +331,13 @@ public class ReportVariableWriterReport implements AuctionReport,
       auctionLog.flush();
     }
   }
+  
+  public void updateSettingLog( AuctionClosedEvent event ) {
+  	if ( settingLog != null ) {
+  		settingLog.setAuction((AuctionImpl)event.getAuction());
+  		settingLog.update();
+  	}
+  }
 
   public void produceUserOutput() {
   }
@@ -301,11 +355,11 @@ public class ReportVariableWriterReport implements AuctionReport,
 
   static class InternalRVWriterReport extends CSVWriter {
 
-    private static String P_VAR = "var";
+    protected static String P_VAR = "var";
 
-    private static String P_NUM = "n";
+    protected static String P_NUM = "n";
 
-    private String varNames[];
+    protected String varNames[];
 
     public InternalRVWriterReport() {
       setAutowrap(false);
@@ -346,7 +400,67 @@ public class ReportVariableWriterReport implements AuctionReport,
         }
       }
     }
-
   }
-
+  
+  static class InternalRVDistributionWriterReport extends InternalRVWriterReport {
+    
+  	CummulativeDistribution[] resultsStats;
+  	AuctionImpl auction;
+      	
+    public void setAuction( AuctionImpl auction ) {
+      this.auction = auction;
+    }
+  	
+    public void setup( ParameterDatabase parameters, Parameter base ) {
+      super.setup(parameters, base);
+    
+      resultsStats = new CummulativeDistribution[varNames.length];
+      
+  		for ( int i=0; i<varNames.length; i++ ) {
+  			resultsStats[i] = new CummulativeDistribution(varNames[i]);
+  		}
+    } 
+    
+  	public void generateHeader() {
+  		for ( int i=0; i<varNames.length; i++ ) {
+  			newData(varNames[i]+".mean");
+  			newData(varNames[i]+".stdev");
+  		}
+  	}
+  	
+  	public void update() {
+  		
+      TimePeriodValue tpValue;
+      for ( int i = 0; i < varNames.length; i++ ) {
+        tpValue = ReportVariableBoard.getInstance().getValue(varNames[i]);
+        if ( tpValue != null ) {
+          if ( tpValue.getValue() instanceof Number ) {
+          	double v = ((Number) tpValue.getValue()).doubleValue();
+            if ( !Double.isNaN(v) ) {
+            	resultsStats[i].newData(v);
+            }
+          }
+        } else {
+          newData(-1);
+        }
+      }
+  	}
+  	
+  	public void cleanData() {
+  		ReportVariableWriterReport.logger.info("cleanData");
+  		
+  		for ( int i=0; i<resultsStats.length; i++ ) {
+  			resultsStats[i].reset();  			
+  		}
+  	}
+  	
+  	public void outputData() {
+  		ReportVariableWriterReport.logger.info("outputData");
+  		
+  		for ( int i=0; i<resultsStats.length; i++ ) {
+  			newData(resultsStats[i].getMean());
+  			newData(resultsStats[i].getStdDev());
+  		}
+  	}  	
+  }
 }

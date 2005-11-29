@@ -15,36 +15,37 @@
 
 package uk.ac.liv.auction.config;
 
-import uk.ac.liv.auction.core.NPricingPolicy;
+import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
- * Defines the number of the latest successful shout pairs used to determine the next
- * clearing price
- * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class NPricingPolicyCase implements ParameterBasedCase {
 
-  /**
-   * @uml.property name="n"
-   */
-  private int n;
+public class ParameterBasedCaseImpl implements ParameterBasedCase, Parameterizable {
+	
+  public static final String P_NAME = "name";
 
-  public NPricingPolicyCase() {
-  }
+	protected String name;
+	
+	protected String value;
+	
+	public void setup(ParameterDatabase pdb, Parameter base) {
+		name = pdb.getString(base.push(P_NAME));		
+	}
 
-  public void setValue( String value ) {
-    this.n = Integer.parseInt(value);
-  }
+	public void setValue(String value) {
+		this.value = value;		
+	}
 
-  public String toString() {
-    return String.valueOf(n);
-  }
-
-  public void apply( ParameterDatabase pdb, Parameter base ) {
-    pdb.set(base.push(NPricingPolicy.P_N), String.valueOf(n));
-  }
+	public void apply(ParameterDatabase pdb, Parameter base) {
+		pdb.set(new Parameter(name), value);
+	}
+	
+	public String toString() {
+		return value;
+	}
+	
 }

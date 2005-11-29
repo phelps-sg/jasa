@@ -15,6 +15,8 @@
 
 package uk.ac.liv.auction.config;
 
+import java.util.Observable;
+
 import org.apache.log4j.Logger;
 
 import uk.ac.liv.util.Parameterizable;
@@ -50,7 +52,7 @@ import ec.util.Parameter;
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class CaseEnumConfig implements Parameterizable {
+public class CaseEnumConfig extends Observable implements Parameterizable {
 
   private static CaseEnumConfig instance = null;
 

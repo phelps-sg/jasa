@@ -47,8 +47,8 @@ public class StrategyCombo implements ParameterBasedCase, Parameterizable {
   public void setup( ParameterDatabase parameters, Parameter base ) {
   }
 
-  public void setParameter( String param ) {
-    String classes[] = param.split("\\s");
+  public void setValue( String value ) {
+    String classes[] = value.split("\\s");
     cases = new Case[classes.length];
     try {
       for ( int i = 0; i < cases.length; i++ ) {

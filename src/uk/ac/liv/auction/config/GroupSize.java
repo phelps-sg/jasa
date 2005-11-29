@@ -37,8 +37,8 @@ public class GroupSize implements ParameterBasedCase {
   public GroupSize() {
   }
 
-  public void setParameter( String param ) {
-    this.size = Integer.parseInt(param);
+  public void setValue( String value ) {
+    this.size = Integer.parseInt(value);
   }
 
   public String toString() {

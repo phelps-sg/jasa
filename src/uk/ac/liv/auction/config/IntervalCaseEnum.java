@@ -24,7 +24,7 @@ import ec.util.ParameterDatabase;
 
 /**
  * A type of CaseEnum that can automatically generate a list of value cases of
- * an auction property.
+ * an auction property based on the specified value range.
  * 
  * 
  * <p>
@@ -47,11 +47,24 @@ import ec.util.ParameterDatabase;
  * </tr>
  * 
  * <tr>
- * <td valign=top><i>base </i> <tt>.parameters</tt><br>
- * <font size=-1>
- * </font></td>
- * <td valign=top>(a list of ','-separated parameters, each corresponding to a
- * value case.)</td>
+ * <td valign=top><i>base </i> <tt>.min</tt><br>
+ * <font size=-1>double</font></td>
+ * <td valign=top>(the lower bound of the range)
+ * </td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.max</tt><br>
+ * <font size=-1>double</font></td>
+ * <td valign=top>(the upper bound of the range)
+ * </td>
+ * </tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base </i> <tt>.step</tt><br>
+ * <font size=-1>double</font></td>
+ * <td valign=top>(the interval length to sample within the range)
+ * </td>
  * </tr>
  * 
  * </table>
@@ -60,9 +73,9 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public class ParameterBasedCaseEnum extends CaseEnum {
+public class IntervalCaseEnum extends CaseEnum {
 
-  static Logger logger = Logger.getLogger(ParameterBasedCaseEnum.class);
+  static Logger logger = Logger.getLogger(IntervalCaseEnum.class);
 
   /**
    * @uml.property name="cases"
@@ -79,7 +92,11 @@ public class ParameterBasedCaseEnum extends CaseEnum {
 
   private static final String P_CASE = "case";
 
-  private static final String P_PARAMETERS = "parameters";
+  private static final String P_MIN = "min";
+
+  private static final String P_MAX = "max";
+
+  private static final String P_STEP = "step";
 
   public void setup( ParameterDatabase pdb, Parameter base ) {
 
@@ -88,10 +105,14 @@ public class ParameterBasedCaseEnum extends CaseEnum {
     Class c = pdb.getInstanceForParameterEq(base.push(P_CASE), null,
         ParameterBasedCase.class).getClass();
 
-    String s = pdb.getString(base.push(P_PARAMETERS));
-    String params[] = s.split(",");
+    double min = pdb.getDoubleWithDefault(base.push(P_MIN), null, 0);
+    double max = pdb.getDoubleWithDefault(base.push(P_MAX), null, 1);
+    double step = pdb.getDoubleWithDefault(base.push(P_STEP), null, 0.1);
 
-    cases = new ParameterBasedCase[params.length];
+    assert min <= max;
+    
+    int count = (int)((max - min) / step);
+    cases = new ParameterBasedCase[count];
     for ( int i = 0; i < cases.length; i++ ) {
       try {
         cases[i] = (ParameterBasedCase) c.newInstance();
@@ -106,7 +127,7 @@ public class ParameterBasedCaseEnum extends CaseEnum {
       if ( cases[i] instanceof Parameterizable ) {
         ((Parameterizable) cases[i]).setup(pdb, base.push(P_CASE));
       }
-      cases[i].setValue(params[i].trim());
+      cases[i].setValue(String.valueOf(min + i*step));
     }
 
     reset();
@@ -128,7 +149,7 @@ public class ParameterBasedCaseEnum extends CaseEnum {
    */
   public Case nextCase() {
     assert moreCases();
-
+    
     return cases[i++];
   }
 }

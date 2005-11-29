@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.stats;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,6 +67,10 @@ public class ReportVariableBoard {
   public void reset() {
     if ( board != null )
       board.clear();
+  }
+  
+  public Collection getVarNames() {
+  	return board.keySet();
   }
 
   public TimePeriodValue getValue( String varName ) {

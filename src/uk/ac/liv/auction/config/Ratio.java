@@ -43,8 +43,8 @@ public class Ratio implements ParameterBasedCase {
   public Ratio() {
   }
 
-  public void setParameter( String param ) {
-    String values[] = param.split(":");
+  public void setValue( String value ) {
+    String values[] = value.split(":");
 
     s = Integer.parseInt(values[0]);
     b = Integer.parseInt(values[1]);

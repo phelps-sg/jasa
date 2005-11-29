@@ -68,9 +68,9 @@ public class Strategy implements ParameterBasedCase, Parameterizable {
     isSeller = parameters.getBoolean(base.push(P_ISSELLER), null, true);
   }
 
-  public void setParameter( String param ) {
+  public void setValue( String value ) {
     try {
-      c = (Case) Class.forName(param).newInstance();
+      c = (Case) Class.forName(value).newInstance();
     } catch ( InstantiationException e ) {
       e.printStackTrace();
       logger.error(e.toString());

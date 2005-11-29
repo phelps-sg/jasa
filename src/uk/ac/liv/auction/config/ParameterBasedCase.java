@@ -24,9 +24,9 @@ package uk.ac.liv.auction.config;
 public interface ParameterBasedCase extends Case {
 
   /**
-   * @param param the string that is used to initialize the value case of an 
+   * @param value the string that is used to initialize the value case of an 
    * auction property.
    */
-  public abstract void setParameter(String param);
+  public abstract void setValue(String value);
 
 }
