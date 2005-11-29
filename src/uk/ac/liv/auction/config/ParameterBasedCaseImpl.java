@@ -42,10 +42,10 @@ public class ParameterBasedCaseImpl implements ParameterBasedCase, Parameterizab
 
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(new Parameter(name), value);
+		assert value.equals(pdb.getString(new Parameter(name)));	
 	}
 	
 	public String toString() {
 		return value;
-	}
-	
+	}	
 }
