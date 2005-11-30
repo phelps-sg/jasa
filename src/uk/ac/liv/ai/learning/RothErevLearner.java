@@ -18,7 +18,6 @@ package uk.ac.liv.ai.learning;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import uk.ac.liv.auction.agent.DiscreteLearnerStrategy;
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 
 import uk.ac.liv.util.Prototypeable;
