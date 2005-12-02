@@ -25,6 +25,9 @@ import cern.jet.random.engine.RandomEngine;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
+import uk.ac.liv.auction.event.AuctionClosedEvent;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.prng.GlobalPRNG;
 
 /**
@@ -105,14 +108,31 @@ public class RandomClearingDoubleAuctioneer extends ContinuousDoubleAuctioneer
     generateQuote();
     clear();
   }
+  
+  public void endOfAuctionProcessing() {
+    super.endOfAuctionProcessing();
+  }
+  
+  public void eventOccurred( AuctionEvent event ) {
 
+    if ( event instanceof AuctionClosedEvent ) {
+      logger.info("count: "+count);
+    }
+  }
+  
+  int count = 0;
+  
   public void newShout( Shout shout ) throws IllegalShoutException {
     checkImprovement(shout);
     super.newShout(shout);
     
-    if (uniformDistribution.nextDouble() < threshold) {
+    double d = uniformDistribution.nextDouble();
+    if ( d < threshold ) {
     	generateQuote();
     	clear();
+    	count++;
     }
   }
+  
+  
 }
