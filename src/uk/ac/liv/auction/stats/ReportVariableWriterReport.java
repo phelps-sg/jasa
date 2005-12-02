@@ -440,7 +440,7 @@ public class ReportVariableWriterReport implements AuctionReport,
             }
           }
         } else {
-          newData(-1);
+          logger.fatal("Please make sure the report variable "+varNames[i]+" exists!");
         }
       }
   	}
