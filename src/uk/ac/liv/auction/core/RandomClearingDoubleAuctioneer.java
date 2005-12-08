@@ -32,14 +32,16 @@ import uk.ac.liv.prng.GlobalPRNG;
 
 /**
  * <p>
- * An auctioneer for a double auction with continuous clearing and equlibrium
- * price estimation.
+ * An auctioneer for a double auction with market cleared time to time with
+ * probability specified by a threshold value. 
  * </p>
  * 
  * <p>
- * The clearing operation is performed every time a shout arrives. Shouts must
- * beat the current quote and be at the right side of the estimated equilibrium
- * price in order to be accepted.
+ * The clearing operation is performed with a probability specified by a threshold
+ * value every time a shout arrives. Shouts must beat the current quote as in <code>
+ * ContinuousDoubleAuctioneer</code>. When threshold is 0, the market is only cleared
+ * when each round ends and is thus equivalent to a clearing house, while when
+ * threshold is 1, the market becomes a continuous double auction.
  * </p>
  * 
  * <p>
@@ -49,15 +51,9 @@ import uk.ac.liv.prng.GlobalPRNG;
  * <table>
  * 
  * <tr>
- * <td valign=top><i>base </i> <tt>.memorysize</tt><br>
- * <font size=-1>int >=1 </font></td>
- * <td valign=top>(how many recent transaction prices memorized to get the average
- * as the esimated equilibrium)</td>
- * 
- * <td valign=top><i>base </i> <tt>.delta</tt><br>
- * <font size=-1>0 <=double <=1 </font></td>
- * <td valign=top>(relaxing the restriction put by the estimated equilibrium price
- * )</td>
+ * <td valign=top><i>base </i> <tt>.threshold</tt><br>
+ * <font size=-1>0<= double <=1 </font></td>
+ * <td valign=top>(the probability the market is cleared when a new shout arrives)</td>
  * <tr>
  * 
  * </table>
@@ -66,11 +62,13 @@ import uk.ac.liv.prng.GlobalPRNG;
  * @version $Revision$
  */
 
-public class RandomClearingDoubleAuctioneer extends ContinuousDoubleAuctioneer
+public class RandomClearingDoubleAuctioneer extends TransparentAuctioneer
     implements Serializable {
 
   static Logger logger = Logger.getLogger(RandomClearingDoubleAuctioneer.class);
   
+  protected ZeroFundsAccount account;
+
 	Uniform uniformDistribution;
 
   /**
@@ -88,6 +86,7 @@ public class RandomClearingDoubleAuctioneer extends ContinuousDoubleAuctioneer
 
   public RandomClearingDoubleAuctioneer( Auction auction ) {
     super(auction);
+    account = new ZeroFundsAccount(this);
   }
   
   protected void initialise() {
@@ -103,6 +102,14 @@ public class RandomClearingDoubleAuctioneer extends ContinuousDoubleAuctioneer
     assert (0 <= threshold && threshold <= 1);
   }
   
+  public void generateQuote() {
+    currentQuote = new MarketQuote(askQuote(), bidQuote());
+  }
+
+  public Account getAccount() {
+    return account;
+  }
+  
   public void endOfRoundProcessing() {
     super.endOfRoundProcessing();
     generateQuote();
@@ -113,15 +120,6 @@ public class RandomClearingDoubleAuctioneer extends ContinuousDoubleAuctioneer
     super.endOfAuctionProcessing();
   }
   
-  public void eventOccurred( AuctionEvent event ) {
-
-    if ( event instanceof AuctionClosedEvent ) {
-      logger.info("count: "+count);
-    }
-  }
-  
-  int count = 0;
-  
   public void newShout( Shout shout ) throws IllegalShoutException {
     checkImprovement(shout);
     super.newShout(shout);
@@ -130,9 +128,50 @@ public class RandomClearingDoubleAuctioneer extends ContinuousDoubleAuctioneer
     if ( d < threshold ) {
     	generateQuote();
     	clear();
-    	count++;
     }
   }
   
+  public void checkImprovement(Shout shout) throws IllegalShoutException {
+		double quote;
+		if (shout.isBid()) {
+			quote = bidQuote();
+			if (shout.getPrice() < quote) {
+				bidNotAnImprovementException();
+			}
+		} else {
+			quote = askQuote();
+			if (shout.getPrice() > quote) {
+				askNotAnImprovementException();
+			}
+		}
+	}
+
+  protected void askNotAnImprovementException()
+			throws NotAnImprovementOverQuoteException {
+		if (askException == null) {
+			// Only construct a new exception the once (for improved performance)
+			askException = new NotAnImprovementOverQuoteException(DISCLAIMER);
+		}
+		throw askException;
+	}
+
+	protected void bidNotAnImprovementException()
+			throws NotAnImprovementOverQuoteException {
+		if (bidException == null) {
+			// Only construct a new exception the once (for improved performance)
+			bidException = new NotAnImprovementOverQuoteException(DISCLAIMER);
+		}
+		throw bidException;
+	}
+
+	/**
+	 * Reusable exceptions for performance
+	 */
+	protected static NotAnImprovementOverQuoteException askException = null;
+
+	protected static NotAnImprovementOverQuoteException bidException = null;
+
+	protected static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
+
   
 }

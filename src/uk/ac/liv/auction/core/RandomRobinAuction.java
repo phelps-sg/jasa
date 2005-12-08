@@ -849,9 +849,4 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
     assert (cond instanceof DayEndingCondition);
     dayEndingCondition = cond;
   }
-
-  protected void fireEvent( AuctionEvent event ) {
-    super.fireEvent(event);
-    getAuctioneer().eventOccurred(event);
-  }
 }
