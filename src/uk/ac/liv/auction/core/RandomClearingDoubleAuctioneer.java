@@ -120,10 +120,8 @@ public class RandomClearingDoubleAuctioneer extends TransparentAuctioneer
     super.endOfAuctionProcessing();
   }
   
-  public void newShout( Shout shout ) throws IllegalShoutException {
-    checkImprovement(shout);
-    super.newShout(shout);
-    
+  public void newShoutInternal( Shout shout ) throws DuplicateShoutException {
+    shoutEngine.newShout(shout);
     double d = uniformDistribution.nextDouble();
     if ( d < threshold ) {
     	generateQuote();
@@ -131,6 +129,11 @@ public class RandomClearingDoubleAuctioneer extends TransparentAuctioneer
     }
   }
   
+  protected void checkShoutValidity( Shout shout ) throws IllegalShoutException {
+  	super.checkShoutValidity(shout);
+    checkImprovement(shout);
+  }
+
   public void checkImprovement(Shout shout) throws IllegalShoutException {
 		double quote;
 		if (shout.isBid()) {

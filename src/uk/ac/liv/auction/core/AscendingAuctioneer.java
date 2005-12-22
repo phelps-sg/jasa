@@ -86,11 +86,14 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
   public void initialise() {
     super.initialise();
     try {
-      newAsk(new Shout(seller, quantity, 0, false));
+      newShout(new Shout(seller, quantity, 0, false));
     } catch ( DuplicateShoutException e ) {
       throw new AuctionError(
           "Fatal error: invalid auction state on initialisation!");
-    }
+    } catch (IllegalShoutException e) {
+      throw new AuctionError(
+      		"Fatal error: invalid auction state on initialisation!");
+		}
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -128,14 +131,14 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
     currentQuote = new MarketQuote(null, shoutEngine.getLowestMatchedBid());
   }
 
-  public void newShout( Shout shout ) throws IllegalShoutException {
+  protected void checkShoutValidity( Shout shout ) throws IllegalShoutException {
+  	super.checkShoutValidity(shout);
     if ( shout.isAsk() ) {
       throw new IllegalShoutException(
           "asks are not allowed in an ascending auction");
     }
     // TODO: Additional logic to enforce bid amounts at round nos and/or
-    // beat existing bids by certain amount?
-    super.newShout(shout);
+    // beat existing bids by certain amount?  	
   }
 
   public boolean shoutsVisible() {

@@ -74,8 +74,8 @@ public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
     shoutNum = 0;
   }
 
-  public void newShout( Shout shout ) throws IllegalShoutException {
-    super.newShout(shout);
+  protected void newShoutInternal( Shout shout ) throws DuplicateShoutException {
+    super.newShoutInternal(shout);
     shoutNum++;
     if ( shoutNum >= shoutNumEachPeriod ) {
       generateQuote();

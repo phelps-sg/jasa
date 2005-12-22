@@ -136,15 +136,27 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
    * @exception IllegalShoutException
    *              Thrown if the shout is invalid in some way.
    */
-  public void newShout( Shout shout ) throws IllegalShoutException {
+  public void newShout(Shout shout) throws IllegalShoutException,
+			DuplicateShoutException {
+		checkShoutValidity(shout);
+		newShoutInternal(shout);
+	}
+  
+  protected void newShoutInternal(Shout shout) throws DuplicateShoutException {
+		shoutEngine.newShout(shout);
+  }
+  
+  /**
+   * 
+   * @param shout
+   *          The new shout to be processed
+   * @throws IllegalShoutException
+   *         Thrown if the shout is invalid in some way.
+   */
+  protected void checkShoutValidity( Shout shout ) throws IllegalShoutException {
     if ( !shout.isValid() ) {
       logger.error("malformed shout: " + shout);
       throw new IllegalShoutException("Malformed shout");
-    }
-    if ( shout.isBid() ) {
-      newBid(shout);
-    } else {
-      newAsk(shout);
     }
   }
 
@@ -192,30 +204,6 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
   }
 
   public abstract void generateQuote();
-
-  /**
-   * Default rules for handling a new ask. Subclasses should override this
-   * method if they wish to provide different handling for different auction
-   * rules.
-   * 
-   * @param ask
-   *          The new ask (offer to sell) to process
-   */
-  protected void newAsk( Shout ask ) throws DuplicateShoutException {
-    shoutEngine.newAsk(ask);
-  }
-
-  /**
-   * Default rules for handling a new bid. Subclasses should override this
-   * method if they wish to provide different handling for different auction
-   * rules.
-   * 
-   * @param bid
-   *          The new bid (offer to buy) to process
-   */
-  protected void newBid( Shout bid ) throws DuplicateShoutException {
-    shoutEngine.newBid(bid);
-  }
 
   /**
    * @uml.property name="auction"

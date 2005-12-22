@@ -292,8 +292,16 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     assert bid.isBid();
     return promoteShout(bid, sOut, sIn, bIn);
   }
+  
+  public void newShout( Shout shout ) throws DuplicateShoutException {
+  	if ( shout.isBid() ) {
+  		newBid(shout);  		
+  	} else {
+  		newAsk(shout);
+  	}
+  }
 
-  public void newBid( Shout bid ) throws DuplicateShoutException {
+  protected void newBid( Shout bid ) throws DuplicateShoutException {
 
     double bidVal = bid.getPrice();
 
@@ -322,7 +330,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
     }
   }
 
-  public void newAsk( Shout ask ) throws DuplicateShoutException {
+  protected void newAsk( Shout ask ) throws DuplicateShoutException {
 
     double askVal = ask.getPrice();
 

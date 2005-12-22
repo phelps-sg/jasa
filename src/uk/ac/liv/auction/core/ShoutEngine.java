@@ -25,9 +25,7 @@ import java.util.List;
 
 public interface ShoutEngine extends uk.ac.liv.util.Resetable {
 
-  public void newBid( Shout bid ) throws DuplicateShoutException;
-
-  public void newAsk( Shout ask ) throws DuplicateShoutException;
+  public void newShout( Shout shout ) throws DuplicateShoutException;
 
   public void removeShout( Shout shout );
   

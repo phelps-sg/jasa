@@ -50,17 +50,15 @@ public abstract class TransparentAuctioneer extends AbstractAuctioneer {
     acceptedShouts.add(bid);
   }
      
-  protected void newAsk( Shout ask ) throws DuplicateShoutException {   
-    super.newAsk(ask);
-    lastAsk.copyFrom(ask);
-    lastShout = ask;
-  }
-
-  protected void newBid( Shout bid ) throws DuplicateShoutException {  
-    super.newBid(bid);
-    lastBid.copyFrom(bid);
-    lastShout = bid;
-  }
+  protected void newShoutInternal(Shout shout) throws DuplicateShoutException {
+		super.newShoutInternal(shout);
+		if (shout.isAsk()) {
+			lastAsk.copyFrom(shout);
+		} else {
+			lastBid.copyFrom(shout);
+		}
+		lastShout = shout;
+	}
 
   public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException {
     return acceptedShouts.contains(shout);

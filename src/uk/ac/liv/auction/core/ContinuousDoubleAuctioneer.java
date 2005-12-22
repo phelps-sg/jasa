@@ -59,14 +59,18 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer
     return true;
   }
 
-  public void newShout( Shout shout ) throws IllegalShoutException {
-    checkImprovement(shout);
-    super.newShout(shout);
+  public void newShoutInternal( Shout shout ) throws DuplicateShoutException {
+    shoutEngine.newShout(shout);
     generateQuote();
     clear();
   }
+  
+  protected void checkShoutValidity( Shout shout ) throws IllegalShoutException {
+  	super.checkShoutValidity(shout);
+    checkImprovement(shout);
+  }
 
-  public void checkImprovement( Shout shout ) throws IllegalShoutException {
+  protected void checkImprovement( Shout shout ) throws IllegalShoutException {
     double quote;
     if ( shout.isBid() ) {
       quote = bidQuote();
