@@ -15,11 +15,13 @@
 
 package uk.ac.liv.auction.core;
 
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.TradingAgent;
 import uk.ac.liv.auction.event.AgentPolledEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.RoundClosingEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
@@ -214,8 +216,6 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
    */
   protected TimingCondition dayEndingCondition;
   
-  protected boolean shoutsProcessed;
-  
   protected boolean endOfRound;
 
   public static final String P_DEF_BASE = "randomrobinauction";
@@ -286,20 +286,28 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
           .push(P_AUCTION_CLOSING));
     }
 
+    if ( closingCondition instanceof AuctionEventListener ) {
+    	addAuctionEventListener((AuctionEventListener)closingCondition);
+    }
+
     try {
       dayEndingCondition = (TimingCondition) parameters
           .getInstanceForParameter(base.push(P_DAY_ENDING), 
           		defBase.push(P_DAY_ENDING),
               DayEndingCondition.class);
-      dayEndingCondition.setAuction(this);
     } catch ( ParamClassLoadException e ) {
       dayEndingCondition = null;
     }
+    dayEndingCondition.setAuction(this);
 
     if ( dayEndingCondition != null
         && dayEndingCondition instanceof Parameterizable ) {
       ((Parameterizable) dayEndingCondition).setup(parameters, base
           .push(P_DAY_ENDING));
+    }
+    
+    if ( dayEndingCondition instanceof AuctionEventListener ) {
+    	addAuctionEventListener((AuctionEventListener)dayEndingCondition);
     }
 
     try {
@@ -351,12 +359,17 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
       logger.info("Configuring agent population " + t + ":\n\t" + numAgents
           + " agents of type " + parameters.getString(typeParamT, null));
+      
 
       for ( int i = 0; i < numAgents; i++ ) {
         TradingAgent agent = (TradingAgent) parameters.getInstanceForParameter(
             typeParamT, defTypeParamT, TradingAgent.class);
         ((Parameterizable) agent).setup(parameters, typeParamT);
         register(agent);
+        
+        if (i==0 && agent instanceof AbstractTradingAgent) {
+        	logger.info("\tUsing "+((AbstractTradingAgent)agent).getStrategy().getClass());
+        }
       }
 
       logger.info("done.\n");
@@ -443,7 +456,6 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
     if ( closingCondition.eval() ) {
       close();
     } else {
-      shoutsProcessed = false;   
       shoutingTraders = activeTraders.toArray();
       GlobalPRNG.randomPermutation(shoutingTraders);
       currentTrader = 0;
@@ -556,13 +568,16 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
   }
 
   public void endRound() {
+  	informRoundClosing();
+
+    sweepDefunctTraders();
+    auctioneer.endOfRoundProcessing();
+
     endOfRound = true;
     round++;
     age++;
-    sweepDefunctTraders();
-    auctioneer.endOfRoundProcessing();
+    
     informRoundClosed();
-    lastShout = null;
     checkEndOfDay();
   }
   
@@ -583,17 +598,22 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
     }
 
   }
+  
+  public void informRoundClosing() {
+  	fireEvent(new RoundClosingEvent(this, round));
+  }
 
   public void informRoundClosed() {
     fireEvent(new RoundClosedEvent(this, round));
   }
 
   public void newShout( Shout shout ) throws AuctionException {
+  	// TODO: it's an issue whether to switch the following two lines:
     fireEvent(new ShoutPlacedEvent(this, round, shout));
     super.newShout(shout);
+    
     setChanged();
     notifyObservers();
-    shoutsProcessed = true;
   }
 
   public void changeShout( Shout shout ) throws AuctionException {
@@ -712,7 +732,6 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
     day = 0;
     age = 0;
 
-    shoutsProcessed = false;
   }
 
   protected void activate( TradingAgent agent ) {
@@ -735,11 +754,6 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
     round = 0;
     informEndOfDay();
     auctioneer.endOfDayProcessing();
-  }
-
-  // TODO: temporary
-  public boolean shoutsProcessed() {
-    return shoutsProcessed;
   }
 
   public int getRemainingTime() {

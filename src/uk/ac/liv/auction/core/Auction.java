@@ -102,8 +102,6 @@ public interface Auction extends QuoteProvider {
    */
   public boolean transactionsOccured() throws ShoutsNotVisibleException;
   
-  public boolean shoutsProcessed();
-
   public AuctionReport getReport( Class reportClass );
 
 }

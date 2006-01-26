@@ -15,6 +15,10 @@
 
 package uk.ac.liv.auction.core;
 
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.AuctionEventListener;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
+
 /**
  * The interface for expressing the condition of closing an auction.
  *
@@ -23,8 +27,11 @@ package uk.ac.liv.auction.core;
  *
  */
 
-public class QuiescentDayEndingCondition extends TimingCondition implements DayEndingCondition {
+public class QuiescentDayEndingCondition extends TimingCondition implements
+		DayEndingCondition, AuctionEventListener {
 
+  protected boolean shoutsProcessed;
+  
 
   /*
    * @see uk.ac.liv.auction.core.TimingCondition#eval()
@@ -37,7 +44,14 @@ public class QuiescentDayEndingCondition extends TimingCondition implements DayE
    * Returns true if no bidding activity occured in the latest auction round.
    */
   private boolean isQuiescent() {
-    return !(getAuction().shoutsProcessed() || 
-              getAuction().getNumberOfTraders() == 0);
+    return !shoutsProcessed || 
+              (getAuction().getNumberOfTraders() == 0);
   }
+
+	public void eventOccurred(AuctionEvent event) {
+		if ( event instanceof ShoutPlacedEvent ) {
+			shoutsProcessed = true;
+		}
+		
+	}
 }

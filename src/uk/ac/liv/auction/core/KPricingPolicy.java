@@ -84,7 +84,7 @@ public abstract class KPricingPolicy implements Serializable, PricingPolicy,
   }
 
   public String toString() {
-    return "(" + getClass() + " k:" + k + ")";
+    return "(" + getClass().getSimpleName() + " k:" + k + ")";
   }
 
 }

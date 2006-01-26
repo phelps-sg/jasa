@@ -24,7 +24,7 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.util.Parameterizable;
 
 /**
- * The class for expressing the combination of closing conditions.
+ * The class for expressing the combination of timing conditions.
  * 
  * <p>
  * <b>Parameters</b><br>
@@ -116,21 +116,21 @@ public class CombiTimingCondition extends TimingCondition implements
 
   public boolean eval() {
 
-    boolean isClosing = false;
+    boolean isTrue = false;
     Iterator i = conditionIterator();
     while ( i.hasNext() ) {
       TimingCondition condition = (TimingCondition) i.next();
 
       if ( relation == AND )
-        isClosing = isClosing && condition.eval();
+        isTrue = isTrue && condition.eval();
       else
         // if relation == OR
-        isClosing = condition.eval();
+        isTrue = condition.eval();
 
-      if ( isClosing )
+      if ( isTrue )
         break;
     }
 
-    return isClosing;
+    return isTrue;
   }
 }

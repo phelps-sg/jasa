@@ -13,32 +13,31 @@
  * See the GNU General Public License for more details.
  */
 
-package uk.ac.liv.auction.core;
+package uk.ac.liv.auction.event;
+
+import uk.ac.liv.auction.core.Auction;
 
 /**
- * @author Jinzhong Niu
+ * An event that is fired at the end of each round, but before
+ * round-ending processing.
+ * 
+ * @author Steve Phelps
  * @version $Revision$
  */
-public class InOrderPricingPolicy extends DiscriminatoryPricingPolicy {
 
-  public InOrderPricingPolicy() {
-    this(0);
+public class RoundClosingEvent extends AuctionEvent {
+
+  /**
+   * @uml.property name="auction"
+   * @uml.associationEnd readOnly="true"
+   */
+  protected Auction auction;
+
+  public RoundClosingEvent( Auction auction, int time ) {
+    super(auction, time);
   }
 
-	public InOrderPricingPolicy(double k) {
-		super(k);
-	}
-	
-  public double determineClearingPrice( Shout bid, Shout ask,
-                                          MarketQuote clearingQuote ) {
-
-    if ( bid.getId() > ask.getId() ) {
-      // ask comes first
-      return kInterval(ask.getPrice(), bid.getPrice());
-    } else {
-      // bid comes first
-      return kInterval(bid.getPrice(), ask.getPrice());
-    }
-  } 
-  
+  public int getTime() {
+    return time;
+  }
 }

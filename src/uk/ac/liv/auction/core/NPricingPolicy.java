@@ -102,5 +102,11 @@ public class NPricingPolicy implements PricingPolicy, Resetable, Serializable, P
 				
 		return price;
 	}
+	
+
+  public String toString() {
+    return "(" + getClass().getSimpleName() + " n:" + n + ")";
+  }
+
 
 }
