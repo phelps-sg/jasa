@@ -67,5 +67,9 @@ public abstract class AuctionEvent {
   public long getPhysicalTime() {
     return pTime;
   }
+  
+  public int getTime() {
+  	return time;
+  }
 
 }

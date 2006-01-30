@@ -46,8 +46,4 @@ public class ShoutPlacedEvent extends AuctionEvent {
   public Shout getShout() {
     return shout;
   }
-
-  public int getTime() {
-    return time;
-  }
 }

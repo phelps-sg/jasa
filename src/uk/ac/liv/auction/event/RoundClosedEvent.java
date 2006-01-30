@@ -35,8 +35,4 @@ public class RoundClosedEvent extends AuctionEvent {
   public RoundClosedEvent( Auction auction, int time ) {
     super(auction, time);
   }
-
-  public int getTime() {
-    return time;
-  }
 }

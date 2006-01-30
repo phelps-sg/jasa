@@ -93,8 +93,4 @@ public class TransactionExecutedEvent extends AuctionEvent {
   public int getQuantity() {
     return quantity;
   }
-
-  public int getTime() {
-    return time;
-  }
 }

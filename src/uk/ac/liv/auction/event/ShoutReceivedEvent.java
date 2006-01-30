@@ -16,24 +16,36 @@
 package uk.ac.liv.auction.event;
 
 import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.Shout;
 
 /**
- * An event that is fired at the end of each round, but before
- * round-ending processing.
+ * An event that is fired every time a shout is received in an auction
+ * (may not be accepted eventually), in contrast to ShoutPlacedEvent, which represents
+ * a shout is received and accepted.
  * 
- * @author Steve Phelps
+ * @author Jinzhong Niu
  * @version $Revision$
  */
 
-public class RoundClosingEvent extends AuctionEvent {
+public class ShoutReceivedEvent extends AuctionEvent {
 
   /**
-   * @uml.property name="auction"
-   * @uml.associationEnd readOnly="true"
+   * The shout that led to this event.
+   * 
+   * @uml.property name="shout"
+   * @uml.associationEnd multiplicity="(1 1)"
    */
-  protected Auction auction;
+  protected Shout shout;
 
-  public RoundClosingEvent( Auction auction, int time ) {
+  public ShoutReceivedEvent( Auction auction, int time, Shout shout ) {
     super(auction, time);
+    this.shout = shout;
+  }
+
+  /**
+   * @uml.property name="shout"
+   */
+  public Shout getShout() {
+    return shout;
   }
 }
