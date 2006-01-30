@@ -89,6 +89,11 @@ public class WidrowHoffLearner extends AbstractLearner implements
     		new Parameter(P_DEF_BASE).push(P_LEARNINGRATE), DEFAULT_LEARNING_RATE);
   }
 
+  public void initialise() {
+    delta = 0;
+    currentOutput = 0;
+  }
+
   public Object protoClone() {
     WidrowHoffLearner clone = new WidrowHoffLearner(learningRate);
     return clone;
@@ -117,11 +122,6 @@ public class WidrowHoffLearner extends AbstractLearner implements
 
   public double getLearningDelta() {
     return delta;
-  }
-
-  public void initialise() {
-    delta = 0;
-    currentOutput = 0;
   }
 
   public void reset() {
@@ -159,10 +159,9 @@ public class WidrowHoffLearner extends AbstractLearner implements
   public double getDelta() {
     return delta;
   }
+  
 
-  public String toString() {
-    return ("(" + getClass() + " learningRate:" + learningRate + " delta:"
-        + delta + " currentOutput:" + currentOutput + ")");
-  }
-
+	public String toString() {
+		return "(" + getClass().getSimpleName() + " learningRate:" + learningRate + ")";
+	}
 }

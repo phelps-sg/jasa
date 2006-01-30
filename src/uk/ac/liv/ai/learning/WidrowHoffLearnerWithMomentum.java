@@ -25,50 +25,58 @@ import ec.util.ParameterDatabase;
 
 public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 
-  /**
-   * cumulative discounted delta
-   * 
-   * @uml.property name="gamma"
-   */
+	/**
+	 * cumulative discounted delta
+	 * 
+	 * @uml.property name="gamma"
+	 */
 	protected double gamma;
 
 	/**
-   * @uml.property name="momentum"
-   */
-  protected double momentum;
+	 * @uml.property name="momentum"
+	 */
+	protected double momentum;
 
-  public static final String P_MOMENTUM = "momentum";  
+	public static final String P_MOMENTUM = "momentum";
 
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		momentum = parameters.getDouble(base.push(P_MOMENTUM), new Parameter(
+				P_DEF_BASE).push(P_MOMENTUM), 0);
+	}
+	
+	public void initialise() {
+		super.initialise();
+		gamma = 0;
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    gamma = 0;
-    momentum = parameters.getDouble(base.push(P_MOMENTUM), 
-    		new Parameter(P_DEF_BASE).push(P_MOMENTUM), 0);
-  }
+	public void train(double target) {
+		gamma = momentum * gamma + (1 - momentum) * delta(target);
+		currentOutput += gamma;
+	}
 
-  public void train( double target ) {
-  	gamma = momentum * gamma + (1-momentum) * delta(target);
-    currentOutput += gamma;
-  }
+	public void randomInitialise() {
+		super.randomInitialise();
+		gamma = 0;
+		momentum = randomParamDistribution.nextDouble();
+	}
 
-  public void randomInitialise() {
-    super.randomInitialise();
-    gamma = 0;
-    momentum = randomParamDistribution.nextDouble();
-  }
+	/**
+	 * @uml.property name="momentum"
+	 */
+	public double getMomentum() {
+		return momentum;
+	}
 
-  /**
-   * @uml.property name="momentum"
-   */
-  public double getMomentum() {
-    return momentum;
-  }
+	/**
+	 * @uml.property name="momentum"
+	 */
+	public void setMomentum(double momentum) {
+		this.momentum = momentum;
+	}
 
-  /**
-   * @uml.property name="momentum"
-   */
-  public void setMomentum( double momentum ) {
-    this.momentum = momentum;
-  }
+	public String toString() {
+		return "(" + getClass().getSimpleName() + " learningRate:" + learningRate
+		+ " momentum=" + momentum + ")";
+	}
 }
