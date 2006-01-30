@@ -63,23 +63,23 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
   
   public void setup( ParameterDatabase parameters, Parameter base ) {
     
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+  	
     minValueMin = 
       parameters.getDouble(base.push(P_MINVALUEMIN), 
-    		                new Parameter(P_DEF_BASE).push(P_MINVALUEMIN), 0.0);
+      		defBase.push(P_MINVALUEMIN), 0.0);
     
     minValueMax = 
       parameters.getDouble(base.push(P_MINVALUEMAX), 
-                            new Parameter(P_DEF_BASE).push(P_MINVALUEMAX), 
-                            minValueMin);
+      		defBase.push(P_MINVALUEMAX), minValueMin);
     
     rangeMin = 
       parameters.getDouble(base.push(P_RANGEMIN),     
-                              new Parameter(P_DEF_BASE).push(P_RANGEMIN), 0.0);
+      		defBase.push(P_RANGEMIN), 0.0);
     
     rangeMax = 
       parameters.getDouble(base.push(P_RANGEMAX), 
-                            new Parameter(P_DEF_BASE).push(P_RANGEMAX), 
-                            rangeMax);
+      		defBase.push(P_RANGEMAX), rangeMax);
     
     initialise();
   }

@@ -92,11 +92,13 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 
     super.setup(parameters, base);
     
+    Parameter defBase = new Parameter(P_DEF_BASE);
+    
     scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), 
-    		new Parameter(P_DEF_BASE).push(P_SCALING), scaling);
+    		defBase.push(P_SCALING), scaling);
 
     learner = (MimicryLearner) parameters.getInstanceForParameter(
-    		base.push(P_LEARNER), new Parameter(P_DEF_BASE).push(P_LEARNER), 
+    		base.push(P_LEARNER), defBase.push(P_LEARNER), 
         MimicryLearner.class);
     if ( learner instanceof Parameterizable ) {
       ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));

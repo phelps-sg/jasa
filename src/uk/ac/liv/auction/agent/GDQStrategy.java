@@ -34,16 +34,12 @@ import java.util.Iterator;
 
 /**
  * <p>
- * A modified implementation of the Gjerstad Dickhaut strategy. Agents using this
- * strategy calculate the probability of any bid being accepted and bid to
- * maximize expected profit. See
+ * An implementation of the modified Gjerstad Dickhaut strategy in which quadratic, 
+ * instead of cubic originally, functions are used to calculate the probability of 
+ * any bid being accepted and bid to maximize expected profit. See
  * </p>
  * <p>
  * "Price Formation in Double Auctions" S. Gjerstad, J. Dickhaut and R. Palmer
- * </p>
- *
- * <p>
- * The strategy is modified in that instead of a cubic interpolation, a linear one is used.
  * </p>
  * 
  * <p>
@@ -65,11 +61,11 @@ import java.util.Iterator;
  * 
  * @see uk.ac.liv.auction.stats.HistoricalDataReport
  * 
- * @author Marek Marcinkiewicz
+ * @author Jinzhong Niu
  * @version $Revision$
  */
 
-public class GDLStrategy extends FixedQuantityStrategyImpl implements
+public class GDQStrategy extends FixedQuantityStrategyImpl implements
                                                          Serializable,
                                                          Prototypeable {
 
@@ -79,15 +75,15 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
   
   protected HistoricalDataReport historyStats;
 
-  public static final String P_DEF_BASE = "gdlstrategy";
+  public static final String P_DEF_BASE = "gdqstrategy";
 
   public static final String P_MAXPRICE = "maxprice";
 
   public static double MAX_PRICE = 200;
 
-  static Logger logger = Logger.getLogger(GDLStrategy.class);
+  static Logger logger = Logger.getLogger(GDQStrategy.class);
 
-  public GDLStrategy () {
+  public GDQStrategy () {
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
@@ -96,7 +92,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
   }
 
   public Object protoClone() {
-    GDLStrategy clone = new GDLStrategy();
+    GDQStrategy clone = new GDQStrategy();
     return clone;
   }
   
@@ -128,12 +124,9 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
     double lastP = 0;
     double currentPoint = 0;
     double currentP = 0;
+    double slope = 0;
     maxPoint = 0;
     max = 0;
-
-	// from 0 to MAX_PRICE
-	// probability of seller's offer is 1 at 0 and 0 at MAX_PRICE
-	// probability of buyer's offer is 0 at 0 and 1 at MAX_PRICE
 
     if ( !agent.isBuyer(auction) ) {
       lastP = 1;
@@ -145,9 +138,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
       if ( nextShout.getPrice() > lastPoint ) {
         currentPoint = nextShout.getPrice();
         currentP = calculateProbability(currentPoint);
-		// find the point in (lastPoint, currentPoint] maximizing
-		// probability
-        getMax(lastPoint, lastP, currentPoint, currentP);
+        slope = getMax(lastPoint, lastP, currentPoint, currentP, slope);
         lastPoint = currentPoint;
         lastP = currentP;
       }
@@ -158,7 +149,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
     if ( !agent.isBuyer(auction) ) {
       currentP = 0;
     }
-    getMax(lastPoint, lastP, currentPoint, currentP);
+    getMax(lastPoint, lastP, currentPoint, currentP, slope);
 
     //set quote
     if ( maxPoint > 0 ) {
@@ -167,7 +158,6 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
     } else {
       return false;
     }
-
   }
 
   private double calculateProbability( double price ) {
@@ -208,15 +198,15 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
   }
 
   /**
-   * looks for the point in [a1, a2] producing max expected profit.
-   * It simply checks every point in the range.
    * 
    * @param a1
    * @param p1
    * @param a2
    * @param p2
+   * @param s
+   * 			the slope at a1
    */
-  private void getMax( double a1, double p1, double a2, double p2 ) {
+  private double getMax( double a1, double p1, double a2, double p2, double s ) {
     
     if ( a1 > MAX_PRICE ) {
       a1 = MAX_PRICE;
@@ -231,9 +221,15 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
       System.out.println("p2 = " + p2);
       assert p1 >=0 && p1 <= (1 + 10E-6) && p2 >=0 && p2 <= (1 + 10E-6);      
     }
-        
+    
+    
     double pvalue = agent.getValuation(auction);
 
+    double a12 = a1 - a2;
+    double alpha2 = (s * a12 - (p1 - p2)) / (a12 * a12);
+    double alpha1 = s - 2 * a1 * alpha2;
+    double alpha0 = p1 - alpha2 * a1 * a1 - alpha1 * a1;
+    
     double temp = 0;
 
     double p = 0;
@@ -251,7 +247,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
     }
 
     for ( double i = start; i < end; i++ ) {
-      p = p1 + ((p2-p1)*((i-a1)/(a2-a1)));
+      p = (alpha2 * i * i) + (alpha1 * i) + alpha0;
       if ( agent.isBuyer(auction) ) {
         temp = p * (pvalue - i);
       } else {
@@ -262,8 +258,9 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
         maxPoint = i;
       }
     }
+    
+    return 2 * alpha2 * a2 + alpha1;
   }
-  
 
   public void endOfRound( Auction auction ) {
     // Do nothing

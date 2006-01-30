@@ -41,6 +41,14 @@ public class SellerIntervalValuer extends IntervalValuer {
   protected static double nextValue;
 
   protected static boolean firstValue = true;
+  
+  
+  public SellerIntervalValuer() {
+  }
+  
+  public SellerIntervalValuer(double minValue, double step) {
+  	super(minValue, step);
+  }
 
   protected boolean firstValue() {
     return firstValue;

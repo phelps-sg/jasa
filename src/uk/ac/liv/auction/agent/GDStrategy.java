@@ -72,8 +72,6 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
   protected double maxPoint = 0;
 
   protected double max = 0;
-
-  protected MarketQuote quote;
   
   protected HistoricalDataReport historyStats;
 
@@ -119,8 +117,6 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
   public boolean modifyShout( Shout.MutableShout shout ) {
 
     super.modifyShout(shout);
-    
-    quote = auction.getQuote();
 
     Iterator sortedShouts = historyStats.sortedShoutIterator();
 

@@ -17,6 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Account;
 import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.IllegalShoutException;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
@@ -281,9 +282,9 @@ public abstract class AbstractTradingAgent implements
     } catch ( AuctionClosedException e ) {
       logger.debug("requestShout(): Received AuctionClosedException");
       // do nothing
-    } catch ( NotAnImprovementOverQuoteException e ) {
+    } catch ( IllegalShoutException e ) {
       logger
-          .debug("requestShout(): Received NotAnImprovementOverQuoteException");
+          .debug("requestShout(): Received IllegalShoutException");
       // do nothing
     } catch ( AuctionException e ) {
       logger.warn(e.getMessage());

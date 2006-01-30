@@ -100,10 +100,12 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
   }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
+  	Parameter defBase = new Parameter(P_DEF_BASE);
+  	
     t = parameters.getIntWithDefault(base.push(P_T), 
-    		new Parameter(P_DEF_BASE).push(P_T), t);
+    		defBase.push(P_T), t);
     s = parameters.getDoubleWithDefault(base.push(P_S), 
-    		new Parameter(P_DEF_BASE).push(P_S), s);
+    		defBase.push(P_S), s);
   }
 
   public Object protoClone() {

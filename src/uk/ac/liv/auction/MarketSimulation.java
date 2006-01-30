@@ -259,6 +259,12 @@ public class MarketSimulation implements Serializable, Runnable {
 
   public void runSingleExperiment() {
     logger.info("Running auction...");
+
+    if ( verbose ) {
+    	logger.info(auction.getAuctioneer().toString());
+    	logger.info("");
+    }
+    
     auction.run();
     logger.info("Auction finished.");
     auction.generateReport();
@@ -266,6 +272,13 @@ public class MarketSimulation implements Serializable, Runnable {
 
   public void runBatchExperiment( int n ) {
     HashMap resultsStats = new HashMap();
+    
+    if ( verbose ) {
+    	logger.info("auctioneer:");
+    	logger.info(auction.getAuctioneer().toString());
+    	logger.info("");
+    }
+    
     for ( int i = 0; i < n; i++ ) {
       if ( verbose ) {
         logger.info("Running experiment " + (i + 1) + " of " + n + "... ");

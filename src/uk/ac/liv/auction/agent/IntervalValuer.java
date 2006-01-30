@@ -38,10 +38,23 @@ public abstract class IntervalValuer extends FixedValuer {
   public static final String P_MINVALUE = "minvalue";
   
   public static final String P_STEP = "step";
+  
+  public IntervalValuer() {
+  }
+  
+  public IntervalValuer(double minValue, double step) {
+  	setMinValue(minValue);
+  	setStep(step);
+  	initialise();
+  }
 
   public void setup( ParameterDatabase parameters, Parameter base ) {
     setMinValue(parameters.getDouble(base.push(P_MINVALUE), new Parameter(P_DEF_BASE).push(P_MINVALUE), 0));
     setStep(parameters.getDouble(base.push(P_STEP), new Parameter(P_DEF_BASE).push(P_STEP), 0));
+    initialise();
+  }
+  
+  public void initialise() {
     if ( firstValue() ) {
       setNextValue(getMinValue());
       setFirstValue(false);
