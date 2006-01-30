@@ -187,11 +187,11 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 //              + historyStats.getNumberOfAsks(-1 * price, false) + (historyStats
 //              .getNumberOfBids(price, false) - historyStats.getNumberOfBids(
 //              price, true))));
-    	return (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedBidsBelow(price)
-    			+ historyStats.getIncreasingQueryAccelerator().getNumOfAsksBelow(price))
-    			/ (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedBidsBelow(price)
+    	return ((double) (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedBidsBelow(price)
+    			+ historyStats.getIncreasingQueryAccelerator().getNumOfAsksBelow(price)))
+    			/ ((double) (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedBidsBelow(price)
         			+ historyStats.getIncreasingQueryAccelerator().getNumOfAsksBelow(price)
-        			+ historyStats.getIncreasingQueryAccelerator().getNumOfRejectedBidsAbove(price));
+        			+ historyStats.getIncreasingQueryAccelerator().getNumOfRejectedBidsAbove(price)));
   	
     } else {
       //              (taken asks above price) + (all bids above price)
@@ -204,11 +204,11 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 //              + historyStats.getNumberOfBids(price, false) + (historyStats
 //              .getNumberOfAsks(-1 * price, false) - historyStats.getNumberOfAsks(-1
 //              * price, true))));
-    	return (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedAsksAbove(price)
-    			+ historyStats.getIncreasingQueryAccelerator().getNumOfBidsAbove(price))
-    	/ (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedAsksAbove(price)
+    	return ((double) (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedAsksAbove(price)
+    			+ historyStats.getIncreasingQueryAccelerator().getNumOfBidsAbove(price)))
+    	/ ((double) (historyStats.getIncreasingQueryAccelerator().getNumOfAcceptedAsksAbove(price)
     			+ historyStats.getIncreasingQueryAccelerator().getNumOfBidsAbove(price)
-    			+ historyStats.getIncreasingQueryAccelerator().getNumOfRejectedAsksBelow(price));
+    			+ historyStats.getIncreasingQueryAccelerator().getNumOfRejectedAsksBelow(price)));
     }
   }
 
