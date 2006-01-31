@@ -1,0 +1,66 @@
+# To run this example, run the following command:
+#
+#  ant run -Dparams=params/zip-kcda-valuerin-param-op.params
+#
+
+
+parent.0 = ../modules/general.params
+parent.1 = ../modules/timing-5d50r.params
+parent.2 = ../modules/auctioneer-kcda.params
+parent.3 = ../modules/valuer-interval.params
+parent.4 = ../modules/population-zip.params
+
+
+##################################################################
+# 
+# case enumerations
+#
+# note: it is assumed that there are two groups of agents, sellers and buyers.
+
+simulation.caseenum.n = 3
+
+simulation.caseenum.0 = uk.ac.liv.auction.config.IntervalCaseEnum
+simulation.caseenum.0.name = learningrate
+simulation.caseenum.0.case = uk.ac.liv.auction.config.ParameterBasedCaseImpl
+simulation.caseenum.0.case.name = widrowhofflearner.learningrate
+simulation.caseenum.0.min = 0
+simulation.caseenum.0.max = 1
+simulation.caseenum.0.step = 0.1
+
+simulation.caseenum.1 = uk.ac.liv.auction.config.IntervalCaseEnum
+simulation.caseenum.1.name = momentum
+simulation.caseenum.1.case = uk.ac.liv.auction.config.ParameterBasedCaseImpl
+simulation.caseenum.1.case.name = widrowhofflearner.momentum
+simulation.caseenum.1.min = 0
+simulation.caseenum.1.max = 1
+simulation.caseenum.1.step = 0.1
+
+simulation.caseenum.2 = uk.ac.liv.auction.config.IntervalCaseEnum
+simulation.caseenum.2.name = scaling
+simulation.caseenum.2.case = uk.ac.liv.auction.config.ParameterBasedCaseImpl
+simulation.caseenum.2.case.name = momentumstrategy.scaling
+simulation.caseenum.2.min = 0
+simulation.caseenum.2.max = 1
+simulation.caseenum.2.step = 0.1
+
+simulation.iterations = 50
+
+simulation.auction.name = ZIP Parameter Optimization
+
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
+
+simulation.auction.report.n = 1
+
+simulation.auction.report.0 = uk.ac.liv.auction.stats.SurplusReport
+
+simulation.report.settinglog.filename = zip-kcda-valuerin-param-op.csv
+simulation.report.settinglog.var.n = 1
+simulation.report.settinglog.var.0 = surplus.ea
+
+
+# log4j configuration - substitute DEBUG instead of INFO to turn on debugging 
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n
+

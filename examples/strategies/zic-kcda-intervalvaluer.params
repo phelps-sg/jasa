@@ -1,0 +1,21 @@
+# To run this experiment use the command:
+#
+#  java uk.ac.liv.auction.MarketSimulation examples/zic-kcda-intervalvaluer.params
+#
+
+parent.0 = ../modules/general.params
+parent.1 = ../modules/timing-5d50r.params
+parent.2 = ../modules/auctioneer-kcda.params
+parent.3 = ../modules/report-combi.params
+parent.4 = ../modules/valuer-interval.params
+parent.5 = ../modules/population-zic.params
+
+simulation.iterations = 50
+
+simulation.auction.name = ZI-C in kCDA with Interval Fixed Schedule
+
+# log4j configuration - substitute DEBUG instead of INFO to turn on debugging 
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n

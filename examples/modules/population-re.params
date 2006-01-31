@@ -1,0 +1,16 @@
+parent.0 = population.params
+parent.1 = strategy.params
+parent.2 = learner.params
+
+stimuliresponsestrategy.learner = uk.ac.liv.ai.learning.RothErevLearner
+
+# 1st population
+simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+
+# 2nd population
+simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.StimuliResponseStrategy
+
+rotherevlearner.k = 200
+rotherevlearner.r = 0
+rotherevlearner.e = 0
+rotherevlearner.s1 = 1

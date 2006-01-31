@@ -1,13 +1,13 @@
 parent.0 = population.params
 parent.1 = strategy.params
+parent.2 = learner.params
 
 # 1st population
-simulation.auction.agenttype.0.numagents = 11
-simulation.auction.agenttype.0.initialtradeentitlement = 10
 simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.zi.ZIPStrategy
 
 # 2nd population
-simulation.auction.agenttype.1.numagents = 11
-simulation.auction.agenttype.1.initialtradeentitlement = 10
 simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.zi.ZIPStrategy
 
+widrowhofflearner.learningrate = 0.3
+widrowhofflearner.momentum = 0
+momentumstrategy.scaling = 0

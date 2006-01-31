@@ -18,7 +18,7 @@ gdlstrategy.maxprice = 300
 momentumstrategy.scaling = 0.05
 momentumstrategy.learner = uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum
 
-#stimuliresponsestrategy.learner = 
+stimuliresponsestrategy.learner = uk.ac.liv.ai.learning.RothErevLearner
 
 #mdpstrategy.learner = 
 

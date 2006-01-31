@@ -1,5 +1,5 @@
 parent.0 = auctioneer.params
 
-simulation.auction.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+simulation.auction.auctioneer = uk.ac.liv.auction.core.RandomClearingDoubleAuctioneer
 simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
 

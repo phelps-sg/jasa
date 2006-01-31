@@ -1,0 +1,3 @@
+
+# by default, CDA, clear the market whenever a shout arrives
+marketclearingcondition.threshold = 1

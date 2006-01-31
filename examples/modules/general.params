@@ -8,3 +8,5 @@ parent.6 = auctioneer.params
 parent.7 = auction.params
 parent.8 = prng.params
 parent.9 = noconsole.params
+parent.10 = clearing.params
+parent.11 = accepting.params

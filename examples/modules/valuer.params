@@ -6,8 +6,8 @@
 randomvaluer.minvalue = 50
 randomvaluer.maxvalue = 200
 
-intervalvaluer.minvalue = 75
-intervalvaluer.step = 25
+intervalvaluer.minvalue = 50
+intervalvaluer.step = 10
 
 distinctdistributionvaluer.minvaluemin = 161
 distinctdistributionvaluer.minvaluemax = 260

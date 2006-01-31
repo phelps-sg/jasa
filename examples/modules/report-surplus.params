@@ -1,0 +1,8 @@
+parent.0 = report.params
+
+simulation.auction.report = uk.ac.liv.auction.stats.CombiAuctionReport
+
+simulation.auction.report.n = 1
+
+simulation.auction.report.0 = uk.ac.liv.auction.stats.SurplusReport
+simulation.auction.report.1 = uk.ac.liv.auction.stats.ReportVariableBoardUpdater

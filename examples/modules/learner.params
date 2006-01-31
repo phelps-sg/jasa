@@ -8,3 +8,5 @@ rotherevlearner.s1 = 1.0
 
 widrowhofflearner.learningrate = 0.1
 widrowhofflearner.momentum = 0.05
+
+slidingwindowlearner.windowsize = 4

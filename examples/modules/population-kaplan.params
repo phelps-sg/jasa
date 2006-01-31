@@ -1,0 +1,9 @@
+parent.0 = population.params
+parent.1 = strategy.params
+
+# 1st population
+simulation.auction.agenttype.0.strategy = uk.ac.liv.auction.agent.KaplanStrategy
+
+# 2nd population
+simulation.auction.agenttype.1.strategy = uk.ac.liv.auction.agent.KaplanStrategy
+

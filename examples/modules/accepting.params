@@ -1,0 +1,7 @@
+parent.0 = learner.params
+
+#########################
+# shout accepting policy
+
+equilibriumbeatingaccepting.learner = uk.ac.liv.ai.learning.SlidingWindowLearner
+equilibriumbeatingaccepting.delta = 0

@@ -7,12 +7,12 @@
 #  java uk.ac.liv.auction.MarketSimulation examples/zip-kcda-intervalvaluer.params
 #
 
-parent.0 = modules/general.params
-parent.1 = modules/timing-5d50r.params
-parent.2 = modules/auctioneer-kcda.params
-parent.3 = modules/report-combi.params
-parent.4 = modules/valuer-interval.params
-parent.5 = modules/population-zip.params
+parent.0 = ../modules/general.params
+parent.1 = ../modules/timing-5d50r.params
+parent.2 = ../modules/auctioneer-kcda.params
+parent.3 = ../modules/report-combi.params
+parent.4 = ../modules/valuer-interval.params
+parent.5 = ../modules/population-zip.params
 
 simulation.iterations = 50
 
