@@ -137,10 +137,15 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
     if ( memory != null )
       memory.initialize();
   }
+  
+  public void reset() {
+  	super.reset();
+  	initialise();
+  }
 
   public void checkImprovement( Shout shout ) throws IllegalShoutException {
     super.checkImprovement(shout);
-
+    
     if ( shout.isBid() ) {
       if ( shout.getPrice() < expectedLowestBid ) {
         bidNotAnImprovementException();
@@ -160,7 +165,7 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
       if ( memory.count() >= memorySize ) {
         expectedLowestBid = memory.getMean() - delta;
         expectedHighestAsk = memory.getMean() + delta;
-
+        
         ReportVariableBoard.getInstance().reportValue(EST_EQUILIBRIUM_PRICE,
             memory.getMean(), event);
       }

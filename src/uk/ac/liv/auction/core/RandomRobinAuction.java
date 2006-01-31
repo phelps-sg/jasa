@@ -15,34 +15,30 @@
 
 package uk.ac.liv.auction.core;
 
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+import org.apache.log4j.Logger;
+
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.TradingAgent;
 import uk.ac.liv.auction.event.AgentPolledEvent;
-import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.RoundClosingEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.ShoutReceivedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
-
 import uk.ac.liv.auction.stats.AuctionReport;
 import uk.ac.liv.auction.stats.ReportVariableBoard;
-
 import uk.ac.liv.auction.ui.AuctionConsoleFrame;
-
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
-
+import ec.util.ParamClassLoadException;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
-import ec.util.ParamClassLoadException;
-
-import java.util.*;
-
-import java.io.Serializable;
-
-import org.apache.log4j.Logger;
 
 /**
  * <p>
@@ -569,7 +565,7 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
   public void endRound() {
   	informRoundClosing();
-
+  	
     sweepDefunctTraders();
     auctioneer.endOfRoundProcessing();
 
@@ -608,9 +604,12 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
   }
 
   public void newShout( Shout shout ) throws AuctionException {
-  	// TODO: it's an issue whether to switch the following two lines:
+  	
+  	// TODO: to switch the following two lines?
+
+    fireEvent(new ShoutReceivedEvent(this, round, shout));
+  	super.newShout(shout);
     fireEvent(new ShoutPlacedEvent(this, round, shout));
-    super.newShout(shout);
     
     setChanged();
     notifyObservers();

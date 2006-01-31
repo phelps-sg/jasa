@@ -22,7 +22,9 @@ import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.RoundClosingEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
+import uk.ac.liv.auction.event.ShoutReceivedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
 import uk.ac.liv.auction.stats.AuctionReport;
@@ -70,30 +72,6 @@ public abstract class AuctionImpl extends Observable implements Auction,
   protected long id;
 
   /**
-   * The last shout placed in the auction.
-   * 
-   * @uml.property name="lastShout"
-   * @uml.associationEnd
-   */
-  protected Shout lastShout;
-
-  /**
-   * The last bid placed in the auction.
-   * 
-   * @uml.property name="lastBid"
-   * @uml.associationEnd
-   */
-  protected Shout lastBid;
-
-  /**
-   * The last ask placed in the auction.
-   * 
-   * @uml.property name="lastAsk"
-   * @uml.associationEnd
-   */
-  protected Shout lastAsk;
-
-  /**
    * Flag indicating whether the auction is currently closed.
    * 
    * @uml.property name="closed"
@@ -126,9 +104,10 @@ public abstract class AuctionImpl extends Observable implements Auction,
   protected HashMap eventListeners = new HashMap();
 
   private static final Class[] allEvents = { RoundClosedEvent.class,
-      AuctionOpenEvent.class, AuctionClosedEvent.class, EndOfDayEvent.class,
-      TransactionExecutedEvent.class, ShoutPlacedEvent.class,
-      AgentPolledEvent.class };
+			RoundClosingEvent.class, AuctionOpenEvent.class,
+			AuctionClosedEvent.class, EndOfDayEvent.class,
+			TransactionExecutedEvent.class, ShoutPlacedEvent.class,
+			AgentPolledEvent.class, ShoutReceivedEvent.class };
 
   public AuctionImpl( String name ) {
     id = idAllocator.nextId();
@@ -145,9 +124,6 @@ public abstract class AuctionImpl extends Observable implements Auction,
   }
 
   protected void initialise() {
-    lastShout = null;
-    lastBid = null;
-    lastAsk = null;
     closed = false;
   }
 
@@ -266,19 +242,10 @@ public abstract class AuctionImpl extends Observable implements Auction,
     if ( shout == null ) {
       throw new IllegalShoutException("null shout");
     }
-    recordShout(shout);
+
     auctioneer.newShout(shout);
 
-    notifyObservers();
-  }
-
-  protected void recordShout( Shout shout ) {
-    lastShout = shout;
-    if ( shout.isAsk() ) {
-      lastAsk = shout;
-    } else {
-      lastBid = shout;
-    }
+//    notifyObservers();
   }
 
   public void printState() {

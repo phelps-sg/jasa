@@ -15,44 +15,46 @@
 
 package uk.ac.liv.auction.core;
 
+import java.util.Observable;
+
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionEventListener;
-import uk.ac.liv.auction.event.ShoutPlacedEvent;
-import uk.ac.liv.auction.event.ShoutReceivedEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
+import uk.ac.liv.auction.event.RoundClosingEvent;
 
 /**
- * The interface for expressing the condition of closing an auction.
+ * The interface for expressing the condition of clearing the current market.
+ * Whenever, it's time to do so, notifyObservers() is called.
  *
  * @author Jinzhong Niu
  * @version $Revision$
  *
  */
 
-public class QuiescentDayEndingCondition extends TimingCondition implements
-		DayEndingCondition, AuctionEventListener {
+public class MarketClearingCondition extends Observable implements
+		AuctionEventListener {
+	
+  public static final String P_DEF_BASE = "marketclearingcondition";
 
-  protected boolean shoutsProcessed;
+  public MarketClearingCondition() {
+  	initialise();
+  }
   
-
-  /*
-   * @see uk.ac.liv.auction.core.TimingCondition#eval()
-   */
-  public boolean eval() {
-    return isQuiescent();
+  protected void initialise() {
+  }
+  
+  protected void reset() {
   }
   
   /**
-   * Returns true if no bidding activity occured in the latest auction round.
+   * by default, no clearing
    */
-  private boolean isQuiescent() {
-    return !shoutsProcessed || 
-              (getAuction().getNumberOfTraders() == 0);
-  }
-
 	public void eventOccurred(AuctionEvent event) {
-		if ( event instanceof ShoutReceivedEvent ) {
-			shoutsProcessed = true;
-		}
-		
 	}
+	
+	public String toString() {
+		return "(" + getClass().getSimpleName() + ")";
+	}
+
+  
 }

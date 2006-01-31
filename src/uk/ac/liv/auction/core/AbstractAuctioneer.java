@@ -106,8 +106,9 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
     pricingPolicy = (PricingPolicy) parameters.getInstanceForParameterEq(base
         .push(P_PRICING), null, PricingPolicy.class);
 
-    if ( pricingPolicy instanceof Parameterizable )
+    if ( pricingPolicy instanceof Parameterizable ) {
       ((Parameterizable) pricingPolicy).setup(parameters, base.push(P_PRICING));
+    }
 
   }
 
@@ -278,6 +279,10 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
   
   public void recordMatch( Shout ask, Shout bid ) {
     // default is do nothing
+  }
+  
+  public String toString() {
+  	return "(" + getClass() + ")";
   }
   
 }

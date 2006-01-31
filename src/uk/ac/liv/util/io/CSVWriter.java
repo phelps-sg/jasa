@@ -35,200 +35,204 @@ import uk.ac.liv.util.Parameterizable;
 
 public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
-  /**
-   * @uml.property name="out"
-   */
-  protected PrintStream out;
+	/**
+	 * @uml.property name="out"
+	 */
+	protected PrintStream out;
 
-  /**
-   * @uml.property name="autowrap"
-   */
-  protected boolean autowrap = true;
+	/**
+	 * @uml.property name="autowrap"
+	 */
+	protected boolean autowrap = true;
 
-  /**
-   * @uml.property name="numColumns"
-   */
-  protected int numColumns;
+	/**
+	 * @uml.property name="numColumns"
+	 */
+	protected int numColumns;
 
-  /**
-   * @uml.property name="currentColumn"
-   */
-  protected int currentColumn = 0;
+	/**
+	 * @uml.property name="currentColumn"
+	 */
+	protected int currentColumn = 0;
 
-  /**
-   * @uml.property name="seperator"
-   */
-  protected char seperator = DEFAULT_SEPERATOR;
+	/**
+	 * @uml.property name="seperator"
+	 */
+	protected char seperator = DEFAULT_SEPERATOR;
 
-  /**
-   * @uml.property name="append"
-   */
-  protected boolean append = true;
+	/**
+	 * @uml.property name="append"
+	 */
+	protected boolean append = true;
 
-  static final char DEFAULT_SEPERATOR = '\t';
+	static final char DEFAULT_SEPERATOR = '\t';
 
-  public static final String P_FILENAME = "filename";
+	public static final String P_FILENAME = "filename";
 
-  public static final String P_AUTOWRAP = "autowrap";
+	public static final String P_AUTOWRAP = "autowrap";
 
-  public static final String P_COLUMNS = "columns";
+	public static final String P_COLUMNS = "columns";
 
-  public static final String P_APPEND = "append";
+	public static final String P_APPEND = "append";
 
-  static Logger logger = Logger.getLogger(CSVWriter.class);
+	static Logger logger = Logger.getLogger(CSVWriter.class);
 
-  public CSVWriter( OutputStream out, int numColumns, char seperator ) {
-    this.out = new PrintStream(new BufferedOutputStream(out));
-    this.numColumns = numColumns;
-    this.seperator = seperator;
-  }
+	public CSVWriter(OutputStream out, int numColumns, char seperator) {
+		this.out = new PrintStream(new BufferedOutputStream(out));
+		this.numColumns = numColumns;
+		this.seperator = seperator;
+	}
 
-  public CSVWriter( OutputStream out, char seperator ) {
-    this.out = new PrintStream(new BufferedOutputStream(out));
-    this.autowrap = false;
-    this.seperator = seperator;
-  }
+	public CSVWriter(OutputStream out, char seperator) {
+		this.out = new PrintStream(new BufferedOutputStream(out));
+		this.autowrap = false;
+		this.seperator = seperator;
+	}
 
-  public CSVWriter( OutputStream out, int numColumns ) {
-    this(out, numColumns, DEFAULT_SEPERATOR);
-  }
+	public CSVWriter(OutputStream out, int numColumns) {
+		this(out, numColumns, DEFAULT_SEPERATOR);
+	}
 
-  public CSVWriter( OutputStream out ) {
-    this(out, DEFAULT_SEPERATOR);
-  }
+	public CSVWriter(OutputStream out) {
+		this(out, DEFAULT_SEPERATOR);
+	}
 
-  public CSVWriter() {
-  }
+	public CSVWriter() {
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    try {
-      String fileName = parameters.getString(base.push(P_FILENAME), null);
-      append = parameters.getBoolean(base.push(P_APPEND), null, append);
-      out = new PrintStream(new BufferedOutputStream(new FileOutputStream(
-          new File(fileName), append)));
-      autowrap = parameters.getBoolean(base.push(P_AUTOWRAP), null, autowrap);
-      if ( autowrap )
-        numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null,
-            numColumns);
-    } catch ( FileNotFoundException e ) {
-      throw new Error(e);
-    }
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		try {
+			String fileName = parameters.getString(base.push(P_FILENAME), null);
+			if (fileName == null) {
+				throw new FileNotFoundException(base.push(P_FILENAME) + " is NOT set!");
+			}
 
-  public void newData( Iterator i ) {
-    while ( i.hasNext() ) {
-      newData(i.next());
-    }
-  }
+			append = parameters.getBoolean(base.push(P_APPEND), null, append);
+			out = new PrintStream(new BufferedOutputStream(new FileOutputStream(
+					new File(fileName), append)));
+			autowrap = parameters.getBoolean(base.push(P_AUTOWRAP), null, autowrap);
+			if (autowrap)
+				numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null,
+						numColumns);
+		} catch (FileNotFoundException e) {
+			throw new Error(e);
+		}
+	}
 
-  public void newData( Object[] data ) {
-    for ( int i = 0; i < data.length; i++ ) {
-      newData(data[i]);
-    }
-  }
+	public void newData(Iterator i) {
+		while (i.hasNext()) {
+			newData(i.next());
+		}
+	}
 
-  public void newData( Object data ) {
-    prepareColumn();
-    out.print(data.toString());
-    nextColumn();
-  }
+	public void newData(Object[] data) {
+		for (int i = 0; i < data.length; i++) {
+			newData(data[i]);
+		}
+	}
 
-  public void newData( int data ) {
-    prepareColumn();
-    out.print(data);
-    nextColumn();
-  }
+	public void newData(Object data) {
+		prepareColumn();
+		out.print(data.toString());
+		nextColumn();
+	}
 
-  public void newData( long data ) {
-    prepareColumn();
-    out.print(data);
-    nextColumn();
-  }
+	public void newData(int data) {
+		prepareColumn();
+		out.print(data);
+		nextColumn();
+	}
 
-  public void newData( double data ) {
-    prepareColumn();
-    out.print(data);
-    nextColumn();
-  }
+	public void newData(long data) {
+		prepareColumn();
+		out.print(data);
+		nextColumn();
+	}
 
-  public void newData( float data ) {
-    prepareColumn();
-    out.print(data);
-    nextColumn();
-  }
+	public void newData(double data) {
+		prepareColumn();
+		out.print(data);
+		nextColumn();
+	}
 
-  public void newData( boolean data ) {
-    if ( data ) {
-      newData(1);
-    } else {
-      newData(0);
-    }
-  }
+	public void newData(float data) {
+		prepareColumn();
+		out.print(data);
+		nextColumn();
+	}
 
-  /**
-   * @uml.property name="autowrap"
-   */
-  public void setAutowrap( boolean autowrap ) {
-    this.autowrap = autowrap;
-  }
+	public void newData(boolean data) {
+		if (data) {
+			newData(1);
+		} else {
+			newData(0);
+		}
+	}
 
-  /**
-   * @uml.property name="append"
-   */
-  public void setAppend( boolean append ) {
-    this.append = append;
-  }
+	/**
+	 * @uml.property name="autowrap"
+	 */
+	public void setAutowrap(boolean autowrap) {
+		this.autowrap = autowrap;
+	}
 
-  public void endRecord() {
-    if ( autowrap )
-      new Error("endRecord() should NOT be invoked when autowrap is enabled.");
-    newLine();
-  }
+	/**
+	 * @uml.property name="append"
+	 */
+	public void setAppend(boolean append) {
+		this.append = append;
+	}
 
-  public void flush() {
-    out.flush();
-  }
+	public void endRecord() {
+		if (autowrap)
+			new Error("endRecord() should NOT be invoked when autowrap is enabled.");
+		newLine();
+	}
 
-  public void close() {
-    out.close();
-  }
+	public void flush() {
+		out.flush();
+	}
 
-  /**
-   * @uml.property name="numColumns"
-   */
-  public void setNumColumns( int numColumns ) {
-    if ( !autowrap )
-      new Error(
-          "The number of columns should NOT be set when autowrap is disabled.");
-    this.numColumns = numColumns;
-  }
+	public void close() {
+		out.close();
+	}
 
-  protected void prepareColumn() {
-    if ( !autowrap )
-      if ( currentColumn > 0 )
-        out.print(seperator);
-  }
+	/**
+	 * @uml.property name="numColumns"
+	 */
+	public void setNumColumns(int numColumns) {
+		if (!autowrap)
+			new Error(
+					"The number of columns should NOT be set when autowrap is disabled.");
+		this.numColumns = numColumns;
+	}
 
-  protected void nextColumn() {
-    currentColumn++;
-    if ( autowrap )
-      if ( currentColumn < numColumns ) {
-        out.print(seperator);
-      } else {
-        newLine();
-      }
-  }
+	protected void prepareColumn() {
+		if (!autowrap)
+			if (currentColumn > 0)
+				out.print(seperator);
+	}
 
-  private void newLine() {
-    out.println();
-    currentColumn = 0;
-  }
+	protected void nextColumn() {
+		currentColumn++;
+		if (autowrap)
+			if (currentColumn < numColumns) {
+				out.print(seperator);
+			} else {
+				newLine();
+			}
+	}
 
-  private void writeObject( java.io.ObjectOutputStream out ) throws IOException {
-  }
+	private void newLine() {
+		out.println();
+		currentColumn = 0;
+	}
 
-  private void readObject( java.io.ObjectInputStream in ) throws IOException,
-      ClassNotFoundException {
-  }
+	private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+	}
+
+	private void readObject(java.io.ObjectInputStream in) throws IOException,
+			ClassNotFoundException {
+	}
 
 }

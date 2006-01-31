@@ -45,7 +45,7 @@ public abstract class KPricingPolicy implements Serializable, PricingPolicy,
   /**
    * @uml.property name="k"
    */
-  protected double k;
+  protected double k = 0.5;
 
   public static final String P_K = "k";
   
@@ -62,7 +62,7 @@ public abstract class KPricingPolicy implements Serializable, PricingPolicy,
   public void setup( ParameterDatabase parameters, Parameter base ) {
 
     k = parameters.getDoubleWithDefault(base.push(P_K), 
-    		new Parameter(P_DEF_BASE).push(P_K), 0);
+    		new Parameter(P_DEF_BASE).push(P_K), k);
   }
 
   /**
