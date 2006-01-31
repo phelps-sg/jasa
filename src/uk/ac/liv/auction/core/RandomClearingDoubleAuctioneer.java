@@ -58,6 +58,7 @@ import uk.ac.liv.prng.GlobalPRNG;
  * 
  * </table>
  * 
+ * @deprecated
  * @author Jinzhong Niu
  * @version $Revision$
  */

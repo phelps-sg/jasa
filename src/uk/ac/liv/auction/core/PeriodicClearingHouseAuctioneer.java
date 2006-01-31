@@ -27,6 +27,7 @@ import uk.ac.liv.util.Parameterizable;
  * performed periodically as well as at the end of every round. The length of
  * each period depends upon how many shouts have been made since last clearing.
  * 
+ *  @deprecated
  * @author Jinzhong Niu
  * @version $Revision$
  */
