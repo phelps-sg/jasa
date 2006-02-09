@@ -85,6 +85,8 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
     graph = new RepastPlot(null);
     plotSupplyAndDemand();
+    graph.addLegend(0, "Supply", Color.RED);
+    graph.addLegend(1, "Demand", Color.BLUE);
 
     contentPane.add(graph, BorderLayout.CENTER);
 
@@ -164,6 +166,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
     stats.produceUserOutput();
     plotCurve(0, supplyCurve);
     plotCurve(1, demandCurve);
+    
   }
 
   protected void plotCurve( int seriesIndex, DataSeriesWriter curve ) {
