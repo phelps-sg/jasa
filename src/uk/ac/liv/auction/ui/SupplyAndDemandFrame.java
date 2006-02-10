@@ -73,6 +73,11 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
    * @uml.associationEnd multiplicity="(1 1)"
    */
   protected JCheckBox autoUpdate;
+  
+  protected float maxX;
+  
+  public static final int SERIES_SUPPLY = 0;
+  public static final int SERIES_DEMAND = 1;
 
   static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
@@ -85,8 +90,8 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
     graph = new RepastPlot(null);
     plotSupplyAndDemand();
-    graph.addLegend(0, "Supply", Color.RED);
-    graph.addLegend(1, "Demand", Color.BLUE);
+    graph.addLegend(SERIES_SUPPLY, "Supply", Color.RED);
+    graph.addLegend(SERIES_DEMAND, "Demand", Color.BLUE);
 
     contentPane.add(graph, BorderLayout.CENTER);
 
@@ -164,14 +169,33 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
     SupplyAndDemandStats stats = getSupplyAndDemandStats();
     stats.calculate();
     stats.produceUserOutput();
-    plotCurve(0, supplyCurve);
-    plotCurve(1, demandCurve);
-    
+    maxX = Float.NEGATIVE_INFINITY;
+    plotCurve(SERIES_SUPPLY, supplyCurve);
+    plotCurve(SERIES_DEMAND, demandCurve);
+    finishCurve(SERIES_SUPPLY, supplyCurve);
+    finishCurve(SERIES_DEMAND, demandCurve);
   }
 
   protected void plotCurve( int seriesIndex, DataSeriesWriter curve ) {
-    for ( int i = 0; i < curve.length(); i++ ) {
-      graph.addPoint(seriesIndex, curve.getXCoord(i), curve.getYCoord(i), true);
+    if ( curve.length() > 0 ) {       
+      for ( int i = 0; i < curve.length(); i++ ) {
+        graph.addPoint(seriesIndex, curve.getXCoord(i), curve.getYCoord(i), true);
+      }
+      float lastPointX = curve.getXCoord(curve.length()-1);
+      if ( lastPointX > maxX ) {
+        maxX = lastPointX;
+      }
+    }
+  }
+  
+  protected void finishCurve( int seriesIndex, DataSeriesWriter curve ) {
+    if ( curve.length() > 0 ) {
+      int l = curve.length()-1;
+      double lastX = curve.getXCoord(l);
+      double lastY = curve.getYCoord(l);
+      if ( lastX < maxX ) {
+        graph.addPoint(seriesIndex, maxX, curve.getYCoord(l), true);      
+      }
     }
   }
 }
