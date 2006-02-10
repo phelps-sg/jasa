@@ -454,7 +454,7 @@ public class RepastMarketSimulation extends SimModelImpl implements
       // bug in RePast:
       // x and y are suspected to take value
       // from the range of the other's.
-      return matrix.get(y, x);
+      return matrix.get(x, y);
     }
 
     public Dimension getSize() {
