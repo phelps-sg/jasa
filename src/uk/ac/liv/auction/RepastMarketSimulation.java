@@ -357,7 +357,7 @@ public class RepastMarketSimulation extends SimModelImpl implements
     }
 
     public Object get( int col, int row ) {
-      int abs = row * width + col;
+      int abs = row * (width-1) + col;
       if ( abs >= agents.size() ) {
         return new DrawableAgentAdaptor(auction);
       }

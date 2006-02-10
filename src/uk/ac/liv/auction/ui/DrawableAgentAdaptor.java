@@ -153,14 +153,22 @@ public class DrawableAgentAdaptor implements Drawable {
   }
 
   public long getId() {
-    return agent.getId();
+    if ( agent != null ) {
+      return agent.getId();
+    } else {
+      return -1;
+    }
   }
 
   public String getRole() {
-    if ( agent.isSeller(auction) ) {
-      return "Seller";
+    if ( agent != null ) {
+      if ( agent.isSeller(auction) ) {
+        return "Seller";
+      } else {
+        return "Buyer";
+      }
     } else {
-      return "Buyer";
+      return "Null";
     }
   }
 
@@ -180,13 +188,21 @@ public class DrawableAgentAdaptor implements Drawable {
   }
 
   public boolean getLastShoutAccepted() {
-    return agent.lastShoutAccepted();
+    if ( agent != null ) {
+      return agent.lastShoutAccepted();
+    } else {
+      return false;
+    }
   }
 
   public float getLearningDelta() {
-    Strategy s = agent.getStrategy();
-    if ( s instanceof AdaptiveStrategy ) {
-      return (float) ((AdaptiveStrategy) s).getLearner().getLearningDelta();
+    if ( agent != null ) {
+      Strategy s = agent.getStrategy();
+      if ( s instanceof AdaptiveStrategy ) {
+        return (float) ((AdaptiveStrategy) s).getLearner().getLearningDelta();
+      } else {
+        return -1;
+      }
     } else {
       return -1;
     }
