@@ -291,10 +291,11 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
           .getInstanceForParameter(base.push(P_DAY_ENDING), 
           		defBase.push(P_DAY_ENDING),
               DayEndingCondition.class);
+      dayEndingCondition.setAuction(this);
     } catch ( ParamClassLoadException e ) {
       dayEndingCondition = null;
     }
-    dayEndingCondition.setAuction(this);
+    
 
     if ( dayEndingCondition != null
         && dayEndingCondition instanceof Parameterizable ) {

@@ -31,6 +31,14 @@ public interface DataWriter {
 
   public void newData( Object[] data );
 
+  public void newData( String data );
+  
+  public void newData( Double data );
+  
+  public void newData( Integer data );
+  
+  public void newData( Long data );
+  
   public void newData( Object data );
 
   public void newData( int data );

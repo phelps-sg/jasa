@@ -17,7 +17,6 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionEventListener;
-import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.ShoutReceivedEvent;
 
 /**

@@ -68,6 +68,22 @@ public class RepastGraphWriter implements DataWriter, Parameterizable {
   public void newData( double data ) {
     graphSequence.newData(data);
   }
+  
+  public void newData( Double data ) {
+    graphSequence.newData(data.doubleValue());
+  }
+  
+  public void newData( Integer data ) {
+    graphSequence.newData(data.doubleValue());
+  }
+  
+  public void newData( Long data ) {
+    graphSequence.newData(data.doubleValue());
+  }
+  
+  public void newData( String data ) {
+    
+  }
 
   public void newData( float data ) {
     // TODO Auto-generated method stub

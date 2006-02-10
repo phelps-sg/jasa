@@ -23,7 +23,6 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.AuctionException;
 import uk.ac.liv.auction.core.AuctionClosedException;
-import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
 
 import uk.ac.liv.auction.event.AuctionClosedEvent;
 import uk.ac.liv.auction.event.AuctionEvent;

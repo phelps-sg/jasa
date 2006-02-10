@@ -55,6 +55,22 @@ public class NullDataWriter implements DataWriter {
   public void newData( boolean data ) {
     // Do nothing
   }
+  
+  public void newData( String data ) {
+    // Do nothing
+  }
+  
+  public void newData( Integer data ) {
+    // Do nothing
+  }
+  
+  public void newData( Double data ) {
+    // Do nothing
+  }
+  
+  public void newData( Long data ) {
+    // Do nothing
+  }
 
   public void flush() {
     // Do nothing

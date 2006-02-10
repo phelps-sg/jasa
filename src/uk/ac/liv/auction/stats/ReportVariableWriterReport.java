@@ -17,10 +17,7 @@ package uk.ac.liv.auction.stats;
 
 import java.text.DecimalFormat;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;

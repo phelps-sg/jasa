@@ -199,6 +199,40 @@ public class DataSeriesWriter extends AbstractTableModel implements DataWriter,
     throw new java.lang.UnsupportedOperationException(
         "Method newData() not yet implemented.");
   }
+  
+  
+
+  /* (non-Javadoc)
+   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Double)
+   */
+  public void newData( Double data ) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  /* (non-Javadoc)
+   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Integer)
+   */
+  public void newData( Integer data ) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  /* (non-Javadoc)
+   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Long)
+   */
+  public void newData( Long data ) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  /* (non-Javadoc)
+   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.String)
+   */
+  public void newData( String data ) {
+    // TODO Auto-generated method stub
+    
+  }
 
   public String toString() {
     StringBuffer out = new StringBuffer("( " + getClass() + " ");

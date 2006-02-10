@@ -193,6 +193,10 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
     public void newData( float datum ) {
       newData((double) datum);
     }
+    
+    public void newData( String datum ) {
+      
+    }
 
     private double temp;
 
@@ -228,6 +232,18 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
     }
 
     public void newData( boolean data ) {
+      throw newException();
+    }
+    
+    public void newData( Double data ) {
+      throw newException();
+    }
+    
+    public void newData( Integer data ) {
+      throw newException();
+    }
+    
+    public void newData( Long data ) {
       throw newException();
     }
 

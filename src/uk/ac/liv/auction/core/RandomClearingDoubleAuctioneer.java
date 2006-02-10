@@ -25,9 +25,6 @@ import cern.jet.random.engine.RandomEngine;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import uk.ac.liv.auction.event.AuctionClosedEvent;
-import uk.ac.liv.auction.event.AuctionEvent;
-import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.prng.GlobalPRNG;
 
 /**

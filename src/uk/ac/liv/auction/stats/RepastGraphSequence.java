@@ -53,6 +53,21 @@ public class RepastGraphSequence implements Sequence, DataWriter {
   public void newData( double data ) {
     lastValue = data;
   }
+  
+  public void newData( Double data ) {
+    lastValue = data.doubleValue();
+  }
+  
+  public void newData( Integer data ) {
+    lastValue = data.doubleValue();  }
+  
+  public void newData( Long data ) {
+    lastValue = data.doubleValue();
+  }
+  
+  public void newData( String data ) {
+    
+  }
 
   /**
    * @uml.property name="name"

@@ -19,8 +19,6 @@ import java.util.Observable;
 
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionEventListener;
-import uk.ac.liv.auction.event.RoundClosedEvent;
-import uk.ac.liv.auction.event.RoundClosingEvent;
 
 /**
  * The interface for expressing the condition of clearing the current market.

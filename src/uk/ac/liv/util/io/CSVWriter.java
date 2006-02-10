@@ -130,10 +130,30 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 			newData(data[i]);
 		}
 	}
-
-	public void newData(Object data) {
+    
+    public void newData(Boolean data) {      
+      if ( data.booleanValue() ) {
+        newData(1);
+      } else {
+        newData(0);
+      }
+    }
+    
+    public void newData(Integer data) {
+      newData(data.intValue());
+    }
+    
+    public void newData(Double data) {
+      newData(data.doubleValue());
+    }
+    
+    public void newData(Long data) {
+      newData(data.longValue());
+    }
+    
+    public void newData(String data) {
 		prepareColumn();
-		out.print(data.toString());
+		out.print(data);
 		nextColumn();
 	}
 
@@ -168,6 +188,16 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 			newData(0);
 		}
 	}
+    
+    public void newData(Object data) {
+      if ( data instanceof Boolean ) {
+        newData((Boolean) data);
+      } else {
+        prepareColumn();
+        out.print(data.toString());
+        nextColumn();
+      }
+    }
 
 	/**
 	 * @uml.property name="autowrap"
