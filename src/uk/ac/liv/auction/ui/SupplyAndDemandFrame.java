@@ -90,8 +90,8 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
     graph = new RepastPlot(null);
     plotSupplyAndDemand();
-    graph.addLegend(SERIES_SUPPLY, "Supply", Color.RED);
-    graph.addLegend(SERIES_DEMAND, "Demand", Color.BLUE);
+    graph.addLegend(SERIES_SUPPLY, "Supply", Color.BLUE);
+    graph.addLegend(SERIES_DEMAND, "Demand", Color.RED);
 
     contentPane.add(graph, BorderLayout.CENTER);
 
