@@ -57,12 +57,6 @@ public class DrawableAgentAdaptor implements Drawable {
    */
   protected Auction auction;
 
-  /**
-   * @uml.property name="colorMap"
-   * @uml.associationEnd
-   */
-  protected ColorMap colorMap;
-
   protected static float minProfit = Float.POSITIVE_INFINITY;
 
   protected static float maxProfit = Float.NEGATIVE_INFINITY;
@@ -78,14 +72,8 @@ public class DrawableAgentAdaptor implements Drawable {
     this(auction, null);
   }
 
-  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent ) {
-    this(auction, agent, null);
-  }
-
-  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent,
-      ColorMap colorMap ) {
+  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent ) {    
     this.agent = agent;
-    this.colorMap = colorMap;
     if ( agent != null ) {
       ValuationPolicy valuer = agent.getValuationPolicy();
       if ( valuer instanceof AbstractRandomValuer ) {
@@ -113,20 +101,18 @@ public class DrawableAgentAdaptor implements Drawable {
     int y = 1 + (int) (relPrice * 4);
     g.setDrawingParameters(5, y, 1);
     Color color = Color.BLACK;
-    if ( colorMap == null ) {
-      if ( relProfit > 0.01 ) {
-        relProfit = 0.4f + 0.6f * relProfit;
-        if ( agent.isBuyer(auction) ) {
-          color = new Color(relProfit, 0, 0);
-        } else {
-          color = new Color(0, 0, relProfit);
-        }
+  
+    if ( relProfit > 0.01 ) {
+      relProfit = 0.4f + 0.6f * relProfit;
+      if ( agent.isBuyer(auction) ) {
+        color = new Color(relProfit, 0, 0);
       } else {
-        color = Color.WHITE;
+        color = new Color(0, 0, relProfit);
       }
     } else {
-      color = colorMap.getColor((int) profit);
+      color = Color.WHITE;
     }
+  
     g.drawRect(color);
     g.setDrawingParameters(5, 5, 5);
     g.drawHollowRect(Color.WHITE);
