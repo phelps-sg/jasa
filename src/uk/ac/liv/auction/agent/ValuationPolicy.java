@@ -48,5 +48,7 @@ public interface ValuationPolicy extends Resetable, Parameterizable,
    * Recalculate valuation(s) in response to an auction event.
    */
   public void eventOccurred( AuctionEvent event );
+  
+  public void setAgent( TradingAgent agent );
 
 }

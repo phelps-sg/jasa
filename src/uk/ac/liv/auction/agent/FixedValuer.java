@@ -69,6 +69,10 @@ public class FixedValuer implements ValuationPolicy, Serializable {
   public void setValue( double value ) {
     this.value = value;
   }
+  
+  public void setAgent( TradingAgent agent ) {
+    // No action required
+  }
 
   public String toString() {
     return "(" + getClass() + " value:" + value + ")";

@@ -109,6 +109,8 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
     return minValue;
   }
 
-
+  public void setAgent( TradingAgent agent ) {
+    // No action required
+  }
 
 }

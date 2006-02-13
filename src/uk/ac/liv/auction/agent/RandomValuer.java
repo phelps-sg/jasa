@@ -112,6 +112,8 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
     this.minValue = minValue;
   }
   
-  
+  public void setAgent( TradingAgent agent ) {
+    // No action required
+  }
 
 }

@@ -248,6 +248,7 @@ public abstract class AbstractTradingAgent implements
     valuer = (ValuationPolicy) parameters.getInstanceForParameter(base
         .push(P_VALUER), null, ValuationPolicy.class);
     valuer.setup(parameters, base.push(P_VALUER));
+    valuer.setAgent(this);
 
     strategy = (AbstractStrategy) parameters.getInstanceForParameter(base
         .push(P_STRATEGY), null, AbstractStrategy.class);
