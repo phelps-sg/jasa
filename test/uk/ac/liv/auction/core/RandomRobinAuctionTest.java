@@ -115,6 +115,29 @@ public class RandomRobinAuctionTest extends TestCase {
     logger.info("Previous day transaction price statistics = " + transPrice);
     assertTrue(transPrice.getMean() == 725);
   }
+  
+  /**
+   * See bug #1435981    
+   */  
+  public void testEndOfDayNotification() {
+    
+    auction.setLengthOfDay(3);
+    auction.setMaximumDays(2);
+    
+    auction.begin();
+    
+    do {
+      try {
+        auction.step();
+      } catch ( AuctionClosedException e ) {
+        // Do nothing
+      }
+      for( int i=0; i<traders.length; i++ ) {
+        assertTrue(traders[i].receivedEndOfDayAfterRequestShout);
+      }
+    } while ( !auction.closed() );
+    
+  }
 
   public void testHistoryStats() {
     logger.info("testHistoryStats()");

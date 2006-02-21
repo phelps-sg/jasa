@@ -748,12 +748,12 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
    * Terminate the current trading period (day)
    */
   protected void endDay() {
-    logger.debug("endDay()");
-    day++;
+    logger.debug("endDay()");   
     // logger.debug("day = " + day + " of " + getMaximumDays());
     round = 0;
-    informEndOfDay();
+    informEndOfDay();  
     auctioneer.endOfDayProcessing();
+    day++;
   }
 
   public int getRemainingTime() {

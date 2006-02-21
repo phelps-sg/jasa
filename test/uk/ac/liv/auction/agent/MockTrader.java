@@ -41,6 +41,8 @@ public class MockTrader extends AbstractTradingAgent {
    * @uml.property name="lastWinningQuantity"
    */
   public int lastWinningQuantity;
+  
+  public int requestShoutDay = -1;
 
   /**
    * @uml.property name="receivedAuctionOpen"
@@ -56,6 +58,8 @@ public class MockTrader extends AbstractTradingAgent {
    * @uml.property name="receivedAuctionClosedAfterAuctionOpen"
    */
   public boolean receivedAuctionClosedAfterAuctionOpen = false;
+  
+  public boolean receivedEndOfDayAfterRequestShout = true;
 
   /**
    * @uml.property name="receivedRoundClosed"
@@ -123,6 +127,7 @@ public class MockTrader extends AbstractTradingAgent {
     super.requestShout(auction);
     System.out.println(this + ": placed " + currentShout);
     receivedRequestShout++;
+    requestShoutDay = auction.getDay();
   }
 
   public void auctionOpen( AuctionEvent event ) {
@@ -144,7 +149,8 @@ public class MockTrader extends AbstractTradingAgent {
   }
 
   public void endOfDay( AuctionEvent event ) {
-    // TODO
+    int day = event.getAuction().getDay();
+    receivedEndOfDayAfterRequestShout = day <= requestShoutDay;
   }
 
   public boolean active() {
