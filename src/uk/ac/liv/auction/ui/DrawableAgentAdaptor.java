@@ -17,7 +17,6 @@ package uk.ac.liv.auction.ui;
 
 import java.awt.Color;
 
-import uchicago.src.sim.gui.ColorMap;
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
 
