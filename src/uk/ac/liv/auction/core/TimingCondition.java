@@ -17,7 +17,8 @@ package uk.ac.liv.auction.core;
 
 /**
  * The interface for expressing the condition of closing a certain time
- * interval, such as an auction, or a day.
+ * interval, such as an auction, or a day, or whether it's time to do something,
+ * i.e. clearing the market.
  * 
  * @author Jinzhong Niu
  * @version $Revision$
@@ -26,34 +27,34 @@ package uk.ac.liv.auction.core;
 
 public abstract class TimingCondition {
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  private Auction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	private Auction auction;
 
-  public TimingCondition() {
-    this(null);
-  }
+	public TimingCondition() {
+		this(null);
+	}
 
-  public TimingCondition( Auction auction ) {
-    setAuction(auction);
-  }
+	public TimingCondition(Auction auction) {
+		setAuction(auction);
+	}
 
-  /**
-   * @uml.property name="auction"
-   */
-  public void setAuction( Auction auction ) {
-    this.auction = auction;
-  }
+	/**
+	 * @uml.property name="auction"
+	 */
+	public void setAuction(Auction auction) {
+		this.auction = auction;
+	}
 
-  /**
-   * @uml.property name="auction"
-   */
-  public Auction getAuction() {
-    return auction;
-  }
+	/**
+	 * @uml.property name="auction"
+	 */
+	public Auction getAuction() {
+		return auction;
+	}
 
-  public abstract boolean eval();
+	public abstract boolean eval();
 
 }
