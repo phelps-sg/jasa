@@ -1,0 +1,284 @@
+# This example demonstrates a uniform-price k-DA with a large number
+# of agents.
+#
+# To run this example in RePast, use the following command:
+#
+#  ant run -Dparams=examples/example2.params
+#
+
+# Create two auctions
+simulation.auction.n = 3
+
+# Use a random-robin auction which will randomise the order in which agents bid
+simulation.auction.0 = uk.ac.liv.supplychain.SupplyChainRandomRobinAuction
+simulation.auction.0.name = FURNITURE
+simulation.auction.0.initialprice = 1
+# The auction will close after 1000 rounds (or "ticks")
+simulation.auction.0.closing = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
+# 10000
+simulation.auction.0.closing.maximumrounds = 500
+#simulation.auction.0.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+#simulation.auction.0.closing.maximumdays = 100
+#simulation.auction.0.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+#simulation.auction.0.dayending.lengthofday = 5
+# Show GUI console
+simulation.auction.0.console =true 
+# Use a clearing house auctioneer which will clear the auction after each round
+simulation.auction.0.auctioneer = uk.ac.liv.supplychain.ClearingHouseAuctioneer
+#simulation.auction.0.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+# Set a uniform transaction-price based on current market quote.
+simulation.auction.0.auctioneer.pricing = uk.ac.liv.supplychain.ThierrySPricingPolicy
+# Set the transaction price halfway between the bid-ask spread.
+simulation.auction.0.auctioneer.pricing.k = 0.5
+# Configure a combination of two different reports
+simulation.auction.0.report = uk.ac.liv.auction.stats.CombiAuctionReport
+simulation.auction.0.report.n = 3
+# 1st report collects statistics on the auction as it progresses
+#simulation.auction.0.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
+simulation.auction.0.report.0 = uk.ac.liv.supplychain.PriceStatisticsInPeriodReport
+simulation.auction.0.report.0.recordfrom = 10
+simulation.auction.0.report.0.recordto = 20
+# 2nd report logs data to a graph on the console
+#simulation.auction.0.report.1 = uk.ac.liv.auction.stats.GraphReport
+simulation.auction.0.report.1 = uk.ac.liv.supplychain.MyGraphReport
+# Produce a report on the equilibrium price and quantity
+simulation.auction.0.report.2 = uk.ac.liv.auction.stats.EquilibriumReport
+
+# Use a random-robin auction which will randomise the order in which agents bid
+simulation.auction.1 = uk.ac.liv.supplychain.SupplyChainRandomRobinAuction
+simulation.auction.1.name = LUMBER
+simulation.auction.1.initialprice = 1
+# The auction will close after 1000 rounds (or "ticks")
+simulation.auction.1.closing = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
+simulation.auction.1.closing.maximumrounds = 99999
+# Show GUI console
+simulation.auction.1.console =true 
+# Use a clearing house auctioneer which will clear the auction after each round
+simulation.auction.1.auctioneer = uk.ac.liv.supplychain.ClearingHouseAuctioneer
+#simulation.auction.1.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+# Set a uniform transaction-price based on current market quote.
+simulation.auction.1.auctioneer.pricing = uk.ac.liv.supplychain.ThierrySPricingPolicy
+# Set the transaction price halfway between the bid-ask spread.
+simulation.auction.1.auctioneer.pricing.k = 0.5
+# Configure a combination of two different reports
+simulation.auction.1.report = uk.ac.liv.auction.stats.CombiAuctionReport
+simulation.auction.1.report.n = 3
+# 1st report collects statistics on the auction as it progresses
+#simulation.auction.1.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
+simulation.auction.1.report.0 = uk.ac.liv.supplychain.PriceStatisticsInPeriodReport
+simulation.auction.1.report.0.recordfrom = 10
+simulation.auction.1.report.0.recordto = 20
+# 2nd report logs data to a graph on the console
+#simulation.auction.1.report.1 = uk.ac.liv.auction.stats.GraphReport
+simulation.auction.1.report.1 = uk.ac.liv.supplychain.MyGraphReport
+# Produce a report on the equilibrium price and quantity
+simulation.auction.1.report.2 = uk.ac.liv.auction.stats.EquilibriumReport
+
+
+
+# Use a random-robin auction which will randomise the order in which agents bid
+simulation.auction.2 = uk.ac.liv.supplychain.SupplyChainRandomRobinAuction
+simulation.auction.2.name = WOOD
+simulation.auction.2.initialprice = 1
+# The auction will close after 1000 rounds (or "ticks")
+simulation.auction.2.closing = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
+simulation.auction.2.closing.maximumrounds = 99999
+# Show GUI console
+simulation.auction.2.console =true 
+# Use a clearing house auctioneer which will clear the auction after each round
+simulation.auction.2.auctioneer = uk.ac.liv.supplychain.ClearingHouseAuctioneer
+#simulation.auction.1.auctioneer = uk.ac.liv.auction.core.ContinuousDoubleAuctioneer
+# Set a uniform transaction-price based on current market quote.
+simulation.auction.2.auctioneer.pricing = uk.ac.liv.supplychain.ThierrySPricingPolicy
+# Set the transaction price halfway between the bid-ask spread.
+simulation.auction.2.auctioneer.pricing.k = 0.5
+# Configure a combination of two different reports
+simulation.auction.2.report = uk.ac.liv.auction.stats.CombiAuctionReport
+simulation.auction.2.report.n = 3
+# 1st report collects statistics on the auction as it progresses
+#simulation.auction.2.report.0 = uk.ac.liv.auction.stats.PriceStatisticsReport
+simulation.auction.2.report.0 = uk.ac.liv.supplychain.PriceStatisticsInPeriodReport
+simulation.auction.2.report.0.recordfrom = 10
+simulation.auction.2.report.0.recordto = 20
+# 2nd report logs data to a graph on the console
+#simulation.auction.1.report.1 = uk.ac.liv.auction.stats.GraphReport
+simulation.auction.2.report.1 = uk.ac.liv.supplychain.MyGraphReport
+# Produce a report on the equilibrium price and quantity
+simulation.auction.2.report.2 = uk.ac.liv.auction.stats.EquilibriumReport
+
+########################################################################
+
+# 1st population- 500 CompanyAgents (NOTE: which are based on ZITraderAgent, initialtradeentitlement)
+simulation.agenttype.0 = uk.ac.liv.supplychain.EndCustomerAgent
+simulation.agenttype.0.numagents = 25
+simulation.agenttype.0.consumption = 1
+simulation.agenttype.0.produceMoney = 5
+simulation.agenttype.0.initialtradeentitlement = 999999
+#simulation.agenttype.0.initialstock = 370
+simulation.agenttype.0.initialfunds = 60
+simulation.agenttype.0.strategy = uk.ac.liv.supplychain.SteiglitzStrategy
+simulation.agenttype.0.strategy.margin = 4
+simulation.agenttype.0.valuer = uk.ac.liv.supplychain.SteiglitzTraderValuer
+#simulation.agenttype.0.valuer = uk.ac.liv.auction.agent.DailyRandomValuer
+simulation.agenttype.0.valuer.b00 = 2
+simulation.agenttype.0.valuer.b01 = 4
+simulation.agenttype.0.valuer.b0inf = 16
+simulation.agenttype.0.source.n = 1
+simulation.agenttype.0.source.0.capacity = 10
+simulation.agenttype.0.source.0.initial = 15;20
+simulation.agenttype.0.source.0.buysInAuction = 0
+#simulation.agenttype.0.source.0.sellsInAuction = 0
+simulation.agenttype.0.make.cost = 3
+simulation.agenttype.0.make.capacity = 1
+simulation.agenttype.0.make.speed = 3
+simulation.agenttype.0.deliver.n = 0
+
+# 2nd population- 500 CompanyAgents (NOTE: which are based on ZITraderAgent, initialtradeentitlement)
+simulation.agenttype.1 = uk.ac.liv.supplychain.ManufacturerAgent
+simulation.agenttype.1.numagents = 6
+simulation.agenttype.1.initialtradeentitlement = 999999
+#simulation.agenttype.1.initialstock = 370
+simulation.agenttype.1.initialfunds = 555
+simulation.agenttype.1.strategy = uk.ac.liv.supplychain.SteiglitzStrategy
+simulation.agenttype.1.strategy.margin = 3
+simulation.agenttype.1.valuer = uk.ac.liv.supplychain.SteiglitzTraderValuer
+#simulation.agenttype.1.valuer = uk.ac.liv.auction.agent.DailyRandomValuer
+simulation.agenttype.1.valuer.b00 = 2
+simulation.agenttype.1.valuer.b01 = 4
+simulation.agenttype.1.valuer.b0inf = 16
+simulation.agenttype.1.source.n = 1
+simulation.agenttype.1.source.0.initial = 15;20
+simulation.agenttype.1.source.0.capacity = 15
+simulation.agenttype.1.source.0.buysInAuction = 1
+#simulation.agenttype.1.source.0.sellsInAuction = 0
+simulation.agenttype.1.make.cost = 3
+simulation.agenttype.1.make.capacity = 10
+simulation.agenttype.1.make.speed = 1
+simulation.agenttype.1.deliver.n = 1
+simulation.agenttype.1.deliver.0.capacity = 15
+simulation.agenttype.1.deliver.0.initial = 15;20
+#simulation.agenttype.1.deliver.0.buysInAuction = 1
+simulation.agenttype.1.deliver.0.sellsInAuction = 0
+
+
+# 2nd population- 500 CompanyAgents (NOTE: which are based on ZITraderAgent, initialtradeentitlement)
+simulation.agenttype.2 = uk.ac.liv.supplychain.ManufacturerAgent
+simulation.agenttype.2.numagents = 4
+simulation.agenttype.2.initialtradeentitlement = 999999
+#simulation.agenttype.2.initialstock = 370
+simulation.agenttype.2.initialfunds = 555
+simulation.agenttype.2.strategy = uk.ac.liv.supplychain.SteiglitzStrategy
+simulation.agenttype.2.strategy.margin = 2
+simulation.agenttype.2.valuer = uk.ac.liv.supplychain.SteiglitzTraderValuer
+#simulation.agenttype.2.valuer = uk.ac.liv.auction.agent.DailyRandomValuer
+simulation.agenttype.2.valuer.b00 = 2
+simulation.agenttype.2.valuer.b01 = 4
+simulation.agenttype.2.valuer.b0inf = 16
+simulation.agenttype.2.source.n = 1
+simulation.agenttype.2.source.0.initial = 15;20
+simulation.agenttype.2.source.0.capacity = 15
+simulation.agenttype.2.source.0.buysInAuction = 2
+#simulation.agenttype.2.source.0.sellsInAuction = 0
+simulation.agenttype.2.make.cost = 3
+simulation.agenttype.2.make.capacity = 10
+simulation.agenttype.2.make.speed = 1
+simulation.agenttype.2.deliver.n = 1
+simulation.agenttype.2.deliver.0.capacity = 15
+simulation.agenttype.2.deliver.0.initial = 15;20
+#simulation.agenttype.2.deliver.0.buysInAuction = 1
+simulation.agenttype.2.deliver.0.sellsInAuction = 1
+
+
+
+# 3rd population- 500 CompanyAgents (NOTE: which are based on ZITraderAgent, initialtradeentitlement)
+simulation.agenttype.3 = uk.ac.liv.supplychain.RawMaterialSupplierAgent
+simulation.agenttype.3.numagents = 2
+simulation.agenttype.3.initialtradeentitlement = 999999
+#simulation.agenttype.3.initialstock = 370
+simulation.agenttype.3.initialfunds = 60
+simulation.agenttype.3.strategy = uk.ac.liv.supplychain.SteiglitzStrategy
+simulation.agenttype.3.strategy.margin = 1
+simulation.agenttype.3.valuer = uk.ac.liv.supplychain.SteiglitzTraderValuer
+#simulation.agenttype.3.valuer = uk.ac.liv.auction.agent.DailyRandomValuer
+simulation.agenttype.3.valuer.b00 = 2
+simulation.agenttype.3.valuer.b01 = 4
+simulation.agenttype.3.valuer.b0inf = 16
+simulation.agenttype.3.source.n = 0
+#simulation.agenttype.3.source.0.capacity = 10
+#simulation.agenttype.3.source.0.initial = 33
+#simulation.agenttype.3.source.0.buysInAuction = 0
+#simulation.agenttype.3.source.0.sellsInAuction = 0
+simulation.agenttype.3.make.cost = 3
+simulation.agenttype.3.make.capacity = 10
+simulation.agenttype.3.make.speed = 1
+simulation.agenttype.3.deliver.n = 1
+simulation.agenttype.3.deliver.0.capacity = 1
+simulation.agenttype.3.deliver.0.initial = 15;20
+#simulation.agenttype.3.deliver.0.buysInAuction = 1
+simulation.agenttype.3.deliver.0.sellsInAuction = 2
+
+
+# 4rd population- 25 LUMBER speculators
+simulation.agenttype.4 = uk.ac.liv.supplychain.SpeculatorAgent
+simulation.agenttype.4.numagents = 5
+simulation.agenttype.4.initialtradeentitlement = 999999
+#simulation.agenttype.4.initialstock = 370
+simulation.agenttype.4.initialfunds = 60
+simulation.agenttype.4.strategy = uk.ac.liv.supplychain.SpeculatorStrategy
+simulation.agenttype.4.strategy.activationdate = 0
+simulation.agenttype.4.strategy.margin = uk.ac.liv.supplychain.DoubleFromInterval
+# numintervals = numagents - 1
+simulation.agenttype.4.strategy.margin.numintervals = 4
+simulation.agenttype.4.strategy.margin.minvalue = 0.0
+simulation.agenttype.4.strategy.margin.maxvalue = 0.5
+simulation.agenttype.4.valuer = uk.ac.liv.supplychain.AVGPriceForecastValuer
+simulation.agenttype.4.valuer.smoothing = 0.008
+simulation.agenttype.4.source.n = 1
+simulation.agenttype.4.source.0.capacity = 10
+simulation.agenttype.4.source.0.initial = 15;20
+simulation.agenttype.4.source.0.buysInAuction = 1
+simulation.agenttype.4.source.0.sellsInAuction = 1
+simulation.agenttype.4.make.cost = 3
+simulation.agenttype.4.make.capacity = 10
+simulation.agenttype.4.make.speed = 1
+simulation.agenttype.4.deliver.n = 0
+
+
+# 5th population- 25 WOOD speculators
+simulation.agenttype.5 = uk.ac.liv.supplychain.SpeculatorAgent
+simulation.agenttype.5.numagents = 5
+simulation.agenttype.5.initialtradeentitlement = 999999
+#simulation.agenttype.5.initialstock = 370
+simulation.agenttype.5.initialfunds = 60
+simulation.agenttype.5.strategy = uk.ac.liv.supplychain.SpeculatorStrategy
+simulation.agenttype.5.strategy.activationdate = 0
+simulation.agenttype.5.strategy.margin = uk.ac.liv.supplychain.DoubleFromInterval
+# numintervals = numagents - 1
+simulation.agenttype.5.strategy.margin.numintervals = 4
+simulation.agenttype.5.strategy.margin.minvalue = 0.0
+simulation.agenttype.5.strategy.margin.maxvalue = 0.5
+simulation.agenttype.5.valuer = uk.ac.liv.supplychain.AVGPriceForecastValuer
+simulation.agenttype.5.valuer.smoothing = 0.008
+simulation.agenttype.5.source.n = 1
+simulation.agenttype.5.source.0.capacity = 10
+simulation.agenttype.5.source.0.initial = 15;20
+simulation.agenttype.5.source.0.buysInAuction = 2
+simulation.agenttype.5.source.0.sellsInAuction = 2
+simulation.agenttype.5.make.cost = 3
+simulation.agenttype.5.make.capacity = 10
+simulation.agenttype.5.make.speed = 1
+simulation.agenttype.5.deliver.n = 0
+
+simulation.agenttype.n = 6
+
+# PRNG configuration
+#  Use the 32bit version of the Mersenne Twister algorithm 
+simulation.prng = uk.ac.liv.prng.MT32
+#  with the following PRNG seed
+simulation.seed = 2704
+
+# log4j configuration - substitute DEBUG instead of INFO to turn on debugging 
+log4j.rootCategory=INFO, stdout
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%m%n

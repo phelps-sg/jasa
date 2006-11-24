@@ -12,7 +12,8 @@ simulation.auction.name = Example 2: Uniform-price CH
 
 # The auction will close after 1000 rounds (or "ticks")
 simulation.auction.closing = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
-simulation.auction.closing.maximumrounds = 10000
+# 10000
+simulation.auction.closing.maximumrounds = 10
 
 # Show GUI console
 simulation.auction.console = true
