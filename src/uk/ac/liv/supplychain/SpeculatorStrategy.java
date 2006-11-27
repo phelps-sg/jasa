@@ -6,7 +6,7 @@ import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Uniform;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
-import edu.stanford.smi.protege.model.Facet;
+//import edu.stanford.smi.protege.model.Facet;
 
 import uk.ac.liv.auction.agent.FixedQuantityStrategyImpl;
 import uk.ac.liv.auction.core.Auction;
