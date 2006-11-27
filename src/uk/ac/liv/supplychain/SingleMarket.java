@@ -12,7 +12,7 @@ import uk.ac.liv.auction.RepastMarketSimulation;
 import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Auctioneer;
-import uk.ac.liv.supplyChain.bin.Company;
+//import uk.ac.liv.supplyChain.bin.Company;
 
 /**
  * @author moyaux
@@ -63,10 +63,10 @@ public class SingleMarket extends RepastMarketSimulation {
 			int x = Random.uniform.nextIntFromTo (0, worldXSize - 1);
 			int y = Random.uniform.nextIntFromTo (0, worldYSize - 1);
 			RectNetworkItem drawable = new RectNetworkItem (x, y);
-			Company company = new Company(worldXSize, worldYSize, drawable, this);
-			company.setBorderColor(Color.red);
-			company.setBorderWidth(1);
-			agentList.add(company);
+			//Company company = new Company(worldXSize, worldYSize, drawable, this);
+			//company.setBorderColor(Color.red);
+			//company.setBorderWidth(1);
+			//agentList.add(company);
 		}//for
 /*		
 		//link every market to every retailer
@@ -82,8 +82,8 @@ public class SingleMarket extends RepastMarketSimulation {
 		//auction.setAuctioneer(auctioneer);
 		auction.activateGUIConsole();
 		for (int i=0 ; i < agentList.size() ; i++) {
-			Company company = (Company)agentList.get(i);
-			auction.register(company);
+			//Company company = (Company)agentList.get(i);
+			//auction.register(company);
 		}//for
 		auction.requestShouts();
 		//auction.runSingleRound();
