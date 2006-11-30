@@ -2,8 +2,6 @@ package uk.ac.liv.supplychain;
 
 import java.io.Serializable;
 
-import cern.jet.random.AbstractContinousDistribution;
-import cern.jet.random.Uniform;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 //import edu.stanford.smi.protege.model.Facet;
@@ -11,7 +9,6 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.agent.FixedQuantityStrategyImpl;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.prng.GlobalPRNG;
 
 public class SpeculatorStrategy extends FixedQuantityStrategyImpl implements Serializable {
 	boolean display = false;

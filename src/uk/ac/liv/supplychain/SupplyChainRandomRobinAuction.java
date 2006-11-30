@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import uk.ac.liv.auction.agent.TradingAgent;
 import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.AuctionError;
 import uk.ac.liv.auction.core.RandomRobinAuction;

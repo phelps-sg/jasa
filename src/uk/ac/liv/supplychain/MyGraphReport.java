@@ -2,8 +2,6 @@ package uk.ac.liv.supplychain;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
-import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.auction.stats.GraphReport;
 import uk.ac.liv.auction.stats.RepastGraphSequence;
 import uk.ac.liv.util.io.DataWriter;

@@ -19,7 +19,6 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.RepastMarketSimulation.AgentSpace;
 import uk.ac.liv.auction.agent.*;
 
 //import uk.ac.liv.auction.stats.GraphReport;
@@ -56,9 +55,6 @@ import uchicago.src.sim.gui.Object2DDisplay;
 import uchicago.src.sim.space.Discrete2DSpace;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.jmx.Agent;
-
-import com.sun.org.apache.xerces.internal.impl.dv.xs.DecimalDV;
 
 /**
  * <p>

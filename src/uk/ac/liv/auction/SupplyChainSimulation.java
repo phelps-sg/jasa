@@ -19,11 +19,9 @@ import ec.util.ParamClassLoadException;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-import sun.security.krb5.internal.ccache.au;
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.TradingAgent;
 import uk.ac.liv.auction.config.CaseEnumConfig;
-import uk.ac.liv.auction.core.*;
 import uk.ac.liv.supplychain.*;
 import uk.ac.liv.auction.stats.ReportVariable;
 

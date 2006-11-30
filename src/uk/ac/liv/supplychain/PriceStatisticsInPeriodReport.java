@@ -5,8 +5,6 @@ import org.apache.log4j.Logger;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.core.MarketQuote;
-import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.auction.stats.PriceStatisticsReport;
 

@@ -11,17 +11,10 @@ import cern.jet.random.Uniform;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-//import sun.security.krb5.internal.ag;
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.TradingAgent;
 import uk.ac.liv.auction.agent.ValuationPolicy;
 import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.core.RandomRobinAuction;
-import uk.ac.liv.auction.core.RoundRobinAuction;
 import uk.ac.liv.auction.event.AuctionEvent;
-import uk.ac.liv.auction.event.RoundClosedEvent;
-import uk.ac.liv.auction.speculation.SimpleTradingAgent;
-import uk.ac.liv.auction.stats.EquilibriumReport;
 import uk.ac.liv.prng.GlobalPRNG;
 
 /**

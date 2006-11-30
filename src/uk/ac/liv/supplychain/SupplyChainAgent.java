@@ -4,20 +4,13 @@
 
 package uk.ac.liv.supplychain;
 
-import java.util.Random;
-import java.util.logging.Logger;
-
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Uniform;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
-import sun.security.krb5.internal.ccache.au;
-import sun.security.krb5.internal.crypto.e;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.event.AuctionEvent;
-import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.prng.GlobalPRNG;
 
 public abstract class SupplyChainAgent extends uk.ac.liv.auction.zi.ZITraderAgent {

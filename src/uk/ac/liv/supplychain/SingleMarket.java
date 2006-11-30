@@ -1,5 +1,4 @@
 package uk.ac.liv.supplychain;
-import java.awt.Color;
 import java.util.ArrayList;
 
 import uchicago.src.sim.engine.Schedule;
@@ -9,7 +8,6 @@ import uchicago.src.sim.gui.Network2DDisplay;
 import uchicago.src.sim.gui.RectNetworkItem;
 import uchicago.src.sim.util.Random;
 import uk.ac.liv.auction.RepastMarketSimulation;
-import uk.ac.liv.auction.core.AuctionClosedException;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Auctioneer;
 //import uk.ac.liv.supplyChain.bin.Company;
