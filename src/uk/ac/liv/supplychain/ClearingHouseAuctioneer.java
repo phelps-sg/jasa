@@ -3,10 +3,6 @@ package uk.ac.liv.supplychain;
 import java.util.Iterator;
 import java.util.List;
 
-import com.bbn.openmap.omGraphics.grid.GridData.Double;
-
-import sun.security.krb5.internal.av;
-import sun.security.krb5.internal.bi;
 import uk.ac.liv.auction.core.MarketQuote;
 import uk.ac.liv.auction.core.Shout;
 
