@@ -539,9 +539,9 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
     begin();
 
     try {
-      //while ( !closed ) {
+      while ( !closed ) {
         step();
-      //}
+      }
 
     } catch ( AuctionClosedException e ) {
       throw new AuctionError(e);
