@@ -12,9 +12,12 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
+
 package uk.ac.liv.auction.agent;
 
-public class CommodityHolding {
+import java.io.Serializable;
+
+public class CommodityHolding implements Serializable {
 
   protected int quantity;
   
@@ -57,6 +60,8 @@ public class CommodityHolding {
     this.quantity = quantity;
   }
   
-  
+  public String toString() {
+    return "(" + getClass() + " quantity:" + quantity + " owner:" + owner + ")";
+  }
 
 }
