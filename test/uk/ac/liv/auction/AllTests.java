@@ -50,6 +50,7 @@ public class AllTests {
     suite.addTest(uk.ac.liv.auction.agent.RandomValuerTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.BuyerIntervalValuerTest.suite());
     suite.addTest(uk.ac.liv.auction.agent.SellerIntervalValuerTest.suite());
+    suite.addTest(uk.ac.liv.auction.agent.CommodityHoldingTest.suite());
     
     suite.addTest(uk.ac.liv.auction.zi.ZITraderAgentTest.suite());
 

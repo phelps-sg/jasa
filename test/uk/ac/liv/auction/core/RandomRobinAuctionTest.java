@@ -282,11 +282,17 @@ public class RandomRobinAuctionTest extends TestCase {
    */
   public void testClear() {
     
+    // We will test a clearing operation that involves a transfer of 2 units
+    // from seller to buyer.
     int testQty = 2;
+    MockTrader buyer = traders[0];
+    MockTrader seller = traders[2]; 
+    
+    // Check initial state
+    assertTrue(buyer.lastWinningShout == null);
+    assertTrue(seller.lastWinningShout == null);
     
     // Record initial allocations
-    MockTrader buyer = traders[0];
-    MockTrader seller = traders[2];
     int sellerInitial = seller.getCommodityHolding().getQuantity();
     int buyerInitial = buyer.getCommodityHolding().getQuantity();
     
@@ -304,6 +310,9 @@ public class RandomRobinAuctionTest extends TestCase {
     // Test that 2 units were transfered from the seller
     assertTrue(seller.getCommodityHolding().getQuantity() == sellerInitial - testQty);
     
+    // Check that agents received win notification
+    assertTrue(buyer.lastWinningShout == testBid);
+    assertTrue(seller.lastWinningShout == testAsk);
   }
 
   public static void main( String[] args ) {
