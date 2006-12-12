@@ -396,7 +396,7 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
     auctioneer.getAccount().doubleEntry(buyer.getAccount(), buyerCharge, 
                                         seller.getAccount(), sellerPayment);    
-    buyer.getCommodityHolding().transfer(seller.getCommodityHolding(), quantity);
+    seller.getCommodityHolding().transfer(buyer.getCommodityHolding(), quantity);
     
     buyer.shoutAccepted(this, bid, buyerCharge, quantity);
     seller.shoutAccepted(this, ask, sellerPayment, quantity);    
