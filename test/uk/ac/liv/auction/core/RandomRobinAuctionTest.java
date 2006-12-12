@@ -276,6 +276,35 @@ public class RandomRobinAuctionTest extends TestCase {
       fail(e.getMessage());
     }
   }
+  
+  /**
+   * Test for bug #1614071 
+   */
+  public void testClear() {
+    
+    int testQty = 2;
+    
+    // Record initial allocations
+    MockTrader buyer = traders[0];
+    MockTrader seller = traders[2];
+    int sellerInitial = seller.getCommodityHolding().getQuantity();
+    int buyerInitial = buyer.getCommodityHolding().getQuantity();
+    
+    // Set up a purchase of 2 units from by buyer (traders[0]) from seller (traders[2])  
+    Shout testBid = new Shout(buyer, testQty, 200, true);
+    Shout testAsk = new Shout(seller, testQty, 100, false);
+    auction.clear(testAsk, testBid, 200, 100, testQty);
+    
+    // Test that 2 units were transfered from seller to buyer
+    //  Note that the buyer will immediately cash-in the stock so
+    //   net qty should remain unchanged
+    //    @see uk.ac.liv.auction.agent.AbstractTradingAgent.cashIn()
+    assertTrue(buyer.getCommodityHolding().getQuantity() == buyerInitial + 0);
+    
+    // Test that 2 units were transfered from the seller
+    assertTrue(seller.getCommodityHolding().getQuantity() == sellerInitial - testQty);
+    
+  }
 
   public static void main( String[] args ) {
     junit.textui.TestRunner.run(suite());
