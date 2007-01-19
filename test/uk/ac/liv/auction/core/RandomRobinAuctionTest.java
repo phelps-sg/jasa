@@ -299,7 +299,7 @@ public class RandomRobinAuctionTest extends TestCase {
     // Set up a purchase of 2 units from by buyer (traders[0]) from seller (traders[2])  
     Shout testBid = new Shout(buyer, testQty, 200, true);
     Shout testAsk = new Shout(seller, testQty, 100, false);
-    auction.clear(testAsk, testBid, 200, 100, testQty);
+    auction.clear(testAsk, testBid, 200, 200, testQty);
     
     // Test that 2 units were transfered from seller to buyer
     //  Note that the buyer will immediately cash-in the stock so
