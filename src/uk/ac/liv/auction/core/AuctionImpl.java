@@ -60,7 +60,7 @@ public abstract class AuctionImpl extends Observable implements Auction,
   protected String name;
 
   /**
-   * Used to assign unique ids to each mySingletonInstance.
+   * Used to assign unique ids to each instance.
    */
   static IdAllocator idAllocator = new IdAllocator();
 

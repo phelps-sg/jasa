@@ -42,7 +42,7 @@ import ec.util.ParameterDatabase;
  * <td valign=top><i>base </i> <tt>.case</tt><br>
  * <font size=-1> classname inherits uk.ac.liv.auction.config.ParameterBasedCase
  * </font></td>
- * <td valign=top>(the class whose mySingletonInstance represents a value of the property)
+ * <td valign=top>(the class whose instance represents a value of the property)
  * </td>
  * </tr>
  * 
