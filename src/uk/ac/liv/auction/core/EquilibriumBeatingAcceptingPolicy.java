@@ -38,9 +38,11 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
+public class EquilibriumBeatingAcceptingPolicy extends
+		QuoteBeatingAcceptingPolicy {
 
-	static Logger logger = Logger.getLogger(ContinuousDoubleAuctioneerEE.class);
+	static Logger logger = Logger
+			.getLogger(EquilibriumBeatingAcceptingPolicy.class);
 
 	/**
 	 * Reusable exceptions for performance
@@ -86,8 +88,9 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 				.push(P_DELTA), delta);
 		assert (0 <= delta);
 
-		learner = (MimicryLearner) parameters.getInstanceForParameter(base
-				.push(P_LEARNER), defBase.push(P_LEARNER), MimicryLearner.class);
+		learner = (MimicryLearner) parameters
+				.getInstanceForParameter(base.push(P_LEARNER), defBase
+						.push(P_LEARNER), MimicryLearner.class);
 		if (learner instanceof Parameterizable) {
 			((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
 		}
@@ -97,7 +100,7 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 		expectedHighestAsk = Double.MAX_VALUE;
 		expectedLowestBid = 0;
 	}
-	
+
 	public void reset() {
 		initialise();
 	}
@@ -111,7 +114,7 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 	 */
 	public void check(Shout shout) throws IllegalShoutException {
 		super.check(shout);
-		
+
 		if (shout.isBid()) {
 			if (shout.getPrice() < expectedLowestBid) {
 				bidNotAnImprovementException();
@@ -125,7 +128,8 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 
 	protected void bidNotAnImprovementException() throws IllegalShoutException {
 		if (bidException == null) {
-			// Only construct a new exception the once (for improved performance)
+			// Only construct a new exception the once (for improved
+			// performance)
 			bidException = new IllegalShoutException(
 					"Bid cannot beat the estimated equilibrium!");
 		}
@@ -134,7 +138,8 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 
 	protected void askNotAnImprovementException() throws IllegalShoutException {
 		if (askException == null) {
-			// Only construct a new exception the once (for improved performance)
+			// Only construct a new exception the once (for improved
+			// performance)
 			askException = new IllegalShoutException(
 					"Ask cannot beat the estimated equilibrium!");
 		}
@@ -143,7 +148,7 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 
 	public void eventOccurred(AuctionEvent event) {
 		super.eventOccurred(event);
-		
+
 		if (event instanceof TransactionExecutedEvent) {
 			learner.train(((TransactionExecutedEvent) event).getPrice());
 
@@ -153,16 +158,16 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 				expectedLowestBid = learner.act() - delta;
 				expectedHighestAsk = learner.act() + delta;
 
-				ReportVariableBoard.getInstance().reportValue(EST_EQUILIBRIUM_PRICE,
-						learner.act(), event);
+				ReportVariableBoard.getInstance().reportValue(
+						EST_EQUILIBRIUM_PRICE, learner.act(), event);
 			}
 		}
 	}
-	
+
 	public void setDelta(double delta) {
 		this.delta = delta;
 	}
-	
+
 	public double getDelta() {
 		return delta;
 	}
@@ -174,9 +179,9 @@ public class EquilibriumBeatingAcceptingPolicy extends QuoteBeatingAcceptingPoli
 	public void setLearner(MimicryLearner learner) {
 		this.learner = learner;
 	}
-	
+
 	public String toString() {
-		return "(" + getClass().getSimpleName() + " delta:" + delta 
-		+ " " + learner + ")";
+		return "(" + getClass().getSimpleName() + " delta:" + delta + " "
+				+ learner + ")";
 	}
 }
