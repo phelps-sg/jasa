@@ -3,6 +3,11 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ecj"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/repast"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/scheme"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/trove"/>
 	<classpathentry kind="lib" path="/LOCAL/moyaux/lib/jar/asm.jar"/>
 	<classpathentry kind="lib" path="/LOCAL/moyaux/lib/jar/beanbowl.jar"/>
 	<classpathentry kind="lib" path="/LOCAL/moyaux/lib/jar/colt.jar"/>
