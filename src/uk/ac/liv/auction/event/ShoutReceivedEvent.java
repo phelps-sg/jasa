@@ -19,9 +19,9 @@ import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 
 /**
- * An event that is fired every time a shout is received in an auction
- * (may not be accepted eventually), in contrast to ShoutPlacedEvent, which represents
- * a shout is received and accepted.
+ * An event that is fired every time a shout is received in an auction (may not
+ * be allowed to place eventually), in contrast to ShoutPlacedEvent, which
+ * represents a shout is received and placed.
  * 
  * @author Jinzhong Niu
  * @version $Revision$
@@ -29,23 +29,23 @@ import uk.ac.liv.auction.core.Shout;
 
 public class ShoutReceivedEvent extends AuctionEvent {
 
-  /**
-   * The shout that led to this event.
-   * 
-   * @uml.property name="shout"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected Shout shout;
+	/**
+	 * The shout that led to this event.
+	 * 
+	 * @uml.property name="shout"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected Shout shout;
 
-  public ShoutReceivedEvent( Auction auction, int time, Shout shout ) {
-    super(auction, time);
-    this.shout = shout;
-  }
+	public ShoutReceivedEvent(Auction auction, int time, Shout shout) {
+		super(auction, time);
+		this.shout = shout;
+	}
 
-  /**
-   * @uml.property name="shout"
-   */
-  public Shout getShout() {
-    return shout;
-  }
+	/**
+	 * @uml.property name="shout"
+	 */
+	public Shout getShout() {
+		return shout;
+	}
 }
