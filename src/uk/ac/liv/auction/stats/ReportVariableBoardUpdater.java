@@ -202,8 +202,8 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 			// TODO: update how computeActualProfit() works.
 
 			double temp = computeActualProfit() / pCE;
-			double dailyEA = 100 * temp - (eA * (getAuction().getDay() - 1));
-			eA = 100 * temp / getAuction().getDay();
+			double dailyEA = 100 * temp - (eA * getAuction().getDay());
+			eA = 100 * temp / (getAuction().getDay() + 1);
 
 			ReportVariableBoard.getInstance().reportValue(ALLOCATIVE_EFFICIENCY,
 					new TimePeriodValue(time, eA));
