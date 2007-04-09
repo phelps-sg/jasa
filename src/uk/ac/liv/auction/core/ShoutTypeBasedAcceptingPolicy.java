@@ -37,7 +37,8 @@ import ec.util.ParameterDatabase;
 
 public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 
-	static Logger logger = Logger.getLogger(ContinuousDoubleAuctioneerEE.class);
+	static Logger logger = Logger
+			.getLogger(ShoutTypeBasedAcceptingPolicy.class);
 
 	/**
 	 * Reusable exceptions for performance
@@ -46,11 +47,11 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 
 	protected static IllegalShoutException askException = null;
 
-	
 	protected Uniform uniformDistribution;
+
 	/**
-	 * A parameter used to control the probability of next shout being from
-	 * a seller.
+	 * A parameter used to control the probability of next shout being from a
+	 * seller.
 	 * 
 	 * @uml.property name="q"
 	 */
@@ -65,20 +66,19 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 
 		Parameter defBase = new Parameter(P_DEF_BASE);
 
-		q = parameters.getDoubleWithDefault(base.push(P_Q), defBase
-				.push(P_Q), q);
+		q = parameters.getDoubleWithDefault(base.push(P_Q), defBase.push(P_Q),
+				q);
 		assert (0 <= q && q <= 1);
 	}
-	
-  public void initialise() {
-    RandomEngine prng = GlobalPRNG.getInstance();
-    uniformDistribution = new Uniform(0, 1, prng);
-  }
-  
-  public void reset() {
-  	initialise();
-  }
 
+	public void initialise() {
+		RandomEngine prng = GlobalPRNG.getInstance();
+		uniformDistribution = new Uniform(0, 1, prng);
+	}
+
+	public void reset() {
+		initialise();
+	}
 
 	/**
 	 * checks whether
@@ -89,8 +89,8 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 	 */
 	public void check(Shout shout) throws IllegalShoutException {
 		super.check(shout);
-		
-    double d = uniformDistribution.nextDouble();
+
+		double d = uniformDistribution.nextDouble();
 		if (d <= q) {
 			if (shout.isBid()) {
 				askExpectedException();
@@ -104,26 +104,26 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 
 	protected void askExpectedException() throws IllegalShoutException {
 		if (bidException == null) {
-			// Only construct a new exception the once (for improved performance)
-			bidException = new IllegalShoutException(
-					"Ask expected!");
+			// Only construct a new exception the once (for improved
+			// performance)
+			bidException = new IllegalShoutException("Ask expected!");
 		}
 		throw bidException;
 	}
 
 	protected void bidExpectedException() throws IllegalShoutException {
 		if (askException == null) {
-			// Only construct a new exception the once (for improved performance)
-			askException = new IllegalShoutException(
-					"Bid expected!");
+			// Only construct a new exception the once (for improved
+			// performance)
+			askException = new IllegalShoutException("Bid expected!");
 		}
 		throw askException;
 	}
-	
+
 	public void setQ(double q) {
 		this.q = q;
 	}
-	
+
 	public double getQ() {
 		return q;
 	}
