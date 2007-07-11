@@ -16,7 +16,7 @@
 package uk.ac.liv.auction.agent;
 
 import uk.ac.liv.auction.core.Account;
-import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.AuctionRuntimeException;
 import uk.ac.liv.auction.core.IllegalShoutException;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
@@ -318,11 +318,11 @@ public abstract class AbstractTradingAgent implements
     lastShoutAccepted = false;
 
     if ( valuer == null ) {
-      throw new AuctionError("No valuation policy configured for agent " + this);
+      throw new AuctionRuntimeException("No valuation policy configured for agent " + this);
     }
 
     if ( strategy == null ) {
-      throw new AuctionError("No strategy configured for agent " + this);
+      throw new AuctionRuntimeException("No strategy configured for agent " + this);
     }
   }
 

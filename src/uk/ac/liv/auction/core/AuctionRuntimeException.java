@@ -20,13 +20,13 @@ package uk.ac.liv.auction.core;
  * @version $Revision$
  */
 
-public class AuctionError extends Error {
+public class AuctionRuntimeException extends RuntimeException {
 
-  public AuctionError( String message ) {
+  public AuctionRuntimeException( String message ) {
     super(message);
   }
 
-  public AuctionError( Throwable e ) {
+  public AuctionRuntimeException( Throwable e ) {
     super(e);
   }
 

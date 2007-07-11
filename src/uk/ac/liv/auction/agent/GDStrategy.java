@@ -109,7 +109,7 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
       (HistoricalDataReport) auction.getReport(HistoricalDataReport.class);
 
     if ( historyStats == null ) {
-      throw new AuctionError(getClass() + " requires a HistoricalDataReport to be configured");
+      throw new AuctionRuntimeException(getClass() + " requires a HistoricalDataReport to be configured");
     }
   }
   

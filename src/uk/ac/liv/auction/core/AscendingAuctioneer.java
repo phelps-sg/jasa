@@ -88,10 +88,10 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
     try {
       newShout(new Shout(seller, quantity, 0, false));
     } catch ( DuplicateShoutException e ) {
-      throw new AuctionError(
+      throw new AuctionRuntimeException(
           "Fatal error: invalid auction state on initialisation!");
     } catch (IllegalShoutException e) {
-      throw new AuctionError(
+      throw new AuctionRuntimeException(
       		"Fatal error: invalid auction state on initialisation!");
 		}
   }

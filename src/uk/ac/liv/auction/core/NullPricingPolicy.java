@@ -19,7 +19,7 @@ public class NullPricingPolicy implements PricingPolicy {
 
   public double determineClearingPrice( Shout bid, Shout ask,
       MarketQuote clearingQuote ) {
-    throw new AuctionError(this + ": attempting to clear with a null pricing policy");
+    throw new AuctionRuntimeException(this + ": attempting to clear with a null pricing policy");
   }
 
 }

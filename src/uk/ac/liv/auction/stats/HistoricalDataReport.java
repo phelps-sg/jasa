@@ -31,7 +31,7 @@ import org.apache.commons.collections.bag.TreeBag;
 import org.apache.commons.collections.list.TreeList;
 import org.apache.log4j.Logger;
 
-import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.AuctionRuntimeException;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.ShoutsNotVisibleException;
 import uk.ac.liv.auction.event.AuctionEvent;
@@ -139,23 +139,23 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		logger.debug("memorysize = " + memorySize);
 
 	}
-
+  
+  protected void removeNShouts(int n, LinkedList shouts) {
+    for( int i = 0; i < n; i++) {
+      Shout shout = (Shout) shouts.removeFirst();
+      sortedShouts.remove(shout);
+      acceptedShouts.remove(shout);
+    }
+  }
+ 
 	public void updateTransPriceLog(TransactionExecutedEvent event) {
 		Object o;
 		currentMemoryCell = (currentMemoryCell + 1) % memorySize;
 		if (memoryAsks[currentMemoryCell] > 0 || memoryBids[currentMemoryCell] > 0) {
-			for (int i = 0; i < memoryAsks[currentMemoryCell]; i++) {
-				o = asks.removeFirst();
-				sortedShouts.remove(o);
-			}
-
-			for (int i = 0; i < memoryBids[currentMemoryCell]; i++) {
-				o = bids.removeFirst();
-				sortedShouts.remove(o);
-			}
+      removeNShouts(memoryAsks[currentMemoryCell], asks);
+      removeNShouts(memoryBids[currentMemoryCell], bids);		
 			memoryBids[currentMemoryCell] = 0;
-			memoryAsks[currentMemoryCell] = 0;
-			// acceptedShouts.clear();
+			memoryAsks[currentMemoryCell] = 0;			
 			markMatched(asks);
 			markMatched(bids);
 		}
@@ -214,6 +214,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			}
 
 		}
+    
+    markMatched(asks);
+    markMatched(bids);
 		observableProxy.notifyObservers();
 	}
 
@@ -400,7 +403,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 				}
 			}
 		} catch (ShoutsNotVisibleException e) {
-			throw new AuctionError(e);
+			throw new AuctionRuntimeException(e);
 		}
 	}
 

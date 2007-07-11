@@ -11,7 +11,7 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.core.AuctionClosedException;
-import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.AuctionRuntimeException;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
@@ -54,7 +54,7 @@ public class SupplyChainRandomRobinAuction extends RandomRobinAuction {
 	public void run() {
 		
 		if ( auctioneer == null ) {
-			throw new AuctionError("No auctioneer has been assigned for auction " + name);
+			throw new AuctionRuntimeException("No auctioneer has been assigned for auction " + name);
 		}
 		//begin();
 		try {
@@ -62,7 +62,7 @@ public class SupplyChainRandomRobinAuction extends RandomRobinAuction {
 				step();
 			//}
 		} catch ( AuctionClosedException e ) {
-			throw new AuctionError(e);
+			throw new AuctionRuntimeException(e);
 		}
 		//end();
 	}//run

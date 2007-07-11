@@ -15,7 +15,7 @@ import ec.util.ParameterDatabase;
 
 import uk.ac.liv.auction.agent.FixedQuantityStrategyImpl;
 import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.AuctionRuntimeException;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AuctionEvent;

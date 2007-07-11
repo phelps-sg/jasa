@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.AuctionError;
+import uk.ac.liv.auction.core.AuctionRuntimeException;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.stats.HistoricalDataReport;
@@ -48,7 +48,7 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
         HistoricalDataReport.class);
 
     if ( historyStats == null ) {
-      throw new AuctionError(getClass()
+      throw new AuctionRuntimeException(getClass()
           + " requires a HistoryStatsMarketDataLogger to be configured");
     }
   }

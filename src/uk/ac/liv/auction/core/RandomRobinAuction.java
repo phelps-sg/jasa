@@ -532,7 +532,7 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
   public void run() {
 
     if ( auctioneer == null ) {
-      throw new AuctionError("No auctioneer has been assigned for auction "
+      throw new AuctionRuntimeException("No auctioneer has been assigned for auction "
           + name);
     }
 
@@ -544,7 +544,7 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
       }
 
     } catch ( AuctionClosedException e ) {
-      throw new AuctionError(e);
+      throw new AuctionRuntimeException(e);
     }
 
     end();
@@ -767,7 +767,7 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
       if ( cond != null ) {
         return ((MaxRoundsDayEndingCondition) cond).getRemainingRounds();
       } else {
-        throw new AuctionError(
+        throw new AuctionRuntimeException(
             getClass()
                 + " requires a TimingCondition knowing remaining time in the auction to be configured");
       }

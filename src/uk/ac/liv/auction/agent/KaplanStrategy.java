@@ -129,7 +129,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
     dailyStats = (DailyStatsReport) event.getAuction().getReport(
         DailyStatsReport.class);
     if ( dailyStats == null ) {
-      throw new AuctionError(getClass()
+      throw new AuctionRuntimeException(getClass()
           + " requires a DailyStatsReport to be configured");
     }
   }
@@ -245,7 +245,7 @@ public class KaplanStrategy extends FixedQuantityStrategyImpl implements
     logger
         .error("Auction is not configured with loggers appropriate for this strategy");
     logger.error(e.getMessage());
-    throw new AuctionError(e);
+    throw new AuctionRuntimeException(e);
   }
 
 }

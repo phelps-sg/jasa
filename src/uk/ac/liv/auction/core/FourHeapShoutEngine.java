@@ -471,7 +471,7 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
           newAsk(top);
         }
       } catch ( DuplicateShoutException e ) {
-        throw new AuctionError("Invalid auction state");
+        throw new AuctionRuntimeException("Invalid auction state");
       }
     }
 
