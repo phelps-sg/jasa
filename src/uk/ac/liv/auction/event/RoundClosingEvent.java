@@ -18,8 +18,8 @@ package uk.ac.liv.auction.event;
 import uk.ac.liv.auction.core.Auction;
 
 /**
- * An event that is fired at the end of each round, but before
- * round-ending processing.
+ * An event that is fired at the end of each round, but before round-ending
+ * processing.
  * 
  * @author Steve Phelps
  * @version $Revision$
@@ -27,13 +27,13 @@ import uk.ac.liv.auction.core.Auction;
 
 public class RoundClosingEvent extends AuctionEvent {
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd readOnly="true"
-   */
-  protected Auction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd readOnly="true"
+	 */
+	protected Auction auction;
 
-  public RoundClosingEvent( Auction auction, int time ) {
-    super(auction, time);
-  }
+	public RoundClosingEvent(Auction auction, int time) {
+		super(auction, time);
+	}
 }

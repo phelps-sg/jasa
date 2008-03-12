@@ -15,15 +15,12 @@
 
 package uk.ac.liv.prng;
 
-// import edu.cornell.lassp.houle.RngPack.*;
+import org.apache.log4j.Logger;
 
 import cern.jet.random.engine.RandomEngine;
-
+import ec.util.ParamClassLoadException;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
-import ec.util.ParamClassLoadException;
-
-import org.apache.log4j.Logger;
 
 /**
  * @author Steve Phelps
@@ -32,35 +29,36 @@ import org.apache.log4j.Logger;
 
 public abstract class PRNGFactory {
 
-  public static final String P_DEF_BASE = "prngfactory";
-  
-  protected static PRNGFactory currentFactory = new MT();
+	public static final String P_DEF_BASE = "prngfactory";
 
-  static Logger logger = Logger.getLogger(PRNGFactory.class);
+	protected static PRNGFactory currentFactory = new MT();
 
-  public static void setup( ParameterDatabase parameters, Parameter base ) {
-    try {
-      PRNGFactory.currentFactory = (PRNGFactory) parameters
-          .getInstanceForParameter(base, new Parameter(P_DEF_BASE), PRNGFactory.class);
-    } catch ( ParamClassLoadException e ) {
-      logger.warn(e.getMessage());
-    }
-  }
+	static Logger logger = Logger.getLogger(PRNGFactory.class);
 
-  /**
-   * Get the concrete factory.
-   */
-  public static PRNGFactory getFactory() {
-    return currentFactory;
-  }
+	public static void setup(ParameterDatabase parameters, Parameter base) {
+		try {
+			PRNGFactory.currentFactory = (PRNGFactory) parameters
+			    .getInstanceForParameter(base, new Parameter(P_DEF_BASE),
+			        PRNGFactory.class);
+		} catch (ParamClassLoadException e) {
+			logger.warn(e.getMessage());
+		}
+	}
 
-  public abstract RandomEngine create();
+	/**
+	 * Get the concrete factory.
+	 */
+	public static PRNGFactory getFactory() {
+		return currentFactory;
+	}
 
-  public abstract RandomEngine create( long seed );
+	public abstract RandomEngine create();
 
-  /**
-   * @uml.property name="description"
-   */
-  public abstract String getDescription();
+	public abstract RandomEngine create(long seed);
+
+	/**
+	 * @uml.property name="description"
+	 */
+	public abstract String getDescription();
 
 }

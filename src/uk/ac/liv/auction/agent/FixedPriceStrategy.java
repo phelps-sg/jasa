@@ -32,60 +32,60 @@ import java.io.Serializable;
 public class FixedPriceStrategy extends FixedQuantityStrategyImpl implements
     Serializable, Prototypeable {
 
-  protected double price;
+	protected double price;
 
-  public static final String P_DEF_BASE = "fixedpricestrategy";
+	public static final String P_DEF_BASE = "fixedpricestrategy";
 
-  static final String P_PRICE = "price";
+	static final String P_PRICE = "price";
 
-  public FixedPriceStrategy( AbstractTradingAgent agent, double price,
-      int quantity ) {
-    super(agent);
-    this.price = price;
-    this.quantity = quantity;
-  }
+	public FixedPriceStrategy(AbstractTradingAgent agent, double price,
+	    int quantity) {
+		super(agent);
+		this.price = price;
+		this.quantity = quantity;
+	}
 
-  public FixedPriceStrategy() {
-    super(null);
-  }
+	public FixedPriceStrategy() {
+		super(null);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    price = parameters.getDoubleWithDefault(base.push(P_PRICE), 
-    		new Parameter(P_DEF_BASE).push(P_PRICE), 0);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		price = parameters.getDoubleWithDefault(base.push(P_PRICE), new Parameter(
+		    P_DEF_BASE).push(P_PRICE), 0);
+	}
 
-  public Object protoClone() {
-    Object clonedStrategy;
-    try {
-      clonedStrategy = this.clone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-    return clonedStrategy;
-  }
+	public Object protoClone() {
+		Object clonedStrategy;
+		try {
+			clonedStrategy = this.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clonedStrategy;
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    if ( agent.isBuyer(auction) && price <= agent.getValuation(auction)
-        || agent.isSeller(auction) && price >= agent.getValuation(auction) ) {
-      shout.setPrice(price);
-    } else {
-      shout.setPrice(agent.getValuation(auction));
-    }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)
+		    || agent.isSeller(auction) && price >= agent.getValuation(auction)) {
+			shout.setPrice(price);
+		} else {
+			shout.setPrice(agent.getValuation(auction));
+		}
 
-    return super.modifyShout(shout);
-  }
+		return super.modifyShout(shout);
+	}
 
-  public void endOfRound( Auction auction ) {
-    // Do nothing
-  }
+	public void endOfRound(Auction auction) {
+		// Do nothing
+	}
 
-  public void setPrice( double price ) {
-    this.price = price;
-  }
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
-  public double getPrice() {
-    return price;
-  }
+	public double getPrice() {
+		return price;
+	}
 
 }

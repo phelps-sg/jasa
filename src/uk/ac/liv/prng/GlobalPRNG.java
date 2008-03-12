@@ -14,15 +14,14 @@
 
 package uk.ac.liv.prng;
 
-//import edu.cornell.lassp.houle.RngPack.RandomElement;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
+// import edu.cornell.lassp.houle.RngPack.RandomElement;
 
 import org.apache.log4j.Logger;
 
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.engine.RandomSeedGenerator;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * @author Steve Phelps
@@ -31,66 +30,65 @@ import cern.jet.random.engine.RandomSeedGenerator;
 
 public class GlobalPRNG {
 
-  protected static RandomEngine prng;
-  
-  protected static RandomSeedGenerator seedGenerator = 
-    										new RandomSeedGenerator((int)System.currentTimeMillis(), 1);
+	protected static RandomEngine prng;
 
-  protected static long seed;
+	protected static RandomSeedGenerator seedGenerator = new RandomSeedGenerator(
+	    (int) System.currentTimeMillis(), 1);
 
-  public static final String P_SEED = "seed";
+	protected static long seed;
 
-  public static final String P_PRNG = "prng";
-  
-  public static final String P_DEF_BASE = P_PRNG;
-  
-  static Logger logger = Logger.getLogger(GlobalPRNG.class);
+	public static final String P_SEED = "seed";
 
-  public static void setup( ParameterDatabase parameters, Parameter base ) {
+	public static final String P_PRNG = "prng";
 
-    uk.ac.liv.prng.PRNGFactory.setup(parameters, base.push(P_PRNG));
+	public static final String P_DEF_BASE = P_PRNG;
 
-    long defaultSeed = seedGenerator.nextSeed();
+	static Logger logger = Logger.getLogger(GlobalPRNG.class);
 
-    seed = parameters.getLongWithDefault(base.push(P_SEED), 
-    		new Parameter(P_DEF_BASE).push(P_SEED), defaultSeed);
+	public static void setup(ParameterDatabase parameters, Parameter base) {
 
-    prng = PRNGFactory.getFactory().create(seed);
-  }
+		uk.ac.liv.prng.PRNGFactory.setup(parameters, base.push(P_PRNG));
 
-  public static RandomEngine getInstance() {
-    if ( prng == null ) {
-      logger.warn("No PRNG configured: using default");
-      long defaultSeed = seedGenerator.nextSeed();
-      prng = PRNGFactory.getFactory().create(defaultSeed);
-    }
-    return prng;
-  }
+		long defaultSeed = seedGenerator.nextSeed();
 
-  public static long getSeed() {
-    return seed;
-  }
+		seed = parameters.getLongWithDefault(base.push(P_SEED), new Parameter(
+		    P_DEF_BASE).push(P_SEED), defaultSeed);
 
-  public static void initialiseWithSeed( long seed ) {
-    GlobalPRNG.seed = seed;
-    prng = PRNGFactory.getFactory().create(seed);
-  }
-  
-  public static void generateNewSeed() {
-    GlobalPRNG.seed = seedGenerator.nextSeed();
-    prng = PRNGFactory.getFactory().create(seed);
-  }
-  
+		prng = PRNGFactory.getFactory().create(seed);
+	}
 
-  public static void randomPermutation( Object[] a ) {
-    for( int i = 0; i < a.length - 1; i++ ) {
-      //int choice = getInstance().choose(i, a.length-1);
-//      int choice = getInstance().choose(i, a.length);
-      int choice = (int) ((long)a.length *getInstance().raw());
-      Object tmp = a[i];
-      a[i] = a[choice];
-      a[choice] = tmp;
-    }
-  }
+	public static RandomEngine getInstance() {
+		if (prng == null) {
+			logger.warn("No PRNG configured: using default");
+			long defaultSeed = seedGenerator.nextSeed();
+			prng = PRNGFactory.getFactory().create(defaultSeed);
+		}
+		return prng;
+	}
+
+	public static long getSeed() {
+		return seed;
+	}
+
+	public static void initialiseWithSeed(long seed) {
+		GlobalPRNG.seed = seed;
+		prng = PRNGFactory.getFactory().create(seed);
+	}
+
+	public static void generateNewSeed() {
+		GlobalPRNG.seed = seedGenerator.nextSeed();
+		prng = PRNGFactory.getFactory().create(seed);
+	}
+
+	public static void randomPermutation(Object[] a) {
+		for (int i = 0; i < a.length - 1; i++) {
+			// int choice = getInstance().choose(i, a.length-1);
+			// int choice = getInstance().choose(i, a.length);
+			int choice = (int) ((long) a.length * getInstance().raw());
+			Object tmp = a[i];
+			a[i] = a[choice];
+			a[choice] = tmp;
+		}
+	}
 
 }

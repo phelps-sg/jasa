@@ -42,49 +42,49 @@ import ec.util.ParameterDatabase;
 public abstract class KPricingPolicy implements Serializable, PricingPolicy,
     Parameterizable {
 
-  /**
-   * @uml.property name="k"
-   */
-  protected double k = 0.5;
+	/**
+	 * @uml.property name="k"
+	 */
+	protected double k = 0.5;
 
-  public static final String P_K = "k";
-  
-  public static final String P_DEF_BASE = "kpricingpolicy";
+	public static final String P_K = "k";
 
-  public KPricingPolicy() {
-    this(0);
-  }
+	public static final String P_DEF_BASE = "kpricingpolicy";
 
-  public KPricingPolicy( double k ) {
-    this.k = k;
-  }
+	public KPricingPolicy() {
+		this(0);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public KPricingPolicy(double k) {
+		this.k = k;
+	}
 
-    k = parameters.getDoubleWithDefault(base.push(P_K), 
-    		new Parameter(P_DEF_BASE).push(P_K), k);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-  /**
-   * @uml.property name="k"
-   */
-  public void setK( double k ) {
-    this.k = k;
-  }
+		k = parameters.getDoubleWithDefault(base.push(P_K), new Parameter(
+		    P_DEF_BASE).push(P_K), k);
+	}
 
-  /**
-   * @uml.property name="k"
-   */
-  public double getK() {
-    return k;
-  }
+	/**
+	 * @uml.property name="k"
+	 */
+	public void setK(double k) {
+		this.k = k;
+	}
 
-  public double kInterval( double a, double b ) {
-    return k * b + (1 - k) * a;
-  }
+	/**
+	 * @uml.property name="k"
+	 */
+	public double getK() {
+		return k;
+	}
 
-  public String toString() {
-    return "(" + getClass().getSimpleName() + " k:" + k + ")";
-  }
+	public double kInterval(double a, double b) {
+		return k * b + (1 - k) * a;
+	}
+
+	public String toString() {
+		return "(" + getClass().getSimpleName() + " k:" + k + ")";
+	}
 
 }

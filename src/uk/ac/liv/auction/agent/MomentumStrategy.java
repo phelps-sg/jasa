@@ -15,32 +15,25 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.*;
+import java.io.Serializable;
 
+import org.apache.log4j.Logger;
+
+import uk.ac.liv.ai.learning.Learner;
+import uk.ac.liv.ai.learning.MimicryLearner;
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AgentPolledEvent;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
-
-import uk.ac.liv.ai.learning.MimicryLearner;
-import uk.ac.liv.ai.learning.Learner;
-
-import uk.ac.liv.util.Parameterizable;
-
 import uk.ac.liv.prng.GlobalPRNG;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
-// import edu.cornell.lassp.houle.RngPack.RandomElement;
-
-import java.io.Serializable;
-
-import org.apache.log4j.Logger;
-
+import uk.ac.liv.util.Parameterizable;
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Uniform;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * @author Steve Phelps
@@ -50,200 +43,201 @@ import cern.jet.random.Uniform;
 public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
     Serializable {
 
-  protected MimicryLearner learner;
+	protected MimicryLearner learner;
 
-  protected double currentPrice;
+	protected double currentPrice;
 
-  protected Shout lastShout;
+	protected Shout lastShout;
 
-  /**
-   * A parameter used to scale the randomly drawn price adjustment perturbation
-   * values.
-   */
-  protected double scaling = 0.01;
+	/**
+	 * A parameter used to scale the randomly drawn price adjustment perturbation
+	 * values.
+	 */
+	protected double scaling = 0.01;
 
-  protected boolean lastShoutAccepted;
+	protected boolean lastShoutAccepted;
 
-  protected double trPrice, trBidPrice, trAskPrice;
+	protected double trPrice, trBidPrice, trAskPrice;
 
-  protected AbstractContinousDistribution initialMarginDistribution = new Uniform(
-      0.05, 0.35, GlobalPRNG.getInstance());
+	protected AbstractContinousDistribution initialMarginDistribution = new Uniform(
+	    0.05, 0.35, GlobalPRNG.getInstance());
 
-  protected AbstractContinousDistribution relativePerterbationDistribution;
-  protected AbstractContinousDistribution absolutePerterbationDistribution;
+	protected AbstractContinousDistribution relativePerterbationDistribution;
 
-  public static final String P_DEF_BASE = "momentumstrategy";
+	protected AbstractContinousDistribution absolutePerterbationDistribution;
 
-  public static final String P_SCALING = "scaling";
+	public static final String P_DEF_BASE = "momentumstrategy";
 
-  public static final String P_LEARNER = "learner";
+	public static final String P_SCALING = "scaling";
 
-  static Logger logger = Logger.getLogger(MomentumStrategy.class);
+	public static final String P_LEARNER = "learner";
 
-  public MomentumStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	static Logger logger = Logger.getLogger(MomentumStrategy.class);
 
-  public MomentumStrategy() {
-    this(null);
-  }
+	public MomentumStrategy(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public MomentumStrategy() {
+		this(null);
+	}
 
-    super.setup(parameters, base);
-    
-    Parameter defBase = new Parameter(P_DEF_BASE);
-    
-    scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), 
-    		defBase.push(P_SCALING), scaling);
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    learner = (MimicryLearner) parameters.getInstanceForParameter(
-    		base.push(P_LEARNER), defBase.push(P_LEARNER), 
-        MimicryLearner.class);
-    if ( learner instanceof Parameterizable ) {
-      ((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
-    }
+		super.setup(parameters, base);
 
-    initialise();
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
+		scaling = parameters.getDoubleWithDefault(base.push(P_SCALING), defBase
+		    .push(P_SCALING), scaling);
 
-    logger.debug("Initialised with scaling = " + scaling + " and learner = "
-        + learner);
+		learner = (MimicryLearner) parameters.getInstanceForParameter(base
+		    .push(P_LEARNER), defBase.push(P_LEARNER), MimicryLearner.class);
+		if (learner instanceof Parameterizable) {
+			((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
+		}
 
-  }
+		initialise();
 
-  public void initialise() {
-    super.initialise();
-    relativePerterbationDistribution = new Uniform(0, scaling, GlobalPRNG.getInstance());
-    absolutePerterbationDistribution = new Uniform(0, 0.05, GlobalPRNG.getInstance());
-  }
+		logger.debug("Initialised with scaling = " + scaling + " and learner = "
+		    + learner);
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    shout.setPrice(currentPrice);
-    return super.modifyShout(shout);
-  }
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    if ( event instanceof TransactionExecutedEvent ) {
-      transactionExecuted((TransactionExecutedEvent) event);
-    } else if ( event instanceof ShoutPlacedEvent ) {
-      shoutPlaced((ShoutPlacedEvent) event);
-    } else if ( event instanceof AgentPolledEvent ) {
-      agentPolled((AgentPolledEvent) event);
-    } else if ( event instanceof AuctionOpenEvent ) {
-      if ( agent.isSeller(auction) ) {
-      	setMargin(initialMarginDistribution.nextDouble());
-      } else {
-      	setMargin(-initialMarginDistribution.nextDouble());
-      }
-      updateCurrentPrice();
-    }
-  }
+	public void initialise() {
+		super.initialise();
+		relativePerterbationDistribution = new Uniform(0, scaling, GlobalPRNG
+		    .getInstance());
+		absolutePerterbationDistribution = new Uniform(0, 0.05, GlobalPRNG
+		    .getInstance());
+	}
 
-  protected void agentPolled( AgentPolledEvent event ) {
-    auction = event.getAuction();
-    if ( event.getAgent() != agent ) {
-      adjustMargin();
-    }
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		shout.setPrice(currentPrice);
+		return super.modifyShout(shout);
+	}
 
-  protected void shoutPlaced( ShoutPlacedEvent event ) {
-    lastShout = event.getShout();
-    lastShoutAccepted = false;
-  }
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof TransactionExecutedEvent) {
+			transactionExecuted((TransactionExecutedEvent) event);
+		} else if (event instanceof ShoutPlacedEvent) {
+			shoutPlaced((ShoutPlacedEvent) event);
+		} else if (event instanceof AgentPolledEvent) {
+			agentPolled((AgentPolledEvent) event);
+		} else if (event instanceof AuctionOpenEvent) {
+			if (agent.isSeller(auction)) {
+				setMargin(initialMarginDistribution.nextDouble());
+			} else {
+				setMargin(-initialMarginDistribution.nextDouble());
+			}
+			updateCurrentPrice();
+		}
+	}
 
-  protected void transactionExecuted( TransactionExecutedEvent event ) {
-    lastShoutAccepted = lastShout.isAsk() && event.getAsk().equals(lastShout)
-        || lastShout.isBid() && event.getBid().equals(lastShout);
-    if ( lastShoutAccepted ) {
-      trPrice = event.getPrice();
-      trBidPrice = event.getBid().getPrice();
-      trAskPrice = event.getAsk().getPrice();
-    }
-  }
+	protected void agentPolled(AgentPolledEvent event) {
+		auction = event.getAuction();
+		if (event.getAgent() != agent) {
+			adjustMargin();
+		}
+	}
 
-  public void endOfRound( Auction auction ) {
+	protected void shoutPlaced(ShoutPlacedEvent event) {
+		lastShout = event.getShout();
+		lastShoutAccepted = false;
+	}
 
-  }
+	protected void transactionExecuted(TransactionExecutedEvent event) {
+		lastShoutAccepted = lastShout.isAsk() && event.getAsk().equals(lastShout)
+		    || lastShout.isBid() && event.getBid().equals(lastShout);
+		if (lastShoutAccepted) {
+			trPrice = event.getPrice();
+			trBidPrice = event.getBid().getPrice();
+			trAskPrice = event.getAsk().getPrice();
+		}
+	}
 
-  public void setLearner( Learner learner ) {
-    this.learner = (MimicryLearner) learner;
-  }
+	public void endOfRound(Auction auction) {
 
-  public Learner getLearner() {
-    return learner;
-  }
+	}
 
-  public void setMargin( double margin ) {
-    learner.setOutputLevel(margin);
-  }
+	public void setLearner(Learner learner) {
+		this.learner = (MimicryLearner) learner;
+	}
 
-  public double getCurrentPrice() {
-    return currentPrice;
-  }
+	public Learner getLearner() {
+		return learner;
+	}
 
-  public Shout getLastShout() {
-    return lastShout;
-  }
+	public void setMargin(double margin) {
+		learner.setOutputLevel(margin);
+	}
 
-  public boolean isLastShoutAccepted() {
-    return lastShoutAccepted;
-  }
-  
-  public void setScaling( double scaling ) {
-  	assert scaling >= 0 && scaling <= 1;
-  	this.scaling = scaling;
-  }
+	public double getCurrentPrice() {
+		return currentPrice;
+	}
 
-  public double getScaling() {
-    return scaling;
-  }
+	public Shout getLastShout() {
+		return lastShout;
+	}
 
-  public double getTrAskPrice() {
-    return trAskPrice;
-  }
+	public boolean isLastShoutAccepted() {
+		return lastShoutAccepted;
+	}
 
-  public double getTrBidPrice() {
-    return trBidPrice;
-  }
+	public void setScaling(double scaling) {
+		assert scaling >= 0 && scaling <= 1;
+		this.scaling = scaling;
+	}
 
-  public double getTrPrice() {
-    return trPrice;
-  }
+	public double getScaling() {
+		return scaling;
+	}
 
-  private void updateCurrentPrice() {
-  	currentPrice = calculatePrice(learner.act());
-  	assert currentPrice > 0;
-  }
+	public double getTrAskPrice() {
+		return trAskPrice;
+	}
 
-  protected double calculatePrice( double margin ) {
-  	if ( (agent.isBuyer(auction) && margin <= 0.0 && margin > -1.0 )
-  			|| (agent.isSeller(auction) && margin >= 0.0) ) {
-  		return agent.getValuation(auction) * (1 + margin);
-  	} else {
-  		return currentPrice;
-  	}
-  }
+	public double getTrBidPrice() {
+		return trBidPrice;
+	}
 
-  protected double targetMargin( double targetPrice ) {
-    double privValue = agent.getValuation(auction);
-    double targetMargin = 0;
-    targetMargin = (targetPrice - privValue) / privValue;
-    
-    return targetMargin;
-  }
+	public double getTrPrice() {
+		return trPrice;
+	}
 
-  protected void adjustMargin( double targetMargin ) {
-    learner.train(targetMargin);
-    updateCurrentPrice();
-  }
+	private void updateCurrentPrice() {
+		currentPrice = calculatePrice(learner.act());
+		assert currentPrice > 0;
+	}
 
-  protected double perterb( double price ) {
-    double relative = relativePerterbationDistribution.nextDouble();
-    double absolute = absolutePerterbationDistribution.nextDouble();
-    return relative * price + absolute;
-  }
+	protected double calculatePrice(double margin) {
+		if ((agent.isBuyer(auction) && margin <= 0.0 && margin > -1.0)
+		    || (agent.isSeller(auction) && margin >= 0.0)) {
+			return agent.getValuation(auction) * (1 + margin);
+		} else {
+			return currentPrice;
+		}
+	}
 
-  protected abstract void adjustMargin();
+	protected double targetMargin(double targetPrice) {
+		double privValue = agent.getValuation(auction);
+		double targetMargin = 0;
+		targetMargin = (targetPrice - privValue) / privValue;
+
+		return targetMargin;
+	}
+
+	protected void adjustMargin(double targetMargin) {
+		learner.train(targetMargin);
+		updateCurrentPrice();
+	}
+
+	protected double perterb(double price) {
+		double relative = relativePerterbationDistribution.nextDouble();
+		double absolute = absolutePerterbationDistribution.nextDouble();
+		return relative * price + absolute;
+	}
+
+	protected abstract void adjustMargin();
 }

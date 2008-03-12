@@ -25,56 +25,53 @@ import cern.jet.random.AbstractContinousDistribution;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
-public abstract class AbstractRandomValuer 
-      implements ValuationPolicy, Serializable {
+public abstract class AbstractRandomValuer implements ValuationPolicy,
+    Serializable {
 
-  /**
-   * The current valuation.
-   */
-  protected double value;
+	/**
+	 * The current valuation.
+	 */
+	protected double value;
 
-  /**
-   * The probability distribution to use for drawing valuations.
-   */
-  protected AbstractContinousDistribution distribution;
-  
-  public AbstractRandomValuer() {
-    
-  }
+	/**
+	 * The probability distribution to use for drawing valuations.
+	 */
+	protected AbstractContinousDistribution distribution;
 
-  
-  public abstract void setup( ParameterDatabase params, Parameter base );
-  
-  public abstract void initialise();   
+	public AbstractRandomValuer() {
 
-  public abstract double getMaxValue();
+	}
 
-  public abstract double getMinValue();
-  
-  public double determineValue( Auction auction ) {    
-    return value;
-  }
+	public abstract void setup(ParameterDatabase params, Parameter base);
 
-  public void consumeUnit( Auction auction ) {
-    // Do nothing
-  }
+	public abstract void initialise();
 
-  public void eventOccurred( AuctionEvent event ) {
-    // Do nothing
-  }
+	public abstract double getMaxValue();
 
-  public void reset() {
-    initialise();
-  }
+	public abstract double getMinValue();
 
+	public double determineValue(Auction auction) {
+		return value;
+	}
 
+	public void consumeUnit(Auction auction) {
+		// Do nothing
+	}
 
-  public double getCurrentValuation() {
-    return value;
-  }
+	public void eventOccurred(AuctionEvent event) {
+		// Do nothing
+	}
 
-  public void drawRandomValue() {
-    value = distribution.nextDouble();
-  }
+	public void reset() {
+		initialise();
+	}
+
+	public double getCurrentValuation() {
+		return value;
+	}
+
+	public void drawRandomValue() {
+		value = distribution.nextDouble();
+	}
 
 }

@@ -21,37 +21,35 @@ import uk.ac.liv.auction.event.ShoutReceivedEvent;
 
 /**
  * The interface for expressing the condition of closing an auction.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
- *
+ * 
  */
 
 public class QuiescentDayEndingCondition extends TimingCondition implements
-		DayEndingCondition, AuctionEventListener {
+    DayEndingCondition, AuctionEventListener {
 
-  protected boolean shoutsProcessed;
-  
+	protected boolean shoutsProcessed;
 
-  /*
-   * @see uk.ac.liv.auction.core.TimingCondition#eval()
-   */
-  public boolean eval() {
-    return isQuiescent();
-  }
-  
-  /**
-   * Returns true if no bidding activity occured in the latest auction round.
-   */
-  private boolean isQuiescent() {
-    return !shoutsProcessed || 
-              (getAuction().getNumberOfTraders() == 0);
-  }
+	/*
+	 * @see uk.ac.liv.auction.core.TimingCondition#eval()
+	 */
+	public boolean eval() {
+		return isQuiescent();
+	}
+
+	/**
+	 * Returns true if no bidding activity occured in the latest auction round.
+	 */
+	private boolean isQuiescent() {
+		return !shoutsProcessed || (getAuction().getNumberOfTraders() == 0);
+	}
 
 	public void eventOccurred(AuctionEvent event) {
-		if ( event instanceof ShoutReceivedEvent ) {
+		if (event instanceof ShoutReceivedEvent) {
 			shoutsProcessed = true;
 		}
-		
+
 	}
 }

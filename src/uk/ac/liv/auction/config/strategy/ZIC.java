@@ -14,7 +14,6 @@
  */
 package uk.ac.liv.auction.config.strategy;
 
-
 import uk.ac.liv.auction.config.Case;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -24,13 +23,13 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 public class ZIC implements Case {
-	
+
 	private static final String ClassName = "uk.ac.liv.auction.agent.RandomConstrainedStrategy";
-	
+
 	public String toString() {
 		return "ZI-C";
 	}
-	
+
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(base, ClassName);
 		pdb.set(base.push("maxmarkup"), String.valueOf(50));

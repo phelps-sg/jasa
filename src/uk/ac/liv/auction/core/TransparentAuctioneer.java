@@ -18,39 +18,38 @@ import java.util.HashSet;
 
 public abstract class TransparentAuctioneer extends AbstractAuctioneer {
 
-  /**
-   * The set of shouts that have been matched in the current round.
-   * 
-   */
-  protected HashSet acceptedShouts = new HashSet();
-  
-  protected Shout.MutableShout lastAsk = new Shout.MutableShout();
-  
-  protected Shout.MutableShout lastBid = new Shout.MutableShout();
-  
-  protected Shout lastShout;
-  
-  public TransparentAuctioneer() {
-    super();
-  }
+	/**
+	 * The set of shouts that have been matched in the current round.
+	 * 
+	 */
+	protected HashSet acceptedShouts = new HashSet();
 
-  public TransparentAuctioneer( Auction auction ) {
-    super(auction);
-  }
+	protected Shout.MutableShout lastAsk = new Shout.MutableShout();
 
+	protected Shout.MutableShout lastBid = new Shout.MutableShout();
 
-  public boolean shoutsVisible() {    
-    return true;
-  }
-  
-  public void recordMatch( Shout ask, Shout bid ) {
-    assert ask.isAsk();
-    assert bid.isBid();
-    acceptedShouts.add(ask);
-    acceptedShouts.add(bid);
-  }
-     
-  protected void newShoutInternal(Shout shout) throws DuplicateShoutException {
+	protected Shout lastShout;
+
+	public TransparentAuctioneer() {
+		super();
+	}
+
+	public TransparentAuctioneer(Auction auction) {
+		super(auction);
+	}
+
+	public boolean shoutsVisible() {
+		return true;
+	}
+
+	public void recordMatch(Shout ask, Shout bid) {
+		assert ask.isAsk();
+		assert bid.isBid();
+		acceptedShouts.add(ask);
+		acceptedShouts.add(bid);
+	}
+
+	protected void newShoutInternal(Shout shout) throws DuplicateShoutException {
 		super.newShoutInternal(shout);
 		if (shout.isAsk()) {
 			lastAsk.copyFrom(shout);
@@ -60,38 +59,34 @@ public abstract class TransparentAuctioneer extends AbstractAuctioneer {
 		lastShout = shout;
 	}
 
-  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException {
-    return acceptedShouts.contains(shout);
-  }
+	public boolean shoutAccepted(Shout shout) throws ShoutsNotVisibleException {
+		return acceptedShouts.contains(shout);
+	}
 
-  public boolean transactionsOccurred() throws ShoutsNotVisibleException {
-    return !acceptedShouts.isEmpty();
-  }
+	public boolean transactionsOccurred() throws ShoutsNotVisibleException {
+		return !acceptedShouts.isEmpty();
+	}
 
-  public void endOfRoundProcessing() {
-    acceptedShouts.clear();
-  }
+	public void endOfRoundProcessing() {
+		acceptedShouts.clear();
+	}
 
-  public void reset() {
-    super.reset();
-    acceptedShouts.clear();   
-    lastShout = null;
-  }
+	public void reset() {
+		super.reset();
+		acceptedShouts.clear();
+		lastShout = null;
+	}
 
-  public Shout getLastAsk() {
-    return lastAsk;
-  }
+	public Shout getLastAsk() {
+		return lastAsk;
+	}
 
+	public Shout getLastBid() {
+		return lastBid;
+	}
 
-  public Shout getLastBid() {
-    return lastBid;
-  }
-
-
-  public Shout getLastShout() {
-    return lastShout;
-  }
-
-
+	public Shout getLastShout() {
+		return lastShout;
+	}
 
 }

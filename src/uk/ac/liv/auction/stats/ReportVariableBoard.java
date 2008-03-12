@@ -38,79 +38,79 @@ import uk.ac.liv.auction.event.AuctionEvent;
 
 public class ReportVariableBoard {
 
-  static Logger logger = Logger.getLogger(ReportVariableBoard.class);
+	static Logger logger = Logger.getLogger(ReportVariableBoard.class);
 
-  private static ReportVariableBoard instance;
+	private static ReportVariableBoard instance;
 
-  /**
-   * @uml.property name="board"
-   * @uml.associationEnd qualifier="varName:java.lang.String
-   *                     org.jfree.data.time.TimePeriodValue"
-   */
-  private Map board;
+	/**
+	 * @uml.property name="board"
+	 * @uml.associationEnd qualifier="varName:java.lang.String
+	 *                     org.jfree.data.time.TimePeriodValue"
+	 */
+	private Map board;
 
-  private ReportVariableBoard() {
-    if ( instance != null )
-      throw new Error("ReportVariableBoard cannot be instantiated twice!");
+	private ReportVariableBoard() {
+		if (instance != null)
+			throw new Error("ReportVariableBoard cannot be instantiated twice!");
 
-    instance = this;
-    board = Collections.synchronizedMap(new HashMap());
-  }
+		instance = this;
+		board = Collections.synchronizedMap(new HashMap());
+	}
 
-  public static ReportVariableBoard getInstance() {
-    if ( instance == null ) {
-      instance = new ReportVariableBoard();
-    }
-    return instance;
-  }
+	public static ReportVariableBoard getInstance() {
+		if (instance == null) {
+			instance = new ReportVariableBoard();
+		}
+		return instance;
+	}
 
-  public void reset() {
-    if ( board != null )
-      board.clear();
-  }
-  
-  public Collection getVarNames() {
-  	return board.keySet();
-  }
+	public void reset() {
+		if (board != null)
+			board.clear();
+	}
 
-  public TimePeriodValue getValue( String varName ) {
-    return (TimePeriodValue) board.get(varName);
-  }
+	public Collection getVarNames() {
+		return board.keySet();
+	}
 
-  public TimePeriodValue getValue( ReportVariable var ) {
-    return getValue(var.getName());
-  }
+	public TimePeriodValue getValue(String varName) {
+		return (TimePeriodValue) board.get(varName);
+	}
 
-  public void reportValue( ReportVariable var, TimePeriodValue value ) {
-    reportValue(var.getName(), value);
-  }
+	public TimePeriodValue getValue(ReportVariable var) {
+		return getValue(var.getName());
+	}
 
-  public void reportValue( String varName, TimePeriodValue value ) {
-    board.put(varName, value);
-  }
+	public void reportValue(ReportVariable var, TimePeriodValue value) {
+		reportValue(var.getName(), value);
+	}
 
-  public void reportValue( String varName, double value, AuctionEvent event ) {
-    Millisecond time = new Millisecond(new Date(event.getPhysicalTime()));
-    reportValue(varName, new TimePeriodValue(time, value));
-  }
+	public void reportValue(String varName, TimePeriodValue value) {
+		board.put(varName, value);
+	}
 
-  public void reportValues( Map vars, AuctionEvent event ) {
-    Millisecond time = new Millisecond(new Date(event.getPhysicalTime()));
+	public void reportValue(String varName, double value, AuctionEvent event) {
+		Millisecond time = new Millisecond(new Date(event.getPhysicalTime()));
+		reportValue(varName, new TimePeriodValue(time, value));
+	}
 
-    ArrayList list = new ArrayList(vars.keySet());
-    Iterator i = list.iterator();
-    while ( i.hasNext() ) {
-      ReportVariable var = (ReportVariable) i.next();
-      Object value = vars.get(var);
-      if ( value instanceof Number ) {
-        double v = ((Number) value).doubleValue();
-        if ( !Double.isNaN(v) ) {
-          reportValue(var.getName(), new TimePeriodValue(time, v));
-        }
-      } else if ( value instanceof Boolean ) {
-        reportValue(var.getName(), new TimePeriodValue(time, ((Boolean) value)
-            .booleanValue() ? 1 : 0));
-      }
-    }
-  }
+	public void reportValues(Map vars, AuctionEvent event) {
+		Millisecond time = new Millisecond(new Date(event.getPhysicalTime()));
+
+		ArrayList list = new ArrayList(vars.keySet());
+		Iterator i = list.iterator();
+		while (i.hasNext()) {
+			ReportVariable var = (ReportVariable) i.next();
+			Object value = vars.get(var);
+			if (value instanceof Number) {
+				double v = ((Number) value).doubleValue();
+				if (!Double.isNaN(v)) {
+					reportValue(var.getName(), new TimePeriodValue(time, v));
+				}
+			} else if (value instanceof Boolean) {
+				reportValue(var.getName(), new TimePeriodValue(time, ((Boolean) value)
+				    .booleanValue() ? 1 : 0));
+			}
+		}
+	}
 }

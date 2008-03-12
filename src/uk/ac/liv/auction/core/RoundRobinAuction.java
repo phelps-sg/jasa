@@ -7,13 +7,13 @@ package uk.ac.liv.auction.core;
  * @version $Revision$
  */
 public class RoundRobinAuction extends RandomRobinAuction {
-  
-  public RoundRobinAuction() {
-    super();
-  }
-  
-  public RoundRobinAuction( String name ) {
-    super();
-  }
-  
+
+	public RoundRobinAuction() {
+		super();
+	}
+
+	public RoundRobinAuction(String name) {
+		super();
+	}
+
 }

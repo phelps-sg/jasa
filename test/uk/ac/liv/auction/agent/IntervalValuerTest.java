@@ -16,13 +16,9 @@
 package uk.ac.liv.auction.agent;
 
 import junit.framework.TestCase;
-
-import uk.ac.liv.auction.agent.IntervalValuer;
-
 import uk.ac.liv.auction.core.RandomRobinAuction;
-
-import ec.util.ParameterDatabase;
 import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * @author Steve Phelps
@@ -30,63 +26,63 @@ import ec.util.Parameter;
  */
 public abstract class IntervalValuerTest extends TestCase {
 
-  /**
-   * @uml.property   name="valuer"
-   * @uml.associationEnd   
-   */
-  protected IntervalValuer valuer;
+	/**
+	 * @uml.property name="valuer"
+	 * @uml.associationEnd
+	 */
+	protected IntervalValuer valuer;
 
-  /**
-   * @uml.property   name="paramDb"
-   * @uml.associationEnd   
-   */
-  protected ParameterDatabase paramDb;
+	/**
+	 * @uml.property name="paramDb"
+	 * @uml.associationEnd
+	 */
+	protected ParameterDatabase paramDb;
 
-  /**
-   * @uml.property   name="base"
-   * @uml.associationEnd   
-   */
-  protected Parameter base;
+	/**
+	 * @uml.property name="base"
+	 * @uml.associationEnd
+	 */
+	protected Parameter base;
 
-  /**
-   * @uml.property   name="auction"
-   * @uml.associationEnd   
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	protected RandomRobinAuction auction;
 
-  public static final double MIN_VALUE = 10;
+	public static final double MIN_VALUE = 10;
 
-  public static final double STEP = 5;
+	public static final double STEP = 5;
 
-  public IntervalValuerTest( String name ) {
-    super(name);
-  }
+	public IntervalValuerTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    valuer = assignValuer();
-    paramDb = new ParameterDatabase();
-    base = new Parameter("test");
-    paramDb.set(base.push(IntervalValuer.P_MINVALUE), MIN_VALUE + "");
-    paramDb.set(base.push(IntervalValuer.P_STEP), STEP + "");
-    auction = new RandomRobinAuction("test");
-  }
+	public void setUp() {
+		valuer = assignValuer();
+		paramDb = new ParameterDatabase();
+		base = new Parameter("test");
+		paramDb.set(base.push(IntervalValuer.P_MINVALUE), MIN_VALUE + "");
+		paramDb.set(base.push(IntervalValuer.P_STEP), STEP + "");
+		auction = new RandomRobinAuction("test");
+	}
 
-  public void testStep() {
-    double value;
+	public void testStep() {
+		double value;
 
-    valuer.setup(paramDb, base);
+		valuer.setup(paramDb, base);
 
-    value = valuer.determineValue(auction);
-    System.out.println("value = " + value);
-    assertTrue(value == MIN_VALUE);
+		value = valuer.determineValue(auction);
+		System.out.println("value = " + value);
+		assertTrue(value == MIN_VALUE);
 
-    valuer.setup(paramDb, base);
+		valuer.setup(paramDb, base);
 
-    value = valuer.determineValue(auction);
-    System.out.println("value = " + value);
-    assertTrue(value == MIN_VALUE + STEP);
-  }
+		value = valuer.determineValue(auction);
+		System.out.println("value = " + value);
+		assertTrue(value == MIN_VALUE + STEP);
+	}
 
-  public abstract IntervalValuer assignValuer();
+	public abstract IntervalValuer assignValuer();
 
 }

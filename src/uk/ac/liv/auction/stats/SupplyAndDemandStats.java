@@ -33,68 +33,68 @@ import uk.ac.liv.util.io.DataWriter;
 
 public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 
-  /**
-   * The DataWriter to write the supply curve to.
-   * 
-   * @uml.property name="supplyStats"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected DataWriter supplyStats;
+	/**
+	 * The DataWriter to write the supply curve to.
+	 * 
+	 * @uml.property name="supplyStats"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected DataWriter supplyStats;
 
-  /**
-   * The DataWriter to write the demand curve to.
-   * 
-   * @uml.property name="demandStats"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected DataWriter demandStats;
+	/**
+	 * The DataWriter to write the demand curve to.
+	 * 
+	 * @uml.property name="demandStats"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected DataWriter demandStats;
 
-  /**
-   * Constructor.
-   * 
-   * @param auction
-   *          The auction to compute supply and demand stats for.
-   * @param supplyStats
-   *          The DataWriter to write the supply curve to.
-   * @param demandStats
-   *          The DataWriter to write the demand curve to.
-   */
-  public SupplyAndDemandStats( RandomRobinAuction auction,
-      DataWriter supplyStats, DataWriter demandStats ) {
-    super(auction);
-    this.supplyStats = supplyStats;
-    this.demandStats = demandStats;
-  }
+	/**
+	 * Constructor.
+	 * 
+	 * @param auction
+	 *          The auction to compute supply and demand stats for.
+	 * @param supplyStats
+	 *          The DataWriter to write the supply curve to.
+	 * @param demandStats
+	 *          The DataWriter to write the demand curve to.
+	 */
+	public SupplyAndDemandStats(RandomRobinAuction auction,
+	    DataWriter supplyStats, DataWriter demandStats) {
+		super(auction);
+		this.supplyStats = supplyStats;
+		this.demandStats = demandStats;
+	}
 
-  public void produceUserOutput() {
-    writeSupplyStats();
-    writeDemandStats();
-  }
+	public void produceUserOutput() {
+		writeSupplyStats();
+		writeDemandStats();
+	}
 
-  public Map getVariables() {
-    return new HashMap();
-  }
+	public Map getVariables() {
+		return new HashMap();
+	}
 
-  public abstract void writeSupplyStats();
+	public abstract void writeSupplyStats();
 
-  public abstract void writeDemandStats();
+	public abstract void writeDemandStats();
 
-  public void writeStats( DataWriter stats, List shouts, Comparator comparator ) {
-    int qty = 0, qty1 = 0;
-    if ( shouts.isEmpty() ) {
-      return;
-    }
-    Collections.sort(shouts, comparator);
-    Shout shout = (Shout) shouts.get(0);
-    Iterator i = shouts.iterator();
-    while ( i.hasNext() ) {
-      shout = (Shout) i.next();
-      qty1 = qty + shout.getQuantity();
-      stats.newData(qty);
-      stats.newData(shout.getPrice());
-      stats.newData(qty1);
-      stats.newData(shout.getPrice());
-      qty = qty1;
-    }
-  }
+	public void writeStats(DataWriter stats, List shouts, Comparator comparator) {
+		int qty = 0, qty1 = 0;
+		if (shouts.isEmpty()) {
+			return;
+		}
+		Collections.sort(shouts, comparator);
+		Shout shout = (Shout) shouts.get(0);
+		Iterator i = shouts.iterator();
+		while (i.hasNext()) {
+			shout = (Shout) i.next();
+			qty1 = qty + shout.getQuantity();
+			stats.newData(qty);
+			stats.newData(shout.getPrice());
+			stats.newData(qty1);
+			stats.newData(shout.getPrice());
+			qty = qty1;
+		}
+	}
 }

@@ -15,67 +15,65 @@
 
 package uk.ac.liv.auction.core;
 
-import junit.framework.*;
-
+import junit.framework.TestCase;
 import uk.ac.liv.auction.agent.MockTrader;
-
 
 public abstract class AuctioneerTest extends TestCase {
 
-  /**
-   * @uml.property name="auctioneer"
-   * @uml.associationEnd
-   */
-  Auctioneer auctioneer;
+	/**
+	 * @uml.property name="auctioneer"
+	 * @uml.associationEnd
+	 */
+	Auctioneer auctioneer;
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	RandomRobinAuction auction;
 
-  /**
-   * @uml.property name="traders"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  MockTrader[] traders;
+	/**
+	 * @uml.property name="traders"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	MockTrader[] traders;
 
-  public AuctioneerTest( String name ) {
-    super(name);
-  }
+	public AuctioneerTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    auction = new RandomRobinAuction("unit test auction");
+	public void setUp() {
+		auction = new RandomRobinAuction("unit test auction");
 
-    traders = new MockTrader[5];
-    traders[0] = new MockTrader(this, 30, 1000, 1000, false);
-    traders[1] = new MockTrader(this, 10, 10000, 1000, false);
-    traders[2] = new MockTrader(this, 15, 10000, 400, true);
-    traders[3] = new MockTrader(this, 10, 10000, 400, true);
-    traders[4] = new MockTrader(this, 15, 10000, 400, true);
-  }
+		traders = new MockTrader[5];
+		traders[0] = new MockTrader(this, 30, 1000, 1000, false);
+		traders[1] = new MockTrader(this, 10, 10000, 1000, false);
+		traders[2] = new MockTrader(this, 15, 10000, 400, true);
+		traders[3] = new MockTrader(this, 10, 10000, 400, true);
+		traders[4] = new MockTrader(this, 15, 10000, 400, true);
+	}
 
-  public void testDelete() {
+	public void testDelete() {
 
-    // round 0
-    Shout testShout = null;
-    try {
-      auctioneer.newShout(new Shout(traders[0], 1, 21, true));
-      auctioneer.newShout(new Shout(traders[1], 1, 42, true));
-      testShout = new Shout(traders[2], 1, 43, false);
-      auctioneer.newShout(testShout);
-      auctioneer.newShout(new Shout(traders[3], 1, 23, false));
-      auctioneer.newShout(new Shout(traders[4], 1, 10, false));
-    } catch ( IllegalShoutException e ) {
-      fail("invalid IllegalShoutException exception thrown " + e);
-      e.printStackTrace();
-    }
+		// round 0
+		Shout testShout = null;
+		try {
+			auctioneer.newShout(new Shout(traders[0], 1, 21, true));
+			auctioneer.newShout(new Shout(traders[1], 1, 42, true));
+			testShout = new Shout(traders[2], 1, 43, false);
+			auctioneer.newShout(testShout);
+			auctioneer.newShout(new Shout(traders[3], 1, 23, false));
+			auctioneer.newShout(new Shout(traders[4], 1, 10, false));
+		} catch (IllegalShoutException e) {
+			fail("invalid IllegalShoutException exception thrown " + e);
+			e.printStackTrace();
+		}
 
-    auctioneer.removeShout(testShout);
-    // auctioneer.endOfRoundProcessing();
+		auctioneer.removeShout(testShout);
+		// auctioneer.endOfRoundProcessing();
 
-    auctioneer.printState();
+		auctioneer.printState();
 
-  }
+	}
 
 }

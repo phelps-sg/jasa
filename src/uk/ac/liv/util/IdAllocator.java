@@ -37,16 +37,16 @@ package uk.ac.liv.util;
 
 public class IdAllocator {
 
-  /**
-   * @uml.property name="nextId"
-   */
-  protected long nextId = 0;
+	/**
+	 * @uml.property name="nextId"
+	 */
+	protected long nextId = 0;
 
-  public IdAllocator() {
-  }
+	public IdAllocator() {
+	}
 
-  public synchronized long nextId() {
-    return nextId++;
-  }
+	public synchronized long nextId() {
+		return nextId++;
+	}
 
 }

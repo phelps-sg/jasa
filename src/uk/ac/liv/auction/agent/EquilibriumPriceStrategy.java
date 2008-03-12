@@ -38,47 +38,47 @@ import java.io.Serializable;
 public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
     implements Serializable, Prototypeable {
 
-  public EquilibriumPriceStrategy( AbstractTradingAgent agent, double price,
-      int quantity ) {
-    super(agent);
+	public EquilibriumPriceStrategy(AbstractTradingAgent agent, double price,
+	    int quantity) {
+		super(agent);
 
-    this.quantity = quantity;
-  }
+		this.quantity = quantity;
+	}
 
-  public EquilibriumPriceStrategy() {
-    super(null);
-  }
+	public EquilibriumPriceStrategy() {
+		super(null);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+	}
 
-  public Object protoClone() {
-    Object clonedStrategy;
-    try {
-      clonedStrategy = this.clone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-    return clonedStrategy;
-  }
+	public Object protoClone() {
+		Object clonedStrategy;
+		try {
+			clonedStrategy = this.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clonedStrategy;
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    EquilibriumReport eqReport = new EquilibriumReport(
-        (RandomRobinAuction) auction);
-    eqReport.calculate();
-    double price = eqReport.calculateMidEquilibriumPrice();
-    if ( agent.isBuyer(auction) && price <= agent.getValuation(auction)
-        || agent.isSeller(auction) && price >= agent.getValuation(auction) ) {
-      shout.setPrice(price);
-    } else {
-      shout.setPrice(agent.getValuation(auction));
-    }
-    return super.modifyShout(shout);
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		EquilibriumReport eqReport = new EquilibriumReport(
+		    (RandomRobinAuction) auction);
+		eqReport.calculate();
+		double price = eqReport.calculateMidEquilibriumPrice();
+		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)
+		    || agent.isSeller(auction) && price >= agent.getValuation(auction)) {
+			shout.setPrice(price);
+		} else {
+			shout.setPrice(agent.getValuation(auction));
+		}
+		return super.modifyShout(shout);
+	}
 
-  public void endOfRound( Auction auction ) {
-    // Do nothing
-  }
+	public void endOfRound(Auction auction) {
+		// Do nothing
+	}
 
 }

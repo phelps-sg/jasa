@@ -22,6 +22,6 @@ package uk.ac.liv.auction.event;
 
 public interface AuctionEventListener {
 
-  public void eventOccurred( AuctionEvent event );
+	public void eventOccurred(AuctionEvent event);
 
 }

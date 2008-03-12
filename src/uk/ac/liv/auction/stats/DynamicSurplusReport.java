@@ -15,23 +15,22 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.RandomRobinAuction;
-
-import uk.ac.liv.auction.event.*;
-
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-
-import java.util.*;
-
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
+import gnu.trove.TObjectDoubleHashMap;
+import gnu.trove.TObjectDoubleIterator;
 
-import uk.ac.liv.util.Resetable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import gnu.trove.TObjectDoubleHashMap;
-import gnu.trove.TObjectDoubleIterator;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.EndOfDayEvent;
+import uk.ac.liv.util.Resetable;
 
 /**
  * <p>
@@ -50,184 +49,183 @@ import gnu.trove.TObjectDoubleIterator;
 public class DynamicSurplusReport extends AbstractMarketStatsReport implements
     Resetable {
 
-  /**
-   * The report used to calculate the equilibrium price.
-   * 
-   * @uml.property name="equilibriaStats"
-   * @uml.associationEnd
-   */
-  protected EquilibriumReport equilibriaStats;
+	/**
+	 * The report used to calculate the equilibrium price.
+	 * 
+	 * @uml.property name="equilibriaStats"
+	 * @uml.associationEnd
+	 */
+	protected EquilibriumReport equilibriaStats;
 
-  /**
-   * Total theoretically available profits per agent. This table maps
-   * AbstractTradingAgent keys onto double values.
-   * 
-   * @uml.property name="surplusTable"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
-   */
-  private TObjectDoubleHashMap surplusTable = new TObjectDoubleHashMap();
+	/**
+	 * Total theoretically available profits per agent. This table maps
+	 * AbstractTradingAgent keys onto double values.
+	 * 
+	 * @uml.property name="surplusTable"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
+	 */
+	private TObjectDoubleHashMap surplusTable = new TObjectDoubleHashMap();
 
-  /**
-   * The quantity that each agent can theoretically trade per day. This should
-   * normally be set equal to agents' trade entitlement.
-   * 
-   * @uml.property name="quantity"
-   */
-  protected int quantity = 1;
+	/**
+	 * The quantity that each agent can theoretically trade per day. This should
+	 * normally be set equal to agents' trade entitlement.
+	 * 
+	 * @uml.property name="quantity"
+	 */
+	protected int quantity = 1;
 
-  /**
-   * @uml.property name="efficiency"
-   */
-  protected double efficiency;
-  
-  public static final String P_DEF_BASE = "dynamicsurplusreport";
+	/**
+	 * @uml.property name="efficiency"
+	 */
+	protected double efficiency;
 
-  public static final String P_QUANTITY = "quantity";
-  
-  public static final ReportVariable VAR_EFFICIENCY = 
-    new ReportVariable("efficiency", "dynamic market efficiency");
+	public static final String P_DEF_BASE = "dynamicsurplusreport";
 
-  static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
+	public static final String P_QUANTITY = "quantity";
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), 
-    		new Parameter(P_DEF_BASE).push(P_QUANTITY),
-        quantity);
-  }
+	public static final ReportVariable VAR_EFFICIENCY = new ReportVariable(
+	    "efficiency", "dynamic market efficiency");
 
-  public void setAuction( RandomRobinAuction auction ) {
-    super.setAuction(auction);
-    equilibriaStats = new EquilibriumReport(auction);
-  }
+	static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    if ( event instanceof EndOfDayEvent ) {
-      recalculate(event);
-    }
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		quantity = parameters.getIntWithDefault(base.push(P_QUANTITY),
+		    new Parameter(P_DEF_BASE).push(P_QUANTITY), quantity);
+	}
 
-  public void calculate() {
-    efficiency = calculateTotalProfits() / calculateTotalEquilibriumSurplus();
-  }
+	public void setAuction(RandomRobinAuction auction) {
+		super.setAuction(auction);
+		equilibriaStats = new EquilibriumReport(auction);
+	}
 
-  /**
-   * @uml.property name="efficiency"
-   */
-  public double getEfficiency() {
-    return efficiency;
-  }
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof EndOfDayEvent) {
+			recalculate(event);
+		}
+	}
 
-  public void recalculate( AuctionEvent event ) {
+	public void calculate() {
+		efficiency = calculateTotalProfits() / calculateTotalEquilibriumSurplus();
+	}
 
-    equilibriaStats.recalculate();
-    double ep = equilibriaStats.calculateMidEquilibriumPrice();
+	/**
+	 * @uml.property name="efficiency"
+	 */
+	public double getEfficiency() {
+		return efficiency;
+	}
 
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-      double surplus = equilibriumSurplus(agent, ep, quantity);
-      updateStats(agent, surplus);
-    }
+	public void recalculate(AuctionEvent event) {
 
-  }
+		equilibriaStats.recalculate();
+		double ep = equilibriaStats.calculateMidEquilibriumPrice();
 
-  public double getEquilibriumProfits( AbstractTradingAgent agent ) {
-    return surplusTable.get(agent);
-  }
+		Iterator i = auction.getTraderIterator();
+		while (i.hasNext()) {
+			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
+			double surplus = equilibriumSurplus(agent, ep, quantity);
+			updateStats(agent, surplus);
+		}
 
-  public double calculateTotalEquilibriumSurplus() {
-    double totalSurplus = 0;
-    TObjectDoubleIterator i = surplusTable.iterator();
-    while ( i.hasNext() ) {
-      i.advance();
-      AbstractTradingAgent agent = (AbstractTradingAgent) i.key();
-      totalSurplus += i.value();
-    }
-    return totalSurplus;
-  }
+	}
 
-  public double calculateTotalProfits() {
-    double totalProfits = 0;
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-      totalProfits += agent.getProfits();
-    }
-    return totalProfits;
-  }
+	public double getEquilibriumProfits(AbstractTradingAgent agent) {
+		return surplusTable.get(agent);
+	}
 
-  /**
-   * Increment the surplus available to the specified agent by the specified
-   * amount.
-   */
-  protected void updateStats( AbstractTradingAgent agent, double lastSurplus ) {
-    if ( !surplusTable.adjustValue(agent, lastSurplus) ) {
-      surplusTable.put(agent, lastSurplus);
-    }
-  }
+	public double calculateTotalEquilibriumSurplus() {
+		double totalSurplus = 0;
+		TObjectDoubleIterator i = surplusTable.iterator();
+		while (i.hasNext()) {
+			i.advance();
+			AbstractTradingAgent agent = (AbstractTradingAgent) i.key();
+			totalSurplus += i.value();
+		}
+		return totalSurplus;
+	}
 
-  /**
-   * Calculate the surplus available to the specified agent given the specified
-   * equilibrium price and quantity.
-   * 
-   * @param agent
-   *          The agent to calculate theoretically available surplus to.
-   * @param ep
-   *          The hypothetical equilibrium price
-   * @param quantity
-   *          The hypothetical quantity that this agent is able to trade in any
-   *          given day.
-   */
-  protected double equilibriumSurplus( AbstractTradingAgent agent, double ep,
-      int quantity ) {
-    double surplus;
-    if ( agent.isSeller(auction) ) {
-      surplus = (ep - agent.getValuation(auction)) * quantity;
-    } else {
-      surplus = (agent.getValuation(auction) - ep) * quantity;
-    }
-    if ( surplus >= 0 ) {
-      return surplus;
-    } else {
-      return 0;
-    }
-  }
+	public double calculateTotalProfits() {
+		double totalProfits = 0;
+		Iterator i = auction.getTraderIterator();
+		while (i.hasNext()) {
+			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
+			totalProfits += agent.getProfits();
+		}
+		return totalProfits;
+	}
 
-  public void initialise() {
-    surplusTable.clear();
-  }
+	/**
+	 * Increment the surplus available to the specified agent by the specified
+	 * amount.
+	 */
+	protected void updateStats(AbstractTradingAgent agent, double lastSurplus) {
+		if (!surplusTable.adjustValue(agent, lastSurplus)) {
+			surplusTable.put(agent, lastSurplus);
+		}
+	}
 
-  public void reset() {
-    initialise();
-  }
+	/**
+	 * Calculate the surplus available to the specified agent given the specified
+	 * equilibrium price and quantity.
+	 * 
+	 * @param agent
+	 *          The agent to calculate theoretically available surplus to.
+	 * @param ep
+	 *          The hypothetical equilibrium price
+	 * @param quantity
+	 *          The hypothetical quantity that this agent is able to trade in any
+	 *          given day.
+	 */
+	protected double equilibriumSurplus(AbstractTradingAgent agent, double ep,
+	    int quantity) {
+		double surplus;
+		if (agent.isSeller(auction)) {
+			surplus = (ep - agent.getValuation(auction)) * quantity;
+		} else {
+			surplus = (agent.getValuation(auction) - ep) * quantity;
+		}
+		if (surplus >= 0) {
+			return surplus;
+		} else {
+			return 0;
+		}
+	}
 
-  public void produceUserOutput() {
-    logger.info("Surplus Report (Dynamic)");
-    logger.info("------------------------");
-    logger.info("");
-    logger.info("\tefficiency =\t" + efficiency);
-    logger.info("");
-  } 
+	public void initialise() {
+		surplusTable.clear();
+	}
 
-  public Map getVariables() {
-    HashMap vars = new HashMap();
-    vars.put(VAR_EFFICIENCY, new Double(efficiency));
-    return vars;
-  }
+	public void reset() {
+		initialise();
+	}
 
-  /**
-   * @uml.property name="quantity"
-   */
-  public int getQuantity() {
-    return quantity;
-  }
+	public void produceUserOutput() {
+		logger.info("Surplus Report (Dynamic)");
+		logger.info("------------------------");
+		logger.info("");
+		logger.info("\tefficiency =\t" + efficiency);
+		logger.info("");
+	}
 
-  /**
-   * @uml.property name="quantity"
-   */
-  public void setQuantity( int quantity ) {
-    this.quantity = quantity;
-  }
+	public Map getVariables() {
+		HashMap vars = new HashMap();
+		vars.put(VAR_EFFICIENCY, new Double(efficiency));
+		return vars;
+	}
+
+	/**
+	 * @uml.property name="quantity"
+	 */
+	public int getQuantity() {
+		return quantity;
+	}
+
+	/**
+	 * @uml.property name="quantity"
+	 */
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 }

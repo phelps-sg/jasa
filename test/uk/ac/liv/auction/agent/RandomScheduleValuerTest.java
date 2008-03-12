@@ -24,51 +24,50 @@ import junit.framework.TestSuite;
 
 public class RandomScheduleValuerTest extends TestCase {
 
-  protected MockTrader agent;
-  
-  protected MockRandomScheduleValuer valuer;  
-  
-  public static final double MIN = 10;
-  public static final double MAX = 100;
-  
-  public RandomScheduleValuerTest( String name ) {
-    super(name); 
-  }
-  
-  public void setUp() {
-    agent = new MockTrader(this, 2, 0);  
-    valuer = new MockRandomScheduleValuer(MIN, MAX);
-    agent.setValuationPolicy(valuer);
-  }
-  
-  public void testValueChanges() {
-    RandomRobinAuction auction = new RandomRobinAuction();
-    agent.shoutAccepted(auction, new Shout(agent, 1, 100, true), 100, 1);
-    assertTrue(valuer.consumed);
-  }
-  
-  
+	protected MockTrader agent;
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	protected MockRandomScheduleValuer valuer;
 
-  public static Test suite() {
-    return new TestSuite(RandomScheduleValuerTest.class);
-  }
+	public static final double MIN = 10;
+
+	public static final double MAX = 100;
+
+	public RandomScheduleValuerTest(String name) {
+		super(name);
+	}
+
+	public void setUp() {
+		agent = new MockTrader(this, 2, 0);
+		valuer = new MockRandomScheduleValuer(MIN, MAX);
+		agent.setValuationPolicy(valuer);
+	}
+
+	public void testValueChanges() {
+		RandomRobinAuction auction = new RandomRobinAuction();
+		agent.shoutAccepted(auction, new Shout(agent, 1, 100, true), 100, 1);
+		assertTrue(valuer.consumed);
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
+
+	public static Test suite() {
+		return new TestSuite(RandomScheduleValuerTest.class);
+	}
 
 }
 
 class MockRandomScheduleValuer extends RandomScheduleValuer {
-  
-  public boolean consumed = false;
-  
-  public MockRandomScheduleValuer( double min, double max ) {
-    super(min, max);
-  }
-  
-  public void consumeUnit( Auction auction ) {
-    super.consumeUnit(auction);
-    consumed = true;
-  }
+
+	public boolean consumed = false;
+
+	public MockRandomScheduleValuer(double min, double max) {
+		super(min, max);
+	}
+
+	public void consumeUnit(Auction auction) {
+		super.consumeUnit(auction);
+		consumed = true;
+	}
 }

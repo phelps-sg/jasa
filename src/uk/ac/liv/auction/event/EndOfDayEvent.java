@@ -26,7 +26,7 @@ import uk.ac.liv.auction.core.Auction;
 
 public class EndOfDayEvent extends AuctionEvent {
 
-  public EndOfDayEvent( Auction auction, int time ) {
-    super(auction, time);
-  }
+	public EndOfDayEvent(Auction auction, int time) {
+		super(auction, time);
+	}
 }

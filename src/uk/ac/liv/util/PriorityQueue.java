@@ -21,18 +21,18 @@ package uk.ac.liv.util;
  */
 public interface PriorityQueue {
 
-  public Object removeFirst();
+	public Object removeFirst();
 
-  /**
-   * @uml.property name="first"
-   */
-  public Object getFirst();
+	/**
+	 * @uml.property name="first"
+	 */
+	public Object getFirst();
 
-  public void insert( Object o );
+	public void insert(Object o);
 
-  public boolean isEmpty();
+	public boolean isEmpty();
 
-  public void transfer( PriorityQueue other );
+	public void transfer(PriorityQueue other);
 
-  public boolean remove( Object o );
+	public boolean remove(Object o);
 }

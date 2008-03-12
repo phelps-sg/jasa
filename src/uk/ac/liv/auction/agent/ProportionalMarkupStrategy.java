@@ -35,54 +35,54 @@ import java.io.Serializable;
 public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
     implements Serializable, Prototypeable {
 
-  protected double markup;
+	protected double markup;
 
-  public static final String P_MARKUP = "markup";
+	public static final String P_MARKUP = "markup";
 
-  public ProportionalMarkupStrategy( AbstractTradingAgent agent, double markup,
-      int quantity ) {
-    super(agent);
-    this.markup = markup;
-    this.quantity = quantity;
-  }
+	public ProportionalMarkupStrategy(AbstractTradingAgent agent, double markup,
+	    int quantity) {
+		super(agent);
+		this.markup = markup;
+		this.quantity = quantity;
+	}
 
-  public ProportionalMarkupStrategy() {
-    super(null);
-    markup = 0;
-  }
+	public ProportionalMarkupStrategy() {
+		super(null);
+		markup = 0;
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    markup = parameters.getDoubleWithDefault(base.push(P_MARKUP), null, 0);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		markup = parameters.getDoubleWithDefault(base.push(P_MARKUP), null, 0);
+	}
 
-  public Object protoClone() {
-    Object clonedStrategy;
-    try {
-      clonedStrategy = this.clone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-    return clonedStrategy;
-  }
+	public Object protoClone() {
+		Object clonedStrategy;
+		try {
+			clonedStrategy = this.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clonedStrategy;
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    double delta;
-    if ( agent.isSeller(auction) ) {
-      delta = markup * agent.getValuation(auction);
-    } else {
-      delta = -markup * agent.getValuation(auction);
-    }
-    shout.setPrice(agent.getValuation(auction) + delta);
-    shout.setQuantity(quantity);
-    if ( shout.getPrice() < 0 ) {
-      shout.setPrice(0);
-    }
-    return super.modifyShout(shout);
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		double delta;
+		if (agent.isSeller(auction)) {
+			delta = markup * agent.getValuation(auction);
+		} else {
+			delta = -markup * agent.getValuation(auction);
+		}
+		shout.setPrice(agent.getValuation(auction) + delta);
+		shout.setQuantity(quantity);
+		if (shout.getPrice() < 0) {
+			shout.setPrice(0);
+		}
+		return super.modifyShout(shout);
+	}
 
-  public void endOfRound( Auction auction ) {
-    // Do nothing
-  }
+	public void endOfRound(Auction auction) {
+		// Do nothing
+	}
 
 }

@@ -21,25 +21,25 @@ import uk.ac.liv.auction.event.RoundClosingEvent;
 /**
  * The interface for expressing the condition of clearing the current market.
  * Whenever, it's time to do so, notifyObservers() is called.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
- *
+ * 
  */
 
 public class RoundClearingCondition extends MarketClearingCondition {
-	
-  /**
-   * by default, clears the market when each round is closing.
-   */
+
+	/**
+	 * by default, clears the market when each round is closing.
+	 */
 	public void eventOccurred(AuctionEvent event) {
 		super.eventOccurred(event);
-		
-		if ( event instanceof RoundClosingEvent ) {
+
+		if (event instanceof RoundClosingEvent) {
 			trigger();
 		}
 	}
-	
+
 	protected void trigger() {
 		setChanged();
 		notifyObservers();
@@ -49,5 +49,4 @@ public class RoundClearingCondition extends MarketClearingCondition {
 		return "(" + getClass().getSimpleName() + ")";
 	}
 
-  
 }

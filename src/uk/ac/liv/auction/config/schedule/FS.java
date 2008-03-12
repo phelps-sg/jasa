@@ -14,7 +14,6 @@
  */
 package uk.ac.liv.auction.config.schedule;
 
-
 import uk.ac.liv.auction.config.Case;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -26,13 +25,13 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 public class FS implements Case {
-	
+
 	private static final String ClassName = "uk.ac.liv.auction.agent.FixedValuer";
 
 	public String toString() {
 		return "FS";
 	}
-	
+
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(base, ClassName);
 		pdb.set(base.push("value"), String.valueOf(120));

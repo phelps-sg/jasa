@@ -17,26 +17,25 @@ package uk.ac.liv.util;
 
 /**
  * <p>
- * This is an extension of Java's Number class that provides 
- * methods for performing untyped polymorphic arithmetic.  For example,
- * an UntypedDouble can be added to an UntypedInteger without having
- * to know the class of each operand.  
+ * This is an extension of Java's Number class that provides methods for
+ * performing untyped polymorphic arithmetic. For example, an UntypedDouble can
+ * be added to an UntypedInteger without having to know the class of each
+ * operand.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
- *
+ * 
  */
 
-public abstract class UntypedNumber extends Number
-    implements Comparable {
+public abstract class UntypedNumber extends Number implements Comparable {
 
-  public abstract UntypedNumber multiply( UntypedNumber other );
+	public abstract UntypedNumber multiply(UntypedNumber other);
 
-  public abstract UntypedNumber add( UntypedNumber other );
+	public abstract UntypedNumber add(UntypedNumber other);
 
-  public abstract UntypedNumber subtract( UntypedNumber other );
+	public abstract UntypedNumber subtract(UntypedNumber other);
 
-  public abstract UntypedNumber divide( UntypedNumber other );
+	public abstract UntypedNumber divide(UntypedNumber other);
 
 }

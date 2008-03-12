@@ -15,20 +15,15 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.FixedQuantityStrategyImpl;
-import uk.ac.liv.auction.core.Shout;
-import uk.ac.liv.auction.core.Auction;
-
-import uk.ac.liv.prng.GlobalPRNG;
-
-import ec.util.ParameterDatabase;
-import ec.util.Parameter;
-
 import java.io.Serializable;
 
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.prng.GlobalPRNG;
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Uniform;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * <p>
@@ -56,58 +51,58 @@ import cern.jet.random.Uniform;
 public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
     implements Serializable {
 
-  public static final String P_MAXPRICE = "maxprice";
+	public static final String P_MAXPRICE = "maxprice";
 
-  public static final double DEFAULT_MAX_PRICE = 200;
+	public static final double DEFAULT_MAX_PRICE = 200;
 
-  protected double maxPrice;
+	protected double maxPrice;
 
-  protected AbstractContinousDistribution distribution;
+	protected AbstractContinousDistribution distribution;
 
-  public RandomUnconstrainedStrategy() {
-    super(null);
-  }
+	public RandomUnconstrainedStrategy() {
+		super(null);
+	}
 
-  public RandomUnconstrainedStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	public RandomUnconstrainedStrategy(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    maxPrice = parameters.getDoubleWithDefault(base.push(P_MAXPRICE), null,
-        DEFAULT_MAX_PRICE);
-    initialise();
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		maxPrice = parameters.getDoubleWithDefault(base.push(P_MAXPRICE), null,
+		    DEFAULT_MAX_PRICE);
+		initialise();
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
+	public boolean modifyShout(Shout.MutableShout shout) {
 
-    double price = distribution.nextDouble();
-    shout.setPrice(price);
-    shout.setQuantity(quantity);
+		double price = distribution.nextDouble();
+		shout.setPrice(price);
+		shout.setQuantity(quantity);
 
-    return super.modifyShout(shout);
-  }
+		return super.modifyShout(shout);
+	}
 
-  public void endOfRound( Auction auction ) {
-    // Do nothing
-  }
+	public void endOfRound(Auction auction) {
+		// Do nothing
+	}
 
-  public void initialise() {
-    super.initialise();
-    distribution = new Uniform(0, maxPrice, GlobalPRNG.getInstance());
-  }
+	public void initialise() {
+		super.initialise();
+		distribution = new Uniform(0, maxPrice, GlobalPRNG.getInstance());
+	}
 
-  public double getMaxPrice() {
-    return maxPrice;
-  }
+	public double getMaxPrice() {
+		return maxPrice;
+	}
 
-  public void setMaxPrice( double maxPrice ) {
-    this.maxPrice = maxPrice;
-    initialise();
-  }
+	public void setMaxPrice(double maxPrice) {
+		this.maxPrice = maxPrice;
+		initialise();
+	}
 
-  public String toString() {
-    return "(" + getClass() + " quantity:" + quantity + ")";
-  }
+	public String toString() {
+		return "(" + getClass() + " quantity:" + quantity + ")";
+	}
 
 }

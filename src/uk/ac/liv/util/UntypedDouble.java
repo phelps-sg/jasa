@@ -27,85 +27,85 @@ package uk.ac.liv.util;
 
 public class UntypedDouble extends UntypedNumber {
 
-  /**
-   * @uml.property name="primitiveValue"
-   */
-  double primitiveValue;
+	/**
+	 * @uml.property name="primitiveValue"
+	 */
+	double primitiveValue;
 
-  public UntypedDouble() {
-    this(Double.NaN);
-  }
+	public UntypedDouble() {
+		this(Double.NaN);
+	}
 
-  public UntypedDouble( Double value ) {
-    this(value.doubleValue());
-  }
+	public UntypedDouble(Double value) {
+		this(value.doubleValue());
+	}
 
-  public UntypedDouble( double value ) {
-    primitiveValue = value;
-  }
+	public UntypedDouble(double value) {
+		primitiveValue = value;
+	}
 
-  public UntypedNumber add( UntypedNumber other ) {
-    return new UntypedDouble(primitiveValue + other.doubleValue());
-  }
+	public UntypedNumber add(UntypedNumber other) {
+		return new UntypedDouble(primitiveValue + other.doubleValue());
+	}
 
-  public UntypedNumber multiply( UntypedNumber other ) {
-    return new UntypedDouble(primitiveValue * other.doubleValue());
-  }
+	public UntypedNumber multiply(UntypedNumber other) {
+		return new UntypedDouble(primitiveValue * other.doubleValue());
+	}
 
-  public UntypedNumber subtract( UntypedNumber other ) {
-    return new UntypedDouble(primitiveValue - other.doubleValue());
-  }
+	public UntypedNumber subtract(UntypedNumber other) {
+		return new UntypedDouble(primitiveValue - other.doubleValue());
+	}
 
-  public UntypedNumber divide( UntypedNumber other ) {
-    return new UntypedDouble(primitiveValue / other.doubleValue());
-  }
+	public UntypedNumber divide(UntypedNumber other) {
+		return new UntypedDouble(primitiveValue / other.doubleValue());
+	}
 
-  public int intValue() {
-    return (int) primitiveValue;
-  }
+	public int intValue() {
+		return (int) primitiveValue;
+	}
 
-  public float floatValue() {
-    return (float) primitiveValue;
-  }
+	public float floatValue() {
+		return (float) primitiveValue;
+	}
 
-  public double doubleValue() {
-    return primitiveValue;
-  }
+	public double doubleValue() {
+		return primitiveValue;
+	}
 
-  public long longValue() {
-    return (long) primitiveValue;
-  }
+	public long longValue() {
+		return (long) primitiveValue;
+	}
 
-  public int compareTo( Object other ) {
-    if ( other instanceof Number ) {
-      double d1 = ((Number) other).doubleValue();
-      double d0 = doubleValue();
-      if ( d0 > d1 ) {
-        return +1;
-      } else if ( d0 < d1 ) {
-        return -1;
-      } else {
-        return 0;
-      }
-    } else {
-      throw new ClassCastException();
-    }
-  }
+	public int compareTo(Object other) {
+		if (other instanceof Number) {
+			double d1 = ((Number) other).doubleValue();
+			double d0 = doubleValue();
+			if (d0 > d1) {
+				return +1;
+			} else if (d0 < d1) {
+				return -1;
+			} else {
+				return 0;
+			}
+		} else {
+			throw new ClassCastException();
+		}
+	}
 
-  public boolean equals( Object other ) {
-    if ( other instanceof UntypedNumber ) {
-      return doubleValue() == ((UntypedNumber) other).doubleValue();
-    } else {
-      return super.equals(other);
-    }
-  }
+	public boolean equals(Object other) {
+		if (other instanceof UntypedNumber) {
+			return doubleValue() == ((UntypedNumber) other).doubleValue();
+		} else {
+			return super.equals(other);
+		}
+	}
 
-  public String toString() {
-    return primitiveValue + "";
-  }
+	public String toString() {
+		return primitiveValue + "";
+	}
 
-  protected void setValue( double value ) {
-    primitiveValue = value;
-  }
+	protected void setValue(double value) {
+		primitiveValue = value;
+	}
 
 }

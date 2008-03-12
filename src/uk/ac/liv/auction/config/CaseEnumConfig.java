@@ -54,115 +54,115 @@ import ec.util.Parameter;
  */
 public class CaseEnumConfig extends Observable implements Parameterizable {
 
-  private static CaseEnumConfig instance = null;
+	private static CaseEnumConfig instance = null;
 
-  static Logger logger = Logger.getLogger(CaseEnumConfig.class);
+	static Logger logger = Logger.getLogger(CaseEnumConfig.class);
 
-  public static final String P_N = "n";
+	public static final String P_N = "n";
 
-  /**
-   * All the <code>CaseEnum</code> to produce combinations.
-   */
-  protected static CaseEnum varieties[];
+	/**
+	 * All the <code>CaseEnum</code> to produce combinations.
+	 */
+	protected static CaseEnum varieties[];
 
-  /**
-   * The current combination of <code>Case</code>s.
-   */
-  protected static Case combo[];
+	/**
+	 * The current combination of <code>Case</code>s.
+	 */
+	protected static Case combo[];
 
-  /**
-   * @uml.property name="title"
-   */
-  protected String title;
+	/**
+	 * @uml.property name="title"
+	 */
+	protected String title;
 
-  public CaseEnumConfig() {
-    instance = this;
-  }
+	public CaseEnumConfig() {
+		instance = this;
+	}
 
-  public static CaseEnumConfig getInstance() {
-    return instance;
-  }
+	public static CaseEnumConfig getInstance() {
+		return instance;
+	}
 
-  /*
-   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
-   *      ec.util.Parameter)
-   */
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	/*
+	 * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+	 *      ec.util.Parameter)
+	 */
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    int numOfEnums = parameters.getIntWithDefault(base.push(P_N), null, 0);
+		int numOfEnums = parameters.getIntWithDefault(base.push(P_N), null, 0);
 
-    varieties = new CaseEnum[numOfEnums];
-    combo = new Case[numOfEnums];
+		varieties = new CaseEnum[numOfEnums];
+		combo = new Case[numOfEnums];
 
-    for ( int i = 0; i < numOfEnums; i++ ) {
-      if ( parameters.exists(base.push(String.valueOf(i))) ) {
-        varieties[i] = (CaseEnum) parameters.getInstanceForParameterEq(base
-            .push(String.valueOf(i)), null, CaseEnum.class);
-      } else {
-        // ParameterBasedCaseEnum is default
-        varieties[i] = new ParameterBasedCaseEnum();
-      }
+		for (int i = 0; i < numOfEnums; i++) {
+			if (parameters.exists(base.push(String.valueOf(i)))) {
+				varieties[i] = (CaseEnum) parameters.getInstanceForParameterEq(base
+				    .push(String.valueOf(i)), null, CaseEnum.class);
+			} else {
+				// ParameterBasedCaseEnum is default
+				varieties[i] = new ParameterBasedCaseEnum();
+			}
 
-      varieties[i].setup(parameters, base.push(String.valueOf(i)));
-      if ( varieties[i].moreCases() )
-        combo[i] = varieties[i].nextCase();
-      else
-        logger.error("No case at all in the enumeration of "
-            + varieties[i].getName());
+			varieties[i].setup(parameters, base.push(String.valueOf(i)));
+			if (varieties[i].moreCases())
+				combo[i] = varieties[i].nextCase();
+			else
+				logger.error("No case at all in the enumeration of "
+				    + varieties[i].getName());
 
-    }
-  }
+		}
+	}
 
-  public boolean next() {
-    int index = varieties.length - 1;
+	public boolean next() {
+		int index = varieties.length - 1;
 
-    while ( index >= 0 && !varieties[index].moreCases() ) {
-      varieties[index].reset();
-      combo[index] = varieties[index].nextCase();
-      index--;
-    }
+		while (index >= 0 && !varieties[index].moreCases()) {
+			varieties[index].reset();
+			combo[index] = varieties[index].nextCase();
+			index--;
+		}
 
-    if ( index < 0 )
-      return false;
-    else {
-      combo[index] = varieties[index].nextCase();
-    }
+		if (index < 0)
+			return false;
+		else {
+			combo[index] = varieties[index].nextCase();
+		}
 
-    return true;
-  }
+		return true;
+	}
 
-  public void apply( ParameterDatabase parameters, Parameter base ) {
-    for ( int i = 0; i < combo.length; i++ ) {
-      combo[i].apply(parameters, base);
-    }
-  }
+	public void apply(ParameterDatabase parameters, Parameter base) {
+		for (int i = 0; i < combo.length; i++) {
+			combo[i].apply(parameters, base);
+		}
+	}
 
-  public int getCaseEnumNum() {
-    return varieties.length;
-  }
+	public int getCaseEnumNum() {
+		return varieties.length;
+	}
 
-  public CaseEnum getCaseEnumAt( int i ) {
-    return varieties[i];
-  }
+	public CaseEnum getCaseEnumAt(int i) {
+		return varieties[i];
+	}
 
-  public Case getCaseAt( int i ) {
-    return combo[i];
-  }
+	public Case getCaseAt(int i) {
+		return combo[i];
+	}
 
-  public String getCurrentDesc() {
-    String title = "";
-    for ( int i = 0; i < combo.length; i++ ) {
-      if ( i == 0 )
-        title += combo[i];
-      else
-        title += " & " + combo[i];
-    }
+	public String getCurrentDesc() {
+		String title = "";
+		for (int i = 0; i < combo.length; i++) {
+			if (i == 0)
+				title += combo[i];
+			else
+				title += " & " + combo[i];
+		}
 
-    return title;
-  }
-  
-  public void markChanged() {
-  	setChanged();
-  }
+		return title;
+	}
+
+	public void markChanged() {
+		setChanged();
+	}
 
 }

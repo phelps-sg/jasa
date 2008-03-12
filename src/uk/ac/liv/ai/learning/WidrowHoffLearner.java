@@ -39,129 +39,128 @@ import java.io.Serializable;
 public class WidrowHoffLearner extends AbstractLearner implements
     MimicryLearner, Prototypeable, Serializable {
 
-  /**
-   * The learning rate.
-   * 
-   * @uml.property name="learningRate"
-   */
-  protected double learningRate;
+	/**
+	 * The learning rate.
+	 * 
+	 * @uml.property name="learningRate"
+	 */
+	protected double learningRate;
 
-  /**
-   * The current output level.
-   * 
-   * @uml.property name="currentOutput"
-   */
-  protected double currentOutput;
+	/**
+	 * The current output level.
+	 * 
+	 * @uml.property name="currentOutput"
+	 */
+	protected double currentOutput;
 
-  /**
-   * The current amount of adjustment to the output.
-   * 
-   * @uml.property name="delta"
-   */
-  protected double delta;
+	/**
+	 * The current amount of adjustment to the output.
+	 * 
+	 * @uml.property name="delta"
+	 */
+	protected double delta;
 
-  /**
-   * @uml.property name="randomParamDistribution"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected AbstractContinousDistribution randomParamDistribution = new Uniform(
-      0.1, 0.4, GlobalPRNG.getInstance());
+	/**
+	 * @uml.property name="randomParamDistribution"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected AbstractContinousDistribution randomParamDistribution = new Uniform(
+	    0.1, 0.4, GlobalPRNG.getInstance());
 
-  public static final double DEFAULT_LEARNING_RATE = 0.1;
+	public static final double DEFAULT_LEARNING_RATE = 0.1;
 
-  public static final String P_LEARNINGRATE = "learningrate";
-  
-  public static final String P_DEF_BASE = "widrowhofflearner";
+	public static final String P_LEARNINGRATE = "learningrate";
 
+	public static final String P_DEF_BASE = "widrowhofflearner";
 
-  public WidrowHoffLearner( double learningRate ) {
-    this.learningRate = learningRate;
-    initialise();
-  }
+	public WidrowHoffLearner(double learningRate) {
+		this.learningRate = learningRate;
+		initialise();
+	}
 
-  public WidrowHoffLearner() {
-    this(DEFAULT_LEARNING_RATE);
-  }
+	public WidrowHoffLearner() {
+		this(DEFAULT_LEARNING_RATE);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    learningRate = parameters.getDoubleWithDefault(base.push(P_LEARNINGRATE), 
-    		new Parameter(P_DEF_BASE).push(P_LEARNINGRATE), DEFAULT_LEARNING_RATE);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		learningRate = parameters.getDoubleWithDefault(base.push(P_LEARNINGRATE),
+		    new Parameter(P_DEF_BASE).push(P_LEARNINGRATE), DEFAULT_LEARNING_RATE);
+	}
 
-  public void initialise() {
-    delta = 0;
-    currentOutput = 0;
-  }
+	public void initialise() {
+		delta = 0;
+		currentOutput = 0;
+	}
 
-  public Object protoClone() {
-    WidrowHoffLearner clone = new WidrowHoffLearner(learningRate);
-    return clone;
-  }
+	public Object protoClone() {
+		WidrowHoffLearner clone = new WidrowHoffLearner(learningRate);
+		return clone;
+	}
 
-  public double act() {
-    return currentOutput;
-  }
+	public double act() {
+		return currentOutput;
+	}
 
-  public void train( double target ) {
-    currentOutput += delta(target);
-  }
+	public void train(double target) {
+		currentOutput += delta(target);
+	}
 
-  public double delta( double target ) {
-    delta = learningRate * (target - currentOutput);
-    return delta;
-  }
+	public double delta(double target) {
+		delta = learningRate * (target - currentOutput);
+		return delta;
+	}
 
-  public void setOutputLevel( double currentOutput ) {
-    this.currentOutput = currentOutput;
-  }
+	public void setOutputLevel(double currentOutput) {
+		this.currentOutput = currentOutput;
+	}
 
-  public void dumpState( DataWriter out ) {
-    // TODO
-  }
+	public void dumpState(DataWriter out) {
+		// TODO
+	}
 
-  public double getLearningDelta() {
-    return delta;
-  }
+	public double getLearningDelta() {
+		return delta;
+	}
 
-  public void reset() {
-    initialise();
-  }
+	public void reset() {
+		initialise();
+	}
 
-  /**
-   * @uml.property name="learningRate"
-   */
-  public void setLearningRate( double learningRate ) {
-    this.learningRate = learningRate;
-  }
+	/**
+	 * @uml.property name="learningRate"
+	 */
+	public void setLearningRate(double learningRate) {
+		this.learningRate = learningRate;
+	}
 
-  /**
-   * @uml.property name="learningRate"
-   */
-  public double getLearningRate() {
-    return learningRate;
-  }
+	/**
+	 * @uml.property name="learningRate"
+	 */
+	public double getLearningRate() {
+		return learningRate;
+	}
 
-  public void randomInitialise() {
-    learningRate = randomParamDistribution.nextDouble();
-  }
+	public void randomInitialise() {
+		learningRate = randomParamDistribution.nextDouble();
+	}
 
-  /**
-   * @uml.property name="currentOutput"
-   */
-  public double getCurrentOutput() {
-    return currentOutput;
-  }
+	/**
+	 * @uml.property name="currentOutput"
+	 */
+	public double getCurrentOutput() {
+		return currentOutput;
+	}
 
-  /**
-   * @uml.property name="delta"
-   */
-  public double getDelta() {
-    return delta;
-  }
-  
+	/**
+	 * @uml.property name="delta"
+	 */
+	public double getDelta() {
+		return delta;
+	}
 
 	public String toString() {
-		return "(" + getClass().getSimpleName() + " learningRate:" + learningRate + ")";
+		return "(" + getClass().getSimpleName() + " learningRate:" + learningRate
+		    + ")";
 	}
 }

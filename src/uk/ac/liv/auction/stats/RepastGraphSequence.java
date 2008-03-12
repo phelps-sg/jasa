@@ -28,87 +28,88 @@ import uk.ac.liv.util.io.DataWriter;
 
 public class RepastGraphSequence implements Sequence, DataWriter {
 
-  /**
-   * @uml.property name="lastValue"
-   */
-  protected double lastValue;
+	/**
+	 * @uml.property name="lastValue"
+	 */
+	protected double lastValue;
 
-  /**
-   * @uml.property name="name"
-   */
-  protected String name;
+	/**
+	 * @uml.property name="name"
+	 */
+	protected String name;
 
-  public RepastGraphSequence( String name ) {
-    this.name = name;
-  }
+	public RepastGraphSequence(String name) {
+		this.name = name;
+	}
 
-  public double getSValue() {
-    if ( Double.isInfinite(lastValue) || Double.isNaN(lastValue) ) {
-      return 0;
-    } else {
-      return lastValue;
-    }
-  }
+	public double getSValue() {
+		if (Double.isInfinite(lastValue) || Double.isNaN(lastValue)) {
+			return 0;
+		} else {
+			return lastValue;
+		}
+	}
 
-  public void newData( double data ) {
-    lastValue = data;
-  }
-  
-  public void newData( Double data ) {
-    lastValue = data.doubleValue();
-  }
-  
-  public void newData( Integer data ) {
-    lastValue = data.doubleValue();  }
-  
-  public void newData( Long data ) {
-    lastValue = data.doubleValue();
-  }
-  
-  public void newData( String data ) {
-    
-  }
+	public void newData(double data) {
+		lastValue = data;
+	}
 
-  /**
-   * @uml.property name="name"
-   */
-  public String getName() {
-    return name;
-  }
+	public void newData(Double data) {
+		lastValue = data.doubleValue();
+	}
 
-  public void close() {
-  }
+	public void newData(Integer data) {
+		lastValue = data.doubleValue();
+	}
 
-  public void flush() {
-  }
+	public void newData(Long data) {
+		lastValue = data.doubleValue();
+	}
 
-  public void newData( boolean data ) {
+	public void newData(String data) {
 
-  }
+	}
 
-  public void newData( float data ) {
-    newData(data);
-  }
+	/**
+	 * @uml.property name="name"
+	 */
+	public String getName() {
+		return name;
+	}
 
-  public void newData( int data ) {
+	public void close() {
+	}
 
-  }
+	public void flush() {
+	}
 
-  public void newData( Iterator i ) {
+	public void newData(boolean data) {
 
-  }
+	}
 
-  public void newData( long data ) {
+	public void newData(float data) {
+		newData(data);
+	}
 
-  }
+	public void newData(int data) {
 
-  public void newData( Object data ) {
-    // TODO Auto-generated method stub
+	}
 
-  }
+	public void newData(Iterator i) {
 
-  public void newData( Object[] data ) {
-    // TODO Auto-generated method stub
+	}
 
-  }
+	public void newData(long data) {
+
+	}
+
+	public void newData(Object data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void newData(Object[] data) {
+		// TODO Auto-generated method stub
+
+	}
 }

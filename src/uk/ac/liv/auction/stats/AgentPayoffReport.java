@@ -18,8 +18,8 @@ package uk.ac.liv.auction.stats;
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
 /**
- * A report that lists the ratio of actual to theoretical profits of each
- * agent group in the auction. 
+ * A report that lists the ratio of actual to theoretical profits of each agent
+ * group in the auction.
  * 
  * @see uk.ac.liv.auction.agent.AgentGroup
  * 
@@ -28,16 +28,16 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
  */
 public class AgentPayoffReport extends PayoffReport {
 
-  public Object getKey( AbstractTradingAgent agent ) {   
-    return new Long(agent.getId());
-  }
-  
-  public String getKeyName() {
-    return "agent";
-  }
+	public Object getKey(AbstractTradingAgent agent) {
+		return new Long(agent.getId());
+	}
 
-  public String getReportText() {
-    return "agent";
-  }
+	public String getKeyName() {
+		return "agent";
+	}
+
+	public String getReportText() {
+		return "agent";
+	}
 
 }

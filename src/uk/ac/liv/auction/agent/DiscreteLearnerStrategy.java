@@ -51,83 +51,83 @@ import org.apache.log4j.Logger;
 public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
     implements Serializable {
 
-  /**
-   * A scaling factor used to multiply-up the output from the learning
-   * algorithm.
-   */
-  protected double markupScale = 1;
+	/**
+	 * A scaling factor used to multiply-up the output from the learning
+	 * algorithm.
+	 */
+	protected double markupScale = 1;
 
-  public static final String P_DEF_BASE = "discretelearnerstrategy";
+	public static final String P_DEF_BASE = "discretelearnerstrategy";
 
-  static final String P_MARKUPSCALE = "markupscale";
+	static final String P_MARKUPSCALE = "markupscale";
 
-  static Logger logger = Logger.getLogger(DiscreteLearnerStrategy.class);
+	static Logger logger = Logger.getLogger(DiscreteLearnerStrategy.class);
 
-  public DiscreteLearnerStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-    initialise();
-  }
+	public DiscreteLearnerStrategy(AbstractTradingAgent agent) {
+		super(agent);
+		initialise();
+	}
 
-  public DiscreteLearnerStrategy() {
-    super();
-    initialise();
-  }
+	public DiscreteLearnerStrategy() {
+		super();
+		initialise();
+	}
 
-  public void initialise() {
-    super.initialise();
-  }
+	public void initialise() {
+		super.initialise();
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    markupScale = parameters.getDoubleWithDefault(base.push(P_MARKUPSCALE),
-    		new Parameter(P_DEF_BASE).push(P_MARKUPSCALE), markupScale);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		markupScale = parameters.getDoubleWithDefault(base.push(P_MARKUPSCALE),
+		    new Parameter(P_DEF_BASE).push(P_MARKUPSCALE), markupScale);
+	}
 
-  public void endOfRound( Auction auction ) {
-    if ( agent.active() ) {
-      learn(auction);
-    }
-  }
+	public void endOfRound(Auction auction) {
+		if (agent.active()) {
+			learn(auction);
+		}
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
+	public boolean modifyShout(Shout.MutableShout shout) {
 
-    // Generate an action from the learning algorithm
-    int action = act();
+		// Generate an action from the learning algorithm
+		int action = act();
 
-    // Now turn the action into a price
-    double price;
-    if ( agent.isSeller(auction) ) {
-      price = agent.getValuation(auction) + action * markupScale;
-    } else {
-      price = agent.getValuation(auction) - action * markupScale;
-    }
-    if ( price < 0 ) {
-      // logger.debug(this + ": set negative price- clipping at 0");
-      price = 0;
-    }
+		// Now turn the action into a price
+		double price;
+		if (agent.isSeller(auction)) {
+			price = agent.getValuation(auction) + action * markupScale;
+		} else {
+			price = agent.getValuation(auction) - action * markupScale;
+		}
+		if (price < 0) {
+			// logger.debug(this + ": set negative price- clipping at 0");
+			price = 0;
+		}
 
-    shout.setPrice(price);
-    shout.setQuantity(quantity);
+		shout.setPrice(price);
+		shout.setQuantity(quantity);
 
-    return super.modifyShout(shout);
-  }
+		return super.modifyShout(shout);
+	}
 
-  public double getMarkupScale() {
-    return markupScale;
-  }
+	public double getMarkupScale() {
+		return markupScale;
+	}
 
-  public void setMarkupScale( double markupScale ) {
-    this.markupScale = markupScale;
-  }
+	public void setMarkupScale(double markupScale) {
+		this.markupScale = markupScale;
+	}
 
-  /**
-   * Generate an action from the learning algorithm.
-   */
-  public abstract int act();
+	/**
+	 * Generate an action from the learning algorithm.
+	 */
+	public abstract int act();
 
-  /**
-   * Perform learning.
-   */
-  public abstract void learn( Auction auction );
+	/**
+	 * Perform learning.
+	 */
+	public abstract void learn(Auction auction);
 
 }

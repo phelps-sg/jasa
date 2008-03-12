@@ -25,30 +25,30 @@ import java.util.Vector;
  */
 public class FreeChartSeriesCollection {
 
-  /**
-   * @uml.property name="collection"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.stats.FreeChartSeries"
-   */
-  Vector collection;
+	/**
+	 * @uml.property name="collection"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.auction.stats.FreeChartSeries"
+	 */
+	Vector collection;
 
-  public FreeChartSeriesCollection() {
-    collection = new Vector();
-  }
+	public FreeChartSeriesCollection() {
+		collection = new Vector();
+	}
 
-  public void addSeries( FreeChartSeries series ) {
-    collection.addElement(series);
-  }
+	public void addSeries(FreeChartSeries series) {
+		collection.addElement(series);
+	}
 
-  public int getSeriesCount() {
-    return collection.size();
-  }
+	public int getSeriesCount() {
+		return collection.size();
+	}
 
-  public FreeChartSeries getSeries( int index ) {
-    if ( index < 0 || index >= getSeriesCount() )
-      return null;
+	public FreeChartSeries getSeries(int index) {
+		if (index < 0 || index >= getSeriesCount())
+			return null;
 
-    return (FreeChartSeries) collection.elementAt(index);
-  }
+		return (FreeChartSeries) collection.elementAt(index);
+	}
 
 }

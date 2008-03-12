@@ -67,7 +67,7 @@ import ec.util.ParameterDatabase;
  */
 
 public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
-		implements Serializable, AuctionEventListener {
+    implements Serializable, AuctionEventListener {
 
 	static Logger logger = Logger.getLogger(ContinuousDoubleAuctioneerEE.class);
 
@@ -119,11 +119,11 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 		super.setup(parameters, base);
 
 		delta = parameters.getDoubleWithDefault(base.push(P_DELTA), new Parameter(
-				P_DEF_BASE).push(P_DELTA), delta);
+		    P_DEF_BASE).push(P_DELTA), delta);
 		assert (0 <= delta);
 
 		memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE),
-				new Parameter(P_DEF_BASE).push(P_MEMORYSIZE), memorySize);
+		    new Parameter(P_DEF_BASE).push(P_MEMORYSIZE), memorySize);
 		assert (0 <= memorySize);
 		memory = new FixedLengthQueue(memorySize);
 
@@ -168,7 +168,7 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 				expectedHighestAsk = memory.getMean() + delta;
 
 				ReportVariableBoard.getInstance().reportValue(EST_EQUILIBRIUM_PRICE,
-						memory.getMean(), event);
+				    memory.getMean(), event);
 			}
 
 		}

@@ -42,53 +42,53 @@ import ec.util.ParameterDatabase;
  */
 public class Strategy implements ParameterBasedCase, Parameterizable {
 
-  static Logger logger = Logger.getLogger(Strategy.class);
+	static Logger logger = Logger.getLogger(Strategy.class);
 
-  /**
-   * @uml.property name="c"
-   * @uml.associationEnd
-   */
-  private Case c;
+	/**
+	 * @uml.property name="c"
+	 * @uml.associationEnd
+	 */
+	private Case c;
 
-  /**
-   * @uml.property name="isSeller"
-   */
-  private boolean isSeller;
+	/**
+	 * @uml.property name="isSeller"
+	 */
+	private boolean isSeller;
 
-  private static final String P_ISSELLER = "isseller";
+	private static final String P_ISSELLER = "isseller";
 
-  public Strategy() {
-  }
+	public Strategy() {
+	}
 
-  /*
-   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
-   *      ec.util.Parameter)
-   */
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    isSeller = parameters.getBoolean(base.push(P_ISSELLER), null, true);
-  }
+	/*
+	 * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+	 *      ec.util.Parameter)
+	 */
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		isSeller = parameters.getBoolean(base.push(P_ISSELLER), null, true);
+	}
 
-  public void setValue( String value ) {
-    try {
-      c = (Case) Class.forName(value).newInstance();
-    } catch ( InstantiationException e ) {
-      e.printStackTrace();
-      logger.error(e.toString());
-    } catch ( IllegalAccessException e ) {
-      e.printStackTrace();
-      logger.error(e.toString());
-    } catch ( ClassNotFoundException e ) {
-      e.printStackTrace();
-      logger.error(e.toString());
-    }
-  }
+	public void setValue(String value) {
+		try {
+			c = (Case) Class.forName(value).newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			logger.error(e.toString());
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			logger.error(e.toString());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			logger.error(e.toString());
+		}
+	}
 
-  public String toString() {
-    return c.toString();
-  }
+	public String toString() {
+		return c.toString();
+	}
 
-  public void apply( ParameterDatabase pdb, Parameter base ) {
-    int index = isSeller ? 0 : 1;
-    c.apply(pdb, base.push("agenttype." + index + ".strategy"));
-  }
+	public void apply(ParameterDatabase pdb, Parameter base) {
+		int index = isSeller ? 0 : 1;
+		c.apply(pdb, base.push("agenttype." + index + ".strategy"));
+	}
 }

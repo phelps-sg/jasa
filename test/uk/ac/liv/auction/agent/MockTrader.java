@@ -15,158 +15,158 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.event.AuctionEvent;
-
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-
 import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.auction.event.AuctionEvent;
+
 public class MockTrader extends AbstractTradingAgent {
 
-  /**
-   * @uml.property name="lastWinningShout"
-   * @uml.associationEnd
-   */
-  public Shout lastWinningShout = null;
+	/**
+	 * @uml.property name="lastWinningShout"
+	 * @uml.associationEnd
+	 */
+	public Shout lastWinningShout = null;
 
-  /**
-   * @uml.property name="lastWinningPrice"
-   */
-  public double lastWinningPrice = 0;
+	/**
+	 * @uml.property name="lastWinningPrice"
+	 */
+	public double lastWinningPrice = 0;
 
-  /**
-   * @uml.property name="lastWinningQuantity"
-   */
-  public int lastWinningQuantity;
-  
-  public int requestShoutDay = -1;
+	/**
+	 * @uml.property name="lastWinningQuantity"
+	 */
+	public int lastWinningQuantity;
 
-  /**
-   * @uml.property name="receivedAuctionOpen"
-   */
-  public boolean receivedAuctionOpen = false;
+	public int requestShoutDay = -1;
 
-  /**
-   * @uml.property name="receivedAuctionClosed"
-   */
-  public boolean receivedAuctionClosed = false;
+	/**
+	 * @uml.property name="receivedAuctionOpen"
+	 */
+	public boolean receivedAuctionOpen = false;
 
-  /**
-   * @uml.property name="receivedAuctionClosedAfterAuctionOpen"
-   */
-  public boolean receivedAuctionClosedAfterAuctionOpen = false;
-  
-  public boolean receivedEndOfDayAfterRequestShout = true;
+	/**
+	 * @uml.property name="receivedAuctionClosed"
+	 */
+	public boolean receivedAuctionClosed = false;
 
-  /**
-   * @uml.property name="receivedRoundClosed"
-   */
-  public int receivedRoundClosed = 0;
+	/**
+	 * @uml.property name="receivedAuctionClosedAfterAuctionOpen"
+	 */
+	public boolean receivedAuctionClosedAfterAuctionOpen = false;
 
-  /**
-   * @uml.property name="receivedRequestShout"
-   */
-  public int receivedRequestShout = 0;
+	public boolean receivedEndOfDayAfterRequestShout = true;
 
-  /**
-   * @uml.property name="test"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  TestCase test;
+	/**
+	 * @uml.property name="receivedRoundClosed"
+	 */
+	public int receivedRoundClosed = 0;
 
-  static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
+	/**
+	 * @uml.property name="receivedRequestShout"
+	 */
+	public int receivedRequestShout = 0;
 
-  public MockTrader( TestCase test, int stock, long funds ) {
-    super(stock, funds);
-    this.test = test;
-  }
+	/**
+	 * @uml.property name="test"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	TestCase test;
 
-  public MockTrader( TestCase test, int stock, double funds,
-      double privateValue, boolean isSeller ) {
-    super(stock, funds, privateValue, isSeller);
-    this.test = test;
-  }
-  
-  
-  
+	static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
-//  public void informOfSeller( Auction auction, Shout winningShout,
-//      TradingAgent seller, double price, int quantity ) {
-//    super.informOfSeller(auction, winningShout, seller, price, quantity);
-//    test.assertTrue(((AbstractTradingAgent) seller).isSeller());
-//    System.out.println(this + ": winning shout " + winningShout + " at price "
-//        + price + " and quantity " + quantity + " and seller: " + seller);
-//    lastWinningShout = winningShout;
-//    lastWinningPrice = price;
-//    purchaseFrom(auction, (AbstractTradingAgent) seller, quantity, price);
-//  }
-//
-//  public void informOfBuyer( Auction auction, TradingAgent buyer, double price,
-//      int quantity ) {
-//    super.informOfBuyer(auction, buyer, price, quantity);
-//    test.assertTrue(((AbstractTradingAgent) buyer).isBuyer());
-//    lastWinningPrice = price;
-//    lastWinningShout = getCurrentShout();
-//  }
+	public MockTrader(TestCase test, int stock, long funds) {
+		super(stock, funds);
+		this.test = test;
+	}
 
-  public void shoutAccepted( Auction auction, Shout shout, double price, int quantity ) {    
-    super.shoutAccepted(auction, shout, price, quantity);
-    System.out.println(this + ": winning shout " + shout + " at price " + price + " and quantity " + quantity);
-    lastWinningShout = shout;
-    lastWinningPrice = price;
-  }
+	public MockTrader(TestCase test, int stock, double funds,
+	    double privateValue, boolean isSeller) {
+		super(stock, funds, privateValue, isSeller);
+		this.test = test;
+	}
 
-  public int determineQuantity( Auction auction ) {
-    return 1;
-  }
+	// public void informOfSeller( Auction auction, Shout winningShout,
+	// TradingAgent seller, double price, int quantity ) {
+	// super.informOfSeller(auction, winningShout, seller, price, quantity);
+	// test.assertTrue(((AbstractTradingAgent) seller).isSeller());
+	// System.out.println(this + ": winning shout " + winningShout + " at price "
+	// + price + " and quantity " + quantity + " and seller: " + seller);
+	// lastWinningShout = winningShout;
+	// lastWinningPrice = price;
+	// purchaseFrom(auction, (AbstractTradingAgent) seller, quantity, price);
+	// }
+	//
+	// public void informOfBuyer( Auction auction, TradingAgent buyer, double
+	// price,
+	// int quantity ) {
+	// super.informOfBuyer(auction, buyer, price, quantity);
+	// test.assertTrue(((AbstractTradingAgent) buyer).isBuyer());
+	// lastWinningPrice = price;
+	// lastWinningShout = getCurrentShout();
+	// }
 
-  public void requestShout( Auction auction ) {
-    super.requestShout(auction);
-    System.out.println(this + ": placed " + currentShout);
-    receivedRequestShout++;
-    requestShoutDay = auction.getDay();
-  }
+	public void shoutAccepted(Auction auction, Shout shout, double price,
+	    int quantity) {
+		super.shoutAccepted(auction, shout, price, quantity);
+		System.out.println(this + ": winning shout " + shout + " at price " + price
+		    + " and quantity " + quantity);
+		lastWinningShout = shout;
+		lastWinningPrice = price;
+	}
 
-  public void auctionOpen( AuctionEvent event ) {
-    super.auctionOpen(event);
-    receivedAuctionOpen = true;
-  }
+	public int determineQuantity(Auction auction) {
+		return 1;
+	}
 
-  public void auctionClosed( AuctionEvent event ) {
-    super.auctionClosed(event);
-    logger.debug(this + ": recieved auctionClosed()");
-    ((RandomRobinAuction) event.getAuction()).remove(this);
-    receivedAuctionClosed = true;
-    receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
-  }
+	public void requestShout(Auction auction) {
+		super.requestShout(auction);
+		System.out.println(this + ": placed " + currentShout);
+		receivedRequestShout++;
+		requestShoutDay = auction.getDay();
+	}
 
-  public void roundClosed( AuctionEvent event ) {
-    super.roundClosed(event);
-    receivedRoundClosed++;
-  }
+	public void auctionOpen(AuctionEvent event) {
+		super.auctionOpen(event);
+		receivedAuctionOpen = true;
+	}
 
-  public void endOfDay( AuctionEvent event ) {
-    int day = event.getAuction().getDay();
-    receivedEndOfDayAfterRequestShout = day <= requestShoutDay;
-  }
+	public void auctionClosed(AuctionEvent event) {
+		super.auctionClosed(event);
+		logger.debug(this + ": recieved auctionClosed()");
+		((RandomRobinAuction) event.getAuction()).remove(this);
+		receivedAuctionClosed = true;
+		receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
+	}
 
-  public boolean active() {
-    return true;
-  }
+	public void roundClosed(AuctionEvent event) {
+		super.roundClosed(event);
+		receivedRoundClosed++;
+	}
 
-  public double equilibriumProfits( Auction auction, double equilibriumPrice,
-      int quantity ) {
-    // TODO
-    return -1;
-  }
+	public void endOfDay(AuctionEvent event) {
+		int day = event.getAuction().getDay();
+		receivedEndOfDayAfterRequestShout = day <= requestShoutDay;
+	}
 
-  public String toString() {
-    return "(" + getClass() + " id:" + id + " isSeller:" + isSeller
-        + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:"
-        + account + " account:" + account + ")";
-  }
+	public boolean active() {
+		return true;
+	}
+
+	public double equilibriumProfits(Auction auction, double equilibriumPrice,
+	    int quantity) {
+		// TODO
+		return -1;
+	}
+
+	public String toString() {
+		return "(" + getClass() + " id:" + id + " isSeller:" + isSeller
+		    + " valuer:" + valuer + " lastProfit:" + getLastProfit() + " funds:"
+		    + account + " account:" + account + ")";
+	}
 
 }

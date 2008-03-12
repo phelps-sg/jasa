@@ -26,43 +26,43 @@ import ec.util.ParameterDatabase;
  */
 public class Ratio implements ParameterBasedCase {
 
-  public static final String P_AGENTTYPE = "agenttype";
+	public static final String P_AGENTTYPE = "agenttype";
 
-  public static final String P_NUMAGENTS = "numagents";
+	public static final String P_NUMAGENTS = "numagents";
 
-  /**
-   * @uml.property name="s"
-   */
-  private int s;
+	/**
+	 * @uml.property name="s"
+	 */
+	private int s;
 
-  /**
-   * @uml.property name="b"
-   */
-  private int b;
+	/**
+	 * @uml.property name="b"
+	 */
+	private int b;
 
-  public Ratio() {
-  }
+	public Ratio() {
+	}
 
-  public void setValue( String value ) {
-    String values[] = value.split(":");
+	public void setValue(String value) {
+		String values[] = value.split(":");
 
-    s = Integer.parseInt(values[0]);
-    b = Integer.parseInt(values[1]);
-  }
+		s = Integer.parseInt(values[0]);
+		b = Integer.parseInt(values[1]);
+	}
 
-  public String toString() {
-    return s + "|" + b;
-  }
+	public String toString() {
+		return s + "|" + b;
+	}
 
-  public void apply( ParameterDatabase pdb, Parameter base ) {
-    int groupsize = pdb.getInt(base.push(GroupSize.P_GROUPSIZE));
-    int sellerNum = s * groupsize;
-    int buyerNum = b * groupsize;
+	public void apply(ParameterDatabase pdb, Parameter base) {
+		int groupsize = pdb.getInt(base.push(GroupSize.P_GROUPSIZE), null);
+		int sellerNum = s * groupsize;
+		int buyerNum = b * groupsize;
 
-    pdb.set(base.push(P_AGENTTYPE + ".0." + P_NUMAGENTS), String
-        .valueOf(sellerNum));
-    pdb.set(base.push(P_AGENTTYPE + ".1." + P_NUMAGENTS), String
-        .valueOf(buyerNum));
-  }
+		pdb.set(base.push(P_AGENTTYPE + ".0." + P_NUMAGENTS), String
+		    .valueOf(sellerNum));
+		pdb.set(base.push(P_AGENTTYPE + ".1." + P_NUMAGENTS), String
+		    .valueOf(buyerNum));
+	}
 
 }

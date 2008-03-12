@@ -98,160 +98,158 @@ import ec.util.ParameterDatabase;
  */
 public class MultipleSeriesGraph extends FreeChartGraph {
 
-  public static final String P_DEF_BASE = "multipleseriesgraph";
-  
-  public static final String P_SERIES = "series";
+	public static final String P_DEF_BASE = "multipleseriesgraph";
 
-  public static final String P_MARKER = "marker";
+	public static final String P_SERIES = "series";
 
-  public static final String P_RENDERER = "renderer";
+	public static final String P_MARKER = "marker";
 
-  public static final String P_NUM = "n";
+	public static final String P_RENDERER = "renderer";
 
-  /**
-   * @uml.property name="fcCollections"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected FreeChartSeriesCollection fcCollections;
+	public static final String P_NUM = "n";
 
-  /**
-   * @uml.property name="markers"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected FreeChartMarker markers[];
+	/**
+	 * @uml.property name="fcCollections"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected FreeChartSeriesCollection fcCollections;
 
-  /**
-   * @uml.property name="datasets"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  private XYDataset datasets[];
+	/**
+	 * @uml.property name="markers"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected FreeChartMarker markers[];
 
-  public MultipleSeriesGraph() {
-    fcCollections = new FreeChartSeriesCollection();
-  }
+	/**
+	 * @uml.property name="datasets"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	private XYDataset datasets[];
 
-  protected void setupChart( ParameterDatabase parameters, Parameter base ) {
+	public MultipleSeriesGraph() {
+		fcCollections = new FreeChartSeriesCollection();
+	}
 
-  	Parameter defBase = new Parameter(P_DEF_BASE);
+	protected void setupChart(ParameterDatabase parameters, Parameter base) {
 
-    // series
-  	Parameter defSeriesBase = defBase.push(P_SERIES);
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-  	int num = parameters.getIntWithDefault(base.push(P_SERIES).push(P_NUM),
-    		defSeriesBase.push(P_NUM), 0);
-    datasets = new XYDataset[num];
-    for ( int i = 0; i < num; i++ ) {
-      fcCollections.addSeries((FreeChartSeries) parameters
-          .getInstanceForParameterEq(base.push(P_SERIES)
-              .push(String.valueOf(i)), 
-              defSeriesBase.push(String.valueOf(i)), FreeChartSeries.class));
-      fcCollections.getSeries(i).setGraph(this);
-      fcCollections.getSeries(i).setup(parameters,
-          base.push(P_SERIES).push(String.valueOf(i)));
-      datasets[i] = fcCollections.getSeries(i).getDataset();
-    }
+		// series
+		Parameter defSeriesBase = defBase.push(P_SERIES);
 
-    // markers
-  	Parameter defMarkerBase = defBase.push(P_MARKER);
-  	
-    num = parameters
-        .getIntWithDefault(base.push(P_MARKER).push(P_NUM), 
-        		defMarkerBase.push(P_NUM), 0);
-    markers = new FreeChartMarker[num];
-    for ( int i = 0; i < num; i++ ) {
-      markers[i] = (FreeChartMarker) parameters.getInstanceForParameter(base
-          .push(P_MARKER).push(String.valueOf(i)), 
-          defMarkerBase.push(String.valueOf(i)), FreeChartMarker.class);
-      markers[i].setGraph(this);
-      markers[i].setup(parameters, base.push(P_MARKER).push(String.valueOf(i)));
-    }
+		int num = parameters.getIntWithDefault(base.push(P_SERIES).push(P_NUM),
+		    defSeriesBase.push(P_NUM), 0);
+		datasets = new XYDataset[num];
+		for (int i = 0; i < num; i++) {
+			fcCollections.addSeries((FreeChartSeries) parameters
+			    .getInstanceForParameterEq(base.push(P_SERIES)
+			        .push(String.valueOf(i)), defSeriesBase.push(String.valueOf(i)),
+			        FreeChartSeries.class));
+			fcCollections.getSeries(i).setGraph(this);
+			fcCollections.getSeries(i).setup(parameters,
+			    base.push(P_SERIES).push(String.valueOf(i)));
+			datasets[i] = fcCollections.getSeries(i).getDataset();
+		}
 
-    // freechart and xyplot
-    Parameter defXAxisBase = defBase.push(P_X);
-    Parameter defYAxisBase = defBase.push(P_Y);
-    
-    String xAxisLabel = parameters.getStringWithDefault(base.push(P_X), 
-    		defXAxisBase, "X");
-    String yAxisLabel = parameters.getStringWithDefault(base.push(P_Y), 
-    		defYAxisBase, "Y");
-    setChart(ChartFactory.createTimeSeriesChart(getName(), xAxisLabel,
-        yAxisLabel, null, true, true, false));
-    XYPlot xyplot = getChart().getXYPlot();
-    xyplot.setForegroundAlpha(0.7f);
-    xyplot.setBackgroundPaint(Color.white);
-    xyplot.setDomainGridlinePaint(Color.lightGray);
-    xyplot.setRangeGridlinePaint(Color.lightGray);
-    xyplot
-        .setAxisOffset(new RectangleInsets(UnitType.ABSOLUTE, 4D, 4D, 4D, 4D));
+		// markers
+		Parameter defMarkerBase = defBase.push(P_MARKER);
 
-    // axises
-    int numOfRanges = parameters.getIntWithDefault(base.push(P_Y).push(P_NUM),
-    		defYAxisBase.push(P_NUM), 1);
-    for ( int i = 0; i < numOfRanges; i++ ) {
-      NumberAxis axis = new NumberAxis(parameters.getStringWithDefault(base
-          .push(P_Y).push(String.valueOf(i)), 
-          defYAxisBase.push(String.valueOf(i)), "Y " + i));
-      xyplot.setRangeAxis(i, axis);
-    }
+		num = parameters.getIntWithDefault(base.push(P_MARKER).push(P_NUM),
+		    defMarkerBase.push(P_NUM), 0);
+		markers = new FreeChartMarker[num];
+		for (int i = 0; i < num; i++) {
+			markers[i] = (FreeChartMarker) parameters.getInstanceForParameter(base
+			    .push(P_MARKER).push(String.valueOf(i)), defMarkerBase.push(String
+			    .valueOf(i)), FreeChartMarker.class);
+			markers[i].setGraph(this);
+			markers[i].setup(parameters, base.push(P_MARKER).push(String.valueOf(i)));
+		}
 
-    for ( int i = 0; i < fcCollections.getSeriesCount(); i++ ) {
-      int axisIndex = fcCollections.getSeries(i).getAxisIndex();
-      if ( axisIndex >= 0 && axisIndex < numOfRanges ) {
-        xyplot.setDataset(i, fcCollections.getSeries(i).getDataset());
-        xyplot.mapDatasetToRangeAxis(i, axisIndex);
-      } else {
-        logger.error("Invaid axis number: " + axisIndex);
-      }
-    }
+		// freechart and xyplot
+		Parameter defXAxisBase = defBase.push(P_X);
+		Parameter defYAxisBase = defBase.push(P_Y);
 
-    // renderers
-    Parameter defRenderBase = defBase.push(P_RENDERER);
-    
-    int numOfRenderers = parameters.getIntWithDefault(base.push(P_RENDERER)
-        .push(P_NUM), defRenderBase.push(P_NUM), 1);
-    XYItemRenderer standardRenderer = xyplot.getRenderer();
-    int index = 0;
-    for ( int i = 0; i < fcCollections.getSeriesCount(); i++ ) {
+		String xAxisLabel = parameters.getStringWithDefault(base.push(P_X),
+		    defXAxisBase, "X");
+		String yAxisLabel = parameters.getStringWithDefault(base.push(P_Y),
+		    defYAxisBase, "Y");
+		setChart(ChartFactory.createTimeSeriesChart(getName(), xAxisLabel,
+		    yAxisLabel, null, true, true, false));
+		XYPlot xyplot = getChart().getXYPlot();
+		xyplot.setForegroundAlpha(0.7f);
+		xyplot.setBackgroundPaint(Color.white);
+		xyplot.setDomainGridlinePaint(Color.lightGray);
+		xyplot.setRangeGridlinePaint(Color.lightGray);
+		xyplot
+		    .setAxisOffset(new RectangleInsets(UnitType.ABSOLUTE, 4D, 4D, 4D, 4D));
 
-      int rendererIndex = fcCollections.getSeries(i).getRendererIndex();
-      if ( rendererIndex < 0 || rendererIndex >= numOfRenderers ) {
-        logger.error("Invaid renderer number: " + rendererIndex);
-      }
+		// axises
+		int numOfRanges = parameters.getIntWithDefault(base.push(P_Y).push(P_NUM),
+		    defYAxisBase.push(P_NUM), 1);
+		for (int i = 0; i < numOfRanges; i++) {
+			NumberAxis axis = new NumberAxis(parameters.getStringWithDefault(base
+			    .push(P_Y).push(String.valueOf(i)), defYAxisBase.push(String
+			    .valueOf(i)), "Y " + i));
+			xyplot.setRangeAxis(i, axis);
+		}
 
-      try {
-        xyplot.setRenderer(i, (XYItemRenderer) parameters
-            .getInstanceForParameterEq(base.push(P_RENDERER).push(
-                String.valueOf(rendererIndex)), 
-                defRenderBase.push(String.valueOf(rendererIndex)), 
-                XYItemRenderer.class));
-      } catch ( ParamClassLoadException e ) {
-        xyplot.setRenderer(new StandardXYItemRenderer());
-      }
+		for (int i = 0; i < fcCollections.getSeriesCount(); i++) {
+			int axisIndex = fcCollections.getSeries(i).getAxisIndex();
+			if (axisIndex >= 0 && axisIndex < numOfRanges) {
+				xyplot.setDataset(i, fcCollections.getSeries(i).getDataset());
+				xyplot.mapDatasetToRangeAxis(i, axisIndex);
+			} else {
+				logger.error("Invaid axis number: " + axisIndex);
+			}
+		}
 
-      xyplot.getRenderer(i).setSeriesPaint(0,
-          standardRenderer.getSeriesPaint(index++));
-    }
+		// renderers
+		Parameter defRenderBase = defBase.push(P_RENDERER);
 
-    xyplot.getDomainAxis().setUpperMargin(
-        xyplot.getDomainAxis().getUpperMargin() + 0.05D);
-    xyplot.getDomainAxis().setLowerMargin(
-        xyplot.getDomainAxis().getLowerMargin() + 0.05D);
+		int numOfRenderers = parameters.getIntWithDefault(base.push(P_RENDERER)
+		    .push(P_NUM), defRenderBase.push(P_NUM), 1);
+		XYItemRenderer standardRenderer = xyplot.getRenderer();
+		int index = 0;
+		for (int i = 0; i < fcCollections.getSeriesCount(); i++) {
 
-    xyplot.setDomainCrosshairLockedOnData(true);
-    xyplot.setDomainCrosshairVisible(true);
-    xyplot.setRangeCrosshairLockedOnData(true);
-    xyplot.setRangeCrosshairVisible(true);
-  }
+			int rendererIndex = fcCollections.getSeries(i).getRendererIndex();
+			if (rendererIndex < 0 || rendererIndex >= numOfRenderers) {
+				logger.error("Invaid renderer number: " + rendererIndex);
+			}
 
-  public void eventOccurred( AuctionEvent event ) {
+			try {
+				xyplot.setRenderer(i, (XYItemRenderer) parameters
+				    .getInstanceForParameterEq(base.push(P_RENDERER).push(
+				        String.valueOf(rendererIndex)), defRenderBase.push(String
+				        .valueOf(rendererIndex)), XYItemRenderer.class));
+			} catch (ParamClassLoadException e) {
+				xyplot.setRenderer(new StandardXYItemRenderer());
+			}
 
-    for ( int i = 0; i < fcCollections.getSeriesCount(); i++ ) {
-      fcCollections.getSeries(i).eventOccurred(event);
-    }
+			xyplot.getRenderer(i).setSeriesPaint(0,
+			    standardRenderer.getSeriesPaint(index++));
+		}
 
-    for ( int i = 0; i < markers.length; i++ ) {
-      markers[i].eventOccurred(event);
-    }
-  }
+		xyplot.getDomainAxis().setUpperMargin(
+		    xyplot.getDomainAxis().getUpperMargin() + 0.05D);
+		xyplot.getDomainAxis().setLowerMargin(
+		    xyplot.getDomainAxis().getLowerMargin() + 0.05D);
+
+		xyplot.setDomainCrosshairLockedOnData(true);
+		xyplot.setDomainCrosshairVisible(true);
+		xyplot.setRangeCrosshairLockedOnData(true);
+		xyplot.setRangeCrosshairVisible(true);
+	}
+
+	public void eventOccurred(AuctionEvent event) {
+
+		for (int i = 0; i < fcCollections.getSeriesCount(); i++) {
+			fcCollections.getSeries(i).eventOccurred(event);
+		}
+
+		for (int i = 0; i < markers.length; i++) {
+			markers[i].eventOccurred(event);
+		}
+	}
 
 }

@@ -28,24 +28,24 @@ import uk.ac.liv.auction.event.AuctionEvent;
  */
 public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
 
-  public AbstractMarketStatsReport( RandomRobinAuction auction ) {
-    super(auction);
-  }
-  
-  public AbstractMarketStatsReport() {
-    super();
-  }
-  
-  public void eventOccurred( AuctionEvent event ) {
-    if ( event instanceof AuctionClosedEvent ) {
-      calculate();
-      ReportVariableBoard.getInstance().reportValues(getVariables(), event);
-    }
-  }
-  
-  /**
-   * Perform final calculations at the end of the auction.   
-   */
-  public abstract void calculate();
+	public AbstractMarketStatsReport(RandomRobinAuction auction) {
+		super(auction);
+	}
+
+	public AbstractMarketStatsReport() {
+		super();
+	}
+
+	public void eventOccurred(AuctionEvent event) {
+		if (event instanceof AuctionClosedEvent) {
+			calculate();
+			ReportVariableBoard.getInstance().reportValues(getVariables(), event);
+		}
+	}
+
+	/**
+	 * Perform final calculations at the end of the auction.
+	 */
+	public abstract void calculate();
 
 }

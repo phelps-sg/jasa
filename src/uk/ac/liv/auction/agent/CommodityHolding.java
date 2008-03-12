@@ -19,49 +19,49 @@ import java.io.Serializable;
 
 public class CommodityHolding implements Serializable {
 
-  protected int quantity;
-  
-  protected TradingAgent owner;
-  
-  public CommodityHolding() {
-    this(0);
-  }
-  
-  public CommodityHolding( int quantity ) {
-    this.quantity = quantity;
-  }
-  
-  public void add( int quantity ) {
-    this.quantity += quantity;
-  }
-  
-  public void remove( int quantity ) {
-    this.quantity -= quantity;
-  }
-  
-  public void transfer( CommodityHolding other, int quantity ) {
-    this.remove(quantity);
-    other.add(quantity);    
-  }
+	protected int quantity;
 
-  public TradingAgent getOwner() {
-    return owner;
-  }
+	protected TradingAgent owner;
 
-  public void setOwner( TradingAgent owner ) {
-    this.owner = owner;
-  }
+	public CommodityHolding() {
+		this(0);
+	}
 
-  public int getQuantity() {
-    return quantity;
-  }
+	public CommodityHolding(int quantity) {
+		this.quantity = quantity;
+	}
 
-  public void setQuantity( int quantity ) {
-    this.quantity = quantity;
-  }
-  
-  public String toString() {
-    return "(" + getClass() + " quantity:" + quantity + " owner:" + owner + ")";
-  }
+	public void add(int quantity) {
+		this.quantity += quantity;
+	}
+
+	public void remove(int quantity) {
+		this.quantity -= quantity;
+	}
+
+	public void transfer(CommodityHolding other, int quantity) {
+		this.remove(quantity);
+		other.add(quantity);
+	}
+
+	public TradingAgent getOwner() {
+		return owner;
+	}
+
+	public void setOwner(TradingAgent owner) {
+		this.owner = owner;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	public String toString() {
+		return "(" + getClass() + " quantity:" + quantity + " owner:" + owner + ")";
+	}
 
 }

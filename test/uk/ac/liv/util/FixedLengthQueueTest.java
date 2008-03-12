@@ -15,9 +15,9 @@
 
 package uk.ac.liv.util;
 
-import uk.ac.liv.util.FixedLengthQueue;
-
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 /**
  * @author Jinzhong Niu
@@ -26,36 +26,36 @@ import junit.framework.*;
 
 public class FixedLengthQueueTest extends TestCase {
 
-  /**
-   * @uml.property name="testQueue"
-   * @uml.associationEnd
-   */
+	/**
+	 * @uml.property name="testQueue"
+	 * @uml.associationEnd
+	 */
 	FixedLengthQueue testQueue;
 
-  public FixedLengthQueueTest( String name ) {
-    super(name);
-  }
+	public FixedLengthQueueTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    testQueue = new FixedLengthQueue(5);
-  }
+	public void setUp() {
+		testQueue = new FixedLengthQueue(5);
+	}
 
-  public void testPredefinedData() {
-    for ( int i = 0; i < 10; i++ ) {
-      testQueue.newData(i);
-      System.out.print(testQueue.count());
-      System.out.println(testQueue);
-      
-    }
-    assertTrue(Math.abs(testQueue.getMean() - 7) < 0.000000001);
-  }
-  
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public void testPredefinedData() {
+		for (int i = 0; i < 10; i++) {
+			testQueue.newData(i);
+			System.out.print(testQueue.count());
+			System.out.println(testQueue);
 
-  public static Test suite() {
-    return new TestSuite(FixedLengthQueueTest.class);
-  }
+		}
+		assertTrue(Math.abs(testQueue.getMean() - 7) < 0.000000001);
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
+
+	public static Test suite() {
+		return new TestSuite(FixedLengthQueueTest.class);
+	}
 
 }

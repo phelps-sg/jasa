@@ -32,81 +32,81 @@ import java.io.Serializable;
 public class MetaLearner extends AbstractLearner implements
     StimuliResponseLearner, Parameterizable, Serializable {
 
-  /**
-   * @uml.property name="currentLearner"
-   */
-  protected int currentLearner;
+	/**
+	 * @uml.property name="currentLearner"
+	 */
+	protected int currentLearner;
 
-  /**
-   * @uml.property name="subLearners"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected StimuliResponseLearner[] subLearners;
+	/**
+	 * @uml.property name="subLearners"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected StimuliResponseLearner[] subLearners;
 
-  /**
-   * @uml.property name="masterLearner"
-   * @uml.associationEnd
-   */
-  protected StimuliResponseLearner masterLearner;
+	/**
+	 * @uml.property name="masterLearner"
+	 * @uml.associationEnd
+	 */
+	protected StimuliResponseLearner masterLearner;
 
-  static final String P_N = "n";
+	static final String P_N = "n";
 
-  static final String P_MASTER = "master";
+	static final String P_MASTER = "master";
 
-  public MetaLearner() {
-  }
+	public MetaLearner() {
+	}
 
-  public MetaLearner( int numLearners ) {
-    subLearners = new StimuliResponseLearner[numLearners];
-  }
+	public MetaLearner(int numLearners) {
+		subLearners = new StimuliResponseLearner[numLearners];
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    masterLearner = (StimuliResponseLearner) parameters
-        .getInstanceForParameter(base.push(P_MASTER), null,
-            StimuliResponseLearner.class);
-    if ( masterLearner instanceof Parameterizable ) {
-      ((Parameterizable) masterLearner).setup(parameters, base.push(P_MASTER));
-    }
+		masterLearner = (StimuliResponseLearner) parameters
+		    .getInstanceForParameter(base.push(P_MASTER), null,
+		        StimuliResponseLearner.class);
+		if (masterLearner instanceof Parameterizable) {
+			((Parameterizable) masterLearner).setup(parameters, base.push(P_MASTER));
+		}
 
-    int numLearners = parameters.getInt(base.push(P_N), null, 1);
+		int numLearners = parameters.getInt(base.push(P_N), null, 1);
 
-    subLearners = new StimuliResponseLearner[numLearners];
+		subLearners = new StimuliResponseLearner[numLearners];
 
-    for ( int i = 0; i < numLearners; i++ ) {
+		for (int i = 0; i < numLearners; i++) {
 
-      StimuliResponseLearner sub = (StimuliResponseLearner) parameters
-          .getInstanceForParameter(base.push(i + ""), null,
-              StimuliResponseLearner.class);
+			StimuliResponseLearner sub = (StimuliResponseLearner) parameters
+			    .getInstanceForParameter(base.push(i + ""), null,
+			        StimuliResponseLearner.class);
 
-      if ( sub instanceof Parameterizable ) {
-        ((Parameterizable) sub).setup(parameters, base.push(i + ""));
-      }
+			if (sub instanceof Parameterizable) {
+				((Parameterizable) sub).setup(parameters, base.push(i + ""));
+			}
 
-      subLearners[i] = sub;
-    }
-  }
+			subLearners[i] = sub;
+		}
+	}
 
-  public int act() {
-    currentLearner = masterLearner.act();
-    return subLearners[currentLearner].act();
-  }
+	public int act() {
+		currentLearner = masterLearner.act();
+		return subLearners[currentLearner].act();
+	}
 
-  public void reward( double reward ) {
-    masterLearner.reward(reward);
-    subLearners[currentLearner].reward(reward);
-  }
+	public void reward(double reward) {
+		masterLearner.reward(reward);
+		subLearners[currentLearner].reward(reward);
+	}
 
-  public double getLearningDelta() {
-    return masterLearner.getLearningDelta();
-  }
+	public double getLearningDelta() {
+		return masterLearner.getLearningDelta();
+	}
 
-  public int getNumberOfActions() {
-    return subLearners.length;
-  }
+	public int getNumberOfActions() {
+		return subLearners.length;
+	}
 
-  public void dumpState( DataWriter out ) {
-    // TODO
-  }
+	public void dumpState(DataWriter out) {
+		// TODO
+	}
 
 }

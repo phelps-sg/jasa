@@ -14,7 +14,6 @@
  */
 package uk.ac.liv.auction.config.strategy;
 
-
 import uk.ac.liv.auction.config.Case;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -24,18 +23,19 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 public class RE implements Case {
-	
+
 	private static final String ClassName = "uk.ac.liv.auction.agent.StimuliResponseStrategy";
+
 	private static final String LearnerClassName = "uk.ac.liv.ai.learning.NPTRothErevLearner";
 
 	public String toString() {
 		return "RE";
 	}
-	
+
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(base, ClassName);
 		pdb.set(base.push("learner"), LearnerClassName);
 		pdb.set(base.push("markupscale"), String.valueOf(10));
-		
+
 	}
 }

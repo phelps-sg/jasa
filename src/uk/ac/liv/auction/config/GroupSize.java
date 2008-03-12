@@ -27,25 +27,25 @@ import ec.util.ParameterDatabase;
  */
 public class GroupSize implements ParameterBasedCase {
 
-  public static final String P_GROUPSIZE = "groupsize";
+	public static final String P_GROUPSIZE = "groupsize";
 
-  /**
-   * @uml.property name="size"
-   */
-  private int size;
+	/**
+	 * @uml.property name="size"
+	 */
+	private int size;
 
-  public GroupSize() {
-  }
+	public GroupSize() {
+	}
 
-  public void setValue( String value ) {
-    this.size = Integer.parseInt(value);
-  }
+	public void setValue(String value) {
+		this.size = Integer.parseInt(value);
+	}
 
-  public String toString() {
-    return String.valueOf(size);
-  }
+	public String toString() {
+		return String.valueOf(size);
+	}
 
-  public void apply( ParameterDatabase pdb, Parameter base ) {
-    pdb.set(base.push(P_GROUPSIZE), String.valueOf(size));
-  }
+	public void apply(ParameterDatabase pdb, Parameter base) {
+		pdb.set(base.push(P_GROUPSIZE), String.valueOf(size));
+	}
 }

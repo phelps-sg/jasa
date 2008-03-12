@@ -27,9 +27,9 @@ package uk.ac.liv.auction.agent;
 
 public interface FixedQuantityStrategy extends Strategy {
 
-  /**
-   * Specify the quantity to bid for.
-   */
-  public void setQuantity( int quantity );
+	/**
+	 * Specify the quantity to bid for.
+	 */
+	public void setQuantity(int quantity);
 
 }

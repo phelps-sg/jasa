@@ -20,30 +20,29 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * An auctioneer for a k-double-auction with continuous clearing and
- * no order queuing.  Every time an offer is cleared any pending offers
- * are discarded.
- *
+ * An auctioneer for a k-double-auction with continuous clearing and no order
+ * queuing. Every time an offer is cleared any pending offers are discarded.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class ContinuousDoubleAuctioneerNoQueue
-    extends ContinuousDoubleAuctioneer implements Serializable {
+public class ContinuousDoubleAuctioneerNoQueue extends
+    ContinuousDoubleAuctioneer implements Serializable {
 
-  public void clear() {    
-    clearingQuote = new MarketQuote(askQuote(), bidQuote());
-    List shouts = shoutEngine.getMatchedShouts();
-    if ( shouts.size() > 0 ) {
-      shoutEngine.reset();
-    }
-    Iterator i = shouts.iterator();
-    while (i.hasNext()) {
-      Shout bid = (Shout) i.next();
-      Shout ask = (Shout) i.next();
-      double price = determineClearingPrice(bid, ask);
-      clear(ask, bid, price);
-    }
-  }
+	public void clear() {
+		clearingQuote = new MarketQuote(askQuote(), bidQuote());
+		List shouts = shoutEngine.getMatchedShouts();
+		if (shouts.size() > 0) {
+			shoutEngine.reset();
+		}
+		Iterator i = shouts.iterator();
+		while (i.hasNext()) {
+			Shout bid = (Shout) i.next();
+			Shout ask = (Shout) i.next();
+			double price = determineClearingPrice(bid, ask);
+			clear(ask, bid, price);
+		}
+	}
 
 }

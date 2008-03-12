@@ -15,17 +15,17 @@
 
 package uk.ac.liv.auction.electricity;
 
-import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.core.ParameterizablePricing;
 
 public class ParameterizedElectricityStats extends ElectricityStats {
 
-  public ParameterizedElectricityStats() {
-    super();
-  }
+	public ParameterizedElectricityStats() {
+		super();
+	}
 
-  public double calculateEquilibriumPrice() {
-    double k = ((ParameterizablePricing) auction.getAuctioneer()).getK();
-    return getMinPrice()*k + getMaxPrice()*(1-k);
-  }
+	public double calculateEquilibriumPrice() {
+		double k = ((ParameterizablePricing) auction.getAuctioneer()).getK();
+		return getMinPrice() * k + getMaxPrice() * (1 - k);
+	}
 
 }

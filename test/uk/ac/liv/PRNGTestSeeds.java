@@ -15,9 +15,7 @@
 package uk.ac.liv;
 
 public class PRNGTestSeeds {
-  
-  public static final long UNIT_TEST_SEED = 1536817715;
 
-
+	public static final long UNIT_TEST_SEED = 1536817715;
 
 }

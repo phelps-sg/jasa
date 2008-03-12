@@ -15,7 +15,6 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.agent.AbstractStrategy;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AuctionEvent;
@@ -28,50 +27,50 @@ import uk.ac.liv.auction.event.RoundClosedEvent;
 
 public class MockStrategy extends AbstractStrategy {
 
-  /**
-   * @uml.property name="currentShout"
-   */
-  protected int currentShout = 0;
+	/**
+	 * @uml.property name="currentShout"
+	 */
+	protected int currentShout = 0;
 
-  /**
-   * @uml.property name="shouts"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  public Shout[] shouts;
+	/**
+	 * @uml.property name="shouts"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	public Shout[] shouts;
 
-  /**
-   * @uml.property name="lastShoutAccepted"
-   */
-  public boolean lastShoutAccepted;
+	/**
+	 * @uml.property name="lastShoutAccepted"
+	 */
+	public boolean lastShoutAccepted;
 
-  public MockStrategy( Shout[] shouts ) {
-    this.shouts = shouts;
-  }
+	public MockStrategy(Shout[] shouts) {
+		this.shouts = shouts;
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    if ( event instanceof RoundClosedEvent ) {
-      endOfRound(event.getAuction());
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		if (event instanceof RoundClosedEvent) {
+			endOfRound(event.getAuction());
+		}
+	}
 
-  public void endOfRound( Auction auction ) {
-    currentShout++;
-  }
+	public void endOfRound(Auction auction) {
+		currentShout++;
+	}
 
-  public int determineQuantity( Auction auction ) {
-    return shouts[currentShout].getQuantity();
-  }
+	public int determineQuantity(Auction auction) {
+		return shouts[currentShout].getQuantity();
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    if ( currentShout >= shouts.length ) {
-      return false;
-    }
-    super.modifyShout(shout);
-    lastShoutAccepted = agent.lastShoutAccepted();
-    Shout current = shouts[currentShout];
-    shout.setPrice(current.getPrice());
-    shout.setQuantity(current.getQuantity());
-    return true;
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		if (currentShout >= shouts.length) {
+			return false;
+		}
+		super.modifyShout(shout);
+		lastShoutAccepted = agent.lastShoutAccepted();
+		Shout current = shouts[currentShout];
+		shout.setPrice(current.getPrice());
+		shout.setQuantity(current.getQuantity());
+		return true;
+	}
 
 }

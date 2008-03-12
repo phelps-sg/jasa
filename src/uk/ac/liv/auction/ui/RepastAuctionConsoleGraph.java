@@ -30,14 +30,14 @@ import uchicago.src.sim.analysis.OpenSequenceGraph;
 
 public class RepastAuctionConsoleGraph extends OpenSequenceGraph {
 
-  public RepastAuctionConsoleGraph( String title, SimModel repastModel, 
-      						 GraphReport graphModel ) {
-    super(title, repastModel);
-    Iterator i = graphModel.getSequenceIterator();
-    while ( i.hasNext() ) {
-      RepastGraphSequence sequence = (RepastGraphSequence) i.next();
-      addSequence(sequence.getName(), sequence);
-    }
-    
-  }
+	public RepastAuctionConsoleGraph(String title, SimModel repastModel,
+	    GraphReport graphModel) {
+		super(title, repastModel);
+		Iterator i = graphModel.getSequenceIterator();
+		while (i.hasNext()) {
+			RepastGraphSequence sequence = (RepastGraphSequence) i.next();
+			addSequence(sequence.getName(), sequence);
+		}
+
+	}
 }

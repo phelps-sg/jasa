@@ -82,373 +82,373 @@ import org.apache.log4j.Logger;
 public class RothErevLearner extends AbstractLearner implements Prototypeable,
     StimuliResponseLearner, Serializable {
 
-  /**
-   * The number of choices available to make at each iteration.
-   * 
-   * @uml.property name="k"
-   */
-  protected int k;
+	/**
+	 * The number of choices available to make at each iteration.
+	 * 
+	 * @uml.property name="k"
+	 */
+	protected int k;
 
-  /**
-   * The recency parameter.
-   * 
-   * @uml.property name="r"
-   */
-  protected double r;
+	/**
+	 * The recency parameter.
+	 * 
+	 * @uml.property name="r"
+	 */
+	protected double r;
 
-  /**
-   * The experimentation parameter.
-   * 
-   * @uml.property name="e"
-   */
-  protected double e;
+	/**
+	 * The experimentation parameter.
+	 * 
+	 * @uml.property name="e"
+	 */
+	protected double e;
 
-  /**
-   * The scaling parameter.
-   * 
-   * @uml.property name="s1"
-   */
-  protected double s1;
+	/**
+	 * The scaling parameter.
+	 * 
+	 * @uml.property name="s1"
+	 */
+	protected double s1;
 
-  /**
-   * Propensity for each possible action.
-   * 
-   * @uml.property name="q" multiplicity="(0 -1)" dimension="1"
-   */
-  protected double q[];
+	/**
+	 * Propensity for each possible action.
+	 * 
+	 * @uml.property name="q" multiplicity="(0 -1)" dimension="1"
+	 */
+	protected double q[];
 
-  /**
-   * Probabilities for each possible action.
-   * 
-   * @uml.property name="p"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected DiscreteProbabilityDistribution p;
+	/**
+	 * Probabilities for each possible action.
+	 * 
+	 * @uml.property name="p"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected DiscreteProbabilityDistribution p;
 
-  /**
-   * The current iteration.
-   * 
-   * @uml.property name="iteration"
-   */
-  protected int iteration;
+	/**
+	 * The current iteration.
+	 * 
+	 * @uml.property name="iteration"
+	 */
+	protected int iteration;
 
-  /**
-   * The last action chosen.
-   * 
-   * @uml.property name="lastAction"
-   */
-  protected int lastAction;
+	/**
+	 * The last action chosen.
+	 * 
+	 * @uml.property name="lastAction"
+	 */
+	protected int lastAction;
 
-  /**
-   * The total amount of update to the probability vector on the last iteration.
-   * 
-   * @uml.property name="deltaP"
-   */
-  protected double deltaP;
+	/**
+	 * The total amount of update to the probability vector on the last iteration.
+	 * 
+	 * @uml.property name="deltaP"
+	 */
+	protected double deltaP;
 
-  static final int DEFAULT_K = 100;
+	static final int DEFAULT_K = 100;
 
-  static final double DEFAULT_R = 0.1;
+	static final double DEFAULT_R = 0.1;
 
-  static final double DEFAULT_E = 0.2;
+	static final double DEFAULT_E = 0.2;
 
-  static final double DEFAULT_S1 = 1.0;
-  
-  static final String P_DEF_BASE = "rotherevlearner";
-  
-  static Logger logger = Logger.getLogger(RothErevLearner.class);
+	static final double DEFAULT_S1 = 1.0;
 
-  /**
-   * Construct a new learner.
-   * 
-   * @param k
-   *          The no. of possible actions.
-   * @param r
-   *          The recency parameter.
-   * @param e
-   *          The experimentation parameter.
-   */
-  public RothErevLearner( int k, double r, double e, double s1 ) {
-    this.k = k;
-    this.r = r;
-    this.e = e;
-    this.s1 = s1;
-    validateParams();
-    q = new double[k];
-    p = new DiscreteProbabilityDistribution(k);
-    initialise();
-  }
+	static final String P_DEF_BASE = "rotherevlearner";
 
-  public RothErevLearner() {
-    this(DEFAULT_K, DEFAULT_R, DEFAULT_E, DEFAULT_S1);
-  }
+	static Logger logger = Logger.getLogger(RothErevLearner.class);
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    
-    Parameter defBase = new Parameter(P_DEF_BASE);
-    
-    k = parameters.getIntWithDefault(base.push("k"), 
-    		defBase.push("k"), DEFAULT_K);
-    r = parameters.getDoubleWithDefault(base.push("r"), 
-    		defBase.push("r"), DEFAULT_R);
-    e = parameters.getDoubleWithDefault(base.push("e"), 
-    		defBase.push("e"), DEFAULT_E);
-    s1 = parameters.getDoubleWithDefault(base.push("s1"), 
-    		defBase.push("s1"), DEFAULT_S1);
-    
-    validateParams();
-    q = new double[k];
-    p = new DiscreteProbabilityDistribution(k);
-    initialise();
-  }
+	/**
+	 * Construct a new learner.
+	 * 
+	 * @param k
+	 *          The no. of possible actions.
+	 * @param r
+	 *          The recency parameter.
+	 * @param e
+	 *          The experimentation parameter.
+	 */
+	public RothErevLearner(int k, double r, double e, double s1) {
+		this.k = k;
+		this.r = r;
+		this.e = e;
+		this.s1 = s1;
+		validateParams();
+		q = new double[k];
+		p = new DiscreteProbabilityDistribution(k);
+		initialise();
+	}
 
-  public Object protoClone() {
-    RothErevLearner clonedLearner;
-    try {
-      clonedLearner = (RothErevLearner) clone();
-      clonedLearner.p = (DiscreteProbabilityDistribution) p.protoClone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-    return clonedLearner;
-  }
+	public RothErevLearner() {
+		this(DEFAULT_K, DEFAULT_R, DEFAULT_E, DEFAULT_S1);
+	}
 
-  protected void validateParams() {
-    if ( !(k > 0) ) {
-      throw new IllegalArgumentException("k must be positive");
-    }
-    if ( !(r >= 0 && r <= 1) ) {
-      throw new IllegalArgumentException("r must range [0..1]");
-    }
-    if ( !(e >= 0 && e <= 1) ) {
-      throw new IllegalArgumentException("e must range [0..1]");
-    }
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
 
-  /**
-   * Generate the next action for this learner.
-   * 
-   * @return An int in the range [0..k) representing the choice made by the
-   *         learner.
-   */
-  public int act() {
-    int action = choose();
-    lastAction = action;
-    iteration++;
-    return action;
-  }
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-  /**
-   * Reward the last action taken by the learner according to some payoff.
-   * 
-   * @param reward
-   *          The payoff for the last action taken by the learner.
-   */
-  public void reward( double reward ) {
-    updatePropensities(lastAction, reward);
-    updateProbabilities();
-  }
+		k = parameters.getIntWithDefault(base.push("k"), defBase.push("k"),
+		    DEFAULT_K);
+		r = parameters.getDoubleWithDefault(base.push("r"), defBase.push("r"),
+		    DEFAULT_R);
+		e = parameters.getDoubleWithDefault(base.push("e"), defBase.push("e"),
+		    DEFAULT_E);
+		s1 = parameters.getDoubleWithDefault(base.push("s1"), defBase.push("s1"),
+		    DEFAULT_S1);
 
-  /**
-   * Choose a random number according to the probability distribution defined by
-   * p.
-   * 
-   * @return one of [0..k) according to the probabilities p[0..k-1].
-   */
-  public int choose() {
-    return p.generateRandomEvent();
-  }
+		validateParams();
+		q = new double[k];
+		p = new DiscreteProbabilityDistribution(k);
+		initialise();
+	}
 
-  /**
-   * Update the propensities for each possible action.
-   * 
-   * @param action
-   *          The last action chosen by the learner
-   */
-  protected void updatePropensities( int action, double reward ) {
-    for ( int i = 0; i < k; i++ ) {
-      q[i] = (1 - r) * q[i] + experience(i, action, reward);
-    }
-  }
+	public Object protoClone() {
+		RothErevLearner clonedLearner;
+		try {
+			clonedLearner = (RothErevLearner) clone();
+			clonedLearner.p = (DiscreteProbabilityDistribution) p.protoClone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clonedLearner;
+	}
 
-  /**
-   * Update the probabilities.
-   */
-  protected void updateProbabilities() {
-    double sigmaQ = 0;
-    for ( int i = 0; i < k; i++ ) {
-      sigmaQ += q[i];
-    }
-    if ( sigmaQ <= 10E-10 ) {
-      resetDistributions();
-      return;
-    }
-    deltaP = 0;
-    for ( int i = 0; i < k; i++ ) {
-      double p1 = q[i] / sigmaQ;
-      deltaP += MathUtil.diffSq(p.getProbability(i), p1);
-      p.setProbability(i, p1);
-    }
-  }
+	protected void validateParams() {
+		if (!(k > 0)) {
+			throw new IllegalArgumentException("k must be positive");
+		}
+		if (!(r >= 0 && r <= 1)) {
+			throw new IllegalArgumentException("r must range [0..1]");
+		}
+		if (!(e >= 0 && e <= 1)) {
+			throw new IllegalArgumentException("e must range [0..1]");
+		}
+	}
 
-  /**
-   * The experience function
-   * 
-   * @param i
-   *          The action under consideration
-   * 
-   * @param action
-   *          The last action chosen
-   */
-  public double experience( int i, int action, double reward ) {
-    if ( i == action ) {
-      return reward * (1 - e);
-    } else {
-      return reward * (e / (k - 1));
-    }
-  }
+	/**
+	 * Generate the next action for this learner.
+	 * 
+	 * @return An int in the range [0..k) representing the choice made by the
+	 *         learner.
+	 */
+	public int act() {
+		int action = choose();
+		lastAction = action;
+		iteration++;
+		return action;
+	}
 
-  /**
-   * Replace the current propensities with the supplied propensity array.
-   * 
-   * @param q
-   *          The new propensity array to use.
-   */
-  public void setPropensities( double q[] ) {
-    this.q = q;
-    updateProbabilities();
-  }
+	/**
+	 * Reward the last action taken by the learner according to some payoff.
+	 * 
+	 * @param reward
+	 *          The payoff for the last action taken by the learner.
+	 */
+	public void reward(double reward) {
+		updatePropensities(lastAction, reward);
+		updateProbabilities();
+	}
 
-  public void resetDistributions() {
-    double initialPropensity = s1 / k;
-    for ( int i = 0; i < k; i++ ) {
-      q[i] = initialPropensity;
-    }
-    updateProbabilities();
-  }
+	/**
+	 * Choose a random number according to the probability distribution defined by
+	 * p.
+	 * 
+	 * @return one of [0..k) according to the probabilities p[0..k-1].
+	 */
+	public int choose() {
+		return p.generateRandomEvent();
+	}
 
-  public void initialise() {
-    resetDistributions();
-    iteration = 0;
-  }
+	/**
+	 * Update the propensities for each possible action.
+	 * 
+	 * @param action
+	 *          The last action chosen by the learner
+	 */
+	protected void updatePropensities(int action, double reward) {
+		for (int i = 0; i < k; i++) {
+			q[i] = (1 - r) * q[i] + experience(i, action, reward);
+		}
+	}
 
-  public void reset() {
-    initialise();
-  }
+	/**
+	 * Update the probabilities.
+	 */
+	protected void updateProbabilities() {
+		double sigmaQ = 0;
+		for (int i = 0; i < k; i++) {
+			sigmaQ += q[i];
+		}
+		if (sigmaQ <= 10E-10) {
+			resetDistributions();
+			return;
+		}
+		deltaP = 0;
+		for (int i = 0; i < k; i++) {
+			double p1 = q[i] / sigmaQ;
+			deltaP += MathUtil.diffSq(p.getProbability(i), p1);
+			p.setProbability(i, p1);
+		}
+	}
 
-  public void setRecency( double r ) {
-    this.r = r;
-    validateParams();
-  }
+	/**
+	 * The experience function
+	 * 
+	 * @param i
+	 *          The action under consideration
+	 * 
+	 * @param action
+	 *          The last action chosen
+	 */
+	public double experience(int i, int action, double reward) {
+		if (i == action) {
+			return reward * (1 - e);
+		} else {
+			return reward * (e / (k - 1));
+		}
+	}
 
-  public void setExperimentation( double e ) {
-    this.e = e;
-    validateParams();
-  }
+	/**
+	 * Replace the current propensities with the supplied propensity array.
+	 * 
+	 * @param q
+	 *          The new propensity array to use.
+	 */
+	public void setPropensities(double q[]) {
+		this.q = q;
+		updateProbabilities();
+	}
 
-  public void setScaling( double s1 ) {
-    this.s1 = s1;
-  }
+	public void resetDistributions() {
+		double initialPropensity = s1 / k;
+		for (int i = 0; i < k; i++) {
+			q[i] = initialPropensity;
+		}
+		updateProbabilities();
+	}
 
-  /**
-   * Count the number of peaks in the probability distribution.
-   * 
-   * @return The number of peaks in the distribution.
-   */
-  public int countPeaks() {
-    int peaks = 0;
-    double lastValue = 0;
-    double lastDelta = 0;
-    double delta = 0;
-    for ( int i = 0; i < k; i++ ) {
-      delta = q[i] - lastValue;
-      if ( Math.abs(delta) < 1.0 / (k * 100000) ) {
-        delta = 0;
-      }
-      if ( delta < 0 && sign(delta) != sign(lastDelta) ) {
-        peaks++;
-      }
-      lastDelta = delta;
-      lastValue = q[i];
-    }
-    return peaks;
-  }
+	public void initialise() {
+		resetDistributions();
+		iteration = 0;
+	}
 
-  /**
-   * Compute modes of the probability distribution p.
-   */
-  public void computeDistributionStats( CummulativeDistribution stats ) {
-    p.computeStats(stats);
-  }
+	public void reset() {
+		initialise();
+	}
 
-  private static int sign( double value ) {
-    return (new Double(value)).compareTo(new Double(0));
-  }
+	public void setRecency(double r) {
+		this.r = r;
+		validateParams();
+	}
 
-  public void dumpState( DataWriter out ) {
-    for ( int i = 0; i < k; i++ ) {
-      out.newData(p.getProbability(i));
-    }
-  }
+	public void setExperimentation(double e) {
+		this.e = e;
+		validateParams();
+	}
 
-  /**
-   * @uml.property name="k"
-   */
-  public int getK() {
-    return k;
-  }
+	public void setScaling(double s1) {
+		this.s1 = s1;
+	}
 
-  public int getNumberOfActions() {
-    return getK();
-  }
+	/**
+	 * Count the number of peaks in the probability distribution.
+	 * 
+	 * @return The number of peaks in the distribution.
+	 */
+	public int countPeaks() {
+		int peaks = 0;
+		double lastValue = 0;
+		double lastDelta = 0;
+		double delta = 0;
+		for (int i = 0; i < k; i++) {
+			delta = q[i] - lastValue;
+			if (Math.abs(delta) < 1.0 / (k * 100000)) {
+				delta = 0;
+			}
+			if (delta < 0 && sign(delta) != sign(lastDelta)) {
+				peaks++;
+			}
+			lastDelta = delta;
+			lastValue = q[i];
+		}
+		return peaks;
+	}
 
-  public double getLearningDelta() {
-    return deltaP;
-  }
+	/**
+	 * Compute modes of the probability distribution p.
+	 */
+	public void computeDistributionStats(CummulativeDistribution stats) {
+		p.computeStats(stats);
+	}
 
-  public double getProbability( int i ) {
-    return p.getProbability(i);
-  }
+	private static int sign(double value) {
+		return (new Double(value)).compareTo(new Double(0));
+	}
 
-  /**
-   * @uml.property name="e"
-   */
-  public double getE() {
-    return e;
-  }
+	public void dumpState(DataWriter out) {
+		for (int i = 0; i < k; i++) {
+			out.newData(p.getProbability(i));
+		}
+	}
 
-  /**
-   * @uml.property name="iteration"
-   */
-  public int getIteration() {
-    return iteration;
-  }
+	/**
+	 * @uml.property name="k"
+	 */
+	public int getK() {
+		return k;
+	}
 
-  /**
-   * @uml.property name="lastAction"
-   */
-  public int getLastAction() {
-    return lastAction;
-  }
+	public int getNumberOfActions() {
+		return getK();
+	}
 
-  /**
-   * @uml.property name="r"
-   */
-  public double getR() {
-    return r;
-  }
+	public double getLearningDelta() {
+		return deltaP;
+	}
 
-  /**
-   * @uml.property name="s1"
-   */
-  public double getS1() {
-    return s1;
-  }
+	public double getProbability(int i) {
+		return p.getProbability(i);
+	}
 
-  public String toString() {
-    return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1
-        + " learningDelta:" + deltaP + ")";
-  }
+	/**
+	 * @uml.property name="e"
+	 */
+	public double getE() {
+		return e;
+	}
+
+	/**
+	 * @uml.property name="iteration"
+	 */
+	public int getIteration() {
+		return iteration;
+	}
+
+	/**
+	 * @uml.property name="lastAction"
+	 */
+	public int getLastAction() {
+		return lastAction;
+	}
+
+	/**
+	 * @uml.property name="r"
+	 */
+	public double getR() {
+		return r;
+	}
+
+	/**
+	 * @uml.property name="s1"
+	 */
+	public double getS1() {
+		return s1;
+	}
+
+	public String toString() {
+		return "(" + getClass() + " k:" + k + " r:" + r + " e:" + e + " s1:" + s1
+		    + " learningDelta:" + deltaP + ")";
+	}
 
 }

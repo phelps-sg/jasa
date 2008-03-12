@@ -27,48 +27,48 @@ package uk.ac.liv.auction.stats;
 
 public class ReportVariable implements Comparable {
 
-  /**
-   * @uml.property name="name"
-   */
-  protected String name;
+	/**
+	 * @uml.property name="name"
+	 */
+	protected String name;
 
-  /**
-   * @uml.property name="description"
-   */
-  protected String description;
+	/**
+	 * @uml.property name="description"
+	 */
+	protected String description;
 
-  public ReportVariable( String name, String description ) {
-    this.name = name;
-    this.description = description;
-  }
+	public ReportVariable(String name, String description) {
+		this.name = name;
+		this.description = description;
+	}
 
-  /**
-   * @uml.property name="description"
-   */
-  public String getDescription() {
-    return description;
-  }
+	/**
+	 * @uml.property name="description"
+	 */
+	public String getDescription() {
+		return description;
+	}
 
-  /**
-   * @uml.property name="name"
-   */
-  public String getName() {
-    return name;
-  }
+	/**
+	 * @uml.property name="name"
+	 */
+	public String getName() {
+		return name;
+	}
 
-  public String toString() {
-    return name + " (" + description + ")";
-  }
+	public String toString() {
+		return name + " (" + description + ")";
+	}
 
-  public int compareTo( Object other ) {
-    return this.name.compareTo(((ReportVariable) other).name);
-  }
+	public int compareTo(Object other) {
+		return this.name.compareTo(((ReportVariable) other).name);
+	}
 
-  public boolean equals( Object other ) {
-    return this.name.equals(((ReportVariable) other).name);
-  }
+	public boolean equals(Object other) {
+		return this.name.equals(((ReportVariable) other).name);
+	}
 
-  public int hashCode() {
-    return name.hashCode();
-  }
+	public int hashCode() {
+		return name.hashCode();
+	}
 }

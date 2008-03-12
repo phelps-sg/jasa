@@ -15,22 +15,20 @@
 
 package uk.ac.liv.auction.zi;
 
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
-import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.stats.*;
-import uk.ac.liv.auction.MarketSimulation;
-
-import uk.ac.liv.prng.GlobalPRNG;
-
-import uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum;
-import uk.ac.liv.util.CummulativeDistribution;
+import java.io.File;
 import java.util.Iterator;
 
-import java.io.File;
-
 import org.apache.log4j.Logger;
+
+import uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum;
+import uk.ac.liv.auction.MarketSimulation;
+import uk.ac.liv.auction.agent.AdaptiveStrategy;
+import uk.ac.liv.auction.stats.AuctionReport;
+import uk.ac.liv.auction.stats.DailyStatsReport;
+import uk.ac.liv.prng.GlobalPRNG;
+import uk.ac.liv.util.CummulativeDistribution;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * An implementation of Cliff's symetric supply and demand ZIP experiment. See:
@@ -49,244 +47,244 @@ import org.apache.log4j.Logger;
 
 public class ZIPExperiment extends MarketSimulation {
 
-  /**
-   * @uml.property name="marketData"
-   * @uml.associationEnd
-   */
-  protected DailyStatsReport marketData;
+	/**
+	 * @uml.property name="marketData"
+	 * @uml.associationEnd
+	 */
+	protected DailyStatsReport marketData;
 
-  /**
-   * @uml.property name="stats"
-   * @uml.associationEnd readOnly="true"
-   */
-  protected AuctionReport stats;
+	/**
+	 * @uml.property name="stats"
+	 * @uml.associationEnd readOnly="true"
+	 */
+	protected AuctionReport stats;
 
-  /**
-   * @uml.property name="gatherStats"
-   */
-  protected boolean gatherStats;
+	/**
+	 * @uml.property name="gatherStats"
+	 */
+	protected boolean gatherStats;
 
-  /**
-   * @uml.property name="prngSeed"
-   */
-  protected long prngSeed;
+	/**
+	 * @uml.property name="prngSeed"
+	 */
+	protected long prngSeed;
 
-  /**
-   * @uml.property name="tradeEntitlement"
-   */
-  protected int tradeEntitlement = 1;
+	/**
+	 * @uml.property name="tradeEntitlement"
+	 */
+	protected int tradeEntitlement = 1;
 
-  /**
-   * @uml.property name="privValueRangeMin"
-   */
-  protected double privValueRangeMin = 75;
+	/**
+	 * @uml.property name="privValueRangeMin"
+	 */
+	protected double privValueRangeMin = 75;
 
-  /**
-   * @uml.property name="privValueIncrement"
-   */
-  protected double privValueIncrement = 25;
+	/**
+	 * @uml.property name="privValueIncrement"
+	 */
+	protected double privValueIncrement = 25;
 
-  /**
-   * @uml.property name="numDays"
-   */
-  protected int numDays = 10;
+	/**
+	 * @uml.property name="numDays"
+	 */
+	protected int numDays = 10;
 
-  /**
-   * @uml.property name="numSellers"
-   */
-  protected int numSellers = 11;
+	/**
+	 * @uml.property name="numSellers"
+	 */
+	protected int numSellers = 11;
 
-  /**
-   * @uml.property name="numBuyers"
-   */
-  protected int numBuyers = 11;
+	/**
+	 * @uml.property name="numBuyers"
+	 */
+	protected int numBuyers = 11;
 
-  /**
-   * @uml.property name="numSamples"
-   */
-  protected int numSamples = 50;
+	/**
+	 * @uml.property name="numSamples"
+	 */
+	protected int numSamples = 50;
 
-  /**
-   * @uml.property name="transPriceMean"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected CummulativeDistribution[] transPriceMean;
+	/**
+	 * @uml.property name="transPriceMean"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected CummulativeDistribution[] transPriceMean;
 
-  /**
-   * @uml.property name="transPriceStdDev"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected CummulativeDistribution[] transPriceStdDev;
+	/**
+	 * @uml.property name="transPriceStdDev"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected CummulativeDistribution[] transPriceStdDev;
 
-  /**
-   * @uml.property name="console"
-   */
-  protected boolean console = false;
+	/**
+	 * @uml.property name="console"
+	 */
+	protected boolean console = false;
 
-  public static final String P_SIMULATION = "simulation";
+	public static final String P_SIMULATION = "simulation";
 
-  public static final String P_STATS = "stats";
+	public static final String P_STATS = "stats";
 
-  public static final String P_GATHER_STATS = "gatherstats";
+	public static final String P_GATHER_STATS = "gatherstats";
 
-  public static final String P_PRIVVALUERANGEMIN = "privvaluerangemin";
+	public static final String P_PRIVVALUERANGEMIN = "privvaluerangemin";
 
-  public static final String P_PRIVVALUEINCREMENT = "increment";
+	public static final String P_PRIVVALUEINCREMENT = "increment";
 
-  public static final String P_NUMBUYERS = "numbuyers";
+	public static final String P_NUMBUYERS = "numbuyers";
 
-  public static final String P_NUMSELLERS = "numsellers";
+	public static final String P_NUMSELLERS = "numsellers";
 
-  public static final String P_DAYS = "days";
+	public static final String P_DAYS = "days";
 
-  public static final String P_NUMSAMPLES = "samples";
+	public static final String P_NUMSAMPLES = "samples";
 
-  static Logger logger = Logger.getLogger(ZIPExperiment.class);
+	static Logger logger = Logger.getLogger(ZIPExperiment.class);
 
-  public static void main( String[] args ) {
+	public static void main(String[] args) {
 
-    try {
+		try {
 
-      if ( args.length < 1 ) {
-        fatalError("Must specify a parameter file");
-      }
+			if (args.length < 1) {
+				fatalError("Must specify a parameter file");
+			}
 
-      String fileName = args[0];
-      File file = new File(fileName);
-      if ( !file.canRead() ) {
-        fatalError("Cannot read parameter file " + fileName);
-      }
+			String fileName = args[0];
+			File file = new File(fileName);
+			if (!file.canRead()) {
+				fatalError("Cannot read parameter file " + fileName);
+			}
 
-      org.apache.log4j.PropertyConfigurator.configure(fileName);
+			org.apache.log4j.PropertyConfigurator.configure(fileName);
 
-      gnuMessage();
+			gnuMessage();
 
-      ParameterDatabase parameters = new ParameterDatabase(file);
-      ZIPExperiment experiment = new ZIPExperiment();
-      experiment.setup(parameters, new Parameter(P_SIMULATION));
-      experiment.run();
-      experiment.report();
+			ParameterDatabase parameters = new ParameterDatabase(file);
+			ZIPExperiment experiment = new ZIPExperiment();
+			experiment.setup(parameters, new Parameter(P_SIMULATION));
+			experiment.run();
+			experiment.report();
 
-    } catch ( Exception e ) {
-      logger.error(e);
-      e.printStackTrace();
-    }
-  }
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    super.setup(parameters, base);
+		super.setup(parameters, base);
 
-    gatherStats = parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
+		gatherStats = parameters.getBoolean(base.push(P_GATHER_STATS), null, false);
 
-    privValueRangeMin = parameters.getDoubleWithDefault(base
-        .push(P_PRIVVALUERANGEMIN), null, privValueRangeMin);
+		privValueRangeMin = parameters.getDoubleWithDefault(base
+		    .push(P_PRIVVALUERANGEMIN), null, privValueRangeMin);
 
-    privValueIncrement = parameters.getDoubleWithDefault(base
-        .push(P_PRIVVALUEINCREMENT), null, privValueIncrement);
+		privValueIncrement = parameters.getDoubleWithDefault(base
+		    .push(P_PRIVVALUEINCREMENT), null, privValueIncrement);
 
-    numSamples = parameters.getIntWithDefault(base.push(P_NUMSAMPLES), null,
-        numSamples);
+		numSamples = parameters.getIntWithDefault(base.push(P_NUMSAMPLES), null,
+		    numSamples);
 
-    marketData = new DailyStatsReport();
-    auction.addReport(marketData);
+		marketData = new DailyStatsReport();
+		auction.addReport(marketData);
 
-    numDays = auction.getMaximumDays();
+		numDays = auction.getMaximumDays();
 
-    setSupplyAndDemand();
+		setSupplyAndDemand();
 
-    logger.info("");
-    logger.info("ZIP Parameters");
-    logger.info("--------------");
-    logger.info("privValueRangeMin = " + privValueRangeMin);
-    logger.info("privValueIncrement = " + privValueIncrement);
-    logger.info("numDays = " + numDays);
-    logger.info("numSamples = " + numSamples);
-    logger.info("numBuyers = " + numBuyers);
-    logger.info("numSellers = " + numSellers);
+		logger.info("");
+		logger.info("ZIP Parameters");
+		logger.info("--------------");
+		logger.info("privValueRangeMin = " + privValueRangeMin);
+		logger.info("privValueIncrement = " + privValueIncrement);
+		logger.info("numDays = " + numDays);
+		logger.info("numSamples = " + numSamples);
+		logger.info("numBuyers = " + numBuyers);
+		logger.info("numSellers = " + numSellers);
 
-  }
+	}
 
-  public void run() {
-    transPriceMean = new CummulativeDistribution[numDays];
-    transPriceStdDev = new CummulativeDistribution[numDays];
+	public void run() {
+		transPriceMean = new CummulativeDistribution[numDays];
+		transPriceStdDev = new CummulativeDistribution[numDays];
 
-    for ( int day = 0; day < numDays; day++ ) {
-      transPriceMean[day] = new CummulativeDistribution(
-          "Mean of mean transaction price for day " + day);
-      transPriceStdDev[day] = new CummulativeDistribution(
-          "Mean of stddev of transaction price for day " + day);
-    }
+		for (int day = 0; day < numDays; day++) {
+			transPriceMean[day] = new CummulativeDistribution(
+			    "Mean of mean transaction price for day " + day);
+			transPriceStdDev[day] = new CummulativeDistribution(
+			    "Mean of stddev of transaction price for day " + day);
+		}
 
-    for ( int sample = 0; sample < numSamples; sample++ ) {
+		for (int sample = 0; sample < numSamples; sample++) {
 
-      logger.info("\nSample " + sample + "... ");
-      initialiseAgents();
-      auction.run();
-      logger.debug("Auction terminated at round " + auction.getRound());
+			logger.info("\nSample " + sample + "... ");
+			initialiseAgents();
+			auction.run();
+			logger.debug("Auction terminated at round " + auction.getRound());
 
-      for ( int day = 0; day < numDays; day++ ) {
-        CummulativeDistribution stats = marketData.getTransPriceStats(day);
-        if ( stats != null ) {
-          transPriceMean[day].newData(stats.getMean());
-          transPriceStdDev[day].newData(stats.getStdDev());
-        }
-      }
+			for (int day = 0; day < numDays; day++) {
+				CummulativeDistribution stats = marketData.getTransPriceStats(day);
+				if (stats != null) {
+					transPriceMean[day].newData(stats.getMean());
+					transPriceStdDev[day].newData(stats.getStdDev());
+				}
+			}
 
-      marketData.produceUserOutput();
-      auction.reset();
+			marketData.produceUserOutput();
+			auction.reset();
 
-      logger.info("Sample " + sample + " done.\n");
-    }
-  }
+			logger.info("Sample " + sample + " done.\n");
+		}
+	}
 
-  public void report() {
-    for ( int day = 0; day < numDays; day++ ) {
-      logger.info("Day " + day + " mean of mean tr price: "
-          + transPriceMean[day].getMean());
-    }
-    for ( int day = 0; day < numDays; day++ ) {
-      logger.info("Day " + day + " mean of stdev of tr price: "
-          + transPriceStdDev[day].getMean());
-    }
-  }
+	public void report() {
+		for (int day = 0; day < numDays; day++) {
+			logger.info("Day " + day + " mean of mean tr price: "
+			    + transPriceMean[day].getMean());
+		}
+		for (int day = 0; day < numDays; day++) {
+			logger.info("Day " + day + " mean of stdev of tr price: "
+			    + transPriceStdDev[day].getMean());
+		}
+	}
 
-  protected static void fatalError( String message ) {
-    System.err.println(message);
-    System.exit(1);
-  }
+	protected static void fatalError(String message) {
+		System.err.println(message);
+		System.exit(1);
+	}
 
-  protected void initialiseAgents() {
-    double momentum = 0.1 + GlobalPRNG.getInstance().raw() * 0.4;
-    double learningRate = 0.2 + GlobalPRNG.getInstance().raw() * 0.6;
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      ZITraderAgent trader = (ZITraderAgent) i.next();
-      WidrowHoffLearnerWithMomentum l = (WidrowHoffLearnerWithMomentum) ((AdaptiveStrategy) trader
-          .getStrategy()).getLearner();
-      l.setLearningRate(learningRate);
-      l.setMomentum(momentum);
-//      l.randomInitialise();
-      trader.reset();
-    }
-  }
+	protected void initialiseAgents() {
+		double momentum = 0.1 + GlobalPRNG.getInstance().raw() * 0.4;
+		double learningRate = 0.2 + GlobalPRNG.getInstance().raw() * 0.6;
+		Iterator i = auction.getTraderIterator();
+		while (i.hasNext()) {
+			ZITraderAgent trader = (ZITraderAgent) i.next();
+			WidrowHoffLearnerWithMomentum l = (WidrowHoffLearnerWithMomentum) ((AdaptiveStrategy) trader
+			    .getStrategy()).getLearner();
+			l.setLearningRate(learningRate);
+			l.setMomentum(momentum);
+			// l.randomInitialise();
+			trader.reset();
+		}
+	}
 
-  protected void setSupplyAndDemand() {
-    double buyerValue = privValueRangeMin;
-    double sellerValue = privValueRangeMin;
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      ZITraderAgent trader = (ZITraderAgent) i.next();
-      if ( trader.isBuyer(auction) ) {
-        logger.debug("Setting priv value of " + trader + " to " + buyerValue);
-        trader.setPrivateValue(buyerValue);
-        buyerValue += privValueIncrement;
-      } else {
-        logger.debug("Setting priv value of " + trader + " to " + sellerValue);
-        trader.setPrivateValue(sellerValue);
-        sellerValue += privValueIncrement;
-      }
-    }
-  }
+	protected void setSupplyAndDemand() {
+		double buyerValue = privValueRangeMin;
+		double sellerValue = privValueRangeMin;
+		Iterator i = auction.getTraderIterator();
+		while (i.hasNext()) {
+			ZITraderAgent trader = (ZITraderAgent) i.next();
+			if (trader.isBuyer(auction)) {
+				logger.debug("Setting priv value of " + trader + " to " + buyerValue);
+				trader.setPrivateValue(buyerValue);
+				buyerValue += privValueIncrement;
+			} else {
+				logger.debug("Setting priv value of " + trader + " to " + sellerValue);
+				trader.setPrivateValue(sellerValue);
+				sellerValue += privValueIncrement;
+			}
+		}
+	}
 
 }

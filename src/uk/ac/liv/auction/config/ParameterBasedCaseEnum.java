@@ -48,8 +48,7 @@ import ec.util.ParameterDatabase;
  * 
  * <tr>
  * <td valign=top><i>base </i> <tt>.parameters</tt><br>
- * <font size=-1>
- * </font></td>
+ * <font size=-1> </font></td>
  * <td valign=top>(a list of ','-separated parameters, each corresponding to a
  * value case.)</td>
  * </tr>
@@ -62,73 +61,73 @@ import ec.util.ParameterDatabase;
 
 public class ParameterBasedCaseEnum extends CaseEnum {
 
-  static Logger logger = Logger.getLogger(ParameterBasedCaseEnum.class);
+	static Logger logger = Logger.getLogger(ParameterBasedCaseEnum.class);
 
-  /**
-   * @uml.property name="cases"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  private ParameterBasedCase cases[];
+	/**
+	 * @uml.property name="cases"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	private ParameterBasedCase cases[];
 
-  /**
-   * @uml.property name="i"
-   */
-  private int i;
+	/**
+	 * @uml.property name="i"
+	 */
+	private int i;
 
-  private static final String P_NAME = "name";
+	private static final String P_NAME = "name";
 
-  private static final String P_CASE = "case";
+	private static final String P_CASE = "case";
 
-  private static final String P_PARAMETERS = "parameters";
+	private static final String P_PARAMETERS = "parameters";
 
-  public void setup( ParameterDatabase pdb, Parameter base ) {
+	public void setup(ParameterDatabase pdb, Parameter base) {
 
-    setName(pdb.getString(base.push(P_NAME)));
+		setName(pdb.getString(base.push(P_NAME), null));
 
-    Class c = pdb.getInstanceForParameterEq(base.push(P_CASE), null,
-        ParameterBasedCase.class).getClass();
+		Class c = pdb.getInstanceForParameterEq(base.push(P_CASE), null,
+		    ParameterBasedCase.class).getClass();
 
-    String s = pdb.getString(base.push(P_PARAMETERS));
-    String params[] = s.split(",");
+		String s = pdb.getString(base.push(P_PARAMETERS), null);
+		String params[] = s.split(",");
 
-    cases = new ParameterBasedCase[params.length];
-    for ( int i = 0; i < cases.length; i++ ) {
-      try {
-        cases[i] = (ParameterBasedCase) c.newInstance();
-      } catch ( InstantiationException e ) {
-        e.printStackTrace();
-        logger.error(e.toString());
-      } catch ( IllegalAccessException e ) {
-        e.printStackTrace();
-        logger.error(e.toString());
-      }
+		cases = new ParameterBasedCase[params.length];
+		for (int i = 0; i < cases.length; i++) {
+			try {
+				cases[i] = (ParameterBasedCase) c.newInstance();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+				logger.error(e.toString());
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				logger.error(e.toString());
+			}
 
-      if ( cases[i] instanceof Parameterizable ) {
-        ((Parameterizable) cases[i]).setup(pdb, base.push(P_CASE));
-      }
-      cases[i].setValue(params[i].trim());
-    }
+			if (cases[i] instanceof Parameterizable) {
+				((Parameterizable) cases[i]).setup(pdb, base.push(P_CASE));
+			}
+			cases[i].setValue(params[i].trim());
+		}
 
-    reset();
-  }
+		reset();
+	}
 
-  public void reset() {
-    i = 0;
-  }
+	public void reset() {
+		i = 0;
+	}
 
-  /*
-   * @see uk.ac.liv.auction.config.CaseEnum#moreCases()
-   */
-  public boolean moreCases() {
-    return i < cases.length;
-  }
+	/*
+	 * @see uk.ac.liv.auction.config.CaseEnum#moreCases()
+	 */
+	public boolean moreCases() {
+		return i < cases.length;
+	}
 
-  /*
-   * @see uk.ac.liv.auction.config.CaseEnum#nextCase()
-   */
-  public Case nextCase() {
-    assert moreCases();
+	/*
+	 * @see uk.ac.liv.auction.config.CaseEnum#nextCase()
+	 */
+	public Case nextCase() {
+		assert moreCases();
 
-    return cases[i++];
-  }
+		return cases[i++];
+	}
 }

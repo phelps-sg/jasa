@@ -17,18 +17,20 @@ package uk.ac.liv.auction.agent;
 
 import java.io.Serializable;
 
-import uk.ac.liv.util.Prototypeable;
-import uk.ac.liv.util.Distribution;
+import org.apache.log4j.Logger;
 
-import ec.util.ParameterDatabase;
-import ec.util.Parameter;
-
-import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.core.AuctionRuntimeException;
+import uk.ac.liv.auction.core.DataUnavailableException;
+import uk.ac.liv.auction.core.MarketQuote;
+import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.stats.DailyStatsReport;
-
-import org.apache.log4j.Logger;
+import uk.ac.liv.util.Distribution;
+import uk.ac.liv.util.Prototypeable;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * <p>
@@ -73,179 +75,177 @@ import org.apache.log4j.Logger;
 public class KaplanStrategy extends FixedQuantityStrategyImpl implements
     Serializable, Prototypeable {
 
-  /**
-   * The time factor. Kaplan will bid if the remaining time in the current
-   * period is less than t.
-   */
-  protected int t = 4;
+	/**
+	 * The time factor. Kaplan will bid if the remaining time in the current
+	 * period is less than t.
+	 */
+	protected int t = 4;
 
-  /**
-   * The spread factor.
-   */
-  protected double s = 0.5;
+	/**
+	 * The spread factor.
+	 */
+	protected double s = 0.5;
 
-  protected MarketQuote quote;
+	protected MarketQuote quote;
 
-  protected DailyStatsReport dailyStats;
+	protected DailyStatsReport dailyStats;
 
-  public static final String P_DEF_BASE = "kaplanstrategy";
+	public static final String P_DEF_BASE = "kaplanstrategy";
 
-  public static final String P_T = "t";
+	public static final String P_T = "t";
 
-  public static final String P_S = "s";
+	public static final String P_S = "s";
 
-  static Logger logger = Logger.getLogger(KaplanStrategy.class);
+	static Logger logger = Logger.getLogger(KaplanStrategy.class);
 
-  public KaplanStrategy() {
-  }
+	public KaplanStrategy() {
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-  	Parameter defBase = new Parameter(P_DEF_BASE);
-  	
-    t = parameters.getIntWithDefault(base.push(P_T), 
-    		defBase.push(P_T), t);
-    s = parameters.getDoubleWithDefault(base.push(P_S), 
-    		defBase.push(P_S), s);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-  public Object protoClone() {
-    Object clone;
-    try {
-      clone = clone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-    return clone;
-  }
+		t = parameters.getIntWithDefault(base.push(P_T), defBase.push(P_T), t);
+		s = parameters.getDoubleWithDefault(base.push(P_S), defBase.push(P_S), s);
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    if ( event instanceof AuctionOpenEvent ) {
-      auctionOpen((AuctionOpenEvent) event);
-    }
-  }
+	public Object protoClone() {
+		Object clone;
+		try {
+			clone = clone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clone;
+	}
 
-  public void auctionOpen( AuctionOpenEvent event ) {
-    dailyStats = (DailyStatsReport) event.getAuction().getReport(
-        DailyStatsReport.class);
-    if ( dailyStats == null ) {
-      throw new AuctionRuntimeException(getClass()
-          + " requires a DailyStatsReport to be configured");
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof AuctionOpenEvent) {
+			auctionOpen((AuctionOpenEvent) event);
+		}
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    super.modifyShout(shout);
-    quote = auction.getQuote();
-    if ( timeRunningOut() || juicyOffer() || smallSpread() ) {
-      logger.debug("quote = " + quote);
-      logger.debug("my priv value = " + agent.getValuation(auction));
-      logger.debug("isSeller = " + agent.isSeller(auction));
-      shout.setPrice(agent.getValuation(auction));
-      if ( agent.isBuyer(auction) ) {
-        if ( quote.getAsk() <= agent.getValuation(auction) ) {
-          shout.setPrice(quote.getAsk());
-        }
-      } else {
-        if ( quote.getBid() >= agent.getValuation(auction) ) {
-          shout.setPrice(quote.getBid());
-        }
-      }
-      logger.debug(this + ": price = " + shout.getPrice());
-      return true;
-    } else {
-      return false;
-    }
-  }
+	public void auctionOpen(AuctionOpenEvent event) {
+		dailyStats = (DailyStatsReport) event.getAuction().getReport(
+		    DailyStatsReport.class);
+		if (dailyStats == null) {
+			throw new AuctionRuntimeException(getClass()
+			    + " requires a DailyStatsReport to be configured");
+		}
+	}
 
-  public void endOfRound( Auction auction ) {
-    // Do nothing
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		super.modifyShout(shout);
+		quote = auction.getQuote();
+		if (timeRunningOut() || juicyOffer() || smallSpread()) {
+			logger.debug("quote = " + quote);
+			logger.debug("my priv value = " + agent.getValuation(auction));
+			logger.debug("isSeller = " + agent.isSeller(auction));
+			shout.setPrice(agent.getValuation(auction));
+			if (agent.isBuyer(auction)) {
+				if (quote.getAsk() <= agent.getValuation(auction)) {
+					shout.setPrice(quote.getAsk());
+				}
+			} else {
+				if (quote.getBid() >= agent.getValuation(auction)) {
+					shout.setPrice(quote.getBid());
+				}
+			}
+			logger.debug(this + ": price = " + shout.getPrice());
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-  public boolean juicyOffer() {
+	public void endOfRound(Auction auction) {
+		// Do nothing
+	}
 
-    boolean juicyOffer = false;
+	public boolean juicyOffer() {
 
-    Distribution transPrice = null;
+		boolean juicyOffer = false;
 
-    transPrice = dailyStats.getPreviousDayTransPriceStats();
+		Distribution transPrice = null;
 
-    if ( transPrice == null ) {
-      return false;
-    }
+		transPrice = dailyStats.getPreviousDayTransPriceStats();
 
-    if ( agent.isBuyer(auction) ) {
-      juicyOffer = quote.getAsk() < transPrice.getMin();
-    } else {
-      juicyOffer = quote.getBid() > transPrice.getMax();
-    }
+		if (transPrice == null) {
+			return false;
+		}
 
-    if ( juicyOffer ) {
-      logger.debug(this + ": juicy offer detected");
-    }
+		if (agent.isBuyer(auction)) {
+			juicyOffer = quote.getAsk() < transPrice.getMin();
+		} else {
+			juicyOffer = quote.getBid() > transPrice.getMax();
+		}
 
-    return juicyOffer;
-  }
+		if (juicyOffer) {
+			logger.debug(this + ": juicy offer detected");
+		}
 
-  public boolean smallSpread() {
+		return juicyOffer;
+	}
 
-    boolean smallSpread = false;
+	public boolean smallSpread() {
 
-    Distribution transPrice = null;
+		boolean smallSpread = false;
 
-    transPrice = dailyStats.getPreviousDayTransPriceStats();
+		Distribution transPrice = null;
 
-    double spread = Math.abs(quote.getAsk() - quote.getBid());    
-    if ( agent.isBuyer(auction) ) {      
-      smallSpread =
-        (transPrice == null || (quote.getAsk() < transPrice.getMax())) &&
-          (spread / quote.getAsk()) < s;
-    } else {
-      smallSpread =
-        (transPrice == null || (quote.getBid() > transPrice.getMin())) &&
-          (spread / quote.getBid()) < s;
-    }
+		transPrice = dailyStats.getPreviousDayTransPriceStats();
 
-    if ( smallSpread ) {
-      logger.debug(this + ": small spread detected");
-    }
+		double spread = Math.abs(quote.getAsk() - quote.getBid());
+		if (agent.isBuyer(auction)) {
+			smallSpread = (transPrice == null || (quote.getAsk() < transPrice
+			    .getMax()))
+			    && (spread / quote.getAsk()) < s;
+		} else {
+			smallSpread = (transPrice == null || (quote.getBid() > transPrice
+			    .getMin()))
+			    && (spread / quote.getBid()) < s;
+		}
 
-    return smallSpread;
-  }
+		if (smallSpread) {
+			logger.debug(this + ": small spread detected");
+		}
 
-  public boolean timeRunningOut() {
-    boolean timeOut = auction.getRemainingTime() < t;
-    if ( timeOut ) {
-      logger.debug(this + ": time running out");
-    }
-    return timeOut;
-  }
+		return smallSpread;
+	}
 
-  public double getS() {
-    return s;
-  }
-  
-  public void setS( double s ) {
-    this.s = s;
-  }
-  
-  public double getT() {
-    return t;
-  }
-  
-  public void setT( int t ) {
-    this.t = t;
-  }
-  
-  public String toString() {
-    return "(" + getClass() + " s:" + s + " t:" + t + ")";
-  }
+	public boolean timeRunningOut() {
+		boolean timeOut = auction.getRemainingTime() < t;
+		if (timeOut) {
+			logger.debug(this + ": time running out");
+		}
+		return timeOut;
+	}
 
-  protected void error( DataUnavailableException e ) {
-    logger
-        .error("Auction is not configured with loggers appropriate for this strategy");
-    logger.error(e.getMessage());
-    throw new AuctionRuntimeException(e);
-  }
+	public double getS() {
+		return s;
+	}
+
+	public void setS(double s) {
+		this.s = s;
+	}
+
+	public double getT() {
+		return t;
+	}
+
+	public void setT(int t) {
+		this.t = t;
+	}
+
+	public String toString() {
+		return "(" + getClass() + " s:" + s + " t:" + t + ")";
+	}
+
+	protected void error(DataUnavailableException e) {
+		logger
+		    .error("Auction is not configured with loggers appropriate for this strategy");
+		logger.error(e.getMessage());
+		throw new AuctionRuntimeException(e);
+	}
 
 }

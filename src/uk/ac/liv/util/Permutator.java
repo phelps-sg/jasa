@@ -15,8 +15,8 @@
 
 package uk.ac.liv.util;
 
-import java.util.Stack;
 import java.util.Iterator;
+import java.util.Stack;
 
 /**
  * 
@@ -26,93 +26,93 @@ import java.util.Iterator;
 
 public class Permutator implements Iterator {
 
-  /**
-   * @uml.property name="goal" multiplicity="(0 -1)" dimension="1"
-   */
-  protected int[] goal;
+	/**
+	 * @uml.property name="goal" multiplicity="(0 -1)" dimension="1"
+	 */
+	protected int[] goal;
 
-  /**
-   * @uml.property name="n"
-   */
-  protected int n;
+	/**
+	 * @uml.property name="n"
+	 */
+	protected int n;
 
-  /**
-   * @uml.property name="stack"
-   * @uml.associationEnd multiplicity="(0 -1)" elementType="[I"
-   */
-  protected Stack stack;
+	/**
+	 * @uml.property name="stack"
+	 * @uml.associationEnd multiplicity="(0 -1)" elementType="[I"
+	 */
+	protected Stack stack;
 
-  public Permutator( int[] goal ) {
-    n = 0;
-    for ( int i = 0; i < goal.length; i++ ) {
-      n += goal[i];
-    }
-    this.goal = goal;
-    stack = new Stack();
-    stack.push(new PermutatorState(new int[n], 0));
-  }
+	public Permutator(int[] goal) {
+		n = 0;
+		for (int i = 0; i < goal.length; i++) {
+			n += goal[i];
+		}
+		this.goal = goal;
+		stack = new Stack();
+		stack.push(new PermutatorState(new int[n], 0));
+	}
 
-  public boolean hasNext() {
-    return !stack.isEmpty();
-  }
+	public boolean hasNext() {
+		return !stack.isEmpty();
+	}
 
-  public Object next() {
-    return permutate();
-  }
+	public Object next() {
+		return permutate();
+	}
 
-  public void remove() {
-    throw new IllegalArgumentException("method remove() not implemented");
-  }
+	public void remove() {
+		throw new IllegalArgumentException("method remove() not implemented");
+	}
 
-  protected int[] permutate() {
-    while ( !stack.isEmpty() ) {
-      PermutatorState state = (PermutatorState) stack.pop();
-      if ( state.j == n ) {
-        return state.solution;
-      }
-      int[] k = new int[goal.length];
-      for ( int i = 0; i < state.j; i++ ) {
-        k[state.solution[i]]++;
-      }
-      for ( int i = 0; i < goal.length; i++ ) {
-        if ( k[i] < goal[i] ) {
-          int[] solution1 = (int[]) state.solution.clone();
-          solution1[state.j] = i;
-          stack.push(new PermutatorState(solution1, state.j + 1));
-        }
-      }
-    }
-    return null;
-  }
+	protected int[] permutate() {
+		while (!stack.isEmpty()) {
+			PermutatorState state = (PermutatorState) stack.pop();
+			if (state.j == n) {
+				return state.solution;
+			}
+			int[] k = new int[goal.length];
+			for (int i = 0; i < state.j; i++) {
+				k[state.solution[i]]++;
+			}
+			for (int i = 0; i < goal.length; i++) {
+				if (k[i] < goal[i]) {
+					int[] solution1 = (int[]) state.solution.clone();
+					solution1[state.j] = i;
+					stack.push(new PermutatorState(solution1, state.j + 1));
+				}
+			}
+		}
+		return null;
+	}
 
-  public static void main( String[] args ) {
-    Permutator p = new Permutator(new int[] { 2, 1, 3 });
-    while ( p.hasNext() ) {
-      int[] s = (int[]) p.next();
-      for ( int i = 0; i < s.length; i++ ) {
-        System.out.print(s[i] + " ");
-      }
-      System.out.println("");
-    }
-  }
+	public static void main(String[] args) {
+		Permutator p = new Permutator(new int[] { 2, 1, 3 });
+		while (p.hasNext()) {
+			int[] s = (int[]) p.next();
+			for (int i = 0; i < s.length; i++) {
+				System.out.print(s[i] + " ");
+			}
+			System.out.println("");
+		}
+	}
 }
 
 class PermutatorState {
 
-  /**
-   * @uml.property name="solution"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected int[] solution;
+	/**
+	 * @uml.property name="solution"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected int[] solution;
 
-  /**
-   * @uml.property name="j"
-   */
-  protected int j;
+	/**
+	 * @uml.property name="j"
+	 */
+	protected int j;
 
-  public PermutatorState( int[] solution, int j ) {
-    this.solution = solution;
-    this.j = j;
-  }
+	public PermutatorState(int[] solution, int j) {
+		this.solution = solution;
+		this.j = j;
+	}
 
 }

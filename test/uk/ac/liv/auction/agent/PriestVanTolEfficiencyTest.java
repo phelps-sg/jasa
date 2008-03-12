@@ -17,11 +17,7 @@ package uk.ac.liv.auction.agent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
 import uk.ac.liv.ai.learning.WidrowHoffLearnerWithMomentum;
-
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.PriestVanTolStrategy;
 import uk.ac.liv.auction.stats.HistoricalDataReport;
 
 /**
@@ -30,41 +26,41 @@ import uk.ac.liv.auction.stats.HistoricalDataReport;
  */
 public class PriestVanTolEfficiencyTest extends EfficiencyTest {
 
-  public static final double BENCHMARK_EFFICIENCY = 85.0;
-  
-  public static final int TRADE_ENTITLEMENT = 5;
-  
-  public PriestVanTolEfficiencyTest( String name ) {
-    super(name);
-  }
+	public static final double BENCHMARK_EFFICIENCY = 85.0;
 
-  protected void initialiseAuction() {
-    super.initialiseAuction();
-    HistoricalDataReport report = new HistoricalDataReport();
-    report.setAuction(auction);
-    auction.setReport(report);    
-  }
-  
-  protected void assignStrategy( AbstractTradingAgent agent ) {
-    PriestVanTolStrategy strategy = new PriestVanTolStrategy();
-    strategy.setLearner( new WidrowHoffLearnerWithMomentum() );
-    agent.setStrategy(strategy);
-    strategy.setAgent(agent);
-  }
+	public static final int TRADE_ENTITLEMENT = 5;
 
-  protected double getMinMeanEfficiency() {
-    return BENCHMARK_EFFICIENCY;
-  }
-  
-  protected int getInitialTradeEntitlement() {
-    return TRADE_ENTITLEMENT;
-  }
+	public PriestVanTolEfficiencyTest(String name) {
+		super(name);
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	protected void initialiseAuction() {
+		super.initialiseAuction();
+		HistoricalDataReport report = new HistoricalDataReport();
+		report.setAuction(auction);
+		auction.setReport(report);
+	}
 
-  public static Test suite() {
-    return new TestSuite(PriestVanTolEfficiencyTest.class);
-  }
+	protected void assignStrategy(AbstractTradingAgent agent) {
+		PriestVanTolStrategy strategy = new PriestVanTolStrategy();
+		strategy.setLearner(new WidrowHoffLearnerWithMomentum());
+		agent.setStrategy(strategy);
+		strategy.setAgent(agent);
+	}
+
+	protected double getMinMeanEfficiency() {
+		return BENCHMARK_EFFICIENCY;
+	}
+
+	protected int getInitialTradeEntitlement() {
+		return TRADE_ENTITLEMENT;
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
+
+	public static Test suite() {
+		return new TestSuite(PriestVanTolEfficiencyTest.class);
+	}
 }

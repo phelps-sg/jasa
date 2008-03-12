@@ -33,49 +33,49 @@ import java.io.Serializable;
 
 public class FixedValuer implements ValuationPolicy, Serializable {
 
-  protected double value;
-  
-  public static final String P_DEF_BASE = "fixedvaluer";
+	protected double value;
 
-  public static final String P_VALUE = "value";
+	public static final String P_DEF_BASE = "fixedvaluer";
 
-  public FixedValuer() {
-  }
+	public static final String P_VALUE = "value";
 
-  public FixedValuer( double value ) {
-    this.value = value;
-  }
+	public FixedValuer() {
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    value = parameters.getDouble(base.push(P_VALUE), 
-    		new Parameter(P_DEF_BASE).push(P_VALUE), 0);
-  }
+	public FixedValuer(double value) {
+		this.value = value;
+	}
 
-  public double determineValue( Auction auction ) {
-    return value;
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		value = parameters.getDouble(base.push(P_VALUE), new Parameter(P_DEF_BASE)
+		    .push(P_VALUE), 0);
+	}
 
-  public void consumeUnit( Auction auction ) {
-    // Do nothing
-  }
+	public double determineValue(Auction auction) {
+		return value;
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    // Do nothing
-  }
+	public void consumeUnit(Auction auction) {
+		// Do nothing
+	}
 
-  public void reset() {
-  }
+	public void eventOccurred(AuctionEvent event) {
+		// Do nothing
+	}
 
-  public void setValue( double value ) {
-    this.value = value;
-  }
-  
-  public void setAgent( TradingAgent agent ) {
-    // No action required
-  }
+	public void reset() {
+	}
 
-  public String toString() {
-    return "(" + getClass() + " value:" + value + ")";
-  }
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public void setAgent(TradingAgent agent) {
+		// No action required
+	}
+
+	public String toString() {
+		return "(" + getClass() + " value:" + value + ")";
+	}
 
 }

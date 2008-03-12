@@ -48,7 +48,7 @@ import uk.ac.liv.util.Resetable;
  */
 
 public abstract class AuctionImpl extends Observable implements Auction,
-		Serializable, Resetable {
+    Serializable, Resetable {
 
 	/**
 	 * The name of this auction.
@@ -102,10 +102,10 @@ public abstract class AuctionImpl extends Observable implements Auction,
 	protected HashMap eventListeners = new HashMap();
 
 	private static final Class[] allEvents = { RoundClosedEvent.class,
-			RoundClosingEvent.class, AuctionOpenEvent.class,
-			AuctionClosedEvent.class, EndOfDayEvent.class,
-			TransactionExecutedEvent.class, ShoutPlacedEvent.class,
-			AgentPolledEvent.class, ShoutReceivedEvent.class };
+	    RoundClosingEvent.class, AuctionOpenEvent.class,
+	    AuctionClosedEvent.class, EndOfDayEvent.class,
+	    TransactionExecutedEvent.class, ShoutPlacedEvent.class,
+	    AgentPolledEvent.class, ShoutReceivedEvent.class };
 
 	public AuctionImpl(String name) {
 		id = idAllocator.nextId();
@@ -288,7 +288,7 @@ public abstract class AuctionImpl extends Observable implements Auction,
 	}
 
 	public void addAuctionEventListener(Class eventClass,
-			AuctionEventListener listener) {
+	    AuctionEventListener listener) {
 		LinkedList listenerList = (LinkedList) eventListeners.get(eventClass);
 		if (listenerList == null) {
 			listenerList = new LinkedList();
@@ -298,7 +298,7 @@ public abstract class AuctionImpl extends Observable implements Auction,
 	}
 
 	public void removeAuctionEventListener(Class eventClass,
-			AuctionEventListener listener) {
+	    AuctionEventListener listener) {
 		LinkedList listenerList = (LinkedList) eventListeners.get(eventClass);
 		if (listenerList != null) {
 			listenerList.remove(listener);

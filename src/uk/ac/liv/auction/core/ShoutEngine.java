@@ -25,76 +25,76 @@ import java.util.List;
 
 public interface ShoutEngine extends uk.ac.liv.util.Resetable {
 
-  public void newShout( Shout shout ) throws DuplicateShoutException;
+	public void newShout(Shout shout) throws DuplicateShoutException;
 
-  public void removeShout( Shout shout );
-  
-  /**
-   * Log the current state of the auction.
-   */
-  public void printState();
+	public void removeShout(Shout shout);
 
-  /**
-   * <p>
-   * Destructively fetch the list of matched bids and asks. The list is of the
-   * form
-   * </p>
-   * <br> ( b0, a0, b1, a1 .. bn, an )<br>
-   * <p>
-   * where bi is the ith bid and a0 is the ith ask. A typical auctioneer would
-   * clear by matching bi with ai for all i at some price.
-   * </p>
-   * <p>
-   * Note that the engine's set of matched shouts will become empty as a result
-   * of invoking this method.
-   * </p>
-   * 
-   * @uml.property name="matchedShouts"
-   */
-  public List getMatchedShouts();
+	/**
+	 * Log the current state of the auction.
+	 */
+	public void printState();
 
-  /**
-   * Get the highest unmatched bid in the auction.
-   * 
-   * @uml.property name="highestUnmatchedBid"
-   * @uml.associationEnd
-   */
-  public Shout getHighestUnmatchedBid();
+	/**
+	 * <p>
+	 * Destructively fetch the list of matched bids and asks. The list is of the
+	 * form
+	 * </p>
+	 * <br> ( b0, a0, b1, a1 .. bn, an )<br>
+	 * <p>
+	 * where bi is the ith bid and a0 is the ith ask. A typical auctioneer would
+	 * clear by matching bi with ai for all i at some price.
+	 * </p>
+	 * <p>
+	 * Note that the engine's set of matched shouts will become empty as a result
+	 * of invoking this method.
+	 * </p>
+	 * 
+	 * @uml.property name="matchedShouts"
+	 */
+	public List getMatchedShouts();
 
-  /**
-   * Get the lowest matched bid in the auction.
-   * 
-   * @uml.property name="lowestMatchedBid"
-   * @uml.associationEnd
-   */
-  public Shout getLowestMatchedBid();
+	/**
+	 * Get the highest unmatched bid in the auction.
+	 * 
+	 * @uml.property name="highestUnmatchedBid"
+	 * @uml.associationEnd
+	 */
+	public Shout getHighestUnmatchedBid();
 
-  /**
-   * Get the lowest unmatched ask.
-   * 
-   * @uml.property name="lowestUnmatchedAsk"
-   * @uml.associationEnd
-   */
-  public Shout getLowestUnmatchedAsk();
+	/**
+	 * Get the lowest matched bid in the auction.
+	 * 
+	 * @uml.property name="lowestMatchedBid"
+	 * @uml.associationEnd
+	 */
+	public Shout getLowestMatchedBid();
 
-  /**
-   * Get the highest matched ask.
-   * 
-   * @uml.property name="highestMatchedAsk"
-   * @uml.associationEnd
-   */
-  public Shout getHighestMatchedAsk();
+	/**
+	 * Get the lowest unmatched ask.
+	 * 
+	 * @uml.property name="lowestUnmatchedAsk"
+	 * @uml.associationEnd
+	 */
+	public Shout getLowestUnmatchedAsk();
 
-  /**
-   * Return an iterator that non-destructively iterates over every ask in the
-   * auction (both matched and unmatched).
-   */
-  public Iterator askIterator();
+	/**
+	 * Get the highest matched ask.
+	 * 
+	 * @uml.property name="highestMatchedAsk"
+	 * @uml.associationEnd
+	 */
+	public Shout getHighestMatchedAsk();
 
-  /**
-   * Return an iterator that non-destructively iterates over every bid in the
-   * auction (both matched and unmatched).
-   */
-  public Iterator bidIterator();
+	/**
+	 * Return an iterator that non-destructively iterates over every ask in the
+	 * auction (both matched and unmatched).
+	 */
+	public Iterator askIterator();
+
+	/**
+	 * Return an iterator that non-destructively iterates over every bid in the
+	 * auction (both matched and unmatched).
+	 */
+	public Iterator bidIterator();
 
 }

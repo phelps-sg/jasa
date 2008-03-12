@@ -13,16 +13,15 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.electricity;
 
 public class FixedScheduleRandomizer extends StandardRandomizer {
 
-  public FixedScheduleRandomizer() {
-  }
+	public FixedScheduleRandomizer() {
+	}
 
-  public void randomizePrivateValues( double[][] values, int iteration ) {
-    super.randomizePrivateValues(values, 0);
-  }
+	public void randomizePrivateValues(double[][] values, int iteration) {
+		super.randomizePrivateValues(values, 0);
+	}
 
 }

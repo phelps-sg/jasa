@@ -30,39 +30,39 @@ import uk.ac.liv.util.io.DataWriter;
 
 public abstract class AbstractLearner implements Learner, Parameterizable {
 
-  /**
-   * @uml.property name="monitor"
-   * @uml.associationEnd
-   */
-  protected LearnerMonitor monitor = null;
+	/**
+	 * @uml.property name="monitor"
+	 * @uml.associationEnd
+	 */
+	protected LearnerMonitor monitor = null;
 
-  public static final String P_MONITOR = "monitor";
+	public static final String P_MONITOR = "monitor";
 
-  public AbstractLearner() {
-  }
+	public AbstractLearner() {
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    try {
-      Parameter monitorParameter = base.push(P_MONITOR);
-      monitor = (LearnerMonitor) parameters.getInstanceForParameter(
-          monitorParameter, null, LearnerMonitor.class);
-      monitor.setup(parameters, monitorParameter);
-    } catch ( ParamClassLoadException e ) {
-      monitor = null;
-    }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		try {
+			Parameter monitorParameter = base.push(P_MONITOR);
+			monitor = (LearnerMonitor) parameters.getInstanceForParameter(
+			    monitorParameter, null, LearnerMonitor.class);
+			monitor.setup(parameters, monitorParameter);
+		} catch (ParamClassLoadException e) {
+			monitor = null;
+		}
 
-  }
+	}
 
-  public void monitor() {
-    if ( monitor != null ) {
-      monitor.startRecording();
-      dumpState(monitor);
-      monitor.finishRecording();
-    }
-  }
+	public void monitor() {
+		if (monitor != null) {
+			monitor.startRecording();
+			dumpState(monitor);
+			monitor.finishRecording();
+		}
+	}
 
-  public abstract double getLearningDelta();
+	public abstract double getLearningDelta();
 
-  public abstract void dumpState( DataWriter out );
+	public abstract void dumpState(DataWriter out);
 
 }

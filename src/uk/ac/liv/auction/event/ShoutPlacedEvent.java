@@ -27,23 +27,23 @@ import uk.ac.liv.auction.core.Shout;
 
 public class ShoutPlacedEvent extends AuctionEvent {
 
-  /**
-   * The shout that led to this event.
-   * 
-   * @uml.property name="shout"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected Shout shout;
+	/**
+	 * The shout that led to this event.
+	 * 
+	 * @uml.property name="shout"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected Shout shout;
 
-  public ShoutPlacedEvent( Auction auction, int time, Shout shout ) {
-    super(auction, time);
-    this.shout = shout;
-  }
+	public ShoutPlacedEvent(Auction auction, int time, Shout shout) {
+		super(auction, time);
+		this.shout = shout;
+	}
 
-  /**
-   * @uml.property name="shout"
-   */
-  public Shout getShout() {
-    return shout;
-  }
+	/**
+	 * @uml.property name="shout"
+	 */
+	public Shout getShout() {
+		return shout;
+	}
 }

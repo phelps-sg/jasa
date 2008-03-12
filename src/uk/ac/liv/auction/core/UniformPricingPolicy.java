@@ -18,31 +18,30 @@ package uk.ac.liv.auction.core;
 import java.io.Serializable;
 
 /**
- * A pricing policy in which we set the transaction price in the
- * interval between the ask quote and the bid quote as determined by
- * the parameter k.  The pricing policy is uniform in the sense that individual
- * bid and ask prices are ignored, thus all agents performing transactions
- * in the clearing operation will pay the same price.
- *
+ * A pricing policy in which we set the transaction price in the interval
+ * between the ask quote and the bid quote as determined by the parameter k. The
+ * pricing policy is uniform in the sense that individual bid and ask prices are
+ * ignored, thus all agents performing transactions in the clearing operation
+ * will pay the same price.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class UniformPricingPolicy extends KPricingPolicy
-                                   implements Serializable {
+public class UniformPricingPolicy extends KPricingPolicy implements
+    Serializable {
 
-  public UniformPricingPolicy() {
-    this(0);
-  }
+	public UniformPricingPolicy() {
+		this(0);
+	}
 
-  public UniformPricingPolicy( double k ) {
-    super(k);
-  }
+	public UniformPricingPolicy(double k) {
+		super(k);
+	}
 
-  public double determineClearingPrice( Shout bid, Shout ask,
-                                         MarketQuote clearingQuote ) {
-    return kInterval(clearingQuote.getAsk(), clearingQuote.getBid());
-  }
-
+	public double determineClearingPrice(Shout bid, Shout ask,
+	    MarketQuote clearingQuote) {
+		return kInterval(clearingQuote.getAsk(), clearingQuote.getBid());
+	}
 
 }

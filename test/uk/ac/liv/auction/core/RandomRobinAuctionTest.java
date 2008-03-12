@@ -14,313 +14,313 @@
 
 package uk.ac.liv.auction.core;
 
-import junit.framework.*;
-
-import uk.ac.liv.auction.agent.MockStrategy;
-import uk.ac.liv.auction.agent.MockTrader;
-
-import uk.ac.liv.auction.stats.DailyStatsReport;
-import uk.ac.liv.auction.stats.HistoricalDataReport;
-
-import uk.ac.liv.util.Distribution;
-
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.liv.auction.agent.MockStrategy;
+import uk.ac.liv.auction.agent.MockTrader;
+import uk.ac.liv.auction.stats.DailyStatsReport;
+import uk.ac.liv.auction.stats.HistoricalDataReport;
+import uk.ac.liv.util.Distribution;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 public class RandomRobinAuctionTest extends TestCase {
 
-  /**
-   * @uml.property name="auctioneer"
-   * @uml.associationEnd
-   */
-  Auctioneer auctioneer;
+	/**
+	 * @uml.property name="auctioneer"
+	 * @uml.associationEnd
+	 */
+	Auctioneer auctioneer;
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	RandomRobinAuction auction;
 
-  /**
-   * @uml.property name="traders"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  MockTrader[] traders;
+	/**
+	 * @uml.property name="traders"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	MockTrader[] traders;
 
-  static Logger logger = Logger.getLogger(RandomRobinAuctionTest.class);
+	static Logger logger = Logger.getLogger(RandomRobinAuctionTest.class);
 
-  public RandomRobinAuctionTest( String name ) {
-    super(name);
-    org.apache.log4j.BasicConfigurator.configure();
-  }
+	public RandomRobinAuctionTest(String name) {
+		super(name);
+		org.apache.log4j.BasicConfigurator.configure();
+	}
 
-  public void setUpTraders() {
-    traders = new MockTrader[3];
+	public void setUpTraders() {
+		traders = new MockTrader[3];
 
-    traders[0] = new MockTrader(this, 30, 1000, 500, false);
-    traders[1] = new MockTrader(this, 10, 10000, 500, false);
-    traders[2] = new MockTrader(this, 15, 10000, 725, true);
+		traders[0] = new MockTrader(this, 30, 1000, 500, false);
+		traders[1] = new MockTrader(this, 10, 10000, 500, false);
+		traders[2] = new MockTrader(this, 15, 10000, 725, true);
 
-    MockTrader trader = traders[0];
-    trader.setStrategy(new MockStrategy(new Shout[] {
-        new Shout(trader, 1, 500, true), new Shout(trader, 1, 600, true),
-        new Shout(trader, 1, 700, true) }));
+		MockTrader trader = traders[0];
+		trader.setStrategy(new MockStrategy(new Shout[] {
+		    new Shout(trader, 1, 500, true), new Shout(trader, 1, 600, true),
+		    new Shout(trader, 1, 700, true) }));
 
-    trader = traders[1];
-    trader.setStrategy(new MockStrategy(new Shout[] {
-        new Shout(trader, 1, 500, true), new Shout(trader, 1, 550, true),
-        new Shout(trader, 1, 750, true) }));
+		trader = traders[1];
+		trader.setStrategy(new MockStrategy(new Shout[] {
+		    new Shout(trader, 1, 500, true), new Shout(trader, 1, 550, true),
+		    new Shout(trader, 1, 750, true) }));
 
-    trader = traders[2];
-    trader.setStrategy(new MockStrategy(new Shout[] {
-        new Shout(trader, 1, 900, false), new Shout(trader, 1, 950, false),
-        new Shout(trader, 1, 725, false) }));
-  }
+		trader = traders[2];
+		trader.setStrategy(new MockStrategy(new Shout[] {
+		    new Shout(trader, 1, 900, false), new Shout(trader, 1, 950, false),
+		    new Shout(trader, 1, 725, false) }));
+	}
 
-  public void setUp() {
-    auctioneer = new ClearingHouseAuctioneer(auction);
-    ((AbstractAuctioneer) auctioneer)
-        .setPricingPolicy(new UniformPricingPolicy(1));
-    setUpTraders();
-    setUpAuction();
-  }
+	public void setUp() {
+		auctioneer = new ClearingHouseAuctioneer(auction);
+		((AbstractAuctioneer) auctioneer)
+		    .setPricingPolicy(new UniformPricingPolicy(1));
+		setUpTraders();
+		setUpAuction();
+	}
 
-  public void setUpAuction() {
-    auction = new RandomRobinAuction("Round Robin Test Auction");
-    auction.setAuctioneer(auctioneer);
-    auctioneer.setAuction(auction);
-    auction.setMaximumRounds(3);
-    for ( int i = 0; i < traders.length; i++ ) {
-      System.out.println("Registering trader " + traders[i]);
-      auction.register(traders[i]);
-    }
-  }
+	public void setUpAuction() {
+		auction = new RandomRobinAuction("Round Robin Test Auction");
+		auction.setAuctioneer(auctioneer);
+		auctioneer.setAuction(auction);
+		auction.setMaximumRounds(3);
+		for (int i = 0; i < traders.length; i++) {
+			System.out.println("Registering trader " + traders[i]);
+			auction.register(traders[i]);
+		}
+	}
 
-  public void testDailyStats() {
+	public void testDailyStats() {
 
-    auction.setLengthOfDay(3);
-    auction.setMaximumDays(1);
+		auction.setLengthOfDay(3);
+		auction.setMaximumDays(1);
 
-    DailyStatsReport dailyStats = new DailyStatsReport();
-    dailyStats.setAuction(auction);
-    auction.setReport(dailyStats);
-    dailyStats.setup(new ParameterDatabase(), new Parameter("stats"));
+		DailyStatsReport dailyStats = new DailyStatsReport();
+		dailyStats.setAuction(auction);
+		auction.setReport(dailyStats);
+		dailyStats.setup(new ParameterDatabase(), new Parameter("stats"));
 
-    auction.run();
+		auction.run();
 
-    Distribution transPrice = dailyStats.getPreviousDayTransPriceStats();
-    logger.info("Previous day transaction price statistics = " + transPrice);
-    assertTrue(transPrice.getMean() == 725);
-  }
-  
-  /**
-   * See bug #1435981    
-   */  
-  public void testEndOfDayNotification() {
-    
-    auction.setLengthOfDay(3);
-    auction.setMaximumDays(2);
-    
-    auction.begin();
-    
-    do {
-      try {
-        auction.step();
-      } catch ( AuctionClosedException e ) {
-        // Do nothing
-      }
-      for( int i=0; i<traders.length; i++ ) {
-        assertTrue(traders[i].receivedEndOfDayAfterRequestShout);
-      }
-    } while ( !auction.closed() );
-    
-  }
+		Distribution transPrice = dailyStats.getPreviousDayTransPriceStats();
+		logger.info("Previous day transaction price statistics = " + transPrice);
+		assertTrue(transPrice.getMean() == 725);
+	}
 
-  public void testHistoryStats() {
-    logger.info("testHistoryStats()");
+	/**
+	 * See bug #1435981
+	 */
+	public void testEndOfDayNotification() {
 
-    HistoricalDataReport stats = new HistoricalDataReport();
-    stats.setAuction(auction);
-    auction.setReport(stats);
-    stats.setup(new ParameterDatabase(), new Parameter("stats"));
+		auction.setLengthOfDay(3);
+		auction.setMaximumDays(2);
 
-    auction.run();
+		auction.begin();
 
-    int acceptedBids = stats.getNumberOfBids(0, true);
-    int unacceptedBids = stats.getNumberOfBids(0, false);
-    int acceptedAsks = stats.getNumberOfAsks(0, true);
-    int unacceptedAsks = stats.getNumberOfAsks(0, false);
-    System.out.println("Number of accepted bids above 0 = " + acceptedBids);
-    System.out.println("Number of unaccepted bids above 0 = " + unacceptedBids);
-    System.out.println("Number of accepted asks above 0 = " + acceptedAsks);
-    System.out.println("Number of unaccepted asks above 0 = " + unacceptedAsks);
-    assertTrue(acceptedBids == acceptedAsks);
-    assertTrue(acceptedBids == 1);
+		do {
+			try {
+				auction.step();
+			} catch (AuctionClosedException e) {
+				// Do nothing
+			}
+			for (int i = 0; i < traders.length; i++) {
+				assertTrue(traders[i].receivedEndOfDayAfterRequestShout);
+			}
+		} while (!auction.closed());
 
-  }
+	}
 
-  public void testProtocol() {
+	public void testHistoryStats() {
+		logger.info("testHistoryStats()");
 
-    assertTrue(auction.getNumberOfTraders() == traders.length);
-    assertTrue(!auction.closed());
+		HistoricalDataReport stats = new HistoricalDataReport();
+		stats.setAuction(auction);
+		auction.setReport(stats);
+		stats.setup(new ParameterDatabase(), new Parameter("stats"));
 
-    auction.setMaximumRounds(2);
+		auction.run();
 
-    assertTrue(auction.getMaximumRounds() == 2);
+		int acceptedBids = stats.getNumberOfBids(0, true);
+		int unacceptedBids = stats.getNumberOfBids(0, false);
+		int acceptedAsks = stats.getNumberOfAsks(0, true);
+		int unacceptedAsks = stats.getNumberOfAsks(0, false);
+		System.out.println("Number of accepted bids above 0 = " + acceptedBids);
+		System.out.println("Number of unaccepted bids above 0 = " + unacceptedBids);
+		System.out.println("Number of accepted asks above 0 = " + acceptedAsks);
+		System.out.println("Number of unaccepted asks above 0 = " + unacceptedAsks);
+		assertTrue(acceptedBids == acceptedAsks);
+		assertTrue(acceptedBids == 1);
 
-    auction.run();
+	}
 
-    for ( int i = 0; i < traders.length; i++ ) {
-      assertTrue(traders[i].receivedAuctionOpen);
-      assertTrue(traders[i].receivedAuctionClosed);
-      assertTrue(traders[i].receivedAuctionClosedAfterAuctionOpen);
-      assertTrue(traders[i].receivedRequestShout == 2);
-      assertTrue(traders[i].receivedRoundClosed == 2);
-    }
+	public void testProtocol() {
 
-  }
+		assertTrue(auction.getNumberOfTraders() == traders.length);
+		assertTrue(!auction.closed());
 
-  public void testNumberOfTraders() {
-    assertTrue(auction.getNumberOfTraders() == traders.length);
-    auction.run();
-    // check that no traders left active at end of auction.
-    assertTrue(auction.getNumberOfTraders() == 0);
-  }
+		auction.setMaximumRounds(2);
 
-  public void testClosed() {
-    try {
-      assertTrue(!auction.closed());
-      auction.begin();
-      assertTrue(!auction.closed());
-      while ( !auction.closed() ) {
-        auction.step();
-      }
-      assertTrue(auction.closed());
-    } catch ( AuctionClosedException e ) {
-      fail("tried to step through closed auction");
-    }
-  }
+		assertTrue(auction.getMaximumRounds() == 2);
 
-  /**
-   * Test that transactions occur only in the final (3rd) round.
-   */
-  public void testTransactionsOccured() {
-    try {
+		auction.run();
 
-      assertTrue(!auction.transactionsOccured());
-      auction.begin();
+		for (int i = 0; i < traders.length; i++) {
+			assertTrue(traders[i].receivedAuctionOpen);
+			assertTrue(traders[i].receivedAuctionClosed);
+			assertTrue(traders[i].receivedAuctionClosedAfterAuctionOpen);
+			assertTrue(traders[i].receivedRequestShout == 2);
+			assertTrue(traders[i].receivedRoundClosed == 2);
+		}
 
-      auction.step();
-      assertTrue(!auction.transactionsOccured());
+	}
 
-      auction.step();
-      assertTrue(!auction.transactionsOccured());
+	public void testNumberOfTraders() {
+		assertTrue(auction.getNumberOfTraders() == traders.length);
+		auction.run();
+		// check that no traders left active at end of auction.
+		assertTrue(auction.getNumberOfTraders() == 0);
+	}
 
-      auction.step();
-      assertTrue(auction.transactionsOccured());
+	public void testClosed() {
+		try {
+			assertTrue(!auction.closed());
+			auction.begin();
+			assertTrue(!auction.closed());
+			while (!auction.closed()) {
+				auction.step();
+			}
+			assertTrue(auction.closed());
+		} catch (AuctionClosedException e) {
+			fail("tried to step through closed auction");
+		}
+	}
 
-    } catch ( AuctionClosedException e ) {
-      fail("we tried to step through an auction past its closure");
-    } catch ( ShoutsNotVisibleException e ) {
-      fail("test is configured incorrectly: we must use an auctioneer that permits shout visibility");
-    }
-  }
+	/**
+	 * Test that transactions occur only in the final (3rd) round.
+	 */
+	public void testTransactionsOccured() {
+		try {
 
-  public void testShoutAccepted() {
+			assertTrue(!auction.transactionsOccured());
+			auction.begin();
 
-    try {
+			auction.step();
+			assertTrue(!auction.transactionsOccured());
 
-      Shout testBid = new Shout(traders[0], 1, 500, true);
-      Shout testAsk = new Shout(traders[2], 1, 300, false);
+			auction.step();
+			assertTrue(!auction.transactionsOccured());
 
-      auction.newShout(testBid);
-      assertTrue(!auction.shoutAccepted(testBid));
+			auction.step();
+			assertTrue(auction.transactionsOccured());
 
-      auction.newShout(testAsk);
-      assertTrue(!auction.shoutAccepted(testAsk));
+		} catch (AuctionClosedException e) {
+			fail("we tried to step through an auction past its closure");
+		} catch (ShoutsNotVisibleException e) {
+			fail("test is configured incorrectly: we must use an auctioneer that permits shout visibility");
+		}
+	}
 
-      auctioneer.clear();
-      // auction.clear(testAsk, testBid, 400);
+	public void testShoutAccepted() {
 
-      assertTrue(auction.shoutAccepted(testBid));
-      assertTrue(auction.shoutAccepted(testAsk));
+		try {
 
-      auction.runSingleRound();
+			Shout testBid = new Shout(traders[0], 1, 500, true);
+			Shout testAsk = new Shout(traders[2], 1, 300, false);
 
-      assertTrue(!auction.shoutAccepted(testBid));
-      assertTrue(!auction.shoutAccepted(testAsk));
+			auction.newShout(testBid);
+			assertTrue(!auction.shoutAccepted(testBid));
 
-    } catch ( AuctionException e ) {
-      fail(e.getMessage());
-    }
-  }
+			auction.newShout(testAsk);
+			assertTrue(!auction.shoutAccepted(testAsk));
 
-  public void testLastShout() {
-    try {
+			auctioneer.clear();
+			// auction.clear(testAsk, testBid, 400);
 
-      Shout testBid = new Shout(traders[0], 1, 500, true);
-      Shout testAsk = new Shout(traders[2], 1, 300, false);
+			assertTrue(auction.shoutAccepted(testBid));
+			assertTrue(auction.shoutAccepted(testAsk));
 
-      assertTrue(auction.getLastShout() == null);
+			auction.runSingleRound();
 
-      auction.newShout(testBid);
-      assertTrue(auction.getLastShout().equals(testBid));
+			assertTrue(!auction.shoutAccepted(testBid));
+			assertTrue(!auction.shoutAccepted(testAsk));
 
-      auction.newShout(testAsk);
-      assertTrue(auction.getLastShout().equals(testAsk));
+		} catch (AuctionException e) {
+			fail(e.getMessage());
+		}
+	}
 
-    } catch ( AuctionException e ) {
-      fail(e.getMessage());
-    }
-  }
-  
-  /**
-   * Test for bug #1614071 
-   */
-  public void testClear() {
-    
-    // We will test a clearing operation that involves a transfer of 2 units
-    // from seller to buyer.
-    int testQty = 2;
-    MockTrader buyer = traders[0];
-    MockTrader seller = traders[2]; 
-    
-    // Check initial state
-    assertTrue(buyer.lastWinningShout == null);
-    assertTrue(seller.lastWinningShout == null);
-    
-    // Record initial allocations
-    int sellerInitial = seller.getCommodityHolding().getQuantity();
-    int buyerInitial = buyer.getCommodityHolding().getQuantity();
-    
-    // Set up a purchase of 2 units from by buyer (traders[0]) from seller (traders[2])  
-    Shout testBid = new Shout(buyer, testQty, 200, true);
-    Shout testAsk = new Shout(seller, testQty, 100, false);
-    auction.clear(testAsk, testBid, 200, 200, testQty);
-    
-    // Test that 2 units were transfered from seller to buyer
-    //  Note that the buyer will immediately cash-in the stock so
-    //   net qty should remain unchanged
-    //    @see uk.ac.liv.auction.agent.AbstractTradingAgent.cashIn()
-    assertTrue(buyer.getCommodityHolding().getQuantity() == buyerInitial + 0);
-    
-    // Test that 2 units were transfered from the seller
-    assertTrue(seller.getCommodityHolding().getQuantity() == sellerInitial - testQty);
-    
-    // Check that agents received win notification
-    assertTrue(buyer.lastWinningShout == testBid);
-    assertTrue(seller.lastWinningShout == testAsk);
-  }
+	public void testLastShout() {
+		try {
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+			Shout testBid = new Shout(traders[0], 1, 500, true);
+			Shout testAsk = new Shout(traders[2], 1, 300, false);
 
-  public static Test suite() {
-    return new TestSuite(RandomRobinAuctionTest.class);
-  }
+			assertTrue(auction.getLastShout() == null);
+
+			auction.newShout(testBid);
+			assertTrue(auction.getLastShout().equals(testBid));
+
+			auction.newShout(testAsk);
+			assertTrue(auction.getLastShout().equals(testAsk));
+
+		} catch (AuctionException e) {
+			fail(e.getMessage());
+		}
+	}
+
+	/**
+	 * Test for bug #1614071
+	 */
+	public void testClear() {
+
+		// We will test a clearing operation that involves a transfer of 2 units
+		// from seller to buyer.
+		int testQty = 2;
+		MockTrader buyer = traders[0];
+		MockTrader seller = traders[2];
+
+		// Check initial state
+		assertTrue(buyer.lastWinningShout == null);
+		assertTrue(seller.lastWinningShout == null);
+
+		// Record initial allocations
+		int sellerInitial = seller.getCommodityHolding().getQuantity();
+		int buyerInitial = buyer.getCommodityHolding().getQuantity();
+
+		// Set up a purchase of 2 units from by buyer (traders[0]) from seller
+		// (traders[2])
+		Shout testBid = new Shout(buyer, testQty, 200, true);
+		Shout testAsk = new Shout(seller, testQty, 100, false);
+		auction.clear(testAsk, testBid, 200, 200, testQty);
+
+		// Test that 2 units were transfered from seller to buyer
+		// Note that the buyer will immediately cash-in the stock so
+		// net qty should remain unchanged
+		// @see uk.ac.liv.auction.agent.AbstractTradingAgent.cashIn()
+		assertTrue(buyer.getCommodityHolding().getQuantity() == buyerInitial + 0);
+
+		// Test that 2 units were transfered from the seller
+		assertTrue(seller.getCommodityHolding().getQuantity() == sellerInitial
+		    - testQty);
+
+		// Check that agents received win notification
+		assertTrue(buyer.lastWinningShout == testBid);
+		assertTrue(seller.lastWinningShout == testAsk);
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
+
+	public static Test suite() {
+		return new TestSuite(RandomRobinAuctionTest.class);
+	}
 
 }

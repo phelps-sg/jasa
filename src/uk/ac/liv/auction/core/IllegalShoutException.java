@@ -16,20 +16,20 @@
 package uk.ac.liv.auction.core;
 
 /**
- * This exception is thrown by auctioneers when a shout placed in an
- * auction is illegal under the rules of the auction.
- *
+ * This exception is thrown by auctioneers when a shout placed in an auction is
+ * illegal under the rules of the auction.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 public class IllegalShoutException extends AuctionException {
 
-  public IllegalShoutException( String message ) {
-    super(message);
-  }
+	public IllegalShoutException(String message) {
+		super(message);
+	}
 
-  public IllegalShoutException() {
-    super();
-  }
+	public IllegalShoutException() {
+		super();
+	}
 
 }

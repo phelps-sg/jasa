@@ -26,28 +26,28 @@ import uk.ac.liv.auction.event.AuctionEventListener;
  */
 
 public interface AuctionReport extends AuctionEventListener {
-	
-  /**
-   * Produce the final report for the user. Implementors can do whatever they
-   * see fit, for example by writing a report on stdout, or they may choose to
-   * do nothing.
-   */
-  public void produceUserOutput();
 
-  /**
-   * Returns a Map of all of the variables that are produced in the report. The
-   * Map maps variables, represented by objects of type ReportVariable, onto
-   * values, which may be of any class. If no variables are produced by this
-   * report then an empty Map is returned.
-   * 
-   * @see ReportVariable
-   * @uml.property name="variables"
-   */
-  public Map getVariables();
+	/**
+	 * Produce the final report for the user. Implementors can do whatever they
+	 * see fit, for example by writing a report on stdout, or they may choose to
+	 * do nothing.
+	 */
+	public void produceUserOutput();
 
-  /**
-   * Specify the auction to be used when generating the report.
-   */
-  public void setAuction( RandomRobinAuction auction );
+	/**
+	 * Returns a Map of all of the variables that are produced in the report. The
+	 * Map maps variables, represented by objects of type ReportVariable, onto
+	 * values, which may be of any class. If no variables are produced by this
+	 * report then an empty Map is returned.
+	 * 
+	 * @see ReportVariable
+	 * @uml.property name="variables"
+	 */
+	public Map getVariables();
+
+	/**
+	 * Specify the auction to be used when generating the report.
+	 */
+	public void setAuction(RandomRobinAuction auction);
 
 }

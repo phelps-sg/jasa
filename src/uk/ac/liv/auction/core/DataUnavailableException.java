@@ -16,21 +16,21 @@
 package uk.ac.liv.auction.core;
 
 /**
- * This is exception is thrown when requesting data from an auction
- * that is not available due to the way that the auction is configured.
- *
+ * This is exception is thrown when requesting data from an auction that is not
+ * available due to the way that the auction is configured.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class DataUnavailableException extends AuctionException {
 
-  public DataUnavailableException( String message ) {
-    super(message);
-  }
+	public DataUnavailableException(String message) {
+		super(message);
+	}
 
-  public DataUnavailableException() {
-    super();
-  }
+	public DataUnavailableException() {
+		super();
+	}
 
 }

@@ -15,84 +15,85 @@
 
 package uk.ac.liv.util.io;
 
-import java.lang.reflect.Method;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
-
-import java.io.*;
-
-import java.util.List;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class CSVReader {
 
-  /**
-   * @uml.property name="in"
-   */
-  BufferedReader in;
+	/**
+	 * @uml.property name="in"
+	 */
+	BufferedReader in;
 
-  /**
-   * @uml.property name="seperator"
-   */
-  char seperator;
+	/**
+	 * @uml.property name="seperator"
+	 */
+	char seperator;
 
-  /**
-   * @uml.property name="types" multiplicity="(0 -1)" dimension="1"
-   */
-  Class[] types;
+	/**
+	 * @uml.property name="types" multiplicity="(0 -1)" dimension="1"
+	 */
+	Class[] types;
 
-  static final char DEFAULT_SEPERATOR = '\t';
+	static final char DEFAULT_SEPERATOR = '\t';
 
-  public CSVReader( InputStream in, Class[] types, char seperator ) {
-    this.in = new BufferedReader(new InputStreamReader(in));
-    this.seperator = seperator;
-    this.types = types;
-  }
+	public CSVReader(InputStream in, Class[] types, char seperator) {
+		this.in = new BufferedReader(new InputStreamReader(in));
+		this.seperator = seperator;
+		this.types = types;
+	}
 
-  public CSVReader( InputStream in, Class[] types ) {
-    this(in, types, DEFAULT_SEPERATOR);
-  }
+	public CSVReader(InputStream in, Class[] types) {
+		this(in, types, DEFAULT_SEPERATOR);
+	}
 
-  public List nextRecord() throws IOException {
-    String line = in.readLine();
-    List record = new ArrayList(types.length);
-    if ( line == null ) {
-      return null;
-    }
-    StringTokenizer tokens = new StringTokenizer(line, seperator + "");
-    for ( int i = 0; i < types.length; i++ ) {
-      String fieldStr = tokens.nextToken();
-      record.add(convert(fieldStr, types[i]));
-    }
-    return (List) record;
-  }
+	public List nextRecord() throws IOException {
+		String line = in.readLine();
+		List record = new ArrayList(types.length);
+		if (line == null) {
+			return null;
+		}
+		StringTokenizer tokens = new StringTokenizer(line, seperator + "");
+		for (int i = 0; i < types.length; i++) {
+			String fieldStr = tokens.nextToken();
+			record.add(convert(fieldStr, types[i]));
+		}
+		return (List) record;
+	}
 
-  public static Object convert( String str, Class type ) {
-    Method valueOf = null;
-    try {
-      Class[] strParam = new Class[1];
-      strParam[0] = str.getClass();
-      valueOf = type.getDeclaredMethod("valueOf", strParam);
-    } catch ( NoSuchMethodException e ) {
-      valueOf = null;
-    }
-    if ( valueOf != null ) {
-      Object[] params = new Object[1];
-      params[0] = (Object) str;
-      try {
-        return valueOf.invoke(type, params);
-      } catch ( InvocationTargetException e ) {
-        throw new NumberFormatException(str);
-      } catch ( IllegalArgumentException e ) {
-        // fail silently?
-      } catch ( IllegalAccessException e ) {
-        // fail silently?
-      }
-    } else {
-      // No valueOf method, just return a String
-      return (Object) str;
-    }
-    return null;
-  }
+	public static Object convert(String str, Class type) {
+		Method valueOf = null;
+		try {
+			Class[] strParam = new Class[1];
+			strParam[0] = str.getClass();
+			valueOf = type.getDeclaredMethod("valueOf", strParam);
+		} catch (NoSuchMethodException e) {
+			valueOf = null;
+		}
+		if (valueOf != null) {
+			Object[] params = new Object[1];
+			params[0] = (Object) str;
+			try {
+				return valueOf.invoke(type, params);
+			} catch (InvocationTargetException e) {
+				throw new NumberFormatException(str);
+			} catch (IllegalArgumentException e) {
+				// fail silently?
+			} catch (IllegalAccessException e) {
+				// fail silently?
+			}
+		} else {
+			// No valueOf method, just return a String
+			return (Object) str;
+		}
+		return null;
+	}
 
 }

@@ -24,84 +24,86 @@ import uk.ac.liv.auction.stats.AuctionReport;
 
 public interface Auction extends QuoteProvider {
 
-  /**
-   * Returns true if the auction is closed.
-   */
-  public boolean closed();
+	/**
+	 * Returns true if the auction is closed.
+	 */
+	public boolean closed();
 
-  /**
-   * Close the auction.
-   */
-  public void close();
+	/**
+	 * Close the auction.
+	 */
+	public void close();
 
-  /**
-   * Place a new shout in the auction.
-   */
-  public void newShout( Shout shout ) throws AuctionException;
+	/**
+	 * Place a new shout in the auction.
+	 */
+	public void newShout(Shout shout) throws AuctionException;
 
-  /**
-   * Remove a shout from the auction.
-   */
-  public void removeShout( Shout shout );
+	/**
+	 * Remove a shout from the auction.
+	 */
+	public void removeShout(Shout shout);
 
-  /**
-   * Return the last shout placed in the auction.
-   * 
-   * @uml.property name="lastShout"
-   * @uml.associationEnd
-   */
-  public Shout getLastShout() throws ShoutsNotVisibleException;
+	/**
+	 * Return the last shout placed in the auction.
+	 * 
+	 * @uml.property name="lastShout"
+	 * @uml.associationEnd
+	 */
+	public Shout getLastShout() throws ShoutsNotVisibleException;
 
-  /**
-   * Return the current auctioneer for this auction.
-   * 
-   * @uml.property name="auctioneer"
-   * @uml.associationEnd inverse="auction:uk.ac.liv.auction.core.Auctioneer"
-   */
-  public Auctioneer getAuctioneer();
+	/**
+	 * Return the current auctioneer for this auction.
+	 * 
+	 * @uml.property name="auctioneer"
+	 * @uml.associationEnd inverse="auction:uk.ac.liv.auction.core.Auctioneer"
+	 */
+	public Auctioneer getAuctioneer();
 
-  /**
-   * Report the state of the auction.
-   */
-  public void printState();
+	/**
+	 * Report the state of the auction.
+	 */
+	public void printState();
 
-  /**
-   * Handle a single clearing operation between two traders
-   */
-  public void clear( Shout ask, Shout bid, double price );
-  public void clear( Shout ask, Shout bid, double buyerCharge, double sellerPayment, int quantity );
-  
-  /**
-   * Get the age of the auction in unspecified units
-   */
-  public int getRound();
+	/**
+	 * Handle a single clearing operation between two traders
+	 */
+	public void clear(Shout ask, Shout bid, double price);
 
-  public int getDay();
+	public void clear(Shout ask, Shout bid, double buyerCharge,
+	    double sellerPayment, int quantity);
 
-  public int getAge();
+	/**
+	 * Get the age of the auction in unspecified units
+	 */
+	public int getRound();
 
-  /**
-   * Get the remaining time in the current trading day (period).
-   */
-  public int getRemainingTime();
+	public int getDay();
 
-  /**
-   * Get the number of traders known to be trading in the auction.
-   */
-  public int getNumberOfTraders();
+	public int getAge();
 
-  /**
-   * Find out whether the given shout has resulted in a transaction in the
-   * current round of trading.
-   */
-  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException;
+	/**
+	 * Get the remaining time in the current trading day (period).
+	 */
+	public int getRemainingTime();
 
-  /**
-   * Determine whether or not any transactions have occured in the current round
-   * of trading.
-   */
-  public boolean transactionsOccured() throws ShoutsNotVisibleException;
-  
-  public AuctionReport getReport( Class reportClass );
+	/**
+	 * Get the number of traders known to be trading in the auction.
+	 */
+	public int getNumberOfTraders();
+
+	/**
+	 * Find out whether the given shout has resulted in a transaction in the
+	 * current round of trading.
+	 */
+	public boolean shoutAccepted(Shout shout) throws ShoutsNotVisibleException;
+
+	/**
+	 * Determine whether or not any transactions have occured in the current round
+	 * of trading.
+	 */
+	public boolean transactionsOccured() throws ShoutsNotVisibleException;
+
+	public AuctionReport getReport(Class reportClass);
 
 }

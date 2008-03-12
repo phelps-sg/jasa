@@ -20,21 +20,21 @@ import java.util.Comparator;
 import java.io.Serializable;
 
 /**
- * A comparator that can be used for arranging shouts in descending
- * order; that is, highest price first.
- *
+ * A comparator that can be used for arranging shouts in descending order; that
+ * is, highest price first.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class DescendingShoutComparator implements Comparator, Serializable {
 
-  public DescendingShoutComparator() {
-  }
+	public DescendingShoutComparator() {
+	}
 
-  public int compare(Object parm1, Object parm2) {
-    Shout shout1 = (Shout) parm1;
-    Shout shout2 = (Shout) parm2;
-    return shout2.compareTo(shout1);
-  }
+	public int compare(Object parm1, Object parm2) {
+		Shout shout1 = (Shout) parm1;
+		Shout shout2 = (Shout) parm2;
+		return shout2.compareTo(shout1);
+	}
 }

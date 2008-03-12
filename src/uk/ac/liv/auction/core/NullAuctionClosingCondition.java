@@ -15,12 +15,11 @@
 
 package uk.ac.liv.auction.core;
 
-public class NullAuctionClosingCondition extends TimingCondition
-  implements AuctionClosingCondition {
+public class NullAuctionClosingCondition extends TimingCondition implements
+    AuctionClosingCondition {
 
-  public boolean eval() {    
-    return false;
-  }
+	public boolean eval() {
+		return false;
+	}
 
-  
 }

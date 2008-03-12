@@ -15,19 +15,19 @@
 
 package uk.ac.liv.auction.core;
 
-
 public class ZeroCreditAccount extends Account {
 
-  public ZeroCreditAccount( Object owner ) {
-    super(owner, 0);    
-  }
-  
-  public ZeroCreditAccount() {
-    super();
-  }
+	public ZeroCreditAccount(Object owner) {
+		super(owner, 0);
+	}
 
-  public void doubleEntry( Account payer, double charge, Account payee, double payment ) {   
-    super.doubleEntry(payer, charge, payee, payment);
-    assert funds >= 0;
-  }
+	public ZeroCreditAccount() {
+		super();
+	}
+
+	public void doubleEntry(Account payer, double charge, Account payee,
+	    double payment) {
+		super.doubleEntry(payer, charge, payee, payment);
+		assert funds >= 0;
+	}
 }

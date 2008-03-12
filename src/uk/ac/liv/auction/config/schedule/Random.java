@@ -25,15 +25,16 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 public class Random implements Case {
-	
-//	private static final String ClassName = "uk.ac.liv.auction.agent.RandomValuer";
-		
+
+	// private static final String ClassName =
+	// "uk.ac.liv.auction.agent.RandomValuer";
+
 	public String toString() {
 		return "Random";
 	}
-	
+
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(base.push("minvalue"), String.valueOf(80));
-		pdb.set(base.push("maxvalue"), String.valueOf(150));	
+		pdb.set(base.push("maxvalue"), String.valueOf(150));
 	}
 }

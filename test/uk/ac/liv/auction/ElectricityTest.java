@@ -15,27 +15,25 @@
 
 package uk.ac.liv.auction;
 
-import junit.framework.*;
+import java.util.Iterator;
+
+import junit.framework.TestCase;
+
+import org.apache.log4j.Logger;
 
 import uk.ac.liv.PRNGTestSeeds;
-
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.electricity.*;
-
 import uk.ac.liv.ai.learning.NPTRothErevLearner;
-
+import uk.ac.liv.auction.agent.StimuliResponseStrategy;
+import uk.ac.liv.auction.core.AbstractAuctioneer;
+import uk.ac.liv.auction.core.Auctioneer;
+import uk.ac.liv.auction.core.ClearingHouseAuctioneer;
+import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.electricity.ElectricityStats;
+import uk.ac.liv.auction.electricity.ElectricityTrader;
+import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.util.CummulativeDistribution;
-
-import uk.ac.liv.prng.*;
-
-// import edu.cornell.lassp.houle.RngPack.RandomElement;
-
 import cern.jet.random.engine.RandomSeedGenerator;
-
-import java.util.*;
-
-import org.apache.log4j.*;
 
 /**
  * 
@@ -53,195 +51,195 @@ import org.apache.log4j.*;
 
 public abstract class ElectricityTest extends TestCase {
 
-  /**
-   * @uml.property name="auctioneer"
-   * @uml.associationEnd
-   */
-  protected Auctioneer auctioneer;
+	/**
+	 * @uml.property name="auctioneer"
+	 * @uml.associationEnd
+	 */
+	protected Auctioneer auctioneer;
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	protected RandomRobinAuction auction;
 
-  /**
-   * @uml.property name="stats"
-   * @uml.associationEnd
-   */
-  protected ElectricityStats stats;
+	/**
+	 * @uml.property name="stats"
+	 * @uml.associationEnd
+	 */
+	protected ElectricityStats stats;
 
-  protected static double buyerValues[] = { 37, 17, 12 };
+	protected static double buyerValues[] = { 37, 17, 12 };
 
-  protected static double sellerValues[] = { 35, 16, 11 };
+	protected static double sellerValues[] = { 35, 16, 11 };
 
-  protected static long seeds[] = null;
+	protected static long seeds[] = null;
 
-  /**
-   * @uml.property name="mPB"
-   * @uml.associationEnd
-   */
-  protected CummulativeDistribution mPB;
+	/**
+	 * @uml.property name="mPB"
+	 * @uml.associationEnd
+	 */
+	protected CummulativeDistribution mPB;
 
-  /**
-   * @uml.property name="mPS"
-   * @uml.associationEnd
-   */
-  protected CummulativeDistribution mPS;
+	/**
+	 * @uml.property name="mPS"
+	 * @uml.associationEnd
+	 */
+	protected CummulativeDistribution mPS;
 
-  /**
-   * @uml.property name="eA"
-   * @uml.associationEnd
-   */
-  protected CummulativeDistribution eA;
+	/**
+	 * @uml.property name="eA"
+	 * @uml.associationEnd
+	 */
+	protected CummulativeDistribution eA;
 
-  /**
-   * @uml.property name="ns"
-   */
-  protected int ns;
+	/**
+	 * @uml.property name="ns"
+	 */
+	protected int ns;
 
-  /**
-   * @uml.property name="nb"
-   */
-  protected int nb;
+	/**
+	 * @uml.property name="nb"
+	 */
+	protected int nb;
 
-  /**
-   * @uml.property name="cs"
-   */
-  protected int cs;
+	/**
+	 * @uml.property name="cs"
+	 */
+	protected int cs;
 
-  /**
-   * @uml.property name="cb"
-   */
-  protected int cb;
+	/**
+	 * @uml.property name="cb"
+	 */
+	protected int cb;
 
-  static final int ITERATIONS = 100;
+	static final int ITERATIONS = 100;
 
-  static final int MAX_ROUNDS = 1000;
+	static final int MAX_ROUNDS = 1000;
 
-  static final int K = 40;
+	static final int K = 40;
 
-  static final double R = 0.10;
+	static final double R = 0.10;
 
-  static final double E = 0.20;
+	static final double E = 0.20;
 
-  static final double S1 = 9;
+	static final double S1 = 9;
 
-  static final double MIN_PRIVATE_VALUE = 30;
+	static final double MIN_PRIVATE_VALUE = 30;
 
-  static final double MAX_PRIVATE_VALUE = 100;
+	static final double MAX_PRIVATE_VALUE = 100;
 
-  static Logger logger = Logger.getLogger(ElectricityTest.class);
+	static Logger logger = Logger.getLogger(ElectricityTest.class);
 
-  public ElectricityTest( String name ) {
-    super(name);
-    generatePRNGseeds();
-  }
+	public ElectricityTest(String name) {
+		super(name);
+		generatePRNGseeds();
+	}
 
-  public void runExperiment() {
-    System.out.println("\nAttempting to replicate NPT results with");
-    System.out.println("NS = " + ns + " NB = " + nb + " CS = " + cs + " CB = "
-        + cb);
-    System.out.println("R = " + R + " E = " + E + " K = " + K + " S1 = " + S1);
-    System.out.println("with " + ITERATIONS + " iterations and " + MAX_ROUNDS
-        + " auction rounds.");
-    initStats();
-    for ( int i = 0; i < ITERATIONS; i++ ) {
-      System.out.println("Iteration " + i);
-      auction.reset();
-      GlobalPRNG.initialiseWithSeed(seeds[i]);
-      auction.run();
-      stats.calculate();
-      if ( stats.equilibriaExists() ) {
-        updateStats();
-        System.out.println("EA = " + stats.getEA());
-      } else {
-        System.out.println("no equilibrium price");
-      }
-    }
-    System.out.println(eA);
-    System.out.println(mPS);
-    System.out.println(mPB);
-    traderReport();
-  }
+	public void runExperiment() {
+		System.out.println("\nAttempting to replicate NPT results with");
+		System.out.println("NS = " + ns + " NB = " + nb + " CS = " + cs + " CB = "
+		    + cb);
+		System.out.println("R = " + R + " E = " + E + " K = " + K + " S1 = " + S1);
+		System.out.println("with " + ITERATIONS + " iterations and " + MAX_ROUNDS
+		    + " auction rounds.");
+		initStats();
+		for (int i = 0; i < ITERATIONS; i++) {
+			System.out.println("Iteration " + i);
+			auction.reset();
+			GlobalPRNG.initialiseWithSeed(seeds[i]);
+			auction.run();
+			stats.calculate();
+			if (stats.equilibriaExists()) {
+				updateStats();
+				System.out.println("EA = " + stats.getEA());
+			} else {
+				System.out.println("no equilibrium price");
+			}
+		}
+		System.out.println(eA);
+		System.out.println(mPS);
+		System.out.println(mPB);
+		traderReport();
+	}
 
-  public void updateStats() {
-    mPS.newData(stats.getMPS());
-    mPB.newData(stats.getMPB());
-    eA.newData(stats.getEA());
-  }
+	public void updateStats() {
+		mPS.newData(stats.getMPS());
+		mPB.newData(stats.getMPB());
+		eA.newData(stats.getEA());
+	}
 
-  public void initStats() {
-    mPS = new CummulativeDistribution("MPS");
-    mPB = new CummulativeDistribution("MPB");
-    eA = new CummulativeDistribution("EA");
-  }
+	public void initStats() {
+		mPS = new CummulativeDistribution("MPS");
+		mPB = new CummulativeDistribution("MPB");
+		eA = new CummulativeDistribution("EA");
+	}
 
-  public void experimentSetup( int ns, int nb, int cs, int cb ) {
-    this.ns = ns;
-    this.nb = nb;
-    this.cs = cs;
-    this.cb = cb;
-    auction = new RandomRobinAuction("NPTReplicationTest");
-    auctioneer = new ClearingHouseAuctioneer(auction);
-    ((AbstractAuctioneer) auctioneer)
-        .setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
-    auction.setAuctioneer(auctioneer);
-    auction.setMaximumRounds(MAX_ROUNDS);
-    registerTraders(auction, true, ns, cs, sellerValues);
-    registerTraders(auction, false, nb, cb, buyerValues);
-    stats = new ElectricityStats(auction);
-  }
+	public void experimentSetup(int ns, int nb, int cs, int cb) {
+		this.ns = ns;
+		this.nb = nb;
+		this.cs = cs;
+		this.cb = cb;
+		auction = new RandomRobinAuction("NPTReplicationTest");
+		auctioneer = new ClearingHouseAuctioneer(auction);
+		((AbstractAuctioneer) auctioneer)
+		    .setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+		auction.setAuctioneer(auctioneer);
+		auction.setMaximumRounds(MAX_ROUNDS);
+		registerTraders(auction, true, ns, cs, sellerValues);
+		registerTraders(auction, false, nb, cb, buyerValues);
+		stats = new ElectricityStats(auction);
+	}
 
-  public void registerTraders( RandomRobinAuction auction, boolean areSellers,
-      int num, int capacity, double[] values ) {
-    for ( int i = 0; i < num; i++ ) {
-      double value = values[i % values.length];
-      ElectricityTrader agent = new ElectricityTrader(capacity, value, 0,
-          areSellers);
-      assignStrategy(agent);
-      assignValuer(agent);
-      auction.register(agent);
-    }
-  }
+	public void registerTraders(RandomRobinAuction auction, boolean areSellers,
+	    int num, int capacity, double[] values) {
+		for (int i = 0; i < num; i++) {
+			double value = values[i % values.length];
+			ElectricityTrader agent = new ElectricityTrader(capacity, value, 0,
+			    areSellers);
+			assignStrategy(agent);
+			assignValuer(agent);
+			auction.register(agent);
+		}
+	}
 
-  public void generatePRNGseeds() {
+	public void generatePRNGseeds() {
 
-    if ( seeds != null ) {
-      return;
-    }
+		if (seeds != null) {
+			return;
+		}
 
-    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-    logger.info(this + ": generating PRNG seeds using default seed.. ");
+		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+		logger.info(this + ": generating PRNG seeds using default seed.. ");
 
-    seeds = new long[ITERATIONS];
+		seeds = new long[ITERATIONS];
 
-    RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
-    for ( int i = 0; i < ITERATIONS; i++ ) {
-      seeds[i] = (long) seedGenerator.nextSeed();
-    }
-    logger.info("done.");
-  }
+		RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
+		for (int i = 0; i < ITERATIONS; i++) {
+			seeds[i] = (long) seedGenerator.nextSeed();
+		}
+		logger.info("done.");
+	}
 
-  public void assignStrategy( ElectricityTrader agent ) {
-    StimuliResponseStrategy strategy = new StimuliResponseStrategy(agent);
-    strategy.setQuantity(agent.getCapacity());
-    NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1);
-    strategy.setLearner(learner);
-    agent.setStrategy(strategy);
-    agent.reset();
-  }
+	public void assignStrategy(ElectricityTrader agent) {
+		StimuliResponseStrategy strategy = new StimuliResponseStrategy(agent);
+		strategy.setQuantity(agent.getCapacity());
+		NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1);
+		strategy.setLearner(learner);
+		agent.setStrategy(strategy);
+		agent.reset();
+	}
 
-  public void assignValuer( ElectricityTrader agent ) {
-    // Stick with default fixed valuation
-  }
+	public void assignValuer(ElectricityTrader agent) {
+		// Stick with default fixed valuation
+	}
 
-  public void traderReport() {
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      ElectricityTrader agent = (ElectricityTrader) i.next();
-      System.out.println(agent);
-    }
-  }
+	public void traderReport() {
+		Iterator i = auction.getTraderIterator();
+		while (i.hasNext()) {
+			ElectricityTrader agent = (ElectricityTrader) i.next();
+			System.out.println(agent);
+		}
+	}
 
 }

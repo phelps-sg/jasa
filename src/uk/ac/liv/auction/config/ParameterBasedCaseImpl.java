@@ -24,28 +24,29 @@ import ec.util.ParameterDatabase;
  * @version $Revision$
  */
 
-public class ParameterBasedCaseImpl implements ParameterBasedCase, Parameterizable {
-	
-  public static final String P_NAME = "name";
+public class ParameterBasedCaseImpl implements ParameterBasedCase,
+    Parameterizable {
+
+	public static final String P_NAME = "name";
 
 	protected String name;
-	
+
 	protected String value;
-	
+
 	public void setup(ParameterDatabase pdb, Parameter base) {
-		name = pdb.getString(base.push(P_NAME));		
+		name = pdb.getString(base.push(P_NAME), null);
 	}
 
 	public void setValue(String value) {
-		this.value = value;		
+		this.value = value;
 	}
 
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(new Parameter(name), value);
-		assert value.equals(pdb.getString(new Parameter(name)));	
+		assert value.equals(pdb.getString(new Parameter(name), null));
 	}
-	
+
 	public String toString() {
 		return value;
-	}	
+	}
 }

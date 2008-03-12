@@ -16,18 +16,18 @@
 package uk.ac.liv.auction.core;
 
 /**
- * Classes implementing this interface define pricing policies for
- * auctioneers.  A pricing policy determines the price of an individual
- * transaction in the market as a function of the individual bid
- * and ask prices and the current market quote.
- *
+ * Classes implementing this interface define pricing policies for auctioneers.
+ * A pricing policy determines the price of an individual transaction in the
+ * market as a function of the individual bid and ask prices and the current
+ * market quote.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public interface PricingPolicy  {
-	
-  public double determineClearingPrice( Shout bid, Shout ask,
-                                         MarketQuote clearingQuote );
+public interface PricingPolicy {
+
+	public double determineClearingPrice(Shout bid, Shout ask,
+	    MarketQuote clearingQuote);
 
 }

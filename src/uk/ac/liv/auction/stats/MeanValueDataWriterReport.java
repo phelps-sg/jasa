@@ -15,15 +15,16 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.*;
+import org.apache.log4j.Logger;
+
+import uk.ac.liv.auction.core.MarketQuote;
+import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.util.CummulativeDistribution;
-import uk.ac.liv.util.io.*;
-
-import org.apache.log4j.Logger;
+import uk.ac.liv.util.io.DataWriter;
 
 /**
  * This report keeps track of the mean value of each market variable over the
@@ -36,115 +37,115 @@ import org.apache.log4j.Logger;
 
 public class MeanValueDataWriterReport extends DataWriterReport {
 
-  /**
-   * @uml.property name="askQuoteStats"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected CummulativeDistribution askQuoteStats = new CummulativeDistribution(
-      "Ask Quote");
+	/**
+	 * @uml.property name="askQuoteStats"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected CummulativeDistribution askQuoteStats = new CummulativeDistribution(
+	    "Ask Quote");
 
-  /**
-   * @uml.property name="bidQuoteStats"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected CummulativeDistribution bidQuoteStats = new CummulativeDistribution(
-      "Bid Quote");
+	/**
+	 * @uml.property name="bidQuoteStats"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected CummulativeDistribution bidQuoteStats = new CummulativeDistribution(
+	    "Bid Quote");
 
-  /**
-   * @uml.property name="bidStats"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected CummulativeDistribution bidStats = new CummulativeDistribution(
-      "Bid");
+	/**
+	 * @uml.property name="bidStats"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected CummulativeDistribution bidStats = new CummulativeDistribution(
+	    "Bid");
 
-  /**
-   * @uml.property name="askStats"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected CummulativeDistribution askStats = new CummulativeDistribution(
-      "Ask");
+	/**
+	 * @uml.property name="askStats"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected CummulativeDistribution askStats = new CummulativeDistribution(
+	    "Ask");
 
-  /**
-   * @uml.property name="transPriceStats"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected CummulativeDistribution transPriceStats = new CummulativeDistribution(
-      "Transaction Price");
+	/**
+	 * @uml.property name="transPriceStats"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected CummulativeDistribution transPriceStats = new CummulativeDistribution(
+	    "Transaction Price");
 
-  /**
-   * @uml.property name="allStats"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected CummulativeDistribution[] allStats = { askQuoteStats,
-      bidQuoteStats, askStats, bidStats, transPriceStats };
+	/**
+	 * @uml.property name="allStats"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected CummulativeDistribution[] allStats = { askQuoteStats,
+	    bidQuoteStats, askStats, bidStats, transPriceStats };
 
-  /**
-   * @uml.property name="round"
-   */
-  protected int round;
+	/**
+	 * @uml.property name="round"
+	 */
+	protected int round;
 
-  static Logger logger = Logger.getLogger(MeanValueDataWriterReport.class);
+	static Logger logger = Logger.getLogger(MeanValueDataWriterReport.class);
 
-  public MeanValueDataWriterReport( DataWriter askQuoteLog,
-      DataWriter bidQuoteLog, DataWriter bidLog, DataWriter askLog,
-      DataWriter transPriceLog ) {
-    super(askQuoteLog, bidQuoteLog, bidLog, askLog, transPriceLog);
-  }
+	public MeanValueDataWriterReport(DataWriter askQuoteLog,
+	    DataWriter bidQuoteLog, DataWriter bidLog, DataWriter askLog,
+	    DataWriter transPriceLog) {
+		super(askQuoteLog, bidQuoteLog, bidLog, askLog, transPriceLog);
+	}
 
-  public MeanValueDataWriterReport() {
-    super();
-  }
+	public MeanValueDataWriterReport() {
+		super();
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    if ( event instanceof RoundClosedEvent ) {
-      roundClosed((RoundClosedEvent) event);
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof RoundClosedEvent) {
+			roundClosed((RoundClosedEvent) event);
+		}
+	}
 
-  public void updateQuoteLog( RoundClosedEvent event ) {
-    MarketQuote quote = event.getAuction().getQuote();
-    askQuoteStats.newData(quote.getAsk());
-    bidQuoteStats.newData(quote.getBid());
-  }
+	public void updateQuoteLog(RoundClosedEvent event) {
+		MarketQuote quote = event.getAuction().getQuote();
+		askQuoteStats.newData(quote.getAsk());
+		bidQuoteStats.newData(quote.getBid());
+	}
 
-  public void updateTransPriceLog( TransactionExecutedEvent event ) {
-    transPriceStats.newData(event.getPrice());
-  }
+	public void updateTransPriceLog(TransactionExecutedEvent event) {
+		transPriceStats.newData(event.getPrice());
+	}
 
-  public void updateShoutLog( ShoutPlacedEvent event ) {
-    Shout shout = event.getShout();
-    if ( shout.isBid() ) {
-      bidStats.newData(shout.getPrice());
-    } else {
-      askStats.newData(shout.getPrice());
-    }
-  }
+	public void updateShoutLog(ShoutPlacedEvent event) {
+		Shout shout = event.getShout();
+		if (shout.isBid()) {
+			bidStats.newData(shout.getPrice());
+		} else {
+			askStats.newData(shout.getPrice());
+		}
+	}
 
-  public void roundClosed( RoundClosedEvent event ) {
+	public void roundClosed(RoundClosedEvent event) {
 
-    logger.debug("roundClosed(" + auction + ")");
+		logger.debug("roundClosed(" + auction + ")");
 
-    update(askQuoteLog, askQuoteStats);
-    update(bidQuoteLog, bidQuoteStats);
-    update(askLog, askStats);
-    update(bidLog, bidStats);
-    update(transPriceLog, transPriceStats);
+		update(askQuoteLog, askQuoteStats);
+		update(bidQuoteLog, bidQuoteStats);
+		update(askLog, askStats);
+		update(bidLog, bidStats);
+		update(transPriceLog, transPriceStats);
 
-    for ( int i = 0; i < allStats.length; i++ ) {
-      logger.debug(allStats[i]);
-      allStats[i].reset();
-    }
+		for (int i = 0; i < allStats.length; i++) {
+			logger.debug(allStats[i]);
+			allStats[i].reset();
+		}
 
-    round++;
-  }
+		round++;
+	}
 
-  protected void update( DataWriter writer, CummulativeDistribution stats ) {
-    // writer.newData(round);
-    writer.newData(stats.getMean());
-  }
+	protected void update(DataWriter writer, CummulativeDistribution stats) {
+		// writer.newData(round);
+		writer.newData(stats.getMean());
+	}
 
-  public void produceUserOutput() {
-  }
+	public void produceUserOutput() {
+	}
 
 }

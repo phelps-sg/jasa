@@ -15,129 +15,128 @@
 
 package uk.ac.liv.auction.stats;
 
-import java.util.*;
+import java.util.Random;
 
-import junit.framework.*;
-
-
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import uk.ac.liv.auction.agent.FixedValuer;
 import uk.ac.liv.auction.agent.MockTrader;
 import uk.ac.liv.auction.agent.TruthTellingStrategy;
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.stats.EquilibriumReport;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.util.MathUtil;
 
 public class EquilibriaStatsTest extends TestCase {
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	RandomRobinAuction auction;
 
-  /**
-   * @uml.property name="traders"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  MockTrader[] traders;
+	/**
+	 * @uml.property name="traders"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	MockTrader[] traders;
 
-  /**
-   * @uml.property name="randGenerator"
-   */
-  Random randGenerator = new Random();
+	/**
+	 * @uml.property name="randGenerator"
+	 */
+	Random randGenerator = new Random();
 
-  static double[] NO_EP = { 100, 90, 80, 10, 20, 30 };
+	static double[] NO_EP = { 100, 90, 80, 10, 20, 30 };
 
-  static double[] SINGLE_CROSS = { 100, 90, 40, 10, 20, 50 };
+	static double[] SINGLE_CROSS = { 100, 90, 40, 10, 20, 50 };
 
-  static double[] EXACT_OVERLAP = { 100, 90, 40, 10, 20, 40 };
+	static double[] EXACT_OVERLAP = { 100, 90, 40, 10, 20, 40 };
 
-  static double[] NPT = { 37, 17, 12, 11, 16, 37 };
+	static double[] NPT = { 37, 17, 12, 11, 16, 37 };
 
-  static final int N = 6;
+	static final int N = 6;
 
-  static final int NS = 3;
+	static final int NS = 3;
 
-  static final double MAX_PV = 100;
+	static final double MAX_PV = 100;
 
-  public EquilibriaStatsTest( String name ) {
-    super(name);
-  }
+	public EquilibriaStatsTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    auction = new RandomRobinAuction();
-    traders = new MockTrader[N];
-    for ( int i = 0; i < N; i++ ) {
-      traders[i] = new MockTrader(this, 0, 0, 0, i < NS);
-      traders[i].setStrategy(new TruthTellingStrategy(traders[i]));
-      auction.register(traders[i]);
-    }
-  }
+	public void setUp() {
+		auction = new RandomRobinAuction();
+		traders = new MockTrader[N];
+		for (int i = 0; i < N; i++) {
+			traders[i] = new MockTrader(this, 0, 0, 0, i < NS);
+			traders[i].setStrategy(new TruthTellingStrategy(traders[i]));
+			auction.register(traders[i]);
+		}
+	}
 
-  /**
-   * Check that EP is zero when valuations are zero.
-   * 
-   */
-  public void testZeroEP() {
-    EquilibriumReport ep = new EquilibriumReport(auction);
-    ep.calculate();
-    assertTrue(ep.calculateMidEquilibriumPrice() == 0);
-  }
+	/**
+	 * Check that EP is zero when valuations are zero.
+	 * 
+	 */
+	public void testZeroEP() {
+		EquilibriumReport ep = new EquilibriumReport(auction);
+		ep.calculate();
+		assertTrue(ep.calculateMidEquilibriumPrice() == 0);
+	}
 
-  public void testSingleCross() {
-    checkEP(SINGLE_CROSS, 45);
-  }
+	public void testSingleCross() {
+		checkEP(SINGLE_CROSS, 45);
+	}
 
-  public void testExactOverlap() {
-    checkEP(EXACT_OVERLAP, 40);
-  }
+	public void testExactOverlap() {
+		checkEP(EXACT_OVERLAP, 40);
+	}
 
-  public void testNPT() {
-    checkEP(NPT, 16.5);
-  }
+	public void testNPT() {
+		checkEP(NPT, 16.5);
+	}
 
-  /**
-   * Check that no equilibria exists when supp/demand do not cross.
-   */
-  public void testNoEP() {
-    setValuations(NO_EP);
-    EquilibriumReport ep = new EquilibriumReport(auction);
-    ep.calculate();
-    assertTrue(!ep.equilibriaExists());
-  }
+	/**
+	 * Check that no equilibria exists when supp/demand do not cross.
+	 */
+	public void testNoEP() {
+		setValuations(NO_EP);
+		EquilibriumReport ep = new EquilibriumReport(auction);
+		ep.calculate();
+		assertTrue(!ep.equilibriaExists());
+	}
 
-  /**
-   * Check that no equilibria exists when there are no traders.
-   */
-  public void testNoTraders() {
-    auction = new RandomRobinAuction();
-    EquilibriumReport ep = new EquilibriumReport(auction);
-    ep.calculate();
-    assertTrue(!ep.equilibriaExists());
-  }
+	/**
+	 * Check that no equilibria exists when there are no traders.
+	 */
+	public void testNoTraders() {
+		auction = new RandomRobinAuction();
+		EquilibriumReport ep = new EquilibriumReport(auction);
+		ep.calculate();
+		assertTrue(!ep.equilibriaExists());
+	}
 
-  protected void checkEP( double[] valuations, double correctEP ) {
-    setValuations(valuations);
-    EquilibriumReport ep = new EquilibriumReport(auction);
-    ep.calculate();
-    double mep = ep.calculateMidEquilibriumPrice();
-    System.out.println("Mid EP = " + mep);
-    assertTrue(MathUtil.approxEqual(mep, correctEP));
-    assertTrue(ep.equilibriaExists());
-  }
+	protected void checkEP(double[] valuations, double correctEP) {
+		setValuations(valuations);
+		EquilibriumReport ep = new EquilibriumReport(auction);
+		ep.calculate();
+		double mep = ep.calculateMidEquilibriumPrice();
+		System.out.println("Mid EP = " + mep);
+		assertTrue(MathUtil.approxEqual(mep, correctEP));
+		assertTrue(ep.equilibriaExists());
+	}
 
-  protected void setValuations( double[] valuations ) {
-    for ( int i = 0; i < N; i++ ) {
-      traders[i].setValuationPolicy(new FixedValuer(valuations[i]));
-    }
-  }
+	protected void setValuations(double[] valuations) {
+		for (int i = 0; i < N; i++) {
+			traders[i].setValuationPolicy(new FixedValuer(valuations[i]));
+		}
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(EquilibriaStatsTest.class);
-  }
+	public static Test suite() {
+		return new TestSuite(EquilibriaStatsTest.class);
+	}
 
 }

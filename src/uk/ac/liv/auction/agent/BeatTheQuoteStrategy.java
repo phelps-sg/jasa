@@ -22,40 +22,43 @@ import uk.ac.liv.prng.GlobalPRNG;
 
 public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
 
-  protected double perterb = 0.20;
-  
-  public BeatTheQuoteStrategy() {
-    super();
-  }
+	protected double perterb = 0.20;
 
-  public BeatTheQuoteStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	public BeatTheQuoteStrategy() {
+		super();
+	}
 
-  public void endOfRound( Auction auction ) {
-  }
+	public BeatTheQuoteStrategy(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public boolean modifyShout( MutableShout shout ) {
-    MarketQuote quote = auction.getQuote();
-    if ( agent.isBuyer(auction) ) {
-      double p = quote.getAsk();
-      if ( !Double.isInfinite(p) && p < agent.getValuation(auction)  ) {
-//        shout.setPrice(p + p * GlobalPRNG.getInstance().uniform(0, perterb));
-      	shout.setPrice(p + p * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
-      } else {
-        shout.setPrice(agent.getValuation(auction));
-      }
-    } else {
-      double p = quote.getBid();
-      if ( !Double.isInfinite(p) && p > agent.getValuation(auction) ) {
-//        shout.setPrice(p - p * GlobalPRNG.getInstance().uniform(0, perterb));
-      	shout.setPrice(p - p * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
-      } else {
-        shout.setPrice(agent.getValuation(auction));
-      }
-    }
-    return super.modifyShout(shout);
-  }
+	public void endOfRound(Auction auction) {
+	}
 
+	public boolean modifyShout(MutableShout shout) {
+		MarketQuote quote = auction.getQuote();
+		if (agent.isBuyer(auction)) {
+			double p = quote.getAsk();
+			if (!Double.isInfinite(p) && p < agent.getValuation(auction)) {
+				// shout.setPrice(p + p * GlobalPRNG.getInstance().uniform(0,
+				// perterb));
+				shout.setPrice(p + p
+				    * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
+			} else {
+				shout.setPrice(agent.getValuation(auction));
+			}
+		} else {
+			double p = quote.getBid();
+			if (!Double.isInfinite(p) && p > agent.getValuation(auction)) {
+				// shout.setPrice(p - p * GlobalPRNG.getInstance().uniform(0,
+				// perterb));
+				shout.setPrice(p - p
+				    * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
+			} else {
+				shout.setPrice(agent.getValuation(auction));
+			}
+		}
+		return super.modifyShout(shout);
+	}
 
 }

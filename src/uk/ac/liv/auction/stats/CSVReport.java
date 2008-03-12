@@ -15,129 +15,132 @@
 
 package uk.ac.liv.auction.stats;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
 import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.io.*;
-
-import ec.util.ParameterDatabase;
+import uk.ac.liv.util.io.CSVWriter;
 import ec.util.Parameter;
-
-import java.io.*;
+import ec.util.ParameterDatabase;
 
 /**
  * A report that records data in CSV (comma-separated values) files.
- *
- * <p><b>Parameters</b><br></p>
+ * 
+ * <p>
+ * <b>Parameters</b><br>
+ * </p>
  * <table>
- *
- * <tr><td valign=top><i>base</i><tt>.quotelogfile</tt><br>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.quotelogfile</tt><br>
  * <font size=-1>string</font></td>
- * <td valign=top>(the filename to store the quote data)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.shoutlogfile</tt><br>
+ * <td valign=top>(the filename to store the quote data)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.shoutlogfile</tt><br>
  * <font size=-1>string</font></td>
- * <td valign=top>(the filename to store the shout data)</td><tr>
- *
- * <tr><td valign=top><i>base</i><tt>.translogfile</tt><br>
+ * <td valign=top>(the filename to store the shout data)</td>
+ * <tr>
+ * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.translogfile</tt><br>
  * <font size=-1>string</font></td>
- * <td valign=top>(the filename to store the transaction price data)</td><tr>
- *
+ * <td valign=top>(the filename to store the transaction price data)</td>
+ * <tr>
+ * 
  * </table>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class CSVReport extends DataWriterReport
-    implements Parameterizable {
+public class CSVReport extends DataWriterReport implements Parameterizable {
 
-  public static final String P_DEF_BASE = "csvreport";
-  
-  static final String P_ASK_QUOTE_LOG_FILE = "askquotelogfile";
-  static final String P_BID_QUOTE_LOG_FILE = "bidquotelogfile";
-  static final String P_ASK_LOG_FILE = "asklogfile";
-  static final String P_BID_LOG_FILE = "bidlogfile";
-  static final String P_TRANS_LOG_FILE = "translogfile";
+	public static final String P_DEF_BASE = "csvreport";
 
-  static final int CSV_COLS = 2;
+	static final String P_ASK_QUOTE_LOG_FILE = "askquotelogfile";
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-  	
-  	Parameter defBase = new Parameter(P_DEF_BASE);
-  	
-    String askQuoteLogFile =
-        parameters.getString(base.push(P_ASK_QUOTE_LOG_FILE), 
-        		defBase.push(P_ASK_QUOTE_LOG_FILE));
-    String bidQuoteLogFile =
-        parameters.getString(base.push(P_BID_QUOTE_LOG_FILE), 
-        		defBase.push(P_BID_QUOTE_LOG_FILE));
-    String askLogFile =
-        parameters.getString(base.push(P_ASK_LOG_FILE), 
-        		defBase.push(P_ASK_LOG_FILE));
-    String bidLogFile =
-        parameters.getString(base.push(P_BID_LOG_FILE), 
-        		defBase.push(P_BID_LOG_FILE));
-    String transLogFile =
-        parameters.getString(base.push(P_TRANS_LOG_FILE), 
-        		defBase.push(P_TRANS_LOG_FILE));
-    try {
-      if ( askQuoteLogFile != null ) {
-        setCSVAskQuoteLog(new FileOutputStream(new File(askQuoteLogFile)));
-      }
-      if ( bidQuoteLogFile != null ) {
-        setCSVBidQuoteLog(new FileOutputStream(new File(bidQuoteLogFile)));
-      }
-      if ( askLogFile != null ) {
-        setCSVAskLog(new FileOutputStream(new File(askLogFile)));
-      }
-      if ( bidLogFile != null ) {
-        setCSVBidLog(new FileOutputStream(new File(bidLogFile)));
-      }
-      if ( transLogFile != null ) {
-        setCSVTransPriceLog(new FileOutputStream(new File(transLogFile)));
-      }
-    } catch ( java.io.IOException e ) {
-      e.printStackTrace();
-    }
+	static final String P_BID_QUOTE_LOG_FILE = "bidquotelogfile";
 
-  }
+	static final String P_ASK_LOG_FILE = "asklogfile";
 
-  /**
-   * Assign an output stream for logging market quote data
-   * in comma-separated variable (CSV) format.
-   */
-  public void setCSVAskQuoteLog( OutputStream stream ) {
-    askQuoteLog = new CSVWriter(stream, CSV_COLS);
-  }
+	static final String P_BID_LOG_FILE = "bidlogfile";
 
-  /**
-   * Assign an output stream for logging market quote data
-   * in comma-separated variable (CSV) format.
-   */
-  public void setCSVBidQuoteLog( OutputStream stream ) {
-    bidQuoteLog = new CSVWriter(stream, CSV_COLS);
-  }
+	static final String P_TRANS_LOG_FILE = "translogfile";
 
-  /**
-   * Assign an output stream for logging shouts
-   * in comma-separated variable (CSV) format.
-   * This can significantly impact the performance
-   * of an auction.
-   */
-  public void setCSVAskLog( OutputStream stream ) {
-    askLog = new CSVWriter(stream, CSV_COLS);
-  }
+	static final int CSV_COLS = 2;
 
-  public void setCSVBidLog( OutputStream stream ) {
-    bidLog = new CSVWriter(stream, CSV_COLS);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-  /**
-   * Assign an output stream for logging transaction price data
-   * in CSV format.
-   */
-  public void setCSVTransPriceLog( OutputStream stream ) {
-    transPriceLog = new CSVWriter(stream, CSV_COLS);
-  }
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
+		String askQuoteLogFile = parameters.getString(base
+		    .push(P_ASK_QUOTE_LOG_FILE), defBase.push(P_ASK_QUOTE_LOG_FILE));
+		String bidQuoteLogFile = parameters.getString(base
+		    .push(P_BID_QUOTE_LOG_FILE), defBase.push(P_BID_QUOTE_LOG_FILE));
+		String askLogFile = parameters.getString(base.push(P_ASK_LOG_FILE), defBase
+		    .push(P_ASK_LOG_FILE));
+		String bidLogFile = parameters.getString(base.push(P_BID_LOG_FILE), defBase
+		    .push(P_BID_LOG_FILE));
+		String transLogFile = parameters.getString(base.push(P_TRANS_LOG_FILE),
+		    defBase.push(P_TRANS_LOG_FILE));
+		try {
+			if (askQuoteLogFile != null) {
+				setCSVAskQuoteLog(new FileOutputStream(new File(askQuoteLogFile)));
+			}
+			if (bidQuoteLogFile != null) {
+				setCSVBidQuoteLog(new FileOutputStream(new File(bidQuoteLogFile)));
+			}
+			if (askLogFile != null) {
+				setCSVAskLog(new FileOutputStream(new File(askLogFile)));
+			}
+			if (bidLogFile != null) {
+				setCSVBidLog(new FileOutputStream(new File(bidLogFile)));
+			}
+			if (transLogFile != null) {
+				setCSVTransPriceLog(new FileOutputStream(new File(transLogFile)));
+			}
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * Assign an output stream for logging market quote data in comma-separated
+	 * variable (CSV) format.
+	 */
+	public void setCSVAskQuoteLog(OutputStream stream) {
+		askQuoteLog = new CSVWriter(stream, CSV_COLS);
+	}
+
+	/**
+	 * Assign an output stream for logging market quote data in comma-separated
+	 * variable (CSV) format.
+	 */
+	public void setCSVBidQuoteLog(OutputStream stream) {
+		bidQuoteLog = new CSVWriter(stream, CSV_COLS);
+	}
+
+	/**
+	 * Assign an output stream for logging shouts in comma-separated variable
+	 * (CSV) format. This can significantly impact the performance of an auction.
+	 */
+	public void setCSVAskLog(OutputStream stream) {
+		askLog = new CSVWriter(stream, CSV_COLS);
+	}
+
+	public void setCSVBidLog(OutputStream stream) {
+		bidLog = new CSVWriter(stream, CSV_COLS);
+	}
+
+	/**
+	 * Assign an output stream for logging transaction price data in CSV format.
+	 */
+	public void setCSVTransPriceLog(OutputStream stream) {
+		transPriceLog = new CSVWriter(stream, CSV_COLS);
+	}
 
 }

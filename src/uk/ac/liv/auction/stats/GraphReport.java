@@ -41,88 +41,88 @@ import uchicago.src.sim.analysis.Sequence;
 public class GraphReport extends MeanValueDataWriterReport implements
     Parameterizable, Resetable {
 
-  /**
-   * @uml.property name="currentSeries"
-   */
-  protected int currentSeries;
+	/**
+	 * @uml.property name="currentSeries"
+	 */
+	protected int currentSeries;
 
-  /**
-   * @uml.property name="allSeries"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected RepastGraphSequence[] allSeries;
+	/**
+	 * @uml.property name="allSeries"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected RepastGraphSequence[] allSeries;
 
-  protected static GraphReport singletonInstance;
+	protected static GraphReport singletonInstance;
 
-  /**
-   * @uml.property name="askQuoteSeries"
-   * @uml.associationEnd readOnly="true"
-   */
-  protected RepastGraphSequence askQuoteSeries;
+	/**
+	 * @uml.property name="askQuoteSeries"
+	 * @uml.associationEnd readOnly="true"
+	 */
+	protected RepastGraphSequence askQuoteSeries;
 
-  /**
-   * @uml.property name="bidQuoteSeries"
-   * @uml.associationEnd readOnly="true"
-   */
-  protected RepastGraphSequence bidQuoteSeries;
+	/**
+	 * @uml.property name="bidQuoteSeries"
+	 * @uml.associationEnd readOnly="true"
+	 */
+	protected RepastGraphSequence bidQuoteSeries;
 
-  /**
-   * @uml.property name="transPriceSeries"
-   * @uml.associationEnd readOnly="true"
-   */
-  protected RepastGraphSequence transPriceSeries;
+	/**
+	 * @uml.property name="transPriceSeries"
+	 * @uml.associationEnd readOnly="true"
+	 */
+	protected RepastGraphSequence transPriceSeries;
 
-  /**
-   * @uml.property name="listenerList"
-   * @uml.associationEnd
-   */
-  protected EventListenerList listenerList = new EventListenerList();
+	/**
+	 * @uml.property name="listenerList"
+	 * @uml.associationEnd
+	 */
+	protected EventListenerList listenerList = new EventListenerList();
 
-  // protected GraphDataEvent event = new GraphDataEvent(this);
+	// protected GraphDataEvent event = new GraphDataEvent(this);
 
-  static Logger logger = Logger.getLogger(GraphReport.class);
+	static Logger logger = Logger.getLogger(GraphReport.class);
 
-  public GraphReport() {
-    super();
-    askQuoteLog = new RepastGraphSequence("mean ask quote per round");
-    bidQuoteLog = new RepastGraphSequence("mean bid quote per round");
-    transPriceLog = new RepastGraphSequence("mean transaction price per round");
-    askLog = new RepastGraphSequence("ask");
-    bidLog = new RepastGraphSequence("bid");
-    allSeries = new RepastGraphSequence[] { (RepastGraphSequence) askQuoteLog,
-        (RepastGraphSequence) bidQuoteLog, (RepastGraphSequence) transPriceLog };
-  }
+	public GraphReport() {
+		super();
+		askQuoteLog = new RepastGraphSequence("mean ask quote per round");
+		bidQuoteLog = new RepastGraphSequence("mean bid quote per round");
+		transPriceLog = new RepastGraphSequence("mean transaction price per round");
+		askLog = new RepastGraphSequence("ask");
+		bidLog = new RepastGraphSequence("bid");
+		allSeries = new RepastGraphSequence[] { (RepastGraphSequence) askQuoteLog,
+		    (RepastGraphSequence) bidQuoteLog, (RepastGraphSequence) transPriceLog };
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    singletonInstance = this;
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		singletonInstance = this;
+	}
 
-  public static GraphReport getSingletonInstance() {
-    return singletonInstance;
-  }
+	public static GraphReport getSingletonInstance() {
+		return singletonInstance;
+	}
 
-  public void reset() {
-    // TODO
-    // fireGraphChanged(new GraphDataEvent(this));
-  }
+	public void reset() {
+		// TODO
+		// fireGraphChanged(new GraphDataEvent(this));
+	}
 
-  public Iterator getSequenceIterator() {
-    return new Iterator() {
+	public Iterator getSequenceIterator() {
+		return new Iterator() {
 
-      int currentSequence = 0;
+			int currentSequence = 0;
 
-      public boolean hasNext() {
-        return currentSequence < allSeries.length;
-      }
+			public boolean hasNext() {
+				return currentSequence < allSeries.length;
+			}
 
-      public Object next() {
-        return (Sequence) allSeries[currentSequence++];
-      }
+			public Object next() {
+				return (Sequence) allSeries[currentSequence++];
+			}
 
-      public void remove() {
-      }
+			public void remove() {
+			}
 
-    };
-  }
+		};
+	}
 
 }

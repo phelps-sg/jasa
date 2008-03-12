@@ -53,67 +53,69 @@ import org.apache.log4j.Logger;
 
 public class RandomValuer extends AbstractRandomValuer implements Serializable {
 
-  /**
-   * The minimum valuation to use.
-   */
-  protected double minValue;
+	/**
+	 * The minimum valuation to use.
+	 */
+	protected double minValue;
 
-  /**
-   * The maximum valuation to use.
-   */
-  protected double maxValue;
-  
-  public static final String P_DEF_BASE = "randomvaluer";
+	/**
+	 * The maximum valuation to use.
+	 */
+	protected double maxValue;
 
-  public static final String P_MINVALUE = "minvalue";
+	public static final String P_DEF_BASE = "randomvaluer";
 
-  public static final String P_MAXVALUE = "maxvalue";
+	public static final String P_MINVALUE = "minvalue";
 
-  static Logger logger = Logger.getLogger(RandomValuer.class);
+	public static final String P_MAXVALUE = "maxvalue";
 
-  public RandomValuer() {
-    super();
-  }
+	static Logger logger = Logger.getLogger(RandomValuer.class);
 
-  public RandomValuer( double minValue, double maxValue ) {
-    super();
-    this.minValue = minValue;
-    this.maxValue = maxValue;
-    initialise();
-  }
+	public RandomValuer() {
+		super();
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-  	
-  	Parameter defBase = new Parameter(P_DEF_BASE);
-  	
-    minValue = parameters.getDouble(base.push(P_MINVALUE), defBase.push(P_MINVALUE), 0);
-    maxValue = parameters.getDouble(base.push(P_MAXVALUE), defBase.push(P_MAXVALUE), minValue);
-    initialise();
-  }
+	public RandomValuer(double minValue, double maxValue) {
+		super();
+		this.minValue = minValue;
+		this.maxValue = maxValue;
+		initialise();
+	}
 
-  public void initialise() {
-    distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
-    drawRandomValue();
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-  public double getMaxValue() {
-    return maxValue;
-  }
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-  public void setMaxValue( double maxValue ) {
-    this.maxValue = maxValue;
-  }
+		minValue = parameters.getDouble(base.push(P_MINVALUE), defBase
+		    .push(P_MINVALUE), 0);
+		maxValue = parameters.getDouble(base.push(P_MAXVALUE), defBase
+		    .push(P_MAXVALUE), minValue);
+		initialise();
+	}
 
-  public double getMinValue() {
-    return minValue;
-  }
+	public void initialise() {
+		distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
+		drawRandomValue();
+	}
 
-  public void setMinValue( double minValue ) {
-    this.minValue = minValue;
-  }
-  
-  public void setAgent( TradingAgent agent ) {
-    // No action required
-  }
+	public double getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(double maxValue) {
+		this.maxValue = maxValue;
+	}
+
+	public double getMinValue() {
+		return minValue;
+	}
+
+	public void setMinValue(double minValue) {
+		this.minValue = minValue;
+	}
+
+	public void setAgent(TradingAgent agent) {
+		// No action required
+	}
 
 }

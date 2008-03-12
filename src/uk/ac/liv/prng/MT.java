@@ -13,28 +13,25 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.prng;
 
-//import edu.cornell.lassp.houle.RngPack.RandomSeedable;
+// import edu.cornell.lassp.houle.RngPack.RandomSeedable;
 
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
-//import edu.cornell.lassp.houle.RngPack.RanMT;
-
 
 public class MT extends PRNGFactory {
 
-  public RandomEngine create() {
-     return new MersenneTwister64();
-  }
+	public RandomEngine create() {
+		return new MersenneTwister64();
+	}
 
-  public RandomEngine create( long seed ) {
-    return new MersenneTwister64((int) seed);
-  }
+	public RandomEngine create(long seed) {
+		return new MersenneTwister64((int) seed);
+	}
 
-  public String getDescription() {
-    return "64-bit Mersenne Twister (Matsumoto and Nishimura)";
-  }
+	public String getDescription() {
+		return "64-bit Mersenne Twister (Matsumoto and Nishimura)";
+	}
 
 }

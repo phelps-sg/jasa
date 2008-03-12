@@ -15,13 +15,11 @@
 
 package uk.ac.liv.auction.electricity;
 
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.event.AuctionEvent;
-
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.Strategy;
 import uk.ac.liv.auction.agent.FixedQuantityStrategy;
-
+import uk.ac.liv.auction.agent.Strategy;
+import uk.ac.liv.auction.core.Auction;
+import uk.ac.liv.auction.event.AuctionEvent;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -66,116 +64,118 @@ import ec.util.ParameterDatabase;
 
 public class ElectricityTrader extends AbstractTradingAgent {
 
-  /**
-   * The capacity of this trader in MWh
-   * 
-   * @uml.property name="capacity"
-   */
-  protected int capacity;
+	/**
+	 * The capacity of this trader in MWh
+	 * 
+	 * @uml.property name="capacity"
+	 */
+	protected int capacity;
 
-  /**
-   * The fixed costs for this trader.
-   * 
-   * @uml.property name="fixedCosts"
-   */
-  protected double fixedCosts;
+	/**
+	 * The fixed costs for this trader.
+	 * 
+	 * @uml.property name="fixedCosts"
+	 */
+	protected double fixedCosts;
 
-  static final String P_CAPACITY = "capacity";
+	static final String P_CAPACITY = "capacity";
 
-  static final String P_FIXED_COSTS = "fixedcosts";
+	static final String P_FIXED_COSTS = "fixedcosts";
 
-  public ElectricityTrader( int capacity, double privateValue,
-      double fixedCosts, boolean isSeller, Strategy strategy ) {
-    super(0, 0, privateValue, isSeller, strategy);
-    this.capacity = capacity;
-    this.fixedCosts = fixedCosts;
-    initialise();
-  }
+	public ElectricityTrader(int capacity, double privateValue,
+	    double fixedCosts, boolean isSeller, Strategy strategy) {
+		super(0, 0, privateValue, isSeller, strategy);
+		this.capacity = capacity;
+		this.fixedCosts = fixedCosts;
+		initialise();
+	}
 
-  public ElectricityTrader( int capacity, double privateValue,
-      double fixedCosts, boolean isSeller ) {
-    super(0, 0, privateValue, isSeller);
-    this.capacity = capacity;
-    this.fixedCosts = fixedCosts;
-    initialise();
-  }
+	public ElectricityTrader(int capacity, double privateValue,
+	    double fixedCosts, boolean isSeller) {
+		super(0, 0, privateValue, isSeller);
+		this.capacity = capacity;
+		this.fixedCosts = fixedCosts;
+		initialise();
+	}
 
-  public ElectricityTrader() {
-    this(0, 0, 0, false);
-  }
+	public ElectricityTrader() {
+		this(0, 0, 0, false);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    capacity = parameters.getInt(base.push(P_CAPACITY));
-    fixedCosts = parameters.getDoubleWithDefault(base.push(P_FIXED_COSTS),
-        null, 0);
-    initialise();
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		capacity = parameters.getInt(base.push(P_CAPACITY), null);
+		fixedCosts = parameters.getDoubleWithDefault(base.push(P_FIXED_COSTS),
+		    null, 0);
+		initialise();
+	}
 
-  public void initialise() {
-    super.initialise();
-    if ( strategy instanceof FixedQuantityStrategy ) {
-      ((FixedQuantityStrategy) strategy).setQuantity(capacity);
-    }
-  }
+	public void initialise() {
+		super.initialise();
+		if (strategy instanceof FixedQuantityStrategy) {
+			((FixedQuantityStrategy) strategy).setQuantity(capacity);
+		}
+	}
 
-  public void requestShout( Auction auction ) {
-    super.requestShout(auction);
-    lastProfit = 0;
-  }
-//
-//  public void informOfSeller( Auction auction, Shout winningShout,
-//      TradingAgent seller, double price, int quantity ) {
-//    super.informOfSeller(auction, winningShout, seller, price, quantity);
-//    if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) ) {
-//      purchaseFrom(auction, (ElectricityTrader) seller, quantity, price);
-//    }
-//  }
+	public void requestShout(Auction auction) {
+		super.requestShout(auction);
+		lastProfit = 0;
+	}
 
-  public boolean acceptDeal( Auction auction, double price, int quantity ) {
-    assert isSeller;
-    return price >= valuer.determineValue(auction);
-  }
+	//
+	// public void informOfSeller( Auction auction, Shout winningShout,
+	// TradingAgent seller, double price, int quantity ) {
+	// super.informOfSeller(auction, winningShout, seller, price, quantity);
+	// if ( ((ElectricityTrader) seller).acceptDeal(auction, price, quantity) )
+	// {
+	// purchaseFrom(auction, (ElectricityTrader) seller, quantity, price);
+	// }
+	// }
 
-  /**
-   * @uml.property name="capacity"
-   */
-  public int getCapacity() {
-    return capacity;
-  }
+	public boolean acceptDeal(Auction auction, double price, int quantity) {
+		assert isSeller;
+		return price >= valuer.determineValue(auction);
+	}
 
-  public double getLastProfit() {
-    return lastProfit;
-  }
+	/**
+	 * @uml.property name="capacity"
+	 */
+	public int getCapacity() {
+		return capacity;
+	}
 
-  public double equilibriumProfits( Auction auction, double equilibriumPrice,
-      int quantity ) {
-    double surplus = 0;
-    if ( isSeller ) {
-      surplus = equilibriumPrice - getValuation(auction);
-    } else {
-      surplus = getValuation(auction) - equilibriumPrice;
-    }
-    // TODO
-    if ( surplus < 0 ) {
-      surplus = 0;
-    }
-    return auction.getAge() * quantity * surplus;
-  }
+	public double getLastProfit() {
+		return lastProfit;
+	}
 
-  public boolean active() {
-    return true;
-  }
+	public double equilibriumProfits(Auction auction, double equilibriumPrice,
+	    int quantity) {
+		double surplus = 0;
+		if (isSeller) {
+			surplus = equilibriumPrice - getValuation(auction);
+		} else {
+			surplus = getValuation(auction) - equilibriumPrice;
+		}
+		// TODO
+		if (surplus < 0) {
+			surplus = 0;
+		}
+		return auction.getAge() * quantity * surplus;
+	}
 
-  public void endOfDay( AuctionEvent event ) {
-    // reset();
-  }
+	public boolean active() {
+		return true;
+	}
 
-  public String toString() {
-    return "(" + getClass() + " id:" + id + " capacity:" + capacity
-        + " valuer:" + valuer + " fixedCosts:" + fixedCosts + " profits:"
-        + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit
-        + " strategy:" + strategy + ")";
-  }
+	public void endOfDay(AuctionEvent event) {
+		// reset();
+	}
+
+	public String toString() {
+		return "(" + getClass() + " id:" + id + " capacity:" + capacity
+		    + " valuer:" + valuer + " fixedCosts:" + fixedCosts + " profits:"
+		    + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit
+		    + " strategy:" + strategy + ")";
+	}
 
 }

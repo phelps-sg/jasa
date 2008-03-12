@@ -27,70 +27,70 @@ import uk.ac.liv.auction.core.Shout;
 
 public class TransactionExecutedEvent extends AuctionEvent {
 
-  /**
-   * The offers that led to this transaction.
-   * 
-   * @uml.property name="ask"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected Shout ask;
+	/**
+	 * The offers that led to this transaction.
+	 * 
+	 * @uml.property name="ask"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected Shout ask;
 
-  /**
-   * The offers that led to this transaction.
-   * 
-   * @uml.property name="bid"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected Shout bid;
+	/**
+	 * The offers that led to this transaction.
+	 * 
+	 * @uml.property name="bid"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected Shout bid;
 
-  /**
-   * The price at which the good was sold for.
-   * 
-   * @uml.property name="price"
-   */
-  protected double price;
+	/**
+	 * The price at which the good was sold for.
+	 * 
+	 * @uml.property name="price"
+	 */
+	protected double price;
 
-  /**
-   * The quantity of the good that was sold.
-   * 
-   * @uml.property name="quantity"
-   */
-  protected int quantity;
+	/**
+	 * The quantity of the good that was sold.
+	 * 
+	 * @uml.property name="quantity"
+	 */
+	protected int quantity;
 
-  public TransactionExecutedEvent( Auction auction, int time, Shout ask,
-      Shout bid, double price, int quantity ) {
-    super(auction, time);
-    this.ask = ask;
-    this.bid = bid;
-    this.price = price;
-    this.quantity = quantity;
-  }
+	public TransactionExecutedEvent(Auction auction, int time, Shout ask,
+	    Shout bid, double price, int quantity) {
+		super(auction, time);
+		this.ask = ask;
+		this.bid = bid;
+		this.price = price;
+		this.quantity = quantity;
+	}
 
-  /**
-   * @uml.property name="ask"
-   */
-  public Shout getAsk() {
-    return ask;
-  }
+	/**
+	 * @uml.property name="ask"
+	 */
+	public Shout getAsk() {
+		return ask;
+	}
 
-  /**
-   * @uml.property name="bid"
-   */
-  public Shout getBid() {
-    return bid;
-  }
+	/**
+	 * @uml.property name="bid"
+	 */
+	public Shout getBid() {
+		return bid;
+	}
 
-  /**
-   * @uml.property name="price"
-   */
-  public double getPrice() {
-    return price;
-  }
+	/**
+	 * @uml.property name="price"
+	 */
+	public double getPrice() {
+		return price;
+	}
 
-  /**
-   * @uml.property name="quantity"
-   */
-  public int getQuantity() {
-    return quantity;
-  }
+	/**
+	 * @uml.property name="quantity"
+	 */
+	public int getQuantity() {
+		return quantity;
+	}
 }

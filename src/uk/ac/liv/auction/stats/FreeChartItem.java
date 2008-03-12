@@ -58,97 +58,97 @@ import uk.ac.liv.util.Parameterizable;
  */
 public class FreeChartItem implements AuctionEventListener, Parameterizable {
 
-  static Logger logger = Logger.getLogger(FreeChartItem.class);
+	static Logger logger = Logger.getLogger(FreeChartItem.class);
 
-  public static final String P_DEF_BASE = "freechartitem";
-  
-  public static final String P_NAME = "name";
+	public static final String P_DEF_BASE = "freechartitem";
 
-  public static final String P_AXIS = "axis";
+	public static final String P_NAME = "name";
 
-  public static final String P_RENDERER = "renderer";
+	public static final String P_AXIS = "axis";
 
-  /**
-   * @uml.property name="name"
-   */
-  protected String name;
+	public static final String P_RENDERER = "renderer";
 
-  /**
-   * @uml.property name="graph"
-   * @uml.associationEnd
-   */
-  protected FreeChartGraph graph;
+	/**
+	 * @uml.property name="name"
+	 */
+	protected String name;
 
-  /**
-   * @uml.property name="axisIndex"
-   */
-  protected int axisIndex;
+	/**
+	 * @uml.property name="graph"
+	 * @uml.associationEnd
+	 */
+	protected FreeChartGraph graph;
 
-  /**
-   * @uml.property name="rendererIndex"
-   */
-  protected int rendererIndex;
+	/**
+	 * @uml.property name="axisIndex"
+	 */
+	protected int axisIndex;
 
-  public FreeChartItem() {
-    name = "";
-  }
+	/**
+	 * @uml.property name="rendererIndex"
+	 */
+	protected int rendererIndex;
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public FreeChartItem() {
+		name = "";
+	}
 
-  	Parameter defBase = new Parameter(P_DEF_BASE);
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    name = parameters.getStringWithDefault(base.push(P_NAME), name);
-    axisIndex = parameters.getIntWithDefault(base.push(P_AXIS), 
-    		defBase.push(P_AXIS), 0);
-    rendererIndex = parameters
-        .getIntWithDefault(base.push(P_RENDERER), defBase.push(P_RENDERER), 0);
-  }
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-  public void eventOccurred( AuctionEvent event ) {
-  }
+		name = parameters.getStringWithDefault(base.push(P_NAME), null, name);
+		axisIndex = parameters.getIntWithDefault(base.push(P_AXIS), defBase
+		    .push(P_AXIS), 0);
+		rendererIndex = parameters.getIntWithDefault(base.push(P_RENDERER), defBase
+		    .push(P_RENDERER), 0);
+	}
 
-  /**
-   * @uml.property name="axisIndex"
-   */
-  public int getAxisIndex() {
-    return axisIndex;
-  }
+	public void eventOccurred(AuctionEvent event) {
+	}
 
-  /**
-   * @uml.property name="rendererIndex"
-   */
-  public int getRendererIndex() {
-    return rendererIndex;
-  }
+	/**
+	 * @uml.property name="axisIndex"
+	 */
+	public int getAxisIndex() {
+		return axisIndex;
+	}
 
-  /**
-   * @uml.property name="name"
-   */
-  public String getName() {
-    return name;
-  }
+	/**
+	 * @uml.property name="rendererIndex"
+	 */
+	public int getRendererIndex() {
+		return rendererIndex;
+	}
 
-  /**
-   * @uml.property name="name"
-   */
-  public void setName( String name ) {
-    this.name = name;
-  }
+	/**
+	 * @uml.property name="name"
+	 */
+	public String getName() {
+		return name;
+	}
 
-  /**
-   * @return Returns the graph.
-   * @uml.property name="graph"
-   */
-  public FreeChartGraph getGraph() {
-    return graph;
-  }
+	/**
+	 * @uml.property name="name"
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  /**
-   * @param graph
-   *          The graph to set.
-   * @uml.property name="graph"
-   */
-  public void setGraph( FreeChartGraph graph ) {
-    this.graph = graph;
-  }
+	/**
+	 * @return Returns the graph.
+	 * @uml.property name="graph"
+	 */
+	public FreeChartGraph getGraph() {
+		return graph;
+	}
+
+	/**
+	 * @param graph
+	 *          The graph to set.
+	 * @uml.property name="graph"
+	 */
+	public void setGraph(FreeChartGraph graph) {
+		this.graph = graph;
+	}
 }

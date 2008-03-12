@@ -22,6 +22,6 @@ package uk.ac.liv.util;
 
 public interface Prototypeable extends Resetable, Cloneable {
 
-  public Object protoClone();
+	public Object protoClone();
 
 }

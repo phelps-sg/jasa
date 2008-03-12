@@ -17,102 +17,102 @@ package uk.ac.liv.auction.core;
 
 import java.io.Serializable;
 
-
 /**
- * An auctioneer for a double-auction with continuous clearing.
- * The clearing operation is performed every time a shout arrives.
- * Shouts must beat the current quote in order to be accepted.
- *
+ * An auctioneer for a double-auction with continuous clearing. The clearing
+ * operation is performed every time a shout arrives. Shouts must beat the
+ * current quote in order to be accepted.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class ContinuousDoubleAuctioneer extends TransparentAuctioneer 
-      implements Serializable {
+public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
+    Serializable {
 
-  protected ZeroFundsAccount account;
-  
-  public ContinuousDoubleAuctioneer() {
-    this(null);
-  }
+	protected ZeroFundsAccount account;
 
-  public ContinuousDoubleAuctioneer( Auction auction ) {
-    super(auction);
-    account = new ZeroFundsAccount(this);
-    setPricingPolicy(new DiscriminatoryPricingPolicy(0));
-  }
+	public ContinuousDoubleAuctioneer() {
+		this(null);
+	}
 
+	public ContinuousDoubleAuctioneer(Auction auction) {
+		super(auction);
+		account = new ZeroFundsAccount(this);
+		setPricingPolicy(new DiscriminatoryPricingPolicy(0));
+	}
 
-  public void generateQuote() {
-    currentQuote = new MarketQuote(askQuote(), bidQuote());
-  }
+	public void generateQuote() {
+		currentQuote = new MarketQuote(askQuote(), bidQuote());
+	}
 
-  public void endOfRoundProcessing() {    
-    super.endOfRoundProcessing();
-  }
+	public void endOfRoundProcessing() {
+		super.endOfRoundProcessing();
+	}
 
-  public void endOfAuctionProcessing() {
-    super.endOfAuctionProcessing();
-  }
+	public void endOfAuctionProcessing() {
+		super.endOfAuctionProcessing();
+	}
 
-  public boolean shoutsVisible() {
-    return true;
-  }
+	public boolean shoutsVisible() {
+		return true;
+	}
 
-  public void newShoutInternal( Shout shout ) throws DuplicateShoutException {
-    shoutEngine.newShout(shout);
-    generateQuote();
-    clear();
-  }
-  
-  protected void checkShoutValidity( Shout shout ) throws IllegalShoutException {
-  	super.checkShoutValidity(shout);
-    checkImprovement(shout);
-  }
+	public void newShoutInternal(Shout shout) throws DuplicateShoutException {
+		shoutEngine.newShout(shout);
+		generateQuote();
+		clear();
+	}
 
-  protected void checkImprovement( Shout shout ) throws IllegalShoutException {
-    double quote;
-    if ( shout.isBid() ) {
-      quote = bidQuote();
-      if ( shout.getPrice() < quote ) {
-        bidNotAnImprovementException();
-      }  
-    } else {
-      quote = askQuote();
-      if ( shout.getPrice() > quote ) {
-        askNotAnImprovementException();
-      }      
-    }
-  }
-  
-  public Account getAccount() {
-    return account;
-  }
-  
-  protected void askNotAnImprovementException()
-      throws NotAnImprovementOverQuoteException {
-    if ( askException == null ) {
-      // Only construct a new exception the once (for improved performance)
-      askException = new NotAnImprovementOverQuoteException(DISCLAIMER);
-    }
-    throw askException;
-  }
+	protected void checkShoutValidity(Shout shout) throws IllegalShoutException {
+		super.checkShoutValidity(shout);
+		checkImprovement(shout);
+	}
 
-  protected void bidNotAnImprovementException()
-      throws NotAnImprovementOverQuoteException {
-    if ( bidException == null ) {
-      // Only construct a new exception the once (for improved performance)
-      bidException = new NotAnImprovementOverQuoteException(DISCLAIMER);
-    }
-    throw bidException;
-  }
+	protected void checkImprovement(Shout shout) throws IllegalShoutException {
+		double quote;
+		if (shout.isBid()) {
+			quote = bidQuote();
+			if (shout.getPrice() < quote) {
+				bidNotAnImprovementException();
+			}
+		} else {
+			quote = askQuote();
+			if (shout.getPrice() > quote) {
+				askNotAnImprovementException();
+			}
+		}
+	}
 
-  /**
-   * Reusable exceptions for performance
-   */
-  protected static NotAnImprovementOverQuoteException askException = null;
-  protected static NotAnImprovementOverQuoteException bidException = null;
+	public Account getAccount() {
+		return account;
+	}
 
+	protected void askNotAnImprovementException()
+	    throws NotAnImprovementOverQuoteException {
+		if (askException == null) {
+			// Only construct a new exception the once (for improved
+			// performance)
+			askException = new NotAnImprovementOverQuoteException(DISCLAIMER);
+		}
+		throw askException;
+	}
 
-  protected static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
+	protected void bidNotAnImprovementException()
+	    throws NotAnImprovementOverQuoteException {
+		if (bidException == null) {
+			// Only construct a new exception the once (for improved
+			// performance)
+			bidException = new NotAnImprovementOverQuoteException(DISCLAIMER);
+		}
+		throw bidException;
+	}
+
+	/**
+	 * Reusable exceptions for performance
+	 */
+	protected static NotAnImprovementOverQuoteException askException = null;
+
+	protected static NotAnImprovementOverQuoteException bidException = null;
+
+	protected static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
 }

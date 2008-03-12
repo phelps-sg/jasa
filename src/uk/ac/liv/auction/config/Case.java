@@ -25,7 +25,7 @@ import ec.util.Parameter;
  */
 public interface Case {
 
-  public abstract String toString();
+	public abstract String toString();
 
-  public abstract void apply(ParameterDatabase pdb, Parameter base);
+	public abstract void apply(ParameterDatabase pdb, Parameter base);
 }

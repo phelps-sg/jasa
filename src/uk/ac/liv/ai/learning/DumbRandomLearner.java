@@ -38,64 +38,64 @@ import ec.util.ParameterDatabase;
 public class DumbRandomLearner extends AbstractLearner implements
     Parameterizable, StimuliResponseLearner, Serializable, Prototypeable {
 
-  /**
-   * @uml.property name="numActions"
-   */
-  protected int numActions;
+	/**
+	 * @uml.property name="numActions"
+	 */
+	protected int numActions;
 
-  /**
-   * @uml.property name="distribution"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected Uniform distribution;
+	/**
+	 * @uml.property name="distribution"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected Uniform distribution;
 
-  public static final int DEFAULT_NUM_ACTIONS = 10;
+	public static final int DEFAULT_NUM_ACTIONS = 10;
 
-  public static final String P_K = "k";
+	public static final String P_K = "k";
 
-  public DumbRandomLearner() {
-    this(DEFAULT_NUM_ACTIONS);
-  }
+	public DumbRandomLearner() {
+		this(DEFAULT_NUM_ACTIONS);
+	}
 
-  public DumbRandomLearner( int numActions ) {
-    this.numActions = numActions;
-    distribution = new Uniform(0, 1, GlobalPRNG.getInstance());
-  }
+	public DumbRandomLearner(int numActions) {
+		this.numActions = numActions;
+		distribution = new Uniform(0, 1, GlobalPRNG.getInstance());
+	}
 
-  public void setup( ParameterDatabase params, Parameter base ) {
-    numActions = params.getIntWithDefault(base.push(P_K), null,
-        DEFAULT_NUM_ACTIONS);
-  }
+	public void setup(ParameterDatabase params, Parameter base) {
+		numActions = params.getIntWithDefault(base.push(P_K), null,
+		    DEFAULT_NUM_ACTIONS);
+	}
 
-  public Object protoClone() {
-    try {
-      return this.clone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-  }
+	public Object protoClone() {
+		try {
+			return this.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+	}
 
-  public void reset() {
-    // Do nothing
-  }
+	public void reset() {
+		// Do nothing
+	}
 
-  public int act() {
-    return distribution.nextIntFromTo(0, numActions);
-  }
+	public int act() {
+		return distribution.nextIntFromTo(0, numActions);
+	}
 
-  public double getLearningDelta() {
-    return 0.0;
-  }
+	public double getLearningDelta() {
+		return 0.0;
+	}
 
-  public void dumpState( DataWriter out ) {
-    // TODO
-  }
+	public void dumpState(DataWriter out) {
+		// TODO
+	}
 
-  public int getNumberOfActions() {
-    return numActions;
-  }
+	public int getNumberOfActions() {
+		return numActions;
+	}
 
-  public void reward( double reward ) {
-    // No action
-  }
+	public void reward(double reward) {
+		// No action
+	}
 }

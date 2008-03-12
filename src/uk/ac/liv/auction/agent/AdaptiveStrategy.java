@@ -29,8 +29,8 @@ import uk.ac.liv.ai.learning.Learner;
 
 public interface AdaptiveStrategy extends Strategy {
 
-  public Learner getLearner();
+	public Learner getLearner();
 
-  public void setLearner( Learner learner );
+	public void setLearner(Learner learner);
 
 }

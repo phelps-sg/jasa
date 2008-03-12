@@ -23,21 +23,21 @@ package uk.ac.liv.util;
  */
 public class MutableIntWrapper {
 
-  /**
-   * @uml.property name="value"
-   */
-  public int value;
+	/**
+	 * @uml.property name="value"
+	 */
+	public int value;
 
-  public MutableIntWrapper() {
-    this(0);
-  }
+	public MutableIntWrapper() {
+		this(0);
+	}
 
-  public MutableIntWrapper( int value ) {
-    this.value = value;
-  }
+	public MutableIntWrapper(int value) {
+		this.value = value;
+	}
 
-  public int intValue() {
-    return value;
-  }
+	public int intValue() {
+		return value;
+	}
 
 }

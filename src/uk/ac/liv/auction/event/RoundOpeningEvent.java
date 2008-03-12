@@ -26,9 +26,9 @@ import uk.ac.liv.auction.core.Auction;
 
 public class RoundOpeningEvent extends AuctionEvent {
 
-  protected Auction auction;
+	protected Auction auction;
 
-  public RoundOpeningEvent( Auction auction, int time ) {
-    super(auction, time);
-  }
+	public RoundOpeningEvent(Auction auction, int time) {
+		super(auction, time);
+	}
 }

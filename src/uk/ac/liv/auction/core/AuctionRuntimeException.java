@@ -22,12 +22,12 @@ package uk.ac.liv.auction.core;
 
 public class AuctionRuntimeException extends RuntimeException {
 
-  public AuctionRuntimeException( String message ) {
-    super(message);
-  }
+	public AuctionRuntimeException(String message) {
+		super(message);
+	}
 
-  public AuctionRuntimeException( Throwable e ) {
-    super(e);
-  }
+	public AuctionRuntimeException(Throwable e) {
+		super(e);
+	}
 
 }

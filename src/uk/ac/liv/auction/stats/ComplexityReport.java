@@ -47,290 +47,290 @@ import ec.util.ParameterDatabase;
 public class ComplexityReport extends AbstractAuctionReport implements
     Resetable, Serializable, Parameterizable {
 
-  /**
-   * @uml.property name="numStates"
-   */
-  protected int numStates = 20;
+	/**
+	 * @uml.property name="numStates"
+	 */
+	protected int numStates = 20;
 
-  /**
-   * @uml.property name="globalMargin"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected CummulativeDistribution globalMargin = new CummulativeDistribution();
+	/**
+	 * @uml.property name="globalMargin"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected CummulativeDistribution globalMargin = new CummulativeDistribution();
 
-  /**
-   * @uml.property name="independentHistograms"
-   * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
-   *                     qualifier="agent2:uk.ac.liv.auction.agent.AbstractTradingAgent
-   *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
-   */
-  protected HashMap independentHistograms;
+	/**
+	 * @uml.property name="independentHistograms"
+	 * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
+	 *                     qualifier="agent2:uk.ac.liv.auction.agent.AbstractTradingAgent
+	 *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
+	 */
+	protected HashMap independentHistograms;
 
-  /**
-   * @uml.property name="jointHistograms"
-   * @uml.associationEnd qualifier="new:uk.ac.liv.auction.stats.AgentPair
-   *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
-   */
-  protected HashMap jointHistograms;
+	/**
+	 * @uml.property name="jointHistograms"
+	 * @uml.associationEnd qualifier="new:uk.ac.liv.auction.stats.AgentPair
+	 *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
+	 */
+	protected HashMap jointHistograms;
 
-  /**
-   * @uml.property name="complexitySequence"
-   * @uml.associationEnd
-   */
-  protected DataWriter complexitySequence;
+	/**
+	 * @uml.property name="complexitySequence"
+	 * @uml.associationEnd
+	 */
+	protected DataWriter complexitySequence;
 
-  /**
-   * @uml.property name="agents"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
-   */
-  protected ArrayList agents;
-  
-  public static final String P_DEF_BASE = "complexityreport";
+	/**
+	 * @uml.property name="agents"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
+	 */
+	protected ArrayList agents;
 
-  public static final String P_WRITER = "writer";
+	public static final String P_DEF_BASE = "complexityreport";
 
-  public static final String P_NUMSTATES = "numstates";
+	public static final String P_WRITER = "writer";
 
-  public ComplexityReport() {
-    initialise();
-  }
+	public static final String P_NUMSTATES = "numstates";
 
-  public void reset() {
-    globalMargin.reset();
-    initialise();
-  }
+	public ComplexityReport() {
+		initialise();
+	}
 
-  public void initialise() {
-    independentHistograms = new HashMap();
-    jointHistograms = new HashMap();
-    agents = null;
-  }
+	public void reset() {
+		globalMargin.reset();
+		initialise();
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    if ( event instanceof ShoutPlacedEvent ) {
-      updateShoutLog((ShoutPlacedEvent) event);
-    } else if ( event instanceof RoundClosedEvent ) {
-      roundClosed(event);
-    }
-  }
+	public void initialise() {
+		independentHistograms = new HashMap();
+		jointHistograms = new HashMap();
+		agents = null;
+	}
 
-  public void updateShoutLog( ShoutPlacedEvent event ) {
-    Shout shout = event.getShout();
-    AbstractTradingAgent agent = (AbstractTradingAgent) shout.getAgent();
-    double markup = markup(agent);
-    globalMargin.newData(markup);
-  }
+	public void eventOccurred(AuctionEvent event) {
+		if (event instanceof ShoutPlacedEvent) {
+			updateShoutLog((ShoutPlacedEvent) event);
+		} else if (event instanceof RoundClosedEvent) {
+			roundClosed(event);
+		}
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void updateShoutLog(ShoutPlacedEvent event) {
+		Shout shout = event.getShout();
+		AbstractTradingAgent agent = (AbstractTradingAgent) shout.getAgent();
+		double markup = markup(agent);
+		globalMargin.newData(markup);
+	}
 
-  	Parameter defBase = new Parameter(P_DEF_BASE);
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    complexitySequence = (DataWriter) parameters.getInstanceForParameter(base
-        .push(P_WRITER), defBase.push(P_WRITER), DataWriter.class);
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-    if ( complexitySequence instanceof Parameterizable ) {
-      ((Parameterizable) complexitySequence).setup(parameters, base
-          .push(P_WRITER));
-    }
+		complexitySequence = (DataWriter) parameters.getInstanceForParameter(base
+		    .push(P_WRITER), defBase.push(P_WRITER), DataWriter.class);
 
-    numStates = parameters.getIntWithDefault(base.push(P_NUMSTATES), 
-    		defBase.push(P_NUMSTATES), numStates);
+		if (complexitySequence instanceof Parameterizable) {
+			((Parameterizable) complexitySequence).setup(parameters, base
+			    .push(P_WRITER));
+		}
 
-  }
+		numStates = parameters.getIntWithDefault(base.push(P_NUMSTATES), defBase
+		    .push(P_NUMSTATES), numStates);
 
-  public void produceUserOutput() {
-  }
+	}
 
-  public Map getVariables() {
-    return new HashMap();
-  }
+	public void produceUserOutput() {
+	}
 
-  public void roundClosed( AuctionEvent event ) {
-    buildAgentList();
-    updateIndependentHistograms();
-    updateJointHistograms();
-    complexitySequence.newData(calculateTotalIndependenceDistance());
-  }
+	public Map getVariables() {
+		return new HashMap();
+	}
 
-  public double calculateTotalIndependenceDistance() {
-    double distance = 0;
-    for ( int i = 0; i < agents.size(); i++ ) {
-      for ( int j = 0; j < i; j++ ) {
-        AbstractTradingAgent agent1 = (AbstractTradingAgent) agents.get(i);
-        AbstractTradingAgent agent2 = (AbstractTradingAgent) agents.get(j);
-        distance += independence(agent1, agent2);
-      }
-    }
-    return distance / ((agents.size() * agents.size()) / 2);
-  }
+	public void roundClosed(AuctionEvent event) {
+		buildAgentList();
+		updateIndependentHistograms();
+		updateJointHistograms();
+		complexitySequence.newData(calculateTotalIndependenceDistance());
+	}
 
-  protected void updateJointHistograms() {
-    for ( int i = 0; i < agents.size(); i++ ) {
-      for ( int j = 0; j < i; j++ ) {
-        if ( i != j ) {
-          AbstractTradingAgent agent1 = (AbstractTradingAgent) agents.get(i);
-          AbstractTradingAgent agent2 = (AbstractTradingAgent) agents.get(j);
-          int si = state(agent1);
-          int sj = state(agent2);
-          AgentPair pair = new AgentPair(agent1, agent2);
-          AgentStateHistogram histogram = (AgentStateHistogram) jointHistograms
-              .get(pair);
-          if ( histogram == null ) {
-            histogram = new AgentStateHistogram();
-            jointHistograms.put(pair, histogram);
-          }
-          if ( si == sj ) {
-            histogram.newState(si);
-          } else {
-            histogram.nullState();
-          }
-        }
-      }
-    }
-  }
+	public double calculateTotalIndependenceDistance() {
+		double distance = 0;
+		for (int i = 0; i < agents.size(); i++) {
+			for (int j = 0; j < i; j++) {
+				AbstractTradingAgent agent1 = (AbstractTradingAgent) agents.get(i);
+				AbstractTradingAgent agent2 = (AbstractTradingAgent) agents.get(j);
+				distance += independence(agent1, agent2);
+			}
+		}
+		return distance / ((agents.size() * agents.size()) / 2);
+	}
 
-  protected void updateIndependentHistograms() {
-    for ( int i = 0; i < agents.size(); i++ ) {
-      AbstractTradingAgent agent = (AbstractTradingAgent) agents.get(i);
-      AgentStateHistogram histogram = (AgentStateHistogram) independentHistograms
-          .get(agent);
-      if ( histogram == null ) {
-        histogram = new AgentStateHistogram();
-        independentHistograms.put(agent, histogram);
-      }
-      histogram.newState(state(agent));
-    }
-  }
+	protected void updateJointHistograms() {
+		for (int i = 0; i < agents.size(); i++) {
+			for (int j = 0; j < i; j++) {
+				if (i != j) {
+					AbstractTradingAgent agent1 = (AbstractTradingAgent) agents.get(i);
+					AbstractTradingAgent agent2 = (AbstractTradingAgent) agents.get(j);
+					int si = state(agent1);
+					int sj = state(agent2);
+					AgentPair pair = new AgentPair(agent1, agent2);
+					AgentStateHistogram histogram = (AgentStateHistogram) jointHistograms
+					    .get(pair);
+					if (histogram == null) {
+						histogram = new AgentStateHistogram();
+						jointHistograms.put(pair, histogram);
+					}
+					if (si == sj) {
+						histogram.newState(si);
+					} else {
+						histogram.nullState();
+					}
+				}
+			}
+		}
+	}
 
-  protected void buildAgentList() {
-    if ( agents == null ) {
-      agents = new ArrayList();
-      Iterator i = ((RandomRobinAuction) auction).getTraderIterator();
-      while ( i.hasNext() ) {
-        AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-        agents.add(agent);
-      }
-    }
-  }
+	protected void updateIndependentHistograms() {
+		for (int i = 0; i < agents.size(); i++) {
+			AbstractTradingAgent agent = (AbstractTradingAgent) agents.get(i);
+			AgentStateHistogram histogram = (AgentStateHistogram) independentHistograms
+			    .get(agent);
+			if (histogram == null) {
+				histogram = new AgentStateHistogram();
+				independentHistograms.put(agent, histogram);
+			}
+			histogram.newState(state(agent));
+		}
+	}
 
-  protected double independence( AbstractTradingAgent agent1,
-      AbstractTradingAgent agent2 ) {
+	protected void buildAgentList() {
+		if (agents == null) {
+			agents = new ArrayList();
+			Iterator i = ((RandomRobinAuction) auction).getTraderIterator();
+			while (i.hasNext()) {
+				AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
+				agents.add(agent);
+			}
+		}
+	}
 
-    AgentStateHistogram h1 = (AgentStateHistogram) independentHistograms
-        .get(agent1);
-    AgentStateHistogram h2 = (AgentStateHistogram) independentHistograms
-        .get(agent2);
+	protected double independence(AbstractTradingAgent agent1,
+	    AbstractTradingAgent agent2) {
 
-    AgentStateHistogram jointHistogram = (AgentStateHistogram) jointHistograms
-        .get(new AgentPair(agent1, agent2));
+		AgentStateHistogram h1 = (AgentStateHistogram) independentHistograms
+		    .get(agent1);
+		AgentStateHistogram h2 = (AgentStateHistogram) independentHistograms
+		    .get(agent2);
 
-    if ( jointHistogram == null ) {
-      jointHistogram = new AgentStateHistogram();
-    }
+		AgentStateHistogram jointHistogram = (AgentStateHistogram) jointHistograms
+		    .get(new AgentPair(agent1, agent2));
 
-    double independence = 0;
-    for ( int s = 0; s < numStates; s++ ) {
+		if (jointHistogram == null) {
+			jointHistogram = new AgentStateHistogram();
+		}
 
-      double jointProbability = jointHistogram.getProbability(s);
-      double independentProbability = h1.getProbability(s)
-          * h2.getProbability(s);
+		double independence = 0;
+		for (int s = 0; s < numStates; s++) {
 
-      independence += Math.abs(jointProbability - independentProbability);
+			double jointProbability = jointHistogram.getProbability(s);
+			double independentProbability = h1.getProbability(s)
+			    * h2.getProbability(s);
 
-    }
+			independence += Math.abs(jointProbability - independentProbability);
 
-    return independence;
-  }
+		}
 
-  protected int state( AbstractTradingAgent agent ) {
-    return state(markup(agent), agent);
-  }
+		return independence;
+	}
 
-  protected int state( double markup, AbstractTradingAgent agent ) {
-    double markupBin = globalMargin.getMax() / numStates;
-    int bin = (int) (markup / markupBin);
-    if ( bin >= numStates ) {
-      bin = numStates - 1;
-    }
-    return (int) bin;
-  }
+	protected int state(AbstractTradingAgent agent) {
+		return state(markup(agent), agent);
+	}
 
-  protected double markup( AbstractTradingAgent agent ) {
+	protected int state(double markup, AbstractTradingAgent agent) {
+		double markupBin = globalMargin.getMax() / numStates;
+		int bin = (int) (markup / markupBin);
+		if (bin >= numStates) {
+			bin = numStates - 1;
+		}
+		return (int) bin;
+	}
 
-    double markup = Math.abs(agent.getValuation(auction)
-        - agent.getCurrentShout().getPrice());
+	protected double markup(AbstractTradingAgent agent) {
 
-    return markup;
-  }
+		double markup = Math.abs(agent.getValuation(auction)
+		    - agent.getCurrentShout().getPrice());
 
-  class AgentStateHistogram {
+		return markup;
+	}
 
-    int[] frequency;
+	class AgentStateHistogram {
 
-    int total = 0;
+		int[] frequency;
 
-    public AgentStateHistogram() {
-      frequency = new int[numStates];
-    }
+		int total = 0;
 
-    public void newState( int state ) {
-      frequency[state]++;
-      total++;
-    }
+		public AgentStateHistogram() {
+			frequency = new int[numStates];
+		}
 
-    public void nullState() {
-      total++;
-    }
+		public void newState(int state) {
+			frequency[state]++;
+			total++;
+		}
 
-    public double getProbability( int state ) {
-      if ( total == 0 ) {
-        return 1 / numStates;
-      } else {
-        return (double) frequency[state] / (double) total;
-      }
-    }
+		public void nullState() {
+			total++;
+		}
 
-  }
+		public double getProbability(int state) {
+			if (total == 0) {
+				return 1 / numStates;
+			} else {
+				return (double) frequency[state] / (double) total;
+			}
+		}
+
+	}
 
 }
 
 class AgentPair {
 
-  /**
-   * @uml.property name="agent1"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected AbstractTradingAgent agent1;
+	/**
+	 * @uml.property name="agent1"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected AbstractTradingAgent agent1;
 
-  /**
-   * @uml.property name="agent2"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected AbstractTradingAgent agent2;
+	/**
+	 * @uml.property name="agent2"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected AbstractTradingAgent agent2;
 
-  public AgentPair( AbstractTradingAgent agent1, AbstractTradingAgent agent2 ) {
-    this.agent1 = agent1;
-    this.agent2 = agent2;
-  }
+	public AgentPair(AbstractTradingAgent agent1, AbstractTradingAgent agent2) {
+		this.agent1 = agent1;
+		this.agent2 = agent2;
+	}
 
-  public boolean equals( Object other ) {
-    AgentPair otherPair = (AgentPair) other;
-    return (this.agent1.equals(otherPair.agent1) && this.agent2
-        .equals(otherPair.agent2))
-        || (this.agent2.equals(otherPair.agent1) && this.agent1
-            .equals(otherPair.agent2));
-  }
+	public boolean equals(Object other) {
+		AgentPair otherPair = (AgentPair) other;
+		return (this.agent1.equals(otherPair.agent1) && this.agent2
+		    .equals(otherPair.agent2))
+		    || (this.agent2.equals(otherPair.agent1) && this.agent1
+		        .equals(otherPair.agent2));
+	}
 
-  public int hashCode() {
-    int hash = 0;
-    if ( agent1 != null ) {
-      hash += agent1.hashCode();
-    }
-    if ( agent2 != null ) {
-      hash += agent2.hashCode();
-    }
-    return hash;
-  }
+	public int hashCode() {
+		int hash = 0;
+		if (agent1 != null) {
+			hash += agent1.hashCode();
+		}
+		if (agent2 != null) {
+			hash += agent2.hashCode();
+		}
+		return hash;
+	}
 
 }

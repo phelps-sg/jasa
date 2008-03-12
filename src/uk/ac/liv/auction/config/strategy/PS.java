@@ -14,24 +14,22 @@
  */
 package uk.ac.liv.auction.config.strategy;
 
-
 import uk.ac.liv.auction.config.Case;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
-
 
 /**
  * @author Jinzhong Niu
  * @version $Revision$
  */
 public class PS implements Case {
-	
+
 	private static final String ClassName = "uk.ac.liv.auction.agent.PureSimpleStrategy";
 
 	public String toString() {
 		return "PS";
 	}
-	
+
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(base, ClassName);
 		pdb.set(base.push("delta"), String.valueOf(10));

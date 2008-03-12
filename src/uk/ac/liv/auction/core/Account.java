@@ -15,59 +15,58 @@
 package uk.ac.liv.auction.core;
 
 public class Account {
-  
-  protected double funds;
-  
-  protected Object owner;
 
-  public Account( Object owner, double funds ) {
-    this.funds = funds;
-    this.owner = owner;
-  }
-  
-  public Account() {
-    this.funds = 0;
-    owner = null;
-  }
-  
-  public void credit( double additionalFunds ) {
-    funds += additionalFunds;
-  }
-  
-  public void transfer( Account other, double payment ) {
-    other.credit(payment);
-    this.debit(payment);
-  }
-  
-  protected void debit( double payment ) {
-    funds -= payment;    
-  }
-  
-  public void doubleEntry( Account payer, double charge, 
-                            Account payee, double payment ) {
-    payer.transfer(this, charge);
-    transfer(payee, payment);
-  }
+	protected double funds;
 
-  public double getFunds() {
-    return funds;
-  }
+	protected Object owner;
 
-  public void setFunds( double funds ) {
-    this.funds = funds;
-  }
+	public Account(Object owner, double funds) {
+		this.funds = funds;
+		this.owner = owner;
+	}
 
-  public Object getOwner() {
-    return owner;
-  }
+	public Account() {
+		this.funds = 0;
+		owner = null;
+	}
 
-  protected void setOwner( Object owner ) {
-    this.owner = owner;
-  }
-  
-  public String toString() {
-    return "(" + getClass() + " funds:" + funds + ")";
-  }
-  
+	public void credit(double additionalFunds) {
+		funds += additionalFunds;
+	}
+
+	public void transfer(Account other, double payment) {
+		other.credit(payment);
+		this.debit(payment);
+	}
+
+	protected void debit(double payment) {
+		funds -= payment;
+	}
+
+	public void doubleEntry(Account payer, double charge, Account payee,
+	    double payment) {
+		payer.transfer(this, charge);
+		transfer(payee, payment);
+	}
+
+	public double getFunds() {
+		return funds;
+	}
+
+	public void setFunds(double funds) {
+		this.funds = funds;
+	}
+
+	public Object getOwner() {
+		return owner;
+	}
+
+	protected void setOwner(Object owner) {
+		this.owner = owner;
+	}
+
+	public String toString() {
+		return "(" + getClass() + " funds:" + funds + ")";
+	}
 
 }

@@ -27,120 +27,120 @@ package uk.ac.liv.util;
 
 public class UntypedLong extends UntypedNumber {
 
-  /**
-   * @uml.property name="primitiveValue"
-   */
-  long primitiveValue;
+	/**
+	 * @uml.property name="primitiveValue"
+	 */
+	long primitiveValue;
 
-  public UntypedLong() {
-    this(0L);
-  }
+	public UntypedLong() {
+		this(0L);
+	}
 
-  public UntypedLong( Long value ) {
-    this(value.longValue());
-  }
+	public UntypedLong(Long value) {
+		this(value.longValue());
+	}
 
-  public UntypedLong( long value ) {
-    primitiveValue = value;
-  }
+	public UntypedLong(long value) {
+		primitiveValue = value;
+	}
 
-  public UntypedNumber add( UntypedNumber other ) {
-    if ( other instanceof UntypedLong ) {
-      return new UntypedLong(primitiveValue + other.longValue());
-    } else if ( other instanceof UntypedDouble ) {
-      return new UntypedDouble(doubleValue() + other.doubleValue());
-    } else {
-      throw new IllegalArgumentException();
-    }
-  }
+	public UntypedNumber add(UntypedNumber other) {
+		if (other instanceof UntypedLong) {
+			return new UntypedLong(primitiveValue + other.longValue());
+		} else if (other instanceof UntypedDouble) {
+			return new UntypedDouble(doubleValue() + other.doubleValue());
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
 
-  public UntypedNumber multiply( UntypedNumber other ) {
-    if ( other instanceof UntypedLong ) {
-      return new UntypedLong(primitiveValue * other.longValue());
-    } else if ( other instanceof UntypedDouble ) {
-      return new UntypedDouble(doubleValue() * other.doubleValue());
-    } else {
-      throw new IllegalArgumentException();
-    }
-  }
+	public UntypedNumber multiply(UntypedNumber other) {
+		if (other instanceof UntypedLong) {
+			return new UntypedLong(primitiveValue * other.longValue());
+		} else if (other instanceof UntypedDouble) {
+			return new UntypedDouble(doubleValue() * other.doubleValue());
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
 
-  public UntypedNumber subtract( UntypedNumber other ) {
-    if ( other instanceof UntypedLong ) {
-      return new UntypedLong(primitiveValue - other.longValue());
-    } else if ( other instanceof UntypedDouble ) {
-      return new UntypedDouble(doubleValue() - other.doubleValue());
-    } else {
-      throw new IllegalArgumentException();
-    }
-  }
+	public UntypedNumber subtract(UntypedNumber other) {
+		if (other instanceof UntypedLong) {
+			return new UntypedLong(primitiveValue - other.longValue());
+		} else if (other instanceof UntypedDouble) {
+			return new UntypedDouble(doubleValue() - other.doubleValue());
+		} else {
+			throw new IllegalArgumentException();
+		}
+	}
 
-  public UntypedNumber divide( UntypedNumber other ) {
-    return opResult(doubleValue() / other.doubleValue());
-  }
+	public UntypedNumber divide(UntypedNumber other) {
+		return opResult(doubleValue() / other.doubleValue());
+	}
 
-  protected UntypedNumber opResult( double tempResult ) {
-    long intResult = Math.round(tempResult);
-    if ( intResult == tempResult ) {
-      return new UntypedLong(intResult);
-    } else {
-      return new UntypedDouble(tempResult);
-    }
-  }
+	protected UntypedNumber opResult(double tempResult) {
+		long intResult = Math.round(tempResult);
+		if (intResult == tempResult) {
+			return new UntypedLong(intResult);
+		} else {
+			return new UntypedDouble(tempResult);
+		}
+	}
 
-  public int compareTo( Object other ) {
-    if ( other instanceof UntypedLong ) {
-      long l0 = primitiveValue;
-      long l1 = ((UntypedLong) other).longValue();
-      if ( l0 < l1 ) {
-        return -1;
-      } else if ( l0 > l1 ) {
-        return +1;
-      } else {
-        return 0;
-      }
-    } else if ( other instanceof UntypedDouble ) {
-      double d0 = doubleValue();
-      double d1 = ((UntypedDouble) other).doubleValue();
-      if ( d0 < d1 ) {
-        return -1;
-      } else if ( d0 > d1 ) {
-        return +1;
-      } else {
-        return 0;
-      }
-    } else {
-      throw new ClassCastException("");
-    }
-  }
+	public int compareTo(Object other) {
+		if (other instanceof UntypedLong) {
+			long l0 = primitiveValue;
+			long l1 = ((UntypedLong) other).longValue();
+			if (l0 < l1) {
+				return -1;
+			} else if (l0 > l1) {
+				return +1;
+			} else {
+				return 0;
+			}
+		} else if (other instanceof UntypedDouble) {
+			double d0 = doubleValue();
+			double d1 = ((UntypedDouble) other).doubleValue();
+			if (d0 < d1) {
+				return -1;
+			} else if (d0 > d1) {
+				return +1;
+			} else {
+				return 0;
+			}
+		} else {
+			throw new ClassCastException("");
+		}
+	}
 
-  public int intValue() {
-    return (int) primitiveValue;
-  }
+	public int intValue() {
+		return (int) primitiveValue;
+	}
 
-  public float floatValue() {
-    return (float) primitiveValue;
-  }
+	public float floatValue() {
+		return (float) primitiveValue;
+	}
 
-  public double doubleValue() {
-    return (double) primitiveValue;
-  }
+	public double doubleValue() {
+		return (double) primitiveValue;
+	}
 
-  public long longValue() {
-    return primitiveValue;
-  }
+	public long longValue() {
+		return primitiveValue;
+	}
 
-  public String toString() {
-    return primitiveValue + "";
-  }
+	public String toString() {
+		return primitiveValue + "";
+	}
 
-  public boolean equals( Object other ) {
-    if ( other instanceof UntypedLong ) {
-      return primitiveValue == ((UntypedLong) other).longValue();
-    } else if ( other instanceof UntypedNumber ) {
-      return doubleValue() == ((UntypedNumber) other).doubleValue();
-    } else {
-      return super.equals(other);
-    }
-  }
+	public boolean equals(Object other) {
+		if (other instanceof UntypedLong) {
+			return primitiveValue == ((UntypedLong) other).longValue();
+		} else if (other instanceof UntypedNumber) {
+			return doubleValue() == ((UntypedNumber) other).doubleValue();
+		} else {
+			return super.equals(other);
+		}
+	}
 
 }

@@ -28,58 +28,57 @@ package uk.ac.liv.auction.agent;
 
 public class SellerIntervalValuer extends IntervalValuer {
 
-  /**
-   * The minimum valuation that any buyer will receive.
-   */
-  protected static double minValue;
+	/**
+	 * The minimum valuation that any buyer will receive.
+	 */
+	protected static double minValue;
 
-  /**
-   * The increment in valuation to use
-   */
-  protected static double step;
+	/**
+	 * The increment in valuation to use
+	 */
+	protected static double step;
 
-  protected static double nextValue;
+	protected static double nextValue;
 
-  protected static boolean firstValue = true;
-  
-  
-  public SellerIntervalValuer() {
-  }
-  
-  public SellerIntervalValuer(double minValue, double step) {
-  	super(minValue, step);
-  }
+	protected static boolean firstValue = true;
 
-  protected boolean firstValue() {
-    return firstValue;
-  }
+	public SellerIntervalValuer() {
+	}
 
-  protected double getMinValue() {
-    return minValue;
-  }
+	public SellerIntervalValuer(double minValue, double step) {
+		super(minValue, step);
+	}
 
-  protected double getNextValue() {
-    return nextValue;
-  }
+	protected boolean firstValue() {
+		return firstValue;
+	}
 
-  protected double getStep() {
-    return step;
-  }
+	protected double getMinValue() {
+		return minValue;
+	}
 
-  protected void setFirstValue( boolean firstValue ) {
-    this.firstValue = firstValue;
-  }
+	protected double getNextValue() {
+		return nextValue;
+	}
 
-  protected void setMinValue( double value ) {
-    this.minValue = value;
-  }
+	protected double getStep() {
+		return step;
+	}
 
-  protected void setNextValue( double value ) {
-    this.nextValue = value;
-  }
+	protected void setFirstValue(boolean firstValue) {
+		this.firstValue = firstValue;
+	}
 
-  protected void setStep( double step ) {
-    this.step = step;
-  }
+	protected void setMinValue(double value) {
+		this.minValue = value;
+	}
+
+	protected void setNextValue(double value) {
+		this.nextValue = value;
+	}
+
+	protected void setStep(double step) {
+		this.step = step;
+	}
 
 }

@@ -64,102 +64,100 @@ import ec.util.ParameterDatabase;
 public abstract class FreeChartGraph extends JPanel implements
     AuctionEventListener {
 
-  static Logger logger = Logger.getLogger(FreeChartGraph.class);
-  
-  public static final String P_DEF_BASE = "freechartgraph";
+	static Logger logger = Logger.getLogger(FreeChartGraph.class);
 
-  public static final String P_NAME = "name";
+	public static final String P_DEF_BASE = "freechartgraph";
 
-  public static final String P_X = "x";
+	public static final String P_NAME = "name";
 
-  public static final String P_Y = "y";
+	public static final String P_X = "x";
 
-  public static final String P_WIDTH = "width";
+	public static final String P_Y = "y";
 
-  public static final String P_HEIGHT = "height";
+	public static final String P_WIDTH = "width";
 
-  /**
-   * @uml.property name="report"
-   * @uml.associationEnd inverse="graphs:uk.ac.liv.auction.stats.FreeChartReport"
-   */
-  private FreeChartReport report;
+	public static final String P_HEIGHT = "height";
 
-  /**
-   * @uml.property name="jfreechart"
-   * @uml.associationEnd
-   */
-  private JFreeChart jfreechart;
+	/**
+	 * @uml.property name="report"
+	 * @uml.associationEnd inverse="graphs:uk.ac.liv.auction.stats.FreeChartReport"
+	 */
+	private FreeChartReport report;
 
-  /**
-   * @uml.property name="chartPanel"
-   * @uml.associationEnd
-   */
-  private ChartPanel chartPanel;
+	/**
+	 * @uml.property name="jfreechart"
+	 * @uml.associationEnd
+	 */
+	private JFreeChart jfreechart;
 
-  public FreeChartGraph() {
-    setLayout(new BorderLayout());
-  }
+	/**
+	 * @uml.property name="chartPanel"
+	 * @uml.associationEnd
+	 */
+	private ChartPanel chartPanel;
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-  	
-  	Parameter defBase = new Parameter(P_DEF_BASE);
+	public FreeChartGraph() {
+		setLayout(new BorderLayout());
+	}
 
-    setName(parameters.getStringWithDefault(base.push(P_NAME), "Name here"));
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    setPreferredSize(new Dimension(
-    		parameters.getIntWithDefault(base
-        .push(P_WIDTH), defBase.push(P_WIDTH), 350), 
-        parameters.getIntWithDefault(base
-        .push(P_HEIGHT), defBase.push(P_HEIGHT), 300))
-        );
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-    setupChart(parameters, base);
+		setName(parameters.getStringWithDefault(base.push(P_NAME), null,
+		    "Name here"));
 
-  }
+		setPreferredSize(new Dimension(parameters.getIntWithDefault(base
+		    .push(P_WIDTH), defBase.push(P_WIDTH), 350), parameters
+		    .getIntWithDefault(base.push(P_HEIGHT), defBase.push(P_HEIGHT), 300)));
 
-  protected abstract void setupChart( ParameterDatabase parameters,
-      Parameter base );
+		setupChart(parameters, base);
 
-  public void eventOccurred( AuctionEvent event ) {
-  }
+	}
 
-  public JFreeChart getChart() {
-    return jfreechart;
-  }
+	protected abstract void setupChart(ParameterDatabase parameters,
+	    Parameter base);
 
-  public void setChart( JFreeChart chart ) {
-    jfreechart = chart;
+	public void eventOccurred(AuctionEvent event) {
+	}
 
-    if ( chartPanel != null ) {
-      remove(chartPanel);
-    }
+	public JFreeChart getChart() {
+		return jfreechart;
+	}
 
-    chartPanel = new ChartPanel(getChart());
-    chartPanel.setRangeZoomable(true);
-    chartPanel.setDomainZoomable(true);
-    add(chartPanel, BorderLayout.CENTER);
-  }
+	public void setChart(JFreeChart chart) {
+		jfreechart = chart;
 
-  public void setName( String name ) {
-    super.setName(name);
-    if ( getChart() != null )
-      getChart().setTitle(name);
-  }
+		if (chartPanel != null) {
+			remove(chartPanel);
+		}
 
-  /**
-   * @return Returns the report.
-   * @uml.property name="report"
-   */
-  public FreeChartReport getReport() {
-    return report;
-  }
+		chartPanel = new ChartPanel(getChart());
+		chartPanel.setRangeZoomable(true);
+		chartPanel.setDomainZoomable(true);
+		add(chartPanel, BorderLayout.CENTER);
+	}
 
-  /**
-   * @param report
-   *          The report to set.
-   * @uml.property name="report"
-   */
-  public void setReport( FreeChartReport report ) {
-    this.report = report;
-  }
+	public void setName(String name) {
+		super.setName(name);
+		if (getChart() != null)
+			getChart().setTitle(name);
+	}
+
+	/**
+	 * @return Returns the report.
+	 * @uml.property name="report"
+	 */
+	public FreeChartReport getReport() {
+		return report;
+	}
+
+	/**
+	 * @param report
+	 *          The report to set.
+	 * @uml.property name="report"
+	 */
+	public void setReport(FreeChartReport report) {
+		this.report = report;
+	}
 }

@@ -37,77 +37,77 @@ import java.io.Serializable;
 public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
     implements Serializable, Prototypeable {
 
-  /**
-   * The component strategy to decorate.
-   */
-  protected Strategy subStrategy;
+	/**
+	 * The component strategy to decorate.
+	 */
+	protected Strategy subStrategy;
 
-  /**
-   * The proportional markup on the sub strategy.
-   */
-  protected double markup;
+	/**
+	 * The proportional markup on the sub strategy.
+	 */
+	protected double markup;
 
-  public static final String P_SUBSTRATEGY = "substrategy";
+	public static final String P_SUBSTRATEGY = "substrategy";
 
-  public static final String P_MARKUP = "markup";
+	public static final String P_MARKUP = "markup";
 
-  public MarkupStrategyDecorator() {
-    super(null);
-  }
+	public MarkupStrategyDecorator() {
+		super(null);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    markup = parameters.getDoubleWithDefault(base.push(P_MARKUP), null, 0);
-    subStrategy = (Strategy) parameters.getInstanceForParameter(base
-        .push(P_SUBSTRATEGY), null, Strategy.class);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		markup = parameters.getDoubleWithDefault(base.push(P_MARKUP), null, 0);
+		subStrategy = (Strategy) parameters.getInstanceForParameter(base
+		    .push(P_SUBSTRATEGY), null, Strategy.class);
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    assert agent.equals(((AbstractStrategy) subStrategy).getAgent());
-    double delta;
-    Shout strategicShout = subStrategy.modifyShout(shout, auction);
-    double strategicPrice = strategicShout.getPrice();
-    if ( strategicShout != null ) {
-      if ( agent.isSeller(auction) ) {
-        delta = markup * strategicPrice;
-      } else {
-        delta = -markup * strategicPrice;
-      }
-      shout.setPrice(strategicPrice + delta);
-      shout.setQuantity(quantity);
-      if ( shout.getPrice() < 0 ) {
-        shout.setPrice(0);
-      }
-      return super.modifyShout(shout);
-    } else {
-      return false;
-    }
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		assert agent.equals(((AbstractStrategy) subStrategy).getAgent());
+		double delta;
+		Shout strategicShout = subStrategy.modifyShout(shout, auction);
+		double strategicPrice = strategicShout.getPrice();
+		if (strategicShout != null) {
+			if (agent.isSeller(auction)) {
+				delta = markup * strategicPrice;
+			} else {
+				delta = -markup * strategicPrice;
+			}
+			shout.setPrice(strategicPrice + delta);
+			shout.setQuantity(quantity);
+			if (shout.getPrice() < 0) {
+				shout.setPrice(0);
+			}
+			return super.modifyShout(shout);
+		} else {
+			return false;
+		}
+	}
 
-  public void endOfRound( Auction auction ) {
+	public void endOfRound(Auction auction) {
 
-  }
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    subStrategy.eventOccurred(event);
-  }
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		subStrategy.eventOccurred(event);
+	}
 
-  public void setAgent( AbstractTradingAgent agent ) {
-    super.setAgent(agent);
-    subStrategy.setAgent(agent);
-  }
+	public void setAgent(AbstractTradingAgent agent) {
+		super.setAgent(agent);
+		subStrategy.setAgent(agent);
+	}
 
-  public Object protoClone() {
-    Object clonedStrategy;
-    try {
-      clonedStrategy = this.clone();
-      ((MarkupStrategyDecorator) clonedStrategy).subStrategy = (Strategy) subStrategy
-          .protoClone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-    return clonedStrategy;
-  }
+	public Object protoClone() {
+		Object clonedStrategy;
+		try {
+			clonedStrategy = this.clone();
+			((MarkupStrategyDecorator) clonedStrategy).subStrategy = (Strategy) subStrategy
+			    .protoClone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clonedStrategy;
+	}
 
 }

@@ -7,22 +7,22 @@ import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
 
 public class GDEfficiencyCHTest extends GDEfficiencyTest {
 
-  public GDEfficiencyCHTest( String name ) {
-    super(name);
-  }
+	public GDEfficiencyCHTest(String name) {
+		super(name);
+	}
 
-  protected void assignAuctioneer() {
-    auctioneer = new ClearingHouseAuctioneer();
-    auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
-    auction.setAuctioneer(auctioneer);
-  }
+	protected void assignAuctioneer() {
+		auctioneer = new ClearingHouseAuctioneer();
+		auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+		auction.setAuctioneer(auctioneer);
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(GDEfficiencyCHTest.class);
-  }
-  
+	public static Test suite() {
+		return new TestSuite(GDEfficiencyCHTest.class);
+	}
+
 }

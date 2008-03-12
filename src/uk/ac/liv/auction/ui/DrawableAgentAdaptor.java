@@ -44,168 +44,168 @@ import uk.ac.liv.auction.core.Shout;
 
 public class DrawableAgentAdaptor implements Drawable {
 
-  /**
-   * @uml.property name="agent"
-   * @uml.associationEnd
-   */
-  protected AbstractTradingAgent agent;
+	/**
+	 * @uml.property name="agent"
+	 * @uml.associationEnd
+	 */
+	protected AbstractTradingAgent agent;
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd readOnly="true"
-   */
-  protected Auction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd readOnly="true"
+	 */
+	protected Auction auction;
 
-  protected static float minProfit = Float.POSITIVE_INFINITY;
+	protected static float minProfit = Float.POSITIVE_INFINITY;
 
-  protected static float maxProfit = Float.NEGATIVE_INFINITY;
+	protected static float maxProfit = Float.NEGATIVE_INFINITY;
 
-  protected static float maxMarkup = Float.NEGATIVE_INFINITY;
+	protected static float maxMarkup = Float.NEGATIVE_INFINITY;
 
-  /**
-   * @uml.property name="scale"
-   */
-  public float scale = 1000;
+	/**
+	 * @uml.property name="scale"
+	 */
+	public float scale = 1000;
 
-  public DrawableAgentAdaptor( Auction auction ) {
-    this(auction, null);
-  }
+	public DrawableAgentAdaptor(Auction auction) {
+		this(auction, null);
+	}
 
-  public DrawableAgentAdaptor( Auction auction, AbstractTradingAgent agent ) {    
-    this.agent = agent;
-    this.auction = auction;
-    if ( agent != null ) {
-      ValuationPolicy valuer = agent.getValuationPolicy();
-      if ( valuer instanceof AbstractRandomValuer ) {
-        scale = (float) ((AbstractRandomValuer) valuer).getMaxValue() / 2;
-      }
-    }
-  }
+	public DrawableAgentAdaptor(Auction auction, AbstractTradingAgent agent) {
+		this.agent = agent;
+		this.auction = auction;
+		if (agent != null) {
+			ValuationPolicy valuer = agent.getValuationPolicy();
+			if (valuer instanceof AbstractRandomValuer) {
+				scale = (float) ((AbstractRandomValuer) valuer).getMaxValue() / 2;
+			}
+		}
+	}
 
-  public void draw( SimGraphics g ) {
-    int cellHeight = 5;
-    int cellWidth = 5;
-    float price = Math.abs(getLastShoutPrice() - getCurrentValuation());
-    if ( price > DrawableAgentAdaptor.maxMarkup ) {
-      DrawableAgentAdaptor.maxMarkup = price;
-    }
-    float profit = getTotalProfits();
-    if ( profit < DrawableAgentAdaptor.minProfit ) {
-      DrawableAgentAdaptor.minProfit = profit;
-    }
-    if ( profit > DrawableAgentAdaptor.maxProfit ) {
-      DrawableAgentAdaptor.maxProfit = profit;
-    }
-    float relProfit = profit / DrawableAgentAdaptor.maxProfit;
-    float relPrice = price / DrawableAgentAdaptor.maxMarkup;
-    int y = 1 + (int) (relPrice * 4);
-    g.setDrawingParameters(5, y, 1);
-    Color color = Color.BLACK;
-  
-    if ( relProfit > 0.01 ) {
-      relProfit = 0.4f + 0.6f * relProfit;
-      if ( agent.isBuyer(auction) ) {
-        color = new Color(relProfit, 0, 0);
-      } else {
-        color = new Color(0, 0, relProfit);
-      }
-    } else {
-      color = Color.WHITE;
-    }
-  
-    g.drawRect(color);
-    g.setDrawingParameters(5, 5, 5);
-    g.drawHollowRect(Color.WHITE);
-  }
+	public void draw(SimGraphics g) {
+		int cellHeight = 5;
+		int cellWidth = 5;
+		float price = Math.abs(getLastShoutPrice() - getCurrentValuation());
+		if (price > DrawableAgentAdaptor.maxMarkup) {
+			DrawableAgentAdaptor.maxMarkup = price;
+		}
+		float profit = getTotalProfits();
+		if (profit < DrawableAgentAdaptor.minProfit) {
+			DrawableAgentAdaptor.minProfit = profit;
+		}
+		if (profit > DrawableAgentAdaptor.maxProfit) {
+			DrawableAgentAdaptor.maxProfit = profit;
+		}
+		float relProfit = profit / DrawableAgentAdaptor.maxProfit;
+		float relPrice = price / DrawableAgentAdaptor.maxMarkup;
+		int y = 1 + (int) (relPrice * 4);
+		g.setDrawingParameters(5, y, 1);
+		Color color = Color.BLACK;
 
-  public int getX() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
+		if (relProfit > 0.01) {
+			relProfit = 0.4f + 0.6f * relProfit;
+			if (agent.isBuyer(auction)) {
+				color = new Color(relProfit, 0, 0);
+			} else {
+				color = new Color(0, 0, relProfit);
+			}
+		} else {
+			color = Color.WHITE;
+		}
 
-  public int getY() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
+		g.drawRect(color);
+		g.setDrawingParameters(5, 5, 5);
+		g.drawHollowRect(Color.WHITE);
+	}
 
-  public float getLastProfit() {
-    float profit = 0;
-    if ( agent != null ) {
-      profit = (float) agent.getLastProfit();
-    }
-    return profit;
-  }
+	public int getX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-  public float getTotalProfits() {
-    float profit = 0;
-    if ( agent != null ) {
-      profit = (float) agent.getProfits();
-    }
-    return profit;
-  }
+	public int getY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
-  public float getCurrentValuation() {
-    float valuation = 0;
-    if ( agent != null ) {
-      valuation = (float) agent.getValuation(auction);
-    }
-    return valuation;
-  }
+	public float getLastProfit() {
+		float profit = 0;
+		if (agent != null) {
+			profit = (float) agent.getLastProfit();
+		}
+		return profit;
+	}
 
-  public long getId() {
-    if ( agent != null ) {
-      return agent.getId();
-    } else {
-      return -1;
-    }
-  }
+	public float getTotalProfits() {
+		float profit = 0;
+		if (agent != null) {
+			profit = (float) agent.getProfits();
+		}
+		return profit;
+	}
 
-  public String getRole() {
-    if ( agent != null ) {
-      if ( agent.isSeller(auction) ) {
-        return "Seller";
-      } else {
-        return "Buyer";
-      }
-    } else {
-      return "Null";
-    }
-  }
+	public float getCurrentValuation() {
+		float valuation = 0;
+		if (agent != null) {
+			valuation = (float) agent.getValuation(auction);
+		}
+		return valuation;
+	}
 
-  public float getLastShoutPrice() {
-    float price = 0;
-    if ( agent != null ) {
-      Shout shout = agent.getCurrentShout();
-      if ( shout != null ) {
-        price = (float) shout.getPrice();
-      }
-    }
-    return price;
-  }
+	public long getId() {
+		if (agent != null) {
+			return agent.getId();
+		} else {
+			return -1;
+		}
+	}
 
-  public Object getAgentType() {
-    return agent;
-  }
+	public String getRole() {
+		if (agent != null) {
+			if (agent.isSeller(auction)) {
+				return "Seller";
+			} else {
+				return "Buyer";
+			}
+		} else {
+			return "Null";
+		}
+	}
 
-  public boolean getLastShoutAccepted() {
-    if ( agent != null ) {
-      return agent.lastShoutAccepted();
-    } else {
-      return false;
-    }
-  }
+	public float getLastShoutPrice() {
+		float price = 0;
+		if (agent != null) {
+			Shout shout = agent.getCurrentShout();
+			if (shout != null) {
+				price = (float) shout.getPrice();
+			}
+		}
+		return price;
+	}
 
-  public float getLearningDelta() {
-    if ( agent != null ) {
-      Strategy s = agent.getStrategy();
-      if ( s instanceof AdaptiveStrategy ) {
-        return (float) ((AdaptiveStrategy) s).getLearner().getLearningDelta();
-      } else {
-        return -1;
-      }
-    } else {
-      return -1;
-    }
-  }
+	public Object getAgentType() {
+		return agent;
+	}
+
+	public boolean getLastShoutAccepted() {
+		if (agent != null) {
+			return agent.lastShoutAccepted();
+		} else {
+			return false;
+		}
+	}
+
+	public float getLearningDelta() {
+		if (agent != null) {
+			Strategy s = agent.getStrategy();
+			if (s instanceof AdaptiveStrategy) {
+				return (float) ((AdaptiveStrategy) s).getLearner().getLearningDelta();
+			} else {
+				return -1;
+			}
+		} else {
+			return -1;
+		}
+	}
 
 }

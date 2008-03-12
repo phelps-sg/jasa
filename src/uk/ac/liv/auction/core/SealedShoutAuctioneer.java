@@ -15,26 +15,27 @@
 package uk.ac.liv.auction.core;
 
 public abstract class SealedShoutAuctioneer extends AbstractAuctioneer {
-  
-  public SealedShoutAuctioneer() {
-    super();
-  }
 
-  public SealedShoutAuctioneer( Auction auction ) {
-    super(auction);
-  }
+	public SealedShoutAuctioneer() {
+		super();
+	}
 
-  public boolean shoutsVisible() {   
-    return false;
-  }
+	public SealedShoutAuctioneer(Auction auction) {
+		super(auction);
+	}
 
-  public boolean shoutAccepted( Shout shout ) throws ShoutsNotVisibleException {
-    throw new ShoutsNotVisibleException(getClass() + " implements a sealed-bid policy");
-  }
+	public boolean shoutsVisible() {
+		return false;
+	}
 
-  public boolean transactionsOccurred() throws ShoutsNotVisibleException {
-    throw new ShoutsNotVisibleException(getClass() + " implements a sealed-bid policy");
-  }
-  
+	public boolean shoutAccepted(Shout shout) throws ShoutsNotVisibleException {
+		throw new ShoutsNotVisibleException(getClass()
+		    + " implements a sealed-bid policy");
+	}
+
+	public boolean transactionsOccurred() throws ShoutsNotVisibleException {
+		throw new ShoutsNotVisibleException(getClass()
+		    + " implements a sealed-bid policy");
+	}
 
 }

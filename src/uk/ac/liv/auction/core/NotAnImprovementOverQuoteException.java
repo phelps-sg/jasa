@@ -16,21 +16,21 @@
 package uk.ac.liv.auction.core;
 
 /**
- * This exception is thrown by an auctioneer implementing the NYSE rule
- * if a trader agent attempts to place a shout that is not an improvement
- * over the current best bid.
- *
+ * This exception is thrown by an auctioneer implementing the NYSE rule if a
+ * trader agent attempts to place a shout that is not an improvement over the
+ * current best bid.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 public class NotAnImprovementOverQuoteException extends IllegalShoutException {
 
-  public NotAnImprovementOverQuoteException( String message ) {
-    super(message);
-  }
+	public NotAnImprovementOverQuoteException(String message) {
+		super(message);
+	}
 
-  public NotAnImprovementOverQuoteException() {
-    super();
-  }
+	public NotAnImprovementOverQuoteException() {
+		super();
+	}
 
 }

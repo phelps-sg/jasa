@@ -33,49 +33,49 @@ import java.io.Serializable;
 public class DumbLearner extends AbstractLearner implements DiscreteLearner,
     Parameterizable, Serializable {
 
-  /**
-   * @uml.property name="action"
-   */
-  protected int action;
+	/**
+	 * @uml.property name="action"
+	 */
+	protected int action;
 
-  static final String P_ACTION = "action";
+	static final String P_ACTION = "action";
 
-  public DumbLearner() {
-  }
+	public DumbLearner() {
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    action = parameters.getInt(base.push(P_ACTION), null, 0);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		action = parameters.getInt(base.push(P_ACTION), null, 0);
+	}
 
-  /**
-   * @uml.property name="action"
-   */
-  public void setAction( int action ) {
-    this.action = action;
-  }
+	/**
+	 * @uml.property name="action"
+	 */
+	public void setAction(int action) {
+		this.action = action;
+	}
 
-  /**
-   * @uml.property name="action"
-   */
-  public int getAction() {
-    return action;
-  }
+	/**
+	 * @uml.property name="action"
+	 */
+	public int getAction() {
+		return action;
+	}
 
-  public int act() {
-    return action;
-  }
+	public int act() {
+		return action;
+	}
 
-  public double getLearningDelta() {
-    return 0.0;
-  }
+	public double getLearningDelta() {
+		return 0.0;
+	}
 
-  public void dumpState( DataWriter out ) {
-    // TODO
-  }
+	public void dumpState(DataWriter out) {
+		// TODO
+	}
 
-  public int getNumberOfActions() {
-    return 1;
-  }
+	public int getNumberOfActions() {
+		return 1;
+	}
 
 }

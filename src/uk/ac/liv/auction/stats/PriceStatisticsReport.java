@@ -49,154 +49,154 @@ import org.apache.log4j.Logger;
 public class PriceStatisticsReport extends AbstractAuctionReport implements
     Serializable, Cloneable, Resetable {
 
-  /**
-   * @uml.property name="stats"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  protected CummulativeDistribution[] stats;
+	/**
+	 * @uml.property name="stats"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected CummulativeDistribution[] stats;
 
-  static Logger logger = Logger.getLogger(PriceStatisticsReport.class);
+	static Logger logger = Logger.getLogger(PriceStatisticsReport.class);
 
-  protected static final int TRANS_PRICE = 0;
+	protected static final int TRANS_PRICE = 0;
 
-  protected static final int BID_PRICE = 1;
+	protected static final int BID_PRICE = 1;
 
-  protected static final int ASK_PRICE = 2;
+	protected static final int ASK_PRICE = 2;
 
-  protected static final int BID_QUOTE = 3;
+	protected static final int BID_QUOTE = 3;
 
-  protected static final int ASK_QUOTE = 4;
+	protected static final int ASK_QUOTE = 4;
 
-  public PriceStatisticsReport() {
-    initialise();
-  }
+	public PriceStatisticsReport() {
+		initialise();
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    if ( event instanceof RoundClosedEvent ) {
-      roundClosed((RoundClosedEvent) event);
-    } else if ( event instanceof TransactionExecutedEvent ) {
-      updateTransPriceLog((TransactionExecutedEvent) event);
-    } else if ( event instanceof ShoutPlacedEvent ) {
-      updateShoutLog((ShoutPlacedEvent) event);
-    } else if ( event instanceof AuctionClosedEvent ) {
-    	ReportVariableBoard.getInstance().reportValues(getVariables(), event);
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		if (event instanceof RoundClosedEvent) {
+			roundClosed((RoundClosedEvent) event);
+		} else if (event instanceof TransactionExecutedEvent) {
+			updateTransPriceLog((TransactionExecutedEvent) event);
+		} else if (event instanceof ShoutPlacedEvent) {
+			updateShoutLog((ShoutPlacedEvent) event);
+		} else if (event instanceof AuctionClosedEvent) {
+			ReportVariableBoard.getInstance().reportValues(getVariables(), event);
+		}
+	}
 
-  public void roundClosed( RoundClosedEvent event ) {
-    MarketQuote quote = event.getAuction().getQuote();
-    stats[BID_QUOTE].newData((double) quote.getBid());
-    stats[ASK_QUOTE].newData((double) quote.getAsk());
-  }
+	public void roundClosed(RoundClosedEvent event) {
+		MarketQuote quote = event.getAuction().getQuote();
+		stats[BID_QUOTE].newData((double) quote.getBid());
+		stats[ASK_QUOTE].newData((double) quote.getAsk());
+	}
 
-  public void updateTransPriceLog( TransactionExecutedEvent event ) {
-    stats[TRANS_PRICE].newData(event.getPrice());
-  }
+	public void updateTransPriceLog(TransactionExecutedEvent event) {
+		stats[TRANS_PRICE].newData(event.getPrice());
+	}
 
-  public void updateShoutLog( ShoutPlacedEvent event ) {
-    Shout shout = event.getShout();
-    if ( shout.isBid() ) {
-      stats[BID_PRICE].newData(shout.getPrice());
-    } else {
-      stats[ASK_PRICE].newData(shout.getPrice());
-    }
-  }
+	public void updateShoutLog(ShoutPlacedEvent event) {
+		Shout shout = event.getShout();
+		if (shout.isBid()) {
+			stats[BID_PRICE].newData(shout.getPrice());
+		} else {
+			stats[ASK_PRICE].newData(shout.getPrice());
+		}
+	}
 
-  public CummulativeDistribution getTransPriceStats() {
-    return stats[TRANS_PRICE];
-  }
+	public CummulativeDistribution getTransPriceStats() {
+		return stats[TRANS_PRICE];
+	}
 
-  public CummulativeDistribution getBidPriceStats() {
-    return stats[BID_PRICE];
-  }
+	public CummulativeDistribution getBidPriceStats() {
+		return stats[BID_PRICE];
+	}
 
-  public CummulativeDistribution getAskPriceStats() {
-    return stats[ASK_PRICE];
-  }
+	public CummulativeDistribution getAskPriceStats() {
+		return stats[ASK_PRICE];
+	}
 
-  public CummulativeDistribution getBidQuoteStats() {
-    return stats[BID_QUOTE];
-  }
+	public CummulativeDistribution getBidQuoteStats() {
+		return stats[BID_QUOTE];
+	}
 
-  public CummulativeDistribution getAskQuoteStats() {
-    return stats[ASK_QUOTE];
-  }
+	public CummulativeDistribution getAskQuoteStats() {
+		return stats[ASK_QUOTE];
+	}
 
-  public void initialise() {
-    stats = new CummulativeDistribution[] {
-        new CummulativeDistribution("Transaction Price"),
-        new CummulativeDistribution("Bid Price"),
-        new CummulativeDistribution("Ask Price"),
-        new CummulativeDistribution("Bid Quote"),
-        new CummulativeDistribution("Ask Quote") };
-  }
+	public void initialise() {
+		stats = new CummulativeDistribution[] {
+		    new CummulativeDistribution("Transaction Price"),
+		    new CummulativeDistribution("Bid Price"),
+		    new CummulativeDistribution("Ask Price"),
+		    new CummulativeDistribution("Bid Quote"),
+		    new CummulativeDistribution("Ask Quote") };
+	}
 
-  public void reset() {
-    for ( int i = 0; i < stats.length; i++ ) {
-      ((CummulativeDistribution) stats[i]).reset();
-    }
-  }
+	public void reset() {
+		for (int i = 0; i < stats.length; i++) {
+			((CummulativeDistribution) stats[i]).reset();
+		}
+	}
 
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
-  public PriceStatisticsReport newCopy() {
-    PriceStatisticsReport copy = null;
-    try {
-      copy = (PriceStatisticsReport) clone();
-      for ( int i = 0; i < stats.length; i++ ) {
-        copy.stats[i] = (CummulativeDistribution) stats[i].clone();
-      }
-    } catch ( CloneNotSupportedException e ) {
-      logger.error(e.getMessage());
-      e.printStackTrace();
-      throw new Error(e.getMessage());
-    }
-    return copy;
-  }
+	public PriceStatisticsReport newCopy() {
+		PriceStatisticsReport copy = null;
+		try {
+			copy = (PriceStatisticsReport) clone();
+			for (int i = 0; i < stats.length; i++) {
+				copy.stats[i] = (CummulativeDistribution) stats[i].clone();
+			}
+		} catch (CloneNotSupportedException e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			throw new Error(e.getMessage());
+		}
+		return copy;
+	}
 
-  public void produceUserOutput() {
-    reportHeader();
-    for ( int i = 0; i < stats.length; i++ ) {
-      printStats(stats[i]);
-    }
-  }
+	public void produceUserOutput() {
+		reportHeader();
+		for (int i = 0; i < stats.length; i++) {
+			printStats(stats[i]);
+		}
+	}
 
-  public Map getVariables() {
-    HashMap vars = new HashMap();
-    createReportVars(vars, "transactionprice", stats[TRANS_PRICE]);
-    createReportVars(vars, "askprice", stats[ASK_PRICE]);
-    createReportVars(vars, "bidprice", stats[BID_PRICE]);
-    createReportVars(vars, "askquote", stats[ASK_QUOTE]);
-    createReportVars(vars, "bidquote", stats[BID_QUOTE]);
-    return vars;
-  }
+	public Map getVariables() {
+		HashMap vars = new HashMap();
+		createReportVars(vars, "transactionprice", stats[TRANS_PRICE]);
+		createReportVars(vars, "askprice", stats[ASK_PRICE]);
+		createReportVars(vars, "bidprice", stats[BID_PRICE]);
+		createReportVars(vars, "askquote", stats[ASK_QUOTE]);
+		createReportVars(vars, "bidquote", stats[BID_QUOTE]);
+		return vars;
+	}
 
-  protected void reportHeader() {
-    logger.info("");
-    logger.info("Auction statistics");
-    logger.info("------------------");
-    logger.info("");
-  }
+	protected void reportHeader() {
+		logger.info("");
+		logger.info("Auction statistics");
+		logger.info("------------------");
+		logger.info("");
+	}
 
-  protected void printStats( CummulativeDistribution stats ) {
-    stats.log();
-    logger.info("");
-  }
+	protected void printStats(CummulativeDistribution stats) {
+		stats.log();
+		logger.info("");
+	}
 
-  protected void createReportVars( Map vars, String var, Distribution stats ) {
-    vars.put(makeVar(var, "mean"), new Double(stats.getMean()));
-    vars.put(makeVar(var, "min"), new Double(stats.getMin()));
-    vars.put(makeVar(var, "max"), new Double(stats.getMax()));
-    vars.put(makeVar(var, "stdev"), new Double(stats.getStdDev()));
-  }
+	protected void createReportVars(Map vars, String var, Distribution stats) {
+		vars.put(makeVar(var, "mean"), new Double(stats.getMean()));
+		vars.put(makeVar(var, "min"), new Double(stats.getMin()));
+		vars.put(makeVar(var, "max"), new Double(stats.getMax()));
+		vars.put(makeVar(var, "stdev"), new Double(stats.getStdDev()));
+	}
 
-  protected ReportVariable makeVar( String varName, String moment ) {
-    return new ReportVariable("pricestats." + varName + "." + moment, varName
-        + " distribution " + moment);
-  }
+	protected ReportVariable makeVar(String varName, String moment) {
+		return new ReportVariable("pricestats." + varName + "." + moment, varName
+		    + " distribution " + moment);
+	}
 }

@@ -15,10 +15,10 @@
 
 package uk.ac.liv.util;
 
-
 /**
  * <p>
- * A queue with fixed length, which can be useful when tracking a sliding window on a data series
+ * A queue with fixed length, which can be useful when tracking a sliding window
+ * on a data series
  * </p>
  * 
  * @author Jinzhong Niu
@@ -26,72 +26,72 @@ package uk.ac.liv.util;
  */
 
 public class FixedLengthQueue implements Resetable {
-		
-  protected double list[];
 
-  protected int curIndex;
+	protected double list[];
 
-  protected double sum;
+	protected int curIndex;
 
-  protected int count;
+	protected double sum;
 
-  public FixedLengthQueue( int length ) {
-    assert (length >= 0);
-    list = new double[length];
-    initialize();
-  }
+	protected int count;
 
-  public void initialize() {    
-    for ( int i = 0; i < list.length; i++ ) {
-      list[i] = 0;
-    }
-    curIndex = 0;
-    sum = 0;
-    count = 0;
-  }
-  
-  public void reset() {
-  	initialize();
-  }
+	public FixedLengthQueue(int length) {
+		assert (length >= 0);
+		list = new double[length];
+		initialize();
+	}
 
-  public void newData( double value ) {
-    sum -= list[curIndex];
-    list[curIndex] = value;
-    sum += value;
+	public void initialize() {
+		for (int i = 0; i < list.length; i++) {
+			list[i] = 0;
+		}
+		curIndex = 0;
+		sum = 0;
+		count = 0;
+	}
 
-    curIndex++;
-    curIndex %= list.length;
+	public void reset() {
+		initialize();
+	}
 
-    if (count < list.length) {
-    	count++;
-    }
-  }
+	public void newData(double value) {
+		sum -= list[curIndex];
+		list[curIndex] = value;
+		sum += value;
 
-  public int count() {
-    return count;
-  }
+		curIndex++;
+		curIndex %= list.length;
 
-  public double getMean() {
-    return sum / count();
-  }
-  
-  public String toString() {
-  	String s = "[";
-  	int start;
-  	if (count() < list.length) {
-  		start = 0;
-  	} else {
-  		start = curIndex;
-  	}
-  	
-  	for (int i=0; i<count; i++) {
-  		s += list[(start+i) % list.length];
-  		if (i < count-1) {
-  			s += ", ";
-  		} else {
-  			s += "]";
-  		}
-  	}
-  	return s;
-  }
+		if (count < list.length) {
+			count++;
+		}
+	}
+
+	public int count() {
+		return count;
+	}
+
+	public double getMean() {
+		return sum / count();
+	}
+
+	public String toString() {
+		String s = "[";
+		int start;
+		if (count() < list.length) {
+			start = 0;
+		} else {
+			start = curIndex;
+		}
+
+		for (int i = 0; i < count; i++) {
+			s += list[(start + i) % list.length];
+			if (i < count - 1) {
+				s += ", ";
+			} else {
+				s += "]";
+			}
+		}
+		return s;
+	}
 }

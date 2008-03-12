@@ -28,9 +28,9 @@ import ec.util.ParameterDatabase;
 
 /**
  * A discriminatory pricing policy that uses the average of the last <i>n</i>
- * pair of bid and ask prices leading to transactions as the clearing price. In case
- * of the price falls out of the range between the current bid and ask, the nearest
- * boundary is used.
+ * pair of bid and ask prices leading to transactions as the clearing price. In
+ * case of the price falls out of the range between the current bid and ask, the
+ * nearest boundary is used.
  * 
  * <p>
  * <b>Parameters </b>
@@ -41,72 +41,69 @@ import ec.util.ParameterDatabase;
  * <tr>
  * <td valign=top><i>base </i> <tt>.n</tt><br>
  * <font size=-1>int >= 1 </font></td>
- * <td valign=top>(the number of latest successful shout pairs used to determine next
- * clearing price)</td>
+ * <td valign=top>(the number of latest successful shout pairs used to
+ * determine next clearing price)</td>
  * <tr>
  * 
  * </table>
-
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
 
-public class NPricingPolicy implements PricingPolicy, Resetable, Serializable, Parameterizable {
-	
-  /**
-   * @uml.property name="n"
-   */
-  protected int n;
+public class NPricingPolicy implements PricingPolicy, Resetable, Serializable,
+    Parameterizable {
 
-  public static final String P_N = "n";
-  
-  public static final String P_DEF_BASE = "npricingpolicy";
-  
-  protected FixedLengthQueue queue;
-  
-  static Logger logger = Logger.getLogger(NPricingPolicy.class);
-  
-  public NPricingPolicy() {
-    this(1);
-  }
+	/**
+	 * @uml.property name="n"
+	 */
+	protected int n;
 
-  public NPricingPolicy( int n ) {
-    this.n = n;
-  }
+	public static final String P_N = "n";
 
-	
-  public void setup(ParameterDatabase parameters, Parameter base) {    
-    n = parameters.getIntWithDefault(base.push(P_N), 
-    		new Parameter(P_DEF_BASE).push(P_N), 1);
-    initialize();
-  }
-  
-  public void initialize() {
-    queue = new FixedLengthQueue(2*n);
-  }
-  
+	public static final String P_DEF_BASE = "npricingpolicy";
+
+	protected FixedLengthQueue queue;
+
+	static Logger logger = Logger.getLogger(NPricingPolicy.class);
+
+	public NPricingPolicy() {
+		this(1);
+	}
+
+	public NPricingPolicy(int n) {
+		this.n = n;
+	}
+
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		n = parameters.getIntWithDefault(base.push(P_N), new Parameter(P_DEF_BASE)
+		    .push(P_N), 1);
+		initialize();
+	}
+
+	public void initialize() {
+		queue = new FixedLengthQueue(2 * n);
+	}
+
 	public void reset() {
 		queue.reset();
 	}
 
-
 	public double determineClearingPrice(Shout bid, Shout ask,
-			MarketQuote clearingQuote) {
-		
+	    MarketQuote clearingQuote) {
+
 		queue.newData(bid.getPrice());
 		queue.newData(ask.getPrice());
 		double avg = queue.getMean();
-		
-		double price = (avg >= bid.getPrice()) ? bid.getPrice() 
-				: ((avg <= ask.getPrice()) ? ask.getPrice() : avg);
-				
+
+		double price = (avg >= bid.getPrice()) ? bid.getPrice() : ((avg <= ask
+		    .getPrice()) ? ask.getPrice() : avg);
+
 		return price;
 	}
-	
 
-  public String toString() {
-    return "(" + getClass().getSimpleName() + " n:" + n + ")";
-  }
-
+	public String toString() {
+		return "(" + getClass().getSimpleName() + " n:" + n + ")";
+	}
 
 }

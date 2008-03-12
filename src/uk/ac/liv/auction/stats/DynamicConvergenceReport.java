@@ -43,7 +43,7 @@ import ec.util.ParameterDatabase;
  */
 
 public class DynamicConvergenceReport extends AbstractMarketStatsReport
-		implements Resetable {
+    implements Resetable {
 
 	/**
 	 * The report used to calculate the equilibrium price.
@@ -67,13 +67,13 @@ public class DynamicConvergenceReport extends AbstractMarketStatsReport
 	public static final String P_QUANTITY = "quantity";
 
 	public static final ReportVariable VAR_ALPHA = new ReportVariable(
-			"convergence.alpha", "coefficient of convergence");
+	    "convergence.alpha", "coefficient of convergence");
 
 	static Logger logger = Logger.getLogger(DynamicConvergenceReport.class);
 
 	public void setup(ParameterDatabase parameters, Parameter base) {
 		quantity = parameters.getIntWithDefault(base.push(P_QUANTITY),
-				new Parameter(P_DEF_BASE).push(P_QUANTITY), quantity);
+		    new Parameter(P_DEF_BASE).push(P_QUANTITY), quantity);
 	}
 
 	public void setAuction(RandomRobinAuction auction) {

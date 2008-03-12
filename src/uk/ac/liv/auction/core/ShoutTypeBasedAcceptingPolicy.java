@@ -37,8 +37,7 @@ import ec.util.ParameterDatabase;
 
 public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 
-	static Logger logger = Logger
-			.getLogger(ShoutTypeBasedAcceptingPolicy.class);
+	static Logger logger = Logger.getLogger(ShoutTypeBasedAcceptingPolicy.class);
 
 	/**
 	 * Reusable exceptions for performance
@@ -66,8 +65,7 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 
 		Parameter defBase = new Parameter(P_DEF_BASE);
 
-		q = parameters.getDoubleWithDefault(base.push(P_Q), defBase.push(P_Q),
-				q);
+		q = parameters.getDoubleWithDefault(base.push(P_Q), defBase.push(P_Q), q);
 		assert (0 <= q && q <= 1);
 	}
 

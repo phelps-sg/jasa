@@ -32,50 +32,50 @@ import org.apache.log4j.Logger;
 public class PriestVanTolStrategy extends MomentumStrategy implements
     Serializable {
 
-  static Logger logger = Logger.getLogger(PriestVanTolStrategy.class);
-  
-  protected HistoricalDataReport historyStats;
+	static Logger logger = Logger.getLogger(PriestVanTolStrategy.class);
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    if ( event instanceof AuctionOpenEvent ) {
-      auctionOpen((AuctionOpenEvent) event);
-    }
-  }
+	protected HistoricalDataReport historyStats;
 
-  public void auctionOpen( AuctionOpenEvent event ) {
-    historyStats = (HistoricalDataReport) event.getAuction().getReport(
-        HistoricalDataReport.class);
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof AuctionOpenEvent) {
+			auctionOpen((AuctionOpenEvent) event);
+		}
+	}
 
-    if ( historyStats == null ) {
-      throw new AuctionRuntimeException(getClass()
-          + " requires a HistoryStatsMarketDataLogger to be configured");
-    }
-  }
+	public void auctionOpen(AuctionOpenEvent event) {
+		historyStats = (HistoricalDataReport) event.getAuction().getReport(
+		    HistoricalDataReport.class);
 
-  protected void adjustMargin() {
+		if (historyStats == null) {
+			throw new AuctionRuntimeException(getClass()
+			    + " requires a HistoryStatsMarketDataLogger to be configured");
+		}
+	}
 
-	  double aMin = historyStats.getLowestUnacceptedAskPrice();	  
-	  double bMax = historyStats.getHighestUnacceptedBidPrice();
-	  
-	  if ( agent.isBuyer(auction) ) {
-		  if ( aMin > bMax ) {
-			  adjustMargin(targetMargin(bMax+perterb(bMax)));
-		  } else {
-			  adjustMargin(targetMargin(aMin+perterb(aMin)));
-		  }
-	  } else {
-		  if ( aMin > bMax ) {
-			  adjustMargin(targetMargin(aMin-perterb(aMin)));
-		  } else {
-			  adjustMargin(targetMargin(bMax-perterb(bMax)));
-		  }
-	  }
-  }
-  
-  protected double calculatePrice( double margin ) {
+	protected void adjustMargin() {
+
+		double aMin = historyStats.getLowestUnacceptedAskPrice();
+		double bMax = historyStats.getHighestUnacceptedBidPrice();
+
+		if (agent.isBuyer(auction)) {
+			if (aMin > bMax) {
+				adjustMargin(targetMargin(bMax + perterb(bMax)));
+			} else {
+				adjustMargin(targetMargin(aMin + perterb(aMin)));
+			}
+		} else {
+			if (aMin > bMax) {
+				adjustMargin(targetMargin(aMin - perterb(aMin)));
+			} else {
+				adjustMargin(targetMargin(bMax - perterb(bMax)));
+			}
+		}
+	}
+
+	protected double calculatePrice(double margin) {
 		double price = super.calculatePrice(margin);
-  	if (!agent.active()) {
+		if (!agent.active()) {
 			if (agent.isBuyer(auction)) {
 				if (price > currentPrice) {
 					return currentPrice;
@@ -86,7 +86,7 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 				}
 			}
 		}
-  		
-  	return price;
-  }
+
+		return price;
+	}
 }

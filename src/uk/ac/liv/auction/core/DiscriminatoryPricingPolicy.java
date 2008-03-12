@@ -45,23 +45,23 @@ import ec.util.ParameterDatabase;
 public class DiscriminatoryPricingPolicy extends KPricingPolicy implements
     Serializable {
 
-  public DiscriminatoryPricingPolicy() {
-    this(0);
-  }
+	public DiscriminatoryPricingPolicy() {
+		this(0);
+	}
 
-  public DiscriminatoryPricingPolicy(double k) {
-    super(k);
-  }
+	public DiscriminatoryPricingPolicy(double k) {
+		super(k);
+	}
 
-  public void setup(ParameterDatabase parameters, Parameter base) {
-    super.setup(parameters, base);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+	}
 
-  public double determineClearingPrice(Shout bid, Shout ask,
-      MarketQuote clearingQuote) {
-    assert bid.getPrice() >= ask.getPrice();
- 
-    return kInterval(ask.getPrice(), bid.getPrice());    
-  }
+	public double determineClearingPrice(Shout bid, Shout ask,
+	    MarketQuote clearingQuote) {
+		assert bid.getPrice() >= ask.getPrice();
+
+		return kInterval(ask.getPrice(), bid.getPrice());
+	}
 
 }

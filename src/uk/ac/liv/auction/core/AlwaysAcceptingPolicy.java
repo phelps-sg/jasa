@@ -17,7 +17,7 @@ package uk.ac.liv.auction.core;
 
 /**
  * the losest accepting policy under which all shouts are allowed.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */

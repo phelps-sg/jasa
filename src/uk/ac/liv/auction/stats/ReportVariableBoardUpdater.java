@@ -49,7 +49,7 @@ import ec.util.ParameterDatabase;
  */
 
 public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
-		Parameterizable, Resetable {
+    Parameterizable, Resetable {
 
 	public static String TRANS_PRICE = "transaction.price";
 
@@ -72,11 +72,11 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 	public static String DAILY_ALLOCATIVE_EFFICIENCY = "daily.allocative.efficiency";
 
 	public static final ReportVariable VAR_CUMULATIVE_CONVERGENCE_COEFFICIENT = new ReportVariable(
-			CUMULATIVE_CONVERGENCE_COEFFICIENT,
-			"The cumulative convergence coefficient");
+	    CUMULATIVE_CONVERGENCE_COEFFICIENT,
+	    "The cumulative convergence coefficient");
 
 	public static final ReportVariable VAR_ALLOCATIVE_EFFICIENCY = new ReportVariable(
-			ALLOCATIVE_EFFICIENCY, "The allocative efficiency");
+	    ALLOCATIVE_EFFICIENCY, "The allocative efficiency");
 
 	public static String P_TRANS_PRICE_MEMORY = "transpricememory";
 
@@ -126,7 +126,7 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
 	public void setup(ParameterDatabase parameters, Parameter base) {
 		transPriceMemory = new FixedLengthQueue(parameters.getIntWithDefault(base
-				.push(P_TRANS_PRICE_MEMORY), null, 3));
+		    .push(P_TRANS_PRICE_MEMORY), null, 3));
 	}
 
 	public void reset() {
@@ -148,42 +148,42 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
 		if (event instanceof TransactionExecutedEvent) {
 			ReportVariableBoard.getInstance().reportValue(
-					TRANS_PRICE,
-					new TimePeriodValue(time, ((TransactionExecutedEvent) event)
-							.getPrice()));
+			    TRANS_PRICE,
+			    new TimePeriodValue(time, ((TransactionExecutedEvent) event)
+			        .getPrice()));
 
 			transPriceMemory.newData(((TransactionExecutedEvent) event).getPrice());
 			ReportVariableBoard.getInstance().reportValue(TRANS_PRICE_MEAN_MYOPIC,
-					new TimePeriodValue(time, transPriceMemory.getMean()));
+			    new TimePeriodValue(time, transPriceMemory.getMean()));
 
 			ReportVariableBoard.getInstance().reportValue(
-					TRANS_PRICE_SPREAD,
-					new TimePeriodValue(time, ((TransactionExecutedEvent) event).getBid()
-							.getPrice()
-							- ((TransactionExecutedEvent) event).getAsk().getPrice()));
+			    TRANS_PRICE_SPREAD,
+			    new TimePeriodValue(time, ((TransactionExecutedEvent) event).getBid()
+			        .getPrice()
+			        - ((TransactionExecutedEvent) event).getAsk().getPrice()));
 			ReportVariableBoard.getInstance().reportValue(
-					TRANS_ASK_PRICE,
-					new TimePeriodValue(time, ((TransactionExecutedEvent) event).getAsk()
-							.getPrice()));
+			    TRANS_ASK_PRICE,
+			    new TimePeriodValue(time, ((TransactionExecutedEvent) event).getAsk()
+			        .getPrice()));
 			ReportVariableBoard.getInstance().reportValue(
-					TRANS_BID_PRICE,
-					new TimePeriodValue(time, ((TransactionExecutedEvent) event).getBid()
-							.getPrice()));
+			    TRANS_BID_PRICE,
+			    new TimePeriodValue(time, ((TransactionExecutedEvent) event).getBid()
+			        .getPrice()));
 
 			transPriceDay.count++;
 			transPriceDay.devSquareSum += Math.pow(((TransactionExecutedEvent) event)
-					.getPrice()
-					- equilPrice, 2);
+			    .getPrice()
+			    - equilPrice, 2);
 
 			transPriceAuction.count++;
 			transPriceAuction.devSquareSum += Math.pow(
-					((TransactionExecutedEvent) event).getPrice() - equilPrice, 2);
+			    ((TransactionExecutedEvent) event).getPrice() - equilPrice, 2);
 		} else if (event instanceof AuctionOpenEvent) {
 			EquilibriumReport eqmReport = new EquilibriumReport(getAuction());
 			eqmReport.calculate();
 			equilPrice = eqmReport.calculateMidEquilibriumPrice();
 			ReportVariableBoard.getInstance().reportValue(EQUIL_PRICE,
-					new TimePeriodValue(time, equilPrice));
+			    new TimePeriodValue(time, equilPrice));
 
 			pCE = computeTheoreticalProfit();
 			eA = 0;
@@ -195,7 +195,7 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 		} else if (event instanceof AuctionClosedEvent) {
 
 			ReportVariableBoard.getInstance().reportValue(EQUIL_PRICE,
-					new TimePeriodValue(time, equilPrice));
+			    new TimePeriodValue(time, equilPrice));
 
 		} else if (event instanceof EndOfDayEvent) {
 			// compute efficiency
@@ -206,32 +206,31 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 			eA = 100 * temp / (getAuction().getDay() + 1);
 
 			ReportVariableBoard.getInstance().reportValue(ALLOCATIVE_EFFICIENCY,
-					new TimePeriodValue(time, eA));
+			    new TimePeriodValue(time, eA));
 			ReportVariableBoard.getInstance().reportValue(
-					DAILY_ALLOCATIVE_EFFICIENCY, new TimePeriodValue(time, dailyEA));
+			    DAILY_ALLOCATIVE_EFFICIENCY, new TimePeriodValue(time, dailyEA));
 
 			// CONVERGENCE_COEFFICIENT (each day)
 
 			double dalyAlpha = Double.NaN;
 			if (transPriceDay.count > 0) {
 				dalyAlpha = 100 * (Math.sqrt(transPriceDay.devSquareSum
-						/ transPriceDay.count) / equilPrice);
+				    / transPriceDay.count) / equilPrice);
 			}
 
 			ReportVariableBoard.getInstance().reportValue(CONVERGENCE_COEFFICIENT,
-					new TimePeriodValue(time, dalyAlpha));
+			    new TimePeriodValue(time, dalyAlpha));
 			transPriceDay.reset();
 
 			// CUMULATIVE_CONVERGENCE_COEFFICIENT (each auction)
 
 			if (transPriceAuction.count > 0) {
 				alpha = 100 * (Math.sqrt(transPriceAuction.devSquareSum
-						/ transPriceAuction.count) / equilPrice);
+				    / transPriceAuction.count) / equilPrice);
 			}
 
 			ReportVariableBoard.getInstance().reportValue(
-					CUMULATIVE_CONVERGENCE_COEFFICIENT,
-					new TimePeriodValue(time, alpha));
+			    CUMULATIVE_CONVERGENCE_COEFFICIENT, new TimePeriodValue(time, alpha));
 
 		} else if (event instanceof RoundClosedEvent) {
 		}
@@ -281,10 +280,10 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 			return pCE; // no equilibrium
 		} else {
 			double minPrice = Shout.maxPrice(shoutEngine.getHighestMatchedAsk(),
-					shoutEngine.getHighestUnmatchedBid());
+			    shoutEngine.getHighestUnmatchedBid());
 
 			double maxPrice = Shout.minPrice(shoutEngine.getLowestUnmatchedAsk(),
-					shoutEngine.getLowestMatchedBid());
+			    shoutEngine.getLowestMatchedBid());
 
 			double midEquilibriumPrice = (minPrice + maxPrice) / 2;
 
@@ -296,12 +295,12 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 					Shout ask = (Shout) i.next();
 
 					pCE += ((AbstractTradingAgent) bid.getAgent())
-							.equilibriumProfitsEachDay(getAuction(), midEquilibriumPrice, bid
-									.getQuantity());
+					    .equilibriumProfitsEachDay(getAuction(), midEquilibriumPrice, bid
+					        .getQuantity());
 
 					pCE += ((AbstractTradingAgent) ask.getAgent())
-							.equilibriumProfitsEachDay(getAuction(), midEquilibriumPrice, ask
-									.getQuantity());
+					    .equilibriumProfitsEachDay(getAuction(), midEquilibriumPrice, ask
+					        .getQuantity());
 				}
 			}
 		}
@@ -309,11 +308,11 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 		return pCE;
 
 	}
-	
+
 	public double getEA() {
 		return eA;
 	}
-	
+
 	public double getAlpha() {
 		return alpha;
 	}

@@ -17,7 +17,6 @@ package uk.ac.liv.auction.stats;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 
-
 /**
  * A report that lists the ratio of actual to theoretical profits of each
  * strategy being played in the auction. Note that strategies are identified by
@@ -29,16 +28,16 @@ import uk.ac.liv.auction.agent.AbstractTradingAgent;
  */
 public class StrategyPayoffReport extends PayoffReport {
 
-  public Object getKey( AbstractTradingAgent agent ) {
-    return agent.getStrategy().getClass().getName();
-  }
-  
-  public String getKeyName() {
-    return "strategy";
-  }
-  
-  public String getReportText() {
-    return "agents playing strategy";
-  }
+	public Object getKey(AbstractTradingAgent agent) {
+		return agent.getStrategy().getClass().getName();
+	}
+
+	public String getKeyName() {
+		return "strategy";
+	}
+
+	public String getReportText() {
+		return "agents playing strategy";
+	}
 
 }

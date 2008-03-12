@@ -33,7 +33,7 @@ import java.io.Serializable;
  */
 
 public class DiscreteProbabilityDistribution implements Resetable,
-		Serializable, Prototypeable {
+    Serializable, Prototypeable {
 
 	/**
 	 * The probability distribution.
@@ -54,7 +54,7 @@ public class DiscreteProbabilityDistribution implements Resetable,
 	 * The log4j logger.
 	 */
 	static Logger logger = Logger
-			.getLogger(DiscreteProbabilityDistribution.class);
+	    .getLogger(DiscreteProbabilityDistribution.class);
 
 	/**
 	 * Construct a new distribution with k possible events.

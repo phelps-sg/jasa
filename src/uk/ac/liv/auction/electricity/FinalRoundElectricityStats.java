@@ -13,10 +13,9 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.electricity;
 
-import uk.ac.liv.auction.agent.*;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 
 /**
@@ -26,34 +25,27 @@ import uk.ac.liv.auction.core.RandomRobinAuction;
 
 public class FinalRoundElectricityStats extends ElectricityStats {
 
-  public FinalRoundElectricityStats() {
-    super();
-  }
+	public FinalRoundElectricityStats() {
+		super();
+	}
 
-  public FinalRoundElectricityStats( RandomRobinAuction auction ) {
-    super(auction);
-  }
+	public FinalRoundElectricityStats(RandomRobinAuction auction) {
+		super(auction);
+	}
 
+	protected double getProfits(AbstractTradingAgent trader) {
+		return ((ElectricityTrader) trader).getLastProfit();
+	}
 
-  protected double getProfits( AbstractTradingAgent trader ) {
-    return ((ElectricityTrader) trader).getLastProfit();
-  }
+	/*
+	 * public double equilibriumProfits( AbstractTraderAgent trader ) { double
+	 * surplus = 0; if ( trader.isSeller() ) { surplus = equilibPrice -
+	 * trader.getPrivateValue(); } else { surplus = trader.getPrivateValue() -
+	 * equilibPrice; } return equilibQuant(trader, equilibPrice) * surplus; }
+	 */
 
-/*
-  public double equilibriumProfits( AbstractTraderAgent trader ) {
-    double surplus = 0;
-    if ( trader.isSeller() ) {
-      surplus = equilibPrice - trader.getPrivateValue();
-    } else {
-      surplus = trader.getPrivateValue() - equilibPrice;
-    }
-    return equilibQuant(trader, equilibPrice) * surplus;
-  }
-  */
-
-  protected int calculateAuctionAge() {
-    return 1;
-  }
-
+	protected int calculateAuctionAge() {
+		return 1;
+	}
 
 }

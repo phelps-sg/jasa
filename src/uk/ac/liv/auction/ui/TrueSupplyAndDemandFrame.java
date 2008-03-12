@@ -16,11 +16,10 @@
 package uk.ac.liv.auction.ui;
 
 import uk.ac.liv.auction.core.RandomRobinAuction;
-
-import uk.ac.liv.auction.event.*;
-
-import uk.ac.liv.auction.stats.TrueSupplyAndDemandStats;
+import uk.ac.liv.auction.event.AuctionEvent;
+import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.stats.SupplyAndDemandStats;
+import uk.ac.liv.auction.stats.TrueSupplyAndDemandStats;
 
 /**
  * @author Steve Phelps
@@ -29,24 +28,24 @@ import uk.ac.liv.auction.stats.SupplyAndDemandStats;
 
 public class TrueSupplyAndDemandFrame extends SupplyAndDemandFrame {
 
-  public static final String TITLE = "Supply and Demand Graph";
+	public static final String TITLE = "Supply and Demand Graph";
 
-  public TrueSupplyAndDemandFrame( RandomRobinAuction auction ) {
-    super(auction);
-  }
-  
-  public String getGraphName() {
-    return TITLE;
-  }
+	public TrueSupplyAndDemandFrame(RandomRobinAuction auction) {
+		super(auction);
+	}
 
-  public SupplyAndDemandStats getSupplyAndDemandStats() {
-    return new TrueSupplyAndDemandStats(auction, supplyCurve, demandCurve);
-  }
-  
-  public void eventOccurred( AuctionEvent event ) {
-    if ( event instanceof RoundClosedEvent ) {
-      updateGraph();
-    }
-  }
+	public String getGraphName() {
+		return TITLE;
+	}
+
+	public SupplyAndDemandStats getSupplyAndDemandStats() {
+		return new TrueSupplyAndDemandStats(auction, supplyCurve, demandCurve);
+	}
+
+	public void eventOccurred(AuctionEvent event) {
+		if (event instanceof RoundClosedEvent) {
+			updateGraph();
+		}
+	}
 
 }

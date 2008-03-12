@@ -15,13 +15,17 @@
 
 package uk.ac.liv.auction.core;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
-import uk.ac.liv.auction.agent.MockTrader;
-
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 import org.apache.commons.collections.buffer.PriorityBuffer;
+
+import uk.ac.liv.auction.agent.MockTrader;
 
 /**
  * @author Steve Phelps
@@ -30,160 +34,160 @@ import org.apache.commons.collections.buffer.PriorityBuffer;
 
 public class FourHeapTest extends TestCase {
 
-  /**
-   * @uml.property name="shoutEngine"
-   * @uml.associationEnd
-   */
-  TestShoutEngine shoutEngine;
+	/**
+	 * @uml.property name="shoutEngine"
+	 * @uml.associationEnd
+	 */
+	TestShoutEngine shoutEngine;
 
-  /**
-   * @uml.property name="testTrader"
-   * @uml.associationEnd
-   */
-  MockTrader testTrader;
+	/**
+	 * @uml.property name="testTrader"
+	 * @uml.associationEnd
+	 */
+	MockTrader testTrader;
 
-  /**
-   * @uml.property name="randGenerator"
-   */
-  Random randGenerator;
+	/**
+	 * @uml.property name="randGenerator"
+	 */
+	Random randGenerator;
 
-  public FourHeapTest( String name ) {
-    super(name);
-  }
+	public FourHeapTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    shoutEngine = new TestShoutEngine();
-    testTrader = new MockTrader(this, 0, 0);
-    randGenerator = new Random();
-    org.apache.log4j.BasicConfigurator.configure();
-  }
+	public void setUp() {
+		shoutEngine = new TestShoutEngine();
+		testTrader = new MockTrader(this, 0, 0);
+		randGenerator = new Random();
+		org.apache.log4j.BasicConfigurator.configure();
+	}
 
-  public Shout randomShout() {
-    int quantity = randGenerator.nextInt(50);
-    double price = randGenerator.nextDouble() * 100;
-    boolean isBid = randGenerator.nextBoolean();
-    return new Shout(testTrader, quantity, price, isBid);
-  }
+	public Shout randomShout() {
+		int quantity = randGenerator.nextInt(50);
+		double price = randGenerator.nextDouble() * 100;
+		boolean isBid = randGenerator.nextBoolean();
+		return new Shout(testTrader, quantity, price, isBid);
+	}
 
-  public void testRandom() {
+	public void testRandom() {
 
-    int matches = 0;
+		int matches = 0;
 
-    try {
+		try {
 
-      Shout testRemoveShout = null, testRemoveShout2 = null;
+			Shout testRemoveShout = null, testRemoveShout2 = null;
 
-      for ( int round = 0; round < 700; round++ ) {
+			for (int round = 0; round < 700; round++) {
 
-        if ( testRemoveShout != null ) {
-          shoutEngine.removeShout(testRemoveShout);
-          shoutEngine.removeShout(testRemoveShout2);
-        }
+				if (testRemoveShout != null) {
+					shoutEngine.removeShout(testRemoveShout);
+					shoutEngine.removeShout(testRemoveShout2);
+				}
 
-        for ( int shout = 0; shout < 200; shout++ ) {
-          shoutEngine.newShout(randomShout());
-        }
+				for (int shout = 0; shout < 200; shout++) {
+					shoutEngine.newShout(randomShout());
+				}
 
-        shoutEngine.newShout(testRemoveShout = randomShout());
-        testRemoveShout2 = (Shout) testRemoveShout.clone();
-        testRemoveShout2 = new Shout(testRemoveShout.getAgent(),
-            testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
-            !testRemoveShout.isBid());
-        shoutEngine.newShout(testRemoveShout2);
+				shoutEngine.newShout(testRemoveShout = randomShout());
+				testRemoveShout2 = (Shout) testRemoveShout.clone();
+				testRemoveShout2 = new Shout(testRemoveShout.getAgent(),
+				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
+				    !testRemoveShout.isBid());
+				shoutEngine.newShout(testRemoveShout2);
 
-        if ( (round & 0x01) > 0 ) {
-          continue;
-        }
+				if ((round & 0x01) > 0) {
+					continue;
+				}
 
-        List matched = shoutEngine.getMatchedShouts();
-        Iterator i = matched.iterator();
-        while ( i.hasNext() ) {
-          matches++;
-          Shout bid = (Shout) i.next();
-          Shout ask = (Shout) i.next();
-          assertTrue(bid.isBid());
-          assertTrue(ask.isAsk());
-          assertTrue(bid.getPrice() >= ask.getPrice());
-          // System.out.print(bid + "/" + ask + " ");
-        }
-        // System.out.println("");
-      }
+				List matched = shoutEngine.getMatchedShouts();
+				Iterator i = matched.iterator();
+				while (i.hasNext()) {
+					matches++;
+					Shout bid = (Shout) i.next();
+					Shout ask = (Shout) i.next();
+					assertTrue(bid.isBid());
+					assertTrue(ask.isAsk());
+					assertTrue(bid.getPrice() >= ask.getPrice());
+					// System.out.print(bid + "/" + ask + " ");
+				}
+				// System.out.println("");
+			}
 
-    } catch ( Exception e ) {
-      shoutEngine.printState();
-      e.printStackTrace();
-      fail();
-    }
+		} catch (Exception e) {
+			shoutEngine.printState();
+			e.printStackTrace();
+			fail();
+		}
 
-    System.out.println("Matches = " + matches);
+		System.out.println("Matches = " + matches);
 
-  }
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(FourHeapTest.class);
-  }
+	public static Test suite() {
+		return new TestSuite(FourHeapTest.class);
+	}
 
 }
 
 class TestShoutEngine extends FourHeapShoutEngine {
 
-  protected void preRemovalProcessing() {
-    checkBalanced();
-  }
+	protected void preRemovalProcessing() {
+		checkBalanced();
+	}
 
-  protected void postRemovalProcessing() {
-    checkBalanced();
-  }
+	protected void postRemovalProcessing() {
+		checkBalanced();
+	}
 
-  protected void checkBalanced() {
+	protected void checkBalanced() {
 
-    int nS = countQty(sIn);
-    int nB = countQty(bIn);
-    if ( nS != nB ) {
-      printState();
-      throw new Error("shout heaps not balanced nS=" + nS + " nB=" + nB);
-    }
+		int nS = countQty(sIn);
+		int nB = countQty(bIn);
+		if (nS != nB) {
+			printState();
+			throw new Error("shout heaps not balanced nS=" + nS + " nB=" + nB);
+		}
 
-    Shout bInTop = getLowestMatchedBid();
-    Shout sInTop = getHighestMatchedAsk();
-    Shout bOutTop = getHighestUnmatchedBid();
-    Shout sOutTop = getLowestUnmatchedAsk();
+		Shout bInTop = getLowestMatchedBid();
+		Shout sInTop = getHighestMatchedAsk();
+		Shout bOutTop = getHighestUnmatchedBid();
+		Shout sOutTop = getLowestUnmatchedAsk();
 
-    checkBalanced(bInTop, bOutTop, "bIn >= bOut");
-    checkBalanced(sOutTop, sInTop, "sOut >= sIn");
-    checkBalanced(sOutTop, bOutTop, "sOut >= bOut");
-    checkBalanced(bInTop, sInTop, "bIn >= sIn");
-  }
+		checkBalanced(bInTop, bOutTop, "bIn >= bOut");
+		checkBalanced(sOutTop, sInTop, "sOut >= sIn");
+		checkBalanced(sOutTop, bOutTop, "sOut >= bOut");
+		checkBalanced(bInTop, sInTop, "bIn >= sIn");
+	}
 
-  protected void checkBalanced( Shout s1, Shout s2, String condition ) {
-    if ( !((s1 == null || s2 == null) || s1.getPrice() >= s2.getPrice()) ) {
-      printState();
-      System.out.println("shout1 = " + s1);
-      System.out.println("shout2 = " + s2);
-      throw new Error("Heaps not balanced! - " + condition);
-    }
-  }
+	protected void checkBalanced(Shout s1, Shout s2, String condition) {
+		if (!((s1 == null || s2 == null) || s1.getPrice() >= s2.getPrice())) {
+			printState();
+			System.out.println("shout1 = " + s1);
+			System.out.println("shout2 = " + s2);
+			throw new Error("Heaps not balanced! - " + condition);
+		}
+	}
 
-  public static int countQty( PriorityBuffer heap ) {
-    Iterator i = heap.iterator();
-    int qty = 0;
-    while ( i.hasNext() ) {
-      Shout s = (Shout) i.next();
-      qty += s.getQuantity();
-    }
-    return qty;
-  }
+	public static int countQty(PriorityBuffer heap) {
+		Iterator i = heap.iterator();
+		int qty = 0;
+		while (i.hasNext()) {
+			Shout s = (Shout) i.next();
+			qty += s.getQuantity();
+		}
+		return qty;
+	}
 
-  public void newShout( Shout shout ) throws DuplicateShoutException {
-    if ( shout.isAsk() ) {
-      newAsk(shout);
-    } else {
-      newBid(shout);
-    }
-  }
+	public void newShout(Shout shout) throws DuplicateShoutException {
+		if (shout.isAsk()) {
+			newAsk(shout);
+		} else {
+			newBid(shout);
+		}
+	}
 
 }

@@ -21,24 +21,24 @@ package uk.ac.liv.auction.core;
  */
 public class InOrderPricingPolicy extends DiscriminatoryPricingPolicy {
 
-  public InOrderPricingPolicy() {
-    this(0);
-  }
+	public InOrderPricingPolicy() {
+		this(0);
+	}
 
 	public InOrderPricingPolicy(double k) {
 		super(k);
 	}
-	
-  public double determineClearingPrice( Shout bid, Shout ask,
-                                          MarketQuote clearingQuote ) {
 
-    if ( bid.getId() > ask.getId() ) {
-      // ask comes first
-      return kInterval(ask.getPrice(), bid.getPrice());
-    } else {
-      // bid comes first
-      return kInterval(bid.getPrice(), ask.getPrice());
-    }
-  } 
-  
+	public double determineClearingPrice(Shout bid, Shout ask,
+	    MarketQuote clearingQuote) {
+
+		if (bid.getId() > ask.getId()) {
+			// ask comes first
+			return kInterval(ask.getPrice(), bid.getPrice());
+		} else {
+			// bid comes first
+			return kInterval(bid.getPrice(), ask.getPrice());
+		}
+	}
+
 }

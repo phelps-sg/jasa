@@ -15,72 +15,74 @@
 
 package uk.ac.liv.auction;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import junit.swingui.TestRunner;
-
 
 public class AllTests {
 
-  public static void main( String[] args ) {    
-	  org.apache.log4j.BasicConfigurator.configure();
-	  TestRunner.run(AllTests.class);    
-  }
+	public static void main(String[] args) {
+		org.apache.log4j.BasicConfigurator.configure();
+		TestRunner.run(AllTests.class);
+	}
 
-  public static Test suite() {
+	public static Test suite() {
 
-    TestSuite suite = new TestSuite("auction test suite");
+		TestSuite suite = new TestSuite("auction test suite");
 
-    suite.addTest(uk.ac.liv.util.DiscreteProbabilityDistributionTest.suite());
-    suite.addTest(uk.ac.liv.util.CummulativeDistributionTest.suite());
-    suite.addTest(uk.ac.liv.util.HeavyweightDistributionTest.suite());
-    suite.addTest(uk.ac.liv.util.FixedLengthQueueTest.suite());
-    
-    suite.addTest(uk.ac.liv.prng.GlobalPRNGTest.suite());
+		suite.addTest(uk.ac.liv.util.DiscreteProbabilityDistributionTest.suite());
+		suite.addTest(uk.ac.liv.util.CummulativeDistributionTest.suite());
+		suite.addTest(uk.ac.liv.util.HeavyweightDistributionTest.suite());
+		suite.addTest(uk.ac.liv.util.FixedLengthQueueTest.suite());
 
-    suite.addTest(uk.ac.liv.auction.NPTReplicationTest.suite());
-    suite.addTest(uk.ac.liv.auction.DirectRevelationTest.suite());
-    //suite.addTest(test.uk.ac.liv.auction.SerializationTests.suite());
+		suite.addTest(uk.ac.liv.prng.GlobalPRNGTest.suite());
 
-    suite.addTest(uk.ac.liv.auction.agent.AbstractTraderAgentTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.AdaptiveStrategyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.MixedStrategyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.RandomConstrainedStrategyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.RandomUnconstrainedStrategyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.MomentumStrategyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.RandomValuerTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.BuyerIntervalValuerTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.SellerIntervalValuerTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.CommodityHoldingTest.suite());
-    
-    suite.addTest(uk.ac.liv.auction.zi.ZITraderAgentTest.suite());
+		suite.addTest(uk.ac.liv.auction.NPTReplicationTest.suite());
+		suite.addTest(uk.ac.liv.auction.DirectRevelationTest.suite());
+		// suite.addTest(test.uk.ac.liv.auction.SerializationTests.suite());
 
-    suite.addTest(uk.ac.liv.auction.electricity.ElectricityStatsTest.suite());
-    suite.addTest(uk.ac.liv.auction.stats.EquilibriumSurplusLoggerTest.suite());
-    suite.addTest(uk.ac.liv.auction.stats.EquilibriaStatsTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.AbstractTraderAgentTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.AdaptiveStrategyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.MixedStrategyTest.suite());
+		suite
+		    .addTest(uk.ac.liv.auction.agent.RandomConstrainedStrategyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.RandomUnconstrainedStrategyTest
+		    .suite());
+		suite.addTest(uk.ac.liv.auction.agent.MomentumStrategyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.RandomValuerTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.BuyerIntervalValuerTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.SellerIntervalValuerTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.CommodityHoldingTest.suite());
 
-    suite.addTest(uk.ac.liv.auction.core.ClearingHouseAuctioneerTest.suite());
-    suite.addTest(uk.ac.liv.auction.core.McAfeeClearingHouseAuctioneerTest.suite());
-    suite.addTest(uk.ac.liv.auction.core.ContinuousDoubleAuctioneerTest.suite());
-    suite.addTest(uk.ac.liv.auction.core.RandomRobinAuctionTest.suite());
-    suite.addTest(uk.ac.liv.auction.core.FourHeapTest.suite());
-    suite.addTest(uk.ac.liv.auction.core.KPricingPolicyTest.suite());
+		suite.addTest(uk.ac.liv.auction.zi.ZITraderAgentTest.suite());
 
-    suite.addTest(uk.ac.liv.ai.learning.RothErevLearnerTest.suite());
-    suite.addTest(uk.ac.liv.ai.learning.QLearnerTest.suite());
-    suite.addTest(uk.ac.liv.ai.learning.WidrowHoffLearnerTest.suite());
+		suite.addTest(uk.ac.liv.auction.electricity.ElectricityStatsTest.suite());
+		suite.addTest(uk.ac.liv.auction.stats.EquilibriumSurplusLoggerTest.suite());
+		suite.addTest(uk.ac.liv.auction.stats.EquilibriaStatsTest.suite());
 
-    suite.addTest(uk.ac.liv.auction.agent.RandomScheduleValuerTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.KaplanStrategyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.RothErevEfficiencyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.EPEfficiencyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.GDEfficiencyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.QLearnerEfficiencyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.PriestVanTolEfficiencyTest.suite());
-    suite.addTest(uk.ac.liv.auction.agent.ZIPEfficiencyTest.suite());
-    
-    return suite;
-  }
+		suite.addTest(uk.ac.liv.auction.core.ClearingHouseAuctioneerTest.suite());
+		suite.addTest(uk.ac.liv.auction.core.McAfeeClearingHouseAuctioneerTest
+		    .suite());
+		suite
+		    .addTest(uk.ac.liv.auction.core.ContinuousDoubleAuctioneerTest.suite());
+		suite.addTest(uk.ac.liv.auction.core.RandomRobinAuctionTest.suite());
+		suite.addTest(uk.ac.liv.auction.core.FourHeapTest.suite());
+		suite.addTest(uk.ac.liv.auction.core.KPricingPolicyTest.suite());
 
+		suite.addTest(uk.ac.liv.ai.learning.RothErevLearnerTest.suite());
+		suite.addTest(uk.ac.liv.ai.learning.QLearnerTest.suite());
+		suite.addTest(uk.ac.liv.ai.learning.WidrowHoffLearnerTest.suite());
+
+		suite.addTest(uk.ac.liv.auction.agent.RandomScheduleValuerTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.KaplanStrategyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.RothErevEfficiencyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.EPEfficiencyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.GDEfficiencyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.QLearnerEfficiencyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.PriestVanTolEfficiencyTest.suite());
+		suite.addTest(uk.ac.liv.auction.agent.ZIPEfficiencyTest.suite());
+
+		return suite;
+	}
 
 }
-

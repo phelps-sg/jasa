@@ -15,12 +15,11 @@
 
 package uk.ac.liv.util.io;
 
-import javax.swing.table.AbstractTableModel;
-
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import java.io.Serializable;
+import javax.swing.table.AbstractTableModel;
 
 import org.apache.log4j.Logger;
 
@@ -56,244 +55,250 @@ import org.apache.log4j.Logger;
 public class DataSeriesWriter extends AbstractTableModel implements DataWriter,
     Serializable {
 
-  /**
-   * @uml.property name="isVisible"
-   */
-  protected boolean isVisible = true;
+	/**
+	 * @uml.property name="isVisible"
+	 */
+	protected boolean isVisible = true;
 
-  /**
-   * @uml.property name="isXCoordinate"
-   */
-  protected boolean isXCoordinate = true;
+	/**
+	 * @uml.property name="isXCoordinate"
+	 */
+	protected boolean isXCoordinate = true;
 
-  /**
-   * @uml.property name="xCoord"
-   */
-  protected double xCoord;
+	/**
+	 * @uml.property name="xCoord"
+	 */
+	protected double xCoord;
 
-  /**
-   * @uml.property name="data"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.util.io.SeriesDatum"
-   */
-  protected Vector data = new Vector();
+	/**
+	 * @uml.property name="data"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.util.io.SeriesDatum"
+	 */
+	protected Vector data = new Vector();
 
-  static Logger logger = Logger.getLogger(DataSeriesWriter.class);
+	static Logger logger = Logger.getLogger(DataSeriesWriter.class);
 
-  public DataSeriesWriter() {
-    super();
-  }
+	public DataSeriesWriter() {
+		super();
+	}
 
-  public void newData( int datum ) {
-    newData((double) datum);
-  }
+	public void newData(int datum) {
+		newData((double) datum);
+	}
 
-  public void newData( long datum ) {
-    newData((double) datum);
-  }
+	public void newData(long datum) {
+		newData((double) datum);
+	}
 
-  public void newData( double datum ) {
-    if ( isXCoordinate ) {
-      xCoord = datum;
-    } else {
-      SeriesDatum d = new SeriesDatum(xCoord, datum);
-      data.add(d);
-    }
-    isXCoordinate = !isXCoordinate;
-  }
+	public void newData(double datum) {
+		if (isXCoordinate) {
+			xCoord = datum;
+		} else {
+			SeriesDatum d = new SeriesDatum(xCoord, datum);
+			data.add(d);
+		}
+		isXCoordinate = !isXCoordinate;
+	}
 
-  public void newData( float datum ) {
-    newData((double) datum);
-  }
+	public void newData(float datum) {
+		newData((double) datum);
+	}
 
-  public void clear() {
-    data.clear();
-  }
+	public void clear() {
+		data.clear();
+	}
 
-  public float getValue( int datum ) {
-    return (float) getDatum(datum);
-  }
+	public float getValue(int datum) {
+		return (float) getDatum(datum);
+	}
 
-  public float getCoord( int datum, int dimension ) {
-    switch ( dimension ) {
-    case 0:
-      return getXCoord(datum);
-    case 1:
-      return getYCoord(datum);
-    default:
-      throw new Error("Invalid dimension- " + dimension);
-    }
-  }
+	public float getCoord(int datum, int dimension) {
+		switch (dimension) {
+		case 0:
+			return getXCoord(datum);
+		case 1:
+			return getYCoord(datum);
+		default:
+			throw new Error("Invalid dimension- " + dimension);
+		}
+	}
 
-  public float getXCoord( int datum ) {
-    if ( datum > data.size() - 1 ) {
-      return 0f;
-    } else {
-      return (float) ((SeriesDatum) data.get(datum)).getX();
-    }
-  }
+	public float getXCoord(int datum) {
+		if (datum > data.size() - 1) {
+			return 0f;
+		} else {
+			return (float) ((SeriesDatum) data.get(datum)).getX();
+		}
+	}
 
-  public float getYCoord( int datum ) {
-    return (float) getDatum(datum);
-  }
+	public float getYCoord(int datum) {
+		return (float) getDatum(datum);
+	}
 
-  public double getDatum( int i ) {
-    SeriesDatum datum = (SeriesDatum) data.get(i);
-    double value = 0;
-    if ( datum != null ) {
-      value = ((SeriesDatum) data.get(i)).getY();
-    }
-    if ( Double.isNaN(value) || Double.isInfinite(value) ) {
-      return 0;
-    } else {
-      return value;
-    }
-  }
+	public double getDatum(int i) {
+		SeriesDatum datum = (SeriesDatum) data.get(i);
+		double value = 0;
+		if (datum != null) {
+			value = ((SeriesDatum) data.get(i)).getY();
+		}
+		if (Double.isNaN(value) || Double.isInfinite(value)) {
+			return 0;
+		} else {
+			return value;
+		}
+	}
 
-  public int getColumnCount() {
-    return 2;
-  }
+	public int getColumnCount() {
+		return 2;
+	}
 
-  public int getRowCount() {
-    return data.size();
-  }
+	public int getRowCount() {
+		return data.size();
+	}
 
-  public Object getValueAt( int rowIndex, int columnIndex ) {
-    if ( columnIndex == 0 ) {
-      return new Integer(rowIndex);
-    } else {
-      return new Double(getDatum(rowIndex));
-    }
-  }
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		if (columnIndex == 0) {
+			return new Integer(rowIndex);
+		} else {
+			return new Double(getDatum(rowIndex));
+		}
+	}
 
-  public void flush() {
-  }
+	public void flush() {
+	}
 
-  public void close() {
-  }
+	public void close() {
+	}
 
-  public int length() {
-    return data.size();
-  }
+	public int length() {
+		return data.size();
+	}
 
-  public void newData( Iterator i ) {
-    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
-    throw new java.lang.UnsupportedOperationException(
-        "Method newData() not yet implemented.");
-  }
+	public void newData(Iterator i) {
+		/** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+		throw new java.lang.UnsupportedOperationException(
+		    "Method newData() not yet implemented.");
+	}
 
-  public void newData( Object[] data ) {
-    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
-    throw new java.lang.UnsupportedOperationException(
-        "Method newData() not yet implemented.");
-  }
+	public void newData(Object[] data) {
+		/** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+		throw new java.lang.UnsupportedOperationException(
+		    "Method newData() not yet implemented.");
+	}
 
-  public void newData( Object data ) {
-    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
-    throw new java.lang.UnsupportedOperationException(
-        "Method newData() not yet implemented.");
-  }
+	public void newData(Object data) {
+		/** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+		throw new java.lang.UnsupportedOperationException(
+		    "Method newData() not yet implemented.");
+	}
 
-  public void newData( boolean data ) {
-    /** @todo Implement this uk.ac.liv.util.io.DataWriter method */
-    throw new java.lang.UnsupportedOperationException(
-        "Method newData() not yet implemented.");
-  }
-  
-  
+	public void newData(boolean data) {
+		/** @todo Implement this uk.ac.liv.util.io.DataWriter method */
+		throw new java.lang.UnsupportedOperationException(
+		    "Method newData() not yet implemented.");
+	}
 
-  /* (non-Javadoc)
-   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Double)
-   */
-  public void newData( Double data ) {
-    // TODO Auto-generated method stub
-    
-  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Double)
+	 */
+	public void newData(Double data) {
+		// TODO Auto-generated method stub
 
-  /* (non-Javadoc)
-   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Integer)
-   */
-  public void newData( Integer data ) {
-    // TODO Auto-generated method stub
-    
-  }
+	}
 
-  /* (non-Javadoc)
-   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Long)
-   */
-  public void newData( Long data ) {
-    // TODO Auto-generated method stub
-    
-  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Integer)
+	 */
+	public void newData(Integer data) {
+		// TODO Auto-generated method stub
 
-  /* (non-Javadoc)
-   * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.String)
-   */
-  public void newData( String data ) {
-    // TODO Auto-generated method stub
-    
-  }
+	}
 
-  public String toString() {
-    StringBuffer out = new StringBuffer("( " + getClass() + " ");
-    Iterator i = data.iterator();
-    while ( i.hasNext() ) {
-      Object datum = i.next();
-      out.append(datum.toString());
-    }
-    out.append(")");
-    return out.toString();
-  }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.Long)
+	 */
+	public void newData(Long data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see uk.ac.liv.util.io.DataWriter#newData(java.lang.String)
+	 */
+	public void newData(String data) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public String toString() {
+		StringBuffer out = new StringBuffer("( " + getClass() + " ");
+		Iterator i = data.iterator();
+		while (i.hasNext()) {
+			Object datum = i.next();
+			out.append(datum.toString());
+		}
+		out.append(")");
+		return out.toString();
+	}
 
 }
 
 class SeriesDatum {
 
-  /**
-   * @uml.property name="x"
-   */
-  double x;
+	/**
+	 * @uml.property name="x"
+	 */
+	double x;
 
-  /**
-   * @uml.property name="y"
-   */
-  double y;
+	/**
+	 * @uml.property name="y"
+	 */
+	double y;
 
-  public SeriesDatum( double x, double y ) {
-    this.x = x;
-    this.y = y;
-  }
+	public SeriesDatum(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
 
-  /**
-   * @uml.property name="x"
-   */
-  public void setX( double x ) {
-    this.x = x;
-  }
+	/**
+	 * @uml.property name="x"
+	 */
+	public void setX(double x) {
+		this.x = x;
+	}
 
-  /**
-   * @uml.property name="y"
-   */
-  public void setY( double y ) {
-    this.y = y;
-  }
+	/**
+	 * @uml.property name="y"
+	 */
+	public void setY(double y) {
+		this.y = y;
+	}
 
-  /**
-   * @uml.property name="x"
-   */
-  public double getX() {
-    return x;
-  }
+	/**
+	 * @uml.property name="x"
+	 */
+	public double getX() {
+		return x;
+	}
 
-  /**
-   * @uml.property name="y"
-   */
-  public double getY() {
-    return y;
-  }
+	/**
+	 * @uml.property name="y"
+	 */
+	public double getY() {
+		return y;
+	}
 
-  public String toString() {
-    return "(" + getClass() + " x:" + x + " y:" + y + ")";
-  }
+	public String toString() {
+		return "(" + getClass() + " x:" + x + " y:" + y + ")";
+	}
 
 }

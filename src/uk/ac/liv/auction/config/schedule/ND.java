@@ -14,7 +14,6 @@
  */
 package uk.ac.liv.auction.config.schedule;
 
-
 import uk.ac.liv.auction.config.Case;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -26,15 +25,16 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 public class ND implements Case {
-	
-//	private static final String ClassName = "uk.ac.liv.auction.agent.BuyerIntervalValuer";
-		
+
+	// private static final String ClassName =
+	// "uk.ac.liv.auction.agent.BuyerIntervalValuer";
+
 	public String toString() {
 		return "ND";
 	}
-	
+
 	public void apply(ParameterDatabase pdb, Parameter base) {
 		pdb.set(base.push("minvalue"), String.valueOf(20));
-		pdb.set(base.push("step"), String.valueOf(10));	
+		pdb.set(base.push("step"), String.valueOf(10));
 	}
 }

@@ -18,73 +18,70 @@ package uk.ac.liv.auction.core;
 import java.util.Iterator;
 
 /**
- * An implementation of the mechanism described in 
+ * An implementation of the mechanism described in
  * 
- * "A Dominant Strategy Double Auction"
- * R. Preston McAfee
- * Journal of Economic Theory Vol 56 pages 434-450
- * 1992
+ * "A Dominant Strategy Double Auction" R. Preston McAfee Journal of Economic
+ * Theory Vol 56 pages 434-450 1992
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
 
-  protected ZeroCreditAccount account;
-  
-  public McAfeeClearingHouseAuctioneer() {
-    this(null);    
-  }
+	protected ZeroCreditAccount account;
 
-  public McAfeeClearingHouseAuctioneer( Auction auction ) {
-    super(auction);
-    account = new ZeroCreditAccount(this);
-  }
-  
-  public void clear() {
-    boolean efficientClearing;
-    double a0 = -1, a1 = -1;
-    double b0 = -1, b1 = -1;
-    double p0 = -1;    
-    if ( shoutEngine.getLowestMatchedBid() == null ) {
-      return;
-    }
-    if ( shoutEngine.getHighestUnmatchedBid() == null 
-          || shoutEngine.getLowestUnmatchedAsk() == null ) {
-      efficientClearing = false;
-    } else {
-      a0 = shoutEngine.getHighestUnmatchedBid().getPrice();
-      b0 = shoutEngine.getLowestUnmatchedAsk().getPrice();      
-      p0 = (a0 + b0) / 2;
-      efficientClearing = shoutEngine.getHighestMatchedAsk().getPrice() <= p0 && p0 <= shoutEngine.getLowestMatchedBid().getPrice();
-    }
-    if ( ! efficientClearing ) {
-      a1 = shoutEngine.getLowestMatchedBid().getPrice();
-      b1 = shoutEngine.getHighestMatchedAsk().getPrice();      
-    }
-    Iterator matchedShouts = shoutEngine.getMatchedShouts().iterator();
-    while ( matchedShouts.hasNext() ) {
-      Shout bid = (Shout) matchedShouts.next();
-      Shout ask = (Shout) matchedShouts.next();      
-      if ( efficientClearing ) {       
-        clear(ask, bid, p0);
-      } else {
-        if ( bid.getPrice() > a1 ) {
-          clear(ask, bid, a1, b1, ask.getQuantity());
-        }
-      }
-    }
-  }
+	public McAfeeClearingHouseAuctioneer() {
+		this(null);
+	}
 
+	public McAfeeClearingHouseAuctioneer(Auction auction) {
+		super(auction);
+		account = new ZeroCreditAccount(this);
+	}
 
-  public Account getAccount() {
-    return account;
-  }
-  
-  public void reset() {
-    super.reset();
-    account.setFunds(0);
-  }
+	public void clear() {
+		boolean efficientClearing;
+		double a0 = -1, a1 = -1;
+		double b0 = -1, b1 = -1;
+		double p0 = -1;
+		if (shoutEngine.getLowestMatchedBid() == null) {
+			return;
+		}
+		if (shoutEngine.getHighestUnmatchedBid() == null
+		    || shoutEngine.getLowestUnmatchedAsk() == null) {
+			efficientClearing = false;
+		} else {
+			a0 = shoutEngine.getHighestUnmatchedBid().getPrice();
+			b0 = shoutEngine.getLowestUnmatchedAsk().getPrice();
+			p0 = (a0 + b0) / 2;
+			efficientClearing = shoutEngine.getHighestMatchedAsk().getPrice() <= p0
+			    && p0 <= shoutEngine.getLowestMatchedBid().getPrice();
+		}
+		if (!efficientClearing) {
+			a1 = shoutEngine.getLowestMatchedBid().getPrice();
+			b1 = shoutEngine.getHighestMatchedAsk().getPrice();
+		}
+		Iterator matchedShouts = shoutEngine.getMatchedShouts().iterator();
+		while (matchedShouts.hasNext()) {
+			Shout bid = (Shout) matchedShouts.next();
+			Shout ask = (Shout) matchedShouts.next();
+			if (efficientClearing) {
+				clear(ask, bid, p0);
+			} else {
+				if (bid.getPrice() > a1) {
+					clear(ask, bid, a1, b1, ask.getQuantity());
+				}
+			}
+		}
+	}
 
+	public Account getAccount() {
+		return account;
+	}
+
+	public void reset() {
+		super.reset();
+		account.setFunds(0);
+	}
 
 }

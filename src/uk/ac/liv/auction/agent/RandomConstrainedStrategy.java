@@ -56,70 +56,70 @@ import cern.jet.random.Uniform;
 public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     implements Serializable {
 
-  protected double maxMarkup = DEFAULT_MARKUP;
+	protected double maxMarkup = DEFAULT_MARKUP;
 
-  protected AbstractContinousDistribution markupDistribution;
+	protected AbstractContinousDistribution markupDistribution;
 
-  public static final String P_MAX_MARKUP = "maxmarkup";
+	public static final String P_MAX_MARKUP = "maxmarkup";
 
-  public static final double DEFAULT_MARKUP = 50;
+	public static final double DEFAULT_MARKUP = 50;
 
-  public RandomConstrainedStrategy() {
-    this(null, DEFAULT_MARKUP);
-  }
+	public RandomConstrainedStrategy() {
+		this(null, DEFAULT_MARKUP);
+	}
 
-  public RandomConstrainedStrategy( AbstractTradingAgent agent, double maxMarkup ) {
-    super(agent);
-    this.maxMarkup = maxMarkup;
-    initialise();
-  }
+	public RandomConstrainedStrategy(AbstractTradingAgent agent, double maxMarkup) {
+		super(agent);
+		this.maxMarkup = maxMarkup;
+		initialise();
+	}
 
-  public void initialise() {
-    super.initialise();
-    markupDistribution = new Uniform(0, maxMarkup, GlobalPRNG.getInstance());
-  }
+	public void initialise() {
+		super.initialise();
+		markupDistribution = new Uniform(0, maxMarkup, GlobalPRNG.getInstance());
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
+	public boolean modifyShout(Shout.MutableShout shout) {
 
-    double markup = markupDistribution.nextDouble();
-    double price = 0;
-    if ( agent.isBuyer(auction) ) {
-      price = agent.getValuation(auction) - markup;
-    } else {
-      price = agent.getValuation(auction) + markup;
-    }
-    if ( price > 0 ) {
-      shout.setPrice(price);
-    } else {
-      shout.setPrice(0);
-    }
-    shout.setQuantity(quantity);
+		double markup = markupDistribution.nextDouble();
+		double price = 0;
+		if (agent.isBuyer(auction)) {
+			price = agent.getValuation(auction) - markup;
+		} else {
+			price = agent.getValuation(auction) + markup;
+		}
+		if (price > 0) {
+			shout.setPrice(price);
+		} else {
+			shout.setPrice(0);
+		}
+		shout.setQuantity(quantity);
 
-    return super.modifyShout(shout);
-  }
+		return super.modifyShout(shout);
+	}
 
-  public void endOfRound( Auction auction ) {
-    // Do nothing
-  }
+	public void endOfRound(Auction auction) {
+		// Do nothing
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null,
-        maxMarkup);
-    initialise();
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
+		maxMarkup = parameters.getDoubleWithDefault(base.push(P_MAX_MARKUP), null,
+		    maxMarkup);
+		initialise();
+	}
 
-  public double getMaxMarkup() {
-    return maxMarkup;
-  }
+	public double getMaxMarkup() {
+		return maxMarkup;
+	}
 
-  public void setMaxMarkup( double maxMarkup ) {
-    this.maxMarkup = maxMarkup;
-  }
+	public void setMaxMarkup(double maxMarkup) {
+		this.maxMarkup = maxMarkup;
+	}
 
-  public String toString() {
-    return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:"
-        + quantity + ")";
-  }
+	public String toString() {
+		return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:"
+		    + quantity + ")";
+	}
 
 }

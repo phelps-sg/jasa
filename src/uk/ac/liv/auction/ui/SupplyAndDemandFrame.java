@@ -15,21 +15,25 @@
 
 package uk.ac.liv.auction.ui;
 
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.stats.SupplyAndDemandStats;
-
-import uchicago.src.sim.analysis.plot.*;
-
-import uk.ac.liv.util.io.DataSeriesWriter;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import org.apache.log4j.Logger;
+
+import uchicago.src.sim.analysis.plot.RepastPlot;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.stats.SupplyAndDemandStats;
+import uk.ac.liv.util.io.DataSeriesWriter;
 
 /**
  * @author Steve Phelps
@@ -38,164 +42,166 @@ import org.apache.log4j.Logger;
 
 public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected RandomRobinAuction auction;
 
-  /**
-   * @uml.property name="graph"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected RepastPlot graph;
+	/**
+	 * @uml.property name="graph"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected RepastPlot graph;
 
-  /**
-   * @uml.property name="supplyCurve"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected DataSeriesWriter supplyCurve;
+	/**
+	 * @uml.property name="supplyCurve"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected DataSeriesWriter supplyCurve;
 
-  /**
-   * @uml.property name="demandCurve"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected DataSeriesWriter demandCurve;
+	/**
+	 * @uml.property name="demandCurve"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected DataSeriesWriter demandCurve;
 
-  /**
-   * @uml.property name="updateButton"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected JButton updateButton;
+	/**
+	 * @uml.property name="updateButton"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected JButton updateButton;
 
-  /**
-   * @uml.property name="autoUpdate"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected JCheckBox autoUpdate;
-  
-  protected float maxX;
-  
-  public static final int SERIES_SUPPLY = 0;
-  public static final int SERIES_DEMAND = 1;
+	/**
+	 * @uml.property name="autoUpdate"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected JCheckBox autoUpdate;
 
-  static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
+	protected float maxX;
 
-  public SupplyAndDemandFrame( RandomRobinAuction auction ) {
+	public static final int SERIES_SUPPLY = 0;
 
-    this.auction = auction;
-    Container contentPane = getContentPane();
-    BorderLayout layout = new BorderLayout();
-    contentPane.setLayout(layout);
+	public static final int SERIES_DEMAND = 1;
 
-    graph = new RepastPlot(null);
-    plotSupplyAndDemand();
-    graph.addLegend(SERIES_SUPPLY, "Supply", Color.BLUE);
-    graph.addLegend(SERIES_DEMAND, "Demand", Color.RED);
+	static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
-    contentPane.add(graph, BorderLayout.CENTER);
+	public SupplyAndDemandFrame(RandomRobinAuction auction) {
 
-    JPanel controlPanel = new JPanel();
-    updateButton = new JButton("Update");
-    updateButton.addActionListener(new ActionListener() {
-      public void actionPerformed( ActionEvent event ) {
-        updateGraph();
-      }
-    });
-    controlPanel.add(updateButton);
+		this.auction = auction;
+		Container contentPane = getContentPane();
+		BorderLayout layout = new BorderLayout();
+		contentPane.setLayout(layout);
 
-    autoUpdate = new JCheckBox("Auto Update");
-    autoUpdate.addActionListener(new ActionListener() {
-      public void actionPerformed( ActionEvent event ) {
-        toggleAutoUpdate();
-      }
-    });
-    controlPanel.add(autoUpdate);
+		graph = new RepastPlot(null);
+		plotSupplyAndDemand();
+		graph.addLegend(SERIES_SUPPLY, "Supply", Color.BLUE);
+		graph.addLegend(SERIES_DEMAND, "Demand", Color.RED);
 
-    contentPane.add(controlPanel, BorderLayout.SOUTH);
+		contentPane.add(graph, BorderLayout.CENTER);
 
-    updateTitle();
+		JPanel controlPanel = new JPanel();
+		updateButton = new JButton("Update");
+		updateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				updateGraph();
+			}
+		});
+		controlPanel.add(updateButton);
 
-    pack();
-  }
+		autoUpdate = new JCheckBox("Auto Update");
+		autoUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				toggleAutoUpdate();
+			}
+		});
+		controlPanel.add(autoUpdate);
 
-  protected void toggleAutoUpdate() {
-    if ( autoUpdate.isSelected() ) {
-      auction.addObserver(this);
-    } else {
-      auction.deleteObserver(this);
-    }
-  }
+		contentPane.add(controlPanel, BorderLayout.SOUTH);
 
-  public void update( Observable auction, Object o ) {
-    updateGraph();
-  }
+		updateTitle();
 
-  public void updateGraph() {
-    graph.clear(0);
-    graph.clear(1);
-    plotSupplyAndDemand();
-    updateTitle();
-  }
+		pack();
+	}
 
-  public void updateTitle() {
-    setTitle(getGraphName() + " for " + auction.getName() + " at time "
-        + auction.getRound());
-  }
+	protected void toggleAutoUpdate() {
+		if (autoUpdate.isSelected()) {
+			auction.addObserver(this);
+		} else {
+			auction.deleteObserver(this);
+		}
+	}
 
-  public void open() {
-    pack();
-    setVisible(true);
-  }
+	public void update(Observable auction, Object o) {
+		updateGraph();
+	}
 
-  public void close() {
-    setVisible(false);
-  }
+	public void updateGraph() {
+		graph.clear(0);
+		graph.clear(1);
+		plotSupplyAndDemand();
+		updateTitle();
+	}
 
-  /**
-   * @uml.property name="graphName"
-   */
-  public abstract String getGraphName();
+	public void updateTitle() {
+		setTitle(getGraphName() + " for " + auction.getName() + " at time "
+		    + auction.getRound());
+	}
 
-  /**
-   * @uml.property name="supplyAndDemandStats"
-   * @uml.associationEnd readOnly="true"
-   */
-  public abstract SupplyAndDemandStats getSupplyAndDemandStats();
+	public void open() {
+		pack();
+		setVisible(true);
+	}
 
-  protected void plotSupplyAndDemand() {
-    supplyCurve = new DataSeriesWriter();
-    demandCurve = new DataSeriesWriter();
-    SupplyAndDemandStats stats = getSupplyAndDemandStats();
-    stats.calculate();
-    stats.produceUserOutput();
-    maxX = Float.NEGATIVE_INFINITY;
-    plotCurve(SERIES_SUPPLY, supplyCurve);
-    plotCurve(SERIES_DEMAND, demandCurve);
-    finishCurve(SERIES_SUPPLY, supplyCurve);
-    finishCurve(SERIES_DEMAND, demandCurve);
-  }
+	public void close() {
+		setVisible(false);
+	}
 
-  protected void plotCurve( int seriesIndex, DataSeriesWriter curve ) {
-    if ( curve.length() > 0 ) {       
-      for ( int i = 0; i < curve.length(); i++ ) {
-        graph.addPoint(seriesIndex, curve.getXCoord(i), curve.getYCoord(i), true);
-      }
-      float lastPointX = curve.getXCoord(curve.length()-1);
-      if ( lastPointX > maxX ) {
-        maxX = lastPointX;
-      }
-    }
-  }
-  
-  protected void finishCurve( int seriesIndex, DataSeriesWriter curve ) {
-    if ( curve.length() > 0 ) {
-      int l = curve.length()-1;
-      double lastX = curve.getXCoord(l);
-      double lastY = curve.getYCoord(l);
-      if ( lastX < maxX ) {
-        graph.addPoint(seriesIndex, maxX, curve.getYCoord(l), true);      
-      }
-    }
-  }
+	/**
+	 * @uml.property name="graphName"
+	 */
+	public abstract String getGraphName();
+
+	/**
+	 * @uml.property name="supplyAndDemandStats"
+	 * @uml.associationEnd readOnly="true"
+	 */
+	public abstract SupplyAndDemandStats getSupplyAndDemandStats();
+
+	protected void plotSupplyAndDemand() {
+		supplyCurve = new DataSeriesWriter();
+		demandCurve = new DataSeriesWriter();
+		SupplyAndDemandStats stats = getSupplyAndDemandStats();
+		stats.calculate();
+		stats.produceUserOutput();
+		maxX = Float.NEGATIVE_INFINITY;
+		plotCurve(SERIES_SUPPLY, supplyCurve);
+		plotCurve(SERIES_DEMAND, demandCurve);
+		finishCurve(SERIES_SUPPLY, supplyCurve);
+		finishCurve(SERIES_DEMAND, demandCurve);
+	}
+
+	protected void plotCurve(int seriesIndex, DataSeriesWriter curve) {
+		if (curve.length() > 0) {
+			for (int i = 0; i < curve.length(); i++) {
+				graph.addPoint(seriesIndex, curve.getXCoord(i), curve.getYCoord(i),
+				    true);
+			}
+			float lastPointX = curve.getXCoord(curve.length() - 1);
+			if (lastPointX > maxX) {
+				maxX = lastPointX;
+			}
+		}
+	}
+
+	protected void finishCurve(int seriesIndex, DataSeriesWriter curve) {
+		if (curve.length() > 0) {
+			int l = curve.length() - 1;
+			double lastX = curve.getXCoord(l);
+			double lastY = curve.getYCoord(l);
+			if (lastX < maxX) {
+				graph.addPoint(seriesIndex, maxX, curve.getYCoord(l), true);
+			}
+		}
+	}
 }

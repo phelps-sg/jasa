@@ -13,13 +13,12 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.ai.learning;
 
 /**
- * Classes implementing this interface indicate that they know
- * if their output is good enough to be used.
- *
+ * Classes implementing this interface indicate that they know if their output
+ * is good enough to be used.
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */

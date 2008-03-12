@@ -27,25 +27,25 @@ import java.util.HashMap;
 
 public class TransmissionGrid {
 
-  /**
-   * @uml.property name="graph"
-   * @uml.associationEnd qualifier="x:uk.ac.liv.auction.electricity.ElectricityTrader
-   *                     java.lang.Integer"
-   */
-  HashMap graph;
+	/**
+	 * @uml.property name="graph"
+	 * @uml.associationEnd qualifier="x:uk.ac.liv.auction.electricity.ElectricityTrader
+	 *                     java.lang.Integer"
+	 */
+	HashMap graph;
 
-  public TransmissionGrid( HashMap graph ) {
-    this.graph = graph;
-  }
+	public TransmissionGrid(HashMap graph) {
+		this.graph = graph;
+	}
 
-  /**
-   * Get the available transmission capacitity (ATC) between two traders in the
-   * grid.
-   */
-  public int getATC( ElectricityTrader x, ElectricityTrader y ) {
-    HashMap edges = (HashMap) graph.get(x);
-    Integer atc = (Integer) edges.get(y);
-    return atc.intValue();
-  }
+	/**
+	 * Get the available transmission capacitity (ATC) between two traders in the
+	 * grid.
+	 */
+	public int getATC(ElectricityTrader x, ElectricityTrader y) {
+		HashMap edges = (HashMap) graph.get(x);
+		Integer atc = (Integer) edges.get(y);
+		return atc.intValue();
+	}
 
 }

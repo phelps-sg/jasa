@@ -16,9 +16,9 @@
 package uk.ac.liv.auction.core;
 
 /**
- * implements the NYSE rule under which a shout must improve the market
- * quote to be acceptable.
- *
+ * implements the NYSE rule under which a shout must improve the market quote to
+ * be acceptable.
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
@@ -43,7 +43,8 @@ public class QuoteBeatingAcceptingPolicy extends ShoutAcceptingPolicy {
 			quote = auctioneer.bidQuote();
 			if (shout.getPrice() < quote) {
 				if (bidException == null) {
-					// Only construct a new exception the once (for improved performance)
+					// Only construct a new exception the once (for improved
+					// performance)
 					bidException = new NotAnImprovementOverQuoteException(DISCLAIMER);
 				}
 				throw bidException;
@@ -52,7 +53,8 @@ public class QuoteBeatingAcceptingPolicy extends ShoutAcceptingPolicy {
 			quote = auctioneer.askQuote();
 			if (shout.getPrice() > quote) {
 				if (askException == null) {
-					// Only construct a new exception the once (for improved performance)
+					// Only construct a new exception the once (for improved
+					// performance)
 					askException = new NotAnImprovementOverQuoteException(DISCLAIMER);
 				}
 				throw askException;

@@ -15,27 +15,8 @@
 
 package uk.ac.liv.auction;
 
-import ec.util.ParamClassLoadException;
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.TradingAgent;
-import uk.ac.liv.auction.config.CaseEnumConfig;
-import uk.ac.liv.supplychain.*;
-import uk.ac.liv.auction.stats.ReportVariable;
-
-import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.prng.PRNGFactory;
-import uk.ac.liv.util.CummulativeDistribution;
-import uk.ac.liv.util.Distribution;
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.io.CSVWriter;
-import uk.ac.liv.util.io.DataWriter;
-
 import java.io.File;
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,6 +25,22 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
+import uk.ac.liv.auction.agent.TradingAgent;
+import uk.ac.liv.auction.config.CaseEnumConfig;
+import uk.ac.liv.auction.stats.ReportVariable;
+import uk.ac.liv.prng.GlobalPRNG;
+import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.supplychain.SupplyChainRandomRobinAuction;
+import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.Distribution;
+import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.io.CSVWriter;
+import uk.ac.liv.util.io.DataWriter;
+import ec.util.ParamClassLoadException;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * <p>
@@ -181,11 +178,11 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 			Parameter base = new Parameter(P_SIMULATION);
 
 			try {
-				resultsFile = (DataWriter) parameters.getInstanceForParameter(
-						base.push(P_WRITER), null, DataWriter.class);
+				resultsFile = (DataWriter) parameters.getInstanceForParameter(base
+				    .push(P_WRITER), null, DataWriter.class);
 				if (resultsFile instanceof Parameterizable) {
-					((Parameterizable) resultsFile).setup(parameters, base
-							.push(P_WRITER));
+					((Parameterizable) resultsFile)
+					    .setup(parameters, base.push(P_WRITER));
 				}
 			} catch (ParamClassLoadException e) {
 				resultsFile = null;
@@ -211,7 +208,7 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 	}
 
 	private static void runSingleExperimentSet(ParameterDatabase parameters,
-			Parameter base) throws Exception {
+	    Parameter base) throws Exception {
 
 		SupplyChainSimulation simulation = new SupplyChainSimulation();
 		simulation.setup(parameters, base);
@@ -219,7 +216,7 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 	}
 
 	private static void runBatchExperimentSet(ParameterDatabase parameters,
-			Parameter base, CaseEnumConfig caseEnumConfig) throws Exception {
+	    Parameter base, CaseEnumConfig caseEnumConfig) throws Exception {
 
 		while (true) {
 
@@ -259,9 +256,8 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 		Parameter typeParam = base.push(P_AUCTION);
 		Parameter defTypeParam = defBase.push(P_AUCTION);
 
-		int numauctions = parameters.getInt(
-				typeParam.push(P_NUM_AUCTION_TYPES), defTypeParam
-						.push(P_NUM_AUCTION_TYPES), 1);
+		int numauctions = parameters.getInt(typeParam.push(P_NUM_AUCTION_TYPES),
+		    defTypeParam.push(P_NUM_AUCTION_TYPES), 1);
 		auction = new SupplyChainRandomRobinAuction[numauctions];
 
 		for (int a = 0; a < numauctions; a++) {
@@ -270,18 +266,17 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 			Parameter defTypeParamT = defTypeParam.push("" + a);
 
 			auction[a] = (SupplyChainRandomRobinAuction) parameters
-					.getInstanceForParameterEq(typeParamT, defTypeParamT,
-							SupplyChainRandomRobinAuction.class);
+			    .getInstanceForParameterEq(typeParamT, defTypeParamT,
+			        SupplyChainRandomRobinAuction.class);
 			auction[a].setup(parameters, typeParamT);
 
-			//TODO: auctionName seems to be useless
+			// TODO: auctionName seems to be useless
 			String auctionName = parameters.getStringWithDefault(base
-					.push(P_AUCTION_NAME), null, "Auction "
-					+ (auction[a]).getId());
+			    .push(P_AUCTION_NAME), null, "Auction " + (auction[a]).getId());
 		}// for
 
-		iterations = parameters.getIntWithDefault(base.push(P_ITERATIONS),
-				null, iterations);
+		iterations = parameters.getIntWithDefault(base.push(P_ITERATIONS), null,
+		    iterations);
 
 		verbose = parameters.getBoolean(base.push(P_VERBOSE), null, verbose);
 
@@ -300,7 +295,7 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 		Parameter defTypeParam = defBase.push(P_AGENT);
 
 		int numAgentTypes = parameters.getInt(typeParam.push("n"), defTypeParam
-				.push("n"), 1);
+		    .push("n"), 1);
 
 		for (int t = 0; t < numAgentTypes; t++) {
 
@@ -308,37 +303,34 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 			Parameter defTypeParamT = defTypeParam.push("" + t);
 
 			int numAgents = parameters.getInt(typeParamT.push(P_NUM_AGENTS),
-					defTypeParamT.push(P_NUM_AGENTS).push(P_NUM_AGENTS), 0);
+			    defTypeParamT.push(P_NUM_AGENTS).push(P_NUM_AGENTS), 0);
 
-			logger.info("Configuring agent population " + t + ":\n\t"
-					+ numAgents + " agents of type "
-					+ parameters.getString(typeParamT, null));
+			logger.info("Configuring agent population " + t + ":\n\t" + numAgents
+			    + " agents of type " + parameters.getString(typeParamT, null));
 
 			for (int i = 0; i < numAgents; i++) {
-				TradingAgent agent = (TradingAgent) parameters
-				.getInstanceForParameter(typeParamT, defTypeParamT,
-						TradingAgent.class);
+				TradingAgent agent = (TradingAgent) parameters.getInstanceForParameter(
+				    typeParamT, defTypeParamT, TradingAgent.class);
 				((uk.ac.liv.supplychain.SupplyChainAgent) agent).setup(parameters,
-						typeParamT, auction);
-				
+				    typeParamT, auction);
+
 				for (int a = 0; a < auction.length; a++) {
 					if (((uk.ac.liv.supplychain.SupplyChainAgent) agent)
-							.isBuyer(auction[a])
-							|| ((uk.ac.liv.supplychain.SupplyChainAgent) agent)
-							.isSeller(auction[a])) {
+					    .isBuyer(auction[a])
+					    || ((uk.ac.liv.supplychain.SupplyChainAgent) agent)
+					        .isSeller(auction[a])) {
 						(auction[a]).register(agent);
-					}//if
-				}//for
-				
+					}// if
+				}// for
+
 				if (i == 0 && agent instanceof AbstractTradingAgent) {
 					logger.info("\tUsing "
-							+ ((AbstractTradingAgent) agent).getStrategy()
-							.getClass());
-				}//if
-			}//for
+					    + ((AbstractTradingAgent) agent).getStrategy().getClass());
+				}// if
+			}// for
 			logger.info("done.\n");
-		}//for
-	}//setupAgents
+		}// for
+	}// setupAgents
 
 	public void run() {
 		if (iterations <= 0) {
@@ -389,8 +381,7 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 
 		for (int i = 0; i < n; i++) {
 			if (verbose) {
-				logger.info("Running experiment " + (i + 1) + " of " + n
-						+ "... ");
+				logger.info("Running experiment " + (i + 1) + " of " + n + "... ");
 			}
 			for (int a = 0; a < auction.length; a++) {
 				auction[a].reset();
@@ -441,7 +432,7 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 				double v = ((Number) value).doubleValue();
 				if (!Double.isNaN(v)) {
 					CummulativeDistribution varStats = (CummulativeDistribution) resultsStats
-							.get(var);
+					    .get(var);
 					if (varStats == null) {
 						varStats = new CummulativeDistribution(var.toString());
 						resultsStats.put(var, varStats);
@@ -464,7 +455,7 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 	 * RandomRobinAuction
 	 */
 	public void register(TradingAgent aTrader,
-			SupplyChainRandomRobinAuction anAuction) {
+	    SupplyChainRandomRobinAuction anAuction) {
 		LinkedList registeredTraders = anAuction.getRegisteredTraders();
 		registeredTraders.add(aTrader);
 		activate(aTrader, anAuction);
@@ -475,7 +466,7 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 	 * RandomRobinAuction
 	 */
 	protected void activate(TradingAgent aTrader,
-			SupplyChainRandomRobinAuction anAuction) {
+	    SupplyChainRandomRobinAuction anAuction) {
 		LinkedList activeTraders = anAuction.getActiveTraders();
 		activeTraders.add(aTrader);
 		// TODO

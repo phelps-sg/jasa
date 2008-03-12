@@ -29,51 +29,51 @@ import org.jfree.data.xy.XYDataset;
  */
 public class FreeChartSeries extends FreeChartItem {
 
-  static Logger logger = Logger.getLogger(FreeChartSeries.class);
+	static Logger logger = Logger.getLogger(FreeChartSeries.class);
 
-  /**
-   * @uml.property name="series"
-   * @uml.associationEnd
-   */
-  protected Series series;
+	/**
+	 * @uml.property name="series"
+	 * @uml.associationEnd
+	 */
+	protected Series series;
 
-  /**
-   * @uml.property name="dataset"
-   * @uml.associationEnd
-   */
-  protected XYDataset dataset;
+	/**
+	 * @uml.property name="dataset"
+	 * @uml.associationEnd
+	 */
+	protected XYDataset dataset;
 
-  /**
-   * @uml.property name="series"
-   */
-  public Series getSeries() {
-    return series;
-  }
+	/**
+	 * @uml.property name="series"
+	 */
+	public Series getSeries() {
+		return series;
+	}
 
-  /**
-   * @uml.property name="dataset"
-   */
-  public XYDataset getDataset() {
-    return dataset;
-  }
+	/**
+	 * @uml.property name="dataset"
+	 */
+	public XYDataset getDataset() {
+		return dataset;
+	}
 
-  public static XYDataset createDataset( Series series ) {
-    XYDataset ds = null;
-    if ( series instanceof TimeSeries ) {
-      ds = new TimeSeriesCollection((TimeSeries) series);
-    } else {
-      logger.error(series.getClass().getName()
-          + " is not supported in FreeChartat this moment!");
-    }
+	public static XYDataset createDataset(Series series) {
+		XYDataset ds = null;
+		if (series instanceof TimeSeries) {
+			ds = new TimeSeriesCollection((TimeSeries) series);
+		} else {
+			logger.error(series.getClass().getName()
+			    + " is not supported in FreeChartat this moment!");
+		}
 
-    return ds;
-  }
+		return ds;
+	}
 
-  public void setName( String name ) {
-    super.setName(name);
-    if ( getSeries() != null ) {
-      getSeries().setKey(name);
-    }
+	public void setName(String name) {
+		super.setName(name);
+		if (getSeries() != null) {
+			getSeries().setKey(name);
+		}
 
-  }
+	}
 }

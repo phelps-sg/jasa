@@ -42,9 +42,9 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 	public void setup(ParameterDatabase parameters, Parameter base) {
 		super.setup(parameters, base);
 		momentum = parameters.getDouble(base.push(P_MOMENTUM), new Parameter(
-				P_DEF_BASE).push(P_MOMENTUM), 0);
+		    P_DEF_BASE).push(P_MOMENTUM), 0);
 	}
-	
+
 	public void initialise() {
 		super.initialise();
 		gamma = 0;
@@ -77,6 +77,6 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 
 	public String toString() {
 		return "(" + getClass().getSimpleName() + " learningRate:" + learningRate
-		+ " momentum=" + momentum + ")";
+		    + " momentum=" + momentum + ")";
 	}
 }

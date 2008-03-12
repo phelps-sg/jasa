@@ -36,8 +36,8 @@ import ec.util.ParameterDatabase;
  * 
  */
 
-public class ProbabilisticClearingCondition extends
-		RoundClearingCondition implements Parameterizable {
+public class ProbabilisticClearingCondition extends RoundClearingCondition
+    implements Parameterizable {
 
 	Uniform uniformDistribution;
 
@@ -48,17 +48,16 @@ public class ProbabilisticClearingCondition extends
 
 	public static final String P_THRESHOLD = "threshold";
 
-	static Logger logger = Logger
-			.getLogger(ProbabilisticClearingCondition.class);
+	static Logger logger = Logger.getLogger(ProbabilisticClearingCondition.class);
 
 	protected void initialise() {
 		RandomEngine prng = GlobalPRNG.getInstance();
 		uniformDistribution = new Uniform(0, 1, prng);
 	}
 
-	public void setup(ParameterDatabase parameters, Parameter base) {		
+	public void setup(ParameterDatabase parameters, Parameter base) {
 		threshold = parameters.getDoubleWithDefault(base.push(P_THRESHOLD),
-				new Parameter(P_DEF_BASE).push(P_THRESHOLD), threshold);
+		    new Parameter(P_DEF_BASE).push(P_THRESHOLD), threshold);
 		assert (0 <= threshold && threshold <= 1);
 	}
 
@@ -75,16 +74,15 @@ public class ProbabilisticClearingCondition extends
 	}
 
 	public void setThreshold(double threshold) {
-		this.threshold = threshold;		
+		this.threshold = threshold;
 	}
-	
+
 	public double getThreshold() {
 		return threshold;
 	}
-	
-	
+
 	public String toString() {
-		return "(" + getClass().getSimpleName() + " threshold:"+ threshold +")";
+		return "(" + getClass().getSimpleName() + " threshold:" + threshold + ")";
 	}
 
 }

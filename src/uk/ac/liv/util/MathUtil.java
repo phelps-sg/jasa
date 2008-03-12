@@ -13,65 +13,64 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.util;
 
 /**
  * Miscalleneous mathematical functions.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class MathUtil {
-  
-  public static final double DEFAULT_ERROR = 0.0000001;
 
-  /**
-   * Calculate the square of x.
-   */
-  public static double squared( double x ) {
-    return x*x;
-  }
+	public static final double DEFAULT_ERROR = 0.0000001;
 
-  /**
-   * Calculate the difference of the squares of x and y.
-   */
-  public static double diffSq( double x, double y ) {
-    return squared(x) - squared(y);
-  }
+	/**
+	 * Calculate the square of x.
+	 */
+	public static double squared(double x) {
+		return x * x;
+	}
 
-  /**
-   * Returns true if the difference between x and y is less than error.
-   */
-  public static boolean approxEqual( double x, double y, double error ) {
-    return Math.abs(x-y) <= error;
-  }
-  
-  public static boolean approxEqual( double x, double y ) {
-    return MathUtil.approxEqual(x, y, DEFAULT_ERROR);
-  }
-  
-  public static double sum( double[] series ) {
-    double total = 0;
-    for( int i=0; i<series.length; i++ ) {
-      total += series[i];
-    }
-    return total;
-  }
-  
-  /**
-   * Use cern.jet.random.Arithmetic.factorial instead.
-   * 
-   * @deprecated
-   * 
-   */
-  public static long factorial( int n ) {
-  	long result = 1;
-  	for( int i=0; i<n-1; i++ ) {
-  		result *= n-i;
-  	}
-  	return result;
-  }
+	/**
+	 * Calculate the difference of the squares of x and y.
+	 */
+	public static double diffSq(double x, double y) {
+		return squared(x) - squared(y);
+	}
+
+	/**
+	 * Returns true if the difference between x and y is less than error.
+	 */
+	public static boolean approxEqual(double x, double y, double error) {
+		return Math.abs(x - y) <= error;
+	}
+
+	public static boolean approxEqual(double x, double y) {
+		return MathUtil.approxEqual(x, y, DEFAULT_ERROR);
+	}
+
+	public static double sum(double[] series) {
+		double total = 0;
+		for (int i = 0; i < series.length; i++) {
+			total += series[i];
+		}
+		return total;
+	}
+
+	/**
+	 * Use cern.jet.random.Arithmetic.factorial instead.
+	 * 
+	 * @deprecated
+	 * 
+	 */
+	public static long factorial(int n) {
+		long result = 1;
+		for (int i = 0; i < n - 1; i++) {
+			result *= n - i;
+		}
+		return result;
+	}
 
 }

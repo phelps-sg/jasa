@@ -33,120 +33,120 @@ import java.io.Serializable;
 public class AscendingAuctioneer extends TransparentAuctioneer implements
     Serializable {
 
-  /**
-   * The reservation price.
-   * 
-   * @uml.property name="reservePrice"
-   */
-  protected double reservePrice;
+	/**
+	 * The reservation price.
+	 * 
+	 * @uml.property name="reservePrice"
+	 */
+	protected double reservePrice;
 
-  /**
-   * The seller.
-   * 
-   * @uml.property name="seller"
-   * @uml.associationEnd
-   */
-  protected TradingAgent seller;
-  
-  protected Account account;
+	/**
+	 * The seller.
+	 * 
+	 * @uml.property name="seller"
+	 * @uml.associationEnd
+	 */
+	protected TradingAgent seller;
 
-  /**
-   * The number of items for sale.
-   * 
-   * @uml.property name="quantity"
-   */
-  int quantity;
+	protected Account account;
 
-  public static final String P_RESERVEPRICE = "reserveprice";
+	/**
+	 * The number of items for sale.
+	 * 
+	 * @uml.property name="quantity"
+	 */
+	int quantity;
 
-  public static final String P_QUANTITY = "quantity";
+	public static final String P_RESERVEPRICE = "reserveprice";
 
-  public static final String P_SELLER = "seller";
+	public static final String P_QUANTITY = "quantity";
 
-  static Logger logger = Logger.getLogger(AscendingAuctioneer.class);
+	public static final String P_SELLER = "seller";
 
-  public AscendingAuctioneer( Auction auction, TradingAgent seller,
-      int quantity, double reservePrice ) {
-    super(auction);
+	static Logger logger = Logger.getLogger(AscendingAuctioneer.class);
 
-    this.reservePrice = reservePrice;
-    this.quantity = quantity;
-    this.seller = seller;
+	public AscendingAuctioneer(Auction auction, TradingAgent seller,
+	    int quantity, double reservePrice) {
+		super(auction);
 
-    setPricingPolicy(new UniformPricingPolicy(0));
-    account = new Account(this, 0);
-    
-    initialise();
-  }
+		this.reservePrice = reservePrice;
+		this.quantity = quantity;
+		this.seller = seller;
 
-  public AscendingAuctioneer() {
-    super();
-  }
+		setPricingPolicy(new UniformPricingPolicy(0));
+		account = new Account(this, 0);
 
-  public void initialise() {
-    super.initialise();
-    try {
-      newShout(new Shout(seller, quantity, 0, false));
-    } catch ( DuplicateShoutException e ) {
-      throw new AuctionRuntimeException(
-          "Fatal error: invalid auction state on initialisation!");
-    } catch (IllegalShoutException e) {
-      throw new AuctionRuntimeException(
-      		"Fatal error: invalid auction state on initialisation!");
+		initialise();
+	}
+
+	public AscendingAuctioneer() {
+		super();
+	}
+
+	public void initialise() {
+		super.initialise();
+		try {
+			newShout(new Shout(seller, quantity, 0, false));
+		} catch (DuplicateShoutException e) {
+			throw new AuctionRuntimeException(
+			    "Fatal error: invalid auction state on initialisation!");
+		} catch (IllegalShoutException e) {
+			throw new AuctionRuntimeException(
+			    "Fatal error: invalid auction state on initialisation!");
 		}
-  }
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    super.setup(parameters, base);
+		super.setup(parameters, base);
 
-    quantity = parameters.getInt(base.push(P_QUANTITY), null, 1);
+		quantity = parameters.getInt(base.push(P_QUANTITY), null, 1);
 
-    reservePrice = parameters.getDouble(base.push(P_RESERVEPRICE), null, 0);
+		reservePrice = parameters.getDouble(base.push(P_RESERVEPRICE), null, 0);
 
-    seller = (TradingAgent) parameters.getInstanceForParameterEq(base
-        .push(P_SELLER), null, TradingAgent.class);
+		seller = (TradingAgent) parameters.getInstanceForParameterEq(base
+		    .push(P_SELLER), null, TradingAgent.class);
 
-    if ( seller instanceof Parameterizable ) {
-      ((Parameterizable) seller).setup(parameters, base.push(P_SELLER));
-    }
+		if (seller instanceof Parameterizable) {
+			((Parameterizable) seller).setup(parameters, base.push(P_SELLER));
+		}
 
-    initialise();
-  }
+		initialise();
+	}
 
-  public void endOfRoundProcessing() {
-    super.endOfRoundProcessing();
-    generateQuote();
-  }
+	public void endOfRoundProcessing() {
+		super.endOfRoundProcessing();
+		generateQuote();
+	}
 
-  public void endOfAuctionProcessing() {
-    super.endOfAuctionProcessing();
-    logger.debug("Clearing at end of auction..");
-    shoutEngine.printState();
-    clear();
-    logger.debug("clearing done.");
-  }
+	public void endOfAuctionProcessing() {
+		super.endOfAuctionProcessing();
+		logger.debug("Clearing at end of auction..");
+		shoutEngine.printState();
+		clear();
+		logger.debug("clearing done.");
+	}
 
-  public void generateQuote() {
-    currentQuote = new MarketQuote(null, shoutEngine.getLowestMatchedBid());
-  }
+	public void generateQuote() {
+		currentQuote = new MarketQuote(null, shoutEngine.getLowestMatchedBid());
+	}
 
-  protected void checkShoutValidity( Shout shout ) throws IllegalShoutException {
-  	super.checkShoutValidity(shout);
-    if ( shout.isAsk() ) {
-      throw new IllegalShoutException(
-          "asks are not allowed in an ascending auction");
-    }
-    // TODO: Additional logic to enforce bid amounts at round nos and/or
-    // beat existing bids by certain amount?  	
-  }
+	protected void checkShoutValidity(Shout shout) throws IllegalShoutException {
+		super.checkShoutValidity(shout);
+		if (shout.isAsk()) {
+			throw new IllegalShoutException(
+			    "asks are not allowed in an ascending auction");
+		}
+		// TODO: Additional logic to enforce bid amounts at round nos and/or
+		// beat existing bids by certain amount?
+	}
 
-  public boolean shoutsVisible() {
-    return true;
-  }
-  
-  public Account getAccount() {
-    return account;
-  }
+	public boolean shoutsVisible() {
+		return true;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
 
 }

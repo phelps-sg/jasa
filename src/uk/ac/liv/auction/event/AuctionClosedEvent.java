@@ -26,7 +26,7 @@ import uk.ac.liv.auction.core.Auction;
 
 public class AuctionClosedEvent extends AuctionEvent {
 
-  public AuctionClosedEvent( Auction auction, int time ) {
-    super(auction, time);
-  }
+	public AuctionClosedEvent(Auction auction, int time) {
+		super(auction, time);
+	}
 }

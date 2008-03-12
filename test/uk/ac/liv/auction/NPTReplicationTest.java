@@ -15,15 +15,14 @@
 
 package uk.ac.liv.auction;
 
+import java.util.Iterator;
 
-import junit.framework.*;
-
-import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.electricity.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import uk.ac.liv.ai.learning.NPTRothErevLearner;
 import uk.ac.liv.ai.learning.RothErevLearnerTest;
-
-import java.util.*;
+import uk.ac.liv.auction.agent.AdaptiveStrategy;
+import uk.ac.liv.auction.electricity.ElectricityTrader;
 
 /**
  * 
@@ -41,63 +40,63 @@ import java.util.*;
 
 public class NPTReplicationTest extends ElectricityTest {
 
-  public NPTReplicationTest( String name ) {
-    super(name);
-    generatePRNGseeds();
-  }
+	public NPTReplicationTest(String name) {
+		super(name);
+		generatePRNGseeds();
+	}
 
-  public void testRCAP1_2() {
-    experimentSetup(3, 3, 20, 10);
-    runExperiment();
-    assertTrue(mPB.getMean() < 0);
-    assertTrue(mPS.getMean() > 0);
-    assertTrue(mPB.getStdDev() <= 1);
-    assertTrue(mPS.getStdDev() <= 1);
-    assertTrue(eA.getMean() >= 87.0);
-    assertTrue(eA.getStdDev() <= 20);
-  }
+	public void testRCAP1_2() {
+		experimentSetup(3, 3, 20, 10);
+		runExperiment();
+		assertTrue(mPB.getMean() < 0);
+		assertTrue(mPS.getMean() > 0);
+		assertTrue(mPB.getStdDev() <= 1);
+		assertTrue(mPS.getStdDev() <= 1);
+		assertTrue(eA.getMean() >= 87.0);
+		assertTrue(eA.getStdDev() <= 20);
+	}
 
-  public void testRCAP_1() {
-    experimentSetup(3, 3, 10, 10);
-    runExperiment();
-    assertTrue(mPB.getMean() < 0);
-    assertTrue(mPS.getMean() > 0);
-    assertTrue(mPB.getStdDev() <= 1);
-    assertTrue(mPS.getStdDev() <= 1);
-    assertTrue(eA.getMean() >= 87.0);
-    assertTrue(eA.getStdDev() <= 20);
-  }
+	public void testRCAP_1() {
+		experimentSetup(3, 3, 10, 10);
+		runExperiment();
+		assertTrue(mPB.getMean() < 0);
+		assertTrue(mPS.getMean() > 0);
+		assertTrue(mPB.getStdDev() <= 1);
+		assertTrue(mPS.getStdDev() <= 1);
+		assertTrue(eA.getMean() >= 87.0);
+		assertTrue(eA.getStdDev() <= 20);
+	}
 
-  public void testRCAP_2() {
-    experimentSetup(3, 3, 10, 20);
-    runExperiment();
-    assertTrue(mPB.getStdDev() <= 1);
-    assertTrue(mPS.getStdDev() <= 1);
-    assertTrue(eA.getMean() >= 87.0);
-    assertTrue(eA.getStdDev() <= 20);
-  }
+	public void testRCAP_2() {
+		experimentSetup(3, 3, 10, 20);
+		runExperiment();
+		assertTrue(mPB.getStdDev() <= 1);
+		assertTrue(mPS.getStdDev() <= 1);
+		assertTrue(eA.getMean() >= 87.0);
+		assertTrue(eA.getStdDev() <= 20);
+	}
 
-  public void runExperiment() {
-    super.runExperiment();
-    checkRothErevProbabilities();
-  }
+	public void runExperiment() {
+		super.runExperiment();
+		checkRothErevProbabilities();
+	}
 
-  public void checkRothErevProbabilities() {
-    Iterator i = auction.getTraderIterator();
-    while ( i.hasNext() ) {
-      ElectricityTrader t = (ElectricityTrader) i.next();
-      NPTRothErevLearner l = (NPTRothErevLearner) ((AdaptiveStrategy) t
-          .getStrategy()).getLearner();
-      RothErevLearnerTest.checkProbabilities(l);
-    }
-  }
+	public void checkRothErevProbabilities() {
+		Iterator i = auction.getTraderIterator();
+		while (i.hasNext()) {
+			ElectricityTrader t = (ElectricityTrader) i.next();
+			NPTRothErevLearner l = (NPTRothErevLearner) ((AdaptiveStrategy) t
+			    .getStrategy()).getLearner();
+			RothErevLearnerTest.checkProbabilities(l);
+		}
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(NPTReplicationTest.class);
-  }
+	public static Test suite() {
+		return new TestSuite(NPTReplicationTest.class);
+	}
 
 }

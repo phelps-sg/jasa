@@ -46,7 +46,7 @@ import org.apache.log4j.Logger;
  */
 
 public class CummulativeDistribution implements Serializable, Cloneable,
-		Resetable, Distribution {
+    Resetable, Distribution {
 
 	/**
 	 * The number of data in the series so far.
@@ -216,8 +216,8 @@ public class CummulativeDistribution implements Serializable, Cloneable,
 
 	public String toString() {
 		return "(" + getClass() + " varName:" + varName + " n:" + n + " mean:"
-				+ getMean() + " stdev:" + getStdDev() + " min:" + min + " max:"
-				+ max + ")";
+		    + getMean() + " stdev:" + getStdDev() + " min:" + min + " max:" + max
+		    + ")";
 	}
 
 	public void log() {

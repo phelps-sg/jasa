@@ -29,38 +29,38 @@ import ec.util.Parameter;
  */
 public abstract class CaseEnum implements Parameterizable {
 
-  /**
-   * @uml.property name="name"
-   */
-  private String name;
+	/**
+	 * @uml.property name="name"
+	 */
+	private String name;
 
-  public CaseEnum() {
-  }
+	public CaseEnum() {
+	}
 
-  public void setup( ParameterDatabase pdb, Parameter base ) {
-  }
+	public void setup(ParameterDatabase pdb, Parameter base) {
+	}
 
-  /**
-   * @return Returns the name.
-   * @uml.property name="name"
-   */
-  public String getName() {
-    return name;
-  }
+	/**
+	 * @return Returns the name.
+	 * @uml.property name="name"
+	 */
+	public String getName() {
+		return name;
+	}
 
-  /**
-   * @param name
-   *          The name to set.
-   * @uml.property name="name"
-   */
-  public void setName( String name ) {
-    this.name = name;
-  }
+	/**
+	 * @param name
+	 *          The name to set.
+	 * @uml.property name="name"
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  public abstract void reset();
+	public abstract void reset();
 
-  public abstract boolean moreCases();
+	public abstract boolean moreCases();
 
-  public abstract Case nextCase();
+	public abstract Case nextCase();
 
 }

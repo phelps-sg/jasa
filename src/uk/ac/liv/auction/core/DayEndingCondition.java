@@ -17,14 +17,14 @@ package uk.ac.liv.auction.core;
 
 /**
  * The interface for expressing the condition of ending an auction day.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
- *
+ * 
  */
 
 public interface DayEndingCondition {
-	
-  public static final String P_DEF_BASE = "dayendingcondition";
+
+	public static final String P_DEF_BASE = "dayendingcondition";
 
 }

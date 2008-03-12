@@ -16,19 +16,20 @@ package uk.ac.liv.auction.core;
 
 import uk.ac.liv.util.MathUtil;
 
-public class ZeroFundsAccount  extends Account {    
+public class ZeroFundsAccount extends Account {
 
-  public ZeroFundsAccount( Object owner ) {
-    super(owner, 0);    
-  }
-  
-  public ZeroFundsAccount() {
-    super();
-  }
+	public ZeroFundsAccount(Object owner) {
+		super(owner, 0);
+	}
 
-  public void doubleEntry( Account payer, double charge, Account payee, double payment ) {   
-    super.doubleEntry(payer, charge, payee, payment);
-    assert MathUtil.approxEqual(funds, 0);
-  }
-    
+	public ZeroFundsAccount() {
+		super();
+	}
+
+	public void doubleEntry(Account payer, double charge, Account payee,
+	    double payment) {
+		super.doubleEntry(payer, charge, payee, payment);
+		assert MathUtil.approxEqual(funds, 0);
+	}
+
 }

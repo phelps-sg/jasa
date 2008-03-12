@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.ai.learning;
 
 import ec.util.Parameter;
@@ -26,25 +25,24 @@ import uk.ac.liv.util.io.DataSeriesWriter;
  * @version $Revision$
  */
 
-public class GraphLearnerMonitor extends DataSeriesWriter
-    implements LearnerMonitor {
+public class GraphLearnerMonitor extends DataSeriesWriter implements
+    LearnerMonitor {
 
+	public GraphLearnerMonitor() {
+		super();
 
-  public GraphLearnerMonitor() {
-    super();
-    
-  }
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    //TODO
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		// TODO
+	}
 
-  public void startRecording() {
-    clear();
-  }
+	public void startRecording() {
+		clear();
+	}
 
-  public void finishRecording() {
-    //TODO
-  }
+	public void finishRecording() {
+		// TODO
+	}
 
 }

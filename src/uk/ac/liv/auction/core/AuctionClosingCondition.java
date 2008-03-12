@@ -17,14 +17,14 @@ package uk.ac.liv.auction.core;
 
 /**
  * The interface for expressing the condition of closing an auction.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
- *
+ * 
  */
 
 public interface AuctionClosingCondition {
-	
-  public static final String P_DEF_BASE = "auctionclosingcondition";
+
+	public static final String P_DEF_BASE = "auctionclosingcondition";
 
 }

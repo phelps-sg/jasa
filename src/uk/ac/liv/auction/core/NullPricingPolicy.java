@@ -17,9 +17,10 @@ package uk.ac.liv.auction.core;
 
 public class NullPricingPolicy implements PricingPolicy {
 
-  public double determineClearingPrice( Shout bid, Shout ask,
-      MarketQuote clearingQuote ) {
-    throw new AuctionRuntimeException(this + ": attempting to clear with a null pricing policy");
-  }
+	public double determineClearingPrice(Shout bid, Shout ask,
+	    MarketQuote clearingQuote) {
+		throw new AuctionRuntimeException(this
+		    + ": attempting to clear with a null pricing policy");
+	}
 
 }

@@ -16,157 +16,151 @@
 package uk.ac.liv.auction.agent;
 
 import junit.framework.TestCase;
-
 import uk.ac.liv.PRNGTestSeeds;
-
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.RandomValuer;
-
-import uk.ac.liv.auction.core.*;
-
+import uk.ac.liv.auction.core.AbstractAuctioneer;
+import uk.ac.liv.auction.core.ContinuousDoubleAuctioneer;
+import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.stats.SurplusReport;
-
 import uk.ac.liv.auction.zi.ZITraderAgent;
-
 import uk.ac.liv.prng.GlobalPRNG;
-
 import uk.ac.liv.util.CummulativeDistribution;
 
 /**
- * Tests that a given strategy yields a certain minimum benchmark
- * mean efficiency over many iterations of self-play, and that 
- * efficiency values fall within the range (0, 1).
+ * Tests that a given strategy yields a certain minimum benchmark mean
+ * efficiency over many iterations of self-play, and that efficiency values fall
+ * within the range (0, 1).
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 public abstract class EfficiencyTest extends TestCase {
 
-  /**
-   * @uml.property   name="auctioneer"
-   * @uml.associationEnd   
-   */
-  protected AbstractAuctioneer auctioneer;
+	/**
+	 * @uml.property name="auctioneer"
+	 * @uml.associationEnd
+	 */
+	protected AbstractAuctioneer auctioneer;
 
-  /**
-   * @uml.property   name="auction"
-   * @uml.associationEnd   
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	protected RandomRobinAuction auction;
 
-  /**
-   * @uml.property   name="agents"
-   * @uml.associationEnd   multiplicity="(0 -1)"
-   */
-  protected ZITraderAgent[] agents;
+	/**
+	 * @uml.property name="agents"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected ZITraderAgent[] agents;
 
-  static final int NS = 6;
+	static final int NS = 6;
 
-  static final int NB = 6;
+	static final int NB = 6;
 
-  static int ITERATIONS = 200;
+	static int ITERATIONS = 200;
 
-  static final double MIN_VALUE = 50;
+	static final double MIN_VALUE = 50;
 
-  static final double MAX_VALUE = 300;
-    
-  static final double MIN_VALUE_MIN = 161;
-  
-  static final double MIN_VALUE_MAX = 260;
-  
-  static final double RANGE_MIN = 90;
-  
-  static final double RANGE_MAX = 100;
+	static final double MAX_VALUE = 300;
 
-  static final int MAX_DAYS = 100;
+	static final double MIN_VALUE_MIN = 161;
 
-  static final int DAY_LENGTH = 20;
+	static final double MIN_VALUE_MAX = 260;
 
-  public EfficiencyTest( String name ) {
-    super(name);
-  }
+	static final double RANGE_MIN = 90;
 
-  protected void assignAuctioneer() {
-    auctioneer = new ContinuousDoubleAuctioneer();
-    auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
-    auction.setAuctioneer(auctioneer);
-  }
+	static final double RANGE_MAX = 100;
 
-  protected void registerTraders() {
-    int numAgents = getNumBuyers() + getNumSellers();
-    agents = new ZITraderAgent[numAgents];
-    for ( int i = 0; i < numAgents; i++ ) {
-      agents[i] = new ZITraderAgent();
-      agents[i].setInitialTradeEntitlement(getInitialTradeEntitlement());
-      assignStrategy(agents[i]);
-      assignValuationPolicy(agents[i]);
-      agents[i].setIsSeller(i < getNumSellers());
-      System.out.println("Registering trader " + agents[i]);
-      auction.register(agents[i]);
-    }
-  }
+	static final int MAX_DAYS = 100;
 
-  public void testEfficiency() {
-    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-    System.out.println("\ntestEfficiency()");
-    CummulativeDistribution efficiency = new CummulativeDistribution(
-        "efficiency");
-    initialiseExperiment();
-    for ( int i = 0; i < ITERATIONS; i++ ) {
-      auction.reset();
-      auction.run();
-      SurplusReport surplus = new SurplusReport(auction);
-      surplus.calculate();
-      System.out
-          .println("Iteration " + i + ": efficiency = " + surplus.getEA());
-      if ( !Double.isNaN(surplus.getEA()) ) {
-        efficiency.newData(surplus.getEA());
-      }
-    }
-    double meanEfficiency = efficiency.getMean();
+	static final int DAY_LENGTH = 20;
 
-    System.out.println("Mean efficiency = " + meanEfficiency);
+	public EfficiencyTest(String name) {
+		super(name);
+	}
 
-    assertTrue("infinite efficiency", !Double.isInfinite(meanEfficiency));
+	protected void assignAuctioneer() {
+		auctioneer = new ContinuousDoubleAuctioneer();
+		auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+		auction.setAuctioneer(auctioneer);
+	}
 
-    assertTrue("mean efficiency too low",
-        meanEfficiency >= getMinMeanEfficiency());
+	protected void registerTraders() {
+		int numAgents = getNumBuyers() + getNumSellers();
+		agents = new ZITraderAgent[numAgents];
+		for (int i = 0; i < numAgents; i++) {
+			agents[i] = new ZITraderAgent();
+			agents[i].setInitialTradeEntitlement(getInitialTradeEntitlement());
+			assignStrategy(agents[i]);
+			assignValuationPolicy(agents[i]);
+			agents[i].setIsSeller(i < getNumSellers());
+			System.out.println("Registering trader " + agents[i]);
+			auction.register(agents[i]);
+		}
+	}
 
-    assertTrue("max efficiency too high", efficiency.getMax() <= 100 + 10E-6);
+	public void testEfficiency() {
+		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+		System.out.println("\ntestEfficiency()");
+		CummulativeDistribution efficiency = new CummulativeDistribution(
+		    "efficiency");
+		initialiseExperiment();
+		for (int i = 0; i < ITERATIONS; i++) {
+			auction.reset();
+			auction.run();
+			SurplusReport surplus = new SurplusReport(auction);
+			surplus.calculate();
+			System.out
+			    .println("Iteration " + i + ": efficiency = " + surplus.getEA());
+			if (!Double.isNaN(surplus.getEA())) {
+				efficiency.newData(surplus.getEA());
+			}
+		}
+		double meanEfficiency = efficiency.getMean();
 
-    assertTrue("negative efficiency encountered", efficiency.getMin() >= 0);
-  }
+		System.out.println("Mean efficiency = " + meanEfficiency);
 
-  protected void initialiseExperiment() {
-    initialiseAuction();
-    assignAuctioneer();
-    registerTraders();
-  }
+		assertTrue("infinite efficiency", !Double.isInfinite(meanEfficiency));
 
-  protected void initialiseAuction() {
-    auction = new RandomRobinAuction();
-    auction.setLengthOfDay(DAY_LENGTH);
-    auction.setMaximumDays(MAX_DAYS);
-  }
+		assertTrue("mean efficiency too low",
+		    meanEfficiency >= getMinMeanEfficiency());
 
-  protected int getNumBuyers() {
-    return NB;
-  }
+		assertTrue("max efficiency too high", efficiency.getMax() <= 100 + 10E-6);
 
-  protected int getNumSellers() {
-    return NS;
-  }
+		assertTrue("negative efficiency encountered", efficiency.getMin() >= 0);
+	}
 
-  protected void assignValuationPolicy( AbstractTradingAgent agent ) {    
-    agent.setValuationPolicy( new RandomValuer(MIN_VALUE, MAX_VALUE));
-  }
+	protected void initialiseExperiment() {
+		initialiseAuction();
+		assignAuctioneer();
+		registerTraders();
+	}
 
-  protected int getInitialTradeEntitlement() {
-    return 1;
-  }
-  
-  protected abstract void assignStrategy( AbstractTradingAgent agent );
+	protected void initialiseAuction() {
+		auction = new RandomRobinAuction();
+		auction.setLengthOfDay(DAY_LENGTH);
+		auction.setMaximumDays(MAX_DAYS);
+	}
 
-  protected abstract double getMinMeanEfficiency();
+	protected int getNumBuyers() {
+		return NB;
+	}
+
+	protected int getNumSellers() {
+		return NS;
+	}
+
+	protected void assignValuationPolicy(AbstractTradingAgent agent) {
+		agent.setValuationPolicy(new RandomValuer(MIN_VALUE, MAX_VALUE));
+	}
+
+	protected int getInitialTradeEntitlement() {
+		return 1;
+	}
+
+	protected abstract void assignStrategy(AbstractTradingAgent agent);
+
+	protected abstract double getMinMeanEfficiency();
 
 }

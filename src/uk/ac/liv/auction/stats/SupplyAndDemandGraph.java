@@ -104,7 +104,7 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 		seriesCollection.addSeries((XYSeries) trueDemand.getSeries());
 		XYItemRenderer renderer0 = new StandardXYItemRenderer();
 		truePlot = new XYPlot(seriesCollection, new NumberAxis("Amount"), null,
-				renderer0);
+		    renderer0);
 		combinedPlot.add(truePlot);
 
 		reportedSupply = new DataWriterSeries("Reported Supply");
@@ -113,8 +113,8 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 		seriesCollection.addSeries((XYSeries) reportedSupply.getSeries());
 		seriesCollection.addSeries((XYSeries) reportedDemand.getSeries());
 		XYItemRenderer renderer1 = new StandardXYItemRenderer();
-		reportedPlot = new XYPlot(seriesCollection, new NumberAxis("Amount"),
-				null, renderer1);
+		reportedPlot = new XYPlot(seriesCollection, new NumberAxis("Amount"), null,
+		    renderer1);
 		renderer1.setSeriesPaint(0, renderer0.getSeriesPaint(0));
 		renderer1.setSeriesPaint(1, renderer0.getSeriesPaint(1));
 		combinedPlot.add(reportedPlot);
@@ -128,17 +128,16 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 			((XYSeries) reportedSupply.getSeries()).clear();
 			((XYSeries) reportedDemand.getSeries()).clear();
 			ReportedSupplyAndDemandStats rsdStats = new ReportedSupplyAndDemandStats(
-					getReport().getAuction(), reportedSupply, reportedDemand);
+			    getReport().getAuction(), reportedSupply, reportedDemand);
 			rsdStats.calculate();
 			rsdStats.produceUserOutput();
 
 		} else if (event instanceof AuctionOpenEvent) {
 
 			double value = ((TimePeriodValue) ReportVariableBoard.getInstance()
-					.getValue(ReportVariableBoardUpdater.EQUIL_PRICE))
-					.getValue().doubleValue();
-			Marker marker = FreeChartMarker.createMarker(value, Color.black,
-					"EE");
+			    .getValue(ReportVariableBoardUpdater.EQUIL_PRICE)).getValue()
+			    .doubleValue();
+			Marker marker = FreeChartMarker.createMarker(value, Color.black, "EE");
 			logger.debug("Equilibriuim: " + value);
 			truePlot.clearRangeMarkers();
 			truePlot.addRangeMarker(marker);
@@ -157,7 +156,7 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 		((XYSeries) trueSupply.getSeries()).clear();
 		((XYSeries) trueDemand.getSeries()).clear();
 		TrueSupplyAndDemandStats tsdStats = new TrueSupplyAndDemandStats(
-				getReport().getAuction(), trueSupply, trueDemand);
+		    getReport().getAuction(), trueSupply, trueDemand);
 		tsdStats.calculate();
 		tsdStats.produceUserOutput();
 
@@ -165,13 +164,11 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 
 	private void updateReportedDS() {
 		TimePeriodValue tpValue = (TimePeriodValue) ReportVariableBoard
-				.getInstance()
-				.getValue(
-						EquilibriumBeatingAcceptingPolicy.EST_EQUILIBRIUM_PRICE);
+		    .getInstance().getValue(
+		        EquilibriumBeatingAcceptingPolicy.EST_EQUILIBRIUM_PRICE);
 		if (tpValue != null) {
 			double value = tpValue.getValue().doubleValue();
-			Marker marker = FreeChartMarker.createMarker(value, Color.black,
-					"EE");
+			Marker marker = FreeChartMarker.createMarker(value, Color.black, "EE");
 			logger.debug("Estimated equilibrium price : " + value);
 			reportedPlot.clearRangeMarkers();
 			reportedPlot.addRangeMarker(marker);
@@ -251,7 +248,7 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 
 		private UnsupportedOperationException newException() {
 			return new java.lang.UnsupportedOperationException(
-					"Method newData() not yet implemented.");
+			    "Method newData() not yet implemented.");
 		}
 	}
 

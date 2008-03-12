@@ -28,7 +28,7 @@ import ec.util.ParameterDatabase;
 
 /**
  * <p>
- * An modular auctioneer for a double auction. 
+ * An modular auctioneer for a double auction.
  * </p>
  * 
  * <p>
@@ -55,7 +55,7 @@ import ec.util.ParameterDatabase;
  */
 
 public class GenericDoubleAuctioneer extends TransparentAuctioneer implements
-		Serializable, Observer {
+    Serializable, Observer {
 
 	static Logger logger = Logger.getLogger(GenericDoubleAuctioneer.class);
 
@@ -97,34 +97,34 @@ public class GenericDoubleAuctioneer extends TransparentAuctioneer implements
 		Parameter defBase = new Parameter(P_DEF_BASE);
 
 		clearingCondition = (MarketClearingCondition) parameters
-				.getInstanceForParameterEq(base.push(P_CLEARING), defBase
-						.push(P_CLEARING), MarketClearingCondition.class);
+		    .getInstanceForParameterEq(base.push(P_CLEARING), defBase
+		        .push(P_CLEARING), MarketClearingCondition.class);
 
 		if (clearingCondition instanceof Parameterizable) {
 			((Parameterizable) clearingCondition).setup(parameters, base
-					.push(P_CLEARING));
+			    .push(P_CLEARING));
 		}
 		clearingCondition.addObserver(this);
 
 		acceptingPolicy = (ShoutAcceptingPolicy) parameters
-				.getInstanceForParameterEq(base.push(P_ACCEPTING), defBase
-						.push(P_ACCEPTING), ShoutAcceptingPolicy.class);
+		    .getInstanceForParameterEq(base.push(P_ACCEPTING), defBase
+		        .push(P_ACCEPTING), ShoutAcceptingPolicy.class);
 
 		if (acceptingPolicy instanceof Parameterizable) {
 			((Parameterizable) acceptingPolicy).setup(parameters, base
-					.push(P_ACCEPTING));
+			    .push(P_ACCEPTING));
 		}
 		acceptingPolicy.setAuctioneer(this);
 	}
-	
+
 	public void reset() {
 		super.reset();
 		initialise();
-		
+
 		if (clearingCondition != null) {
 			clearingCondition.reset();
 		}
-		
+
 		if (acceptingPolicy != null) {
 			acceptingPolicy.reset();
 		}

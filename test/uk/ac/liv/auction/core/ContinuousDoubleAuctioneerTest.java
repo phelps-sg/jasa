@@ -18,63 +18,56 @@ package uk.ac.liv.auction.core;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import uk.ac.liv.auction.core.AbstractAuctioneer;
-import uk.ac.liv.auction.core.DiscriminatoryPricingPolicy;
-import uk.ac.liv.auction.core.IllegalShoutException;
-import uk.ac.liv.auction.core.ContinuousDoubleAuctioneer;
-import uk.ac.liv.auction.core.NotAnImprovementOverQuoteException;
-import uk.ac.liv.auction.core.Shout;
-
-
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 public class ContinuousDoubleAuctioneerTest extends AuctioneerTest {
-  
-  public ContinuousDoubleAuctioneerTest( String name ) {
-    super(name);
-  }
-  
-  public void setUp() {
-    super.setUp();
-    auctioneer = new ContinuousDoubleAuctioneer(auction);
-    ((AbstractAuctioneer) auctioneer).setPricingPolicy(new DiscriminatoryPricingPolicy(0));
-    auction.setAuctioneer(auctioneer);
-  }
-  
-  public void testImprovementRule() {
-    System.out.println("testImprovementRule()");
-    assertTrue(shoutOK(new Shout(traders[0], 1, 21, true)));
-    assertTrue(!shoutOK(new Shout(traders[1], 1, 20, true)));
-    assertTrue(shoutOK(new Shout(traders[1], 1, 42, true)));
-    assertTrue(shoutOK(new Shout(traders[2], 1, 43, false)));
-    assertTrue(shoutOK(new Shout(traders[3], 1, 23, false)));
-    assertTrue(!shoutOK(new Shout(traders[4], 1, 50, false)));
-    assertTrue(!shoutOK(new Shout(traders[3], 1, 51, false)));
-    assertTrue(shoutOK(new Shout(traders[3], 1, 20, false)));
-    assertTrue(shoutOK(new Shout(traders[4], 1, 25, false)));
-    assertTrue(!shoutOK(new Shout(traders[2], 1, 26, false)));
-  }
-  
-  public boolean shoutOK( Shout newShout ) {
-    try {
-      auctioneer.newShout(newShout);
-    } catch ( NotAnImprovementOverQuoteException e ) {
-      System.out.println("Shout " + newShout + " did not beat quote.");
-      return false;
-    } catch ( IllegalShoutException e ) {
-      fail("illegal shout " + e.getMessage());
-    }
-    System.out.println("Placed shout " + newShout);
-    return true;
-  }
 
-  public static Test suite() {
-    return new TestSuite(ContinuousDoubleAuctioneerTest.class);
-  }
-  
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run (suite());
-  }
+	public ContinuousDoubleAuctioneerTest(String name) {
+		super(name);
+	}
+
+	public void setUp() {
+		super.setUp();
+		auctioneer = new ContinuousDoubleAuctioneer(auction);
+		((AbstractAuctioneer) auctioneer)
+		    .setPricingPolicy(new DiscriminatoryPricingPolicy(0));
+		auction.setAuctioneer(auctioneer);
+	}
+
+	public void testImprovementRule() {
+		System.out.println("testImprovementRule()");
+		assertTrue(shoutOK(new Shout(traders[0], 1, 21, true)));
+		assertTrue(!shoutOK(new Shout(traders[1], 1, 20, true)));
+		assertTrue(shoutOK(new Shout(traders[1], 1, 42, true)));
+		assertTrue(shoutOK(new Shout(traders[2], 1, 43, false)));
+		assertTrue(shoutOK(new Shout(traders[3], 1, 23, false)));
+		assertTrue(!shoutOK(new Shout(traders[4], 1, 50, false)));
+		assertTrue(!shoutOK(new Shout(traders[3], 1, 51, false)));
+		assertTrue(shoutOK(new Shout(traders[3], 1, 20, false)));
+		assertTrue(shoutOK(new Shout(traders[4], 1, 25, false)));
+		assertTrue(!shoutOK(new Shout(traders[2], 1, 26, false)));
+	}
+
+	public boolean shoutOK(Shout newShout) {
+		try {
+			auctioneer.newShout(newShout);
+		} catch (NotAnImprovementOverQuoteException e) {
+			System.out.println("Shout " + newShout + " did not beat quote.");
+			return false;
+		} catch (IllegalShoutException e) {
+			fail("illegal shout " + e.getMessage());
+		}
+		System.out.println("Placed shout " + newShout);
+		return true;
+	}
+
+	public static Test suite() {
+		return new TestSuite(ContinuousDoubleAuctioneerTest.class);
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 }

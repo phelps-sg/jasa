@@ -41,97 +41,97 @@ import junit.framework.TestSuite;
 
 public class SerializationTests extends TestCase {
 
-  /**
-   * @uml.property   name="auction"
-   * @uml.associationEnd   
-   */
-  RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	RandomRobinAuction auction;
 
-  public SerializationTests( String name ) {
-    super(name);
-  }
+	public SerializationTests(String name) {
+		super(name);
+	}
 
-  public void setUp() {
+	public void setUp() {
 
-    auction = new RandomRobinAuction("serialized auction");
-    Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
-    ((AbstractAuctioneer) auctioneer)
-        .setPricingPolicy(new UniformPricingPolicy(0.5));
-    auction.setAuctioneer(auctioneer);
+		auction = new RandomRobinAuction("serialized auction");
+		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
+		((AbstractAuctioneer) auctioneer)
+		    .setPricingPolicy(new UniformPricingPolicy(0.5));
+		auction.setAuctioneer(auctioneer);
 
-    ZITraderAgent seller1 = new ZITraderAgent(10, 1, true);
-    seller1.setStrategy(new TruthTellingStrategy(seller1));
+		ZITraderAgent seller1 = new ZITraderAgent(10, 1, true);
+		seller1.setStrategy(new TruthTellingStrategy(seller1));
 
-    ZITraderAgent buyer1 = new ZITraderAgent(5, 1, false);
-    buyer1.setStrategy(new TruthTellingStrategy(buyer1));
+		ZITraderAgent buyer1 = new ZITraderAgent(5, 1, false);
+		buyer1.setStrategy(new TruthTellingStrategy(buyer1));
 
-    ElectricityTrader buyer2 = new ElectricityTrader(10, 5, 0, true);
-    buyer2.setStrategy(new TruthTellingStrategy(buyer2));
+		ElectricityTrader buyer2 = new ElectricityTrader(10, 5, 0, true);
+		buyer2.setStrategy(new TruthTellingStrategy(buyer2));
 
-    auction.register(buyer1);
-    auction.register(buyer2);
-    auction.register(seller1);
-  }
+		auction.register(buyer1);
+		auction.register(buyer2);
+		auction.register(seller1);
+	}
 
-  /**
-   * Test whether we can serialize an auction without resulting in any
-   * NotSerializableExceptions. This simply checks that we have correctly
-   * declared our classes and subclasses to implement Serializable.
-   *  
-   */
-  public void testCanSerializeAuction() {
-    System.out.println("\ntestAuctionSerialization()\n");
+	/**
+	 * Test whether we can serialize an auction without resulting in any
+	 * NotSerializableExceptions. This simply checks that we have correctly
+	 * declared our classes and subclasses to implement Serializable.
+	 * 
+	 */
+	public void testCanSerializeAuction() {
+		System.out.println("\ntestAuctionSerialization()\n");
 
-    System.out.print("Testing serialization in initial state.. ");
-    if ( !canSerialize(auction) ) {
-      fail("cannot serialize auction in initial state");
-    }
-    System.out.println("done.");
+		System.out.print("Testing serialization in initial state.. ");
+		if (!canSerialize(auction)) {
+			fail("cannot serialize auction in initial state");
+		}
+		System.out.println("done.");
 
-    System.out.print("Testing serialization after a single step.. ");
-    auction.begin();
-    try {
-      auction.step();
-    } catch ( AuctionClosedException e ) {
-      fail("tried to step through a closed auction");
-    }
-    if ( !canSerialize(auction) ) {
-      fail("cannot serialize auction in initial state");
-    }
-    System.out.println("done.");
+		System.out.print("Testing serialization after a single step.. ");
+		auction.begin();
+		try {
+			auction.step();
+		} catch (AuctionClosedException e) {
+			fail("tried to step through a closed auction");
+		}
+		if (!canSerialize(auction)) {
+			fail("cannot serialize auction in initial state");
+		}
+		System.out.println("done.");
 
-    System.out.print("Testing serialization of closed auction.. ");
-    auction.close();
-    if ( !canSerialize(auction) ) {
-      fail("cannot serialize auction in initial state");
-    }
-    System.out.println("done.");
+		System.out.print("Testing serialization of closed auction.. ");
+		auction.close();
+		if (!canSerialize(auction)) {
+			fail("cannot serialize auction in initial state");
+		}
+		System.out.println("done.");
 
-  }
+	}
 
-  //TODO create unit test to check state after reading object back
+	// TODO create unit test to check state after reading object back
 
-  public boolean canSerialize( Object o ) {
-    try {
-      ByteArrayOutputStream out = new ByteArrayOutputStream();
-      ObjectOutputStream objectStream = new ObjectOutputStream(out);
-      objectStream.writeObject(o);
-      objectStream.close();
-      out.close();
-      System.out.print(" wrote " + out.size() + " bytes.. ");
-    } catch ( IOException e ) {
-      e.printStackTrace();
-      return false;
-    }
-    return true;
-  }
+	public boolean canSerialize(Object o) {
+		try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			ObjectOutputStream objectStream = new ObjectOutputStream(out);
+			objectStream.writeObject(o);
+			objectStream.close();
+			out.close();
+			System.out.print(" wrote " + out.size() + " bytes.. ");
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(SerializationTests.class);
-  }
+	public static Test suite() {
+		return new TestSuite(SerializationTests.class);
+	}
 
 }

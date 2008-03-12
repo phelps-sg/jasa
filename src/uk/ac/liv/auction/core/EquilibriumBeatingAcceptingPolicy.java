@@ -39,10 +39,10 @@ import ec.util.ParameterDatabase;
  */
 
 public class EquilibriumBeatingAcceptingPolicy extends
-		QuoteBeatingAcceptingPolicy {
+    QuoteBeatingAcceptingPolicy {
 
 	static Logger logger = Logger
-			.getLogger(EquilibriumBeatingAcceptingPolicy.class);
+	    .getLogger(EquilibriumBeatingAcceptingPolicy.class);
 
 	/**
 	 * Reusable exceptions for performance
@@ -85,12 +85,11 @@ public class EquilibriumBeatingAcceptingPolicy extends
 		Parameter defBase = new Parameter(P_DEF_BASE);
 
 		delta = parameters.getDoubleWithDefault(base.push(P_DELTA), defBase
-				.push(P_DELTA), delta);
+		    .push(P_DELTA), delta);
 		assert (0 <= delta);
 
-		learner = (MimicryLearner) parameters
-				.getInstanceForParameter(base.push(P_LEARNER), defBase
-						.push(P_LEARNER), MimicryLearner.class);
+		learner = (MimicryLearner) parameters.getInstanceForParameter(base
+		    .push(P_LEARNER), defBase.push(P_LEARNER), MimicryLearner.class);
 		if (learner instanceof Parameterizable) {
 			((Parameterizable) learner).setup(parameters, base.push(P_LEARNER));
 		}
@@ -131,7 +130,7 @@ public class EquilibriumBeatingAcceptingPolicy extends
 			// Only construct a new exception the once (for improved
 			// performance)
 			bidException = new IllegalShoutException(
-					"Bid cannot beat the estimated equilibrium!");
+			    "Bid cannot beat the estimated equilibrium!");
 		}
 		throw bidException;
 	}
@@ -141,7 +140,7 @@ public class EquilibriumBeatingAcceptingPolicy extends
 			// Only construct a new exception the once (for improved
 			// performance)
 			askException = new IllegalShoutException(
-					"Ask cannot beat the estimated equilibrium!");
+			    "Ask cannot beat the estimated equilibrium!");
 		}
 		throw askException;
 	}
@@ -153,13 +152,13 @@ public class EquilibriumBeatingAcceptingPolicy extends
 			learner.train(((TransactionExecutedEvent) event).getPrice());
 
 			if (learner instanceof SelfKnowledgable
-					&& ((SelfKnowledgable) learner).goodEnough()) {
+			    && ((SelfKnowledgable) learner).goodEnough()) {
 
 				expectedLowestBid = learner.act() - delta;
 				expectedHighestAsk = learner.act() + delta;
 
-				ReportVariableBoard.getInstance().reportValue(
-						EST_EQUILIBRIUM_PRICE, learner.act(), event);
+				ReportVariableBoard.getInstance().reportValue(EST_EQUILIBRIUM_PRICE,
+				    learner.act(), event);
 			}
 		}
 	}
@@ -181,7 +180,7 @@ public class EquilibriumBeatingAcceptingPolicy extends
 	}
 
 	public String toString() {
-		return "(" + getClass().getSimpleName() + " delta:" + delta + " "
-				+ learner + ")";
+		return "(" + getClass().getSimpleName() + " delta:" + delta + " " + learner
+		    + ")";
 	}
 }

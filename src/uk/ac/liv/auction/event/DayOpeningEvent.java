@@ -26,7 +26,7 @@ import uk.ac.liv.auction.core.Auction;
 
 public class DayOpeningEvent extends AuctionEvent {
 
-  public DayOpeningEvent( Auction auction, int time ) {
-    super(auction, time);
-  }
+	public DayOpeningEvent(Auction auction, int time) {
+		super(auction, time);
+	}
 }

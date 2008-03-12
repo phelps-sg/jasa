@@ -30,8 +30,8 @@ import ec.util.ParameterDatabase;
 import java.io.Serializable;
 
 /**
- * maintains a sliding window over the trained data series and use the 
- * average of data items falling into the window as the output learned.
+ * maintains a sliding window over the trained data series and use the average
+ * of data items falling into the window as the output learned.
  * 
  * @author Jinzhong Niu
  * @version $Revision$
@@ -40,117 +40,115 @@ import java.io.Serializable;
 public class SlidingWindowLearner extends AbstractLearner implements
     MimicryLearner, SelfKnowledgable, Prototypeable, Serializable {
 
-  /**
-   * @uml.property name="randomParamDistribution"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected AbstractContinousDistribution randomParamDistribution = new Uniform(
-      1, 10, GlobalPRNG.getInstance());
+	/**
+	 * @uml.property name="randomParamDistribution"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected AbstractContinousDistribution randomParamDistribution = new Uniform(
+	    1, 10, GlobalPRNG.getInstance());
 
-  /**
-   * A parameter used to adjust the size of the window
-   * 
-   * @uml.property name="memorySize"
-   */
-  protected int windowSize = 4;
+	/**
+	 * A parameter used to adjust the size of the window
+	 * 
+	 * @uml.property name="memorySize"
+	 */
+	protected int windowSize = 4;
 
-  public static final String P_WINDOWSIZE = "windowsize";
+	public static final String P_WINDOWSIZE = "windowsize";
 
-  /**
-   * The current output level.
-   * 
-   * @uml.property name="currentOutput"
-   */
-  protected double currentOutput;
+	/**
+	 * The current output level.
+	 * 
+	 * @uml.property name="currentOutput"
+	 */
+	protected double currentOutput;
 
-  public static final String P_DEF_BASE = "slidingwindowlearner";
-  
-  protected FixedLengthQueue memory;
+	public static final String P_DEF_BASE = "slidingwindowlearner";
 
-  public SlidingWindowLearner() {
-  }
+	protected FixedLengthQueue memory;
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
-    
-    windowSize = parameters.getIntWithDefault(base.push(P_WINDOWSIZE), 
-    		new Parameter(P_DEF_BASE).push(P_WINDOWSIZE), windowSize);
-    
-    initialise();
-  }
-  
-  public void initialise() {
-    createMemory();
-  }
+	public SlidingWindowLearner() {
+	}
 
-  public void reset() {
-    if (memory != null) {
-    	memory.reset();
-    }
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
 
-  public void randomInitialise() {
-  	windowSize = randomParamDistribution.nextInt();
-  }
+		windowSize = parameters.getIntWithDefault(base.push(P_WINDOWSIZE),
+		    new Parameter(P_DEF_BASE).push(P_WINDOWSIZE), windowSize);
 
-  /**
-   * @uml.property name="windowSize"
-   */
-  public void setWindowSize( int windowSize ) {
-    this.windowSize = windowSize;
-  }
+		initialise();
+	}
 
-  public int getWindowSize() {
-    return windowSize;
-  }
-  
-  protected void createMemory() {
-    assert (windowSize >= 1);
-    memory = new FixedLengthQueue(windowSize);
-  }
+	public void initialise() {
+		createMemory();
+	}
 
-  public double act() {
-    return currentOutput;
-  }
+	public void reset() {
+		if (memory != null) {
+			memory.reset();
+		}
+	}
 
-  public void train( double target ) {
-  	memory.newData(target);
-  	currentOutput = memory.getMean();
-  }
+	public void randomInitialise() {
+		windowSize = randomParamDistribution.nextInt();
+	}
 
-  public void dumpState( DataWriter out ) {
-    // TODO
-  }
+	/**
+	 * @uml.property name="windowSize"
+	 */
+	public void setWindowSize(int windowSize) {
+		this.windowSize = windowSize;
+	}
 
+	public int getWindowSize() {
+		return windowSize;
+	}
 
-  /**
-   * @uml.property name="currentOutput"
-   */
-  public double getCurrentOutput() {
-    return currentOutput;
-  }
+	protected void createMemory() {
+		assert (windowSize >= 1);
+		memory = new FixedLengthQueue(windowSize);
+	}
 
-  /**
-   * no effect on FixedLengthQueue-based next output!
-   */
-  public void setOutputLevel( double currentOutput ) {
-    this.currentOutput = currentOutput;
-  }
+	public double act() {
+		return currentOutput;
+	}
+
+	public void train(double target) {
+		memory.newData(target);
+		currentOutput = memory.getMean();
+	}
+
+	public void dumpState(DataWriter out) {
+		// TODO
+	}
+
+	/**
+	 * @uml.property name="currentOutput"
+	 */
+	public double getCurrentOutput() {
+		return currentOutput;
+	}
+
+	/**
+	 * no effect on FixedLengthQueue-based next output!
+	 */
+	public void setOutputLevel(double currentOutput) {
+		this.currentOutput = currentOutput;
+	}
 
 	public double getLearningDelta() {
 		return 0;
 	}
 
 	public Object protoClone() {
-    SlidingWindowLearner clone = new SlidingWindowLearner();
-    clone.setWindowSize(windowSize);
-    return clone;
-  }
+		SlidingWindowLearner clone = new SlidingWindowLearner();
+		clone.setWindowSize(windowSize);
+		return clone;
+	}
 
-
-  public String toString() {
-    return "(" + getClass().getSimpleName() + " windowSize:" + windowSize + ")";
-  }
+	public String toString() {
+		return "(" + getClass().getSimpleName() + " windowSize:" + windowSize + ")";
+	}
 
 	public boolean goodEnough() {
 		return memory.count() >= windowSize;

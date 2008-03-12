@@ -14,7 +14,6 @@
  */
 package uk.ac.liv.auction.config.strategy;
 
-
 import uk.ac.liv.auction.config.Case;
 import ec.util.ParameterDatabase;
 import ec.util.Parameter;
@@ -24,14 +23,14 @@ import ec.util.Parameter;
  * @version $Revision$
  */
 public class TT implements Case {
-	
+
 	private static final String ClassName = "uk.ac.liv.auction.agent.TruthTellingStrategy";
 
 	public String toString() {
 		return "TT";
 	}
-	
+
 	public void apply(ParameterDatabase pdb, Parameter base) {
-		pdb.set(base, ClassName);		
+		pdb.set(base, ClassName);
 	}
 }

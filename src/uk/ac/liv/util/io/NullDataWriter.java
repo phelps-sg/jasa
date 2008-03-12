@@ -24,60 +24,60 @@ import java.util.Iterator;
 
 public class NullDataWriter implements DataWriter {
 
-  public void newData( Iterator i ) {
-    // Do nothing
-  }
+	public void newData(Iterator i) {
+		// Do nothing
+	}
 
-  public void newData( Object[] data ) {
-    // Do nothing
-  }
+	public void newData(Object[] data) {
+		// Do nothing
+	}
 
-  public void newData( Object data ) {
-    // Do nothing
-  }
+	public void newData(Object data) {
+		// Do nothing
+	}
 
-  public void newData( int data ) {
-    // Do nothing
-  }
+	public void newData(int data) {
+		// Do nothing
+	}
 
-  public void newData( long data ) {
-    // Do nothing
-  }
+	public void newData(long data) {
+		// Do nothing
+	}
 
-  public void newData( double data ) {
-    // Do nothing
-  }
+	public void newData(double data) {
+		// Do nothing
+	}
 
-  public void newData( float data ) {
-    // Do nothing
-  }
+	public void newData(float data) {
+		// Do nothing
+	}
 
-  public void newData( boolean data ) {
-    // Do nothing
-  }
-  
-  public void newData( String data ) {
-    // Do nothing
-  }
-  
-  public void newData( Integer data ) {
-    // Do nothing
-  }
-  
-  public void newData( Double data ) {
-    // Do nothing
-  }
-  
-  public void newData( Long data ) {
-    // Do nothing
-  }
+	public void newData(boolean data) {
+		// Do nothing
+	}
 
-  public void flush() {
-    // Do nothing
-  }
+	public void newData(String data) {
+		// Do nothing
+	}
 
-  public void close() {
-    // Do nothing
-  }
+	public void newData(Integer data) {
+		// Do nothing
+	}
+
+	public void newData(Double data) {
+		// Do nothing
+	}
+
+	public void newData(Long data) {
+		// Do nothing
+	}
+
+	public void flush() {
+		// Do nothing
+	}
+
+	public void close() {
+		// Do nothing
+	}
 
 }

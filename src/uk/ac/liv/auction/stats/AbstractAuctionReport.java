@@ -34,36 +34,36 @@ import org.apache.log4j.Logger;
 public abstract class AbstractAuctionReport implements AuctionReport,
     Parameterizable {
 
-  static Logger logger = Logger.getLogger(AbstractAuctionReport.class);
+	static Logger logger = Logger.getLogger(AbstractAuctionReport.class);
 
-  /**
-   * The auction we are keeping statistics on.
-   * 
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * The auction we are keeping statistics on.
+	 * 
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	protected RandomRobinAuction auction;
 
-  public AbstractAuctionReport( RandomRobinAuction auction ) {
-    this.auction = auction;
-  }
-  
-  public AbstractAuctionReport() {  
-  }
-  
-  /**
-   * @uml.property name="auction"
-   */
-  public void setAuction( RandomRobinAuction auction ) {
-    this.auction = auction;
-    logger.debug("Set auction to " + auction);
-  }
+	public AbstractAuctionReport(RandomRobinAuction auction) {
+		this.auction = auction;
+	}
 
-  /**
-   * @uml.property name="auction"
-   */
-  public RandomRobinAuction getAuction() {
-    return auction;
-  }
+	public AbstractAuctionReport() {
+	}
+
+	/**
+	 * @uml.property name="auction"
+	 */
+	public void setAuction(RandomRobinAuction auction) {
+		this.auction = auction;
+		logger.debug("Set auction to " + auction);
+	}
+
+	/**
+	 * @uml.property name="auction"
+	 */
+	public RandomRobinAuction getAuction() {
+		return auction;
+	}
 
 }

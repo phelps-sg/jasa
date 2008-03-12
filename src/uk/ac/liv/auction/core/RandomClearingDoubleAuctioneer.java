@@ -30,15 +30,17 @@ import uk.ac.liv.prng.GlobalPRNG;
 /**
  * <p>
  * An auctioneer for a double auction with market cleared time to time with
- * probability specified by a threshold value. 
+ * probability specified by a threshold value.
  * </p>
  * 
  * <p>
- * The clearing operation is performed with a probability specified by a threshold
- * value every time a shout arrives. Shouts must beat the current quote as in <code>
- * ContinuousDoubleAuctioneer</code>. When threshold is 0, the market is only cleared
- * when each round ends and is thus equivalent to a clearing house, while when
- * threshold is 1, the market becomes a continuous double auction.
+ * The clearing operation is performed with a probability specified by a
+ * threshold value every time a shout arrives. Shouts must beat the current
+ * quote as in <code>
+ * ContinuousDoubleAuctioneer</code>. When threshold is 0,
+ * the market is only cleared when each round ends and is thus equivalent to a
+ * clearing house, while when threshold is 1, the market becomes a continuous
+ * double auction.
  * </p>
  * 
  * <p>
@@ -50,7 +52,8 @@ import uk.ac.liv.prng.GlobalPRNG;
  * <tr>
  * <td valign=top><i>base </i> <tt>.threshold</tt><br>
  * <font size=-1>0<= double <=1 </font></td>
- * <td valign=top>(the probability the market is cleared when a new shout arrives)</td>
+ * <td valign=top>(the probability the market is cleared when a new shout
+ * arrives)</td>
  * <tr>
  * 
  * </table>
@@ -63,76 +66,76 @@ import uk.ac.liv.prng.GlobalPRNG;
 public class RandomClearingDoubleAuctioneer extends TransparentAuctioneer
     implements Serializable {
 
-  static Logger logger = Logger.getLogger(RandomClearingDoubleAuctioneer.class);
-  
-  protected ZeroFundsAccount account;
+	static Logger logger = Logger.getLogger(RandomClearingDoubleAuctioneer.class);
+
+	protected ZeroFundsAccount account;
 
 	Uniform uniformDistribution;
 
-  /**
-   * @uml.property name="threshold"
-   */
-  private double threshold = 0.5;
+	/**
+	 * @uml.property name="threshold"
+	 */
+	private double threshold = 0.5;
 
-  public static final String P_THRESHOLD = "threshold";
-  
-  public static final String P_DEF_BASE = "rda";
+	public static final String P_THRESHOLD = "threshold";
 
-  public RandomClearingDoubleAuctioneer() {
-    this(null);
-  }
+	public static final String P_DEF_BASE = "rda";
 
-  public RandomClearingDoubleAuctioneer( Auction auction ) {
-    super(auction);
-    account = new ZeroFundsAccount(this);
-  }
-  
-  protected void initialise() {
-    RandomEngine prng = GlobalPRNG.getInstance();
-    uniformDistribution = new Uniform(0, 1, prng);
-  }
+	public RandomClearingDoubleAuctioneer() {
+		this(null);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
+	public RandomClearingDoubleAuctioneer(Auction auction) {
+		super(auction);
+		account = new ZeroFundsAccount(this);
+	}
 
-    threshold = parameters.getDoubleWithDefault(base.push(P_THRESHOLD), 
-    		new Parameter(P_DEF_BASE).push(P_THRESHOLD), threshold);
-    assert (0 <= threshold && threshold <= 1);
-  }
-  
-  public void generateQuote() {
-    currentQuote = new MarketQuote(askQuote(), bidQuote());
-  }
+	protected void initialise() {
+		RandomEngine prng = GlobalPRNG.getInstance();
+		uniformDistribution = new Uniform(0, 1, prng);
+	}
 
-  public Account getAccount() {
-    return account;
-  }
-  
-  public void endOfRoundProcessing() {
-    super.endOfRoundProcessing();
-    generateQuote();
-    clear();
-  }
-  
-  public void endOfAuctionProcessing() {
-    super.endOfAuctionProcessing();
-  }
-  
-  public void newShoutInternal( Shout shout ) throws DuplicateShoutException {
-    shoutEngine.newShout(shout);
-    double d = uniformDistribution.nextDouble();
-    if ( d < threshold ) {
-    	generateQuote();
-    	clear();
-    }
-  }
-  
-  protected void checkShoutValidity( Shout shout ) throws IllegalShoutException {
-  	super.checkShoutValidity(shout);
-    checkImprovement(shout);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
 
-  public void checkImprovement(Shout shout) throws IllegalShoutException {
+		threshold = parameters.getDoubleWithDefault(base.push(P_THRESHOLD),
+		    new Parameter(P_DEF_BASE).push(P_THRESHOLD), threshold);
+		assert (0 <= threshold && threshold <= 1);
+	}
+
+	public void generateQuote() {
+		currentQuote = new MarketQuote(askQuote(), bidQuote());
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void endOfRoundProcessing() {
+		super.endOfRoundProcessing();
+		generateQuote();
+		clear();
+	}
+
+	public void endOfAuctionProcessing() {
+		super.endOfAuctionProcessing();
+	}
+
+	public void newShoutInternal(Shout shout) throws DuplicateShoutException {
+		shoutEngine.newShout(shout);
+		double d = uniformDistribution.nextDouble();
+		if (d < threshold) {
+			generateQuote();
+			clear();
+		}
+	}
+
+	protected void checkShoutValidity(Shout shout) throws IllegalShoutException {
+		super.checkShoutValidity(shout);
+		checkImprovement(shout);
+	}
+
+	public void checkImprovement(Shout shout) throws IllegalShoutException {
 		double quote;
 		if (shout.isBid()) {
 			quote = bidQuote();
@@ -147,19 +150,21 @@ public class RandomClearingDoubleAuctioneer extends TransparentAuctioneer
 		}
 	}
 
-  protected void askNotAnImprovementException()
-			throws NotAnImprovementOverQuoteException {
+	protected void askNotAnImprovementException()
+	    throws NotAnImprovementOverQuoteException {
 		if (askException == null) {
-			// Only construct a new exception the once (for improved performance)
+			// Only construct a new exception the once (for improved
+			// performance)
 			askException = new NotAnImprovementOverQuoteException(DISCLAIMER);
 		}
 		throw askException;
 	}
 
 	protected void bidNotAnImprovementException()
-			throws NotAnImprovementOverQuoteException {
+	    throws NotAnImprovementOverQuoteException {
 		if (bidException == null) {
-			// Only construct a new exception the once (for improved performance)
+			// Only construct a new exception the once (for improved
+			// performance)
 			bidException = new NotAnImprovementOverQuoteException(DISCLAIMER);
 		}
 		throw bidException;
@@ -174,5 +179,4 @@ public class RandomClearingDoubleAuctioneer extends TransparentAuctioneer
 
 	protected static final String DISCLAIMER = "This exception was generated in a lazy manner for performance reasons.  Beware misleading stacktraces.";
 
-  
 }

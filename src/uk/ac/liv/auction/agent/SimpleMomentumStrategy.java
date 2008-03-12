@@ -26,12 +26,12 @@ import java.io.Serializable;
 public class SimpleMomentumStrategy extends MomentumStrategy implements
     Serializable {
 
-  protected void adjustMargin() {
-    if ( agent.lastShoutAccepted() ) {
-      adjustMargin(1.0);
-    } else if ( agent.active() ) {
-      adjustMargin(0);
-    }
-  }
+	protected void adjustMargin() {
+		if (agent.lastShoutAccepted()) {
+			adjustMargin(1.0);
+		} else if (agent.active()) {
+			adjustMargin(0);
+		}
+	}
 
 }

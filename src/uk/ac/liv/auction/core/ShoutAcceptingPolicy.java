@@ -22,56 +22,58 @@ import uk.ac.liv.auction.event.AuctionEventListener;
 import uk.ac.liv.util.Parameterizable;
 
 /**
- * Classes implementing this interface define policies for accepting
- * shouts.  A shout-accepting policy determines whether a shout should
- * be accepted or not.
- *
+ * Classes implementing this interface define policies for accepting shouts. A
+ * shout-accepting policy determines whether a shout should be accepted or not.
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
 
-public abstract class ShoutAcceptingPolicy implements Parameterizable, AuctionEventListener {
-	
+public abstract class ShoutAcceptingPolicy implements Parameterizable,
+    AuctionEventListener {
+
 	protected AbstractAuctioneer auctioneer;
-	
+
 	public static final String P_DEF_BASE = "accepting";
-	
+
 	public ShoutAcceptingPolicy() {
 		initialise();
 	}
-	
-	public void initialise() {		
+
+	public void initialise() {
 	}
-	
+
 	public void reset() {
 	}
 
-	public void setAuctioneer( AbstractAuctioneer auctioneer ) {
+	public void setAuctioneer(AbstractAuctioneer auctioneer) {
 		this.auctioneer = auctioneer;
 	}
-	
+
 	public AbstractAuctioneer getAuctioneer() {
 		return auctioneer;
 	}
-	
-	public void setup(ParameterDatabase parameters, Parameter base) {		
+
+	public void setup(ParameterDatabase parameters, Parameter base) {
 	}
 
 	/**
-	 * checks whether <p>shout</p> is acceptable or not. If not, an 
-	 * IllegalShoutException is thrown.
+	 * checks whether
+	 * <p>
+	 * shout
+	 * </p>
+	 * is acceptable or not. If not, an IllegalShoutException is thrown.
 	 * 
 	 * @param shout
 	 * @throws IllegalShoutException
 	 */
-  public abstract void check( Shout shout ) throws IllegalShoutException;
+	public abstract void check(Shout shout) throws IllegalShoutException;
 
 	public void eventOccurred(AuctionEvent event) {
 	}
-	
+
 	public String toString() {
 		return "(" + getClass().getSimpleName() + ")";
 	}
-
 
 }

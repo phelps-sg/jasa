@@ -27,7 +27,7 @@ import uk.ac.liv.util.Parameterizable;
  * performed periodically as well as at the end of every round. The length of
  * each period depends upon how many shouts have been made since last clearing.
  * 
- *  @deprecated
+ * @deprecated
  * @author Jinzhong Niu
  * @version $Revision$
  */
@@ -35,52 +35,53 @@ import uk.ac.liv.util.Parameterizable;
 public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
     implements Serializable, Parameterizable {
 
-  public static final String P_SHOUTNUMEACHPERIOD = "shoutnumeachperiod";
+	public static final String P_SHOUTNUMEACHPERIOD = "shoutnumeachperiod";
 
-  public static final int DEF_SHOUTNUMEACHPERIOD = 6;
+	public static final int DEF_SHOUTNUMEACHPERIOD = 6;
 
-  public static final String P_DEF_BASE = "pch";
+	public static final String P_DEF_BASE = "pch";
 
-  /**
-   * @uml.property name="shoutNumEachPeriod"
-   */
-  private int shoutNumEachPeriod;
+	/**
+	 * @uml.property name="shoutNumEachPeriod"
+	 */
+	private int shoutNumEachPeriod;
 
-  /**
-   * @uml.property name="shoutNum"
-   */
-  private int shoutNum;
+	/**
+	 * @uml.property name="shoutNum"
+	 */
+	private int shoutNum;
 
-  public PeriodicClearingHouseAuctioneer() {
-    this(null);
-  }
+	public PeriodicClearingHouseAuctioneer() {
+		this(null);
+	}
 
-  public PeriodicClearingHouseAuctioneer( Auction auction ) {
-    super(auction);
-  }
+	public PeriodicClearingHouseAuctioneer(Auction auction) {
+		super(auction);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    super.setup(parameters, base);
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		super.setup(parameters, base);
 
-    shoutNumEachPeriod = parameters.getInt(base.push(P_SHOUTNUMEACHPERIOD),
-        new Parameter(P_DEF_BASE).push(P_SHOUTNUMEACHPERIOD), DEF_SHOUTNUMEACHPERIOD);
+		shoutNumEachPeriod = parameters.getInt(base.push(P_SHOUTNUMEACHPERIOD),
+		    new Parameter(P_DEF_BASE).push(P_SHOUTNUMEACHPERIOD),
+		    DEF_SHOUTNUMEACHPERIOD);
 
-    if ( shoutNumEachPeriod <= 0 )
-      shoutNumEachPeriod = DEF_SHOUTNUMEACHPERIOD;
+		if (shoutNumEachPeriod <= 0)
+			shoutNumEachPeriod = DEF_SHOUTNUMEACHPERIOD;
 
-  }
+	}
 
-  public void clear() {
-    super.clear();
-    shoutNum = 0;
-  }
+	public void clear() {
+		super.clear();
+		shoutNum = 0;
+	}
 
-  protected void newShoutInternal( Shout shout ) throws DuplicateShoutException {
-    super.newShoutInternal(shout);
-    shoutNum++;
-    if ( shoutNum >= shoutNumEachPeriod ) {
-      generateQuote();
-      clear();
-    }
-  }
+	protected void newShoutInternal(Shout shout) throws DuplicateShoutException {
+		super.newShoutInternal(shout);
+		shoutNum++;
+		if (shoutNum >= shoutNumEachPeriod) {
+			generateQuote();
+			clear();
+		}
+	}
 }

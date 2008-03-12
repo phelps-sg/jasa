@@ -18,44 +18,44 @@ package uk.ac.liv.auction.core;
 import java.io.Serializable;
 
 /**
- * An auctioneer for a clearing house auction.
- * The clearing operation is performed at the end of every round.
- *
+ * An auctioneer for a clearing house auction. The clearing operation is
+ * performed at the end of every round.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class ClearingHouseAuctioneer extends TransparentAuctioneer 
-  implements Serializable {
+public class ClearingHouseAuctioneer extends TransparentAuctioneer implements
+    Serializable {
 
-  protected ZeroFundsAccount account;
-  
-  public ClearingHouseAuctioneer() {
-    this(null);
-  }
+	protected ZeroFundsAccount account;
 
-  public ClearingHouseAuctioneer( Auction auction ) {
-    super(auction);
-    setPricingPolicy(new UniformPricingPolicy(0));
-    account = new ZeroFundsAccount(this);
-  }
+	public ClearingHouseAuctioneer() {
+		this(null);
+	}
 
-  public void generateQuote() {
-    currentQuote = new MarketQuote(askQuote(), bidQuote());
-  }
+	public ClearingHouseAuctioneer(Auction auction) {
+		super(auction);
+		setPricingPolicy(new UniformPricingPolicy(0));
+		account = new ZeroFundsAccount(this);
+	}
 
-  public void endOfRoundProcessing() {
-    super.endOfRoundProcessing();
-    generateQuote();
-    clear();
-  }
+	public void generateQuote() {
+		currentQuote = new MarketQuote(askQuote(), bidQuote());
+	}
 
-  public void endOfAuctionProcessing() {
-    super.endOfAuctionProcessing();
-  }
+	public void endOfRoundProcessing() {
+		super.endOfRoundProcessing();
+		generateQuote();
+		clear();
+	}
 
-  public Account getAccount() {
-    return account;
-  }
-  
+	public void endOfAuctionProcessing() {
+		super.endOfAuctionProcessing();
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
 }

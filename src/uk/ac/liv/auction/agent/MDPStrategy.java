@@ -15,18 +15,16 @@
 
 package uk.ac.liv.auction.agent;
 
+import java.io.Serializable;
+
+import uk.ac.liv.ai.learning.Learner;
+import uk.ac.liv.ai.learning.MDPLearner;
 import uk.ac.liv.auction.core.Auction;
 import uk.ac.liv.auction.core.MarketQuote;
-
-import uk.ac.liv.ai.learning.*;
-
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
-
-import ec.util.ParameterDatabase;
 import ec.util.Parameter;
-
-import java.io.Serializable;
+import ec.util.ParameterDatabase;
 
 /**
  * <p>
@@ -42,110 +40,110 @@ import java.io.Serializable;
 public class MDPStrategy extends DiscreteLearnerStrategy implements
     Serializable {
 
-  protected MDPLearner learner;
+	protected MDPLearner learner;
 
-  protected double bidBinStart;
+	protected double bidBinStart;
 
-  protected double bidBinWidth;
+	protected double bidBinWidth;
 
-  protected double askBinStart;
+	protected double askBinStart;
 
-  protected double askBinWidth;
+	protected double askBinWidth;
 
-  protected int quoteBins;
+	protected int quoteBins;
 
-  protected boolean firstShout = true;
+	protected boolean firstShout = true;
 
-  public static final String P_DEF_BASE = "mdpstrategy";
+	public static final String P_DEF_BASE = "mdpstrategy";
 
-  public static final String P_LEARNER = "learner";
+	public static final String P_LEARNER = "learner";
 
-  public static final String P_QUOTEBINS = "quotebins";
+	public static final String P_QUOTEBINS = "quotebins";
 
-  public static final String P_ASKBINSTART = "askbinstart";
+	public static final String P_ASKBINSTART = "askbinstart";
 
-  public static final String P_ASKBINWIDTH = "askbinwidth";
+	public static final String P_ASKBINWIDTH = "askbinwidth";
 
-  public static final String P_BIDBINSTART = "bidbinstart";
+	public static final String P_BIDBINSTART = "bidbinstart";
 
-  public static final String P_BIDBINWIDTH = "bidbinwidth";
+	public static final String P_BIDBINWIDTH = "bidbinwidth";
 
-  public MDPStrategy( AbstractTradingAgent agent, double askBinStart,
-      double askBinWidth, double bidBinStart, double bidBinWidth ) {
-    super(agent);
-    this.askBinStart = askBinStart;
-    this.askBinWidth = askBinWidth;
-    this.bidBinStart = bidBinStart;
-    this.bidBinWidth = bidBinWidth;
-  }
+	public MDPStrategy(AbstractTradingAgent agent, double askBinStart,
+	    double askBinWidth, double bidBinStart, double bidBinWidth) {
+		super(agent);
+		this.askBinStart = askBinStart;
+		this.askBinWidth = askBinWidth;
+		this.bidBinStart = bidBinStart;
+		this.bidBinWidth = bidBinWidth;
+	}
 
-  public MDPStrategy() {
-    super();
-  }
+	public MDPStrategy() {
+		super();
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    super.setup(parameters, base);
+		super.setup(parameters, base);
 
-    Parameter defBase = new Parameter(P_DEF_BASE);
-    Parameter learnerParameter = base.push(P_LEARNER);
-    learner = (MDPLearner) parameters.getInstanceForParameter(learnerParameter,
-        defBase.push(P_LEARNER), MDPLearner.class);
-    ((Parameterizable) learner).setup(parameters, learnerParameter);
+		Parameter defBase = new Parameter(P_DEF_BASE);
+		Parameter learnerParameter = base.push(P_LEARNER);
+		learner = (MDPLearner) parameters.getInstanceForParameter(learnerParameter,
+		    defBase.push(P_LEARNER), MDPLearner.class);
+		((Parameterizable) learner).setup(parameters, learnerParameter);
 
-    askBinStart = parameters.getDouble(base.push(P_ASKBINSTART), 
-    		defBase.push(P_ASKBINSTART), 0);
-    askBinWidth = parameters.getDouble(base.push(P_ASKBINWIDTH), 
-    		defBase.push(P_ASKBINWIDTH), 0);
-    bidBinStart = parameters.getDouble(base.push(P_BIDBINSTART), 
-    		defBase.push(P_BIDBINSTART), 0);
-    bidBinWidth = parameters.getDouble(base.push(P_BIDBINWIDTH), 
-    		defBase.push(P_BIDBINWIDTH), 0);
-    quoteBins = parameters.getInt(base.push(P_QUOTEBINS), 
-    		defBase.push(P_QUOTEBINS), 1);
-  }
+		askBinStart = parameters.getDouble(base.push(P_ASKBINSTART), defBase
+		    .push(P_ASKBINSTART), 0);
+		askBinWidth = parameters.getDouble(base.push(P_ASKBINWIDTH), defBase
+		    .push(P_ASKBINWIDTH), 0);
+		bidBinStart = parameters.getDouble(base.push(P_BIDBINSTART), defBase
+		    .push(P_BIDBINSTART), 0);
+		bidBinWidth = parameters.getDouble(base.push(P_BIDBINWIDTH), defBase
+		    .push(P_BIDBINWIDTH), 0);
+		quoteBins = parameters.getInt(base.push(P_QUOTEBINS), defBase
+		    .push(P_QUOTEBINS), 1);
+	}
 
-  public int act() {
-    return learner.act();
-  }
+	public int act() {
+		return learner.act();
+	}
 
-  public void learn( Auction auction ) {
-    learner.newState(agent.getLastProfit(), auctionState(auction));
-  }
+	public void learn(Auction auction) {
+		learner.newState(agent.getLastProfit(), auctionState(auction));
+	}
 
-  /**
-   * Hash the market quote to produce a state value for the learning algorithm.
-   */
-  public int auctionState( Auction auction ) {
-    MarketQuote quote = auction.getQuote();
-    double bid = quote.getBid();
-    double ask = quote.getAsk();
-    int bidBin = 0;
-    int askBin = 0;
-    if ( !Double.isInfinite(bid) ) {
-      bidBin = ((int) ((bid - bidBinStart) / bidBinWidth)) + 1;
-    }
-    if ( !Double.isInfinite(ask) ) {
-      askBin = ((int) ((ask - askBinStart) / askBinWidth)) + 1;
-    }
-    return bidBin * quoteBins + askBin;
-  }
+	/**
+	 * Hash the market quote to produce a state value for the learning algorithm.
+	 */
+	public int auctionState(Auction auction) {
+		MarketQuote quote = auction.getQuote();
+		double bid = quote.getBid();
+		double ask = quote.getAsk();
+		int bidBin = 0;
+		int askBin = 0;
+		if (!Double.isInfinite(bid)) {
+			bidBin = ((int) ((bid - bidBinStart) / bidBinWidth)) + 1;
+		}
+		if (!Double.isInfinite(ask)) {
+			askBin = ((int) ((ask - askBinStart) / askBinWidth)) + 1;
+		}
+		return bidBin * quoteBins + askBin;
+	}
 
-  public void reset() {
-    super.reset();
-    ((Resetable) learner).reset();
-  }
+	public void reset() {
+		super.reset();
+		((Resetable) learner).reset();
+	}
 
-  public Learner getLearner() {
-    return learner;
-  }
+	public Learner getLearner() {
+		return learner;
+	}
 
-  public void setLearner( Learner learner ) {
-    this.learner = (MDPLearner) learner;
-  }
+	public void setLearner(Learner learner) {
+		this.learner = (MDPLearner) learner;
+	}
 
-  public String toString() {
-    return "(" + getClass() + " learner:" + learner + ")";
-  }
+	public String toString() {
+		return "(" + getClass() + " learner:" + learner + ")";
+	}
 
 }

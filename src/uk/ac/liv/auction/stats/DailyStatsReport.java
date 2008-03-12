@@ -38,81 +38,81 @@ import org.apache.log4j.Logger;
 public class DailyStatsReport extends PriceStatisticsReport implements
     Parameterizable {
 
-  /**
-   * @uml.property name="dailyStats"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.util.CummulativeDistribution"
-   */
-  protected Vector dailyStats;
+	/**
+	 * @uml.property name="dailyStats"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.util.CummulativeDistribution"
+	 */
+	protected Vector dailyStats;
 
-  static Logger logger = Logger.getLogger(DailyStatsReport.class);
+	static Logger logger = Logger.getLogger(DailyStatsReport.class);
 
-  public DailyStatsReport() {
-    super();
-    initialise();
-  }
+	public DailyStatsReport() {
+		super();
+		initialise();
+	}
 
-  public void setup( ParameterDatabase params, Parameter base ) {
-    // auction.setDailyStats(this);
-  }
+	public void setup(ParameterDatabase params, Parameter base) {
+		// auction.setDailyStats(this);
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    if ( event instanceof EndOfDayEvent ) {
-      endOfDay((EndOfDayEvent) event);
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof EndOfDayEvent) {
+			endOfDay((EndOfDayEvent) event);
+		}
+	}
 
-  public CummulativeDistribution getTransPriceStats( int day ) {
-    if ( day > dailyStats.size() - 1 ) {
-      return null;
-    }
-    return ((CummulativeDistribution[]) dailyStats.get(day))[TRANS_PRICE];
-  }
+	public CummulativeDistribution getTransPriceStats(int day) {
+		if (day > dailyStats.size() - 1) {
+			return null;
+		}
+		return ((CummulativeDistribution[]) dailyStats.get(day))[TRANS_PRICE];
+	}
 
-  public CummulativeDistribution getPreviousDayTransPriceStats() {
-    if ( auction.getDay() <= 0 ) {
-      return null;
-    }
-    return getTransPriceStats(auction.getDay() - 1);
-  }
+	public CummulativeDistribution getPreviousDayTransPriceStats() {
+		if (auction.getDay() <= 0) {
+			return null;
+		}
+		return getTransPriceStats(auction.getDay() - 1);
+	}
 
-  public void endOfDay( EndOfDayEvent event ) {
-    // Make a copy of the current stats, reset them and record
-    try {
-      CummulativeDistribution[] currentStats = new CummulativeDistribution[stats.length];
-      for ( int i = 0; i < stats.length; i++ ) {
-        currentStats[i] = (CummulativeDistribution) stats[i].clone();
-        stats[i].reset();
-      }
-      dailyStats.add(currentStats);
-    } catch ( CloneNotSupportedException e ) {
-      e.printStackTrace();
-      logger.error(e.getMessage());
-      throw new Error(e.getMessage());
-    }
-  }
+	public void endOfDay(EndOfDayEvent event) {
+		// Make a copy of the current stats, reset them and record
+		try {
+			CummulativeDistribution[] currentStats = new CummulativeDistribution[stats.length];
+			for (int i = 0; i < stats.length; i++) {
+				currentStats[i] = (CummulativeDistribution) stats[i].clone();
+				stats[i].reset();
+			}
+			dailyStats.add(currentStats);
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
+			throw new Error(e.getMessage());
+		}
+	}
 
-  public void produceUserOutput() {
-    for ( int day = 0; day < dailyStats.size(); day++ ) {
-      CummulativeDistribution[] todaysStats = (CummulativeDistribution[]) dailyStats
-          .get(day);
-      logger.info("Stats for day " + day);
-      logger.info("");
-      for ( int i = 0; i < todaysStats.length; i++ ) {
-        printStats(todaysStats[i]);
-      }
-    }
-  }
+	public void produceUserOutput() {
+		for (int day = 0; day < dailyStats.size(); day++) {
+			CummulativeDistribution[] todaysStats = (CummulativeDistribution[]) dailyStats
+			    .get(day);
+			logger.info("Stats for day " + day);
+			logger.info("");
+			for (int i = 0; i < todaysStats.length; i++) {
+				printStats(todaysStats[i]);
+			}
+		}
+	}
 
-  public void initialise() {
-    super.initialise();
-    dailyStats = new Vector();
-  }
+	public void initialise() {
+		super.initialise();
+		dailyStats = new Vector();
+	}
 
-  public void reset() {
-    super.reset();
-    dailyStats.clear();
-  }
+	public void reset() {
+		super.reset();
+		dailyStats.clear();
+	}
 
 }

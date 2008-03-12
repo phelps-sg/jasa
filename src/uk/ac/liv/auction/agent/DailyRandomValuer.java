@@ -28,19 +28,19 @@ import uk.ac.liv.auction.event.EndOfDayEvent;
 
 public class DailyRandomValuer extends RandomValuer {
 
-  public DailyRandomValuer() {
-    super();
-  }
+	public DailyRandomValuer() {
+		super();
+	}
 
-  public DailyRandomValuer( double minValue, double maxValue ) {
-    super(minValue, maxValue);
-  }
+	public DailyRandomValuer(double minValue, double maxValue) {
+		super(minValue, maxValue);
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    super.eventOccurred(event);
-    if ( event instanceof EndOfDayEvent ) {
-      drawRandomValue();
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof EndOfDayEvent) {
+			drawRandomValue();
+		}
+	}
 
 }

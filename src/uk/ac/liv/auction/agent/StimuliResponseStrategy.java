@@ -17,16 +17,14 @@ package uk.ac.liv.auction.agent;
 
 import java.io.Serializable;
 
+import uk.ac.liv.ai.learning.Learner;
+import uk.ac.liv.ai.learning.StimuliResponseLearner;
 import uk.ac.liv.auction.core.Auction;
-
-import uk.ac.liv.ai.learning.*;
-
-import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.Prototypeable;
 import uk.ac.liv.util.Resetable;
-
-import ec.util.ParameterDatabase;
 import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * <p>
@@ -56,75 +54,76 @@ import ec.util.Parameter;
 public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
     Serializable {
 
-  /**
-   * The learning algorithm to use.
-   *   
-   * @uml.property  name="learner"
-   * @uml.associationEnd  multiplicity="(1 1)" inverse="stimuliResponseStrategy:uk.ac.liv.ai.learning.StimuliResponseLearner"
-   * @uml.association  name="uses"
-   */
-  protected StimuliResponseLearner learner = null;
+	/**
+	 * The learning algorithm to use.
+	 * 
+	 * @uml.property name="learner"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 *                     inverse="stimuliResponseStrategy:uk.ac.liv.ai.learning.StimuliResponseLearner"
+	 * @uml.association name="uses"
+	 */
+	protected StimuliResponseLearner learner = null;
 
-  public static final String P_DEF_BASE = "stimuliresponsestrategy";
+	public static final String P_DEF_BASE = "stimuliresponsestrategy";
 
-  public static final String P_LEARNER = "learner";
+	public static final String P_LEARNER = "learner";
 
-  public StimuliResponseStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	public StimuliResponseStrategy(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public StimuliResponseStrategy() {
-    super();
-  }
+	public StimuliResponseStrategy() {
+		super();
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    super.setup(parameters, base);
+		super.setup(parameters, base);
 
-    Parameter learnerParameter = base.push(P_LEARNER);
-    learner = (StimuliResponseLearner) parameters.getInstanceForParameter(
-        learnerParameter, new Parameter(P_DEF_BASE).push(P_LEARNER), 
-        StimuliResponseLearner.class);
-    
-    ((Parameterizable) learner).setup(parameters, learnerParameter);
-  }
+		Parameter learnerParameter = base.push(P_LEARNER);
+		learner = (StimuliResponseLearner) parameters.getInstanceForParameter(
+		    learnerParameter, new Parameter(P_DEF_BASE).push(P_LEARNER),
+		    StimuliResponseLearner.class);
 
-  public Object protoClone() {
-    StimuliResponseStrategy clonedStrategy;
-    try {
-      clonedStrategy = (StimuliResponseStrategy) clone();
-      clonedStrategy.learner = (StimuliResponseLearner) ((Prototypeable) this.learner)
-          .protoClone();
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-    return clonedStrategy;
-  }
+		((Parameterizable) learner).setup(parameters, learnerParameter);
+	}
 
-  public int act() {
-    return learner.act();
-  }
+	public Object protoClone() {
+		StimuliResponseStrategy clonedStrategy;
+		try {
+			clonedStrategy = (StimuliResponseStrategy) clone();
+			clonedStrategy.learner = (StimuliResponseLearner) ((Prototypeable) this.learner)
+			    .protoClone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clonedStrategy;
+	}
 
-  public void learn( Auction auction ) {
-    learner.reward(agent.getLastProfit());
-  }
+	public int act() {
+		return learner.act();
+	}
 
-  public void reset() {
-    super.reset();
-    ((Resetable) learner).reset();
-  }
+	public void learn(Auction auction) {
+		learner.reward(agent.getLastProfit());
+	}
 
-  public Learner getLearner() {
-    return learner;
-  }
+	public void reset() {
+		super.reset();
+		((Resetable) learner).reset();
+	}
 
-  public void setLearner( Learner learner ) {
-    this.learner = (StimuliResponseLearner) learner;
-  }
+	public Learner getLearner() {
+		return learner;
+	}
 
-  public String toString() {
-    return "(" + getClass() + " markupscale:" + markupScale + " learner:"
-        + learner + " quantity:" + quantity + ")";
-  }
+	public void setLearner(Learner learner) {
+		this.learner = (StimuliResponseLearner) learner;
+	}
+
+	public String toString() {
+		return "(" + getClass() + " markupscale:" + markupScale + " learner:"
+		    + learner + " quantity:" + quantity + ")";
+	}
 
 }

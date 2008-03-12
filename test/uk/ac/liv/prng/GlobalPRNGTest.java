@@ -15,17 +15,15 @@
 
 package uk.ac.liv.prng;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
-import cern.jet.math.Arithmetic;
-
-import junit.framework.*;
-
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import uk.ac.liv.PRNGTestSeeds;
-
-import uk.ac.liv.prng.GlobalPRNG;
-
 import uk.ac.liv.util.MutableIntWrapper;
+import cern.jet.math.Arithmetic;
 
 /**
  * @author Steve Phelps
@@ -34,104 +32,104 @@ import uk.ac.liv.util.MutableIntWrapper;
 
 public class GlobalPRNGTest extends TestCase {
 
-  /**
- * @uml.property   name="p"
- * @uml.associationEnd   multiplicity="(0 -1)"
- */
-protected Integer[] p;
+	/**
+	 * @uml.property name="p"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	protected Integer[] p;
 
-  public static final int N = 4;
+	public static final int N = 4;
 
-  public static final int ITERATIONS = 1000000;
+	public static final int ITERATIONS = 1000000;
 
-  public GlobalPRNGTest ( String name) {
-    super(name);
-  }
+	public GlobalPRNGTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-    p = new Integer[N];
-    for ( int i = 0; i < N; i++ ) {
-      p[i] = new Integer(i);
-    }
-  }
+	public void setUp() {
+		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+		p = new Integer[N];
+		for (int i = 0; i < N; i++) {
+			p[i] = new Integer(i);
+		}
+	}
 
-  public void testPermutations() {
-    HashMap hist = new HashMap();
-    for ( int i = 0; i < ITERATIONS; i++ ) {
-      GlobalPRNG.randomPermutation(p);
-      Integer[] p1 = (Integer[]) p.clone();
-      Permutation perm = new Permutation(p1);
-      MutableIntWrapper count = (MutableIntWrapper) hist.get(perm);
-      if ( count == null ) {
-        hist.put(perm, new MutableIntWrapper(1));
-      } else {
-        count.value++;
-      }
-    }
-    int numPerms = 0;
-    Iterator i = hist.keySet().iterator();
-    while ( i.hasNext() ) {
-      Permutation perm = (Permutation) i.next();      
-      numPerms++;
-    }
-    System.out.println("num permutations = " + numPerms);
-    assertTrue(numPerms == (int) Arithmetic.factorial(N));
-    int target = ITERATIONS / numPerms;
-    i = hist.keySet().iterator();
-    while ( i.hasNext() ) {
-      Permutation perm = (Permutation) i.next();
-      int instances = ((MutableIntWrapper) hist.get(perm)).value;
-      System.out.println(perm + ": " + instances + " (" + target + ")");
-      assertTrue(Math.abs(instances - target) < 1000);
-    }
-  }
+	public void testPermutations() {
+		HashMap hist = new HashMap();
+		for (int i = 0; i < ITERATIONS; i++) {
+			GlobalPRNG.randomPermutation(p);
+			Integer[] p1 = (Integer[]) p.clone();
+			Permutation perm = new Permutation(p1);
+			MutableIntWrapper count = (MutableIntWrapper) hist.get(perm);
+			if (count == null) {
+				hist.put(perm, new MutableIntWrapper(1));
+			} else {
+				count.value++;
+			}
+		}
+		int numPerms = 0;
+		Iterator i = hist.keySet().iterator();
+		while (i.hasNext()) {
+			Permutation perm = (Permutation) i.next();
+			numPerms++;
+		}
+		System.out.println("num permutations = " + numPerms);
+		assertTrue(numPerms == (int) Arithmetic.factorial(N));
+		int target = ITERATIONS / numPerms;
+		i = hist.keySet().iterator();
+		while (i.hasNext()) {
+			Permutation perm = (Permutation) i.next();
+			int instances = ((MutableIntWrapper) hist.get(perm)).value;
+			System.out.println(perm + ": " + instances + " (" + target + ")");
+			assertTrue(Math.abs(instances - target) < 1000);
+		}
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(GlobalPRNGTest.class);
-  }
+	public static Test suite() {
+		return new TestSuite(GlobalPRNGTest.class);
+	}
 
 }
 
 class Permutation {
 
-  /**
- * @uml.property   name="elements" multiplicity="(0 -1)" dimension="1"
- */
-Integer[] elements;
+	/**
+	 * @uml.property name="elements" multiplicity="(0 -1)" dimension="1"
+	 */
+	Integer[] elements;
 
-  public Permutation ( Integer[] elements) {
-    this.elements = elements;
-  }
+	public Permutation(Integer[] elements) {
+		this.elements = elements;
+	}
 
-  public boolean equals( Object other ) {
-    Permutation p = (Permutation) other;
-    for ( int i = 0; i < elements.length; i++ ) {
-      if ( !this.elements[i].equals(p.elements[i]) ) {
-        return false;
-      }
-    }
-    return true;
-  }
+	public boolean equals(Object other) {
+		Permutation p = (Permutation) other;
+		for (int i = 0; i < elements.length; i++) {
+			if (!this.elements[i].equals(p.elements[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-  public int hashCode() {
-    int hash = 0;
-    for ( int i = 0; i < elements.length; i++ ) {
-      hash += elements[i].intValue() * i + 1;
-    }
-    return hash;
-  }
+	public int hashCode() {
+		int hash = 0;
+		for (int i = 0; i < elements.length; i++) {
+			hash += elements[i].intValue() * i + 1;
+		}
+		return hash;
+	}
 
-  public String toString() {
-    StringBuffer out = new StringBuffer("");
-    for ( int i = 0; i < elements.length; i++ ) {
-      out.append(elements[i] + " ");
-    }
-    return out.toString();
-  }
+	public String toString() {
+		StringBuffer out = new StringBuffer("");
+		for (int i = 0; i < elements.length; i++) {
+			out.append(elements[i] + " ");
+		}
+		return out.toString();
+	}
 
 }

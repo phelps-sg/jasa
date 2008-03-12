@@ -13,7 +13,6 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.io.DataWriter;
@@ -27,8 +26,8 @@ import uk.ac.liv.util.Parameterizable;
 
 public interface LearnerMonitor extends DataWriter, Parameterizable {
 
-  public void startRecording();
+	public void startRecording();
 
-  public void finishRecording();
+	public void finishRecording();
 
 }

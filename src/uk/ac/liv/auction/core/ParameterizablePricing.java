@@ -17,19 +17,18 @@ package uk.ac.liv.auction.core;
 
 /**
  * <p>
- * Auctioneer classes implementing this interface indicate that they
- * support parameterisable pricing rules, as per the k-double-auction
- * variants.
+ * Auctioneer classes implementing this interface indicate that they support
+ * parameterisable pricing rules, as per the k-double-auction variants.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface ParameterizablePricing {
 
-  public void setK( double k );
+	public void setK(double k);
 
-  public double getK();
+	public double getK();
 
 }

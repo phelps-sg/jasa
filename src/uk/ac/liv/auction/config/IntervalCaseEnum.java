@@ -49,22 +49,19 @@ import ec.util.ParameterDatabase;
  * <tr>
  * <td valign=top><i>base </i> <tt>.min</tt><br>
  * <font size=-1>double</font></td>
- * <td valign=top>(the lower bound of the range)
- * </td>
+ * <td valign=top>(the lower bound of the range) </td>
  * </tr>
  * 
  * <tr>
  * <td valign=top><i>base </i> <tt>.max</tt><br>
  * <font size=-1>double</font></td>
- * <td valign=top>(the upper bound of the range)
- * </td>
+ * <td valign=top>(the upper bound of the range) </td>
  * </tr>
  * 
  * <tr>
  * <td valign=top><i>base </i> <tt>.step</tt><br>
  * <font size=-1>double</font></td>
- * <td valign=top>(the interval length to sample within the range)
- * </td>
+ * <td valign=top>(the interval length to sample within the range) </td>
  * </tr>
  * 
  * </table>
@@ -75,98 +72,100 @@ import ec.util.ParameterDatabase;
 
 public class IntervalCaseEnum extends CaseEnum {
 
-  static Logger logger = Logger.getLogger(IntervalCaseEnum.class);
+	static Logger logger = Logger.getLogger(IntervalCaseEnum.class);
 
-  /**
-   * @uml.property name="cases"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   */
-  private ParameterBasedCase cases[];
+	/**
+	 * @uml.property name="cases"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 */
+	private ParameterBasedCase cases[];
 
-  /**
-   * @uml.property name="i"
-   */
-  private int i;
+	/**
+	 * @uml.property name="i"
+	 */
+	private int i;
 
-  private static final String P_NAME = "name";
+	private static final String P_NAME = "name";
 
-  private static final String P_CASE = "case";
+	private static final String P_CASE = "case";
 
-  private static final String P_MIN = "min";
+	private static final String P_MIN = "min";
 
-  private static final String P_MAX = "max";
+	private static final String P_MAX = "max";
 
-  private static final String P_STEP = "step";
+	private static final String P_STEP = "step";
 
-  public void setup( ParameterDatabase pdb, Parameter base ) {
+	public void setup(ParameterDatabase pdb, Parameter base) {
 
-    setName(pdb.getString(base.push(P_NAME)));
+		setName(pdb.getString(base.push(P_NAME), null));
 
-    Class c = pdb.getInstanceForParameterEq(base.push(P_CASE), null,
-        ParameterBasedCase.class).getClass();
+		Class c = pdb.getInstanceForParameterEq(base.push(P_CASE), null,
+		    ParameterBasedCase.class).getClass();
 
-    int count;
-    Number min, max, step;
-    try {
-    	min = new Integer(pdb.getInt(base.push(P_MIN)));
-    	max = new Integer(pdb.getInt(base.push(P_MAX)));
-    	step = new Integer(pdb.getInt(base.push(P_STEP)));
-    	count = (max.intValue() - min.intValue()) / step.intValue() + 1;
-    } catch (NumberFormatException e) {
-    	min = new Double(pdb.getDoubleWithDefault(base.push(P_MIN), null, 0));
-    	max = new Double(pdb.getDoubleWithDefault(base.push(P_MAX), null, 1));
-    	step = new Double(pdb.getDoubleWithDefault(base.push(P_STEP), null, 0.1));
-    	count = (int) ((max.doubleValue() - min.doubleValue()) / step.doubleValue() + 1);
-    }
-    
-    assert max.doubleValue() > min.doubleValue();
-    
-    cases = new ParameterBasedCase[count];
-    for ( int i = 0; i < cases.length; i++ ) {
-      try {
-        cases[i] = (ParameterBasedCase) c.newInstance();
-      } catch ( InstantiationException e ) {
-        e.printStackTrace();
-        logger.error(e.toString());
-      } catch ( IllegalAccessException e ) {
-        e.printStackTrace();
-        logger.error(e.toString());
-      }
+		int count;
+		Number min, max, step;
+		try {
+			min = new Integer(pdb.getInt(base.push(P_MIN), null));
+			max = new Integer(pdb.getInt(base.push(P_MAX), null));
+			step = new Integer(pdb.getInt(base.push(P_STEP), null));
+			count = (max.intValue() - min.intValue()) / step.intValue() + 1;
+		} catch (NumberFormatException e) {
+			min = new Double(pdb.getDoubleWithDefault(base.push(P_MIN), null, 0));
+			max = new Double(pdb.getDoubleWithDefault(base.push(P_MAX), null, 1));
+			step = new Double(pdb.getDoubleWithDefault(base.push(P_STEP), null, 0.1));
+			count = (int) ((max.doubleValue() - min.doubleValue())
+			    / step.doubleValue() + 1);
+		}
 
-      if ( cases[i] instanceof Parameterizable ) {
-        ((Parameterizable) cases[i]).setup(pdb, base.push(P_CASE));
-      }
-      if ( min instanceof Integer ) {
-      	cases[i].setValue(String.valueOf(min.intValue() + i*step.intValue()));
-      } else {
-      	if (min.doubleValue() + i*step.doubleValue() > max.doubleValue()) {
-      		cases[i].setValue(max.toString());
-      	} else {
-      		cases[i].setValue(String.valueOf(min.doubleValue() + i*step.doubleValue()));
-      	}
-      }
-    }
+		assert max.doubleValue() > min.doubleValue();
 
-    reset();
-  }
+		cases = new ParameterBasedCase[count];
+		for (int i = 0; i < cases.length; i++) {
+			try {
+				cases[i] = (ParameterBasedCase) c.newInstance();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+				logger.error(e.toString());
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+				logger.error(e.toString());
+			}
 
-  public void reset() {
-    i = 0;
-  }
+			if (cases[i] instanceof Parameterizable) {
+				((Parameterizable) cases[i]).setup(pdb, base.push(P_CASE));
+			}
+			if (min instanceof Integer) {
+				cases[i].setValue(String.valueOf(min.intValue() + i * step.intValue()));
+			} else {
+				if (min.doubleValue() + i * step.doubleValue() > max.doubleValue()) {
+					cases[i].setValue(max.toString());
+				} else {
+					cases[i].setValue(String.valueOf(min.doubleValue() + i
+					    * step.doubleValue()));
+				}
+			}
+		}
 
-  /*
-   * @see uk.ac.liv.auction.config.CaseEnum#moreCases()
-   */
-  public boolean moreCases() {
-    return i < cases.length;
-  }
+		reset();
+	}
 
-  /*
-   * @see uk.ac.liv.auction.config.CaseEnum#nextCase()
-   */
-  public Case nextCase() {
-    assert moreCases();
-    
-    return cases[i++];
-  }
+	public void reset() {
+		i = 0;
+	}
+
+	/*
+	 * @see uk.ac.liv.auction.config.CaseEnum#moreCases()
+	 */
+	public boolean moreCases() {
+		return i < cases.length;
+	}
+
+	/*
+	 * @see uk.ac.liv.auction.config.CaseEnum#nextCase()
+	 */
+	public Case nextCase() {
+		assert moreCases();
+
+		return cases[i++];
+	}
 }

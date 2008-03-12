@@ -15,13 +15,17 @@
 
 package uk.ac.liv.auction.stats;
 
-import uk.ac.liv.auction.core.*;
-
-import uk.ac.liv.util.io.DataWriter;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import uk.ac.liv.auction.core.AscendingShoutComparator;
+import uk.ac.liv.auction.core.DescendingShoutComparator;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.core.Shout;
+import uk.ac.liv.util.io.DataWriter;
 
 /**
  * A class to calculate the supply and demand curves and write them to the
@@ -35,59 +39,59 @@ import org.apache.log4j.Logger;
 
 public class TrueSupplyAndDemandStats extends SupplyAndDemandStats {
 
-  /**
-   * The sorted list of agent's truthful bids (ie buyers' private values).
-   * 
-   * @uml.property name="bids"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.core.Shout$MutableShout"
-   */
-  protected ArrayList bids = new ArrayList();
+	/**
+	 * The sorted list of agent's truthful bids (ie buyers' private values).
+	 * 
+	 * @uml.property name="bids"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.auction.core.Shout$MutableShout"
+	 */
+	protected ArrayList bids = new ArrayList();
 
-  /**
-   * The sorted list of agents' truthful asks (ie sellers' private values).
-   * 
-   * @uml.property name="asks"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.core.Shout$MutableShout"
-   */
-  protected ArrayList asks = new ArrayList();
+	/**
+	 * The sorted list of agents' truthful asks (ie sellers' private values).
+	 * 
+	 * @uml.property name="asks"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.auction.core.Shout$MutableShout"
+	 */
+	protected ArrayList asks = new ArrayList();
 
-  static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
+	static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
 
-  public TrueSupplyAndDemandStats( RandomRobinAuction auction,
-      DataWriter supplyStats, DataWriter demandStats ) {
-    super(auction, supplyStats, demandStats);
-  }
+	public TrueSupplyAndDemandStats(RandomRobinAuction auction,
+	    DataWriter supplyStats, DataWriter demandStats) {
+		super(auction, supplyStats, demandStats);
+	}
 
-  public void writeSupplyStats() {
-    writeStats(supplyStats, asks, new AscendingShoutComparator());
-  }
+	public void writeSupplyStats() {
+		writeStats(supplyStats, asks, new AscendingShoutComparator());
+	}
 
-  public void writeDemandStats() {
-    writeStats(demandStats, bids, new DescendingShoutComparator());
-  }
+	public void writeDemandStats() {
+		writeStats(demandStats, bids, new DescendingShoutComparator());
+	}
 
-  protected void enumerateTruthfulShout( Shout shout ) {
-    Shout.MutableShout copyOfShout = new Shout.MutableShout();
-    copyOfShout.copyFrom(shout);
+	protected void enumerateTruthfulShout(Shout shout) {
+		Shout.MutableShout copyOfShout = new Shout.MutableShout();
+		copyOfShout.copyFrom(shout);
 
-    if ( shout.isBid() ) {
-      bids.add(copyOfShout);
-    } else {
-      asks.add(copyOfShout);
-    }
-    super.enumerateTruthfulShout(shout);
-  }
+		if (shout.isBid()) {
+			bids.add(copyOfShout);
+		} else {
+			asks.add(copyOfShout);
+		}
+		super.enumerateTruthfulShout(shout);
+	}
 
-  public void initialise() {
-    super.initialise();
-    asks.clear();
-    bids.clear();
-  }
+	public void initialise() {
+		super.initialise();
+		asks.clear();
+		bids.clear();
+	}
 
-  public Map getVariables() {
-    return new HashMap();
-  }
+	public Map getVariables() {
+		return new HashMap();
+	}
 
 }

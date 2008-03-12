@@ -46,40 +46,40 @@ import uk.ac.liv.util.Parameterizable;
 public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
     implements FixedQuantityStrategy, Parameterizable, Serializable {
 
-  int quantity = 1;
+	int quantity = 1;
 
-  public static final String P_DEF_BASE = "fixedquantitystrategy";
+	public static final String P_DEF_BASE = "fixedquantitystrategy";
 
-  static final String P_QUANTITY = "quantity";
+	static final String P_QUANTITY = "quantity";
 
-  public FixedQuantityStrategyImpl( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	public FixedQuantityStrategyImpl(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public FixedQuantityStrategyImpl() {
-    this(null);
-  }
+	public FixedQuantityStrategyImpl() {
+		this(null);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    quantity = parameters.getIntWithDefault(base.push(P_QUANTITY), 
-    		new Parameter(P_DEF_BASE).push(P_QUANTITY), quantity);
-  }
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		quantity = parameters.getIntWithDefault(base.push(P_QUANTITY),
+		    new Parameter(P_DEF_BASE).push(P_QUANTITY), quantity);
+	}
 
-  public void setQuantity( int quantity ) {
-    this.quantity = quantity;
-  }
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
-  public int getQuantity() {
-    return quantity;
-  }
+	public int getQuantity() {
+		return quantity;
+	}
 
-  public int determineQuantity( Auction auction ) {
-    return quantity;
-  }
+	public int determineQuantity(Auction auction) {
+		return quantity;
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    shout.setQuantity(quantity);
-    return super.modifyShout(shout);
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		shout.setQuantity(quantity);
+		return super.modifyShout(shout);
+	}
 
 }

@@ -30,65 +30,65 @@ import uk.ac.liv.util.Parameterizable;
 public class MaxRoundsAuctionClosingCondition extends TimingCondition implements
     Parameterizable, AuctionClosingCondition {
 
-  public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
+	public static final String P_MAXIMUM_ROUNDS = "maximumrounds";
 
-  /**
-   * The maximum number of rounds in the auction. Ignored if negative.
-   * 
-   * @uml.property name="maximumRounds"
-   */
-  protected int maximumRounds = -1;
+	/**
+	 * The maximum number of rounds in the auction. Ignored if negative.
+	 * 
+	 * @uml.property name="maximumRounds"
+	 */
+	protected int maximumRounds = -1;
 
-  public MaxRoundsAuctionClosingCondition() {
-    this(null);
-  }
+	public MaxRoundsAuctionClosingCondition() {
+		this(null);
+	}
 
-  public MaxRoundsAuctionClosingCondition( Auction auction ) {
-    super(auction);
-  }
+	public MaxRoundsAuctionClosingCondition(Auction auction) {
+		super(auction);
+	}
 
-  /*
-   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
-   *      ec.util.Parameter)
-   */
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	/*
+	 * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+	 *      ec.util.Parameter)
+	 */
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS),
-    		new Parameter(P_DEF_BASE).push(P_MAXIMUM_ROUNDS), -1);
-  }
+		maximumRounds = parameters.getIntWithDefault(base.push(P_MAXIMUM_ROUNDS),
+		    new Parameter(P_DEF_BASE).push(P_MAXIMUM_ROUNDS), -1);
+	}
 
-  /**
-   * Return the maximum number of rounds for this auction.
-   * 
-   * @uml.property name="maximumRounds"
-   */
-  public int getMaximumRounds() {
-    return maximumRounds;
-  }
+	/**
+	 * Return the maximum number of rounds for this auction.
+	 * 
+	 * @uml.property name="maximumRounds"
+	 */
+	public int getMaximumRounds() {
+		return maximumRounds;
+	}
 
-  /**
-   * Set the maximum number of rounds for this auction. The auction will
-   * automatically close after this number of rounds has been dealt.
-   * 
-   * @param maximumRounds
-   *          The maximum number of roudns for this auction.
-   * @uml.property name="maximumRounds"
-   */
-  public void setMaximumRounds( int maximumRounds ) {
-    this.maximumRounds = maximumRounds;
-  }
+	/**
+	 * Set the maximum number of rounds for this auction. The auction will
+	 * automatically close after this number of rounds has been dealt.
+	 * 
+	 * @param maximumRounds
+	 *          The maximum number of roudns for this auction.
+	 * @uml.property name="maximumRounds"
+	 */
+	public void setMaximumRounds(int maximumRounds) {
+		this.maximumRounds = maximumRounds;
+	}
 
-  /*
-   * @see uk.ac.liv.auction.core.TimingCondition#eval()
-   */
-  public boolean eval() {
-    return getRemainingRounds() <= 0;
-  }
+	/*
+	 * @see uk.ac.liv.auction.core.TimingCondition#eval()
+	 */
+	public boolean eval() {
+		return getRemainingRounds() <= 0;
+	}
 
-  public int getRemainingRounds() {
-    if ( maximumRounds > getAuction().getAge() )
-      return maximumRounds - getAuction().getAge();
-    else
-      return 0;
-  }
+	public int getRemainingRounds() {
+		if (maximumRounds > getAuction().getAge())
+			return maximumRounds - getAuction().getAge();
+		else
+			return 0;
+	}
 }

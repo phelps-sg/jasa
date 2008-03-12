@@ -13,101 +13,96 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.auction.zi;
-
-import uk.ac.liv.auction.agent.*;
-
-import uk.ac.liv.ai.learning.MimicryLearner;
-
-import uk.ac.liv.util.Prototypeable;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.liv.ai.learning.MimicryLearner;
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
+import uk.ac.liv.auction.agent.MomentumStrategy;
+import uk.ac.liv.util.Prototypeable;
+
 /**
  * <p>
- * An implementation of the Zero-Intelligence-Plus (ZIP) strategy.
- * See:
+ * An implementation of the Zero-Intelligence-Plus (ZIP) strategy. See:
  * </p>
- *
+ * 
  * <p>
- * "Minimal Intelligence Agents for Bargaining Behaviours in
- * Market-based Environments" Dave Cliff 1997.
+ * "Minimal Intelligence Agents for Bargaining Behaviours in Market-based
+ * Environments" Dave Cliff 1997.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 
-  static Logger logger = Logger.getLogger(ZIPStrategy.class);
+	static Logger logger = Logger.getLogger(ZIPStrategy.class);
 
+	public ZIPStrategy(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public ZIPStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	public ZIPStrategy() {
+		this(null);
+	}
 
-  public ZIPStrategy() {
-    this(null);
-  }
+	public Object protoClone() {
+		ZIPStrategy clone = new ZIPStrategy();
+		clone.scaling = this.scaling;
+		clone.learner = (MimicryLearner) ((Prototypeable) this.learner)
+		    .protoClone();
+		clone.reset();
+		return clone;
+	}
 
+	protected void adjustMargin() {
+		if (agent.isSeller(auction)) {
+			sellerStrategy();
+		} else {
+			buyerStrategy();
+		}
+	}
 
-  public Object protoClone() {
-    ZIPStrategy clone = new ZIPStrategy();
-    clone.scaling = this.scaling;
-    clone.learner = (MimicryLearner) ((Prototypeable) this.learner).protoClone();
-    clone.reset();
-    return clone;
-  }
+	protected void sellerStrategy() {
 
-  
-  protected void adjustMargin() {
-    if ( agent.isSeller(auction) ) {
-      sellerStrategy();
-    } else {
-      buyerStrategy();
-    }
-  }
-  
-  
-  protected void sellerStrategy() {
+		if (lastShout == null) {
+			return;
+		}
 
-    if ( lastShout == null ) {
-      return;
-    }
-    
-    if ( lastShoutAccepted ) {
-    	if ( currentPrice <= trPrice ) {
-    		adjustMargin(targetMargin(trPrice + perterb(trPrice)));
-    	} else if ( agent.active() ) {
-    		adjustMargin(targetMargin(trPrice - perterb(trPrice)));
-    	}
-    } else {
-    	if ( agent.active() ) {
-    		adjustMargin(targetMargin(lastShout.getPrice() - perterb(lastShout.getPrice())));
-    	}
-    }
-  }
+		if (lastShoutAccepted) {
+			if (currentPrice <= trPrice) {
+				adjustMargin(targetMargin(trPrice + perterb(trPrice)));
+			} else if (agent.active()) {
+				adjustMargin(targetMargin(trPrice - perterb(trPrice)));
+			}
+		} else {
+			if (agent.active()) {
+				adjustMargin(targetMargin(lastShout.getPrice()
+				    - perterb(lastShout.getPrice())));
+			}
+		}
+	}
 
-  
-  protected void buyerStrategy() {
+	protected void buyerStrategy() {
 
-    if ( lastShout == null ) {
-      return;
-    }
+		if (lastShout == null) {
+			return;
+		}
 
-    if ( lastShoutAccepted ) {
-      if ( currentPrice >= trPrice ) {
-        adjustMargin(targetMargin(trPrice - perterb(trPrice)));
-      } else if ( agent.active() ) {
-        adjustMargin(targetMargin(trPrice + perterb(trPrice)));
-      }
-    } else {
-      if (  agent.active() ) {
-        adjustMargin(targetMargin(lastShout.getPrice() + perterb(lastShout.getPrice())));
-      }
-    }
-  }
+		if (lastShoutAccepted) {
+			if (currentPrice >= trPrice) {
+				adjustMargin(targetMargin(trPrice - perterb(trPrice)));
+			} else if (agent.active()) {
+				adjustMargin(targetMargin(trPrice + perterb(trPrice)));
+			}
+		} else {
+			if (agent.active()) {
+				adjustMargin(targetMargin(lastShout.getPrice()
+				    + perterb(lastShout.getPrice())));
+			}
+		}
+	}
 
 }

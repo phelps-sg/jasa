@@ -15,145 +15,139 @@
 
 package uk.ac.liv.auction.electricity;
 
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.agent.*;
-import uk.ac.liv.auction.stats.*;
-
-import uk.ac.liv.util.*;
-
-import uk.ac.liv.prng.PRNGFactory;
-
-import java.util.*;
 import java.io.Serializable;
-
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
-// import edu.cornell.lassp.houle.RngPack.RandomElement;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.liv.auction.agent.AbstractTradingAgent;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.stats.EquilibriumReport;
+import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.util.Parameterizable;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.engine.RandomSeedGenerator;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 public class StandardRandomizer implements Parameterizable, Serializable {
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	protected RandomRobinAuction auction;
 
-  /**
-   * @uml.property name="minPrivateValue"
-   */
-  protected double minPrivateValue = 30;
+	/**
+	 * @uml.property name="minPrivateValue"
+	 */
+	protected double minPrivateValue = 30;
 
-  /**
-   * @uml.property name="maxPrivateValue"
-   */
-  protected double maxPrivateValue = 1000;
+	/**
+	 * @uml.property name="maxPrivateValue"
+	 */
+	protected double maxPrivateValue = 1000;
 
-  /**
-   * @uml.property name="experiment"
-   * @uml.associationEnd inverse="randomizer:uk.ac.liv.auction.electricity.ElectricityExperiment"
-   */
-  protected ElectricityExperiment experiment;
+	/**
+	 * @uml.property name="experiment"
+	 * @uml.associationEnd inverse="randomizer:uk.ac.liv.auction.electricity.ElectricityExperiment"
+	 */
+	protected ElectricityExperiment experiment;
 
-  /**
-   * @uml.property name="privValuePRNG"
-   * @uml.associationEnd
-   */
-  protected RandomEngine privValuePRNG;
+	/**
+	 * @uml.property name="privValuePRNG"
+	 * @uml.associationEnd
+	 */
+	protected RandomEngine privValuePRNG;
 
-  /**
-   * @uml.property name="seeds" multiplicity="(0 -1)" dimension="1"
-   */
-  protected long[] seeds;
+	/**
+	 * @uml.property name="seeds" multiplicity="(0 -1)" dimension="1"
+	 */
+	protected long[] seeds;
 
-  static Logger logger = Logger.getLogger(StandardRandomizer.class);
+	static Logger logger = Logger.getLogger(StandardRandomizer.class);
 
-  static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
+	static final String P_MAXPRIVATEVALUE = "maxprivatevalue";
 
-  static final String P_MINPRIVATEVALUE = "minprivatevalue";
+	static final String P_MINPRIVATEVALUE = "minprivatevalue";
 
-  public StandardRandomizer( ElectricityExperiment simulation ) {
-    this();
-    setExperiment(experiment);
-  }
+	public StandardRandomizer(ElectricityExperiment simulation) {
+		this();
+		setExperiment(experiment);
+	}
 
-  public StandardRandomizer() {
-  }
+	public StandardRandomizer() {
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    minPrivateValue = parameters.getDoubleWithDefault(base
-        .push(P_MINPRIVATEVALUE), null, minPrivateValue);
-    maxPrivateValue = parameters.getDoubleWithDefault(base
-        .push(P_MAXPRIVATEVALUE), null, maxPrivateValue);
+		minPrivateValue = parameters.getDoubleWithDefault(base
+		    .push(P_MINPRIVATEVALUE), null, minPrivateValue);
+		maxPrivateValue = parameters.getDoubleWithDefault(base
+		    .push(P_MAXPRIVATEVALUE), null, maxPrivateValue);
 
-  }
+	}
 
-  /**
-   * @uml.property name="experiment"
-   */
-  public void setExperiment( ElectricityExperiment experiment ) {
-    this.experiment = experiment;
-    this.auction = experiment.auction;
-  }
+	/**
+	 * @uml.property name="experiment"
+	 */
+	public void setExperiment(ElectricityExperiment experiment) {
+		this.experiment = experiment;
+		this.auction = experiment.auction;
+	}
 
-  public double randomValue( RandomEngine prng, double min, double max ) {
-    return min + prng.raw() * (max - min);
-  }
+	public double randomValue(RandomEngine prng, double min, double max) {
+		return min + prng.raw() * (max - min);
+	}
 
-  public double randomPrivateValue( double min, double max ) {
-    return randomValue(privValuePRNG, min, max);
-  }
+	public double randomPrivateValue(double min, double max) {
+		return randomValue(privValuePRNG, min, max);
+	}
 
-  public double randomPrivateValue() {
-    return randomPrivateValue(minPrivateValue, maxPrivateValue);
-  }
+	public double randomPrivateValue() {
+		return randomPrivateValue(minPrivateValue, maxPrivateValue);
+	}
 
-  public void randomizePrivateValues( double[][] values, int iteration ) {
-    Iterator i = auction.getTraderIterator();
-    int traderNumber = 0;
-    while ( i.hasNext() ) {
-      ElectricityTrader trader = (ElectricityTrader) i.next();
-      trader.setPrivateValue(values[iteration][traderNumber++]);
-    }
-  }
+	public void randomizePrivateValues(double[][] values, int iteration) {
+		Iterator i = auction.getTraderIterator();
+		int traderNumber = 0;
+		while (i.hasNext()) {
+			ElectricityTrader trader = (ElectricityTrader) i.next();
+			trader.setPrivateValue(values[iteration][traderNumber++]);
+		}
+	}
 
-  protected double[][] generateRandomizedPrivateValues( int numTraders,
-      int numIterations ) {
-    double[][] values = new double[numIterations][numTraders];
-    EquilibriumReport stats = new EquilibriumReport(auction);
-    for ( int i = 0; i < numIterations; i++ ) {
-      privValuePRNG = PRNGFactory.getFactory().create(seeds[i]);
-      do {
-        Iterator traders = auction.getTraderIterator();
-        for ( int t = 0; t < numTraders; t++ ) {
-          double value = randomPrivateValue();
-          AbstractTradingAgent agent = (AbstractTradingAgent) traders.next();
-          agent.setPrivateValue(value);
-          values[i][t] = value;
-        }
-        stats.recalculate();
-      } while ( !stats.equilibriaExists() );
-    }
-    return values;
-  }
+	protected double[][] generateRandomizedPrivateValues(int numTraders,
+	    int numIterations) {
+		double[][] values = new double[numIterations][numTraders];
+		EquilibriumReport stats = new EquilibriumReport(auction);
+		for (int i = 0; i < numIterations; i++) {
+			privValuePRNG = PRNGFactory.getFactory().create(seeds[i]);
+			do {
+				Iterator traders = auction.getTraderIterator();
+				for (int t = 0; t < numTraders; t++) {
+					double value = randomPrivateValue();
+					AbstractTradingAgent agent = (AbstractTradingAgent) traders.next();
+					agent.setPrivateValue(value);
+					values[i][t] = value;
+				}
+				stats.recalculate();
+			} while (!stats.equilibriaExists());
+		}
+		return values;
+	}
 
-  protected void generatePRNGseeds( int numIterations ) {
-    seeds = new long[numIterations];
-    RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
-    for ( int i = 0; i < numIterations; i++ ) {
-      seeds[i] = seedGenerator.nextSeed();
-    }
-  }
+	protected void generatePRNGseeds(int numIterations) {
+		seeds = new long[numIterations];
+		RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
+		for (int i = 0; i < numIterations; i++) {
+			seeds[i] = seedGenerator.nextSeed();
+		}
+	}
 
-  public String toString() {
-    return "(" + getClass() + " minPrivateValue:" + minPrivateValue
-        + " maxPrivateValue:" + maxPrivateValue + ")";
-  }
+	public String toString() {
+		return "(" + getClass() + " minPrivateValue:" + minPrivateValue
+		    + " maxPrivateValue:" + maxPrivateValue + ")";
+	}
 
 }

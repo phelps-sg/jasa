@@ -15,13 +15,12 @@
 
 package uk.ac.liv.auction.core;
 
-
 import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
 /**
- *   
+ * 
  * @author Steve Phelps
  * @version $Revision$
  * 
@@ -30,32 +29,32 @@ import org.apache.log4j.Logger;
 public class ShoutStepAuction extends RandomRobinAuction implements
     Serializable {
 
-  static Logger logger = Logger.getLogger(ShoutStepAuction.class);
-  
-  public ShoutStepAuction( String name ) {
-    super(name);
-    initialise();
-  }
+	static Logger logger = Logger.getLogger(ShoutStepAuction.class);
 
-  public ShoutStepAuction() {
-    this(null);
-  }
-  
-  public void step() throws AuctionClosedException {
-    if ( closed() ) {
-      throw new AuctionClosedException("Auction " + name + " is closed.");
-    }
-    if ( closingCondition.eval() ) {
-      close();
-    } else {
-      if ( endOfRound ) {
-        beginRound();
-      }
-      requestNextShout();
-      if ( endOfRound ) {
-        endRound();
-      }
-    }
-  }
+	public ShoutStepAuction(String name) {
+		super(name);
+		initialise();
+	}
+
+	public ShoutStepAuction() {
+		this(null);
+	}
+
+	public void step() throws AuctionClosedException {
+		if (closed()) {
+			throw new AuctionClosedException("Auction " + name + " is closed.");
+		}
+		if (closingCondition.eval()) {
+			close();
+		} else {
+			if (endOfRound) {
+				beginRound();
+			}
+			requestNextShout();
+			if (endOfRound) {
+				endRound();
+			}
+		}
+	}
 
 }

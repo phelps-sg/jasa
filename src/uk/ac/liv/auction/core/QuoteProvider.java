@@ -21,10 +21,10 @@ package uk.ac.liv.auction.core;
  */
 public interface QuoteProvider {
 
-  /**
-   * @uml.property name="quote"
-   * @uml.associationEnd
-   */
-  public MarketQuote getQuote();
+	/**
+	 * @uml.property name="quote"
+	 * @uml.associationEnd
+	 */
+	public MarketQuote getQuote();
 
 }

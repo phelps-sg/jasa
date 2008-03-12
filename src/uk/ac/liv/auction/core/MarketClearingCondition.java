@@ -23,36 +23,35 @@ import uk.ac.liv.auction.event.AuctionEventListener;
 /**
  * The interface for expressing the condition of clearing the current market.
  * Whenever, it's time to do so, notifyObservers() is called.
- *
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
- *
+ * 
  */
 
 public class MarketClearingCondition extends Observable implements
-		AuctionEventListener {
-	
-  public static final String P_DEF_BASE = "marketclearingcondition";
+    AuctionEventListener {
 
-  public MarketClearingCondition() {
-  	initialise();
-  }
-  
-  protected void initialise() {
-  }
-  
-  protected void reset() {
-  }
-  
-  /**
-   * by default, no clearing
-   */
+	public static final String P_DEF_BASE = "marketclearingcondition";
+
+	public MarketClearingCondition() {
+		initialise();
+	}
+
+	protected void initialise() {
+	}
+
+	protected void reset() {
+	}
+
+	/**
+	 * by default, no clearing
+	 */
 	public void eventOccurred(AuctionEvent event) {
 	}
-	
+
 	public String toString() {
 		return "(" + getClass().getSimpleName() + ")";
 	}
 
-  
 }

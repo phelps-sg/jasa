@@ -22,8 +22,8 @@ package uk.ac.liv.auction.core;
 
 public class DuplicateShoutException extends IllegalShoutException {
 
-  public DuplicateShoutException( String message ) {
-    super(message);
-  }
+	public DuplicateShoutException(String message) {
+		super(message);
+	}
 
 }

@@ -18,29 +18,26 @@ package uk.ac.liv.auction.agent;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import uk.ac.liv.auction.agent.SellerIntervalValuer;
-import uk.ac.liv.auction.agent.IntervalValuer;
-
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 public class SellerIntervalValuerTest extends IntervalValuerTest {
 
-  public SellerIntervalValuerTest( String name ) {
-    super(name);
-  }
-  
-  public IntervalValuer assignValuer() {
-    return new SellerIntervalValuer();
-  }
+	public SellerIntervalValuerTest(String name) {
+		super(name);
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public IntervalValuer assignValuer() {
+		return new SellerIntervalValuer();
+	}
 
-  public static Test suite() {
-    return new TestSuite(SellerIntervalValuerTest.class);
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
+
+	public static Test suite() {
+		return new TestSuite(SellerIntervalValuerTest.class);
+	}
 
 }

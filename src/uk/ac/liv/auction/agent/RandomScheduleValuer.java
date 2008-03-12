@@ -29,16 +29,16 @@ import uk.ac.liv.auction.core.Auction;
 
 public class RandomScheduleValuer extends RandomValuer implements Serializable {
 
-  public RandomScheduleValuer( double min, double max ) {
-    super(min, max);
-  }
+	public RandomScheduleValuer(double min, double max) {
+		super(min, max);
+	}
 
-  public RandomScheduleValuer() {
-    super();
-  }
+	public RandomScheduleValuer() {
+		super();
+	}
 
-  public void consumeUnit( Auction auction ) {
-    drawRandomValue();
-  }
+	public void consumeUnit(Auction auction) {
+		drawRandomValue();
+	}
 
 }

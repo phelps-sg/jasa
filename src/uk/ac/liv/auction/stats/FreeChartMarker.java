@@ -26,38 +26,40 @@ import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.TextAnchor;
 
 /**
- * Defines a marker on a JFreeChart graph, which can be a point, a line, etc. in the space.
+ * Defines a marker on a JFreeChart graph, which can be a point, a line, etc. in
+ * the space.
  * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
 public class FreeChartMarker extends FreeChartItem {
 
-  static Logger logger = Logger.getLogger(FreeChartMarker.class);
-  
-  public FreeChartMarker() {
-    
-  }
+	static Logger logger = Logger.getLogger(FreeChartMarker.class);
 
-  protected static Marker createMarker(double value, Color color, String label) {
-    ValueMarker marker = new ValueMarker(value);
-    setupMarker(marker, color, label);
-    return marker;
-  }
+	public FreeChartMarker() {
 
-  
-  protected static Marker createMarker(double start, double end, Color color, String label) {
-    IntervalMarker marker = new IntervalMarker(start, end);
-    setupMarker(marker, color, label);
-    return marker;
-  }
+	}
 
-  protected static void setupMarker(Marker marker, Color color, String label) {
-    marker.setPaint(color);
-    marker.setStroke(new BasicStroke(1f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_BEVEL, 1f, new float[]{5}, 0));
-    marker.setLabel(label);
-    marker.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
-    marker.setLabelTextAnchor(TextAnchor.TOP_LEFT);
-  }
-  
+	protected static Marker createMarker(double value, Color color, String label) {
+		ValueMarker marker = new ValueMarker(value);
+		setupMarker(marker, color, label);
+		return marker;
+	}
+
+	protected static Marker createMarker(double start, double end, Color color,
+	    String label) {
+		IntervalMarker marker = new IntervalMarker(start, end);
+		setupMarker(marker, color, label);
+		return marker;
+	}
+
+	protected static void setupMarker(Marker marker, Color color, String label) {
+		marker.setPaint(color);
+		marker.setStroke(new BasicStroke(1f, BasicStroke.CAP_SQUARE,
+		    BasicStroke.JOIN_BEVEL, 1f, new float[] { 5 }, 0));
+		marker.setLabel(label);
+		marker.setLabelAnchor(RectangleAnchor.TOP_RIGHT);
+		marker.setLabelTextAnchor(TextAnchor.TOP_LEFT);
+	}
+
 }

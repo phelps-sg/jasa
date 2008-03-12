@@ -20,83 +20,76 @@ import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.stats.HistoricalDataReport;
 
-
 public class EstimatedEPStrategy extends FixedQuantityStrategyImpl {
 
-  protected HistoricalDataReport history;
-  
-  protected double perterb = 0.02;
-  
-  protected boolean truthTeller = false;
-  
-  protected double truthTellingProbability = 0.6666;
-  
-  
-  
-  public EstimatedEPStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	protected HistoricalDataReport history;
 
-  public EstimatedEPStrategy() {
-    super();
-  }
-  
-  
+	protected double perterb = 0.02;
 
-  
-  public void eventOccurred( AuctionEvent event ) {
-    if ( event instanceof AuctionOpenEvent ) {
-      history = 
-        (HistoricalDataReport) event.getAuction().getReport(HistoricalDataReport.class);
-      
-    }
-    super.eventOccurred(event);
-  }
+	protected boolean truthTeller = false;
 
-  public boolean modifyShout( MutableShout shout ) {
-      double a = estimatedAskQuote();
-      double b = estimatedBidQuote();
-      double t = agent.getValuation(auction);
-      double p = 0;
-      if ( Double.isInfinite(a) || Double.isInfinite(b) ) {
-        p = t;
-      } else {
-        p = (a + b) / 2;
-      }
-      if ( agent.isBuyer(auction) ) {
-        // p *= 1 - GlobalPRNG.getInstance().uniform(0, perterb);
-        if ( p < t ) {
-          shout.setPrice(p);
-        } else {
-          shout.setPrice(t);
-        }
-      } else {
-        // p *= 1 + GlobalPRNG.getInstance().uniform(0, perterb);
-        if ( p > t ) {
-          shout.setPrice(p);
-        } else {
-          shout.setPrice(t);
-        }
-      }
-    
-    return super.modifyShout(shout);
-  }
+	protected double truthTellingProbability = 0.6666;
 
-  public void endOfRound( Auction auction ) {
-   
-  }
-  
+	public EstimatedEPStrategy(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  protected double estimatedBidQuote() {
-//    return Math.max(history.getHighestAcceptedAskPrice(), history
-//        .getHighestUnacceptedBidPrice());
-    return history.getHighestAcceptedAskPrice();
-  }
+	public EstimatedEPStrategy() {
+		super();
+	}
 
-  protected double estimatedAskQuote() {
-//    return Math.min(history.getLowestUnacceptedAskPrice(), history
-//        .getLowestAcceptedBidPrice());
-    return history.getLowestAcceptedBidPrice();
-  }
+	public void eventOccurred(AuctionEvent event) {
+		if (event instanceof AuctionOpenEvent) {
+			history = (HistoricalDataReport) event.getAuction().getReport(
+			    HistoricalDataReport.class);
+
+		}
+		super.eventOccurred(event);
+	}
+
+	public boolean modifyShout(MutableShout shout) {
+		double a = estimatedAskQuote();
+		double b = estimatedBidQuote();
+		double t = agent.getValuation(auction);
+		double p = 0;
+		if (Double.isInfinite(a) || Double.isInfinite(b)) {
+			p = t;
+		} else {
+			p = (a + b) / 2;
+		}
+		if (agent.isBuyer(auction)) {
+			// p *= 1 - GlobalPRNG.getInstance().uniform(0, perterb);
+			if (p < t) {
+				shout.setPrice(p);
+			} else {
+				shout.setPrice(t);
+			}
+		} else {
+			// p *= 1 + GlobalPRNG.getInstance().uniform(0, perterb);
+			if (p > t) {
+				shout.setPrice(p);
+			} else {
+				shout.setPrice(t);
+			}
+		}
+
+		return super.modifyShout(shout);
+	}
+
+	public void endOfRound(Auction auction) {
+
+	}
+
+	protected double estimatedBidQuote() {
+		// return Math.max(history.getHighestAcceptedAskPrice(), history
+		// .getHighestUnacceptedBidPrice());
+		return history.getHighestAcceptedAskPrice();
+	}
+
+	protected double estimatedAskQuote() {
+		// return Math.min(history.getLowestUnacceptedAskPrice(), history
+		// .getLowestAcceptedBidPrice());
+		return history.getLowestAcceptedBidPrice();
+	}
 
 }

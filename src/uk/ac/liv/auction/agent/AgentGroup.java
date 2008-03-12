@@ -31,36 +31,36 @@ import java.io.Serializable;
 
 public class AgentGroup implements Serializable {
 
-  protected String description;
+	protected String description;
 
-  public static final int MAX_GROUPS = 100;
+	public static final int MAX_GROUPS = 100;
 
-  /**
-   * A global list of groups indexed by number.
-   */
-  private static AgentGroup[] groups = new AgentGroup[MAX_GROUPS];
+	/**
+	 * A global list of groups indexed by number.
+	 */
+	private static AgentGroup[] groups = new AgentGroup[MAX_GROUPS];
 
-  public AgentGroup( String description ) {
-    this.description = description;
-  }
+	public AgentGroup(String description) {
+		this.description = description;
+	}
 
-  public String toString() {
-    return "(" + getClass() + " description:\"" + description + "\")";
-  }
+	public String toString() {
+		return "(" + getClass() + " description:\"" + description + "\")";
+	}
 
-  public String getDescription() {
-    return description;
-  }
+	public String getDescription() {
+		return description;
+	}
 
-  /**
-   * Get group n
-   * 
-   */
-  public static AgentGroup getAgentGroup( int n ) {
-    if ( groups[n] == null ) {
-      groups[n] = new AgentGroup("group " + n);
-    }
-    return groups[n];
-  }
+	/**
+	 * Get group n
+	 * 
+	 */
+	public static AgentGroup getAgentGroup(int n) {
+		if (groups[n] == null) {
+			groups[n] = new AgentGroup("group " + n);
+		}
+		return groups[n];
+	}
 
 }

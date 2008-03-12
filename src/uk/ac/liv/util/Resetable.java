@@ -17,21 +17,21 @@ package uk.ac.liv.util;
 
 /**
  * <p>
- * Classes implementing this interface indicate that their state
- * is resetable.  This is often used in JASA to re-initialise
- * objects instead of re-constructing them, with the associated
- * garbage-collection and initialisation performance penalties.
+ * Classes implementing this interface indicate that their state is resetable.
+ * This is often used in JASA to re-initialise objects instead of
+ * re-constructing them, with the associated garbage-collection and
+ * initialisation performance penalties.
  * </p>
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface Resetable {
 
-  /**
-   * Reinitialise our state to the original settings.
-   */
-  public void reset();
+	/**
+	 * Reinitialise our state to the original settings.
+	 */
+	public void reset();
 
 }

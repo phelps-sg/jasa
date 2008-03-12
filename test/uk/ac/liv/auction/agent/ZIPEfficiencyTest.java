@@ -26,43 +26,43 @@ import uk.ac.liv.auction.zi.ZIPStrategy;
 
 public class ZIPEfficiencyTest extends EfficiencyTest {
 
-  public static final int TRADE_ENTITLEMENT = 5;
-  
-  public ZIPEfficiencyTest( String name ) {
-    super(name);
-  }
+	public static final int TRADE_ENTITLEMENT = 5;
 
-  protected void assignAuctioneer() {
-    auctioneer = new ContinuousDoubleAuctioneer();
-    auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
-    auction.setAuctioneer(auctioneer);
-  }
-  
-  protected void assignStrategy( AbstractTradingAgent agent ) {
-    ZIPStrategy strategy = new ZIPStrategy();
-    WidrowHoffLearnerWithMomentum learner = new WidrowHoffLearnerWithMomentum();
-    learner.setMomentum(0.9);
-    learner.setLearningRate(0.45);
-    strategy.setLearner(learner);
-    strategy.setScaling(0.2);
-    agent.setStrategy(strategy);
-    strategy.setAgent(agent);
-    strategy.initialise();
-  }
-  
-  protected int getInitialTradeEntitlement() {
-    return TRADE_ENTITLEMENT;
-  }
+	public ZIPEfficiencyTest(String name) {
+		super(name);
+	}
 
-  protected double getMinMeanEfficiency() {
-    return 90.0;
-  }
-  
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	protected void assignAuctioneer() {
+		auctioneer = new ContinuousDoubleAuctioneer();
+		auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+		auction.setAuctioneer(auctioneer);
+	}
 
-  public static Test suite() {
-    return new TestSuite(ZIPEfficiencyTest.class);
-  }
+	protected void assignStrategy(AbstractTradingAgent agent) {
+		ZIPStrategy strategy = new ZIPStrategy();
+		WidrowHoffLearnerWithMomentum learner = new WidrowHoffLearnerWithMomentum();
+		learner.setMomentum(0.9);
+		learner.setLearningRate(0.45);
+		strategy.setLearner(learner);
+		strategy.setScaling(0.2);
+		agent.setStrategy(strategy);
+		strategy.setAgent(agent);
+		strategy.initialise();
+	}
+
+	protected int getInitialTradeEntitlement() {
+		return TRADE_ENTITLEMENT;
+	}
+
+	protected double getMinMeanEfficiency() {
+		return 90.0;
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
+
+	public static Test suite() {
+		return new TestSuite(ZIPEfficiencyTest.class);
+	}
 }

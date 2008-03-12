@@ -17,39 +17,36 @@ package uk.ac.liv.auction.agent;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
 import uk.ac.liv.ai.learning.NPTRothErevLearner;
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.StimuliResponseStrategy;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 public class RothErevEfficiencyTest extends EfficiencyTest {
-  
-  public static final double BENCHMARK_EFFICIENCY = 86;
 
-  public RothErevEfficiencyTest( String name ) {
-    super(name);
-  }
-  
-  protected void assignStrategy( AbstractTradingAgent agent ) {
-    StimuliResponseStrategy strategy = new StimuliResponseStrategy();
-    strategy.setLearner( new NPTRothErevLearner() );
-    agent.setStrategy(strategy);
-    strategy.setAgent(agent);
-  }
+	public static final double BENCHMARK_EFFICIENCY = 86;
 
-  protected double getMinMeanEfficiency() {
-    return BENCHMARK_EFFICIENCY;
-  }
+	public RothErevEfficiencyTest(String name) {
+		super(name);
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	protected void assignStrategy(AbstractTradingAgent agent) {
+		StimuliResponseStrategy strategy = new StimuliResponseStrategy();
+		strategy.setLearner(new NPTRothErevLearner());
+		agent.setStrategy(strategy);
+		strategy.setAgent(agent);
+	}
 
-  public static Test suite() {
-    return new TestSuite(RothErevEfficiencyTest.class);
-  }
+	protected double getMinMeanEfficiency() {
+		return BENCHMARK_EFFICIENCY;
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
+
+	public static Test suite() {
+		return new TestSuite(RothErevEfficiencyTest.class);
+	}
 }

@@ -16,18 +16,18 @@
 package uk.ac.liv.ai.learning;
 
 /**
- * Classes implementing this interface implement
- * learning algorithms for markoff descision processes.
- *
+ * Classes implementing this interface implement learning algorithms for markoff
+ * descision processes.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface MDPLearner extends DiscreteLearner {
 
-  /**
-   * The call-back after performing an action.
-   */
-  public void newState( double reward, int newState );
+	/**
+	 * The call-back after performing an action.
+	 */
+	public void newState(double reward, int newState);
 
 }

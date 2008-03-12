@@ -15,65 +15,64 @@
 
 package uk.ac.liv.ai.learning;
 
-import junit.framework.*;
-
-import uk.ac.liv.ai.learning.WidrowHoffLearner;
-
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import uk.ac.liv.util.MathUtil;
 
 public class WidrowHoffLearnerTest extends TestCase {
 
-  /**
-   * @uml.property name="learner1"
-   * @uml.associationEnd
-   */
-  WidrowHoffLearner learner1;
+	/**
+	 * @uml.property name="learner1"
+	 * @uml.associationEnd
+	 */
+	WidrowHoffLearner learner1;
 
-  /**
-   * @uml.property name="score"
-   */
-  double score;
+	/**
+	 * @uml.property name="score"
+	 */
+	double score;
 
-  static final double LEARNING_RATE = 0.8;
+	static final double LEARNING_RATE = 0.8;
 
-  static final double TARGET_VALUE = 0.12;
+	static final double TARGET_VALUE = 0.12;
 
-  static final int ITERATIONS = 100;
+	static final int ITERATIONS = 100;
 
-  public WidrowHoffLearnerTest( String name ) {
-    super(name);
-  }
+	public WidrowHoffLearnerTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    learner1 = new WidrowHoffLearner(LEARNING_RATE);
-  }
+	public void setUp() {
+		learner1 = new WidrowHoffLearner(LEARNING_RATE);
+	}
 
-  public void testConvergence() {
-    train(ITERATIONS);
-    assertTrue(MathUtil.approxEqual(learner1.act(), TARGET_VALUE, 0.01));
-    assertTrue(MathUtil.approxEqual(learner1.getLearningDelta(), 0, 0.01));
-  }
+	public void testConvergence() {
+		train(ITERATIONS);
+		assertTrue(MathUtil.approxEqual(learner1.act(), TARGET_VALUE, 0.01));
+		assertTrue(MathUtil.approxEqual(learner1.getLearningDelta(), 0, 0.01));
+	}
 
-  public void testReset() {
-    train(2);
-    assertTrue(learner1.getLearningDelta() > 0.01);
-    learner1.reset();
-    assertTrue(MathUtil.approxEqual(learner1.getLearningDelta(), 0, 0.00001));
-  }
+	public void testReset() {
+		train(2);
+		assertTrue(learner1.getLearningDelta() > 0.01);
+		learner1.reset();
+		assertTrue(MathUtil.approxEqual(learner1.getLearningDelta(), 0, 0.00001));
+	}
 
-  protected void train( int iterations ) {
-    for ( int i = 0; i < iterations; i++ ) {
-      learner1.train(TARGET_VALUE);
-      System.out.println("Learning delta = " + learner1.getLearningDelta());
-      System.out.println("Current output = " + learner1.act());
-    }
-  }
+	protected void train(int iterations) {
+		for (int i = 0; i < iterations; i++) {
+			learner1.train(TARGET_VALUE);
+			System.out.println("Learning delta = " + learner1.getLearningDelta());
+			System.out.println("Current output = " + learner1.act());
+		}
+	}
 
-  public static Test suite() {
-    return new TestSuite(WidrowHoffLearnerTest.class);
-  }
+	public static Test suite() {
+		return new TestSuite(WidrowHoffLearnerTest.class);
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 }

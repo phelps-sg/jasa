@@ -19,10 +19,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import uk.ac.liv.util.HeavyweightDistribution;
-
-import uk.ac.liv.util.MathUtil;
-
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -30,61 +26,61 @@ import uk.ac.liv.util.MathUtil;
 
 public class HeavyweightDistributionTest extends TestCase {
 
-  /**
-   * @uml.property name="distribution"
-   * @uml.associationEnd
-   */
-  HeavyweightDistribution distribution;
+	/**
+	 * @uml.property name="distribution"
+	 * @uml.associationEnd
+	 */
+	HeavyweightDistribution distribution;
 
-  /**
-   * @uml.property name="testData1" multiplicity="(0 -1)" dimension="1"
-   */
-  double[] testData1 = { 2, 5, 5, 5, 6, 7, 100 };
+	/**
+	 * @uml.property name="testData1" multiplicity="(0 -1)" dimension="1"
+	 */
+	double[] testData1 = { 2, 5, 5, 5, 6, 7, 100 };
 
-  /**
-   * @uml.property name="mean1"
-   */
-  double mean1 = (5.0 + 5.0 + 5.0 + 6.0 + 7.0) / 5.0;
+	/**
+	 * @uml.property name="mean1"
+	 */
+	double mean1 = (5.0 + 5.0 + 5.0 + 6.0 + 7.0) / 5.0;
 
-  public HeavyweightDistributionTest( String name ) {
-    super(name);
-  }
+	public HeavyweightDistributionTest(String name) {
+		super(name);
+	}
 
-  public void setUp() {
-    distribution = new HeavyweightDistribution("test");
-  }
+	public void setUp() {
+		distribution = new HeavyweightDistribution("test");
+	}
 
-  public void test1() {
-    System.out.println("test1()");
-    loadData(testData1);
-    checkTrimmedMean(mean1, 2.0 / 7.0);
-  }
+	public void test1() {
+		System.out.println("test1()");
+		loadData(testData1);
+		checkTrimmedMean(mean1, 2.0 / 7.0);
+	}
 
-  public void testZeroTrim() {
-    System.out.println("testZeroTrim()");
-    loadData(testData1);
-    checkTrimmedMean(distribution.getMean(), 0);
-  }
+	public void testZeroTrim() {
+		System.out.println("testZeroTrim()");
+		loadData(testData1);
+		checkTrimmedMean(distribution.getMean(), 0);
+	}
 
-  public void loadData( double[] testData ) {
-    for ( int i = 0; i < testData.length; i++ ) {
-      distribution.newData(testData[i]);
-    }
-  }
+	public void loadData(double[] testData) {
+		for (int i = 0; i < testData.length; i++) {
+			distribution.newData(testData[i]);
+		}
+	}
 
-  public void checkTrimmedMean( double correctMean, double trim ) {
-    double trimmedMean = distribution.getTrimmedMean(trim);
-    System.out.println("Trimmed mean = " + trimmedMean + " expecting "
-        + correctMean);
-    assertTrue(MathUtil.approxEqual(distribution.getTrimmedMean(trim),
-        correctMean));
-  }
+	public void checkTrimmedMean(double correctMean, double trim) {
+		double trimmedMean = distribution.getTrimmedMean(trim);
+		System.out.println("Trimmed mean = " + trimmedMean + " expecting "
+		    + correctMean);
+		assertTrue(MathUtil.approxEqual(distribution.getTrimmedMean(trim),
+		    correctMean));
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(HeavyweightDistributionTest.class);
-  }
+	public static Test suite() {
+		return new TestSuite(HeavyweightDistributionTest.class);
+	}
 }

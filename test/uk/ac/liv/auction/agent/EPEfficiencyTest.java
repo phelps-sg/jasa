@@ -18,34 +18,31 @@ package uk.ac.liv.auction.agent;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.auction.agent.EquilibriumPriceStrategy;
-
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
 public class EPEfficiencyTest extends EfficiencyTest {
 
-  public EPEfficiencyTest( String name ) {
-    super(name);
-  }
+	public EPEfficiencyTest(String name) {
+		super(name);
+	}
 
-  protected void assignStrategy( AbstractTradingAgent agent ) {
-    EquilibriumPriceStrategy strategy = new EquilibriumPriceStrategy();
-    agent.setStrategy(strategy);
-    strategy.setAgent(agent);
-  }
+	protected void assignStrategy(AbstractTradingAgent agent) {
+		EquilibriumPriceStrategy strategy = new EquilibriumPriceStrategy();
+		agent.setStrategy(strategy);
+		strategy.setAgent(agent);
+	}
 
-  protected double getMinMeanEfficiency() {
-    return 99.99;
-  }
+	protected double getMinMeanEfficiency() {
+		return 99.99;
+	}
 
-  public static void main( String[] args ) {
-    junit.textui.TestRunner.run(suite());
-  }
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(suite());
+	}
 
-  public static Test suite() {
-    return new TestSuite(EPEfficiencyTest.class);
-  }
+	public static Test suite() {
+		return new TestSuite(EPEfficiencyTest.class);
+	}
 }

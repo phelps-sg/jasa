@@ -15,7 +15,7 @@
 
 package uk.ac.liv.auction.agent;
 
-import uk.ac.liv.auction.core.*;
+import uk.ac.liv.auction.core.Auction;
 
 /**
  * @author Steve Phelps
@@ -25,17 +25,17 @@ import uk.ac.liv.auction.core.*;
 public abstract class AdaptiveStrategyImpl extends FixedQuantityStrategyImpl
     implements AdaptiveStrategy {
 
-  public AdaptiveStrategyImpl( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	public AdaptiveStrategyImpl(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public AdaptiveStrategyImpl() {
-    super();
-  }
+	public AdaptiveStrategyImpl() {
+		super();
+	}
 
-  public void endOfRound( Auction auction ) {
-    // super.endOfRound(auction);
-    getLearner().monitor();
-  }
+	public void endOfRound(Auction auction) {
+		// super.endOfRound(auction);
+		getLearner().monitor();
+	}
 
 }

@@ -28,54 +28,51 @@ import org.apache.log4j.Logger;
 
 public abstract class DistributionFactory {
 
-  protected static DistributionFactory currentFactory = new Cummulative();
-  
-  public static final String P_DISTFACTORY = "distribution";
-  
-  public static final String P_DEF_BASE = "P_DISTFACTORY";
-  
-  static Logger logger = Logger.getLogger(DistributionFactory.class);
+	protected static DistributionFactory currentFactory = new Cummulative();
 
-  public static void setup( ParameterDatabase parameters, Parameter base ) {
-    try {
-      DistributionFactory.currentFactory =
-        (DistributionFactory)
-          parameters.getInstanceForParameter(base.push(P_DISTFACTORY), 
-          		new Parameter(P_DEF_BASE), DistributionFactory.class);
-    } catch ( ParamClassLoadException e ) {
-      logger.warn(e.getMessage());
-    }
-  }
-  
-  public static DistributionFactory getFactory() {
-    return currentFactory;
-  }
+	public static final String P_DISTFACTORY = "distribution";
 
-  public abstract Distribution create();
-  
-  public abstract Distribution create( String name );
-  
-  
-  public static class Heavyweight extends DistributionFactory {
-    
-    public Distribution create() {
-      return new HeavyweightDistribution();
-    }
-    
-    public Distribution create( String name ) {
-      return new HeavyweightDistribution(name);
-    }
-  }
-  
-  
-  public static class Cummulative extends DistributionFactory {
-    
-    public Distribution create() {
-      return new CummulativeDistribution();
-    }
-    
-    public Distribution create( String name ) {
-      return new CummulativeDistribution(name);
-    }
-  }
+	public static final String P_DEF_BASE = "P_DISTFACTORY";
+
+	static Logger logger = Logger.getLogger(DistributionFactory.class);
+
+	public static void setup(ParameterDatabase parameters, Parameter base) {
+		try {
+			DistributionFactory.currentFactory = (DistributionFactory) parameters
+			    .getInstanceForParameter(base.push(P_DISTFACTORY), new Parameter(
+			        P_DEF_BASE), DistributionFactory.class);
+		} catch (ParamClassLoadException e) {
+			logger.warn(e.getMessage());
+		}
+	}
+
+	public static DistributionFactory getFactory() {
+		return currentFactory;
+	}
+
+	public abstract Distribution create();
+
+	public abstract Distribution create(String name);
+
+	public static class Heavyweight extends DistributionFactory {
+
+		public Distribution create() {
+			return new HeavyweightDistribution();
+		}
+
+		public Distribution create(String name) {
+			return new HeavyweightDistribution(name);
+		}
+	}
+
+	public static class Cummulative extends DistributionFactory {
+
+		public Distribution create() {
+			return new CummulativeDistribution();
+		}
+
+		public Distribution create(String name) {
+			return new CummulativeDistribution(name);
+		}
+	}
 }

@@ -33,22 +33,22 @@ import uk.ac.liv.util.Parameterizable;
 public interface ValuationPolicy extends Resetable, Parameterizable,
     AuctionEventListener {
 
-  /**
-   * Determine the current valuation of commodity in the given auction.
-   */
-  public double determineValue( Auction auction );
+	/**
+	 * Determine the current valuation of commodity in the given auction.
+	 */
+	public double determineValue(Auction auction);
 
-  /**
-   * Recalculate valuation after consumption of the commodity being traded in
-   * the given auction.
-   */
-  public void consumeUnit( Auction auction );
+	/**
+	 * Recalculate valuation after consumption of the commodity being traded in
+	 * the given auction.
+	 */
+	public void consumeUnit(Auction auction);
 
-  /**
-   * Recalculate valuation(s) in response to an auction event.
-   */
-  public void eventOccurred( AuctionEvent event );
-  
-  public void setAgent( TradingAgent agent );
+	/**
+	 * Recalculate valuation(s) in response to an auction event.
+	 */
+	public void eventOccurred(AuctionEvent event);
+
+	public void setAgent(TradingAgent agent);
 
 }

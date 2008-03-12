@@ -33,55 +33,57 @@ import ec.util.ParameterDatabase;
 
 public abstract class IntervalValuer extends FixedValuer {
 
-  public static final String P_DEF_BASE = "intervalvaluer";
+	public static final String P_DEF_BASE = "intervalvaluer";
 
-  public static final String P_MINVALUE = "minvalue";
-  
-  public static final String P_STEP = "step";
-  
-  public IntervalValuer() {
-  }
-  
-  public IntervalValuer(double minValue, double step) {
-  	setMinValue(minValue);
-  	setStep(step);
-  	initialise();
-  }
+	public static final String P_MINVALUE = "minvalue";
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    setMinValue(parameters.getDouble(base.push(P_MINVALUE), new Parameter(P_DEF_BASE).push(P_MINVALUE), 0));
-    setStep(parameters.getDouble(base.push(P_STEP), new Parameter(P_DEF_BASE).push(P_STEP), 0));
-    initialise();
-  }
-  
-  public void initialise() {
-    if ( firstValue() ) {
-      setNextValue(getMinValue());
-      setFirstValue(false);
-    } else {
-      setNextValue(getNextValue() + getStep());
-    }
-    setValue(getNextValue());
-  }
-  
-  public void reset() {
-  	setFirstValue(true);
-  }
+	public static final String P_STEP = "step";
 
-  protected abstract void setMinValue( double value );
+	public IntervalValuer() {
+	}
 
-  protected abstract double getMinValue();
+	public IntervalValuer(double minValue, double step) {
+		setMinValue(minValue);
+		setStep(step);
+		initialise();
+	}
 
-  protected abstract void setStep( double step );
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		setMinValue(parameters.getDouble(base.push(P_MINVALUE), new Parameter(
+		    P_DEF_BASE).push(P_MINVALUE), 0));
+		setStep(parameters.getDouble(base.push(P_STEP), new Parameter(P_DEF_BASE)
+		    .push(P_STEP), 0));
+		initialise();
+	}
 
-  protected abstract double getStep();
+	public void initialise() {
+		if (firstValue()) {
+			setNextValue(getMinValue());
+			setFirstValue(false);
+		} else {
+			setNextValue(getNextValue() + getStep());
+		}
+		setValue(getNextValue());
+	}
 
-  protected abstract void setNextValue( double value );
+	public void reset() {
+		setFirstValue(true);
+	}
 
-  protected abstract double getNextValue();
+	protected abstract void setMinValue(double value);
 
-  protected abstract boolean firstValue();
+	protected abstract double getMinValue();
 
-  protected abstract void setFirstValue( boolean firstValue );
+	protected abstract void setStep(double step);
+
+	protected abstract double getStep();
+
+	protected abstract void setNextValue(double value);
+
+	protected abstract double getNextValue();
+
+	protected abstract boolean firstValue();
+
+	protected abstract void setFirstValue(boolean firstValue);
 
 }

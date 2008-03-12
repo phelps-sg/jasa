@@ -30,58 +30,58 @@ import uk.ac.liv.util.Parameterizable;
 public class MaxRoundsDayEndingCondition extends TimingCondition implements
     Parameterizable, DayEndingCondition {
 
-  public static final String P_LENGTH_OF_DAY = "lengthofday";
+	public static final String P_LENGTH_OF_DAY = "lengthofday";
 
-  /**
-   * The maximum length in rounds of a trading day
-   * 
-   * @uml.property name="lengthOfDay"
-   */
-  protected int lengthOfDay = -1;
+	/**
+	 * The maximum length in rounds of a trading day
+	 * 
+	 * @uml.property name="lengthOfDay"
+	 */
+	protected int lengthOfDay = -1;
 
-  public MaxRoundsDayEndingCondition() {
-    this(null);
-  }
+	public MaxRoundsDayEndingCondition() {
+		this(null);
+	}
 
-  public MaxRoundsDayEndingCondition( Auction auction ) {
-    super(auction);
-  }
+	public MaxRoundsDayEndingCondition(Auction auction) {
+		super(auction);
+	}
 
-  /*
-   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
-   *      ec.util.Parameter)
-   */
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	/*
+	 * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+	 *      ec.util.Parameter)
+	 */
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    lengthOfDay = parameters.getIntWithDefault(base.push(P_LENGTH_OF_DAY),
-    		new Parameter(P_DEF_BASE).push(P_LENGTH_OF_DAY), -1);
-  }
+		lengthOfDay = parameters.getIntWithDefault(base.push(P_LENGTH_OF_DAY),
+		    new Parameter(P_DEF_BASE).push(P_LENGTH_OF_DAY), -1);
+	}
 
-  /**
-   * @uml.property name="lengthOfDay"
-   */
-  public int getLengthOfDay() {
-    return lengthOfDay;
-  }
+	/**
+	 * @uml.property name="lengthOfDay"
+	 */
+	public int getLengthOfDay() {
+		return lengthOfDay;
+	}
 
-  /**
-   * @uml.property name="lengthOfDay"
-   */
-  public void setLengthOfDay( int lengthOfDay ) {
-    this.lengthOfDay = lengthOfDay;
-  }
+	/**
+	 * @uml.property name="lengthOfDay"
+	 */
+	public void setLengthOfDay(int lengthOfDay) {
+		this.lengthOfDay = lengthOfDay;
+	}
 
-  /*
-   * @see uk.ac.liv.auction.core.TimingCondition#eval()
-   */
-  public boolean eval() {
-    return getRemainingRounds() <= 0;
-  }
+	/*
+	 * @see uk.ac.liv.auction.core.TimingCondition#eval()
+	 */
+	public boolean eval() {
+		return getRemainingRounds() <= 0;
+	}
 
-  public int getRemainingRounds() {
-    if ( lengthOfDay > getAuction().getRound() )
-      return lengthOfDay - getAuction().getRound();
-    else
-      return 0;
-  }
+	public int getRemainingRounds() {
+		if (lengthOfDay > getAuction().getRound())
+			return lengthOfDay - getAuction().getRound();
+		else
+			return 0;
+	}
 }

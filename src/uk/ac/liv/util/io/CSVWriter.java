@@ -15,16 +15,21 @@
 
 package uk.ac.liv.util.io;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.Serializable;
 import java.util.Iterator;
-
-import java.io.*;
 
 import org.apache.log4j.Logger;
 
+import uk.ac.liv.util.Parameterizable;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
-
-import uk.ac.liv.util.Parameterizable;
 
 /**
  * A class for writing data to CSV (comma-separated variables) text files.
@@ -109,11 +114,11 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
 			append = parameters.getBoolean(base.push(P_APPEND), null, append);
 			out = new PrintStream(new BufferedOutputStream(new FileOutputStream(
-					new File(fileName), append)));
+			    new File(fileName), append)));
 			autowrap = parameters.getBoolean(base.push(P_AUTOWRAP), null, autowrap);
 			if (autowrap)
 				numColumns = parameters.getIntWithDefault(base.push(P_COLUMNS), null,
-						numColumns);
+				    numColumns);
 		} catch (FileNotFoundException e) {
 			throw new Error(e);
 		}
@@ -130,28 +135,28 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 			newData(data[i]);
 		}
 	}
-    
-    public void newData(Boolean data) {      
-      if ( data.booleanValue() ) {
-        newData(1);
-      } else {
-        newData(0);
-      }
-    }
-    
-    public void newData(Integer data) {
-      newData(data.intValue());
-    }
-    
-    public void newData(Double data) {
-      newData(data.doubleValue());
-    }
-    
-    public void newData(Long data) {
-      newData(data.longValue());
-    }
-    
-    public void newData(String data) {
+
+	public void newData(Boolean data) {
+		if (data.booleanValue()) {
+			newData(1);
+		} else {
+			newData(0);
+		}
+	}
+
+	public void newData(Integer data) {
+		newData(data.intValue());
+	}
+
+	public void newData(Double data) {
+		newData(data.doubleValue());
+	}
+
+	public void newData(Long data) {
+		newData(data.longValue());
+	}
+
+	public void newData(String data) {
 		prepareColumn();
 		out.print(data);
 		nextColumn();
@@ -188,16 +193,16 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 			newData(0);
 		}
 	}
-    
-    public void newData(Object data) {
-      if ( data instanceof Boolean ) {
-        newData((Boolean) data);
-      } else {
-        prepareColumn();
-        out.print(data.toString());
-        nextColumn();
-      }
-    }
+
+	public void newData(Object data) {
+		if (data instanceof Boolean) {
+			newData((Boolean) data);
+		} else {
+			prepareColumn();
+			out.print(data.toString());
+			nextColumn();
+		}
+	}
 
 	/**
 	 * @uml.property name="autowrap"
@@ -233,7 +238,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 	public void setNumColumns(int numColumns) {
 		if (!autowrap)
 			new Error(
-					"The number of columns should NOT be set when autowrap is disabled.");
+			    "The number of columns should NOT be set when autowrap is disabled.");
 		this.numColumns = numColumns;
 	}
 
@@ -262,7 +267,7 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
-			ClassNotFoundException {
+	    ClassNotFoundException {
 	}
 
 }

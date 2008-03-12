@@ -36,74 +36,74 @@ import uk.ac.liv.util.Resetable;
 public abstract class AbstractStrategy implements Serializable, Strategy,
     Resetable, Cloneable {
 
-  protected AbstractTradingAgent agent;
+	protected AbstractTradingAgent agent;
 
-  protected Shout.MutableShout currentShout;
+	protected Shout.MutableShout currentShout;
 
-  protected Auction auction;
+	protected Auction auction;
 
-  public AbstractStrategy() {
-    initialise();
-  }
+	public AbstractStrategy() {
+		initialise();
+	}
 
-  public AbstractStrategy( AbstractTradingAgent agent ) {
-    this();
-    this.agent = agent;
-  }
+	public AbstractStrategy(AbstractTradingAgent agent) {
+		this();
+		this.agent = agent;
+	}
 
-  public void setAgent( AbstractTradingAgent agent ) {
-    this.agent = agent;
-  }
+	public void setAgent(AbstractTradingAgent agent) {
+		this.agent = agent;
+	}
 
-  public void reset() {
-    initialise();
-  }
+	public void reset() {
+		initialise();
+	}
 
-  public Object protoClone() {
-    try {
-      AbstractStrategy copy = (AbstractStrategy) clone();
-      copy.reset();
-      return copy;
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-  }
+	public Object protoClone() {
+		try {
+			AbstractStrategy copy = (AbstractStrategy) clone();
+			copy.reset();
+			return copy;
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+	}
 
-  public Shout modifyShout( Shout shout, Auction auction ) {
-    this.auction = auction;
-    if ( modifyShout(currentShout) ) {
-      return new Shout(currentShout.getAgent(), currentShout.getQuantity(),
-          currentShout.getPrice(), currentShout.isBid());
-    } else {
-      return null;
-    }
-  }
+	public Shout modifyShout(Shout shout, Auction auction) {
+		this.auction = auction;
+		if (modifyShout(currentShout)) {
+			return new Shout(currentShout.getAgent(), currentShout.getQuantity(),
+			    currentShout.getPrice(), currentShout.isBid());
+		} else {
+			return null;
+		}
+	}
 
-  /**
-   * Modify the price and quantity of the given shout according to this
-   * strategy.
-   * 
-   * @return false if no shout is to be placed at this time
-   */
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    shout.setIsBid(agent.isBuyer(auction));
-    shout.setAgent(agent);
-    return true;
-  }
+	/**
+	 * Modify the price and quantity of the given shout according to this
+	 * strategy.
+	 * 
+	 * @return false if no shout is to be placed at this time
+	 */
+	public boolean modifyShout(Shout.MutableShout shout) {
+		shout.setIsBid(agent.isBuyer(auction));
+		shout.setAgent(agent);
+		return true;
+	}
 
-  public void initialise() {
-    currentShout = new Shout.MutableShout();
-  }
+	public void initialise() {
+		currentShout = new Shout.MutableShout();
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    if ( event instanceof RoundClosedEvent ) {
-      endOfRound(event.getAuction());
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		if (event instanceof RoundClosedEvent) {
+			endOfRound(event.getAuction());
+		}
+	}
 
-  public AbstractTradingAgent getAgent() {
-    return agent;
-  }
+	public AbstractTradingAgent getAgent() {
+		return agent;
+	}
 
-  public abstract void endOfRound( Auction auction );
+	public abstract void endOfRound(Auction auction);
 }

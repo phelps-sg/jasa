@@ -44,93 +44,93 @@ import uk.ac.liv.util.Parameterizable;
 public class CombiTimingCondition extends TimingCondition implements
     Parameterizable, AuctionClosingCondition, DayEndingCondition {
 
-  private static final String P_NUM = "n";
+	private static final String P_NUM = "n";
 
-  private static final String P_RELATION = "relation";
+	private static final String P_RELATION = "relation";
 
-  /**
-   * @uml.property name="conditions"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.core.TimingCondition"
-   */
-  protected List conditions = null;
+	/**
+	 * @uml.property name="conditions"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.auction.core.TimingCondition"
+	 */
+	protected List conditions = null;
 
-  public static final int OR = 0;
+	public static final int OR = 0;
 
-  public static final int AND = 1;
+	public static final int AND = 1;
 
-  /**
-   * @uml.property name="relation"
-   */
-  protected int relation;
+	/**
+	 * @uml.property name="relation"
+	 */
+	protected int relation;
 
-  // private static Logger logger =
-  // Logger.getLogger(CombiTimingCondition.class);
+	// private static Logger logger =
+	// Logger.getLogger(CombiTimingCondition.class);
 
-  public CombiTimingCondition() {
-    this.conditions = new LinkedList();
-  }
+	public CombiTimingCondition() {
+		this.conditions = new LinkedList();
+	}
 
-  /*
-   * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
-   *      ec.util.Parameter)
-   */
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-    int numConditions = parameters.getInt(base.push(P_NUM), null, 0);
+	/*
+	 * @see uk.ac.liv.util.Parameterizable#setup(ec.util.ParameterDatabase,
+	 *      ec.util.Parameter)
+	 */
+	public void setup(ParameterDatabase parameters, Parameter base) {
+		int numConditions = parameters.getInt(base.push(P_NUM), null, 0);
 
-    String s = parameters.getStringWithDefault(base.push(P_RELATION), null,
-        "OR");
-    if ( s == null || s.length() == 0 || s.equalsIgnoreCase("OR") )
-      relation = OR;
-    else
-      relation = AND;
+		String s = parameters.getStringWithDefault(base.push(P_RELATION), null,
+		    "OR");
+		if (s == null || s.length() == 0 || s.equalsIgnoreCase("OR"))
+			relation = OR;
+		else
+			relation = AND;
 
-    for ( int i = 0; i < numConditions; i++ ) {
-      TimingCondition condition = (TimingCondition) parameters
-          .getInstanceForParameter(base.push(i + ""), null,
-              TimingCondition.class);
-      condition.setAuction(getAuction());
-      if ( condition instanceof Parameterizable ) {
-        ((Parameterizable) condition).setup(parameters, base.push(i + ""));
-      }
-      addCondition(condition);
-    }
-  }
+		for (int i = 0; i < numConditions; i++) {
+			TimingCondition condition = (TimingCondition) parameters
+			    .getInstanceForParameter(base.push(i + ""), null,
+			        TimingCondition.class);
+			condition.setAuction(getAuction());
+			if (condition instanceof Parameterizable) {
+				((Parameterizable) condition).setup(parameters, base.push(i + ""));
+			}
+			addCondition(condition);
+		}
+	}
 
-  public void addCondition( TimingCondition condition ) {
-    conditions.add(condition);
-  }
+	public void addCondition(TimingCondition condition) {
+		conditions.add(condition);
+	}
 
-  public Iterator conditionIterator() {
-    return conditions.iterator();
-  }
+	public Iterator conditionIterator() {
+		return conditions.iterator();
+	}
 
-  public void setAuction( RandomRobinAuction auction ) {
-    super.setAuction(auction);
-    Iterator i = conditionIterator();
-    while ( i.hasNext() ) {
-      TimingCondition condition = (TimingCondition) i.next();
-      condition.setAuction(auction);
-    }
-  }
+	public void setAuction(RandomRobinAuction auction) {
+		super.setAuction(auction);
+		Iterator i = conditionIterator();
+		while (i.hasNext()) {
+			TimingCondition condition = (TimingCondition) i.next();
+			condition.setAuction(auction);
+		}
+	}
 
-  public boolean eval() {
+	public boolean eval() {
 
-    boolean isTrue = false;
-    Iterator i = conditionIterator();
-    while ( i.hasNext() ) {
-      TimingCondition condition = (TimingCondition) i.next();
+		boolean isTrue = false;
+		Iterator i = conditionIterator();
+		while (i.hasNext()) {
+			TimingCondition condition = (TimingCondition) i.next();
 
-      if ( relation == AND )
-        isTrue = isTrue && condition.eval();
-      else
-        // if relation == OR
-        isTrue = condition.eval();
+			if (relation == AND)
+				isTrue = isTrue && condition.eval();
+			else
+				// if relation == OR
+				isTrue = condition.eval();
 
-      if ( isTrue )
-        break;
-    }
+			if (isTrue)
+				break;
+		}
 
-    return isTrue;
-  }
+		return isTrue;
+	}
 }

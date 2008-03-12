@@ -15,25 +15,8 @@
 
 package uk.ac.liv.auction;
 
-import ec.util.ParamClassLoadException;
-import ec.util.Parameter;
-import ec.util.ParameterDatabase;
-
-import uk.ac.liv.auction.config.CaseEnumConfig;
-import uk.ac.liv.auction.core.*;
-import uk.ac.liv.auction.stats.ReportVariable;
-
-import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.prng.PRNGFactory;
-import uk.ac.liv.util.CummulativeDistribution;
-import uk.ac.liv.util.Distribution;
-import uk.ac.liv.util.Parameterizable;
-import uk.ac.liv.util.io.CSVWriter;
-import uk.ac.liv.util.io.DataWriter;
-
 import java.io.File;
 import java.io.Serializable;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,6 +24,20 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
+import uk.ac.liv.auction.config.CaseEnumConfig;
+import uk.ac.liv.auction.core.RandomRobinAuction;
+import uk.ac.liv.auction.stats.ReportVariable;
+import uk.ac.liv.prng.GlobalPRNG;
+import uk.ac.liv.prng.PRNGFactory;
+import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.Distribution;
+import uk.ac.liv.util.Parameterizable;
+import uk.ac.liv.util.io.CSVWriter;
+import uk.ac.liv.util.io.DataWriter;
+import ec.util.ParamClassLoadException;
+import ec.util.Parameter;
+import ec.util.ParameterDatabase;
 
 /**
  * <p>
@@ -102,251 +99,251 @@ import org.apache.log4j.Logger;
 
 public class MarketSimulation implements Serializable, Runnable {
 
-  /**
-   * The auction used in this simulation.
-   * 
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * The auction used in this simulation.
+	 * 
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	protected RandomRobinAuction auction;
 
-  /**
-   * The number of repeatitions of this experiment to sample.
-   * 
-   * @uml.property name="iterations"
-   */
-  protected int iterations = 0;
+	/**
+	 * The number of repeatitions of this experiment to sample.
+	 * 
+	 * @uml.property name="iterations"
+	 */
+	protected int iterations = 0;
 
-  /**
-   * @uml.property name="verbose"
-   */
-  protected boolean verbose = true;
+	/**
+	 * @uml.property name="verbose"
+	 */
+	protected boolean verbose = true;
 
-  /**
-   * If running more than one iteration, then write batch statistics to this
-   * DataWriter.
-   */
-  protected static DataWriter resultsFile = null;
+	/**
+	 * If running more than one iteration, then write batch statistics to this
+	 * DataWriter.
+	 */
+	protected static DataWriter resultsFile = null;
 
-  public static final String P_CASEENUM = "caseenum";
+	public static final String P_CASEENUM = "caseenum";
 
-  public static final String P_AUCTION = "auction";
+	public static final String P_AUCTION = "auction";
 
-  public static final String P_SIMULATION = "simulation";
+	public static final String P_SIMULATION = "simulation";
 
-  public static final String P_ITERATIONS = "iterations";
+	public static final String P_ITERATIONS = "iterations";
 
-  public static final String P_WRITER = "writer";
+	public static final String P_WRITER = "writer";
 
-  public static final String P_VERBOSE = "verbose";
+	public static final String P_VERBOSE = "verbose";
 
-  static Logger logger = Logger.getLogger("JASA");
+	static Logger logger = Logger.getLogger("JASA");
 
-  public static void main( String[] args ) {
+	public static void main(String[] args) {
 
-    try {
+		try {
 
-      gnuMessage();
+			gnuMessage();
 
-      if ( args.length < 1 ) {
-        fatalError("You must specify a parameter file");
-      }
+			if (args.length < 1) {
+				fatalError("You must specify a parameter file");
+			}
 
-      String fileName = args[0];
-      File file = new File(fileName);
-      if ( !file.canRead() ) {
-        fatalError("Cannot read parameter file " + fileName);
-      }
+			String fileName = args[0];
+			File file = new File(fileName);
+			if (!file.canRead()) {
+				fatalError("Cannot read parameter file " + fileName);
+			}
 
-      org.apache.log4j.PropertyConfigurator.configure(fileName);
+			org.apache.log4j.PropertyConfigurator.configure(fileName);
 
-      ParameterDatabase parameters = new ParameterDatabase(file, args);
-      Parameter base = new Parameter(P_SIMULATION);
+			ParameterDatabase parameters = new ParameterDatabase(file, args);
+			Parameter base = new Parameter(P_SIMULATION);
 
-      try {
-        resultsFile = (DataWriter) parameters.getInstanceForParameter(base
-            .push(P_WRITER), null, DataWriter.class);
-        if ( resultsFile instanceof Parameterizable ) {
-          ((Parameterizable) resultsFile)
-              .setup(parameters, base.push(P_WRITER));
-        }
-      } catch ( ParamClassLoadException e ) {
-        resultsFile = null;
-      }
+			try {
+				resultsFile = (DataWriter) parameters.getInstanceForParameter(base
+				    .push(P_WRITER), null, DataWriter.class);
+				if (resultsFile instanceof Parameterizable) {
+					((Parameterizable) resultsFile)
+					    .setup(parameters, base.push(P_WRITER));
+				}
+			} catch (ParamClassLoadException e) {
+				resultsFile = null;
+			}
 
-      CaseEnumConfig caseEnumConfig = new CaseEnumConfig();
-      caseEnumConfig.setup(parameters, base.push(P_CASEENUM));
+			CaseEnumConfig caseEnumConfig = new CaseEnumConfig();
+			caseEnumConfig.setup(parameters, base.push(P_CASEENUM));
 
-      if ( caseEnumConfig.getCaseEnumNum() == 0 ) {
-        runSingleExperimentSet(parameters, base);
-      } else {
-        runBatchExperimentSet(parameters, base, caseEnumConfig);
-      }
+			if (caseEnumConfig.getCaseEnumNum() == 0) {
+				runSingleExperimentSet(parameters, base);
+			} else {
+				runBatchExperimentSet(parameters, base, caseEnumConfig);
+			}
 
-      if ( resultsFile != null ) {
-        resultsFile.close();
-      }
+			if (resultsFile != null) {
+				resultsFile.close();
+			}
 
-    } catch ( Exception e ) {
-      logger.error(e);
-      e.printStackTrace();
-    }
-  }
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+	}
 
-  private static void runSingleExperimentSet( ParameterDatabase parameters,
-      Parameter base ) throws Exception {
+	private static void runSingleExperimentSet(ParameterDatabase parameters,
+	    Parameter base) throws Exception {
 
-    MarketSimulation simulation = new MarketSimulation();
-    simulation.setup(parameters, base);
-    simulation.run();
-  }
+		MarketSimulation simulation = new MarketSimulation();
+		simulation.setup(parameters, base);
+		simulation.run();
+	}
 
-  private static void runBatchExperimentSet( ParameterDatabase parameters,
-      Parameter base, CaseEnumConfig caseEnumConfig ) throws Exception {
+	private static void runBatchExperimentSet(ParameterDatabase parameters,
+	    Parameter base, CaseEnumConfig caseEnumConfig) throws Exception {
 
-    while ( true ) {
+		while (true) {
 
-      caseEnumConfig.apply(parameters, base.push(P_AUCTION));
+			caseEnumConfig.apply(parameters, base.push(P_AUCTION));
 
-      // run simulation under the current combination of cases
-      String s = "*   " + caseEnumConfig.getCurrentDesc() + "   *";
-      String stars = "";
-      for ( int i = 0; i < s.length(); i++ )
-        stars += "*";
-      logger.info("\n");
-      logger.info(stars);
-      logger.info(s);
-      logger.info(stars);
-      logger.info("\n");
+			// run simulation under the current combination of cases
+			String s = "*   " + caseEnumConfig.getCurrentDesc() + "   *";
+			String stars = "";
+			for (int i = 0; i < s.length(); i++)
+				stars += "*";
+			logger.info("\n");
+			logger.info(stars);
+			logger.info(s);
+			logger.info(stars);
+			logger.info("\n");
 
-      runSingleExperimentSet(parameters, base);
+			runSingleExperimentSet(parameters, base);
 
-      if ( !caseEnumConfig.next() )
-        break;
-    }
+			if (!caseEnumConfig.next())
+				break;
+		}
 
-  }
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    logger.debug("Setup... ");
+		logger.debug("Setup... ");
 
-    GlobalPRNG.setup(parameters, base);
+		GlobalPRNG.setup(parameters, base);
 
-    auction = (RandomRobinAuction) parameters.getInstanceForParameterEq(base
-        .push(P_AUCTION), null, RandomRobinAuction.class);
+		auction = (RandomRobinAuction) parameters.getInstanceForParameterEq(base
+		    .push(P_AUCTION), null, RandomRobinAuction.class);
 
-    auction.setup(parameters, base.push(P_AUCTION));
+		auction.setup(parameters, base.push(P_AUCTION));
 
-    iterations = parameters.getIntWithDefault(base.push(P_ITERATIONS), null,
-        iterations);
+		iterations = parameters.getIntWithDefault(base.push(P_ITERATIONS), null,
+		    iterations);
 
-    verbose = parameters.getBoolean(base.push(P_VERBOSE), null, verbose);
+		verbose = parameters.getBoolean(base.push(P_VERBOSE), null, verbose);
 
-    logger.info("prng = " + PRNGFactory.getFactory().getDescription());
-    logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
+		logger.info("prng = " + PRNGFactory.getFactory().getDescription());
+		logger.info("seed = " + GlobalPRNG.getSeed() + "\n");
 
-    logger.debug("Setup complete.");
-  }
+		logger.debug("Setup complete.");
+	}
 
-  public void run() {
-    if ( iterations <= 0 ) {
-      runSingleExperiment();
-    } else {
-      runBatchExperiment(iterations);
-    }
-  }
+	public void run() {
+		if (iterations <= 0) {
+			runSingleExperiment();
+		} else {
+			runBatchExperiment(iterations);
+		}
+	}
 
-  public void runSingleExperiment() {
-    logger.info("Running auction...");
+	public void runSingleExperiment() {
+		logger.info("Running auction...");
 
-    if ( verbose ) {
-    	logger.info(auction.getAuctioneer().toString());
-    	logger.info("");
-    }
-    
-    auction.run();    
-    logger.info("Auction finished.");
-    auction.generateReport();
-  }
+		if (verbose) {
+			logger.info(auction.getAuctioneer().toString());
+			logger.info("");
+		}
 
-  public void runBatchExperiment( int n ) {
-    HashMap resultsStats = new HashMap();
-    
-    if ( verbose ) {
-    	logger.info("auctioneer:");
-    	logger.info(auction.getAuctioneer().toString());
-    	logger.info("");
-    }
-    
-    for ( int i = 0; i < n; i++ ) {
-      if ( verbose ) {
-        logger.info("Running experiment " + (i + 1) + " of " + n + "... ");
-      }
-      auction.reset();
-      auction.run();
-      recordResults(auction.getResults(), resultsStats);
-      if ( verbose ) {
-        logger.info("done.\n");
-      }
-    }
+		auction.run();
+		logger.info("Auction finished.");
+		auction.generateReport();
+	}
 
-    finalReport(resultsStats);
-  }
+	public void runBatchExperiment(int n) {
+		HashMap resultsStats = new HashMap();
 
-  public static void gnuMessage() {
-    System.out.println(JASAVersion.getGnuMessage());
-  }
+		if (verbose) {
+			logger.info("auctioneer:");
+			logger.info(auction.getAuctioneer().toString());
+			logger.info("");
+		}
 
-  protected void finalReport( Map resultsStats ) {
-    logger.info("\nResults");
-    logger.info("-------");
-    ArrayList variableList = new ArrayList(resultsStats.keySet());
-    Collections.sort(variableList);
-    Iterator i = variableList.iterator();
-    while ( i.hasNext() ) {
-      ReportVariable var = (ReportVariable) i.next();
-      logger.info("");
-      Distribution stats = (Distribution) resultsStats.get(var);
-      stats.log();
-    }
-  }
+		for (int i = 0; i < n; i++) {
+			if (verbose) {
+				logger.info("Running experiment " + (i + 1) + " of " + n + "... ");
+			}
+			auction.reset();
+			auction.run();
+			recordResults(auction.getResults(), resultsStats);
+			if (verbose) {
+				logger.info("done.\n");
+			}
+		}
 
-  protected void recordResults( Map results, Map resultsStats ) {
-    ArrayList vars = new ArrayList(results.keySet());
-    if ( resultsFile != null && resultsFile instanceof CSVWriter ) {
-      ((CSVWriter) resultsFile).setNumColumns(results.size());
-    }
-    Collections.sort(vars);
-    Iterator i = vars.iterator();
-    while ( i.hasNext() ) {
-      ReportVariable var = (ReportVariable) i.next();
-      Object value = results.get(var);
-      if ( value instanceof Number ) {
-        double v = ((Number) value).doubleValue();
-        if ( !Double.isNaN(v) ) {
-          CummulativeDistribution varStats = (CummulativeDistribution) resultsStats
-              .get(var);
-          if ( varStats == null ) {
-            varStats = new CummulativeDistribution(var.toString());
-            resultsStats.put(var, varStats);
-          }
-          varStats.newData(v);
-        }
-      }
-      if ( resultsFile != null ) {
-        resultsFile.newData(value);
-      }
-    }
+		finalReport(resultsStats);
+	}
 
-    if ( resultsFile != null ) {
-      resultsFile.flush();
-    }
-  }
+	public static void gnuMessage() {
+		System.out.println(JASAVersion.getGnuMessage());
+	}
 
-  protected static void fatalError( String message ) {
-    System.err.println("ERROR: " + message);
-    System.exit(1);
-  }
+	protected void finalReport(Map resultsStats) {
+		logger.info("\nResults");
+		logger.info("-------");
+		ArrayList variableList = new ArrayList(resultsStats.keySet());
+		Collections.sort(variableList);
+		Iterator i = variableList.iterator();
+		while (i.hasNext()) {
+			ReportVariable var = (ReportVariable) i.next();
+			logger.info("");
+			Distribution stats = (Distribution) resultsStats.get(var);
+			stats.log();
+		}
+	}
+
+	protected void recordResults(Map results, Map resultsStats) {
+		ArrayList vars = new ArrayList(results.keySet());
+		if (resultsFile != null && resultsFile instanceof CSVWriter) {
+			((CSVWriter) resultsFile).setNumColumns(results.size());
+		}
+		Collections.sort(vars);
+		Iterator i = vars.iterator();
+		while (i.hasNext()) {
+			ReportVariable var = (ReportVariable) i.next();
+			Object value = results.get(var);
+			if (value instanceof Number) {
+				double v = ((Number) value).doubleValue();
+				if (!Double.isNaN(v)) {
+					CummulativeDistribution varStats = (CummulativeDistribution) resultsStats
+					    .get(var);
+					if (varStats == null) {
+						varStats = new CummulativeDistribution(var.toString());
+						resultsStats.put(var, varStats);
+					}
+					varStats.newData(v);
+				}
+			}
+			if (resultsFile != null) {
+				resultsFile.newData(value);
+			}
+		}
+
+		if (resultsFile != null) {
+			resultsFile.flush();
+		}
+	}
+
+	protected static void fatalError(String message) {
+		System.err.println("ERROR: " + message);
+		System.exit(1);
+	}
 
 }

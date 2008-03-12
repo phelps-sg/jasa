@@ -13,47 +13,45 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.util.io;
 
 import java.util.Iterator;
 
 /**
  * Interface for logging data to a back-end store.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface DataWriter {
 
-  public void newData( Iterator i );
+	public void newData(Iterator i);
 
-  public void newData( Object[] data );
+	public void newData(Object[] data);
 
-  public void newData( String data );
-  
-  public void newData( Double data );
-  
-  public void newData( Integer data );
-  
-  public void newData( Long data );
-  
-  public void newData( Object data );
+	public void newData(String data);
 
-  public void newData( int data );
+	public void newData(Double data);
 
-  public void newData( long data );
+	public void newData(Integer data);
 
-  public void newData( double data );
+	public void newData(Long data);
 
-  public void newData( float data );
+	public void newData(Object data);
 
-  public void newData( boolean data );
+	public void newData(int data);
 
-  public void flush();
+	public void newData(long data);
 
-  public void close();
+	public void newData(double data);
+
+	public void newData(float data);
+
+	public void newData(boolean data);
+
+	public void flush();
+
+	public void close();
 
 }
-

@@ -18,17 +18,16 @@ package uk.ac.liv.ai.learning;
 /**
  * Classes implementing this interface implement myopic stimuli-response
  * reinformcement learning algorithms.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface StimuliResponseLearner extends DiscreteLearner {
 
-  /**
-   * Reward the learning algorithm according to the last action
-   * it chose.
-   */
-  public void reward( double reward );
+	/**
+	 * Reward the learning algorithm according to the last action it chose.
+	 */
+	public void reward(double reward);
 
 }

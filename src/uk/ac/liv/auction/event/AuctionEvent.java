@@ -26,50 +26,50 @@ import uk.ac.liv.auction.core.Auction;
 
 public abstract class AuctionEvent {
 
-  /**
-   * The auction that this event occurred in.
-   * 
-   * @uml.property name="auction"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  protected Auction auction;
+	/**
+	 * The auction that this event occurred in.
+	 * 
+	 * @uml.property name="auction"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	protected Auction auction;
 
-  /**
-   * The time at which this event occurred.
-   * 
-   * @uml.property name="time"
-   */
-  protected int time;
+	/**
+	 * The time at which this event occurred.
+	 * 
+	 * @uml.property name="time"
+	 */
+	protected int time;
 
-  /**
-   * The physical time at which this event occurred.
-   * 
-   * @uml.property name="pTime"
-   */
+	/**
+	 * The physical time at which this event occurred.
+	 * 
+	 * @uml.property name="pTime"
+	 */
 
-  protected long pTime;
+	protected long pTime;
 
-  public AuctionEvent( Auction auction, int time ) {
-    this.auction = auction;
-    this.time = time;
-    this.pTime = System.currentTimeMillis();
-  }
+	public AuctionEvent(Auction auction, int time) {
+		this.auction = auction;
+		this.time = time;
+		this.pTime = System.currentTimeMillis();
+	}
 
-  /**
-   * Get the auction that this event occured in.
-   * 
-   * @uml.property name="auction"
-   */
-  public Auction getAuction() {
-    return auction;
-  }
+	/**
+	 * Get the auction that this event occured in.
+	 * 
+	 * @uml.property name="auction"
+	 */
+	public Auction getAuction() {
+		return auction;
+	}
 
-  public long getPhysicalTime() {
-    return pTime;
-  }
-  
-  public int getTime() {
-  	return time;
-  }
+	public long getPhysicalTime() {
+		return pTime;
+	}
+
+	public int getTime() {
+		return time;
+	}
 
 }

@@ -17,28 +17,28 @@ package uk.ac.liv.ai.learning;
 
 /**
  * A learner that learns a discrete number of different actions.
- *
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface DiscreteLearner extends Learner {
 
-  /**
-   * Request that the learner perform an action.   Users of the learning
-   * algorithm should invoke this method on the learner when they
-   * wish to find out which action the learner is currently recommending.
-   *
-   * @return An integer representing the action to be taken.
-   */
-  public int act();
+	/**
+	 * Request that the learner perform an action. Users of the learning algorithm
+	 * should invoke this method on the learner when they wish to find out which
+	 * action the learner is currently recommending.
+	 * 
+	 * @return An integer representing the action to be taken.
+	 */
+	public int act();
 
-  /**
-   * Get the number of different possible actions this learner
-   * can choose from when it performs an action.
-   *
-   * @return An integer value representing the number of actions available.
-   */
-  public int getNumberOfActions();
+	/**
+	 * Get the number of different possible actions this learner can choose from
+	 * when it performs an action.
+	 * 
+	 * @return An integer value representing the number of actions available.
+	 */
+	public int getNumberOfActions();
 
 }

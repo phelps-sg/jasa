@@ -41,79 +41,79 @@ public class StatelessQLearner extends AbstractLearner implements
     StimuliResponseLearner, Parameterizable, Resetable, Serializable,
     Prototypeable {
 
-  /**
-   * @uml.property name="qLearner"
-   * @uml.associationEnd multiplicity="(1 1)"
-   */
-  QLearner qLearner;
+	/**
+	 * @uml.property name="qLearner"
+	 * @uml.associationEnd multiplicity="(1 1)"
+	 */
+	QLearner qLearner;
 
-  public StatelessQLearner() {
-    qLearner = new QLearner();
-  }
+	public StatelessQLearner() {
+		qLearner = new QLearner();
+	}
 
-  public StatelessQLearner( int numActions, double epsilon,
-      double learningRate, double discountRate ) {
+	public StatelessQLearner(int numActions, double epsilon, double learningRate,
+	    double discountRate) {
 
-    qLearner = new QLearner(1, numActions, epsilon, learningRate, discountRate);
-  }
+		qLearner = new QLearner(1, numActions, epsilon, learningRate, discountRate);
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    super.setup(parameters, base);
+		super.setup(parameters, base);
 
-    double learningRate = parameters.getDoubleWithDefault(base
-        .push(QLearner.P_LEARNING_RATE), null, QLearner.DEFAULT_LEARNING_RATE);
+		double learningRate = parameters.getDoubleWithDefault(base
+		    .push(QLearner.P_LEARNING_RATE), null, QLearner.DEFAULT_LEARNING_RATE);
 
-    double discountRate = parameters.getDoubleWithDefault(base
-        .push(QLearner.P_DISCOUNT_RATE), null, QLearner.DEFAULT_DISCOUNT_RATE);
+		double discountRate = parameters.getDoubleWithDefault(base
+		    .push(QLearner.P_DISCOUNT_RATE), null, QLearner.DEFAULT_DISCOUNT_RATE);
 
-    double epsilon = parameters.getDoubleWithDefault(base
-        .push(QLearner.P_EPSILON), null, QLearner.DEFAULT_EPSILON);
+		double epsilon = parameters.getDoubleWithDefault(base
+		    .push(QLearner.P_EPSILON), null, QLearner.DEFAULT_EPSILON);
 
-    int numActions = parameters.getInt(base.push(QLearner.P_NUM_ACTIONS), null);
+		int numActions = parameters.getInt(base.push(QLearner.P_NUM_ACTIONS), null);
 
-    qLearner.setStatesAndActions(1, numActions);
-    qLearner.setLearningRate(learningRate);
-    qLearner.setEpsilon(epsilon);
-    qLearner.setDiscountRate(discountRate);
-  }
+		qLearner.setStatesAndActions(1, numActions);
+		qLearner.setLearningRate(learningRate);
+		qLearner.setEpsilon(epsilon);
+		qLearner.setDiscountRate(discountRate);
+	}
 
-  public int act() {
-    return qLearner.act();
-  }
+	public int act() {
+		return qLearner.act();
+	}
 
-  public void reward( double reward ) {
-    qLearner.newState(reward, 0);
-  }
+	public void reward(double reward) {
+		qLearner.newState(reward, 0);
+	}
 
-  public void reset() {
-    qLearner.reset();
-  }
+	public void reset() {
+		qLearner.reset();
+	}
 
-  public double getLearningDelta() {
-    return qLearner.getLearningDelta();
-  }
+	public double getLearningDelta() {
+		return qLearner.getLearningDelta();
+	}
 
-  public int getNumberOfActions() {
-    return qLearner.getNumberOfActions();
-  }
+	public int getNumberOfActions() {
+		return qLearner.getNumberOfActions();
+	}
 
-  public void setNumberOfActions( int n ) {
-    qLearner.setStatesAndActions(1, n);
-  }
+	public void setNumberOfActions(int n) {
+		qLearner.setStatesAndActions(1, n);
+	}
 
-  public void dumpState( uk.ac.liv.util.io.DataWriter out ) {
-    qLearner.dumpState(out);
-  }
+	public void dumpState(uk.ac.liv.util.io.DataWriter out) {
+		qLearner.dumpState(out);
+	}
 
-  public Object protoClone() {
-    try {
-      StatelessQLearner cloned = (StatelessQLearner) this.clone();
-      cloned.qLearner = (QLearner) this.qLearner.protoClone();
-      return cloned;
-    } catch ( CloneNotSupportedException e ) {
-      throw new Error(e);
-    }
-  }
+	public Object protoClone() {
+		try {
+			StatelessQLearner cloned = (StatelessQLearner) this.clone();
+			cloned.qLearner = (QLearner) this.qLearner.protoClone();
+			return cloned;
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+	}
 
 }

@@ -20,31 +20,31 @@ import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 /**
- * Defines the number of the latest successful shout pairs used to determine the next
- * clearing price
+ * Defines the number of the latest successful shout pairs used to determine the
+ * next clearing price
  * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
 public class NPricingPolicyCase implements ParameterBasedCase {
 
-  /**
-   * @uml.property name="n"
-   */
-  private int n;
+	/**
+	 * @uml.property name="n"
+	 */
+	private int n;
 
-  public NPricingPolicyCase() {
-  }
+	public NPricingPolicyCase() {
+	}
 
-  public void setValue( String value ) {
-    this.n = Integer.parseInt(value);
-  }
+	public void setValue(String value) {
+		this.n = Integer.parseInt(value);
+	}
 
-  public String toString() {
-    return String.valueOf(n);
-  }
+	public String toString() {
+		return String.valueOf(n);
+	}
 
-  public void apply( ParameterDatabase pdb, Parameter base ) {
-    pdb.set(base.push(NPricingPolicy.P_N), String.valueOf(n));
-  }
+	public void apply(ParameterDatabase pdb, Parameter base) {
+		pdb.set(base.push(NPricingPolicy.P_N), String.valueOf(n));
+	}
 }

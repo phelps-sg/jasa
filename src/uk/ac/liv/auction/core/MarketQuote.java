@@ -26,70 +26,70 @@ import java.io.Serializable;
 
 public class MarketQuote implements Serializable {
 
-  /**
-   * The current ask-quote. Buyers need to beat this in order for their offers
-   * to get matched.
-   * 
-   * @uml.property name="ask"
-   */
-  protected double ask;
+	/**
+	 * The current ask-quote. Buyers need to beat this in order for their offers
+	 * to get matched.
+	 * 
+	 * @uml.property name="ask"
+	 */
+	protected double ask;
 
-  /**
-   * The current bid-quote. Sellers need to ask less than this in order for
-   * their offers to get matched.
-   * 
-   * @uml.property name="bid"
-   */
-  protected double bid;
+	/**
+	 * The current bid-quote. Sellers need to ask less than this in order for
+	 * their offers to get matched.
+	 * 
+	 * @uml.property name="bid"
+	 */
+	protected double bid;
 
-  public MarketQuote( double ask, double bid ) {
-    this.ask = ask;
-    this.bid = bid;
-  }
+	public MarketQuote(double ask, double bid) {
+		this.ask = ask;
+		this.bid = bid;
+	}
 
-  public MarketQuote( Shout ask, Shout bid ) {
-    if ( ask == null ) {
-      this.ask = Double.MAX_VALUE;
-    } else {
-      this.ask = ask.getPrice();
-    }
-    if ( bid == null ) {
-      this.bid = 0;
-    } else {
-      this.bid = bid.getPrice();
-    }
-  }
+	public MarketQuote(Shout ask, Shout bid) {
+		if (ask == null) {
+			this.ask = Double.MAX_VALUE;
+		} else {
+			this.ask = ask.getPrice();
+		}
+		if (bid == null) {
+			this.bid = 0;
+		} else {
+			this.bid = bid.getPrice();
+		}
+	}
 
-  /**
-   * @uml.property name="ask"
-   */
-  public void setAsk( double ask ) {
-    this.ask = ask;
-  }
+	/**
+	 * @uml.property name="ask"
+	 */
+	public void setAsk(double ask) {
+		this.ask = ask;
+	}
 
-  /**
-   * @uml.property name="bid"
-   */
-  public void setBid( double bid ) {
-    this.bid = bid;
-  }
+	/**
+	 * @uml.property name="bid"
+	 */
+	public void setBid(double bid) {
+		this.bid = bid;
+	}
 
-  /**
-   * @uml.property name="ask"
-   */
-  public double getAsk() {
-    return ask;
-  }
+	/**
+	 * @uml.property name="ask"
+	 */
+	public double getAsk() {
+		return ask;
+	}
 
-  /**
-   * @uml.property name="bid"
-   */
-  public double getBid() {
-    return bid;
-  }
+	/**
+	 * @uml.property name="bid"
+	 */
+	public double getBid() {
+		return bid;
+	}
 
-  public String toString() {
-    return "(MarketQuote bid:" + bid + " ask:" + ask + ")";
-  }
+	public String toString() {
+		return "(MarketQuote bid:" + bid + " ask:" + ask + ")";
+	}
 
 }

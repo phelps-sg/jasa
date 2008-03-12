@@ -72,7 +72,7 @@ import ec.util.ParameterDatabase;
  */
 
 public class HistoricalDataReport extends AbstractAuctionReport implements
-		Serializable, Resetable {
+    Serializable, Resetable {
 
 	protected LinkedList asks = new LinkedList();
 
@@ -129,7 +129,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	public void setup(ParameterDatabase parameters, Parameter base) {
 		memorySize = parameters.getIntWithDefault(base.push(P_MEMORYSIZE),
-				new Parameter(P_DEF_BASE).push(P_MEMORYSIZE), memorySize);
+		    new Parameter(P_DEF_BASE).push(P_MEMORYSIZE), memorySize);
 		memoryBids = new int[memorySize];
 		memoryAsks = new int[memorySize];
 		for (int i = 0; i < memorySize; i++) {
@@ -139,23 +139,23 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		logger.debug("memorysize = " + memorySize);
 
 	}
-  
-  protected void removeNShouts(int n, LinkedList shouts) {
-    for( int i = 0; i < n; i++) {
-      Shout shout = (Shout) shouts.removeFirst();
-      sortedShouts.remove(shout);
-      acceptedShouts.remove(shout);
-    }
-  }
- 
+
+	protected void removeNShouts(int n, LinkedList shouts) {
+		for (int i = 0; i < n; i++) {
+			Shout shout = (Shout) shouts.removeFirst();
+			sortedShouts.remove(shout);
+			acceptedShouts.remove(shout);
+		}
+	}
+
 	public void updateTransPriceLog(TransactionExecutedEvent event) {
 		Object o;
 		currentMemoryCell = (currentMemoryCell + 1) % memorySize;
 		if (memoryAsks[currentMemoryCell] > 0 || memoryBids[currentMemoryCell] > 0) {
-      removeNShouts(memoryAsks[currentMemoryCell], asks);
-      removeNShouts(memoryBids[currentMemoryCell], bids);		
+			removeNShouts(memoryAsks[currentMemoryCell], asks);
+			removeNShouts(memoryBids[currentMemoryCell], bids);
 			memoryBids[currentMemoryCell] = 0;
-			memoryAsks[currentMemoryCell] = 0;			
+			memoryAsks[currentMemoryCell] = 0;
 			markMatched(asks);
 			markMatched(bids);
 		}
@@ -198,7 +198,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			}
 
 			if (lowestUnacceptedAsk == null
-					|| lowestUnacceptedAsk.getPrice() > shout.getPrice()) {
+			    || lowestUnacceptedAsk.getPrice() > shout.getPrice()) {
 				lowestUnacceptedAsk = shout;
 			}
 		} else {
@@ -209,14 +209,14 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			}
 
 			if (highestUnacceptedBid == null
-					|| highestUnacceptedBid.getPrice() < shout.getPrice()) {
+			    || highestUnacceptedBid.getPrice() < shout.getPrice()) {
 				highestUnacceptedBid = shout;
 			}
 
 		}
-    
-    markMatched(asks);
-    markMatched(bids);
+
+		markMatched(asks);
+		markMatched(bids);
 		observableProxy.notifyObservers();
 	}
 
@@ -364,7 +364,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		while (i.hasNext()) {
 			Shout shout = (Shout) i.next();
 			if ((price >= 0 && shout.getPrice() >= price)
-					|| (price < 0 && shout.getPrice() <= -price)) {
+			    || (price < 0 && shout.getPrice() <= -price)) {
 				if (accepted) {
 					if (acceptedShouts.contains(shout)) {
 						numShouts++;
@@ -412,7 +412,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	public String toString() {
 		return "(" + getClass() + " auction:" + auction + " memorySize:"
-				+ memorySize + " bids:" + bids + " asks:" + asks + ")";
+		    + memorySize + " bids:" + bids + " asks:" + asks + ")";
 	}
 
 	public SortedView getSortedView() {

@@ -53,107 +53,107 @@ import uk.ac.liv.util.Resetable;
 public class CombiAuctionReport implements AuctionReport, Parameterizable,
     Resetable {
 
-  /**
-   * @uml.property name="reports"
-   * @uml.associationEnd multiplicity="(0 -1)"
-   *                     elementType="uk.ac.liv.auction.stats.AuctionReport"
-   */
-  protected List reports = null;
+	/**
+	 * @uml.property name="reports"
+	 * @uml.associationEnd multiplicity="(0 -1)"
+	 *                     elementType="uk.ac.liv.auction.stats.AuctionReport"
+	 */
+	protected List reports = null;
 
-  /**
-   * @uml.property name="auction"
-   * @uml.associationEnd
-   */
-  protected RandomRobinAuction auction;
+	/**
+	 * @uml.property name="auction"
+	 * @uml.associationEnd
+	 */
+	protected RandomRobinAuction auction;
 
-  public static final String P_DEF_BASE = "combiauctionreport";
+	public static final String P_DEF_BASE = "combiauctionreport";
 
-  public static final String P_NUMLOGGERS = "n";
+	public static final String P_NUMLOGGERS = "n";
 
-  public CombiAuctionReport( List reports ) {
-    this.reports = reports;
-  }
+	public CombiAuctionReport(List reports) {
+		this.reports = reports;
+	}
 
-  public CombiAuctionReport() {
-    this.reports = new LinkedList();
-  }
+	public CombiAuctionReport() {
+		this.reports = new LinkedList();
+	}
 
-  public void setup( ParameterDatabase parameters, Parameter base ) {
-  	
-  	Parameter defBase = new Parameter(P_DEF_BASE);
+	public void setup(ParameterDatabase parameters, Parameter base) {
 
-    int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), 
-    		defBase.push(P_NUMLOGGERS), 1);
+		Parameter defBase = new Parameter(P_DEF_BASE);
 
-    for ( int i = 0; i < numLoggers; i++ ) {
-      AuctionReport report = (AuctionReport) parameters
-          .getInstanceForParameter(base.push(i + ""), 
-          		defBase.push(i + ""), AuctionReport.class);
-      report.setAuction(auction);
-      if ( report instanceof Parameterizable ) {
-        ((Parameterizable) report).setup(parameters, base.push(i + ""));
-      }
-      addReport(report);
-    }
-  }
+		int numLoggers = parameters.getInt(base.push(P_NUMLOGGERS), defBase
+		    .push(P_NUMLOGGERS), 1);
 
-  /**
-   * Add a new logger
-   */
-  public void addReport( AuctionReport report ) {
-    reports.add(report);
-  }
+		for (int i = 0; i < numLoggers; i++) {
+			AuctionReport report = (AuctionReport) parameters
+			    .getInstanceForParameter(base.push(i + ""), defBase.push(i + ""),
+			        AuctionReport.class);
+			report.setAuction(auction);
+			if (report instanceof Parameterizable) {
+				((Parameterizable) report).setup(parameters, base.push(i + ""));
+			}
+			addReport(report);
+		}
+	}
 
-  public void reset() {
-    Iterator i = reports.iterator();
-    while ( i.hasNext() ) {
-      AuctionReport logger = (AuctionReport) i.next();
-      if ( logger instanceof Resetable ) {
-        ((Resetable) logger).reset();
-      }
-    }
-  }
+	/**
+	 * Add a new logger
+	 */
+	public void addReport(AuctionReport report) {
+		reports.add(report);
+	}
 
-  public void produceUserOutput() {
-    Iterator i = reports.iterator();
-    while ( i.hasNext() ) {
-      AuctionReport logger = (AuctionReport) i.next();
-      logger.produceUserOutput();
-    }
-  }
+	public void reset() {
+		Iterator i = reports.iterator();
+		while (i.hasNext()) {
+			AuctionReport logger = (AuctionReport) i.next();
+			if (logger instanceof Resetable) {
+				((Resetable) logger).reset();
+			}
+		}
+	}
 
-  public Iterator reportIterator() {
-    return reports.iterator();
-  }
+	public void produceUserOutput() {
+		Iterator i = reports.iterator();
+		while (i.hasNext()) {
+			AuctionReport logger = (AuctionReport) i.next();
+			logger.produceUserOutput();
+		}
+	}
 
-  public Map getVariables() {
-    HashMap variableMap = new HashMap();
-    Iterator i = reports.iterator();
-    while ( i.hasNext() ) {
-      AuctionReport logger = (AuctionReport) i.next();
-      variableMap.putAll(logger.getVariables());
-    }
-    return variableMap;
-  }
+	public Iterator reportIterator() {
+		return reports.iterator();
+	}
 
-  public void eventOccurred( AuctionEvent event ) {
-    Iterator i = reports.iterator();
-    while ( i.hasNext() ) {
-      AuctionReport logger = (AuctionReport) i.next();
-      logger.eventOccurred(event);
-    }
-  }
+	public Map getVariables() {
+		HashMap variableMap = new HashMap();
+		Iterator i = reports.iterator();
+		while (i.hasNext()) {
+			AuctionReport logger = (AuctionReport) i.next();
+			variableMap.putAll(logger.getVariables());
+		}
+		return variableMap;
+	}
 
-  /**
-   * @uml.property name="auction"
-   */
-  public void setAuction( RandomRobinAuction auction ) {
-    this.auction = auction;
-    Iterator i = reports.iterator();
-    while ( i.hasNext() ) {
-      AuctionReport logger = (AuctionReport) i.next();
-      logger.setAuction(auction);
-    }
-  }
+	public void eventOccurred(AuctionEvent event) {
+		Iterator i = reports.iterator();
+		while (i.hasNext()) {
+			AuctionReport logger = (AuctionReport) i.next();
+			logger.eventOccurred(event);
+		}
+	}
+
+	/**
+	 * @uml.property name="auction"
+	 */
+	public void setAuction(RandomRobinAuction auction) {
+		this.auction = auction;
+		Iterator i = reports.iterator();
+		while (i.hasNext()) {
+			AuctionReport logger = (AuctionReport) i.next();
+			logger.setAuction(auction);
+		}
+	}
 
 }

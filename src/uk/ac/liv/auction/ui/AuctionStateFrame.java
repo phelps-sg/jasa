@@ -26,20 +26,19 @@ import uk.ac.liv.auction.stats.SupplyAndDemandStats;
  */
 
 public class AuctionStateFrame extends SupplyAndDemandFrame {
-  
-  public static final String TITLE = "Auction State";
 
-  public AuctionStateFrame( RandomRobinAuction auction ) {
-    super(auction);
-  }
-  
-  public String getGraphName() {
-    return TITLE;
-  }
+	public static final String TITLE = "Auction State";
 
-  public SupplyAndDemandStats getSupplyAndDemandStats() {
-    return new AuctionStateStats(auction, supplyCurve, demandCurve);
-  }
+	public AuctionStateFrame(RandomRobinAuction auction) {
+		super(auction);
+	}
 
+	public String getGraphName() {
+		return TITLE;
+	}
+
+	public SupplyAndDemandStats getSupplyAndDemandStats() {
+		return new AuctionStateStats(auction, supplyCurve, demandCurve);
+	}
 
 }

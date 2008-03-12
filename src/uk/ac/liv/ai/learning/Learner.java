@@ -13,41 +13,39 @@
  * See the GNU General Public License for more details.
  */
 
-
 package uk.ac.liv.ai.learning;
 
 import uk.ac.liv.util.io.DataWriter;
 
 /**
- * Classes implementing this interface indicate that they implement
- * a learning algorithm.
- *
+ * Classes implementing this interface indicate that they implement a learning
+ * algorithm.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public interface Learner {
 
-  /**
-   * Return a value indicative of the amount of learning that
-   * occured during the last iteration.  Values close to 0.0
-   * indicate that the learner has converged to an equilibrium
-   * state.
-   *
-   * @return A double representing the amount of learning that occured.
-   */
-  public double getLearningDelta();
+	/**
+	 * Return a value indicative of the amount of learning that occured during the
+	 * last iteration. Values close to 0.0 indicate that the learner has converged
+	 * to an equilibrium state.
+	 * 
+	 * @return A double representing the amount of learning that occured.
+	 */
+	public double getLearningDelta();
 
-  /**
-   * Write out our state data to the specified data writer.
-   */
-  public void dumpState( DataWriter out );
+	/**
+	 * Write out our state data to the specified data writer.
+	 */
+	public void dumpState(DataWriter out);
 
-  /**
-   * A hook to provide monitoring functionality.  Implementations of
-   * learning algorithms should either log, or provide a visualisation of,
-   * their state in response to this method.
-   */
-  public void monitor();
+	/**
+	 * A hook to provide monitoring functionality. Implementations of learning
+	 * algorithms should either log, or provide a visualisation of, their state in
+	 * response to this method.
+	 */
+	public void monitor();
 
 }

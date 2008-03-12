@@ -28,19 +28,19 @@ import java.io.Serializable;
 public class TruthTellingStrategy extends FixedQuantityStrategyImpl implements
     Serializable {
 
-  public TruthTellingStrategy( AbstractTradingAgent agent ) {
-    super(agent);
-  }
+	public TruthTellingStrategy(AbstractTradingAgent agent) {
+		super(agent);
+	}
 
-  public TruthTellingStrategy() {
-    super();
-  }
+	public TruthTellingStrategy() {
+		super();
+	}
 
-  public boolean modifyShout( Shout.MutableShout shout ) {
-    shout.setPrice(agent.getValuation(auction));
-    return super.modifyShout(shout);
-  }
+	public boolean modifyShout(Shout.MutableShout shout) {
+		shout.setPrice(agent.getValuation(auction));
+		return super.modifyShout(shout);
+	}
 
-  public void endOfRound( Auction auction ) {
-  }
+	public void endOfRound(Auction auction) {
+	}
 }
