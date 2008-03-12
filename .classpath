@@ -3,33 +3,10 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="C:/cygwin/usr/local/java/lib/ecj12/ecj.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/cygwin/usr/local/java/lib/commons-collections-3.1/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/repastj.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/violinstrings-1.0.2.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/asm.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/beanbowl.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/colt.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/commons-collections.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/commons-logging.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/geotools_r.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/geotools_repast.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/jakarta-poi.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/jep-2.24.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/jgap.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/jh.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/jode-1.1.2-pre1.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/joone.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/JTS.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/junit.jar"/>
-	<classpathentry exported="true" kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/log4j-1.2.8.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/OpenForecast-0.4.0.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/openmap.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/plot.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/ProActive.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/trove.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/RePast-3.0/repastj/lib/velocity-dep-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/cygwin/usr/local/java/lib/trove-1.1b3/lib/trove.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfreechart"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/repast"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ecj"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/commons-collections"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/trove"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
