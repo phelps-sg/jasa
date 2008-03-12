@@ -15,8 +15,6 @@
 
 package uk.ac.liv.prng;
 
-// import edu.cornell.lassp.houle.RngPack.RandomSeedable;
-
 import cern.jet.random.engine.MersenneTwister;
 import cern.jet.random.engine.RandomEngine;
 

@@ -14,8 +14,6 @@
 
 package uk.ac.liv.prng;
 
-// import edu.cornell.lassp.houle.RngPack.RandomElement;
-
 import org.apache.log4j.Logger;
 
 import cern.jet.random.engine.RandomEngine;
