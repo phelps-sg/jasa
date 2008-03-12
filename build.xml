@@ -1,219 +1,205 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="compile" name="JASA">
-   <property file="build.ant.properties"/>
+	<property file="build.ant.properties" />
 
-   <property name="build.compiler" value="modern"/>
-   <property name="sourceDir" value="src"/>
-   <property name="testDir" value="test"/>
-   <property name="buildDir" value="build"/>
-   <property name="buildSrc" value="${buildDir}/src"/>
-   <property name="outputDir" value="${buildDir}/classes"/>
-   <property name="projectName" value="JASA"/>
+	<property name="build.compiler" value="modern" />
+	<property name="sourceDir" value="src" />
+	<property name="testDir" value="test" />
+	<property name="buildDir" value="build" />
+	<property name="buildSrc" value="${buildDir}/src" />
+	<property name="outputDir" value="${buildDir}/classes" />
+	<property name="projectName" value="JASA" />
 
-   <property name="versionFile" value="version.properties"/>
-   <property name="versionTemplate" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.template"/>
-   <property name="versionSrc" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.java"/>
+	<property name="versionFile" value="version.properties" />
+	<property name="versionTemplate" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.template" />
+	<property name="versionSrc" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.java" />
 
-   <property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event,uk.ac.liv.auction.config,uk.ac.liv.auction.config.schedule,uk.ac.liv.auction.config.strategy"/>
+	<property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event,uk.ac.liv.auction.config,uk.ac.liv.auction.config.schedule,uk.ac.liv.auction.config.strategy" />
 
-   <property name="docDir" value="doc/api/"/>
-   <property name="javaLibPath" value="./lib"/>
-   <property name="troveLoc" value="${javaLibPath}/trove-1.1b4/lib/trove.jar"/>
-   <property name="ecjLoc" value="${javaLibPath}/ecj12/ecj.jar"/>
-   <property name="repastLoc" value="${javaLibPath}/Repast-3.1/RepastJ"/>
-   <property name="junitLoc" value="${repastLoc}/lib/junit.jar"/>
-   <property name="log4jLoc" value="${repastLoc}/lib/log4j-1.2.8.jar"/>
-   <property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar"/>
-   <property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.1/commons-collections-3.1.jar"/>
-   <property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/geotools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/trove.jar:${repastLoc}/repast.jar"/>
-   <property name="jfreechartPath" value="${javaLibPath}/jfreechart-1.0.0-rc1.jar:${javaLibPath}/jcommon-1.0.0-rc1.jar"/>
+	<property name="docDir" value="doc/api/" />
 
-   <path id="project.classpath">
-     <pathelement location="${ecjLoc}"/>
-     <pathelement location="${junitLoc}"/>
-     <pathelement location="${log4jLoc}"/>
-     <pathelement location="${troveLoc}"/>
-     <pathelement location="${schemeLoc}"/>
-     <pathelement location="${collectionsLoc}"/>
-     <pathelement path="${repastPath}"/>
-     <pathelement path="${jfreechartPath}"/>
-     <pathelement location="${outputDir}"/>
-     <pathelement location="./jasa.jar"/>
-     <pathelement path="${java.class.path}"/>
-   </path>
+	<property name="javaLibPath" value="../lib" />
+	<property name="troveLoc" value="${javaLibPath}/trove-1.1b4/lib/trove.jar" />
+	<property name="ecjLoc" value="${javaLibPath}/ecj15.jar" />
+	<property name="repastLoc" value="${javaLibPath}/Repast-3.1/RepastJ" />
+	<property name="junitLoc" value="${repastLoc}/lib/junit.jar" />
+	<property name="log4jLoc" value="${repastLoc}/lib/log4j-1.2.8.jar" />
+	<property name="schemeLoc" value="${javaLibPath}/scheme-package1.1/scm.jar" />
+	<property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.2/commons-collections-3.2.jar" />
+	<property name="repastPath" value="${repastLoc}/lib/JTS.jar:${repastLoc}/lib/ProActive.jar:${repastLoc}/lib/asm.jar:${repastLoc}/lib/colt.jar:${repastLoc}/lib/commons-logging.jar:${repastLoc}/lib/geotools.jar:${repastLoc}/lib/jakarta-poi.jar:${repastLoc}/lib/jh.jar:${repastLoc}/lib/jmf.jar:${repastLoc}/lib/mediaplayer.jar:${repastLoc}/lib/multiplayer.jar:${repastLoc}/lib/plot.jar:${repastLoc}/lib/trove.jar:${repastLoc}/repast.jar" />
+	<property name="jfreechartPath" value="${javaLibPath}/jfreechart-1.0.2.jar:${javaLibPath}/jcommon-1.0.5.jar" />
 
-   <target name="cleanOutput">
-      <delete dir="${outputDir}"/>
-      <delete file="jasa.jar"/>
-   </target>
+	<path id="project.classpath">
+		<pathelement location="${ecjLoc}" />
+		<pathelement location="${junitLoc}" />
+		<pathelement location="${log4jLoc}" />
+		<pathelement location="${troveLoc}" />
+		<pathelement location="${schemeLoc}" />
+		<pathelement location="${collectionsLoc}" />
+		<pathelement path="${repastPath}" />
+		<pathelement path="${jfreechartPath}" />
+		<pathelement location="${outputDir}" />
+		<pathelement location="./jasa.jar" />
+		<pathelement path="${java.class.path}" />
+	</path>
 
-   <target depends="cleanOutput" name="prepareOutput">
-      <mkdir dir="${outputDir}"/>
-   </target>
-
-   <target name="cleanDoc">
-      <delete dir="${docDir}"/>
-   </target>
-
-   <target depends="cleanDoc" name="prepareDoc">
-      <mkdir dir="${docDir}"/>
-   </target>
-
-   <target name="cleanTar">
-      <delete file="jasa.tar.gz"/>
-   </target>
-
-   <target name="cleanBuild">
-    <delete dir="${buildSrc}"/>
-   </target>
-
-   <target depends="prepareOutput,copysrc" name="compile">
-      <javac debug="on" optimize="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${buildSrc}">
-        <classpath refid="project.classpath"/>
-     </javac>
-   </target>
-
-   <target depends="compile" name="compiletests">
-     <javac debug="on" optimize="on" deprecation="off" destdir="${outputDir}" source="1.4" srcdir="${testDir}">
-	<classpath refid="project.classpath"/>
-     </javac>
-   </target>
-
-   <target depends="compile,prepareDoc" name="doc">
-     <javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}:${testDir}" windowtitle="${projectName}">
-        <classpath refid="project.classpath"/>
-     </javadoc>
-   </target>
-
-   <target depends="compile,compiletests" name="jar">
-   	<jar basedir="${outputDir}" jarfile="jasa.jar"/>
-   </target>
-
-   <target depends="jar,doc,cleanTar" name="tar">
-	<loadproperties srcFile="${versionFile}"/>
-	<property name="versionStr" value="${majorVersion}.${minorVersion}"/>
-   	<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
-		<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params,lib/**" prefix="jasa-${versionStr}">
-                  <exclude name="src/uk/ac/liv/ec/**"/>
-                  <exclude name="src/uk/ac/liv/auction/ec/**"/>
-		  <exclude name="src/uk/ac/liv/auction/heuristic/**"/>
-		 </tarfileset>
-	</tar>
-    </target>
-
-   <target depends="cleanTar" name="srctar">
-	<loadproperties srcFile="${versionFile}"/>
-	<property name="versionStr" value="${majorVersion}.${minorVersion}"/>
-   	<tar compression="gzip" tarfile="jasa-src-${versionStr}.tar.gz">
-		<tarfileset dir="." includes="${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params" prefix="jasa-${versionStr}">
-                  <exclude name="src/uk/ac/liv/ec/**"/>
-                  <exclude name="src/uk/ac/liv/auction/ec/**"/>
-		  <exclude name="src/uk/ac/liv/auction/heuristic/**"/>
-		 </tarfileset>
-	</tar>
-    </target>
-
-
-
-    <target name="anoncvspass">
-	    <cvspass cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" password=""/>
+	<target name="cleanOutput">
+		<delete dir="${outputDir}" />
+		<delete file="jasa.jar" />
 	</target>
 
-   <target depends="anoncvspass" name="cvsupdate">
-	   <cvs command="update" compression="3" cvsRoot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" cvsRsh="rsh"/>
-    </target>
+	<target depends="cleanOutput" name="prepareOutput">
+		<mkdir dir="${outputDir}" />
+	</target>
 
-   <target depends="compile,compiletests" name="test">
-	   <java classname="uk.ac.liv.auction.AllTests" fork="true">
-        	<classpath refid="project.classpath"/>
-		<jvmarg value="-ea"/>
-	   </java>
-    </target>
+	<target name="cleanDoc">
+		<delete dir="${docDir}" />
+	</target>
 
-    <target name="libtar">
-    	<tar basedir="." compression="gzip" includes="lib/**" tarfile="lib.tar.gz"/>
-    </target>
+	<target depends="cleanDoc" name="prepareDoc">
+		<mkdir dir="${docDir}" />
+	</target>
 
-    <target name="batchrun">
-	<java classname="uk.ac.liv.auction.MarketSimulation" fork="true">
-		<classpath refid="project.classpath"/>
-		<arg value="${params}"/>
-	</java>
-    </target>
+	<target name="cleanTar">
+		<delete file="jasa.tar.gz" />
+	</target>
 
-    <target name="run">
-	<java classname="uk.ac.liv.auction.RepastMarketSimulation" fork="true">
-		<classpath refid="project.classpath"/>
-		<arg value="${params}"/>
-	</java>
-    </target>
+	<target name="cleanBuild">
+		<delete dir="${buildSrc}" />
+	</target>
 
-    <target name="customrun">
-        <echo message="The main class is ${main}."/>
-	<java classname="${main}" fork="true">
-		<classpath refid="project.classpath"/>
-		<arg value="${params}"/>
-	</java>
-    </target>
+	<target depends="prepareOutput,copysrc" name="compile">
+		<javac debug="on" optimize="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${buildSrc}">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target depends="compile" name="compiletests">
+		<javac debug="on" optimize="on" deprecation="off" destdir="${outputDir}" source="1.4" srcdir="${testDir}">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target depends="compile,prepareDoc" name="doc">
+		<javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}:${testDir}" windowtitle="${projectName}">
+			<classpath refid="project.classpath" />
+		</javadoc>
+	</target>
+
+	<target depends="compile,compiletests" name="jar">
+		<jar basedir="${outputDir}" jarfile="jasa.jar" />
+	</target>
+
+	<target depends="jar,doc,cleanTar" name="tar">
+		<loadproperties srcFile="${versionFile}" />
+		<property name="versionStr" value="${majorVersion}.${minorVersion}" />
+		<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
+			<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params,lib/**" prefix="jasa-${versionStr}">
+				<exclude name="src/uk/ac/liv/ec/**" />
+				<exclude name="src/uk/ac/liv/auction/ec/**" />
+				<exclude name="src/uk/ac/liv/auction/heuristic/**" />
+			</tarfileset>
+		</tar>
+	</target>
+
+	<target depends="cleanTar" name="srctar">
+		<loadproperties srcFile="${versionFile}" />
+		<property name="versionStr" value="${majorVersion}.${minorVersion}" />
+		<tar compression="gzip" tarfile="jasa-src-${versionStr}.tar.gz">
+			<tarfileset dir="." includes="${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params" prefix="jasa-${versionStr}">
+				<exclude name="src/uk/ac/liv/ec/**" />
+				<exclude name="src/uk/ac/liv/auction/ec/**" />
+				<exclude name="src/uk/ac/liv/auction/heuristic/**" />
+			</tarfileset>
+		</tar>
+	</target>
 
 
-<target name="gethostname" description="Stores the current machines hostname in a property named 'hostname'">
-  <property environment="env"/>
-  <condition property="hostname" value="${env.HOSTNAME}">
-    <os family="unix"/>
-  </condition>
-  <condition property="hostname" value="${env.COMPUTERNAME}">
-    <os family="windows"/>
-  </condition>
-  <echo message="host = ${hostname}"/>
-</target>
 
-<target name="incminorversion">
-	<propertyfile
-	    file="${versionFile}" comment="Build version info">
-		<entry key="minorVersion" type="int" operation="+" value="1"/>
- 		<entry key="buildNum" type="int" value="1"/>
-	</propertyfile>
-</target>
+	<target name="anoncvspass">
+		<cvspass cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" password="" />
+	</target>
 
-<target name="incbuildnum" depends="gethostname">
-       <propertyfile
-            file="${versionFile}" comment="Build version info">
-            <entry key="buildDate" type="date" value="now"/>
-            <entry key="buildNum" default="0" type="int" operation="+" value="1"/>
-	    <entry key="buildHost" type="string" value="${hostname}"/>
-        </propertyfile>
-</target>
+	<target depends="anoncvspass" name="cvsupdate">
+		<cvs command="update" compression="3" cvsRoot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" cvsRsh="rsh" />
+	</target>
 
-<target depends="incbuildnum,cleanBuild" name="copysrc">
-       <copy todir="${buildSrc}">
-	<fileset dir="${sourceDir}" casesensitive="yes">
-	  <include name="**/*.java"/>
-	  <include name="**/*.template"/>
-	</fileset>
- 	</copy>
- 	<copy file="${versionTemplate}" tofile="${versionSrc}"/>
-        <replace
-            file="${versionSrc}"
-            value="value not found in version.properties"
-            propertyFile="${versionFile}">
-            <replacefilter
-                token="@buildDate@"
-                property="buildDate"/>
-            <replacefilter
-                token="@buildNum@"
-                property="buildNum"/>
- 	    <replacefilter
-		token="@buildHost@"
-		property="buildHost"/>
-	    <replacefilter
-		token="@minorVersion@"
-   		property="minorVersion"/>
-	    <replacefilter
- 		token="@majorVersion@"
-		property="majorVersion"/>
-        </replace>
-</target>
+	<target depends="compile,compiletests" name="test">
+		<java classname="uk.ac.liv.auction.AllTests" fork="true">
+			<classpath refid="project.classpath" />
+			<jvmarg value="-ea" />
+		</java>
+	</target>
+
+	<target name="libtar">
+		<tar basedir="." compression="gzip" includes="lib/**" tarfile="lib.tar.gz" />
+	</target>
+
+	<target name="batchrun">
+		<java classname="uk.ac.liv.auction.MarketSimulation" fork="true">
+			<classpath refid="project.classpath" />
+			<arg value="${params}" />
+		</java>
+	</target>
+
+	<target name="run">
+		<java classname="uk.ac.liv.auction.RepastMarketSimulation" fork="true">
+			<classpath refid="project.classpath" />
+			<arg value="${params}" />
+		</java>
+	</target>
+
+	<target name="customrun">
+		<echo message="The main class is ${main}." />
+		<java classname="${main}" fork="true">
+			<classpath refid="project.classpath" />
+			<arg value="${params}" />
+		</java>
+	</target>
+
+
+	<target name="gethostname" description="Stores the current machines hostname in a property named 'hostname'">
+		<property environment="env" />
+		<condition property="hostname" value="${env.HOSTNAME}">
+			<os family="unix" />
+		</condition>
+		<condition property="hostname" value="${env.COMPUTERNAME}">
+			<os family="windows" />
+		</condition>
+		<echo message="host = ${hostname}" />
+	</target>
+
+	<target name="incminorversion">
+		<propertyfile file="${versionFile}" comment="Build version info">
+			<entry key="minorVersion" type="int" operation="+" value="1" />
+			<entry key="buildNum" type="int" value="1" />
+		</propertyfile>
+	</target>
+
+	<target name="incbuildnum" depends="gethostname">
+		<propertyfile file="${versionFile}" comment="Build version info">
+			<entry key="buildDate" type="date" value="now" />
+			<entry key="buildNum" default="0" type="int" operation="+" value="1" />
+			<entry key="buildHost" type="string" value="${hostname}" />
+		</propertyfile>
+	</target>
+
+	<target depends="incbuildnum,cleanBuild" name="copysrc">
+		<copy todir="${buildSrc}">
+			<fileset dir="${sourceDir}" casesensitive="yes">
+				<include name="**/*.java" />
+				<include name="**/*.template" />
+			</fileset>
+		</copy>
+		<copy file="${versionTemplate}" tofile="${versionSrc}" />
+		<replace file="${versionSrc}" value="value not found in version.properties" propertyFile="${versionFile}">
+			<replacefilter token="@buildDate@" property="buildDate" />
+			<replacefilter token="@buildNum@" property="buildNum" />
+			<replacefilter token="@buildHost@" property="buildHost" />
+			<replacefilter token="@minorVersion@" property="minorVersion" />
+			<replacefilter token="@majorVersion@" property="majorVersion" />
+		</replace>
+	</target>
 
 
 </project>
