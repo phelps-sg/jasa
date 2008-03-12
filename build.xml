@@ -31,10 +31,10 @@
    <path id="project.classpath">
      <pathelement location="${ecjLoc}"/>
      <pathelement location="${junitLoc}"/>
-     <pathelement location="${log4jLoc}"/>     
+     <pathelement location="${log4jLoc}"/>
      <pathelement location="${troveLoc}"/>
-     <pathelement location="${schemeLoc}"/>     
-     <pathelement location="${collectionsLoc}"/>     
+     <pathelement location="${schemeLoc}"/>
+     <pathelement location="${collectionsLoc}"/>
      <pathelement path="${repastPath}"/>
      <pathelement path="${jfreechartPath}"/>
      <pathelement location="${outputDir}"/>
@@ -95,11 +95,8 @@
    	<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
 		<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params,lib/**" prefix="jasa-${versionStr}">
                   <exclude name="src/uk/ac/liv/ec/**"/>
-                  <exclude name="src/test/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
-                  <exclude name="src/test/uk/ac/liv/auction/ec/**"/>
 		  <exclude name="src/uk/ac/liv/auction/heuristic/**"/>
-		  <exclude name="src/test/uk/ac/liv/auction/heuristic/**"/>
 		 </tarfileset>
 	</tar>
     </target>
@@ -110,11 +107,8 @@
    	<tar compression="gzip" tarfile="jasa-src-${versionStr}.tar.gz">
 		<tarfileset dir="." includes="${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params" prefix="jasa-${versionStr}">
                   <exclude name="src/uk/ac/liv/ec/**"/>
-                  <exclude name="src/test/uk/ac/liv/ec/**"/>
                   <exclude name="src/uk/ac/liv/auction/ec/**"/>
-                  <exclude name="src/test/uk/ac/liv/auction/ec/**"/>
 		  <exclude name="src/uk/ac/liv/auction/heuristic/**"/>
-		  <exclude name="src/test/uk/ac/liv/auction/heuristic/**"/>
 		 </tarfileset>
 	</tar>
     </target>
@@ -153,7 +147,6 @@
 		<arg value="${params}"/>
 	</java>
     </target>
-
 
     <target name="customrun">
         <echo message="The main class is ${main}."/>
