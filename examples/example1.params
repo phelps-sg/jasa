@@ -26,8 +26,10 @@ simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.name = Example 1: discriminatory-price electricity CH
 
 # The auction will close after 100 rounds (or "ticks")
-simulation.auction.closing = uk.ac.liv.auction.core.MaxRoundsAuctionClosingCondition
-simulation.auction.closing.maximumrounds = 100
+simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
+simulation.auction.closing.maximumdays = 1
+simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
+simulation.auction.dayending.lengthofday = 100
 
 # Use a clearing house auctioneer - clearing will occur at the end of each
 #  round after every agent has had a chance to place a shout

@@ -5,3 +5,5 @@ parent.0 = learner.params
 
 equilibriumbeatingaccepting.learner = uk.ac.liv.ai.learning.SlidingWindowLearner
 equilibriumbeatingaccepting.delta = 0
+
+shouttypebasedaccepting.q = 0.5

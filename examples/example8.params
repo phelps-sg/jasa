@@ -60,12 +60,11 @@ simulation.writer.filename = cda-10-1_1-x-x-10.csv
 simulation.auction = uk.ac.liv.auction.core.RandomRobinAuction
 simulation.auction.name = Example 8: discriminatory-price CDA
 
-# The auction will close after 100 rounds (or "ticks")
-#simulation.auction.maximumrounds = 100
+# The auction will close after 10 days with 50 rounds each day (or "ticks")
 simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
 simulation.auction.closing.maximumdays = 10
 simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
-simulation.auction.dayending.lengthofday = 10
+simulation.auction.dayending.lengthofday = 50
 
 # Use a k-DA auctioneer- clearing will occur at the end of each
 #  round after every agent has had a chance to place a shout
