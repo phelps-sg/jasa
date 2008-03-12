@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import uk.ac.liv.auction.config.CaseEnumConfig;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.stats.ReportVariable;
+import uk.ac.liv.auction.stats.ReportVariableWriterReport;
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
 import uk.ac.liv.util.CummulativeDistribution;
@@ -91,6 +92,15 @@ import ec.util.ParameterDatabase;
  * experiments)</td>
  * </tr>
  * 
+ * <tr>
+ * <td valign=top><i>base</i><tt>.report</tt><br>
+ * <font size=-1></font></td>
+ * <td valign=top>(the parameter base for configuring a
+ * uk.ac.liv.auction.stats.ReportVariableWriterReport, recording values of
+ * specified report variables at different configuration scenarios in a .csv
+ * file when running a batch of heterogeneous experiments)</td>
+ * </tr>
+ * 
  * </table>
  * 
  * @author Steve Phelps
@@ -125,6 +135,8 @@ public class MarketSimulation implements Serializable, Runnable {
 	 */
 	protected static DataWriter resultsFile = null;
 
+	protected static ReportVariableWriterReport rvReport = null;
+
 	public static final String P_CASEENUM = "caseenum";
 
 	public static final String P_AUCTION = "auction";
@@ -134,6 +146,8 @@ public class MarketSimulation implements Serializable, Runnable {
 	public static final String P_ITERATIONS = "iterations";
 
 	public static final String P_WRITER = "writer";
+
+	public static final String P_REPORT = "report";
 
 	public static final String P_VERBOSE = "verbose";
 
@@ -174,9 +188,23 @@ public class MarketSimulation implements Serializable, Runnable {
 			CaseEnumConfig caseEnumConfig = new CaseEnumConfig();
 			caseEnumConfig.setup(parameters, base.push(P_CASEENUM));
 
+			try {
+				rvReport = new ReportVariableWriterReport();
+				rvReport.setup(parameters, base.push(P_REPORT));
+				caseEnumConfig.addObserver(rvReport);
+			} catch (Error e) {
+				// an error may indicate the report is not configured, which is normal.
+				rvReport = null;
+			}
+
 			if (caseEnumConfig.getCaseEnumNum() == 0) {
 				runSingleExperimentSet(parameters, base);
 			} else {
+				if (rvReport == null) {
+					logger.warn(ReportVariableWriterReport.class.getSimpleName()
+					    + " is not configured.");
+				}
+
 				runBatchExperimentSet(parameters, base, caseEnumConfig);
 			}
 
@@ -203,6 +231,11 @@ public class MarketSimulation implements Serializable, Runnable {
 
 		while (true) {
 
+			// notify that a set of experiments with new configuration starts (to
+			// ReportVariableWriterReport)
+			caseEnumConfig.markChanged();
+			caseEnumConfig.notifyObservers("start");
+
 			caseEnumConfig.apply(parameters, base.push(P_AUCTION));
 
 			// run simulation under the current combination of cases
@@ -217,6 +250,11 @@ public class MarketSimulation implements Serializable, Runnable {
 			logger.info("\n");
 
 			runSingleExperimentSet(parameters, base);
+
+			// notify that a set of experiments with current configuration ends (to
+			// ReportVariableWriterReport)
+			caseEnumConfig.markChanged();
+			caseEnumConfig.notifyObservers("end");
 
 			if (!caseEnumConfig.next())
 				break;
@@ -234,6 +272,9 @@ public class MarketSimulation implements Serializable, Runnable {
 		    .push(P_AUCTION), null, RandomRobinAuction.class);
 
 		auction.setup(parameters, base.push(P_AUCTION));
+		if (rvReport != null) {
+			auction.addReport(rvReport);
+		}
 
 		iterations = parameters.getIntWithDefault(base.push(P_ITERATIONS), null,
 		    iterations);
