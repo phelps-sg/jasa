@@ -275,7 +275,6 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
 	Shout splat(int excess) {
 		Shout newShout = new Shout(agent, quantity - excess, price, isBid);
-		// Shout newShout = ShoutPool.fetch(agent, excess, price, isBid);
 		quantity = excess;
 		child = newShout;
 		assert isValid();
