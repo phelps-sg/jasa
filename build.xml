@@ -45,7 +45,7 @@
 
 	<target name="cleanOutput">
 		<delete dir="${outputDir}" />
-		<delete file="jasa.jar" />
+		<delete file="jasa.jar" failonerror="false" />
 	</target>
 
 	<target depends="cleanOutput" name="prepareOutput">
