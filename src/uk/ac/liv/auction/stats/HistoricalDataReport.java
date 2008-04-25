@@ -36,7 +36,7 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.core.ShoutsNotVisibleException;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
-import uk.ac.liv.auction.event.ShoutReceivedEvent;
+import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 import uk.ac.liv.util.Resetable;
 import ec.util.Parameter;
@@ -187,7 +187,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		initialise();
 	}
 
-	public void updateShoutLog(ShoutReceivedEvent event) {
+	public void updateShoutLog(ShoutPlacedEvent event) {
 		Shout shout = event.getShout();
 		addToSortedShouts(shout);
 		if (shout.isAsk()) {
@@ -233,9 +233,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	public void eventOccurred(AuctionEvent event) {
 		if (event instanceof RoundClosedEvent) {
 			roundClosed(event);
-		} else if (event instanceof ShoutReceivedEvent) {
-			// TODO: replaced ShoutPlacedEvent
-			updateShoutLog((ShoutReceivedEvent) event);
+		} else if (event instanceof ShoutPlacedEvent) {
+			updateShoutLog((ShoutPlacedEvent) event);
 		} else if (event instanceof TransactionExecutedEvent) {
 			updateTransPriceLog((TransactionExecutedEvent) event);
 		}
