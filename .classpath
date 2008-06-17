@@ -8,5 +8,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/commons-collections"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/trove"/>
+	<classpathentry kind="lib" path="/lib/ecj15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
