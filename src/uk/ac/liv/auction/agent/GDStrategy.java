@@ -156,7 +156,7 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
 		}
 	}
 
-	private double calculateProbability(double price) {
+	public double calculateProbability(double price) {
 		// (taken bids below price) + (all asks below price)
 		// -------------------------------------------------------------------------------
 		// (taken bids below price) + (all asks below price) + (rejected bids
