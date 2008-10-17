@@ -17,6 +17,7 @@ package uk.ac.liv.auction.stats;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -82,6 +83,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	protected HashSet acceptedShouts = new HashSet();
 
+
+	protected Map shoutMap = Collections.synchronizedMap(new HashMap());
+
 	protected int memorySize = 10;
 
 	protected int currentMemoryCell = 0;
@@ -109,6 +113,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	protected SortedView view;
 
 	protected Observable observableProxy;
+	
+	protected static boolean flag = true;
+	
+	boolean debug = false;
 
 	public HistoricalDataReport() {
 		observableProxy = new Observable() {
@@ -117,6 +125,11 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 				super.notifyObservers();
 			}
 		};
+		
+		if (flag) {
+			debug = flag;
+			flag = !flag;
+		}
 	}
 
 	public void addObserver(Observer o) {
@@ -139,6 +152,17 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		logger.debug("memorysize = " + memorySize);
 
 	}
+	
+	public void checkConsistency() {
+		if (debug) {
+			if (asks.size() + bids.size() != sortedShouts.size()) {
+				logger.info("inconsistency found !");
+				logger.info(asks.size() + " " + getAsks() + "\n");
+				logger.info(bids.size() + " " + getBids() + "\n");
+				logger.info(sortedShouts.size() + " " + sortedShouts.iterator() + "\n");
+			}
+		}
+	}
 
 	protected void removeNShouts(int n, LinkedList shouts) {
 		for (int i = 0; i < n; i++) {
@@ -158,6 +182,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			memoryAsks[currentMemoryCell] = 0;
 			markMatched(asks);
 			markMatched(bids);
+			
+//			checkConsistency();
 		}
 
 		if (event.getAsk() == lowestUnacceptedAsk) {
@@ -189,6 +215,12 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	public void updateShoutLog(ShoutPlacedEvent event) {
 		Shout shout = event.getShout();
+//		if (sortedShouts.getCount(shout) > 0) {
+//			logger.info(sortedShouts.getCount(shout) + "\n" + shout);
+//			logger.info(shoutMap.get(shout.getId()));
+//		}
+//		
+//		shoutMap.put(shout.getId(), shout);
 		addToSortedShouts(shout);
 		if (shout.isAsk()) {
 			asks.add(shout);
@@ -217,6 +249,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 		markMatched(asks);
 		markMatched(bids);
+		
+//		checkConsistency();
+		
 		observableProxy.notifyObservers();
 	}
 
