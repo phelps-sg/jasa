@@ -31,7 +31,7 @@ import uk.ac.liv.auction.stats.ReportVariable;
 import uk.ac.liv.auction.stats.ReportVariableWriterReport;
 import uk.ac.liv.prng.GlobalPRNG;
 import uk.ac.liv.prng.PRNGFactory;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.Distribution;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.CSVWriter;
@@ -363,10 +363,10 @@ public class MarketSimulation implements Serializable, Runnable {
 			if (value instanceof Number) {
 				double v = ((Number) value).doubleValue();
 				if (!Double.isNaN(v)) {
-					CummulativeDistribution varStats = (CummulativeDistribution) resultsStats
+					SummaryStats varStats = (SummaryStats) resultsStats
 					    .get(var);
 					if (varStats == null) {
-						varStats = new CummulativeDistribution(var.toString());
+						varStats = new SummaryStats(var.toString());
 						resultsStats.put(var, varStats);
 					}
 					varStats.newData(v);

@@ -32,7 +32,7 @@ import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.electricity.ElectricityStats;
 import uk.ac.liv.auction.electricity.ElectricityTrader;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import cern.jet.random.engine.RandomSeedGenerator;
 
 /**
@@ -79,19 +79,19 @@ public abstract class ElectricityTest extends TestCase {
 	 * @uml.property name="mPB"
 	 * @uml.associationEnd
 	 */
-	protected CummulativeDistribution mPB;
+	protected SummaryStats mPB;
 
 	/**
 	 * @uml.property name="mPS"
 	 * @uml.associationEnd
 	 */
-	protected CummulativeDistribution mPS;
+	protected SummaryStats mPS;
 
 	/**
 	 * @uml.property name="eA"
 	 * @uml.associationEnd
 	 */
-	protected CummulativeDistribution eA;
+	protected SummaryStats eA;
 
 	/**
 	 * @uml.property name="ns"
@@ -170,9 +170,9 @@ public abstract class ElectricityTest extends TestCase {
 	}
 
 	public void initStats() {
-		mPS = new CummulativeDistribution("MPS");
-		mPB = new CummulativeDistribution("MPB");
-		eA = new CummulativeDistribution("EA");
+		mPS = new SummaryStats("MPS");
+		mPB = new SummaryStats("MPB");
+		eA = new SummaryStats("EA");
 	}
 
 	public void experimentSetup(int ns, int nb, int cs, int cb) {

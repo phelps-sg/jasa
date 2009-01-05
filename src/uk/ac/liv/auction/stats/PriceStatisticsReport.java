@@ -27,7 +27,7 @@ import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
 
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.Distribution;
 import uk.ac.liv.util.Resetable;
 
@@ -53,7 +53,7 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 	 * @uml.property name="stats"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	protected CummulativeDistribution[] stats;
+	protected SummaryStats[] stats;
 
 	static Logger logger = Logger.getLogger(PriceStatisticsReport.class);
 
@@ -105,38 +105,38 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 		}
 	}
 
-	public CummulativeDistribution getTransPriceStats() {
+	public SummaryStats getTransPriceStats() {
 		return stats[TRANS_PRICE];
 	}
 
-	public CummulativeDistribution getBidPriceStats() {
+	public SummaryStats getBidPriceStats() {
 		return stats[BID_PRICE];
 	}
 
-	public CummulativeDistribution getAskPriceStats() {
+	public SummaryStats getAskPriceStats() {
 		return stats[ASK_PRICE];
 	}
 
-	public CummulativeDistribution getBidQuoteStats() {
+	public SummaryStats getBidQuoteStats() {
 		return stats[BID_QUOTE];
 	}
 
-	public CummulativeDistribution getAskQuoteStats() {
+	public SummaryStats getAskQuoteStats() {
 		return stats[ASK_QUOTE];
 	}
 
 	public void initialise() {
-		stats = new CummulativeDistribution[] {
-		    new CummulativeDistribution("Transaction Price"),
-		    new CummulativeDistribution("Bid Price"),
-		    new CummulativeDistribution("Ask Price"),
-		    new CummulativeDistribution("Bid Quote"),
-		    new CummulativeDistribution("Ask Quote") };
+		stats = new SummaryStats[] {
+		    new SummaryStats("Transaction Price"),
+		    new SummaryStats("Bid Price"),
+		    new SummaryStats("Ask Price"),
+		    new SummaryStats("Bid Quote"),
+		    new SummaryStats("Ask Quote") };
 	}
 
 	public void reset() {
 		for (int i = 0; i < stats.length; i++) {
-			((CummulativeDistribution) stats[i]).reset();
+			((SummaryStats) stats[i]).reset();
 		}
 	}
 
@@ -149,7 +149,7 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 		try {
 			copy = (PriceStatisticsReport) clone();
 			for (int i = 0; i < stats.length; i++) {
-				copy.stats[i] = (CummulativeDistribution) stats[i].clone();
+				copy.stats[i] = (SummaryStats) stats[i].clone();
 			}
 		} catch (CloneNotSupportedException e) {
 			logger.error(e.getMessage());
@@ -183,7 +183,7 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 		logger.info("");
 	}
 
-	protected void printStats(CummulativeDistribution stats) {
+	protected void printStats(SummaryStats stats) {
 		stats.log();
 		logger.info("");
 	}

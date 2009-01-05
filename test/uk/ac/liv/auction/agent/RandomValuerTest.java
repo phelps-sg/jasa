@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import uk.ac.liv.PRNGTestSeeds;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.MathUtil;
 
 /**
@@ -53,7 +53,7 @@ public class RandomValuerTest extends TestCase {
 	public void testDistribution() {
 		System.out.println("testDistribution()");
 		System.out.println("Taking " + SAMPLES + " samples...");
-		CummulativeDistribution values = new CummulativeDistribution();
+		SummaryStats values = new SummaryStats();
 		for (int i = 0; i < SAMPLES; i++) {
 			valuer.drawRandomValue();
 			double value = valuer.getCurrentValuation();

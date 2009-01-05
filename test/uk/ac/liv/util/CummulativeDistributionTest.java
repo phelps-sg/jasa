@@ -32,14 +32,14 @@ public class CummulativeDistributionTest extends TestCase {
 	 * @uml.property name="testSeries"
 	 * @uml.associationEnd
 	 */
-	CummulativeDistribution testSeries;
+	SummaryStats testSeries;
 
 	public CummulativeDistributionTest(String name) {
 		super(name);
 	}
 
 	public void setUp() {
-		testSeries = new CummulativeDistribution("test series");
+		testSeries = new SummaryStats("test series");
 	}
 
 	public void testMean() {

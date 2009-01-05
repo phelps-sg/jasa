@@ -24,7 +24,7 @@ import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.stats.PriceStatisticsReport;
 import uk.ac.liv.auction.zi.ZITraderAgent;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 
 public class RandomConstrainedStrategyTest extends TestCase {
 
@@ -88,7 +88,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
 		System.out.println("testStrategy = " + testStrategy);
 		auction.run();
 		logger.produceUserOutput();
-		CummulativeDistribution askStats = logger.getAskPriceStats();
+		SummaryStats askStats = logger.getAskPriceStats();
 		assertTrue(approxEqual(askStats.getMin(), PRIV_VALUE));
 		assertTrue(approxEqual(askStats.getMax(), MAX_MARKUP + PRIV_VALUE));
 		assertTrue(approxEqual(askStats.getMean(), (MAX_MARKUP / 2) + PRIV_VALUE));
@@ -101,7 +101,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
 		System.out.println("testStrategy = " + testStrategy);
 		auction.run();
 		logger.produceUserOutput();
-		CummulativeDistribution bidStats = logger.getBidPriceStats();
+		SummaryStats bidStats = logger.getBidPriceStats();
 		assertTrue(bidStats.getMin() >= 0);
 		assertTrue(bidStats.getMax() <= PRIV_VALUE);
 	}

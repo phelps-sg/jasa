@@ -19,7 +19,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import uk.ac.liv.auction.ElectricityTest;
 import uk.ac.liv.auction.agent.PureSimpleStrategy;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 
 /**
  * 
@@ -33,37 +33,37 @@ public class ElectricityStatsTest extends ElectricityTest {
 	 * @uml.property name="sMPS"
 	 * @uml.associationEnd
 	 */
-	CummulativeDistribution sMPS;
+	SummaryStats sMPS;
 
 	/**
 	 * @uml.property name="sMPB"
 	 * @uml.associationEnd
 	 */
-	CummulativeDistribution sMPB;
+	SummaryStats sMPB;
 
 	/**
 	 * @uml.property name="pSA"
 	 * @uml.associationEnd
 	 */
-	CummulativeDistribution pSA;
+	SummaryStats pSA;
 
 	/**
 	 * @uml.property name="pBA"
 	 * @uml.associationEnd
 	 */
-	CummulativeDistribution pBA;
+	SummaryStats pBA;
 
 	/**
 	 * @uml.property name="pST"
 	 * @uml.associationEnd
 	 */
-	CummulativeDistribution pST;
+	SummaryStats pST;
 
 	/**
 	 * @uml.property name="pBT"
 	 * @uml.associationEnd
 	 */
-	CummulativeDistribution pBT;
+	SummaryStats pBT;
 
 	static final int NUM_SCHEDULES = 10;
 
@@ -99,12 +99,12 @@ public class ElectricityStatsTest extends ElectricityTest {
 
 	public void initStats() {
 		super.initStats();
-		sMPS = new CummulativeDistribution("SMPS");
-		sMPB = new CummulativeDistribution("SMPB");
-		pBA = new CummulativeDistribution("PBA");
-		pSA = new CummulativeDistribution("PSA");
-		pBT = new CummulativeDistribution("PBT");
-		pST = new CummulativeDistribution("PST");
+		sMPS = new SummaryStats("SMPS");
+		sMPB = new SummaryStats("SMPB");
+		pBA = new SummaryStats("PBA");
+		pSA = new SummaryStats("PSA");
+		pBT = new SummaryStats("PBT");
+		pST = new SummaryStats("PST");
 	}
 
 	public void updateStats() {

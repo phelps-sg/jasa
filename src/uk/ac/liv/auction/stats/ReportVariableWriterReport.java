@@ -33,7 +33,7 @@ import uk.ac.liv.auction.event.AuctionOpenEvent;
 import uk.ac.liv.auction.event.EndOfDayEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.io.CSVWriter;
 import ec.util.Parameter;
@@ -398,7 +398,7 @@ public class ReportVariableWriterReport implements AuctionReport,
 	static class InternalRVDistributionWriterReport extends
 	    InternalRVWriterReport {
 
-		CummulativeDistribution[] resultsStats;
+		SummaryStats[] resultsStats;
 
 		AuctionImpl auction;
 
@@ -409,10 +409,10 @@ public class ReportVariableWriterReport implements AuctionReport,
 		public void setup(ParameterDatabase parameters, Parameter base) {
 			super.setup(parameters, base);
 
-			resultsStats = new CummulativeDistribution[varNames.length];
+			resultsStats = new SummaryStats[varNames.length];
 
 			for (int i = 0; i < varNames.length; i++) {
-				resultsStats[i] = new CummulativeDistribution(varNames[i]);
+				resultsStats[i] = new SummaryStats(varNames[i]);
 			}
 		}
 

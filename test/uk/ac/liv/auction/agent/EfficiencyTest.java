@@ -24,7 +24,7 @@ import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.stats.SurplusReport;
 import uk.ac.liv.auction.zi.ZITraderAgent;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 
 /**
  * Tests that a given strategy yields a certain minimum benchmark mean
@@ -103,7 +103,7 @@ public abstract class EfficiencyTest extends TestCase {
 	public void testEfficiency() {
 		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
 		System.out.println("\ntestEfficiency()");
-		CummulativeDistribution efficiency = new CummulativeDistribution(
+		SummaryStats efficiency = new SummaryStats(
 		    "efficiency");
 		initialiseExperiment();
 		for (int i = 0; i < ITERATIONS; i++) {

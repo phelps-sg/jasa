@@ -23,7 +23,7 @@ import ec.util.ParameterDatabase;
 
 import java.util.Vector;
 
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.Parameterizable;
 
 import org.apache.log4j.Logger;
@@ -41,7 +41,7 @@ public class DailyStatsReport extends PriceStatisticsReport implements
 	/**
 	 * @uml.property name="dailyStats"
 	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.util.CummulativeDistribution"
+	 *                     elementType="uk.ac.liv.util.SummaryStats"
 	 */
 	protected Vector dailyStats;
 
@@ -63,14 +63,14 @@ public class DailyStatsReport extends PriceStatisticsReport implements
 		}
 	}
 
-	public CummulativeDistribution getTransPriceStats(int day) {
+	public SummaryStats getTransPriceStats(int day) {
 		if (day > dailyStats.size() - 1) {
 			return null;
 		}
-		return ((CummulativeDistribution[]) dailyStats.get(day))[TRANS_PRICE];
+		return ((SummaryStats[]) dailyStats.get(day))[TRANS_PRICE];
 	}
 
-	public CummulativeDistribution getPreviousDayTransPriceStats() {
+	public SummaryStats getPreviousDayTransPriceStats() {
 		if (auction.getDay() <= 0) {
 			return null;
 		}
@@ -80,9 +80,9 @@ public class DailyStatsReport extends PriceStatisticsReport implements
 	public void endOfDay(EndOfDayEvent event) {
 		// Make a copy of the current stats, reset them and record
 		try {
-			CummulativeDistribution[] currentStats = new CummulativeDistribution[stats.length];
+			SummaryStats[] currentStats = new SummaryStats[stats.length];
 			for (int i = 0; i < stats.length; i++) {
-				currentStats[i] = (CummulativeDistribution) stats[i].clone();
+				currentStats[i] = (SummaryStats) stats[i].clone();
 				stats[i].reset();
 			}
 			dailyStats.add(currentStats);
@@ -95,7 +95,7 @@ public class DailyStatsReport extends PriceStatisticsReport implements
 
 	public void produceUserOutput() {
 		for (int day = 0; day < dailyStats.size(); day++) {
-			CummulativeDistribution[] todaysStats = (CummulativeDistribution[]) dailyStats
+			SummaryStats[] todaysStats = (SummaryStats[]) dailyStats
 			    .get(day);
 			logger.info("Stats for day " + day);
 			logger.info("");

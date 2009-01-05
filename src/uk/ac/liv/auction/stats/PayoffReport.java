@@ -16,6 +16,7 @@
 package uk.ac.liv.auction.stats;
 
 import java.io.Serializable;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,7 +24,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
-import uk.ac.liv.util.HeavyweightDistribution;
+
+import uk.ac.liv.util.SummaryStats;
+
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -104,7 +107,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 
 	}
 
-	public HeavyweightDistribution getPayoffDistribution(Object key) {
+	public SummaryStats getPayoffDistribution(Object key) {
 		PayoffStats stats = (PayoffStats) table.get(key);
 		if (stats == null) {
 			return null;
@@ -187,7 +190,7 @@ class PayoffStats {
 	 * @uml.property name="payoffDistribution"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected HeavyweightDistribution payoffDistribution = new HeavyweightDistribution();
+	protected SummaryStats payoffDistribution = new SummaryStats();
 
 	public PayoffStats(int numAgents, double profits) {
 		this.numAgents = numAgents;
@@ -201,7 +204,7 @@ class PayoffStats {
 	/**
 	 * @uml.property name="payoffDistribution"
 	 */
-	public HeavyweightDistribution getPayoffDistribution() {
+	public SummaryStats getPayoffDistribution() {
 		return payoffDistribution;
 	}
 

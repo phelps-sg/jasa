@@ -30,7 +30,7 @@ import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 
@@ -56,7 +56,7 @@ public class ComplexityReport extends AbstractAuctionReport implements
 	 * @uml.property name="globalMargin"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution globalMargin = new CummulativeDistribution();
+	protected SummaryStats globalMargin = new SummaryStats();
 
 	/**
 	 * @uml.property name="independentHistograms"

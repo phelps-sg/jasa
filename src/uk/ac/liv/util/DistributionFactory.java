@@ -54,25 +54,25 @@ public abstract class DistributionFactory {
 
 	public abstract Distribution create(String name);
 
-	public static class Heavyweight extends DistributionFactory {
-
-		public Distribution create() {
-			return new HeavyweightDistribution();
-		}
-
-		public Distribution create(String name) {
-			return new HeavyweightDistribution(name);
-		}
-	}
+//	public static class Heavyweight extends DistributionFactory {
+//
+//		public Distribution create() {
+//			return new HeavyweightDistribution();
+//		}
+//
+//		public Distribution create(String name) {
+//			return new HeavyweightDistribution(name);
+//		}
+//	}
 
 	public static class Cummulative extends DistributionFactory {
 
 		public Distribution create() {
-			return new CummulativeDistribution();
+			return new SummaryStats();
 		}
 
 		public Distribution create(String name) {
-			return new CummulativeDistribution(name);
+			return new SummaryStats(name);
 		}
 	}
 }

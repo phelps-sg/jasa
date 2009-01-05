@@ -24,14 +24,14 @@ import uk.ac.liv.auction.core.Shout;
 import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
 public class VeracityReport extends AbstractAuctionReport {
 
-	protected CummulativeDistribution veracity;
+	protected SummaryStats veracity;
 
 	public static final ReportVariable VAR_VERACITY_MEAN = new ReportVariable(
 	    "veracity.mean", "mean value of veracity");
@@ -41,7 +41,7 @@ public class VeracityReport extends AbstractAuctionReport {
 
 	public VeracityReport() {
 		super();
-		veracity = new CummulativeDistribution("Veracity");
+		veracity = new SummaryStats("Veracity");
 	}
 
 	public void produceUserOutput() {

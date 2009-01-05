@@ -21,7 +21,7 @@ import ec.util.ParameterDatabase;
 import uk.ac.liv.prng.DiscreteProbabilityDistribution;
 
 import uk.ac.liv.util.Prototypeable;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.MathUtil;
 import uk.ac.liv.util.io.DataWriter;
 
@@ -378,7 +378,7 @@ public class RothErevLearner extends AbstractLearner implements Prototypeable,
 	/**
 	 * Compute modes of the probability distribution p.
 	 */
-	public void computeDistributionStats(CummulativeDistribution stats) {
+	public void computeDistributionStats(SummaryStats stats) {
 		p.computeStats(stats);
 	}
 

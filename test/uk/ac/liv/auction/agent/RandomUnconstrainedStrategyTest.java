@@ -24,7 +24,7 @@ import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.stats.PriceStatisticsReport;
 import uk.ac.liv.auction.zi.ZITraderAgent;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 
 public class RandomUnconstrainedStrategyTest extends TestCase {
 
@@ -88,7 +88,7 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
 		System.out.println("testAgent = " + testAgent);
 		System.out.println("testStrategy = " + testStrategy);
 		auction.run();
-		CummulativeDistribution askStats = logger.getAskPriceStats();
+		SummaryStats askStats = logger.getAskPriceStats();
 		System.out.println(askStats);
 		assertTrue(approxEqual(askStats.getMin(), 0));
 		assertTrue(approxEqual(askStats.getMax(), MAX_PRICE));

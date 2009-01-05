@@ -56,7 +56,7 @@ public class DiscreteProbabilityDistributionTest extends TestCase {
 	public void testStats() {
 		for (int test = 0; test < p.length; test++) {
 			DiscreteProbabilityDistribution subject = p[test];
-			CummulativeDistribution eventData = new CummulativeDistribution(
+			SummaryStats eventData = new SummaryStats(
 			    "Event_Data");
 			for (int trial = 0; trial < NUM_TRIALS; trial++) {
 				int event = subject.generateRandomEvent();

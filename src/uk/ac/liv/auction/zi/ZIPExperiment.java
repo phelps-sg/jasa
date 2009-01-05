@@ -26,7 +26,7 @@ import uk.ac.liv.auction.agent.AdaptiveStrategy;
 import uk.ac.liv.auction.stats.AuctionReport;
 import uk.ac.liv.auction.stats.DailyStatsReport;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import ec.util.Parameter;
 import ec.util.ParameterDatabase;
 
@@ -108,13 +108,13 @@ public class ZIPExperiment extends MarketSimulation {
 	 * @uml.property name="transPriceMean"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	protected CummulativeDistribution[] transPriceMean;
+	protected SummaryStats[] transPriceMean;
 
 	/**
 	 * @uml.property name="transPriceStdDev"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	protected CummulativeDistribution[] transPriceStdDev;
+	protected SummaryStats[] transPriceStdDev;
 
 	/**
 	 * @uml.property name="console"
@@ -206,13 +206,13 @@ public class ZIPExperiment extends MarketSimulation {
 	}
 
 	public void run() {
-		transPriceMean = new CummulativeDistribution[numDays];
-		transPriceStdDev = new CummulativeDistribution[numDays];
+		transPriceMean = new SummaryStats[numDays];
+		transPriceStdDev = new SummaryStats[numDays];
 
 		for (int day = 0; day < numDays; day++) {
-			transPriceMean[day] = new CummulativeDistribution(
+			transPriceMean[day] = new SummaryStats(
 			    "Mean of mean transaction price for day " + day);
-			transPriceStdDev[day] = new CummulativeDistribution(
+			transPriceStdDev[day] = new SummaryStats(
 			    "Mean of stddev of transaction price for day " + day);
 		}
 
@@ -224,7 +224,7 @@ public class ZIPExperiment extends MarketSimulation {
 			logger.debug("Auction terminated at round " + auction.getRound());
 
 			for (int day = 0; day < numDays; day++) {
-				CummulativeDistribution stats = marketData.getTransPriceStats(day);
+				SummaryStats stats = marketData.getTransPriceStats(day);
 				if (stats != null) {
 					transPriceMean[day].newData(stats.getMean());
 					transPriceStdDev[day].newData(stats.getStdDev());

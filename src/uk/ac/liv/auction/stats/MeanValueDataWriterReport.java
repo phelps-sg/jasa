@@ -23,7 +23,7 @@ import uk.ac.liv.auction.event.AuctionEvent;
 import uk.ac.liv.auction.event.RoundClosedEvent;
 import uk.ac.liv.auction.event.ShoutPlacedEvent;
 import uk.ac.liv.auction.event.TransactionExecutedEvent;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.io.DataWriter;
 
 /**
@@ -41,42 +41,42 @@ public class MeanValueDataWriterReport extends DataWriterReport {
 	 * @uml.property name="askQuoteStats"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution askQuoteStats = new CummulativeDistribution(
+	protected SummaryStats askQuoteStats = new SummaryStats(
 	    "Ask Quote");
 
 	/**
 	 * @uml.property name="bidQuoteStats"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution bidQuoteStats = new CummulativeDistribution(
+	protected SummaryStats bidQuoteStats = new SummaryStats(
 	    "Bid Quote");
 
 	/**
 	 * @uml.property name="bidStats"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution bidStats = new CummulativeDistribution(
+	protected SummaryStats bidStats = new SummaryStats(
 	    "Bid");
 
 	/**
 	 * @uml.property name="askStats"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution askStats = new CummulativeDistribution(
+	protected SummaryStats askStats = new SummaryStats(
 	    "Ask");
 
 	/**
 	 * @uml.property name="transPriceStats"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution transPriceStats = new CummulativeDistribution(
+	protected SummaryStats transPriceStats = new SummaryStats(
 	    "Transaction Price");
 
 	/**
 	 * @uml.property name="allStats"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	protected CummulativeDistribution[] allStats = { askQuoteStats,
+	protected SummaryStats[] allStats = { askQuoteStats,
 	    bidQuoteStats, askStats, bidStats, transPriceStats };
 
 	/**
@@ -140,7 +140,7 @@ public class MeanValueDataWriterReport extends DataWriterReport {
 		round++;
 	}
 
-	protected void update(DataWriter writer, CummulativeDistribution stats) {
+	protected void update(DataWriter writer, SummaryStats stats) {
 		// writer.newData(round);
 		writer.newData(stats.getMean());
 	}

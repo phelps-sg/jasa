@@ -34,7 +34,7 @@ import uk.ac.liv.auction.core.KPricingPolicy;
 import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.stats.PriceStatisticsReport;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 import uk.ac.liv.util.Parameterizable;
 import uk.ac.liv.util.Resetable;
 import uk.ac.liv.util.io.CSVWriter;
@@ -202,125 +202,125 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 	 * @uml.property name="efficiency"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution efficiency = new CummulativeDistribution(
+	protected SummaryStats efficiency = new SummaryStats(
 	    "EA");
 
 	/**
 	 * @uml.property name="mPB"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution mPB = new CummulativeDistribution("MPB");
+	protected SummaryStats mPB = new SummaryStats("MPB");
 
 	/**
 	 * @uml.property name="mPS"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution mPS = new CummulativeDistribution("MPS");
+	protected SummaryStats mPS = new SummaryStats("MPS");
 
 	/**
 	 * @uml.property name="pSA"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution pSA = new CummulativeDistribution("PSA");
+	protected SummaryStats pSA = new SummaryStats("PSA");
 
 	/**
 	 * @uml.property name="pBA"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution pBA = new CummulativeDistribution("PBA");
+	protected SummaryStats pBA = new SummaryStats("PBA");
 
 	/**
 	 * @uml.property name="pST"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution pST = new CummulativeDistribution("PST");
+	protected SummaryStats pST = new SummaryStats("PST");
 
 	/**
 	 * @uml.property name="pBT"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution pBT = new CummulativeDistribution("PBT");
+	protected SummaryStats pBT = new SummaryStats("PBT");
 
 	/**
 	 * @uml.property name="eAN"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution eAN = new CummulativeDistribution("EAN");
+	protected SummaryStats eAN = new SummaryStats("EAN");
 
 	/**
 	 * @uml.property name="mPBN"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution mPBN = new CummulativeDistribution("MPBN");
+	protected SummaryStats mPBN = new SummaryStats("MPBN");
 
 	/**
 	 * @uml.property name="mPSN"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution mPSN = new CummulativeDistribution("MPSN");
+	protected SummaryStats mPSN = new SummaryStats("MPSN");
 
 	/**
 	 * @uml.property name="sMPB"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution sMPB = new CummulativeDistribution("SMPB");
+	protected SummaryStats sMPB = new SummaryStats("SMPB");
 
 	/**
 	 * @uml.property name="sMPS"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution sMPS = new CummulativeDistribution("SMPS");
+	protected SummaryStats sMPS = new SummaryStats("SMPS");
 
 	/**
 	 * @uml.property name="sMPBN"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution sMPBN = new CummulativeDistribution("SMPBN");
+	protected SummaryStats sMPBN = new SummaryStats("SMPBN");
 
 	/**
 	 * @uml.property name="sMPSN"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution sMPSN = new CummulativeDistribution("SMPSN");
+	protected SummaryStats sMPSN = new SummaryStats("SMPSN");
 
 	/**
 	 * @uml.property name="pBCE"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution pBCE = new CummulativeDistribution("PBCE");
+	protected SummaryStats pBCE = new SummaryStats("PBCE");
 
 	/**
 	 * @uml.property name="pSCE"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution pSCE = new CummulativeDistribution("PSCE");
+	protected SummaryStats pSCE = new SummaryStats("PSCE");
 
 	/**
 	 * @uml.property name="equilibPrice"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution equilibPrice = new CummulativeDistribution(
+	protected SummaryStats equilibPrice = new SummaryStats(
 	    "EquilibPrice");
 
 	/**
 	 * @uml.property name="equilibQty"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution equilibQty = new CummulativeDistribution(
+	protected SummaryStats equilibQty = new SummaryStats(
 	    "EquilibQty");
 
 	/**
 	 * @uml.property name="learningDelta"
 	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
-	protected CummulativeDistribution learningDelta = new CummulativeDistribution(
+	protected SummaryStats learningDelta = new SummaryStats(
 	    "LD");
 
 	/**
 	 * @uml.property name="variables"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	protected CummulativeDistribution[] variables = new CummulativeDistribution[] {
+	protected SummaryStats[] variables = new SummaryStats[] {
 	    efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
 	    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, learningDelta };
 

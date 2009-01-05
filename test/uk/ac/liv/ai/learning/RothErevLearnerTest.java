@@ -20,7 +20,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import uk.ac.liv.PRNGTestSeeds;
 import uk.ac.liv.prng.GlobalPRNG;
-import uk.ac.liv.util.CummulativeDistribution;
+import uk.ac.liv.util.SummaryStats;
 
 public class RothErevLearnerTest extends TestCase {
 
@@ -44,7 +44,7 @@ public class RothErevLearnerTest extends TestCase {
 	public void testBasic() {
 		learner1.setExperimentation(0.99);
 		System.out.println("testBasic()");
-		CummulativeDistribution stats = new CummulativeDistribution("action");
+		SummaryStats stats = new SummaryStats("action");
 		int correctActions = 0;
 		for (int i = 0; i < 100; i++) {
 			int action = learner1.act();
@@ -76,11 +76,11 @@ public class RothErevLearnerTest extends TestCase {
 	public void testDistribution() {
 		System.out.println("\ntestDistribution()");
 		double q[] = { 55, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
-		CummulativeDistribution action1Data = new CummulativeDistribution("action1");
+		SummaryStats action1Data = new SummaryStats("action1");
 		for (int r = 0; r < 10000; r++) {
 			learner1 = new NPTRothErevLearner(10, 0.2, 0.2, 1);
 			learner1.setPropensities(q);
-			CummulativeDistribution choiceData = new CummulativeDistribution("choice");
+			SummaryStats choiceData = new SummaryStats("choice");
 			int action1Chosen = 0;
 			for (int i = 0; i < 100; i++) {
 				int choice = learner1.act();
