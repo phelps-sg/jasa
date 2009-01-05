@@ -1,0 +1,351 @@
+<html>
+<head>
+<title>How to Create Charts</title>
+</head>
+
+<body>
+<h1>
+<center>How to Create Charts</center>
+</h1><p>
+This document describes how to create and use sequence graphs,
+histograms, and plots in your own simulations. The Sugar Scape, Mouse
+Trap, and JinGirNew models each contain examples of charting, and can
+be used in conjunction with this document.<p>
+
+Charting in Repast is done through four classes:
+<ul>
+<li><a href="../api/uchicago/src/sim/analysis/OpenSequenceGraph.html">OpenSequenceGraph</a>
+<li><a href="../api/uchicago/src/sim/analysis/NetSequenceGraph.html">NetSequenceGraph</a>
+<li><a href="../api/uchicago/src/sim/analysis/OpenHistogram.html">OpenHistogram</a>
+<li><a href="../api/uchicago/src/sim/analysis/Histogram.html">Histogram</a>
+<li><a href="../api/uchicago/src/sim/analysis/Plot.html">Plot</a>
+</ul>
+
+Use the OpenSequenceGraph class to create, naturally enough, a
+sequence graph (some user defined values plotted versus
+time). NetSequenceGraph is similar but contains methods for easily
+plotting well-know network statistics vs. time. OpenHistogram is used
+to create a histogram whose bin ranges are dynamic, and Histogram to
+create a traditional standard histogram. The final class Plot can be
+used to plot any number of points on a graph and is usefull for
+plotting the results of a function where the input to that function is
+some simulation generated data. In additional you can zoom in on all
+five of these types of graphs. Details on each type follow below.
+<p>
+
+<h3>OpenSequenceGraph</h3>
+An OpenSequenceGraph will plot some user defined variable(s) versus
+time, that is, versus the tick count. Using an OpenSequenceGraph consists of
+creating an OpenSequenceGraph object, adding 
+<a href="../api/uchicago/src/sim/analysis/Sequence.html">Sequences</a>
+to it, scheduling updates on it, and displaying it.
+Creating a OpenSequenceGraph is well covered in the API
+<a href="../api/uchicago/src/sim/analysis/OpenSequenceGraph.html">docs</a>
+and in the demonstration simulations.<p>
+
+A Sequence is an interface that you must implement and it serves as
+the source for the data to be plotted. It has a single method
+<tt>public double getSValue()</tt>. An OpenSequenceGraph works by
+calling the <tt>getSValue()</tt> method on all the <tt>Sequences</tt>
+it contains and plotting the returned value vs. the current tick
+count. A single OpenSequenceGraph can contain multiple Sequences. An
+example:
+
+ <code><pre> 
+OpenSequenceGraph graph = new
+OpenSequenceGraph("Agent Stats.", this);
+
+graph.setXRange(0, 200);
+graph.setYRange(0, 200);
+graph.setAxisTitles("time", "agent attributes");
+
+class AverageAge implements Sequence {
+  public double getSValue() {
+    double totalAge = 0;
+    for (int i = 0; i < agentList.length; i++) {
+      Agent a = (Agent)agentList.get(i);
+      totalAge += a.getAge();
+    }
+    
+    return totalAge / agentList.length;
+  }
+}
+
+graph.addSequence("Avg. Age", new AverageAge());
+graph.addSequence("Avg. Vision", new Sequence() {
+  public double getSValue() {
+    double totalVision = 0;
+    for (int i = 0; i < agentList.length; i++) {
+      Agent a = (Agent)agentList.get(i);
+      totalVision += a.getVision();
+    }
+    
+    return totalVision / agentList.length;
+  }
+});
+</pre></code>
+
+This creates a OpenSequenceGraph labeled "Agent Stats." and associates
+it with the model referenced by "this". The initial range of the x and
+y axes are set and are given titles. Two Sequences are then added to
+this graph. The first is created as a non-anonymous inner class and
+computes the average age. The second is created as an anonymous inner
+class and computes the average vision. They are added with appropriate
+labels and the SequenceGraph will take care of creating the
+appropriate legends for them. The methods used to add sequences above,
+that is, <code>addSequence(String name, Sequence sequence)</code> is
+just one version of the addSequence method. There are others that
+allow you to set the color and point type of the sequence. In
+addition, there are also methods that will create and add a Sequence
+for you given an object reference and the name of a method to call on
+that object. See the 
+<a href="../api/uchicago/src/sim/analysis/OpenSequenceGraph.html">API</a>
+docs for details.<p>
+
+In order to update a SequenceGraph, you need to call its step() method.
+Typically this call would be scheduled every tick or at some interval.
+When this step() method is called on an OpenSequenceGraph it will call
+the getSValue method on all its Sequences and plot the results. See
+<a href="./scheduler.html">How to Use a Schedule</a> for more information
+on scheduling method calls for execution.<p>
+
+An OpenSequenceGraph is displayed by calling its <tt>display()</tt>
+method. This is typically done in a model's <tt>begin()</tt>
+method. You can also write the plotted data out to a file
+in tabular format with a OpenSequenceGraph's <tt>writeToFile()</tt>
+method.<p>
+
+<h3>NetSequenceGraph</h3> 
+The NetSequenceGraph is very similar to the OpenSequenceGraph: you can
+add your own sequences the manner described above and the graph itself
+is updated in the same way. (So if you haven't looked at the docs
+above for OpenSequenceGraph, you should.) However, NetSequenceGraph has
+some additional methods for plotting sequences of common network
+statistics such as density, component count and so forth. You can
+choose which of these "pre-canned" statistics to plot either through
+code or through the gui.<p>
+
+In code, for example,
+
+<code><pre>
+graph = new NetSequenceGraph("Network Stats", this, agentList);
+graph.setAxisTitles("Time","Statistic Value");
+graph.setXRange(0, 50);
+graph.setYRange(0, numNodes);
+
+graph.plotDensity("Density", Color.blue, graph.SQUARE);
+graph.plotComponentCount("Component Count", Color.green, graph.SQUARE);
+graph.plotClusterCoefficient("Cluster Coef.", Color.red, graph.SQUARE);
+</pre></code>
+
+The constructor to a NetSequenceGraph takes a title for the plot, a
+reference to the model, and a list of the agents, that is, network
+nodes. The next three lines do some setup on the graph and are
+identical to their OpenSequenceGraph counterparts. The last three tell
+the graph to plot three network statistics, density, component count,
+and the cluster coefficient. In each case, the method takes three
+arguments, a legend, the color to plot the sequence with and the point
+type to plot the sequence with. The various plot* methods have also
+have versions with less arguments that use default values so you
+needn't specify the color or point style if you don't want to. See
+the <a href="../api/uchicago/src/sim/analysis/NetSequenceGraph.html">API</a> docs for more info.<p>
+
+To have the graph plot network stats via the gui, you'll need to
+create the graph and display it as described above. Once it is
+displayed you can click on the setup tab and add network stats via the
+gui.<p>
+
+Note that we are currently working on the robustness of these
+statistics. They should be used only as guides. The actual statistical
+analysis of your network should be done using established tools.<p>
+
+
+<h3>OpenHistogram</h3>
+The OpenHistogram class represents a dynamic bar chart, and allows the
+user to histogram data generated by a collection of objects.  The
+histogram range, as displayed on the screen, is [lowerBound, maxValue]
+where the maxValue is calculated each time the graph is stepped. The
+individual bin ranges except for the final bin are [Math.floor(value),
+Math.ceil(value + interval)) where interval is calculated by (maxValue
+- lowerBound) / numBins.  The final bin is inclusive at the top end.
+Note that the individual bin ranges are dynamic and as such there is
+never any under- or overflow. Histogram (see below) can be used for a
+more traditional histogram where the bin ranges are static.<p>
+
+
+Using an OpenHistogram is much the same as an OpenSequenceGraph. The
+OpenHistogram is created, histogram items (i.e. the collection of
+bins) are created via the OpenHistogram, its updates are scheduled,
+and it is displayed. The creation of an OpenHistogram is well covered
+in the API
+<a href="../api/uchicago/src/sim/analysis/OpenHistogram.html">documentation</a>,
+and in the demonstration simulations.<p>
+
+HistogramItems are the individual set of bins displayed by a
+Histogram.  For example, you may have one set of bins that displays a
+histogram of agents' wealth and another that displays an environment's
+resources.  HistogramItems are created created via an OpenHistogram's
+<tt>createHistogramItem(String name, List list, BinDataSource
+source)</tt> method. The name argument here merely tags and displays
+this HistogramItem with this name. The remaining two arguments provide
+the source of the data for the histogram as well as a means for
+getting that data.<p>
+
+The mechanics of an OpenHistogram update are as follows.  For each
+HistogramItem contained by the OpenHistogram, that HistogramItem
+iterates over the list specified when the HistogramItem was created
+(via Histogram.createHistogramItem) passing each Object in the list as
+an argument to the getBinValue method of the BinDataSource.  This
+getBinValue method returns a double. All these doubles are then
+distributed across the bins according to the number of bins, the lower
+bound, and the maximum value. For example, given 2 bins, a lower bound
+of 0 and a maximum value of 4. The first bin will contain all the
+values from 0 up to but not including 2, and the final bin will
+contain all the values from 2 up to <em>and</em> including 4. The
+displayed bin value (i.e. the height of the bar in the chart) is the
+number of values that fall within this bin.<p>
+
+
+A <a href="../api/uchicago/src/sim/analysis/BinDataSource.html">BinDataSource</a>
+is an interface with a single method <tt>getBinValue(Object o)</tt>
+that must be implemented by the modeler. As mentioned above the
+<tt>Object o</tt> passed into the getBinValue method is an Object from
+the List of objects passed in with OpenHistogram's createHistogramItem
+method. Each object in the list will be passed to this
+<tt>getBinValue</tt> method during an update. The following example
+from SugarModel.java should help to make things clear.
+
+<code><pre>
+bar = new OpenHistogram("Agent Wealth Distribution", 10, 0);
+
+bar.setYRange(0, 100.0);
+
+BinDataSource source = new BinDataSource()  {
+  public double getBinValue(Object o) {
+    SugarAgent agent = (SugarAgent)o;
+    return agent.getSugar();
+  }
+};
+
+bar.createHistogramItem("Wealth", agentList, source);
+</pre></code>
+
+This creates a new OpenHistogram called "Agent Wealth Distribution" that
+contains 10 bins and lower bound of 0. The initial range of the y axis
+is set as 0 - 100. The x range is automatically set dependent on the
+number of bins, and what is being histogrammed. The BinDataSource
+source merely returns the amount of sugar that the SugarAgent passed
+into the getBinValue method has. A HistogramItem called "Wealth" that
+gets its data using the objects in agentList and the BinDataSource
+soure is then created. The effect here is to create 10 bins. Each bin
+will display how many agents have an amount of sugar within the range
+specified by that bin. The actual mechanics here is to iterate over
+every agent in agentList, passing each agent to the getBinValue method
+in the BinDataSource "source" which then returns the amount of sugar
+that agent has. The max value of these amounts determines the range of
+each bin by taking the max value - lower bound (in this case 0) and
+dividing it by the number of bins. The amount values are then placed
+into the appropriate bin, and the number of amount values in that bin
+is the height of the bar when the bin is displayed.<p>
+
+<p>
+OpenHistogram also contains methods to create a BinDataSource while
+creating the HistogramItem, given an object reference and the method
+name to call on that object. The method here is functions in place of
+the getBinValue(Object o) method of a BinDataSource, and thus it
+should taken an Object as a parameter and return a numeric value.
+<p>
+
+Like an OpenScheduleGraph an OpenHistogram is updated using its step()
+method.  Typically this call would be scheduled every tick or at some
+interval.  When this step() method is called on an OpenHistogram the
+OpenHistogram is updated via the HistogramItems as described
+above. See <a href="./scheduler.html">How to Use a Schedule</a> for
+more information on scheduling method calls for execution.<p>
+
+An OpenHistogram is displayed by calling its <tt>display()</tt>
+method. This is typically done in your models <tt>begin()</tt>
+method.<p>
+
+<h3>Histogram</h3> 
+The Histogram class represents a dynamic bar chart and allows the user
+to histogram data generated by a collection of objects (such as the
+list of agents in your model). It differs from OpenHistogram in that
+its bin sizes are static, and thus there is the potential for over-
+and underflow. The histogram range is [lowerBound, maxValue] and the
+individual bin ranges are [Math.floor(value), Math.ceil(value +
+interval)) where interval is calculated by (maxValue - lowerBound) /
+numBins. Note that, unlike OpenHistogram, maxValue is not recalcuated
+each step, but is a value provided by the modeler.<p>
+
+Using a Histogram is nearly identical to using an OpenHistogram. The
+Histogram is created, a HistogramItem (i.e. the collection of
+bins) is created via the Histogram, its updates are scheduled,
+and it is displayed. The creation of a Histogram is well covered
+in the API
+<a href="../api/uchicago/src/sim/analysis/Histogram.html">documentation</a>,
+and in the JinGirNew demonstration simulation.<p>
+
+The mechanics of a Histogram are identical to that of an OpenHistogram
+as is the creation of HistogramItems. See above, under OpenHistogram
+for the details, as well as for applicable examples. However, only a
+single HistogramItem can be created with a Histogram.<p>
+
+A Histogram will also report over- and underflow by default as well as
+the mean and rms for the histogram. This can be turned off with the 
+<tt>setStatsVisible(boolean val)</tt> method. The actual histogramming
+of data is performed by the colt library's Histogram1D class. This class
+provides a variety of methods for working with a one dimensional 
+histogram. See the API docs for
+<a href="../colt/hep/aida/ref/Histogram1D.html">Histogram1D</a> for the
+details. You can get a reference to Histogram's underlying Histgram1D
+using Histogram's <tt>getHistogram</tt> method.<p>
+
+
+<h3>Plot</h3>
+The plot class is a generic point plotting class and can be used to
+plot multiple points, e.g. plotting a function whose input is some
+simulation data. Use the plotPoint method to plot the points,
+updateGraph to display those points, and clear to clear the graph of
+all the points. For example:
+
+<code><pre>
+Plot aPlot = new Plot("Test Plot");
+aPlot.display();
+aPlot.setConnected(true);
+
+for (double i = 0; i < 100; i++) {
+  aPlot.plotPoint(i, Math.sin(i), 0);
+}
+
+aPlot.updateGraph();
+
+aPlot.plotPoint(3.0, 4.0, 1);
+aPlot.plotPoint(5.0, 1.4, 1);
+aPlot.fillPlot();
+</pre></code>
+This creates a new Plot entitled "test plot" and then displays
+it. Calling setConnected(true) ensures that any plotted points will be
+connected. A sin wave is then plotted using plot point, the graph is
+updated with updateGraph() which will actually display the previously
+plotted points. A new series of points is then plotted and fillPlot()
+is called. fillPlot() will shrink the range of the axises so that the
+plotted points just fit and automatically update the graph.
+ See the API
+<a href="../api/uchicago/src/sim/analysis/Plot.html">docs</a> for more
+information.
+
+<h3>Zooming</h3>
+You can zoom by left clicking with the mouse and drawing
+a box around the portion of the graph you wish to zoom. Drawing
+the box by left dragging will zoom in, right dragging will zoom 
+out. You can return the initial pre-zoom state by pressing the 'r' key.
+
+<h3>Custom Charts</h3>
+With Repast 2.0, there is provisional support for creating your own 
+charts using a GUI chart builder. Click on the create / edit charts
+button and follow the dialog prompts.
+
+
+</body>
+</html>

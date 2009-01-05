@@ -1,0 +1,28 @@
+#
+# Some sample aditional parameters for steady-state evolution,
+# beyond what's provided in, say, simple/simple.params
+#
+
+# ec.Evolve
+# ==============================
+
+# simple generational evolution
+state = 				ec.steadystate.SteadyStateEvolutionState
+# one "generation" is 1024 individuals processed
+pseudogeneration = 		1024
+
+# threads should be 1 each
+evalthreads = 				1
+breedthreads = 				1
+
+# ec.EvolutionState
+# ==============================
+
+# We'll use a SimpleExchanger
+exch = 					ec.simple.SimpleExchanger
+
+# We MUST use a SteadyStateBreeder and SteadyStateEvaluator
+breed =					ec.steadystate.SteadyStateBreeder
+eval =					ec.steadystate.SteadyStateEvaluator
+
+# Remember that any species you use MUST be of the SteadyStateSpeciesForm

@@ -1,0 +1,265 @@
+<html>
+<head>
+<title>How to Collect Data</title>
+</head>
+
+<body>
+<h1>
+<center>How to Collect Data</center> </h1><p> Data collection is
+handled primarily through the 
+<a href="../api/uchicago/src/sim/analysis/DataRecorder.html">DataRecorder</a>
+object which can record data from a variety of sources and write that
+data out in tabular format to a file.  The Enn (Endogenous
+Neighborhood) demonstration simulation (in repast/demo/enn) has a good
+example of how to use a DataRecorder object and should be explored in
+conjunction with this document. In addition to the DataRecorder class,
+some other options for data collection are described at the end of
+this document.
+<p>
+Using a DataRecorder is a matter of creating it, adding data sources to it, and
+then scheduling records and file writes. The following is an example of
+creating the DataRecorder variable recorder. 
+Creating a DataRecorder looks like:<p>
+<code>
+recorder = new DataRecorder("./data.txt", this);
+</code>
+<p>
+or to add an optional header comment to the output file:
+<p>
+<code>
+recorder = new DataRecorder("./data.txt", this, "A Comment");
+</code>
+<p>
+
+The first argument is the name of the file to write the data out to, the 
+second is the model associated with the recorder (and so the argument is
+"this" given that the recorder is created within the model). In the
+second example, the final argument is an optional header comment. 
+Once constructed the DataRecorder queries the model to determine if
+the simulation is running in batch mode. If so, the data recorder 
+will write all the data to a single file keeping track of the run 
+number and so forth.<p>
+
+Creating and adding data sources to the DataRecorder tells the 
+DataRecorder where to find the data to record. The DataRecorder will record 
+the data from these sources when it is sent the record() message, 
+usually by the scheduling mechanism. The source of data for DataRecorder 
+is typically a method call on some object, or the value of some instance 
+variable. The actual sources for data can be of two types: numbers
+(ints, floats, longs, doubles) and objects (Strings etc.). 
+<p>
+
+In order for the DataRecorder to know how to work with the wide variety
+of possible data sources, these method calls or instance variables must
+be wrapped in one of two interfaces - NumericDataSource or DataSource,
+where NumericDataSource is for numeric datasources and DataSource is for
+anything else. The <code>NumericDataSource</code> interface has a
+single method: <code>public double execute()</code>, and the
+<code>DataSource</code> interface also has a single method:
+<code>public Object execute()</code>. Wrapping your data source in
+one of these interfaces entails creating a class that implements
+one of the above interfaces and returning the data you wish to record
+from the execute method. Like BasicActions, you can create these 
+classes by hand or have Repast dynamically create them for you. An
+example follows:
+
+<code><pre>
+public class MyModel extends SimModelImpl {
+
+  private int numAgents;
+  private Space space;
+  private DataRecorder recorder;
+
+  ...
+
+  class NumDataSource implements NumericDataSouce {
+    public double execute() {
+      return numAgents;
+    }
+  }
+
+  class ObjDataSource implements DataSource {
+    public Object execute() {
+      return space.getData();
+    }
+  }
+
+  private void buildModel() {
+    recorder = new DataRecorder("./data.txt", this);
+    recorder.addNumericDataSource("numAgents", new NumDataSource());
+    recorder.addObjectDataSource("SpaceData", new ObjDataSource());
+    ...
+  }
+}
+</pre></code>
+
+Here, we have implemented two data sources as inner classes to our 
+model. The first, NumDataSource, merely returns the value of the
+numAgents ivar. The second, ObjDataSource, calls a method on 
+some hypothetical Space object that returns an Object for recording.
+We then add these DataSources to the recorder in the buildModel()
+method. Having added the DataSources, the execute() methods of these
+DataSources will be called whenever we call DataRecorder.record(). (You could
+also use anonymous inner classes here in place of teh explicit inner
+classes ObjectDataSource and NumDataSource.)
+<p>
+
+If you wish Repast to create a class that implements one of these
+interfaces for you, the code looks like:
+
+<code><pre>
+public class MyModel extends SimModelImpl {
+
+  private int numAgents;
+  private Space space;
+  private DataRecorder recorder;
+  ...
+
+  public int getNumAgents() {
+    return numAgents;
+  }
+
+  public String getSpaceData() {
+    return space.getData();
+  }
+
+
+  private void buildModel() {
+    recorder = new DataRecorder("./data.txt", this);
+    recorder.createNumericDataSource("numAgents", this, "getNumAgents");
+    recorder.createObjectDataSource("SpaceData", this, "getSpaceData");
+    ...
+  }
+}
+</pre></code>
+
+Here, we create the DataSources and add them with method calls to the
+DataRecorder object. The create* methods of the DataRecorder takes a
+label for the data to be recorded, an object reference, and the name
+of the method to call on that object that will return the data. So, in
+the above, Repast creates a NumericDataSource object whose execute
+method calls getNumAgents(). The createObjectDataSource works in a
+similar way. The results of either method of creating DataSources, by
+hand or dynamically, are comparable. However, with dynamic creation
+such errors as mis-spelling the method name argument in the create*
+call will not be caught until runtime.
+<p>
+
+For NumericDataSources you can also specify the number of digits
+both before and after the decimal point that you wish to record. So
+for example, <code>recorder.createNumericDataSource("numAgents", 
+this, "getNumAgents", 3, 4)</code> will record 3 digits before the
+decimal point and 4 after. If the DataSource produces 3333.22222222,
+the value 333.2222 will be recorded. An argument of -1 will record
+all the digits, so  <code>recorder.createNumericDataSource("numAgents", 
+this, "getNumAgents", -1, 4)</code> will record 3333.2222. Note that
+the number is not truncated, but rounded according to standard rules
+for rounding floating point numbers. See the API 
+<a href="../api/uchicago/src/sim/analysis/DataRecorder.html">documentation</a>
+for more info on the DataRecorder class.
+<p>
+
+The actual data collection via the record() method and writes of the
+recorded data to a file via writeToFile() are scheduled just 
+like any other methods to be scheduled. For example,
+
+<code><pre>
+schedule.scheduleActionBeginning(0, new BasicAction() {
+  public void execute() {
+    dRecorder.record();
+  }
+});
+
+schedule.scheduleActionAtEnd(dRecorder, "writeToFile");
+</pre></code>
+
+tells the scheduling mechanism to call the record() method on the
+DataRecorder variable dRecorder every tick beginning at 0. As
+mentioned above dRecorder then queries its data sources in the manner
+described above and records the result.  The above also tells the
+scheduling mechanism to call the "writeToFile" method on
+dRecorder. dRecorder then writes the collected data to the file
+specified when the dRecorder was constructed, appending the data if
+data has already been written during this run. The output file begins
+with a header giving model parameters for this run, followed by the
+data in tabular format.  For example
+<p>
+<code>
+RngSeed: 948816295132<br>
+numAgents: 100<br>
+maxAge: 120<br>
+<br>
+"tick","Avg. Age"<br>
+0.0,33<br>
+1.0,33<br>
+2.0,32<br>
+3.0,40<br>
+...
+</code><p>
+The output file in a batch run is slightly different. There, any constant
+parameters are recorded in the header as is the starting time of the batch run.
+Any dynamic parameters as defined in the batch parameter file are recorded 
+in the body of the table.<p>
+ 
+You can also change the delimiter for the recorded
+data with the <tt>setDelimiter(String val)</tt> method. The default 
+delimiter is "," and so by default recorded data will look something like 
+that above. Changing the delimimter to a ":" for example, will result in:
+<p>
+<code>
+RngSeed: 948816295132<br>
+numAgents: 100<br>
+maxAge: 120<br>
+<br>
+"tick":"Avg. Age"<br>
+0.0:33<br>
+1.0:33<br>
+2.0:32<br>
+3.0:40<br>
+...
+</code><p>
+
+<b>Note</b> that data is stored in memory until the writeToFile call
+at which point it is flushed. If you are experiencing memory problems,
+write your data to a file more frequently.
+<p>
+
+<b>Additional Ways to Collect Data</b><br>
+In addition to the DataRecorder there are several other options for
+recording data from a Repast simluation. For the ways to record
+network data, see <a href="./network.html">Network Models</a>.
+Recording data via an 
+<a href="../api/uchicago/src/sim/analysis/ObjectDataRecorder.html">ObjectDataRecorder</a>
+is described below.<p>
+
+An ObjectDataRecorder records arbitrary objects to files as Strings
+together with an optional comment. Typically, this comment will be the 
+tick count, but need not be. An ObjectDataRecorder is constructed
+much like a DataRecorder object with a fileName and associated
+model. Unlike a DataRecorder an ObjectDataRecorder has no data sources, and
+records an arbitrary object when instructed to do so via its
+record() method.<p>
+
+In non-batch mode, a file header will be written that includes all the
+model's properties and the values of these properties. These values
+will be the value at the time the first call to write is made, allowing the
+user to manipulate the parameters after setting up but prior to running the
+model. Consequently, your initial model parameters should only be
+changeable via the user or through a parameter file. If not, the file header
+may be inaccurate. The actual data will be written as a block where the
+block includes the optional comment as a header, followed by the String
+representation of the object itself. This String representation is
+acquired via the object's toString() method.<p>
+
+In batch mode, any constant model parameters will be written in the
+file header. The data block will include the value of any dynamic
+parameters, the run number, as well as the optional comment (again,
+typically the tick count), together with the String representation of the
+Object to be recorded.<p>
+
+Data is recorded by an ObjectDataRecorder via its record() method and 
+written to a file via its write() method. See the API
+<a href="../api/uchicago/src/sim/analysis/ObjectDataRecorder.html">docs</a>
+for more information.
+</body>
+</html>

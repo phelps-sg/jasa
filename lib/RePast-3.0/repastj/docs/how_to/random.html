@@ -1,0 +1,192 @@
+<head>
+<title>How to Work with Random Numbers</title>
+</head>
+
+<body>
+<h1>
+<center>How to Work with Random Numbers</center>
+</h1>
+<h2>Contents</h2>
+<ul>
+<li><a href="#random">The Random class</a></li>
+<li><a href="#custom">Custom Random Number Generation</a></li>
+</ul>
+
+<a name="random">
+<b>The Random Class</b><br>
+The Random class (uchicago.src.sim.util.Random) provides
+default random number generation for Repast. Random 
+encapsulates the <a href="http://tilde-hoschek.home.cern.ch/~hoschek/colt/V1.0.2/doc/index.html">colt</a> library's 
+random number generation by consolidating all the random number
+distributions provided by the colt library into a single class. These
+distributions are wrapped as static instance variables.
+The intent here is two-fold: provide easier access
+to these distributions and more importantly to insure that each
+distribution uses the same random number stream, allowing for easily
+repeatable behavoir of random number generation.<p>
+ 
+Random contains a variety of random number distributions as static
+instance variables as well as a few next* methods for returning the
+next psuedo-random value from a distribution. Before using any of the
+instance variable distributions, these distributions must be created via
+the appropriate create* method. For example,
+<code><pre>
+// initialize Random.uniform
+Random.createUniform();
+
+// Random.uniform is now initialized and can be used.
+int index = Random.uniform.getNextIntFromTo(0, 100);
+</pre></code>
+This creates a uniform distribution from which to draw random numbers.
+You can then draw random numbers from this distribution using
+the the appropriate methods. See the cern.jet.random package in the
+<a href="../colt/index.html">colt</a> documentation for the details
+of these methods. The actual random number generator is seeded on 
+first use with the current timestamp. See below for more details on 
+seeding the generator.<p>
+
+Once created a distribution can be used anywhere in your code through the
+use of Random's static instance variables. So for example, if you create
+the Uniform distribution in your model's begin() method, you can access the
+same Uniform distribution in your model's agent code with
+<code>Random.uniform</code>. This instance variable should always be
+referenced as such, that is, as Random._distribution_name_, and not as
+the right hand side of an assignment. Assigning a variable in this way
+can lead to unpredictable results when setting the random seed. 
+In short, code like this:
+<code><pre>
+int index = Random.uniform.nextIntFromTo(0, 10);
+</pre></code>
+and <b>never like this</b>:
+<code><pre>
+Uniform myUniform = Random.uniform; <b>// This is dangerous. Don't do it!!!</b>
+...
+int index = myUniform.nextIntFromTo(0, 10);
+</pre></code>
+
+All but one of the distributions in Random are from the 
+colt library. The instance variable name is the same as 
+the corresponding colt object with the first
+character in lower case. For example, the cern.jet.Random.Zeta distribution 
+is Random.zeta. See the cern.jet.random package in the
+<a href="../colt/index.html">colt</a> library documentation
+for more information about these distributions, and how to 
+draw random numbers from them.
+
+The next* methods can be used as is, without creating a distribution
+before hand. For example,
+<code><pre>
+double s = Random.nextCauchy();
+</pre></code>
+Draws the next value from a Cauchy distribution.<p>
+
+In all cases, the distributions use a MersenneTwister as the
+source for psuedo-random numbers. The MersenneTwister is a
+particularly good generator for simulations as it has an
+extremely large period. This generator is seeded on first use
+with the current timestamp. However, Random also allows you to set and 
+get the random seed as well as the random number generator associated 
+with that seed. Setting a new seed with <code>Random.setSeed</code> 
+will create a new MersenneTwister with the specified seed and 
+<b>invalidate</b> any previously created distributions. If you wish to use
+a distribution after the seed has been set, you must create it as
+described above. Consequently, the following is correct code:
+<code><pre>
+Random.createUniform();
+int index = Random.uniform.nextIntFromTo(1, 10);
+...
+Random.setSeed(1L);
+Random.createUniform();
+...
+int index = Random.uniform.nextIntFromTo(1, 10);
+</pre></code>
+but this is <b>not</b>:
+<code><pre>
+Random.createUniform();
+int index = Random.uniform.nextIntFromTo(1, 10);
+...
+Random.setSeed(1L);
+...
+int index = Random.uniform.nextIntFromTo(1, 10); <b>// This won't work</b>
+</pre></code>
+
+Calling a Repast model's setRngSeed method will also set Random's seed,
+as will setting the seed through the parameter's panel of a gui model.
+Once the seed has been set all the distributions will
+use the same random number stream and repeatable randomness can be 
+easily achieved.<p>
+
+Note that Random creates a default random number generator using the
+current timestamp as the seed. If you do not explicitly set your own seed,
+the distributions created via the create* calls will use this default
+generator.<p>
+
+The normal pattern of use then is to create the distributions you want,
+and having done so draw randon numbers from those distributions
+througout your code via Random's instance variables. For
+example:
+<code><pre>
+Random.createUniform();
+Random.createNormal(.5, .3);
+...
+int index = Random.uniform.nextIntFromTo(0, 10);
+double val = Random.normal.nextDouble();
+</pre></code>
+
+<a name="custom">
+<b>Custom Random Number Generation</b><br>
+Custom random number generation still uses the colt library but
+bypasses Repast's Random class. You'll need to do this if you
+want to use distributions with independent random number streams (random
+number generators). The general idea here is to define some
+instance variables in your model of the appropriate distribution
+types, create your random number generators and then associate these
+generators with the distributions you want to use. For example:
+<code><pre>
+import cern.jet.random.*;
+import cern.jet.random.engine.MersenneTwister;
+...
+
+public class MyModel extends SimModelImpl {
+  
+  Normal myNormalDist;
+  Uniform myUniformDist;
+
+  ...
+
+  public void begin() {
+    MersenneTwister generator1 = new MersenneTwister(123);
+    MersenneTwister generator2 = new MersenneTwister(321);
+
+    myNormalDist = new Normal(1.0, 1.0, generator1);
+    myUniformDist = new Uniform(generator2);
+  }
+
+  ...
+
+  public void someMethod() {
+    int index = myUniformDist.nextIntFromTo(0, 10);
+    doubl val = myNormalDist.nextDouble();
+ }
+}
+
+</pre></code>
+The important part here is the creation of two different 
+MersenneTwisters. This will provide two different random number
+streams to the distributions. You can parameterize the seeds
+to these distributions and make them available to be set via the 
+user interface or through a parameter file, by providing get
+and set methods for two seed values. You would then use the seed variables
+to seed the MersenneTwisters in place of "123" and "321" above.
+
+If the seeds are user specifiable, its also important to create 
+the distributions in the begin() method rather than the setup() method. 
+Any parameter changes will occur after setup() has been called and
+so creating your distributions there will ignore any parameter changes.<p>
+
+For more information see the doc for cern.jet.random in the
+<a href="../colt/index.html">colt</a> library documentation.<p>
+
+
+</body>
+</html>

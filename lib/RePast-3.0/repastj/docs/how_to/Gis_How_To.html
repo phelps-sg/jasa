@@ -1,0 +1,459 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
+  <title>Gis How To</title>
+</head>
+<body>
+<h1 style="text-align: center;">How to use GIS data with Repast</h1>
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<br>
+<br>
+GIS support has been updated for this version of Repast<br>
+<br>
+The main classes you need to know about are in the following packages:<br>
+<br>
+anl.repast.gis<br>
+anl.repast.gis.data<br>
+anl.repast.display<br>
+<br>
+For an example of creating and modifying agents from Shapefile data,
+see &lt;http://www.cs.indiana.edu/~rnajlis/MasMas/slugis.html&gt;<br>
+<br>
+For an example of creating agents from code, as well as just putting up
+a shapefile as a visible layer, see
+anl.repast.gis.adaptors.openmap.demo#GisAgentsSampleModel.java,<br>
+as well as&nbsp; anl.repast.gis.adaptors.openmap.demo#PointAgent.java,
+anl.repast.gis.adaptors.openmap.demo#CircleAgent.java, and
+anl.repast.gis.adaptors.openmap.demo#URLRasterLocation.java<br>
+<br>
+<br>
+How To Use:<br>
+<br>
+There are two general classes of tasks that need to be handled for
+Repast to work with a GIS.&nbsp; One is reading and writing data.&nbsp;
+The other is working with the GIS to coordinate the display of the GIS
+with updates to ABMS data.&nbsp; In the Repast-GIS integration, these
+tasks are generally broken up into two different classes, a data class,
+and a display class.&nbsp; <br>
+<br>
+The data class allows data to be read into Repast from the GIS, and
+written out from Repast into a GIS format.&nbsp; Agents can easily be
+created from GIS data. <br>
+There are two data classes: GeotoolsData, and OpenMapData<br>
+<br>
+There are two main GIS systems for use with Repast, ESRI ArcMap and
+OpenMap<br>
+There are two display classes EsriDisplay, and OpenMapDisplay<br>
+<br>
+<br>
+You need to use the correct data class for the display class.<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 33%;">
+  <tbody>
+    <tr>
+      <th style="vertical-align: top;"><span
+ style="text-decoration: underline;">Data Class</span><br>
+      </th>
+      <th style="vertical-align: top;"><span
+ style="text-decoration: underline;">Display Class</span><br>
+      </th>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(153, 255, 255);">GeotoolsData<br>
+      </td>
+      <td
+ style="vertical-align: top; background-color: rgb(153, 255, 255);">EsriDisplay<br>
+      </td>
+    </tr>
+    <tr>
+      <td
+ style="vertical-align: top; background-color: rgb(255, 255, 153);">OpenMapData<br>
+      </td>
+      <td
+ style="vertical-align: top; background-color: rgb(255, 255, 153);">OpenMapDisplay<br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<h1>Using ESRI ArcGIS</h1>
+<br>
+<h2>Creating and Writing Agents from a Shapefile:</h2>
+<br style="color: rgb(255, 0, 0);">
+<span style="color: rgb(255, 0, 0);">Note: use the GeotoolsData class
+with the EsriDisplay class.</span><br>
+<br>
+First one has to create an appropriate agent class. this can be done by
+subclassing DefaultGeotoolsAgent, or by creating a class that
+implements the
+GeoToolsAgent interface. <br>
+<br>
+<br>
+&nbsp;In order to create a list of agents from Shapefile data, one has
+to
+specify functions in the agent class which correspond to the fields in
+the Shapefile data.&nbsp; Similarly, in order to update the Shapefile
+data based on
+the agents, a corresponding function has to be specified in the agent
+class.&nbsp; For example, if there is a field in the Shapefile data
+called
+Landuse, the agent would need functions called setLanduse() and
+getLanduse() in order to read and write this data field.&nbsp; The
+setLanduse() function allows the data from the Shapefilefile to be set
+in
+the agent, and the getLanduse() function allows the data from the agent
+to be used in updating the Shapefile data file (See the SluGIS model
+&lt;http://www.cs.indiana.edu/~rnajlis/MasMas/slugis.html&gt;<br>
+<br>
+After the class has been created, you need to get a list of them (one
+agent for each feature in the shapefile).&nbsp; This can be done with
+the GeoToolsData#createAgents() function<br>
+<br>
+<pre>GeotoolsData geotoolsData = GeotoolsData.getInstance();</pre>
+<pre>ArrayList agentList = new ArrayList();</pre>
+<pre>agentList.addAll(geotoolsData.createAgents(Agent.class, SluGISOM.datasource));&nbsp; // here Agent.class refers to the GisAgent class specified (here in the Agent.java file)</pre>
+<br>
+Now you have a list of agents.&nbsp; If you specified the get and set
+Landuse functions, each agent in the list would have had the Landuse
+value set by the Landuse field in the dbf associated with the shapefile.<br>
+<br>
+<br>
+To write out the agents to a datasource, you can use the write Agents
+command:<br>
+<br style="font-weight: bold;">
+first, you might want to sort your list of agents (if you have changed
+the order):<br>
+<br>
+<pre>geotoolsData..sortGisAgentsByIndex(agentList);</pre>
+<br>
+then write the data:<br>
+<br>
+<pre>geotoolsData..writeAgents(agentList, datasource);</pre>
+<br>
+<br>
+you can also interrogate data, which means to look into a shapefile and
+see what fields it contains.&nbsp; The interrogate function returns an
+array of type FieldNameAndType<br>
+<br>
+<pre>FieldNameAndType[]&nbsp; nameTypes = geotoolsData.interrogate( SluGISOM.datasource);</pre>
+<pre>for (int i=0; i&lt;nameTypes.length; i++) {</pre>
+<pre>&nbsp;&nbsp; System.out.println("interrogate " + i + " field name: " + nameTypes[i].getFieldName() + " type : " + nameTypes[i].getFieldType()); </pre>
+<pre>}</pre>
+<br>
+When you create the agents, each agent also gets an Geometry
+object called the_geom.&nbsp; This stands for Geometry object from the
+Java Topolgy Suite
+&lt;http://www.vividsolutions.com/jts/jtshome.htm&gt; which is used by
+GeoTools &lt;www.geotools.org&gt;.&nbsp;&nbsp; The Geometry class is
+the base class for geographic geometry objects, that is, objects that
+describe the geographic locations of the points and lines (arcs) of the
+geographic object.&nbsp; Depending on the type of geometry object, you
+will want to cast the Geometry object to the class appropriate for the
+data type:<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 50%;">
+  <tbody>
+    <tr>
+      <th style="vertical-align: top;">Shapefile data type<br>
+      </th>
+      <th style="vertical-align: top;">Geotools class<br>
+      </th>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Polygon<br>
+      </td>
+      <td style="vertical-align: top;">com.vividsolutions.jts.geom.MultiPolygon</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Point<br>
+      </td>
+      <td style="vertical-align: top;">com.vividsolutions.jts.geom.Point</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Polyline<br>
+      </td>
+      <td style="vertical-align: top;">com.vividsolutions.jts.geom.MultiLineString</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+for example, in order to cast a Geometry object in an Agent class to a
+MuliPolygon, you might use code such as the following:<br>
+<br>
+<pre>&nbsp;&nbsp;&nbsp; public void setthe_geom(Geometry the_geom) {</pre>
+<pre>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; this.the_geom = (MultiPolygon)the_geom;</pre>
+<pre>&nbsp;&nbsp;&nbsp; }</pre>
+<br>
+<h2><br>
+</h2>
+<br>
+<h2>Displaying Agents with ArcMap:</h2>
+In order to display GeotoolsAgents with ESRI ArcMap:<br>
+<br>
+1. load the data into ArcMap.<br>
+2. run your model, either through AgentAnalyst, or Repast For Java.<br>
+3.&nbsp; Write the data.&nbsp; Make sure your rewrite the file to the
+same location, as ArcMap will look for the same file when it refreshes
+(you can also save to alternate locations if you wish)<br>
+4. After the data has been written, you can tell Esri ArcMap to refresh<br>
+<br>
+<pre>EsriDisplay esriDisplay&nbsp; = ESRIDisplay.getInstance();</pre>
+<pre>esriDisplay.updateDisplay(); <br><br></pre>
+calling updateDisplay with no parameters assumes a standard setup, with
+Refresh.exe located at c:\\agent_analyst\\Refresh\\Refresh.exe<br>
+<br>
+Refresh.exe is the executable used to tell ArcMap to refresh its display<br>
+<br>
+you can also call updateDisplay with the path to a different location
+specified.&nbsp; Note the use of double backslashes though.&nbsp; (thus
+you could call esriDisplay.updateDisplay("c:\\my_folder\\"); if you had
+Refresh.exe installed in c:\my_folder<br>
+<h1><br>
+</h1>
+<hr style="width: 100%; height: 2px;">
+<h1><br>
+</h1>
+<h1>Using OpenMap</h1>
+<h2>Creating and Writing Agents from a Shapefile:</h2>
+<span style="color: rgb(255, 0, 0);">Note: use the OpenMapData class
+with the OpenMapDisplay class.</span><br>
+<br>
+First one has to create an appropriate agent class. this can be done by
+subclassing DefaultOpenMapAgent, or by creating a class that implements
+the OpenMapAgent interface. <br>
+<br>
+<br>
+&nbsp;In order to create a list of agents from GIS data, one has to
+specify functions in the agent class which correspond to the fields in
+the GIS data.&nbsp; Similarly, in order to update the GIS data based on
+the agents, a corresponding function has to be specified in the agent
+class.&nbsp; For example, if there is a field in the GIS data called
+Landuse, the agent would need functions called setLanduse() and
+getLanduse() in order to read and write this data field.&nbsp; The
+setLanduse() function allows the data from the GIS file to be set in
+the agent, and the getLanduse() function allows the data from the agent
+to be used in updating the GIS data file (See the SluGIS model
+&lt;http://www.cs.indiana.edu/~rnajlis/MasMas/slugis.html&gt;<br>
+<br>
+After the class has been created, you need to get a list of them (one
+agent for each feature in the shapefile).&nbsp; This can be done with
+the OpenMapData#createAgents() function<br>
+<br>
+<pre>OpenMapData omData = OpenMapData.getInstance();</pre>
+<pre>ArrayList agentList = new ArrayList();</pre>
+<pre>agentList.addAll(omData.createAgents(Agent.class, SluGISOM.datasource));&nbsp; // here Agent.class refers to the GisAgent class specified (here in the Agent.java file)</pre>
+<br>
+Now you have a list of agents.&nbsp; If you specified the get and set
+Landuse functions, each agent in the list would have had the Landuse
+value set by the Landuse field in the dbf associated with the shapefile.<br>
+<br>
+<br>
+To write out the agents to a datasource, you can use the write Agents
+command:<br>
+<br style="font-weight: bold;">
+first, you might want to sort your list of agents (if you have changed
+the order):<br>
+<br>
+<pre>omData.sortGisAgentsByIndex(agentList);</pre>
+<br>
+then write the data:<br>
+<br>
+<pre>omData.writeAgents(agentList, datasource);</pre>
+<br>
+<br>
+you can also interrogate data, which means to look into a shapefile and
+see what fields it contains.&nbsp; The interrogate function returns an
+array of type FieldNameAndType<br>
+<br>
+<pre>FieldNameAndType[]&nbsp; nameTypes = omData.interrogate( SluGISOM.datasource);</pre>
+<pre>for (int i=0; i&lt;nameTypes.length; i++) {</pre>
+<pre>&nbsp;&nbsp; System.out.println("interrogate " + i + " field name: " + nameTypes[i].getFieldName() + " type : " + nameTypes[i].getFieldType()); </pre>
+<pre>}</pre>
+<br>
+When you create the agents, each agent also gets an OMGraphic
+object.&nbsp; This stands for OpenMapGraphic.&nbsp; It is one of the
+base classes used in OpenMap for displaying GIS graphics.&nbsp; There
+are a number of classes you need to know about in order to use OpenMap
+graphics classes.&nbsp; OMGraphic has already been mentioned.
+EsriGraphic is an interface for any OMGraphic that will be used with a
+Shapefile.&nbsp; Three classes that implement the EsriGraphic interface
+and extend OMGraphic are EsriPoint, EsriPolygon, and EsriPolyLine.<br>
+<br>
+Depending on the type of OMGraphic object, you may want to cast the
+OMGraphic object to the class appropriate for the
+data type:
+<br>
+for example, in order to cast an OMGraphic object in an Agent class to
+a point from an shapefile, you might use code such as the following:<br>
+<br>
+<pre>public void setOMGraphic(OMGraphic omg) {</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (omg instanceof EsriPoint) {</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.point = (EsriPoint)omg;</pre>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</pre>
+<pre>&nbsp;&nbsp;&nbsp; }</pre>
+<br>
+<table cellpadding="2" cellspacing="2" border="1"
+ style="text-align: left; width: 50%;">
+  <tbody>
+    <tr>
+      <th style="vertical-align: top;">Shapefile data type<br>
+      </th>
+      <th style="vertical-align: top;">OpenMap class<br>
+      </th>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Polygon<br>
+      </td>
+      <td style="vertical-align: top;">com.bbn.openmap.dataAccess.shape.EsriPolygon</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Point<br>
+      </td>
+      <td style="vertical-align: top;">com.bbn.openmap.dataAccess.shape.EsriPoint</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;">Polyline<br>
+      </td>
+      <td style="vertical-align: top;">com.bbn.openmap.dataAccess.shape.EsriPolyline</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+<br>
+As you will see, some of the functions in the OpenMapData class can use
+an
+OMGraphic, while othere require an EsriGraphicList. This is the case
+because there are some special characteristics of EsriGraphics and
+EsriGraphicsLists that are sometimes needed (mainly the ability to get
+the extents).&nbsp; There is a function <br>
+<pre><br>buildEsriGraphicList(Collection gisAgents)  </pre>
+this function will build an EsriGraphicsList from a Collection of
+GisAgents.&nbsp; This can be useful when a function requires an
+EsriGraphics list, but you have a collection of Agents that have
+OMGraphics.<br>
+<br>
+NOTE:&nbsp; It is possible to convert some OMGraphics to
+EsriGraphics.&nbsp; The code will try to convert them, but not all can
+be converted.&nbsp; If you want OMGraphics that can be used as
+EsriGraphics, it is advised that you use only the EsriGraphic types
+(EsriPoint, EsriPolygon, and EsriPolyLine).&nbsp; EsriGraphics are
+useful for writing out data to Shapefiles.&nbsp; Furthermore, it is
+possible to convert some OMGraphic objects to EsriGraphic
+objects.&nbsp; For instance, an OMPoint cna be converted to an
+EsriPoint by using the function EsriPolygon#convert(OMPoly omPoly)
+which will return an EsriPolygon.&nbsp; Furthermore, an OMCircle cna be
+converted to an OMPoly by using the function
+EsriPolygonList#onvert(OMCircle&nbsp;omCircle,&nbsp;
+Projection&nbsp;proj), this OMPoly can then be converted to an
+EsriPolygon.&nbsp; Relevant classes in the OpenMap API to look at are:
+EsriPolygon, EsriPolygonList, EsriPoint, EsriPointList, EsriPolyline,
+EsriPolylineList.<br>
+<br>
+<br>
+<br>
+<h2>Displaying Agents with OpenMap</h2>
+<br>
+In oder to display OpenMapAgents with OpenMap<br>
+<br>
+<br>
+1. <span style="color: rgb(255, 0, 0);">your Shapfile data must be in
+decimal degree coordinates, OpenMap
+does not handle pre-projected data.</span><br>
+2. create the agents and add them to a list (as shown in the section on
+Data)<br>
+3. create a new instance of OpenMap Display:<br>
+<br>
+<pre>&nbsp;&nbsp;&nbsp; OpenMapDisplay omDisplay = new OpenMapDisplay();&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;  <br></pre>
+<br>
+2. Add the agents to a layer:<br>
+<br>
+<pre>&nbsp;&nbsp;&nbsp; omDisplay.addlayer(gisAgents, "AgentLayer");<br><br></pre>
+3. Update Agents.&nbsp; After changes have been made to the agents, you
+can update the layer containg them:<br>
+<br>
+<pre>&nbsp;&nbsp;&nbsp; omDisplay.updateLayer(gisAgents, "AgentLayer");&nbsp;  <br><br><br><br><br></pre>
+<h3>Using The OpenMap Display</h3>
+Somtimes when you start up OpenMap it can be hard to find your
+data.&nbsp; This is because OpenMap has opened with a world view, but
+you data does not occupy that much space.&nbsp; To focus the display on
+your data you can use the Views&gt;&gt;GoOverData file menu.<br>
+<br>
+<img src="images/SlugisSmall.jpg" title="" alt="GoOverData"
+ style="width: 636px; height: 569px;"><br>
+<br>
+<br>
+<br>
+Agents displayed in OpenMap will display a tooltip when the mouse is
+moved over it. The tooltip text is based on the gisPropertyList
+returned from the GisAgent.&nbsp; The gisPropertyList is used here as
+follows:&nbsp; the list is expected to consist of a pair of strings for
+each entry.&nbsp; The first element is the name to be display ("land
+use" in the example below) and the second element is the name of a a
+function ("getLanduse")<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<img src="images/ROM1.jpg" title=""
+ alt="Gis Agents on OpenMap with Tooltip"
+ style="width: 1124px; height: 750px;"><br>
+<br>
+<br>
+This image shows a number of different agent types: The smaller ones
+use EsriPoints for their graphics, the larger use OMCircles.&nbsp; The
+EsriPoints can be written to a shapfile, while the OMCircles
+cannot.&nbsp; <br>
+<br>
+You can view the properties of an agent (these are the same properties
+as shown in the tooltip.<br>
+<br>
+Agents can be moved.&nbsp; make sure that the cursor is an arrow.&nbsp;
+Also, make sure that the layer you want to modify is on top (use the
+Edit layers option under the layers menu to change the relative
+position - top to bottom - of layers.&nbsp; Right click on the agent
+you want to move, you will get the popup menu.&nbsp; Choose move
+agent.&nbsp; The left click wherever you want to move it.&nbsp; (Mac
+users note, this seems to require an external mouse - I don't know
+why.&nbsp; hopefully this will change with future version of OpenMap).<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<img src="images/OMpoints.jpg" title=""
+ alt="EsriPoints ready to be moved" style="width: 639px; height: 573px;"><br>
+<br>
+<br>
+<br>
+in this image there is no option to move the agents because they are
+polygons.&nbsp; polygons cannot be moved.<br>
+<br>
+<img src="images/ROM2.jpg" title="" alt="EsriPolygons"
+ style="width: 1158px; height: 766px;"><br>
+<br>
+<br>
+<br>
+<hr style="width: 100%; height: 2px;"><br>
+<br>
+<h1>Some useful links:</h1>
+<br>
+<a href="www.esri.com">ESRI</a><br>
+<a href="www.geotools.org">Geotools</a><br>
+<a href="http://www.vividsolutions.com/jts/jtshome.htm">Java Topolgy
+Suite</a><br>
+<a href="http://openmap.bbn.com/">OpenMap</a><br>
+</body>
+</html>

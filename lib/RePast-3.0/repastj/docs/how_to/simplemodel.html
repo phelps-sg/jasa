@@ -1,0 +1,399 @@
+<html>
+	<head>
+		<title>How to Build A Repast Model - 1</title>
+	</head>
+	<body>
+		<h1>
+			<center>How to Build a Repast Model - 1</center>
+		</h1>
+		<h2>Contents</h2>
+		<ul>
+			<li>
+				<a href="#overview">Overview</a>
+			<li>
+				<a href="#simplemodel">SimpleModel</a>
+			<li>
+				<a href="#parameters">Parameters</a>
+			<li>
+				<a href="#name">Naming your Model</a>
+			<li>
+				<a href="#methods">SimpleModel Methods and Instance Variables</a>
+			<li>
+				<a href="#displays">Adding Displays etc.</a></li>
+		</ul>
+		This document describes how to build a Repast model using the SimpleModel 
+		class. It is intended as an introduction to writing agent-based models with 
+		Repast. If you have some experience writing agent-based models, you may want to 
+		see <a href="./model.html">How to Build a Repast Model - 2</a> as well.<p>
+		Note: the demonstration model "Life" in repast/demo/life is an example of how 
+		to build a Repast model using the SimpleModel class.<p>
+			<a name="overview"><b>Overview</b><br>
+				An agent-based simulation typically proceeds in two stages. The first is a 
+				setup stage that prepares the simulation for running, and the second is the 
+				actual running of the simulation. In Repast simulations the running of the 
+				simulation is divided into time steps or "ticks." Each tick some action occurs 
+				using the results of previous actions as its basis. So, for example, if we were 
+				building a prisoner's dilemma type simulation with two players, setup would 
+				create the two players, and provide each with an initial strategy (tit-for-tat, 
+				etc.). Each tick or time step, each player would play the game (cooperate or 
+				defect) where their current play is dependent on their strategy and perhaps on 
+				the results of previous play. What you need to do then to build a simple Repast 
+				model is describe what happens during setup, and what occurs every tick. The 
+				SimpleModel class provides placeholders for you to do this.<p>
+					<a name="simplemodel"><b>SimpleModel</b><br>
+						Repast simulations typically have at least two classes. An agent class that 
+						describes the behavior of your agents (e.g. play a game by cooperating or 
+						defecting) and a model class that coordinates the setup and running of the 
+						model. You use SimpleModel as the basis of your model class, specializing it to 
+						suit your purposes. In Java such specialization is typically done via 
+						inheritance such that SimpleModel becomes the super-class of your model class. 
+						For example, <code>
+							<pre>
+import uchicago.src.sim.engine.SimpleModel;
+
+public class MyModel extends SimpleModel {
+
+...
+
+}
+</pre>
+						</code>In the first line we import SimpleModel and in the next we extend 
+						SimpleModel with our own model class.<p>
+							In writing our simulation, as mentioned above, we want to describe how to setup 
+							our model, and then describe what happens every time step. SimpleModel provides 
+							methods that we override in our own model to do the setup specific to our 
+							model. These two methods are setup() and buildModel(). We use them as follows: <code>
+								<pre>
+<font color="gray">
+import uchicago.src.sim.engine.SimpleModel;
+
+public class MyModel extends SimpleModel {
+</font>
+
+  public static
+
+  final int TIT_FOR_TAT = 0; public static
+  final int ALWAYS_DEFECT = 1; private int
+
+  p1Strategy = TIT_FOR_TAT; private
+  int p2Strategy = ALWAYS_DEFECT;
+
+  ...
+
+  public void setup() {
+    super.setup();
+    p1Strategy = TIT_FOR_TAT;
+    p2Strategy = ALWAYS_DEFECT;
+  }
+
+  public void buildModel() {
+    Player p1 = new Player(p1Strategy);
+    Player p2 = new Player(p2Strategy);
+    p1.setOtherPlayer(p2);
+    p2.setOtherPlayer(p1);
+    agentList.add(p1);
+    agentList.add(p2);
+  }
+}
+
+</pre>
+							</code>
+						Here we use setup() and buildModel() to specialize SimpleModel for our own 
+						purposes. In setup() we first call super.setup() to insure that SimpleModel 
+						does any necessary setup of its own, and then we set the player strategies. The 
+						assumption here is that the strategies may have changed from their default 
+						values either through user interaction or perhaps during the course of a 
+						previous simulation run. We use setup() as the opportunity to set our model 
+						variables back to some reasonable default. In general, setup() should "tear 
+						down" the model in preparation for the next run. setup() is called when the 
+						simulation is first started, and more frequently, whenever the setup button is 
+						clicked.<p>
+						Where setup() "tears downs" the simulation, we use buildModel() to create the 
+						objects that our simulation uses. So, it is here where your agents should be 
+						created, and added to the master list of agents, agentList. agentList is an 
+						ArrayList provided by SimpleModel for this purpose. The assumption here is that 
+						our Player class is constructed with a reference to the initial strategy and a 
+						reference to the other Player to play.<p>
+						The order of execution is that setup() is called first and then buildModel(). 
+						However, as mentioned above, setup() is called when the simulation is first 
+						started, and whenever the setup button is pressed. buildModel() is not called 
+						until the simulation is run, that is, it is not called until either the run, 
+						step or initialize buttons are pressed. (See below for more on what code is 
+						executed by what buttons.) This provides an opportunity for the user to change 
+						any parameters via the gui.
+						<p>
+							Now that setup is finished, we need to define what occurs each timestep of the 
+							simulation. SimpleModel provides three methods for this. They are preStep(), 
+							step() and postStep(). Each tick they are executed in that order, first 
+							preStep(), then step(), and lastly postStep(). The intention here is to 
+							separate the core behavior in step() from any necessary pre- or post- 
+							processing. In our example, we have no such need for any pre- or post- 
+							processing, so we only use the step() method. <code>
+								<pre>
+<font color="gray">
+import uchicago.src.sim.engine.SimpleModel;
+
+public class
+
+MyModel extends SimpleModel { public static
+
+  final int TIT_FOR_TAT = 0; public static
+  final int ALWAYS_DEFECT = 1; private int
+
+  p1Strategy = TIT_FOR_TAT; private
+  int p2Strategy = ALWAYS_DEFECT;
+
+  ...
+
+  public void setup() {
+    super.setup();
+    p1Strategy = TIT_FOR_TAT;
+    p2Strategy = ALWAYS_DEFECT;
+  }
+
+  public void buildModel() {
+    Player p1 = new Player(p1Strategy);
+    Player p2 = new Player(p2Strategy);
+    p1.setOtherPlayer(p2);
+    p2.setOtherPlayer(p1);
+    agentList.add(p1);
+    agentList.add(p2);
+  }
+</font>
+  public void step() {
+    int size = agentList.size();
+    for (int i = 0; i &lt; size; i++) {
+      Player p = (Player)agentList.get(i);
+      p.play();
+    }
+  }
+}
+
+</pre>
+							</code>
+						Here in the step() method we pull each Player out of our master agentList and 
+						call the play() method on each one. The assumption here is that a Player plays 
+						another Player when we call play(). It is typical in the step() method to 
+						iterate through all your agents and call whatever method executes their 
+						behavoir on each one. When the model runs it is this step() method that will 
+						execute each time step.<p>
+						A different game might require a pre- or postStep() method. For example, assume 
+						something like a cooperation game with many players where after each player has 
+						played its neighbors and received a payoff, each player then polls its 
+						neighborhood for the best strategy, and sets its own strategy accordingly. In 
+						this case, the actual play would be defined as above in the step method, and 
+						the neighborhood polling and strategy setting would occur in a postStep() 
+						method.<p>
+							There is an alternative to using step() in your model. You can use the auto 
+							step mechanism. If you choose do this, SimpleModel will iterate through all 
+							your agents and call the step method defined in your agents. In order for this 
+							to work, your agents must implement the Stepable interface. This interface has 
+							a single method, step(). Note that step() here is a method in your agent class <b>not</b>
+						your model class. This autostep takes the place of your model's step method 
+						described above. To use the auto step mechanism, you set the autoStep instance 
+						variable to true in the constructor of your model. You can also set the shuffle 
+						instance variable to true or false depending on whether you wish to shuffle the 
+						agentList before auto-stepping through it. preStep() and postStep() work as 
+						above, being called before and after the autoStep, respectively. Regardeless of 
+						whether we use preStep(), postStep(), both, or auto step, this is all that is 
+						required to create a simulation with SimpleModel: fill in setup(), buildModel() 
+						and step() (or auto step), as described above.<p>
+							Note that much more complicated scheduling of agent behavior, model events, 
+							etc, including dynamic scheduling, is possible with Repast. SimpleModel is 
+							intended to simplify scheduling and the discussion above reflects this. 
+							However, you do have access to the scheduler from within a SimpleModel model 
+							via the schedule instance variable. See <a href="./scheduler.html">How to Use a 
+								Schedule</a>
+						for more information on scheduling.<p>
+						The relationship between the various tool bar buttons and the actual execution 
+						of code is as follows. When the setup button is clicked, the code in the 
+						setup() method is executed. When the initialize button is clicked, the code in 
+						buildModel() is executed. When the step button is clicked, the code in 
+						buildModel() is executed and the preStep(), step(), and postStep() sequence is 
+						executed once. When the start button is clicked, buildModel() is executed, and 
+						the preStep(), step(), and postStep() sequence is executed repeatedly until the 
+						user clicks the stop or pause button.<p>
+							<a name="parameters"><b>Parameters</b><br>
+								While setup(), buildModel() and step() are all we need to create a simulation, 
+								such a simulation is not very interesting. It has "no knobs to twiddle"; we 
+								can't alter the initial conditions of the model very easily. We can provide 
+								such knobs by creating parameters for our model.<p>
+									A model parameter is defined by accessor methods. These are methods that begin 
+									with get and set. So, a parameter for player1's strategy might look like <code>
+										<pre>
+<font color="gray">
+import uchicago.src.sim.engine.SimpleModel;
+
+public class
+
+MyModel extends SimpleModel { public static
+
+
+  final int TIT_FOR_TAT = 0; public static
+  final int ALWAYS_DEFECT = 1; private int
+
+  p1Strategy = TIT_FOR_TAT; private
+  int p2Strategy = ALWAYS_DEFECT;
+</font><b>
+
+  public void setP1Strategy(int val) {
+    p1Strategy = val;
+  }
+
+  public int getP1Strategy() {
+    return p1Strategy;
+  }
+
+</b>
+<font color="gray">
+  public void setup() {
+    super.setup();
+    p1Strategy = TIT_FOR_TAT;
+    p2Strategy = ALWAYS_DEFECT;
+  }
+
+  public void buildModel() {
+    Player p1 = new Player(p1Strategy);
+    Player p2 = new Player(p2Strategy);
+    p1.setOtherPlayer(p2);
+    p2.setOtherPlayer(p1);
+    agentList.add(p1);
+    agentList.add(p2);
+  }
+
+  public void step() {
+    int size = agentList.size();
+    for (int i = 0; i &lt; size; i++) {
+      Player p = (Player)agentList.get(i);
+      p.play();
+    }
+  }
+}
+</font>
+</pre>
+									</code>The parameter name is the accessor method names minus the get / set. So, 
+									here the parameter name is P1Strategy. The last piece of creating a parameter 
+									is to make Repast aware of it. You do this by including the parameter name in 
+									the string array of parameters. This can be done in the constructor of your 
+									model. For example, <code>
+										<pre>
+import uchicago.src.sim.engine.SimpleModel;
+
+public class MyModel extends SimpleModel {
+
+  ...
+
+  public MyModel() {
+    params = new String[] {"P1Strategy"};
+  }
+
+  ...
+
+}
+</pre>
+									</code>
+								The params variable is provided by SimpleModel. It is an array containing the 
+								names of your parameters.<p>
+								Once you've created your parameter accessor methods and placed your parameter 
+								name in the param array, you will see the parameter displayed in the parameter 
+								pane when the simulation is run. The value of this parameter is whatever is 
+								returned by its get accessor method. The parameter is set by entering a new 
+								value in the parameters text box. The change is registed either by pressing 
+								enter, or when the text box loses focus. This newly entered value then becomes 
+								the argument to the parameter's set accessor method. Its important to note here 
+								that its the accessor methods that are important, the actual variable where the 
+								parameter is stored (e.g. p1Strategy) is never seen by the parameter mechanism.<p>
+									There are also ways to display parameters as check boxes, combo boxes, buttons, 
+									etc. See <a href="./prop.html">How to create PropertyDescriptors</a>
+								for more info.<p>
+									<a name="name"><b>Naming your Model</b><br>
+										You can provide a name for your simulation via the name instance variable. 
+										Assign the appropriate value to this variable in your model's constructor. For 
+										example, <code>
+											<pre>
+import uchicago.src.sim.engine.SimpleModel;
+
+public class MyModel extends SimpleModel {
+
+  ...
+
+  public MyModel() {
+    name = "Example Model";
+  }
+
+  ...
+
+}
+</pre>
+										</code>This name will then be the title of your model's toolbar window.<p>
+											<a name="methods"><b>SimpleModel Methods and Instance Variables</b><br>
+												Simple model has several other methods and instance variables available for use 
+												in your own model class.<p>
+													Methods
+													<ol>
+														<li>
+															<tt>setStoppingTime(long time)</tt>
+														can be used set the time step at which the current simulation run will stop.
+														<li>
+															<tt>setRngSeed(long seed)</tt>
+														can be used to set the seed for the default random number generator. Note that 
+														the seed defaults to 1.
+														<li>
+															<tt>getNextIntFromTo(int from, int to)</tt>
+														returns the next random integer between from and to, inclusive of from and to.
+														<li>
+															<tt>getNextDoubleFromTo(double from, double to)</tt>
+														returns the next random double between from and to, exclusive of from and to.
+														<li>
+															<tt>atPause()</tt>
+														the body of this method will be executed whenever your simulation is paused. 
+														You'll need to override this method.
+														<li>
+															<tt>atEnd()</tt> the body of this method will be executed whenever your 
+															simulation ends. You'll need to override this method.</li>
+													</ol>
+													Instance Variables
+													<ol>
+														<li>
+															<tt>Schedule schedule</tt> this can be used to add your own actions to the 
+															schedule. See <a href="./scheduler.html">How to Use a Schedule</a>
+														for more information.
+														<li>
+															<tt>boolean isGui</tt>
+														true if the simulation is running in GUI mode, false if running in batch mode.
+														<li>
+															<tt>long startAt</tt> the time step at which to start executing the preStep(), 
+															step(), postStep() actions. Defaults to 1.</li>
+													</ol>
+													<a name="displays"><b>Adding Displays etc.</b><br>
+														Displays, data recorders and so forth can be incorporated into SimpleModel 
+														based models just as they can any other models. See the <a href="./how_to.html">How 
+															To Index</a> for more information.<p>
+															The only caveat here is that displays are typically although not necessarily 
+															created in a buildDisplay method. To incoporate such a method into your own 
+															code, you can add the method then call it in buildModel(). For example, <code>
+																<pre> public class MyModel extends SimpleModel {
+
+  private DisplaySurface dsurf;
+
+  ...
+
+  private void buildDisplay() {
+    ...
+  }
+
+  public void buildModel() {
+    ...
+    buildDisplay();
+  }
+}
+</pre>
+															</code>
+														You can then put your display building code in buildDisplay() and be sure that 
+														it will be called when your model begins a run. Alternatively, you can put all 
+														the code into buildModel(), but separating out the display building code is 
+														somewhat cleaner.<p>
+															For more information on building models and running in batch mode, see <a href="./model.html">
+																How to Build a Repast Model - 2</a>.</p>
+	</body>
+</html>

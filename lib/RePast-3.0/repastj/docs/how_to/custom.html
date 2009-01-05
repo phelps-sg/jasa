@@ -1,0 +1,149 @@
+<html>
+<head>
+<title>How to Create Custom Actions</title>
+</head>
+
+<body>
+<h1>
+<center>How to Create Custom Actions</center>
+</h1><p>
+Custom actions are actions that occur in response to the movement of a slider, the
+click of a button or the toggling of a checkbox on the Custom Action tab in
+the settings windows. This document explains how to create such actions and should
+be used in conjunction with the demonstration source code to the 
+Heat Bugs model, and the Hypercycles model.<p>
+
+The creation of custom actions is coordinated by the
+<a href="../api/uchicago/src/sim/engine/ModelManipulator.html">Model
+Manipulator</a> class. SimModelImpl contains a ModelManipulator as a
+protected instance variable, and it is thus available to all classes
+that extend SimModelImpl (that is, all Repast models). ModelManipulator
+contains three methods for creating custom actions:
+<code><pre>
+public void addSlider(String label, int min, int max, int tickInterval, 
+       SliderListener listener)
+public void addButton(String label, ActionListener listener)
+public void addCheckBox(String label, CheckBoxListener listener, boolean isSelected)
+</pre></code>
+If you want to add a slider, you use addSlider, a button, addButton, and a checkbox,
+addCheckBox. The arguments to these three methods are defined in
+greater detail in the API documentation for 
+<a href="../api/uchicago/src/sim/engine/ModelManipulator.html">Model
+Manipulator</a>. In all these cases however, the listener argument specifies
+what action should be taken when the slider is moved, the button is clicked, or
+the checkbox is toggled. These listener classes are abstract 
+classes (SliderListener, CheckBoxListener) or interfaces (ActionListener) 
+that are extended or implemented by the modeler to perform the 
+appropriate action.<p>
+
+<h3>Slider Listener</h3>
+<a href="../api/uchicago/src/sim/event/SliderListener.html">Slider Listener</a>
+is an abstract class that a user will extend to specify the appropriate
+action to take when the slider is moved. A modeler must implement a SliderListener's
+<tt>public void execute()</tt> method. This method is called whenever
+the slider is moved. There are three variables that are available from within
+this method:
+<ul><li><b>value</b> an <tt>int</tt> which is the current value of the slider</li>
+<li><b>isAdjusting</b> a <tt>boolean</tt> which indicates whether the slider 
+is in the process of being moved</li> 
+<li><b>isSlidingLeft</b> a <tt>boolean</tt> which indicates whether the
+slider is being dragged to the left</li>
+</ul>. 
+
+A Slider is then created as follows:
+<code><pre>
+class Incrementer extends SliderListener {
+  public void execute() {
+    if (isSlidingLeft) {
+      someValue -= value;
+    } else {
+      someValue += value;
+    }
+  }
+};
+
+modelManipulator.addSlider("Increment", 0, 100, 10, new Incrementer());
+</pre></code>
+(This could also be done more concisely as a anonymous inner class.)
+Here a new class Incrementer that extends SliderListener is defined. Its
+execute method will subtract the current value of the slider from <tt>someValue</tt>
+if the slider is moving left, or add the current value of the slider to 
+<tt>someValue</tt> if the slider is moving right. The <tt>modelManipulator.addSlider</tt>
+method associates this behavoir with a slider. The slider will be
+labeled "Increment" and range for 0 to 100 with labeled ticks every 10 units.
+<p>
+<h3>ActionListener</h3>
+The
+<a href="http://java.sun.com/products/jdk/1.2/docs/api/java/awt/event/ActionListener.html">ActionListener</a> 
+interface is provided as part Java itself.
+It has a single method: <tt>public void actionPerformed(ActionEvent evt)</tt> 
+and is used in much the same way as the SliderListener. The modeler
+must provide an implementation of an ActionListener, implementing
+the <tt>actionPerformed</tt> method. Whenever the button is clicked
+the actionPerformed method will be called, and so it is in this method that
+the modeler should code the appropriate actions. For example,
+<code><pre>
+modelManipulator.addButton("Clear Space", new ActionListener() {
+  public void actionPerformed(ActionEvent evt) {
+    space.clear();
+  }
+});
+</pre></code>
+(Here the ActionListener is coded as an anonymous inner class.) The
+ModelManipulator creates a button labeled "Clear Space" and the 
+actionPerformed method will be executed whenever that button is clicked.
+<p>
+
+<h3>CheckBoxListener</h3>
+<a href="../api/uchicago/src/sim/event/CheckBoxListener.html">CheckBoxListener</a>
+is an abstract class that a user will extend to specify the appropriate
+action to take when a checkbox is clicked. Like the SliderListener, a modeler
+must extend this class and implement its <tt>public void execute()</tt>
+method. This method is called whenever the checkbox is clicked. Two variables
+are available from within this method: 
+<ul>
+<li><b>isSelected</b> a <tt>boolean</tt> indicating 
+whether the checkbox is selected or not</li> 
+<li><b>actionEvent</b> an <tt>ActionEvent</tt> which should not be of interest to most users.
+See the 
+<a href="http://java.sun.com/products/jdk/1.2/docs/api/java/awt/event/ActionEvent.html">ActionEvent</a> 
+entry in the jdk javadocs for more on ActionEvents.</li>
+</ul>
+A checkbox is then created as follows:
+<code><pre>
+CheckBoxListener showVal = new CheckBoxListener() {
+  public void execute() {
+    if (isSelected) {
+      showValues();
+    } else {
+      hideValues();
+    }
+  }
+};
+
+modelManipulator.addCheckBox("Show Values", showVal, false);
+</pre></code>
+Here when the checkbox is clicked the execute
+method will be called. This method then checks whether the
+checkbox is selected through the isSelected variable and calls
+showValues() or hideValues(). ModelManipulator then creates a checkbox labeled
+"Show Values", associates it with the <tt>showVal</tt>
+CheckBoxListener and sets its initial state to unselected.<p>
+
+<h3>The Model Manipulator</h3>
+As mentioned above all models that extend SimModelImpl have
+acces to a ModelManipulator variable called modelManipulator. If 
+you wish to have custom actions in your own simulations, you can
+use this modelManipulator. The easiest way to setup a model that 
+will create and show the sliders etc. created via a ModelManipulator is
+to put all the slider etc. creation in a private method in your model, and
+call this method as part of your model's setup() method. <b>Note that
+the first thing you want to call in this method is 
+<tt>modelManipulator.init()</tt></b> The Heat Bugs and
+HyperCycles demonstration simulations both setup their custom actions in 
+this way, and can be used as templates for your own custom action
+setup.
+
+</body>
+</html>
+

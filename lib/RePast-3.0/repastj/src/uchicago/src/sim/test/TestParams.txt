@@ -1,0 +1,24 @@
+runs: 1
+IntA {
+  start: 10
+  end: 30
+  incr: 10
+  {
+     runs: 1
+     StrB {
+      set_string_list: bob bill cormac
+
+      {
+        runs: 1
+        BooleanC {
+          set_boolean_list: true false
+        }
+      }
+    }
+  }
+}
+
+FloatD {
+  set: 2342.23423
+}
+

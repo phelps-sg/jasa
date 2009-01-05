@@ -1,0 +1,6 @@
+parent.0 = 11.params
+
+
+# 6-Multiplexer with IF
+eval.problem.bits = 2
+gp.fs.0.size = 10

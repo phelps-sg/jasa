@@ -1,0 +1,320 @@
+<html>
+	<head>
+		<title>How to Build A Repast Model - 2</title>
+	</head>
+	<body>
+		<h1>
+			<center>How to Build a Repast Model - 2</center>
+		</h1>
+		<h2>Contents</h2>
+		<ul>
+			<li>
+				<a href="#overview">Overview</a>
+			<li>
+				<a href="#agent">The Agent</a>
+			<li>
+				<a href="#model">The Model</a>
+			<li>
+				<a href="#vars">Infrastructure and Representation Variables</a>
+			<li>
+				<a href="#template">Repast Template Methods</a>
+			<li>
+				<a href="#getset">Get and Set Accessor Methods</a>
+			<li>
+				<a href="#interface">Interface Required Methods</a>
+			<li>
+				<a href="#custom">The Custom Actions Tab</a>
+			<li>
+				<a href="#simspec">Simulation Specific Methods</a>
+			<li>
+				<a href="#main">The Main Method</a>
+			<li>
+				<a href="#batchparams">Batch Parameters</a></li>
+		</ul>
+		This document describes how to build Repast models using the SimModelImpl 
+		class. Such models are more complicated to code, but can take fuller advantage 
+		of Repast's capabilities. This document is intended for users whose models 
+		require such capabilities or who have some experience in writing agent-based 
+		simulations. Other users should see <a href="./simplemodel.html">How to Build a 
+			Repast Model - 1</a> if you have not already.<p>
+		Note: This how to is best read together with the source code from the sample 
+		simulations.<p>
+			<a name="overview"></a><b>Overview</b><br>
+		The kinds of simulations that can be written using Repast fall into two broad 
+		categories: batch-run, and non-batch run. A batch run simulation reads in a 
+		specially formatted parameter file detailing the starting and ending values of 
+		a model's parameters, how to increment these parameters and the number of runs 
+		to complete. The simulation then begins to run without user interference.<p>
+		A non-batch run requires a user to start and stop a run through a graphical 
+		user interface, and allows the user to graphically set starting parameters. In 
+		addition a non-batch simulation allows a user to graphically display and 
+		manipulate (i.e. probe) an agent's state during the course of a run, as well as 
+		the models.<p>
+		What follows explains the basics of how to write both these kinds of 
+		simulations, paying special attention to what must done for a model to set the 
+		initial parameters from a parameter file, to allow a user to graphically set 
+		starting parameters, and to allow probing to occur.<p>
+			<a name="agent"></a><b>The Agent</b><br>
+			Both batch and non-batch run simulations are largely similar. A typical 
+			simulation of either kind written with Repast will have at least two classes 
+			written by the user, the agent class and the model class. (See the source code 
+			to the sample simulations for detailed examples). The agent class will be 
+			largely simulation specific, although Repast does provide some minimal (at this 
+			time) support for cooperation type agents, through the <a href="../api/uchicago/src/sim/games/GameAgent.html">
+				GameAgent</a> interface and the <a href="../api/uchicago/src/sim/games/Game.html">
+				Game</a> abstract class. If the agent is to be displayed, it should 
+			implement one of the Drawable interfaces (see <a href="./display.html">How To 
+				Create Displays</a> for more). If a user wishes an agent to be probeable, 
+			that is, have its state graphically displayable and manipulable, the agent must 
+			be coded using the <a href="#getset">Accessor</a>
+		method pattern.<p>
+			<a name="model"><b>The Model</b><br>
+				A model, such as SugarModel.java or EnnModel.java (in 
+				repast/demos/sugarscape/src/src/uchicago/src/sim/sugarScape and 
+				repastdemos/enn/src/src/uchicago/src/sim/enn respectively) sets up and controls 
+				both the representational and infrastructure parts of a Repast simulation. All 
+				Repast simulation models must implement the <a href="../api/uchicago/src/sim/engine/SimModel.html">
+					SimModel</a> interface. Repast provides an abstract class <a href="../api/uchicago/src/sim/engine/SimModelImpl.html">
+					SimModelImpl</a> that partialy implements this interface and it is expected 
+				that most if not all models will extend this class.<p>
+					Assuming then that a user is writing his or her own model that extends <a href="../api/uchicago/src/sim/engine/SimModelImpl.html">
+						SimModelImpl</a>
+				, a typical model class should have the following parts:<p>
+					<ul>
+						<a name="vars">
+							<li>
+								<b>Infrastructure and Representation Variables</b> The variables contained by a 
+								typical model class will be of both the infrastructure and representational 
+								type. Infrastructure variables will be such things as a <a href="../api/uchicago/src/sim/engine/Schedule.html">
+									Schedule</a>, collection classes for agents and so forth. For example, 
+								SugarModel.java has a Schedule variable and a DisplaySurface for displaying the 
+								agents and their environment. The largest portion of the representation 
+								variables will be initial parameters for a run of this model. For example, 
+								SugarModel contains a numAgents variable that is used to set the number of 
+								sugar agents in a simulation run.<p>
+									Any model that extends <a href="../api/uchicago/src/sim/engine/SimModelImpl.html">SimModelImpl</a>
+								also inherits the rngSeed variable which can be accessed through getRngSeed and 
+								setRngSeed.<p>
+									<a name="template">
+								</p>
+							<li>
+								<b>Repast Template Methods</b><br>
+								These template methods, although not required by the SimModel interface divide 
+								the infrastructure and representation setup process into coherent groups. 
+								Consequently, a user is encouraged but not required to structure their models 
+								using these three methods.<p>
+									<ul>
+										<li>
+											<b><tt>private void buildModel()</tt></b> The buildModel() method is 
+											responsible for creating those parts of the simulation that represent what is 
+											being modeled. This is largely model specific. Nevertheless, The agents and 
+											their environment are typically created here, together with any optional data 
+											collection objects. Of course, this method may call other methods to help build 
+											the model. SugarModel constructs all the SugarAgents and the SugarSpace in 
+											buildModel() using the initial parameters. See <a href="./data.html">How To Collect 
+												Data</a> for more on setting up and collecting data.<p></p>
+										<li>
+											<b><tt>private void buildDisplay()</tt></b> buildDisplay() builds those parts 
+											of the simulation that have to do with displaying the simulation to a user. A 
+											batch run model will probably not have this method. SugarModel builds both the 
+											display for the agents and for the graphing classes here. The actual creation 
+											of a DisplaySurface object should occur in the setup() method however. See <a href="./display.html">
+												How To Create Displays</a> for more on creating displays, and <a href="./chart.html">
+												How to Create Charts</a> for more on creating charts.<p></p>
+										<li>
+											<b><tt>private void buildSchedule()</tt></b> buildSchedule() builds the <a href="../api/uchicago/src/sim/engine/Schedule.html">
+												Schedule</a> that is responsible for altering the state of the simulation. 
+											What this means is that the schedule is told what methods to call on which 
+											objects and when. See <a href="./scheduler.html">How to Use a Schedule</a> for 
+											more information. The source code to all the demonstration models provides good 
+											examples of this and the API documentation for <a href=".../api/uchicago/src/sim/engine/Schedule.html">
+												Schedule</a> should be straight forward.<p></p>
+										</li>
+									</ul>
+									<a name="getset">
+										<li>
+											<b>Get and Set Accessor Methods</b><br>
+											First some background on how a model gets instantiated through the <a href="../api/uchicago/src/sim/engine/SimInit.html">
+												SimInit</a> class, either as a command line argument or via its own main 
+											method. (See <a href="./simstart.html">How to Run a Simulation</a> for more 
+											information on a simulation starts using SimInit). When a non-batch simulation 
+											is started through SimInit, a Controller object is created to control the 
+											running of that model. If the name of the model was passed in as an argument to 
+											SimInit, the Controller calls getInitParam() on the model and receives a list 
+											of initial parameters that can be displayed for modification. (The same occurs 
+											when a model is loaded through the load model dialog.) In order to display the 
+											value of these parameters the controller determines if the model has 
+											implemented get and set methods for that parameter. If so, the controller calls 
+											the get method and displays the result to the user. When a user graphically 
+											modifies one of these parameters the corresponding set method is called with 
+											the new value as an argument. A typical get and set accessor method pair might 
+											look like:<br>
+											<code>
+												<pre>
+public int getNumAgents() {
+&nbsp;&nbsp;&nbsp;return numAgents;
+}<br><br>
+public void setNumAgents(int numAgents) {
+&nbsp;&nbsp;&nbsp;this.numAgents = numAgents;
+}
+</pre>
+											</code>Consequently, if a user wants to display some initial starting parameter 
+											and have this parameter be modifiable, the name of the parameter must be 
+											returned by the getInitParam() method and the model must contain the 
+											appropriate get and set methods. For example, if a modeler wants a parameter 
+											that contains the number of initial agents to be displayable, and modifiable, 
+											some String such as "numAgents" must be present in the array returned by 
+											getInitParam and the model must have a getNumAgents method and a setNumAgents 
+											method. The source code to the example simulations all follow this pattern and 
+											are good examples of it.<p>
+											Probing objects (agents, environment and so forth) during the course of a 
+											simulation run requires that the same accessor pattern be present. In these 
+											cases, however, only the get method need be present for the variable to be 
+											displayed. For example, an agent has a variable sugar that tracks the amount of 
+											sugar that this agent has collected. The author of this simulation would like 
+											to be able to probe this agent and have this variable displayed during the 
+											course of a simulation run. In order for the value of the sugar variable to be 
+											displayed, the agent must have a getSugar method. If the agent has no setSugar 
+											method then "Sugar" is considered read-only and will be displayed as such in a 
+											field entitled "Sugar:". If the agent has both getSugar and setSugar methods 
+											then value of the Sugar variable will be able to be modified by the user during 
+											the course of a simulation run.<p>
+												You can limit what can be probed on non-models (agents, environments and so 
+												forth) by implementing the <a href="../api/uchicago/src/sim/engine/CustomProbeable.html">
+													CustomProbeable</a> interface on these non-model objects. The 
+												CustomProbeable interface contains a single method <tt>public String[] 
+													getProbedProperties()</tt> that functions like a model's <tt>getInitParams()</tt>
+											method. By implementing the interface and returning an array of Strings that 
+											are the names of the properties you want probed, you can limit probing to only 
+											those properties. For example, suppose getProbedProperties returns "Sugar", and 
+											"Age". The probing mechanism would only look for and return values through 
+											getSugar, setSugar and getAge, setAge methods. This inteface can be useful when 
+											your agent extends other classes whose properties you do not want displayed. 
+											The OvalNode agents in the jiggle demonstration simulation are a good examples 
+											of this.<p>
+											Typically, only Strings, booleans and numbers are probed. However, this does 
+											not mean that only agent variables of these types can be the source of such 
+											probes. Translation from one type to another can be done inside the get and set 
+											methods. For example a get method may iterate over a Vector of values and 
+											return those values as a comma delimited String and the set method may parse 
+											such a String and insert those values into the Vector. The hypercycle 
+											demonstration simulation is an example of this. However, if the probed 
+											parameter is itself some non-String, numeric, or non-boolean class, the 
+											parameter will be displayed as a button. Clicking on this button, will then 
+											probe the parameter itself and display the results in a new window.<p>
+												The default display type for parameters is a text field. If you wish to display 
+												check boxes for boolean parameters or combo-boxes to delimit a range of 
+												choices, then see <a href="./prop.html">How To Create Property Descriptors</a>
+											.<p>
+												<a name="interface">
+											</p>
+										<li>
+											<b>Interface Required Methods</b><br>
+											In order to implement the <a href="../api/uchicago/src/sim/engine/SimModel.html">SimModel</a>
+											interface a user's model must define the following methods (the model will 
+											refuse to compile if these are not defined):<p>
+												<ul>
+													<li>
+														<b><tt>public String[] getInitParam()</tt></b> getInitParam should return a 
+														String array of the initial model parameters that a user wishes to be 
+														displayable and manipulable.<p></p>
+													<li>
+														<b><tt>public void begin()</b></TT> begin() should intialize the model for the 
+														start of a run. Consequently, the three build methods are called here, and any 
+														displays are displayed. begin() is called whenever the start button (or the 
+														step button if the run has not yet started) is clicked. All the demonstration 
+														simulations implement this method and have good examples of it. In addition, 
+														any objects you need to create that depend on parameter values can be created 
+														here (<b>NOT</b> in setup).<p></p>
+													<li>
+														<b><tt>public void setup()</tt></b> setup() should "tear down" the model in 
+														preparation for a call to begin(). setup() is called when the model is loaded 
+														either through passing the model name as an argument to SimInit, or through the 
+														load model dialog, and more frequently, whenever the setup button is clicked. 
+														Setup should set any objects that are created over the course of the run to 
+														null, and dispose of any DisplaySurfaces, graphs, and Schedules. While not 
+														strictly necessary this should help prevent memory leaks and insure a clean 
+														startup (calling System.gc() helps too).<p>
+															The initial model parameters should be set to whatever defaults the user wants 
+															to see initially, and a Schedule should be created here (i.e. <tt>schedule = new 
+																Schedule(1);</tt>) and if the model is a gui model a DisplaySurface should 
+															be created here as well (i.e. <tt>displaySurface = new DisplaySurface(this, "Heat 
+																Bugs Display");</tt>
+														).<p>
+															Objects that rely on parameter values should <b>NOT</b>
+														be created or setup here. Any parameter manipulation either through the user 
+														interface or through parameter files occurs after setup() is called. As a 
+														result your objects will be created using incorrect parameter values.<p></p>
+													<li>
+														<b><tt>public Schedule getSchedule()</tt></b> Returns the schedule associated 
+														with the model. Typically this just returns the the model's schedule variable.<p></p>
+													<li>
+														<b><tt>public String getName()</tt></b> This should return the name of the 
+														model. This name will be displayed as the title of the tool bar.<p>
+														The relationship between the various tool bar buttons and the actual execution 
+														of code is as follows. When the setup button is clicked, the code in the 
+														setup() method is executed. When the initialize button is clicked, the code in 
+														begin() is executed. When the step button is clicked, the code in begin() is 
+														executed and any behavoir scheduled for the next tick is executed. When the 
+														start button is clicked, begin() is executed, and the simulation enters a loop 
+														where any behavoir scheduled for the next tick is executed, the tick count is 
+														incremented and the next schedule behavoir is executed and so on until the user 
+														clicks the stop or pause button.<p>
+														<p></p>
+													</li>
+												</ul>
+											<p>
+												<a name="custom">
+											</p>
+										<li>
+											<b>The Custom Actions Tab</b> If you are creating a gui non-batch model, you 
+											can also place buttons, sliders, and check boxes on the Custom Actions tab in 
+											the settings window. You can use the buttons and so forth to alter the state of 
+											the model, agents, environment and so forth while the simulation is running. 
+											The demonstration simulations Heat Bugs, and Hypercycles have good examples of 
+											how this is done. See <a href="./custom.html">How to Create Custom Actions</a> for 
+											more information.<p>
+												<a name="simspec">
+											</p>
+										<li>
+											<b>Simulation Specific Methods</b> A model may have simulation specific methods 
+											such as methods that calculate and return data to be written to a file. The 
+											calc* methods in EnnModel.java for example.
+											<p>
+												<a name="main">
+											</p>
+										<li>
+											<b>The Main Method</b> A model may also contain an optional main method. The 
+											model may be started through this method or as an argument to 
+											uchicago.src.sim.engine.SimInit on the command line. See <a href="./simstart.html">How 
+												To Run a Simulation</a> for more details on the variuos ways to start a 
+											Repast simluation.<p>
+												If you chose to include a main method in your model, this main method should 
+												create an instance of your model, of SimInit and then load your model with 
+												SimInit instance. For example, <code>
+													<pre>
+public static void main(String[] args) {
+  SimInit init = new SimInit();
+  MyModel model = new MyModel();
+  init.load(model, null, false);
+}
+</pre>
+												</code>The above loads the Repast model MyModel with no parameter file and in 
+												gui mode. However, you can also specify a parameter file and whether this 
+												should be run in batch mode or not. See the api docs for <a href="../api/uchicago/src/sim/engine/SimInit.html">
+													SimInit</a>
+											for the details.<p></p>
+										</li>
+					</ul>
+				Both batch and non-batch models should follow this general structure, although 
+				in the case of a batch model the buildDisplay method is not necessary.<p>
+					<a name="batchparams"><b>Batch Parameters</b><br>
+						The get/set method pattern is used differently by a batch model. Just as a 
+						non-batch model's initial parameters can be displayed and manipulated through 
+						its get and set methods, a non-batch model uses the same methods to set its 
+						initial parameters from a parameter file. See <a href="./params.html">How To Use 
+							Parameters and Parameter Files</a> for more information.
+						<UL>
+						</UL>
+	</body>
+</html>

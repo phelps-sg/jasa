@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+    <info>
+        <appname>Repast 3</appname>
+        <appversion>3.0</appversion>
+        <authors>
+            <author name="Nick Collier" email="nick.collier@verizon.net"/>
+            <author name="Jerry R. Vos" email="jvos@anl.gov"/>
+	    <author name="Robert Najlis" email="rnajlis@anl.gov"/>
+	    <author name="Michael J. North" email="north@anl.gov"/>
+	    <author name="Tom Howe" email="trhowe@anl.gov"/>
+        </authors>
+        <url>http://repast.sf.net/</url>
+    </info>
+    
+    <guiprefs width="640" height="480" resizable="no"/>
+    
+    <locale>
+        <langpack iso3="eng"/>
+    </locale>
+    
+    <native type="izpack" name="ShellLink.dll"/>
+    
+    <resources>
+        <res id="HTMLInfoPanel.info" src="repastj/readme.html"/>
+        <res id="shortcutSpec.xml" src="repastj/distfiles/shortcutSpec.xml"/>
+    </resources>
+    
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="HTMLInfoPanel"/>
+        <panel classname="TargetPanel"/> 
+        <panel classname="PacksPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+    
+    <packs>
+        <pack name="RepastJ" required="yes">
+            <description>The Repast for Java toolkit for developing agent based simulations</description>
+		<file src="repastj/readme.html" targetdir="$INSTALL_PATH/repastj"/>
+		<file src="repastj/lib" targetdir="$INSTALL_PATH/repastj"/>
+		<file src="repastj/repastj.jar" targetdir="$INSTALL_PATH/repastj"/>
+		<file src="repastj/repast-demos.jar" targetdir="$INSTALL_PATH/repastj"/>
+		<file src="repastj/demo/data" targetdir="$INSTALL_PATH/repastj/demo"/>
+		<file src="repastj/demo/doc" targetdir="$INSTALL_PATH/repastj/demo"/>
+		
+         </pack>
+        <pack name="Sources" required="no">
+            <description>The source files for RepastJ</description>
+	    <file src="repastj/src" targetdir="$INSTALL_PATH/repastj"/>
+	    <file src="repastj/test" targetdir="$INSTALL_PATH/repastj"/>
+	    <file src="repastj/demo/src" targetdir="$INSTALL_PATH/repastj"/>
+	    <file src="repastj/build.xml" targetdir="$INSTALL_PATH/repastj"/>
+	    <file src="repastj/distfiles" targetdir="$INSTALL_PATH/repastj"/>
+        </pack>
+	<pack name="Docs" required="no">
+	    <description>How-to and API documentation for RepastJ</description>
+	    <file src="repastj/docs" targetdir="$INSTALL_PATH/repastj"/>
+	</pack>
+    </packs>
+    
+</installation>

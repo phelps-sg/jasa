@@ -1,0 +1,183 @@
+<html>
+<head>
+<title>How to Create PropertyDescriptors</title>
+</head>
+
+<body >
+<h1>
+<center>How to Create PropertyDescriptors</center> </h1><p>
+PropertyDescriptors allows the manipulation of a model's properties
+(also called parameters) via gui widgets displayed on the parameter's
+tab pane.  You can also use PropertyDescriptors in conjunction with an
+agent's parameters. More on that at the end of this document.  Repast
+has three kinds of PropertyDescriptors: a descriptor for boolean
+properties which are displayed as a check box; a descriptor for
+properties whose possible values can be expressed as a list (a
+neighborhood parameter whose possible values are Von Neumann or Moore,
+for example); and a descriptor for numerical integer ranges. Just like
+the parameters displayed by default in a text box, boolean, list and
+range propery descriptors depend on the get and set accessor method
+pattern. In fact, when creating PropertyDescriptor objects, the
+PropertyDescriptor is passed the name of the property in its
+constructor.  The name of this property must be reflected in the model
+as a get and set method. So for example, if the property is "Age", the
+model must have a getAge and setAge method.<p>
+
+<b>BooleanPropertyDescriptor</b><p>
+
+A BooleanPropertyDescriptor is typically setup in a model's constructor
+as follows:
+<code><pre>
+BooleanPropertyDescriptor bd1 = new BooleanPropertyDescriptor("RecordData", 
+                                                             false);
+descriptors.put("RecordData", bd1);
+</pre></code>
+<p>
+This property descriptor describes the RecordData property/parameter of
+some model, and thus assumes that the model contains a setRecordData
+and a getRecordData (or a isRecordData method in place of the getRecordData). 
+A BooleanPropertyDescriptor's
+constructor takes the name of the boolean property, and the default state
+of that property, in this case false. The BooleanPropertyDescriptor is then
+placed in the hashtable "descriptors" (an ivar of the SimModelImpl class,
+and so available to any model that extends SimModelImpl).
+When the model parameters are displayed in gui mode, the RecordData
+parameter will then be displayed as a check box. For more information 
+see the API documentation for 
+<a href="../api/uchicago/src/reflector/BooleanPropertyDescriptor.html">BooleanPropertyDescriptor</a>
+
+<b>Note that as of Repast 1.3 boolean (or Boolean) properties are now
+displayed as checkboxes by default. You no longer need to create your
+own BooleanPropertyDescriptors</b>
+<p>
+
+<b>ListPropertyDescriptor</b><p>
+A ListPropertyDescriptor is a PropertyDescriptor for a parameter whose
+possible values can be constrained to a list. This list is represented in
+the parameters tab panel as combo box. Selecting an item from the 
+combo box calls the appropriate set method passing the selected item
+as an argument. The list of possible values can be passed to a
+ListPropertyDescriptor as a Vector or an array of Objects. For example:
+<code><pre>
+Vector v = new Vector();
+v.add("VON NEUMANN");
+v.add("MOORE");
+ListPropertyDescriptor pd = new ListPropertyDescriptor("NType", v);
+descriptors.put("NType", pd);
+</pre></code>
+
+The combo box associated with this ListPropertyDescriptor will 
+display two items: "VON NEUMANN", and "MOORE". 'NType' indicates 
+that these items are possible values for the 'NType' model parameter.
+When the user selects one of these two items from the combo box, the 
+selected Object (a String with a value of "VON NEUMANN", or "MOORE")
+is passed as an argument to the setNType method.<p>
+
+A ListPropertyDescriptor can also be used to display such things as
+numerical constants as Strings by passing a hashtable in
+the constructor of the ListPropertyDescriptor. For example:
+<code><pre>
+Hashtable h1 = new Hashtable();
+h1.put(new Integer(0), "VON NEUMANN");
+h1.put(new Integer(1), "MOORE");
+ListPropertyDescriptor pd = new ListPropertyDescriptor("NType", h1);
+descriptors.put("NType", pd);
+</pre></code>
+
+Here a ListPropertyDescriptor is created with the name of the property, and a
+hashtable as an argument. The second argument is a hashtable
+whose keys are the actual objects that can be selected and passed to the
+set method and whose values are the string representations of those objects.
+In the above case, the hashtable contains two keys: an Integer with a value
+of 0 and an Integer with a value of 1. The value of these two keys' are
+the Strings "VON NEUMANN" and "MOORE" respectively. What the user will see
+then is a combo box labeled as "NType" that contains two Strings "VON
+NEUMANN" and "MOORE". When the user selects one of these strings, the
+corresponding Integer is passed as an argument to the setNType method.
+Note that setNType can take an int argument as the probing mechanism
+here automatically converts between an Integer and an int.
+Descriptors is an instance variable (a hashtable) of the SimModelImpl class
+and can be used by sub classes. For more information see the API docs
+for 
+<a href="../api/uchicago/src/reflector/ListPropertyDescriptor.html">ListPropertyDescriptor</a>
+<p>
+
+<b>RangePropertyDescriptor</b><p>
+
+A RangePropertyDescriptor is a descriptor for a parameter / property
+whose value can be expressed as falling within a range of integer
+values. It is useful when you want to restrict user input to some
+value within a range of integers. The range is represented in the gui
+by a slider with minimum and maximum values and a text box into which
+you can type some specific value. If the value you enter is greater
+than the maximum allowable value or less than the minimum value the
+actual value will be set to the maximum or minimum
+respectively. Similarly, if you enter a non-numerical value into the
+text box the value will default to the most recent valid
+value. Selecting an integer from within the range either via the
+slider or the text box calls the appropriate set method in your
+model.<p>
+
+Assuming your model has a property called "numAgents" that is
+represented by an integer. You can tie this property to a
+RangePropertyDescriptor as follows:
+
+<code><pre>
+RangePropertyDescriptor d = new RangePropertyDescriptor("numAgents", 
+                                                       10, 100, 20);
+descriptors.put("numAgents", d);
+</pre></code>
+
+The first parameter to the RangePropertyDescriptor constructor is the
+name of the property, the second is the minimum values, followed by
+the maximum value and then the tick spacing. The tick spacing
+parameter determines the display of intermediate values in the
+slider. For example, a range of 10 - 100 and a tick spacing of 10 will
+display ticks on the slider for 20, 30, 40 and so on up to 90. Note that
+this only determines the display, any integer value between 10 - 100
+can be selected. For more information see the API docs for 
+<a href="../api/uchicago/src/reflector/RangePropertyDescriptor.html">RangePropertyDescriptor</a>
+<p>
+
+
+<h3>Using PropertyDescriptors in Agent classes</h3>
+Its quite easy to use PropertyDescriptors in agent classes. When coded
+properly the appropriate checkbox (for boolean properties) or combobox will 
+appear when the agent is probed (i.e. double clicked). The behavoir of 
+these widgets is identical to those that appear a model's parameter pane.<p>
+
+The code for your agent to use PropertyDescriptors is nearly identical to
+the necessary code for using PropertyDescriptors in your model with two
+important exceptions. A model that inherits from SimModelImpl 
+automatically inherits the Hashtable instance variable called descriptors.
+(This variable was mentioned and used in the code above). An agent
+class will not have this variable and will need to create it. Similarly,
+any model that inherits from SimModelImpl also inherits the 
+<code>DescriptorContainer</code> interface. If your agent class doesn't
+already implement this inteface (unlikely), it will need to. 
+Fortunately, this interface has a single method 
+<code>public Hashtable getParameterDescriptors()</code> that would
+return the descriptors hashtable mentioned above.<p>
+
+The minimum amount of code necessary for an agent to use 
+PropertyDescriptors follows:
+
+<code><pre>
+public class MyAgent implements DescriptorContainer {
+  
+  private Hashtable descriptors = new Hashtable();
+
+  public Hashtable getParameterDescriptors() {
+    return descriptors;
+  } 
+
+}
+</pre></code>
+
+Actually creating the PropertyDescriptors and adding them to the 
+descriptors Hashtable is identical for both models and agents, and
+the instructions in the first part of this document can be used for
+both cases.
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+parent.0 = 1.params
+
+#
+# Here we specify the particular files to do induction over
+#
+
+eval.problem.allpos = input/4.out.gz
+eval.problem.allneg = input/4a.out.gz
+eval.problem.testpos = input/4s.out.gz
+eval.problem.testneg = input/4sa.out.gz
+

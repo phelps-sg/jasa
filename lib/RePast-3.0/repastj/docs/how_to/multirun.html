@@ -1,0 +1,68 @@
+<html><head>
+		<title>How to Build A Repast Model - 2</title></head>
+<body>
+<h1>
+<center> How to Use Multi-Run</center></h1>
+<ul>
+  <li><A href="#overview" >Overview</A>
+  <li><A href="#wizard" >The Parameter Wizard</A>
+  <li><A href="#button" >The Multi-Run Button</A>
+  <li><A href="#runwalkthrough" >A Multi-Run</A>
+  <li><A href="#notes" >Multi-Run Notes</A></li>
+</ul>
+This document describes how to use the "Multi-Run" capabilities in 
+Repast. This includes the Multi-Run button on the Repast toolbar, and the 
+Parameter Wizard. 
+<p><a name="overview"></a><b>Overview</b><br>Repast has previously 
+included support for performing batch simulation runs. This is useful when you 
+want to run a simulation without the extra burden of graphical displays or when 
+you have a large set of parameters you wish to run your model against (More 
+information on this is available in <A href="./params.html" >How to Use Parameters and 
+Parameter files</A>). New in Repast 3 is the capability to build parameter files 
+through a graphical wizard and the ability to execute these batch runs from the 
+Repast toolbar. 
+<P><a name="wizard"></a><b>The Parameter Wizard</b><br>The 
+Parameter wizard automatically searches a model for the parameters available. It 
+will load the parameters from the model's getInitParam(). Once they are loaded 
+you can choose how the parameter will be fed through into the model. You have 
+the choice of the parameter being a single constant value, an incremented value 
+(starting at some value, incrementing by another value, and continuing until it 
+has hit a final value), or a list of values. 
+<p>
+<center><IMG alt="A picture of the parmeter wizard" src="images/paramWizardInput.png" ></center>
+<p>You can get to the Parameter wizard in two ways, one by 
+choosing a model through the Load Model dialog (available through the Open 
+button on the toolbar <IMG src="./images/Open24.gif" align="absMiddle" >); the other through 
+the Multi-Run button on the toolbar <IMG alt="Multi-Run button" src="images/ParameterSweep.gif" align="absMiddle" >.</p>
+<P><a name="button"></a><b>The Multi-Run Button</b><br>The 
+Multi-Run button is used to start a set of batch runs on a model through the 
+Repast toolbar.&nbsp; When you have a model loaded you can click on the 
+Multi-Run button and you will be prompted to choose a parameter file.
+<p>
+<center><IMG src="images/paramBrowse.png" ></center>
+<p>If you do not have a previously generated parameter 
+file, by choosing cancel you will be notified that you must choose a parameter 
+file and you then will be returned to the now expanded Repast toolbar.
+<p>
+<center><IMG src="images/paramMessage.png" ></center>
+<p>Now by clicking on the combo box on the toolbar that 
+currently says "&lt;Browse...&gt;" you can either choose to again browse for a 
+parameter file or you can choose "&lt;Create...&gt;" which will take you to the 
+parameter wizard.
+<P>Once you have selected (or created) a parameter file, you then can execute 
+the model on it by clicking the Multi-Run button.
+<P><a name="runwalkthrough"></a><b>A Multi-Run</b><br>
+Once you have your parameter file selected, you can then click on the Multi-Run button.  This will start the model
+in batch mode.  The "Tick Count" label will update according to the current tick of the model and the Run count 
+label will update according to which run the model is on (a run is started every time the model stops).<br>
+
+<P><a name="notes"></a><b>Multi-Run Notes</b><br>
+For a run to 
+end the model must in some way end. This can happen through a call to 
+super.stop() from inside a SimModel or by calling stopSim() on the current 
+controller. Also, the model still must handle being in batch mode by itself. 
+This means, if you do not wish for displays and graphs and other GUI elements of 
+your model to display, you must disable them yourself. A simple way to do this 
+is to have a DisplayGUI parameter in your model and whenever that parameter is 
+set to something like 0 do not show the displays, otherwise do.</P>
+</body></html>

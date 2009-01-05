@@ -1,0 +1,515 @@
+<title>Social Network Models</title>
+</head>
+
+<body>
+<h1>
+<center>Network Models</center>
+</h1>
+
+The jiggle demonstration model (repast/demo/jiggle) is a simple
+example of a trivial network model, and the JinGirNew network model
+(repast/demo/jinGirNew) is a more complicated and realistic example.
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#over">Network Overview</a></li>
+<li><a href="#display">Displaying Networks</a></li>
+<li><a href="#io">Importing and Exporting Network Data</a></li>
+<li><a href="#create">Predefined Network Structures</a></li>
+</ul>
+
+<a name="over">
+<b>Network Overview</b><br>
+Network models in Repast are built around two basic 
+interfaces: the
+<a href="../api/uchicago/src/sim/network/Node.html">Node</a> and the
+<a href="../api/uchicago/src/sim/network/Edge.html">Edge</a>. All
+the mechanisms for displaying, exporting and importing networks use
+these two interfaces and they should be the basis for your own
+network models. Repast provides default implementations of these
+interfaces,
+<a href="../api/uchicago/src/sim/network/DefaultNode.html">DefaultNode</a>
+and
+<a href="../api/uchicago/src/sim/network/DefaultEdge.html">DefaultEdge</a>
+that can be used as is or as the basis for your own network node and
+edge classes.<p>
+
+The Node and Edge interfaces provide some simple methods for
+working with network nodes and edges. The API documentation should
+be clear, but the intention is that a Node keeps track of its
+incoming and outgoing edges as well as an optional label while
+an Edge keeps track of the Nodes to which and from which it is
+joined. In addition, an Edge also has methods for getting and
+setting the strength of the edge (typically to a value of 1), as 
+well as an optional label and type. The type of the edge 
+refers to the type of network that the edge defines (e.g.
+kinship, business and so forth).<p>
+
+Creating a link (an Edge) between two Nodes can be done
+is either of two ways. The first way:
+<code><pre>
+// this sets up the Nodes
+DefaultNode nodeA = new DefaultNode("A");
+DefaultNode nodeB = new DefaultNode("B");
+
+// constructs a DefaultEdge from nodeA to nodeB
+// with a default strength of 1
+// nodeA --> nodeB
+DefaultEdge edge = new DefaultEdge(nodeA, nodeB);
+nodeA.addOutEdge(edge);
+nodeB.addInEdge(edge);
+</pre></code>
+
+Here two Nodes are created, and Edge is created linking nodeA to
+nodeB. This Edge is then added as an outgoing Edge to nodeA and as an
+incoming Edge to nodeB.<p>
+
+The second and preferrable way is to use the
+<a href="../api/uchicago/src/sim/network/EdgeFactory.html">EdgeFactory</a>
+class to automate edge creation and linking for you. For example,
+<code><pre>
+// this sets up the Nodes
+DefaultNode nodeA = new DefaultNode("A");
+DefaultNode nodeB = new DefaultNode("B");
+
+// creates a DefaultEdge and links nodeA to nodeB
+EdgeFactory.createEdge(nodeA, nodeB);
+</pre></code>
+Here EdgeFactory creates a DefaultEdge and links nodeA and nodeB
+appropriately. EdgeFactory also as methods for setting edge strength
+labels and so forth during edge creation. In addition, you can also
+supply your own Edge implementing classes and EdgeFactory can use
+those. For example,
+
+<code><pre>
+// this sets up the Nodes
+DefaultNode nodeA = new DefaultNode("A");
+DefaultNode nodeB = new DefaultNode("B");
+
+// creates a DefaultEdge and links nodeA to nodeB
+EdgeFactory.linkNodes(nodeA, nodeB, new MyEdge());
+</pre></code>
+Here, EdgeFactory will link nodeA to nodeB using MyEdge. See the
+<a href="../api/uchicago/src/sim/network/EdgeFactory.html">API</a> docs
+for EdgeFactory for more info.<p>
+
+
+A Node can get a reference to another Node via the Edge
+that connects them. For example,
+<code><pre>
+// this sets up the Nodes
+DefaultNode nodeA = new DefaultNode("A");
+DefaultNode nodeB = new DefaultNode("B");
+
+EdgeFactory.createEdge(nodeA, nodeB);
+
+// set up is complete. The following shows
+// how to get a reference to nodeB given only
+// nodeA.
+
+ArrayList outEdges = nodeA.getOutEdges();
+
+// we know there is only a single edge from nodeA
+// because we only added one. Typically you'd 
+// iterate through or choose a specific edge based
+// on some criteria.
+DefaultEdge someEdge = (DefaultEdge)outEdges.get(0);
+
+// the getToNode() method returns a Node so we need to
+// cast to a DefaultNode. This someNode is in fact 
+// nodeB.
+DefaultNode someNode = (DefaultNode)someEdge.getToNode();
+
+// label = "B"
+String label = someNode.getLabel();
+</pre></code>
+
+DefaultNode also provides many convenience methods that makes 
+coding something like the above a bit shorter. See DefaultNode's
+<a href="../api/uchicago/src/sim/network/DefaultNode.html">API</a>
+docs for the details. For example,
+
+<code><pre>
+// this sets up the Nodes
+DefaultNode nodeA = new DefaultNode("A");
+DefaultNode nodeB = new DefaultNode("B");
+
+// constructs a DefaultEdge from nodeA to nodeB
+// with a default strength of 1
+// nodeA --> nodeB
+DefaultEdge edge = new DefaultEdge(nodeA, nodeB);
+nodeA.addOutEdge(edge);
+nodeB.addInEdge(edge);
+
+// set up is complete. The following shows
+// how to get a reference to nodeB given only
+// nodeA.
+
+// we know there is only a single edge from nodeA
+// because we only added one, and thus only a single
+// ToNode.
+
+DefaultNode = (DefaultNode)nodeA.getToNodes().get(0);
+
+// label = "B"
+String label = someNode.getLabel();
+</pre></code>
+
+Here the getToNodes() methods allows us to remove some of the code
+from the first example. DefaultNode contains many such methods.<p>
+
+The DefaultNode provides much of the network type functionality you
+are likely to need. Consequently, you can compose your own network
+agents out of these DefaultNodes, either by inheritance or
+composition.<p>
+
+A typical network model will treat the network nodes as the agents,
+and build these nodes and any necessary Edges as part of the
+buildModel() template method. For example,
+
+<code><pre>
+public class MyModel extends SimModelImpl {
+
+  ArrayList agentList = new ArrayList();
+
+  ...
+
+  private void buildModel() {
+    // creates DefaultNodes and adds them to a list
+    for (int i = 0; i < numAgents; i++) {
+      DefaultNode node = new DefaultNode(String.valueOf(i));
+      agentList.add(node);
+    }
+
+    // iterate through the agentList creating edges between 
+    // the current node and the previous node. 
+    for (int i = 0; i < agentList.size(); i++) {
+      Node node = (Node)agentList.get(i);
+      Node prevNode = null;
+      if (i == 0) {
+        // current node is first node in list so
+        // create an edge between it and the last node in
+        // the list.
+	prevNode = (Node)agentList.get(agentList.size() - 1);
+      } else {
+        prevNode = (Node)agentList.get(i - 1);
+      }
+      
+      EdgeFactory.createEdge(node, prevNode);
+    }
+  }
+}
+</pre></code>
+
+This is a simple example of how the structure of the initial network
+is created (adding edges to previous nodes). Real network models will
+use the same sort of code to create and add edges, but the criterion
+for adding edges will certainly be different. Together the Nodes and
+their Edges constitute the network, and all the nodes are placed in an
+ArrayList. Consequently this ArrayList represents the network as a
+whole. Many methods in the 
+<a href="../api/uchicago/src/sim/network/NetUtilities.html">NetUtilities</a>
+class operate on the entire network and expect to get such an ArrayList of 
+nodes as an argument.<p>
+
+
+<a name="display">
+<b>Displaying Networks</b><br>
+Repast provides some fairly useful tools for network visualization. However,
+these tools are meant only to give you sense of the network and are not
+intended for network analysis. True network visualization and analysis
+should be done with third party tools such as Pajek or UCINet.<p>
+
+Networks are displayed using the 
+<a href="../api/uchicago/src/sim/gui/Network2DDisplay.html">Network2DDisplay</a> class.
+The Network2DDisplay class expects to be drawing a network composed of 
+<a href="../api/uchicago/src/sim/gui/DrawableNonGridNode.html">DrawableNonGridNodes</a>
+and
+<a href="../api/uchicago/src/sim/gui/DrawableEdge.html">DrawableEdges</a>.
+As mentioned above, this network is encapsulated by a List of Nodes,
+in this case, DrawableNonGridNodes whose edges are of the DrawableEdge
+type.  Typically, this List is not passed directly to the
+Network2DDisplay for drawing, but is wrapped in some sort of
+<a href="../api/uchicago/src/sim/gui/GraphLayout.html">GraphLayout</a> first.
+The GraphLayout sets the x and y coordinates of the DrawableNonGridNodes 
+according to some algorithm and then the Network2DDisplay displays the
+nodes at these coordinates. Repast comes with four types of GraphLayouts:
+<a href="../api/uchicago/src/sim/gui/CircularGraphLayout.html">CircularGraphLayout</a>,
+<a href="../api/uchicago/src/sim/gui/RandomGraphLayout.html">RandomGraphLayout</a>,
+<a href="../api/uchicago/src/sim/gui/FruchGraphLayout.html">FruchGraphLayout</a>
+ (lays out the nodes according to a modified implementation of the 
+Fruchmen-Reingold graph layout algorithm), and
+<a href="../api/uchicago/src/sim/gui/KamadaGraphLayout.html">KamadaGraphLayout</a>
+ (lays out the nodes according to a modified implementation of the
+Kamada Kawai graph layout algorithm). More on using GraphLayouts later
+below.<p>
+
+What all this means is that if you want your Nodes to be displayed
+they must implement the DrawableNonGridNode interface and your Edges
+must implement the DrawableEdge interface. Rather than having you
+implement the DrawableNonGridNode interface, Repast provides the 
+<a href="../api/uchicago/src/sim/network/DefaultDrawableNode.html">DefaultDrawableNode</a>
+class. This class extends DefaultNode, so it contains all the network
+functionality described above; it is a DefaultNode. And it implements
+DrawableNonGridNode so it can be drawn with a Network2DDisplay. The
+actual drawing (as a rectangle, oval or whatever) of a DefaultDrawableNode
+is handled by a 
+<a href="../api/uchicago/src/sim/gui/NetworkDrawable.html">NetworkDrawable</a>.
+Repast provide two sorts of NetworkDrawables: a
+<a href="../api/uchicago/src/sim/gui/OvalNetworkItem.html">OvalNetworkItem</a>,
+and a 
+<a href="../api/uchicago/src/sim/gui/RectNetworkItem.html">RectNetworkItem</a>.
+These will draw your DefaultDrawableNodes as ovals or rectangles respectively.
+<p>
+
+While this mixture of DefaultNodes, DefaultDrawableNodes, and
+NetworkDrawables sounds quite complicated, in practice just a few
+lines of code are erequired to create nodes capable of being drawn by
+a Network2DDisplay and laid out by a GraphLayout. For example,
+
+<code><pre>
+OvalNetworkItem item = new OvalNetworkItem(1, 10);
+DefaultDrawableNode node = new DefaultDrawableNode(item);
+</pre></code>
+
+The first line creates an OvalNetworkItem with x and y coordinates of
+1 and 10. The second line creates a DefaultDrawableNode and passes the
+OvalNetworkItem as part of the constructor. This means that the
+DefaultDrawableNode will be drawn as an oval. Moreover, once you've
+passed the OvalNetworkItem in this way, you needn't worry about it
+again. In addition to the above, you can also set the NetworkDrawable for
+a DefaultDrawableNode with DefaultDrawableNode's setDrawable method. 
+This allows you to easily change the shape etc. of the node while the model
+is running.<p>
+
+The above is a simple example of how NetworkDrawables (OvalNetworkItems etc.)
+and DefaultDrawableNodes work together. Typically, you would create your
+own agent class that extends DefaultDrawableNode and then set the 
+NetworkDrawable on that. Both the demonstration network models, 
+jiggle (repast/demo/jiggle) and jinGirNew (repast/demo/jinGirNew) work
+in this way.<p>
+
+As mentioned above, your Edges must implement the DrawableEdge
+interface. Repast provides a default implementation of this that should
+be fine for most purposes. See, 
+<a href="../api/uchicago/src/sim/gui/DefaultDrawableEdge.html">DefaultDrawableEdge</a>
+for more info. Edge directionality is indicated by a small square on
+the displayed edge. The square is closer to the "to" node and farther from
+the "from" node. If the nodes are too close to each other to determine
+directionality, you can use the mouse (click and drag) to move the
+nodes further away. In addition, EdgeFactory has methods for automating
+the creation and linking of Nodes using DefaultDrawableEdges. 
+<p>
+
+Once you have constructed a Network2DDisplay it is handled like any
+other display. See <a href="./display.html">How to Create Displays</a>
+for more information.
+<p>
+
+The Network2DDisplay will layout DrawableNonGridNodes according to
+their x, y coordinates, and is not itself capable of doing any sort of
+graph layout.  As mentioned above, you can use one of the graph layout
+classes to lay out your network for you. For example,
+
+<code><pre>
+layout = new CircularLayout(agentList, xSize, ySize);
+Network2DDisplay display = new Network2DDisplay(layout);
+surface.addDisplayableProbeable(display, "Network Display");
+</pre></code>
+
+This constructs a CircularGraphLayout by passing it the list of 
+agents (most likely a list of DefaultDrawableNodes) and the size
+of the display. This layout is then passed to Network2DDisplay and
+that display is then handled in the usual manner.  See 
+<a href="./display.html">How to Create Displays</a> for more information.
+If the included graph layouts are not sufficient you can create 
+your own using 
+<a href="../api/uchicago/src/sim/gui/AbstractGraphLayout.html">AbstractGraphLayout</a>
+as a base class.<p>
+
+Graph layouts do not update themselves automatically every tick. You
+will need to schedule the updateLayout() method on your graph layout
+in order to update the layout. See 
+<a href="./scheduler.html">How to Use a Schedule</a> for more info.  
+FruchGraphLayout and KamadaGraphLayout calculate node coordinates
+based on edge connections, so whenever these connections change then
+updateLayout() will create a new layout. Conversely, the
+CircularGraphLayout will create the same layout regardeless of the
+structure of the network, and updateLayout() will only need to be
+called if the model itself changes the coordinates of the
+nodes.<p> 
+
+FruchGraphLayout and KamadaGraphLayout can be quite slow when laying
+out large networks. Consequently, you may want to update the layout
+infrequently. These two classes also have "hooks" in them to react to
+Repast toolbar (the bar with the start, stop, etc. buttons) button
+presses. This allows you to interrupt the layout by pressing stop,
+pause, or exit. Without this, your model may continue to finish
+network layout even though you have pressed pause.  You can attach the
+layout to the toolbar buttons as follows:
+
+<code><pre>
+Controller c = (Controller)getController();
+c.addStopListener(graphLayout);
+c.addPauseListener(graphLayout);
+c.addExitListener(graphLayout);
+</pre></code>
+
+This code would typically be placed in your model's buildDisplay() 
+method.<p>
+
+
+You can also move the nodes around with the mouse by clicking on a
+node and dragging it. This is useful if the nodes are obscuring each
+other.  Zooming in on parts of the network is also posssible. You do
+this by holding down the control-key and dragging the mouse to draw a
+box around the area you wish to zoom in on. After you've defined the
+zoom area, press the "z" key to zoom. Press "r" to return the network
+to its normal state.
+<p>
+
+<a name="io">
+<b>Importing and Exporting Network Data</b><br>
+Repast provides facilities for importing and exporting network data.<p>
+
+<b>Importing Data</b><br>
+Network data is imported via the
+<a href="../api/uchicago/src/sim/network/NetworkFactory.html">NetworkFactory</a> class.
+Using NetworkFactory.getNetwork method, you can import a network
+from two file formats. The file description of the network is 
+transformed into a list of Nodes and Edges of some user specified
+type. The supported formats are UCINet's dl format and the UCINet
+compatible Excel format.<p>
+
+The matrix is assumed to be square for both the dl and Excel formats.
+For Excel, each worksheet is treated as a matrix, and any worksheets
+that do not contain matrices will cause an error. The worksheet name
+is treated as the matrix label unless the name begins with Sheet
+(Excel's generic worksheet name). The format for excel files is that
+imported and exported by UCINet. The first cell is empty, and the
+node labels begin on this first row in the second column. The column
+node labels begin in first column on the second row. The actual data
+begins in cell 2,2. For example,
+<code><pre>
+             | first_label | second_label | ...
+-------------+-------------+--------------+----
+first_label  | 0           | 1            | ...
+-------------+-------------+--------------+----
+second_label | 1           | 0            | ...
+-------------+-------------+--------------+----
+...          | ...         | ...          | ...
+</pre></code>
+If the matrix has no node labels, Repast will expect the first row and
+column to be blank and for the data to begin in cell 2,2.<p>
+
+An example,
+<code><pre>
+List list = NetworkFactory.getNetwork("./network.dl", NetworkFactory.DL,
+                                     MyNode.class, MyEdge.class,
+                                     NetworkFactory.BINARY);
+</pre></code>
+NetworkFactory will parse the network.dl file creating a list of
+Nodes that contain the appropriate Edges to other Nodes. In this case,
+all the nodes will be of the MyNode class and the edges of MyEdge class.
+This assumes you have defined a MyNode class that implements the
+Node interface and have defined a MyEdge class that implements the
+Edge interface. DefaultNode.class and DefaultEdge.class could have
+been substituted here as well. (The "ClassName.class" notation returns 
+class information about a class.) The resulting List can be used just
+as if you had created the network by hand (as in the previous example).
+The final argument specifies the size of the matrix cell items (ij values). 
+It can be one of NetworkFactory.BINARY, NetworkFactory.SMALL, or
+NetworkFactory.LARGE. Use BINARY if the ij values are 0 or 1, SMALL if
+the values are between -127 and 127 and LARGE for anything else. The 
+difference in memory usage between BINARY and LARGE is enormous and 
+specifying BINARY here can make the difference between being able or
+unable to actually import a network into Repast.
+<p>
+
+<b>Note</b>: The Excel format can only be used on windows and
+requires that you copy the ExcelAccessor.dll from
+repast/lib to your system folder (i.e. windows/system or
+winnt/system32).<p>
+
+<b>Exporting Data</b><br>
+Exporting data is done through the
+<a href="../api/uchicago/src/sim/network/NetworkRecorder.html">NetworkRecorder</a> class. NetworkRecorder records a network as a matrix or 
+matrices in the appropriate format. It takes a list of Nodes and 
+writes the corresponding adjacency matrix to a file. Three file formats 
+are supported: UCINet's dl, Excel, and ASCII. The actual network 
+matrix is written out in this format, although Repast records relevant 
+non-matrix information as well:
+a file header containing the constant parameters for the model and a
+timestamp, and a block header that contains header information relevant
+to the network data recorded beneath it. The block header will contain
+the value of any dynamic model parameters at the time a network
+was recorded, as well as any user comments (typically the current tick
+count).<p>
+
+The actual format of the file is as follows:
+<code><pre>
+file header
+
+block_header_1
+network data in the specified format
+
+block_header_2
+network data in the specified format
+...
+</pre></code>
+
+Specifying the format then specifies the format for the network data. The
+rest (file header and block header) will remain the same for all formats.
+The actual network data can easily be cut and pasted out of the file.<p>
+
+ASCII format will record the matrix and the matrix label in comma
+delimited plain text. Excel format will store it in an Excel file
+in a format suitable for importation into UCINet.<p>
+
+<b>Note</b>: Excel format should not be used as it is very time consuming
+and error prone to write to an Excel file. Use ASCII instead which
+is a plain text format suitable for importation into excel.<p>
+
+An example,
+<code><pre>
+NetworkRecorder recorder = new NetworkRecorder(NetworkRecorder.DL,
+                                              "./myNetwork.dl",
+					      this);
+...
+
+recorder.record(nodeList, "tick: " + getTickCount(), NetworkRecorder.BINARY);
+...
+recorder.write();
+</pre></code>
+The first line creates a NetworkRecorder to record a network in
+dl format into the file myNetwork.dl, and passes it a reference to the
+model in which the recorder is constructed. The second line
+does the actual recording. It records the network(s) represented by the
+Nodes and their Edges in nodeList and appends the current tick count
+to the block header. The last argument refers to the size of the 
+ij values, and works the same as for NetworkFactory.getNetwork (see above).
+The ij value recorded is that of the strength of the edge. By default
+this is 1 if an edge exists otherwise 0. recorder.record(..) should occur 
+as part of a BasicAction to be scheduled for some sort of repeated execution.
+recorder.write() does the actual write of the data record by 
+recored.record to the specified file (e.g. myNetwork.dl). Writing
+to disk is slow and so the call to recorder.write() should be done
+sporadically.
+See <a href="./data.html">How to Collect Data</a> from more on 
+scheduling data collection.<p>
+
+<a name="create">
+<b>Predefined Network Structures</b><br>
+In addtion to being used to import networks from a file,
+<a href="../api/uchicago/src/sim/network/NetworkFactory.html">NetworkFactory</a> 
+can also be used to create some common network structures. These are:
+a Square Lattice Network, a Random Density Network, and the classic
+Watts-Strogatz small world network (ring substrate). You create these
+networks using the appropriate methods in NetworkFactory. They operate
+similar to importing data. You provide the node and edge classes, as
+well as some network parameters, and you get back a network of the 
+appropriate structure as a List of your node classes See
+<a href="../api/uchicago/src/sim/network/NetworkFactory.html">NetworkFactory</a>
+for more info.
+</body>
+</html>

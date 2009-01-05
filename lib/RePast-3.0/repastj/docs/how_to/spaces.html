@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<title>Space Overview</title>
+	<head>
+		<h2>Spaces Overview</h2>
+	</head>
+	<p>
+		<body>
+			Spaces in Repast serve two purposes. They can be the basis for "spatial agents" 
+			such as the SugarSpace or the InfiniteLifeSpace in the SugarScape and Life 
+			demonstration models. And they also function as a collection of agents that 
+			define the spatial relationship of agents relative to each other.<p>
+				Repast offers the following spaces. See the API docs (click the links) for more 
+				information. Note that Network spaces are quite different and are covered in 
+				the <a href="./network.html">Network Models</a> document.
+				<ul>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Diffuse2D.html">Diffuse2D</a>. A 
+						discrete approximation of two dimensional diffusion. The space itself is a 
+						toriodal (a donut-shape) grid whose cells contain doubles.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Object2DGrid.html">Object2DGrid</a>. A 
+						discrete two dimensional grid whose cells contain Objects.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Object2DTorus.html">Object2DTorus</a>. A 
+						discrete two dimensional torus whose cells contain Objects.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Multi2DGrid.html">Multi2DGrid</a>. A two 
+						dimensional grid whose cells can contain more than one Object. The order of the 
+						Objects in each cell is undefined.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/OrderedMulti2DGrid.html">OrderedMulti2DGrid</a>. 
+						A two dimensional grid whose cell can contain more than one Object. The order 
+						of the Objects in each cell is first in, first out.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Multi2DTorus.html">Multi2DTorus</a>. A 
+						two dimensional torus whose cells can contain more than one Object. The order 
+						of the Objects in each cell is undefined.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/OrderedMulti2DTorus.html">OrderedMulti2DTorus</a>. 
+						A two dimensional torus whose cell can contain more than one Object. The order 
+						of the Objects in each cell is first in, first out.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Diffuse2DHexagonal.html">Diffuse2DHexagonal</a>. 
+						A discrete approximation of two dimensional diffusion. The space itself is a 
+						toriodal (a donut-shape) hexagonal grid whose cells contain doubles.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Object2DHexagonalGrid.html">Object2DHexagonalGrid</a>. 
+						A discrete two dimensional hexagonal grid whose cells contain Objects.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Object2DHexagonalTorus.html">Object2DHexagonalTorus</a>. 
+						A discrete two dimensional hexagonal torus whose cells contain Objects.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Multi2DHexagonalGrid.html">Multi2DHexagonalGrid</a>. 
+						A two dimensional hexagonal grid whose cells can contain more than one Object. 
+						The order of the Objects in each cell is undefined.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/OrderedMulti2DHexagonalGrid.html">OrderedMulti2DHexagonalGrid</a>. 
+						A two dimensional hexagonal grid whose cell can contain more than one Object. 
+						The order of the Objects in each cell is first in, first out.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/Multi2DHexagonalTorus.html">Multi2DHexagonalTorus</a>. 
+						A two dimensional hexagonal torus whose cells can contain more than one Object. 
+						The order of the Objects in each cell is undefined.<p>
+					<li>
+						<a href="../api/uchicago/src/sim/space/OrderedMulti2DHexagonalTorus.html">OrderedMulti2DHexagonalTorus</a>. 
+						A two dimensional hexagonal torus whose cell can contain more than one Object. 
+						The order of the Objects in each cell is first in, first out.<P>
+					<li>
+						<a href="../api/uchicago/src/sim/space/RasterSpace.html">RasterSpace</a> A two 
+						dimensional grid that reflects geographic data. Each cell can contain one 
+						Object. Movement in this space can use distances, coordinates or discrete cell 
+						locations.<P>
+				</ul>
+			(Note that in the above, hexagonal refers to the shape of the cells, such that 
+			in a hexagonal grid or torus each cell is hexagonal and thus has six 
+			neighbors.)<p>
+			These spaces contain methods for inserting and removing items via the 
+			applicable coordinates. They also contain methods for retrieving a list of 
+			items in neighboring cells (Von Neumann or Moore neighborhood in the case of 
+			non-hexagonal spaces and neighborhood "rings" for hexagonal) as well as for 
+			determining the minimum or maximum item in such a neighborhood. What 
+			constitutes minimum and maximum can be user-defined.<p>
+				Using a space as a spatial collection of agents is fairly simple and is 
+				typically a matter of inserting and removing agents from the space, and perhaps 
+				querying the space for an agent's neighbors. The typical pattern is that all 
+				agents in a particular space have an instance variable reference to that space. 
+				So for example, in the buildModel method in your model, you'd have something 
+				like: <code>
+					<pre>
+Object2DGrid space = new Object2DGrid(spaceWidth, spaceHeight);
+for (int i = 0; i < numAgents; i++) {
+  int x, y;
+  do {
+    x = Random.uniform.nextIntFromTo(0, space.getSizeX() - 1);
+    y = Random.uniform.nextIntFromTo(0, space.getSizeY() - 1);
+  } while (space.getObjectAt(x, y) != null);
+
+  MyAgent agent = new MyAgent(x, y, space);
+  space.putObjectAt(x, y, agent);
+  agentList.add(agent);
+}
+</pre>
+				</code>
+			The first line here creates an Object2DGrid space. It then creates some number 
+			of agents of MyAgent type. The do loop gets random x and y coordinates and 
+			keeps getting new coordinates if the cell in the space at those coordinates is 
+			full. The agent is then created, given those coordinates and a reference to the 
+			space, and added to the space at those coordinates. (Note that if you were 
+			using one of the Multi spaces, you wouldn't need to check if the space cell was 
+			occupied as more than one agent can occupy a cell in those spaces.)<p>
+				Regardless of what sort of space you use, this pattern is typical. The agent 
+				has a reference to the space, and knows its own x and y coordinates and the 
+				space contains the agent. Agent movement is a matter of changing the agent's 
+				internal x and y coordinates, removing it from its previously occupied cell and 
+				adding it to the new one. For example, <code>
+					<pre>
+space.putObjectAt(x, y, null);
+x = newX;
+y = newY;
+space.putObjectAt(x, y, this);
+</pre>
+				</code>
+			As we see here removing an agent from a space cell is accomplished by setting 
+			that cell's occupant to null. This code takes place within the agent and thus 
+			we use the "this" reference to the current agent to place that agent in the new 
+			cell. newX and newY have been set outside our code snippet and no check that 
+			the new cell is occupied is done here. Note that the pattern (set to null for 
+			remove etc.) for working with Multi spaces is the space, although the exact 
+			methods will be different. See the API docs for details.
+		</body>
+</html>

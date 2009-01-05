@@ -1,0 +1,433 @@
+<html>
+<head>
+<title>How to Create Displays</title>
+</head>
+
+<body>
+<h1>
+<center>How to Create Displays</center>
+</h1>
+<h2>Contents</h2>
+<ul>
+<li><a href="#display">Building Displays</a></li>
+<li><a href="#text_display">The Text Display</a></li>
+<li><a href="#movie">Taking Snapshots and Making Movies</a></li>
+<li><a href="#mapping">Drawable, Space and Display Mappings</a></li>
+</ul>
+
+<a name="display">
+<b>Building Displays</b><br>
+Displays, that is graphical presentations of agents and their environments, 
+are created in Repast through the use of three types of classes: spaces 
+(the classes in the uchicago.src.sim.space package), the displays corresponding 
+to those spaces (e.g. Object2DDisplay) in the uchicago.src.sim.gui package and a
+<a href="../api/uchicago/src/sim/gui/DisplaySurface.html">
+DisplaySurface</a>. In addition, those objects such as agents, and individual
+environment objects must implement certain interfaces if they are to be 
+displayed. The actual interface to be implemented depends on the type of 
+display. The source to the demonstration simulations are good examples of 
+how all these fit together and should be explored in conjunction with 
+this document.<p>
+
+Before looking at the buildDisplay() method, it is helpful to understand how 
+Repast actually sets up and draws displays. Setting up Repast for drawing
+consists of several steps. The first of these is creating what you want to
+be drawn. Usually, these are agents and their environment. As mentioned in
+<a href="./model.html">How To Build a Repast Model</a> agents etc. are
+created in buildModel(). Also in buildModel() these agents are added to some
+sort of space, a Object2DTorus for example, and sometimes a list. Then in 
+buildDisplay() the display (e.g. Object2DDisplay) appropriate to the space 
+is created and the space is added to that display. The list, if it exists, is
+also added to the display. The display itself is then added to a 
+DisplaySurface either as a displayable or as a displayableProbeable depending on
+whether probing is to be performed on the objects contained by the space
+in the display. (The DisplaySurface itself should be created in the 
+model's <tt>setup()</tt> method. In short then, after buildDisplay() 
+you have a DisplaySurface containing displays that contain spaces 
+that contain the objects to be displayed.<p>
+
+With this structure setup then, the actual drawing sequence is as follows. 
+The updateDisplay method is called on the DisplaySurface object. Typically, 
+this call is scheduled and the scheduling mechanism makes the call. Having 
+received this call, the DisplaySurface object tells all the displays it 
+contains to display themselves. Having received this call, the displays either
+gets a list of all the objects in the space that they contain, or if a list of
+objects was added, they just use that list. The display then requests some 
+drawing information (coordinates, etc.) from each object in the list, sets up
+the drawing surface using this information, and then tells each object
+in the list to draw itself. These objects then draw themselves. In order for
+a display to display an object it expects the drawable object to implement
+certain methods. These methods vary slightly according to the display and
+are encapsulated in one or another of the drawable interfaces. 
+A mapping of which interfaces to use with which spaces and displays is 
+given <a href="#mapping">below</a>.<p>
+
+As mentioned in <a href="./model.html">How To Build a Repast Model</a> 
+the display is usually created in the buildDisplay() method. A very simple
+buildDisplay() might look like:
+<code><pre>
+public void buildDisplay() {
+&nbsp;&nbsp;&nbsp;Object2DDisplay agentDisplay = new Object2DDisplay(world);
+&nbsp;&nbsp;&nbsp;agentDisplay.setObjectList(agentList);
+
+&nbsp;&nbsp;&nbsp;dsurf.addDisplayableProbeable(agentDisplay, "Agents");
+&nbsp;&nbsp;&nbsp;addSimEventListener(dsurf);
+}
+</pre></code>
+where world is a space, an Object2DTorus populated with agents, agentList 
+is a simple list of agents, and dsurf is a DisplaySurface, all having been 
+created previously in buildModel() or in the case of dsurf in
+setup().
+Here the display is created and as part of its construction the space "world"
+added to it. Then agentList is also added to it for display. This
+display, agentDisplay, is then added to the DisplaySurface dsurf as both
+a displayable and a probeable. As a displayable dsurf will display 
+agentDisplay in the manner outlined above. As a probeable dsurf will allow
+probing on the agents contained in the space, in this case world, contained
+by agentDisplay. The final method adds dsurf to the model as a listener for
+stop and pause events. This allows dsurf to know when the model is stopped or
+paused and behave accordingly. It may seem redundant to add both agentList and
+world to agentDisplay. It is not, however, because spaces do more than provide
+displays with lists of objects to display, they also take part in the 
+probing mechanism.<p>
+
+<a name="text_display">
+<b>The Text Display</b><br>
+The <a href="../api/uchicago/src/sim/gui/TextDisplay.html">TextDisplay</a>
+differs from the other displays in that it does not display a space.
+Rather, it used to display text on the DisplaySurface. You specify what 
+text to display and the TextDisplay will display that text.<p> 
+
+Setting up a TextDisplay works as follows:
+
+<code><pre>
+td = new TextDisplay(20, 20, Color.yellow);
+dsurf.addDisplayableProbeable(td, "text");
+</pre></code>
+
+This creates a TextDisplay which will display text at the specified x
+and y coordinates (20, 20) and in yellow. This kind of code would
+typically occur in your buildDisplay() method. "td" here is an
+instance variable of your model class. Note that the coordinates refer
+to pixels and not to grid cell locations. The TextDisplay "td" is then
+added to the DisplaySurface just like any other display.  By default
+the text is displayed inside a rectangle of the same color as the
+text. This rectangle can be moved around the display using the mouse.
+
+You specify the text to display using the <code>addLine(String
+line)</code> method. This adds text without removing previously added
+text.  To remove any previously added text, you use the
+<code>clearLines()</code> method. The addition of new text is 
+typically done as part of a scheduled action in order that the text
+reflect the new state of the model. For example,
+
+<code><pre>
+td.clearLines();
+td.addLine("tick count: " + getTickCount());
+</pre></code>
+
+The above would be scheduled to occur every tick, and thus would
+display a new tick count value each tick of the model.<p>
+
+There are variations on the <code>addLine</code> and 
+<code>clearLines</code> methods as well as methods for turning
+the rectangle on and off. See the 
+<a href="../api/uchicago/src/sim/gui/TextDisplay.html">API</a>
+docs for more info.<p>
+
+
+
+
+<a name="movie">
+<b>Taking Snapshots and Making Movies</b><br>
+Repast can be used to take snapshots, that is gif images of the current 
+display, as well as make quicktime movies using the display as it changes 
+over the course of a run. All this functionality is available through the
+<a href="../api/uchicago/src/sim/gui/DisplaySurface.html">DisplaySurface</a>
+class. You can either manually setup your simulation to take 
+snapshots and create movies, or use the buttons provided in the
+Repast Action tab. What follows is a description of manual setup.<p>
+
+To setup the display surface for taking shapshots, you would call<p>
+<code>
+dsurf.setSnapshotFileName(some_fileName);
+</code><p>
+in buildDisplay(). A DisplaySurface will use this name as the base for the
+the actual gif file or files. Then in the buildSchedule() method you schedule
+the DisplaySurface to actually take snapshots of the display at the tick of
+the simulation. For example given a DisplaySurface dsurf,<p>
+<code>
+schedule.scheduleActionAtInterval(100, dsurf, "takeSnapshot");
+</code><p>
+dsurf will now create gifs of the display at every 100 ticks of the simulation.
+The resulting gif files will be some_fileName_tick_count.gif. For example,
+heatbugpic100.gif.<p>
+
+You can also take snapshots of the Repast charting objects 
+(OpenSequenceGraph and
+OpenHistogram) in a nearly identical way. Simply substitute the 
+variable names of your charting objects for dsurf in the above.<p>
+
+Making movies is similar. To prepare a DisplaySurface for making a movie
+you would call<p>
+<code>
+dsurf.setMovieName(movie_name, DisplaySurface.QUICK_TIME);
+</code><p>
+And to actually turn the display at certain simulation tick into a frame of
+the movie, you need to schedule the addMovieFrame on a DisplaySurface.<p>
+<code>
+schedule.scheduleActionAtInterval(10, dsurf, "addMovieFrame");
+</code><p>
+which will take the display every 10 ticks and make a movie frame from it.
+At the moment only quicktime movies are supported. The resulting movie file
+will be whatever the movie_name was in setMovieName combined with the extension
+appropriate to the type of movie. For example, "heatBugMovie.mov". You must also
+explicitly send the closeMovie message to the DisplaySurface. For example,<p>
+<code>
+schedule.scheduleActionAtEnd(dsurf, "closeMovie");
+</code><p>
+while will send the closeMovie message at the end of the simulation. When
+the movie has finished writing itself to a file, you will see the message box
+informing you of this. <b>Do not exit the simulation until you see and click
+on the message box.</b><p>
+
+Making movies of the Repast chart objects is not supported as this time.<p>
+
+The Repast action tab can be used to automate taking snapshots and  making 
+movies of your DisplaySurfaces or charting objects. Clicking on the
+appropriate button on the Repast action tab will present you with
+a self-explanatory series of choices. However, in order for this to work,
+ you'll need to pay some attention to how these objects are created 
+in your setup() method. In general you'll need to create these
+objects in the setup method and register them as DisplaySurfaces or 
+MediaProducters. DisplaySurfaces should be registered as DisplaySurfaces
+and the charting objects as MediaProducers. For example,
+<code><pre>
+private void setup() {
+  ...    
+  dsurf = new DisplaySurface(this, "Sugar Scape");
+  registerDisplaySurface("Sugar Scape", dsurf);
+  bar = new OpenHistogram("Agent Wealth Distribution", 10, 0, this); 
+  graph = new OpenSequenceGraph("Agent Attributes", this, "./graph_data.txt",
+                              Statistics.CSV);
+
+
+  registerMediaProducer("Hist", bar);
+  registerMediaProducer("Plot", graph);
+  ...
+}
+</pre></code>
+Registering an object or DisplaySurface allows it to be displayed as 
+available as a source of snapshots and movies. Clicking the 
+"take Snapshot" button in the Repast Actions tab allows you to choose
+from among these registered objects as sources of snapshots. In the above
+case you'd have a choice of one or all of "Sugar Scape", "Hist", or "Plot".<p>
+<b>Note</b>: at this time making movies of charting objects is not 
+supported.<p>
+
+<a name="mapping">
+<b>Drawable, Space and Display Mappings</b><br>
+Use the following table to determine what interface to implement on your agents
+when using a particular space and display. So for example, if your agents
+inhabit an 
+<a href="../api/uchicago/src/sim/space/Object2DTorus.html">Object2DTorus</a>
+you would use an 
+<a href="../api/uchicago/src/sim/gui/Object2DDisplay.html">Object2DDisplay</a>
+and the agents inhabiting the Object2DTorus would have to implement the
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a> interface.<p>
+<br>
+<table border="1">
+<tr>
+<td VALIGN=TOP>
+<b>Space</b>
+</td>
+<td>
+<b>Display</b>
+</td>
+<td>
+<b>Interface</b>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Object2DGrid.html">Object2DGrid</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Object2DDisplay.html">Object2DDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Object2DTorus.html">Object2DTorus</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Object2DDisplay.html">Object2DDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Object2DGrid.html">Object2DGrid</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Network2DGridDisplay.html">Network2DGridDisplay</a>
+</td>
+<td>
+Nodes:
+<a href="../api/uchicago/src/sim/gui/Drawable2DNode.html">Drawable2DNode</a>
+<br>
+Edges:
+<a href="../api/uchicago/src/sim/gui/DrawableEdge.html">DrawableEdge</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Object2DTorus.html">Object2DTorus</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Network2DGridDisplay.html">Network2DGridDisplay</a>
+</td>
+<td>
+Nodes:
+<a href="../api/uchicago/src/sim/gui/Drawable2DGridNode.html">Drawable2DGridNode</a>
+<br>
+Edges:
+<a href="../api/uchicago/src/sim/gui/DrawableEdge.html">DrawableEdge</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Diffuse2D.html">Diffuse2D</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Value2DDisplay.html">Value2DDisplay</a>
+</td>
+<td>
+N/A. Map to values to a 
+<a href="../api/uchicago/src/sim/gui/ColorMap.html">ColorMap</a> instead.
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Multi2DGrid.html">Multi2DGrid</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/MultiObject2DDisplay.html">MultiObject2DDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Multi2DTorus.html">Multi2DTorus</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/MultiObject2DDisplay.html">MultiObject2DDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/OrderedMulti2DGrid.html">OrderedMulti2DGrid</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/MultiObject2DDisplay.html">MultiObject2DDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/OrderedMulti2DTorus.html">OrderedMulti2DTorus</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/MultiObject2DDisplay.html">MultiObject2DDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Object2DHexagonalGrid.html">Object2DHexagonalGrid</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Object2DHexaDisplay.html">Object2DHexaDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/Object2DHexagonalTorus.html">Object2DHexagonalTorus</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Object2DHexaDisplay.html">Object2DHexaDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/DiffuseHexagonal2D.html">DiffuseHexagonal2D</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Value2DHexaDisplay.html">Value2DHexaDisplay</a>
+</td>
+<td>
+N/A. Map to values to a 
+<a href="../api/uchicago/src/sim/gui/ColorMap.html">ColorMap</a> instead.
+</td>
+</tr>
+
+<tr>
+<td>
+<a href="../api/uchicago/src/sim/space/RasterSpace.html">RasterSpace</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Object2DDisplay.html">Object2DDisplay</a>
+</td>
+<td>
+<a href="../api/uchicago/src/sim/gui/Drawable.html">Drawable</a>
+</td>
+</tr>
+</table>
+<p>
+
+</table>
+<p>
+
+Network display is discussed in the <a href="./network.html">Network
+Models</a> document.
+
+</body>
+</html>
+
+
+
+
+

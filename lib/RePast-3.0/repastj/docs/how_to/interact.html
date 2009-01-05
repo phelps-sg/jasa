@@ -1,0 +1,130 @@
+<html><head>
+<title>How to use the GUI</title></HEAD>
+<body>
+<h1>
+<center>How to use the GUI</CENTER></H1>
+<p>A user can interact with a non-batch Repast simulation 
+through the gui. The gui allows the user to start, stop, pause, setup, and exit 
+a simulation through the toolbar. The table below lists the toolbar buttons and 
+their functions. 
+<p>
+<table>
+  <tr>
+    <TD><B>Start Multi-Run </B></TD>
+    <td><b>Start</B></TD>
+    <td><b>Step</B></TD>
+    <td><b>Initialize</B></TD>
+    <td><b>Stop</B></TD>
+    <td><b>Pause</B></TD>
+    <td><b>Setup</B></TD>
+    <td><b>Load Model</B></TD>
+    <td><b>View Settings</B></TD>
+    <td><b>Exit</B></TD></TR>
+  <tr align=center>
+    <td><IMG src="./images/ParameterSweep.gif" ></TD>
+    <td><IMG src="./images/Play24.gif" ></TD>
+    <td><IMG src="./images/StepForward24.gif" ></TD>
+    <td><IMG src="./images/Redo24.gif" ></TD>
+    <td><IMG src="./images/StopSquare24.gif" ></TD>
+    <td><IMG src="./images/Pause24.gif" ></TD>
+    <td><IMG src="./images/Refresh24.gif" ></TD>
+    <td><IMG src="./images/Open24.gif" ></TD>
+    <td><IMG src="./images/TipOfTheDay24.gif" ></TD>
+    <td><IMG src="./images/Delete.gif" ></TD></TR></TABLE>
+<p>
+<ol>
+  <li><STRONG>Start 
+  Multi-Run</STRONG>: The start multi-run button starts a batch run of a 
+  simulation. See <A href="./multirun.html" >How to Use the Multi-Run</A> for more details. 
+
+  <LI><B>Start</B>: The start button 
+  starts the simulation when it is paused or has not yet been started, iterating 
+  through the scheduled behavior. 
+  <li><b>Step</B>: The step button 
+  starts the simulation when it is paused or has not yet been started, iterating 
+  through a single iteration the scheduled behavior. 
+  <li><b>Initialize</B>: The 
+  initialize button starts the simulation but pauses before iterating any 
+  scheduled behavior. Only the initializing code is executed in this case. 
+  <li><b>Stop</B>: The stop button 
+  stops the simulation. 
+  <li><b>Pause</B>: The pause button 
+  pauses the simulation. 
+  <li><b>Setup</B>: The setup button 
+  "sets up" the simulation by executing the user defined setup code. 
+  <li><b>Load Model</B>: The load 
+  model button pops up a dialog allowing the user to specify a model to load. 
+  <li><b>View Settings</B>: The view 
+  settings button will display the various model settings panel if it is hidden 
+  or destroyed. 
+  <li><b>Exit</B>: The exit button 
+  will shutdown the simulation and exit. </LI></OL>To run a simulation you would 
+click either the start, step or initialize buttons. If you click the initialize 
+button, you would then click step or start. When you want to stop the simulation 
+and then run it again, you click stop and then the setup button. 
+<p>In addition, if the model has followed the get/set 
+method pattern (see <A href="./model.html#getset" >How to Build a 
+Model</A> and <A href="./params.html" >How to use Parameters and Parameter Files</A>) the user 
+will also be able to see and set the initial parameters of a simulation. The 
+initial parameters will appear in the settings window on the tab entitled 
+"Parameters" into which the user can see the default starting parameters and 
+enter new ones. 
+<p>Also in the settings window are the Custom Actions tab 
+and the Repast Actions tab. The Custom Actions tab will contain any sliders, 
+buttons, or checkboxes that the simulation author has defined. You can interact 
+with the model while it is running through these sliders, buttons, and 
+checkboxes. 
+<p>The Repast Actions tab looks like: 
+<p><center><IMG src="./images/repastactions.png" ></center>
+<p>
+<ul>
+  <li>The first two buttons allow you to make a movie or 
+  take a snapshot. Clicking on one of these buttons will bring up a dialog 
+  containing further information and choices. 
+  <li>The third button will bring up a dialog for creating 
+  an sequence chart. (This functionality is provisional at this time.) 
+  <li>The "In Alpha Order" check box controls the order of 
+  the parameters in the parameters tab. If it is checked the parameters will 
+  appear in alphabetical order. Otherwise they will appear in the order they are 
+  defined in the model. 
+  <LI>The "Stdout to Console" check box determines if standard output (output 
+  from "System.out.println") will be captured by the Repast console.
+  <LI>The "Stderr to Console" check box determines if standard error (output 
+  from "System.err.println") will be captured by the Repast console.
+  <li> The "RngSeed in Defaults" checkbox determines 
+  whether the current random number seed will be included as a default value 
+  either when written to a file or set as the current default. 
+  <li>"Update Probes" determines whether or not any probed 
+  objects have their displayed properties updated in real-time or not. 
+  <li>"Show custom charts" determines whether or not any 
+  custom charts created for this model using the "create / edit charts" button 
+  are automatically created and displayed when this model is run. 
+  <li> The "Set As Default" button will set the current
+parameters as the default until Repast is exited. This
+means that whenever the setup button is pressed these new
+defaults will be used rather the initial parameters. 
+
+<li> The "Write Parameters" button will write the current parameters
+to a file so that can be loaded later.
+
+<li> The "About" button displays a typical about dialog 
+  giving some further information about Repast.</li></UL>
+
+ 
+A user may also probe objects in the simulation provided those objects
+implement the get/set method pattern and whose displays are added to
+the DisplaySurface as probeables (see <a href="./display.html">How to
+Create Displays</a>). To probe an object, pause the simulation, and
+left click on the object in the display. The probeable state of all
+the objects underneath the cursor should appear in windows similar to
+the "Parameters" tab in the settings window, and their properties can
+be set in the same way (i.e. changing the property and pressing
+enter).<p>
+
+Displaying a simulation can be one of the slowest parts 
+of a simulation. Repast will not update the display if the display window is 
+minimized, allowing for dynamic display updates. (Of course, these kind of 
+updates can be set explicitly through a Schedule.) When the window is displayed 
+again it will update in the usual manner.</p> 
+
+</body></HTML>

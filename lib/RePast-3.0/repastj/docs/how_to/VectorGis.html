@@ -1,0 +1,98 @@
+<html>
+	<head>
+		<title>How to Use Vector Gis</title>
+	</head>
+	<body>
+		<h1>
+			<center>How to Use Vector GIS</center>
+		</h1>
+		<p>
+			Several packages have been used to add vector gis support to Repast. These are 
+			most notably <a href="http://www.geotools.org">Geotools</a> and <a href="http://www.vividsolution.com/jts/main.htm">
+				Java Topology Suite</a> These provide the back and middle end support for 
+			the types of operations needed for gis. JTS implements the Simple Features 
+			Specification from the OpenGis Consortium, and Geotools provides data handling 
+			(the full geotools package includes much more). Repast's gis tools are 
+			basically adapters between these toolkits and the Repast toolkit.
+		</p>
+		<P>
+			<b>Gis Philosophy</b>
+		These adapters take the philosophy that gis features can be represented as 
+		pieces of a network. A Point can be represented as a node, a polygon can be 
+		represented as a node and a linestring can be represented as an edge. So each 
+		of these feature types (as well as its "multi" counterpart) have the methods 
+		from those types in Repast as well as the basic geographic functions.
+		<P>
+			<b>Use</b> In order to create a gis space in Repast, you need to create a 
+			Geotools datasource. There are several including shapefile, postgis, and gml. 
+			More are being added daily. For an updated view on what's available check out 
+			the <a href="www.geotools.org">Geotools website</a>
+		. The simplest one is the ShapefileDataSource. To create one, you just need a 
+		shape file. It can either be a set of individual files or a zip file.
+		<P>
+		So:
+		<P>
+			<code>
+				<pre>
+				ShapefileDataSource = new ShapefileDataSource(new 
+				URL("file:///home/thowe/data/tomszips"); </code></pre> This would create a 
+			DataSource from the directory:
+			<pre>
+/home
+	/thowe
+		/data
+			tomszips.shp
+			tomszips.dbf
+			tomszips.shx
+
+or
+
+/home
+	/thowe
+		/data
+			tomszips.zip
+</pre>
+		<P>
+		Once you have the datasource, use the DataSourceHandler to extract the 
+		features.
+		<P>
+			<code>
+				<pre>
+				Feature[] f = ShapeFileHandler.getFeatures(datasource); </code>
+		</pre>
+		<P>
+		You then create RepastGisFeatures from these. Each of the features has a 
+		constructor for Feature, so it's quite easy:
+		<P>
+			<code>
+				<pre>
+				DrawablePolygon p = new DrawablePolygon(f[0]); </code>
+		</pre> The next step is to add these features to a GisLayer. This is very 
+		similar to a layer in other gis contexts. It is a set of features which are 
+		connected (semantically, not necessarily physically).
+		<P>
+			<code>
+				<pre>
+				GisLayer layer = new GisLayer(LayerType.POLYGON); layer.add(p); </code>
+		</pre>
+		<P>
+		At this point you have a complete layer of features. At this point, you could 
+		either just work with the data as it is, or add things such as neighborhooders. 
+		This allows you to easily solve the nearest neighbor problem. At the moment, 
+		the only neighborhooder we have for gis is Delaunay Triangulation, but others 
+		will follow. Of course, you could also use distance between features to solve 
+		the nearest neighbor problem.
+		<P>
+			<b>Display</b>
+		<P>
+			To display vector gis, you need to create a GisDisplay and add Displayable 
+			features to it. <code>
+				<pre>
+				GisDisplay display = new GisDisplay(300); display.addLayer(layer); </code>
+		</pre> At this point, your display works just like any other Repast Display. 
+		Note that the constructor for GisDisplay only takes one Argument. This is 
+		because the y value for the size is scaled based on the x value.
+		<P>
+		<P>
+	</body>
+</html>

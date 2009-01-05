@@ -1,0 +1,2 @@
+parent.0 = erc.params
+eval.problem = ec.app.regression.Sextic

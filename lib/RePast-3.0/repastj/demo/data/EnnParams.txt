@@ -1,0 +1,47 @@
+/*
+ * Parameter file for Enn batch run.
+ *
+ * For each GridDensity value from 10 to 90 run with an Aspiration from
+ * 2 to 10 incrementing by 2.
+ *
+ * The trick here is in the RngSeed. This will run each combination of 
+ * Aspiration and GridDensity with 100 different random seeds, although
+ * the same 100 will be used for the next Aspiration Grid Density pair.
+ */
+runs: 1
+GridDensity {
+  start: 10
+  end: 90
+  incr: 10
+  {
+    runs: 1
+    Aspiration {
+      start: 2
+      end: 10
+      incr: 2
+      {
+        runs: 1
+        RngSeed {
+          start: 942167868231
+          end: 942167869230
+          incr: 10
+        }
+      }
+    }
+  }
+}
+
+/*
+ * PURE_ASPIRATION = 0
+ * STRATEGY_UPGRADE = 1
+ * CHANGE_FIRST = 2
+ * MOVE_AND_CHANGE = 3
+ */
+
+HappyPlay {
+  start: 1
+  end: 1
+  incr: 0
+}
+
+

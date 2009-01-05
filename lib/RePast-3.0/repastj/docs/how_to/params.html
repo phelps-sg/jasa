@@ -1,0 +1,244 @@
+<head>
+<title>How to Use Parameters and Parameter Files</title>
+</head>
+
+<body>
+<h1>
+<center>How to Use Parameters and Parameter files</center>
+</h1>
+<h2>Contents</h2>
+<ul>
+<li><a href="#params">Parameter Overview</a></li>
+<li><a href="#file">Parameter Files</a></li>
+</ul>
+
+<a name="params">
+<b>Parameter Overview</b><br>
+A parameter is a property of a model whose initial value is used to 
+create the actual model. It defines an initial model condition. 
+Typically, you use these parameters to build the rest of your model.
+For example, the parameter NumAgents might specify the initial number
+of agents a model should contain. The value of these parameters can
+be retrieved and set by the user via the Repast user interface or 
+automatically through a parameter file. However, for this to work
+your model must follow some simple coding conventions.
+
+<ul>
+<li> The parameter names must be in the String array returned
+by your models getInitParam() method. For example,
+<code><pre>
+public String[] getInitParam() {
+    String[] params = {"evapRate", "diffusionConstant", "maxIdealTemp",
+          "minIdealTemp", "maxOutputHeat", "minOutputHeat", "worldXSize",
+          "worldYSize", "numBugs"};
+    return params;
+}     
+</pre></code>
+These ("evapRate", etc.) are the parameters for this model.
+</li><p>
+
+<li> The parameters must have associated get and/or set methods. If
+both are present the parameter is readable and writable, if only the
+get method is present the parameter is read-only. Get and set method
+are methods whose name is "get" or "set" followed by the parameter
+name. For example, given the above set of parameters, 
+the model must then contain methods such as
+<code><pre>
+public void setEvapRate(double rate) {
+  eRate = rate;
+}
+
+public double getEvapRate() {
+  return eRate;
+}
+</pre></code>
+and so on for the rest of the parameters. All access to the parameters
+is through these methods and any actual variables that represent the 
+parameters (such as eRate in the above example) remain hidden. </li></ul><p>
+
+Many of the Repast data collection mechanisms rely on these parameters
+remaining constant throughout the life time of a run once the model begins
+to run. This does not preclude in any way changing the parameters via
+the user interface or parameter files, but only that these parameters are
+not expected to change once the model is actually running. 
+
+Once the parameters are defined in this way, they can be changed
+through the user interface or through parameter files.<p> 
+
+<a name="file">
+<b>Parameter Files</b><br>
+Parameter files can be used with both gui and batch models. For 
+gui models, the parameter file sets some or all initial parameter values,
+as if the user had entered those values by hand. 
+For a batch model, a parameter file defines a parameter space and 
+describes how the model should explore that space. 
+
+A parameter file has the following format: <pre><code>
+runs: x
+Parameter {
+ value_definition
+}
+</code></pre>
+where x is some number and Parameter is the name of some model parameter
+accessible through get and set methods. Runs specifies the number of runs
+to execute for the current parameter value. "runs:" is ignored for
+non-batch models. The value_definition is composed
+of one or more keywords and corresponding values.<p>
+
+The multi-keyword value definitions:
+
+<ul>
+<li> "start:" the starting numerical value of a parameter.</li>
+<li> "end:" the ending numerical value of a parameter.</li>
+<li> "incr:" the amount to increment the current value of the parameter.</li>
+</ul>
+The start, end, and incr keywords together provide a value defintion and
+must always occur together. For a batch simulation they define
+a parameter space which will be automatically iterated through. start:
+defines the initial parameter. end: the parameter up to and including
+ending parameter, and incr: the amount to increment the start: value and
+any succeeding values to reach the end: parameters. For a gui simulation
+the start: value is taken as the default parameter and the remaining
+keywords are ignored.<p>
+ 
+Single keyword value_definitions:
+<ul>
+<li> "set:" defines a single numerical value as a constant 
+for the entire collection of batch runs.</li>
+<li> "set_list:" defines a space separated list of numerical values. A batch
+simluation will iterate through the list.</li>
+<li> "set_boolean:" defines a boolean value as a constant for the entire batch
+simulation. Allowed values are "true" and "false" (without the quotes).</li>
+<li> "set_string:" defines a string value as a constant for the entire batch
+simluation. The string value must not contain any white space.</li>
+<li> "set_boolean_list:" same as set_list but a list of boolean values (true
+or false).</li>
+<li> "set_string_list:" same as set_list but a list of string values.</li>
+</ul>
+For non-batch models the list keywords are equivalent to the "set:" 
+keywords where the value is the first member of the list.<p>
+
+Some examples,
+<pre><code>
+runs: 10
+Food {
+ start: 10
+ end: 30
+ incr: 10
+}
+</code></pre>
+This means start with a food parameter with a value  of 10 and 
+run the simulation 10 times
+using this value. Increment the food value by 10 and run the simulation 10
+times with a food value of 20 (start 10 + incr 10). Increment the food value
+by another 10, and run another 10 times with the food value of 30 (start 10 +
+incr 10 + incr 10). Incrementing the current value at this point
+would result in a value greater than the ending value and so the
+simulation ends.<p>
+
+More than one parameter can be specified, so for example,
+<pre><code>
+runs: 10
+Food {
+ start: 10
+ end: 30
+ incr: 10
+}
+
+MaxAge {
+ start: 10
+ end: 30
+ incr: 10
+}
+</code></pre>
+Where both food and max age are incremented as described above. If using more
+than one parameter it is important to synchronize them, as whenever any
+parameter's current value is greater than its end value, the simulation will
+exit.<p>
+
+Parameters can also be nested. For example,
+<pre><code>
+runs: 1
+Food {
+ start: 10
+ end: 30
+ incr: 10
+ {
+   runs: 10
+   MaxAge {
+     start: 0
+     end: 40
+     incr: 1
+   }
+ }
+}
+</code></pre>
+This example means starting with a food value of 10 run the simulation 10
+times with a MaxAge of 0. Increment MaxAge by 1 and run the simulation 10
+times, continue until the value of MaxAge is greater than 40. At this point,
+increment Food by 10 and run the simulation 10 times with a MaxAge of 0.
+Increment MaxAge by 1 and run the simulation 10 times. This continues until
+the value of Food is greater than 30. Multiple levels of nesting are possible.
+<p>
+ 
+Setting constants:
+<pre><code>
+runs: 1
+Food {
+ start: 10
+ end: 30
+ incr: 10
+ {
+   runs: 10
+   MaxAge {
+     start: 0
+     end: 40
+     incr: 1
+   }
+ }
+}
+RngSeed {
+ set: 1
+}
+</code></pre>
+RngSeed is parameter of every model and can be manipulated like any other
+parameter. And here it is set to one and this value will remain constant
+over all the individual batch runs.<p>
+
+List parameters:
+ <pre><code>
+runs: 1
+Food {
+ start: 10
+ end: 30
+ incr: 10
+ {
+   runs: 10
+   MaxAge {
+     set_list: 1.2 3 10 12 84
+   }
+ }
+}
+RngSeed {
+ set: 1
+}
+</code></pre>
+This is the same as above except that maxAge will be incremented via the list.
+So first run with maxAge as 1.2, do this for 10 runs. Then set maxAge to 3 and
+run with this value for 10 times. Continue until the end of the list, then
+increment Food and start at the beginning of the MaxAge list, and so on
+until the Food parameter is greater than 30.<p>
+
+The boolean and string keywords work in an identical manner, but set boolean
+and string values instead of numeric ones.<p>
+
+Parameter files can contain comments delimited by the standard c/c++/java
+comment markers: '//', '/*...*/'<p>
+
+For more information on loading a parameter file into your model, see
+<a href="./simstart.html">How Run a Simulation</a>,
+<a href="./model.html#main">The Main Method</a>, and <a href="./multirun.html">How To Use Multi-Run</a>.
+
+ 
+</body>
+</html>

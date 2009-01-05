@@ -1,0 +1,32 @@
+# uchicago.src.sim.parameter.rpl.RPLParameterSetter
+
+#"IntA", "StrB", "BooleanC", "FloatD", "DoubleE"
+
+
+listFloatD = [3, -21.2]
+
+intA = parameter("intA", TestSimModel.INT_ONE, 2)
+strB = parameter("StrB", ["Cormac", "Nick", "Caitrin"])
+floatD = parameter("floatD", listFloatD)
+doubleE = parameter("doubleE", 1.0, 2.0, .5)
+booleanC = constant("BooleanC", true)
+fooInt = parameter("fooInt", [3, 2, 1])
+
+
+
+def block:
+  constant("BooleanC", false)
+  intA:
+    strB
+
+    doubleE
+
+
+
+
+def main:
+  floatD:
+    block
+
+    strB
+

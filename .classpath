@@ -3,11 +3,14 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/repast"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/ecj"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jfc"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/commons-collections"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/trove"/>
-	<classpathentry kind="lib" path="/lib/ecj15.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.1/commons-collections-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/ecj12/ecj.jar"/>
+	<classpathentry kind="lib" path="lib/RePast-3.0/repastj/repastj.jar"/>
+	<classpathentry kind="lib" path="lib/trove-1.1b3/lib/trove.jar"/>
+	<classpathentry kind="lib" path="lib/RePast-3.0/repastj/lib/colt.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.12/lib/jfreechart-1.0.12.jar"/>
+	<classpathentry kind="lib" path="lib/jfreechart-1.0.12/lib/jcommon-1.0.15.jar"/>
+	<classpathentry kind="lib" path="lib/RePast-3.0/repastj/lib/log4j-1.2.8.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

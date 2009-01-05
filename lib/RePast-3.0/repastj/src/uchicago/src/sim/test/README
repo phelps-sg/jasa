@@ -1,0 +1,95 @@
+This directory contains unit tests for various parts of the core RePast
+framework as well as the ancilliary packages on which it depends (e.g
+uchicago.src.collection). This is by no means complete but it is a start.
+
+The unit tests are run using junit (see www.junit.org).
+
+All of these tests can be run using ant.  From the 'repast' directory, type
+'ant test'  This will execute all of the tests in the test directory and put
+the results in the 'results' directory.
+
+Below is a brief description of each test and any necessary jar files, etc.
+required to run it. These required libraries will be found in repast/lib or
+where specified.
+
+If you add a test, makes sure too add it to AllTest so that it will be
+covered. Also add it to this list in alphabetical order.
+
+AllTest:
+
+  - a collection of all the other tests listed here.
+  - colt.jar, trove.jar
+
+CollectionTest:
+
+  - test get, put and remove in the various matrix collections in
+    uchicago/src/collection.
+  - colt.jar
+
+DefaultNodeTest:
+
+  - tests the various methods in DefaultNode.
+  - colt.jar
+
+HexTest:
+  - tests the non-multi Hexagonal spaces
+  - colt.jar
+
+MultiGridTest:
+
+  - tests the Multi2DGrid and Torus in uchicago.src.sim.space. These are
+    grids that can hold more than one object in a cell.
+  - colt.jar
+
+NetworkTest:
+
+  - tests various network import and recording methods.
+  - colt.jar
+  - this must be run in from the repast directory as there are i/o calls
+    here relative to that directory.
+
+    The comparison values for the stats test were generated from
+    ucinet and a calculator. The details:
+
+    density: 0.2993
+    cluster coeff: .301275979
+    component count: 1
+
+    Density calculated by network->network properties->density with
+    utilize diagonal values = yes.
+
+    Cluster coefficent - density of all ego networks
+    summing all these / 100 / num nodes. network->ego networks->density
+    Then exporting to excel summing the densities and doing the divisions.
+
+    Component - count network->regions->components.
+
+
+QueueTest:
+
+  - tests the PriorityQueue used by the 2.0 scheduling mechanism
+
+RectTest:
+
+  - tests the Object2DTorus and Object2DGrid.
+  - colt.jar
+
+ScheduleTest:
+
+  - tests the new 2.0 scheduling mechanism.
+  - colt.jar, trove.jar
+
+ScheduleListTest:
+
+  - tests the shuffling of lists in dynamicaly created BasicActions.
+  - colt.jar, trove.jar.
+
+ScheduleListTestSuper
+
+  - tests the shuffling of lists in dynamicaly created BasicActions where
+    a superclass of the object is specified.
+  - colt.jar, trove.jar.
+
+RangeMapTest
+
+  - tests the RangeMap collection object.

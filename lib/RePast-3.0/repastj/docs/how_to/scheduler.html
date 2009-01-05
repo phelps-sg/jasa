@@ -1,0 +1,355 @@
+<html>
+<head>
+<title>How to Use a Schedule</title>
+</head>
+<body>
+<h1>
+<center>How to create and use a Schedule</center>
+</h1>
+<p>
+The API documentation for the
+<a href="../api/uchicago/src/sim/engine/Schedule.html">Schedule</a> and
+<a href="../api/uchicago/src/sim/engine/ScheduleBase.html">ScheduleBase</a> 
+classes is the source for details about the Schedule object and should be used 
+in conjunction with this document and the demonstration source code.<p>
+
+As with the <a href="http://www.swarm.org">Swarm</a> toolkit the 
+Schedule object is responsible for all the state changes within a 
+Repast simulation. Consequently, any changes you want to occur in a 
+simulation must be scheduled with a Schedule object. 
+
+<h3> What is Scheduled </h3>
+At its heart scheduling consists of setting up method calls on objects
+to occur at certain times. However, these method calls must be wrapped
+by sub-classes of the <a
+href="../api/uchicago/src/sim/engine/BasicAction.html">BasicAction</a>
+class.  A BasicAction consists of some variables used by the Scheduler
+and an abstract <tt>public void execute() method</tt>. Any classes
+that sub-class a BasicAction must implement this method. It is in this
+method that the actual method call or calls to be scheduled should
+occur. You can write a sub-class of BasicAction yourself, or have
+Repast create one for you.<p>
+
+So, for example, if what you want to schedule is the method call 
+step() on an Agent object called agent, you can either write a class
+that sub-classes BasicAction and calls agent.step() in its execute()
+method, or you can have Repast create the BasicAction for you. In the
+former case, your class would look like:
+
+<code><pre>
+class MyAction extends BasicAction {
+  public void execute() {
+    agent.step();
+  }
+}
+</pre></code>
+
+It is this execute method that is called by the Scheduler at the scheduled 
+time. Creating a schedule then consists of creating BasicAction(s) and 
+scheduling these BasicAction(s) for execution.<p>
+
+If you wish Repast to create BasicActions for you, this is done
+through through method calls to the <a
+href="../api/uchicago/src/sim/engine/Schedule.html">Schedule</a>
+object itself. Creating BasicActions through a Schedule object allows
+you to schedule and create BasicAction with one method call. As of
+Repast v.1.3, executing these schedule-created BasicActions is no
+slower than executing the hand-created ones. The tradeoff in using the
+schedule-created BasicActions is that it omits typical compiler
+checks. However any errors will be caught when your model run. 
+So for example, if you wish to schedule a step() method, and
+you write your own BasicAction subclass, but mispell step() as
+stwp(). The compiler will catch this error, before you run your
+model. If you allow the schedule object to create the BasicAction the
+spelling error will not be caught until you actually run your
+model. Regardeless of how you create your BasicActions, the source
+code to the demonstration simulations use both methods and are good
+examples of them.<p>
+
+Hand coding a class that sub-classes a BasicAction is typically done as an 
+inner class<a href="#minar">[1]</a> 
+ inside your model class itself (see inner classes in the Java
+<a href="http://java.sun.com/docs/books/tutorial/java/more/nested.html">tutorial</a>
+or any decent Java book for more on inner classes). For example, 
+the HeatBugsModel.java <tt>buildSchedule()</tt> method could be
+coded as follows:
+
+<code><pre>
+private void buildSchedule() {
+    
+    class HeatBugsRunner extends BasicAction {
+      public void execute() {
+        space.diffuse();
+        for (int i = 0; i < heatBugList.size(); i++) {
+          HeatBug bug = (HeatBug)heatBugList.get(i);
+          bug.step();
+        }
+	space.update();
+	dsurf.updateDisplay();
+      }
+    };
+
+    class SnapshotRunner extends BasicAction {
+      public void execute() {
+        dsurf.takeSnapshot();
+      }
+    };
+
+    HeatBugsRunner run = new HeatBugsRunner();
+    schedule.scheduleActionBeginning(1, run);
+
+    schedule.scheduleActionAtInterval(100, new SnapshotRunner(),
+                                      Schedule.LAST);
+  }
+</pre></code>
+
+Here we have two inner classes HeatBugsRunner and SnapshotRunner both
+of which extend (sub-class) BasicAction. In both cases the <tt>public
+void execute()</tt> method executes the appropriate calls. Actually
+scheduling these for execution is then simply a matter of
+instantiating the BasicActions (HeatBugsRunner and SnapshotRunner) and
+scheduling these instantiated classes for execution. The last two
+lines above (the calls to schedule.scheduleActionBeginning and
+schedule.scheduleActionAtInterval) do precisely that. (More on this
+below). All this could also be done with anonymous inner classes with
+perhaps some reduction in clarity. The <tt>schedule</tt> mentioned
+here, on which the two BasicAction classes are scheduled for
+execution, is a <tt>Schedule</tt> object created in the model's
+<tt>setup()</tt> method. The Schedule.LAST argument will be explained
+below.<p>
+
+If the schedule itself created the BasicActions the above could be 
+written as:
+
+<code><pre>
+public void step() {
+  space.diffuse();
+  for (int i = 0; i < heatBugList.size(); i++) {
+    HeatBug bug = (HeatBug)heatBugList.get(i);
+    bug.step();
+  }
+  space.update();
+  dsurf.updateDisplay();
+}
+
+private void buildSchedule() {
+    
+    schedule.scheduleActionBeginning(1, this, "step");
+    schedule.scheduleActionAtInterval(100, dsurf, "takeSnapshot", 
+                                      Schedule.LAST);
+  }
+</pre></code>
+
+The first line in buildSchedule() schedules the step method of this,
+where the "this" keyword refers to the current object, in this case,
+the model, to execute every tick starting at tick 1 (more on ticks
+below). If you need to execute several method calls in a specific order
+as in the step() method above, or in the HeatBugsRunner class futher
+above, its convenient to put them all in a single method, rather than
+schedule each one individually.
+<p>
+
+<h3>How to Schedule BasicActions</h3>
+
+Scheduling BasicActions for execution is done via the <a
+href="../api/uchicago/src/sim/engine/Schedule.html">Schedule</a>
+object. It allows you to schedule actions to occur every tick
+beginning at some specified tick, once at some specified tick, at
+intervals, at a pause in the simulation, and at the end of the
+simulation. (A tick is a single iteration over all the BasicActions
+scheduled for execution at that time.) Its important to realize that
+ticks are only a way to schedule actions relative to each other and
+not discrete entities themselves. Actions scheduled for tick 3 will
+complete execution before actions scheduled for tick 10 begin
+execution. But if noting is scheduled for the ticks between 3 and 10,
+the actions scheduled for 10 will begin execution immediately after
+those at tick 3 complete. In this way, ticks 4 - 9 do not exist. Ticks
+maybe fractional values as well. For example, it is possible to
+schedule an action for execution at tick 1.25.
+<p>
+
+
+As for what to schedule, a so-called "step" method for each agent, the
+updateDisplay method for a DisplaySurface are typically scheduled for
+every tick. The above example schedules the execution of
+HeatBugsRunner's <tt>public void execute()</tt> method to occur at
+every tick beginning at 1, and schedules the execution of
+SnapshotRunner's <tt>public void execute()</tt> method every 100
+ticks.<p>
+
+You can ensure that certain BasicActions occur after other scheduled 
+BasicActions by using the Schedule.LAST argument when scheduling 
+BasicAction for execution. This argument is accepted by the 
+<tt>schedule.scheduleActionAt, schedule.scheduleActionAtInterval</tt>
+ methods. For example,
+
+<code><pre>
+schedule.scheduleActionAtInterval(100, dsurf, "takeSnapshot", Schedule.LAST);
+</pre></code>
+
+schedules a the execution of the takeSnapshot method for every 100
+ticks and ensures that it executes after any other actions not
+scheduled with the Schedule.LAST argument.  This is particularly
+useful, and was in fact designed so that things such as data
+collection, snapshot and movie frame creation can be scheduled to
+occur after the BasicActions that would alter the source of the data,
+or images.<p>
+
+BasicActions not scheduled using the Schedule.LAST argument will be
+executed in <b>random order</b> and before any
+BasicActions scheduled with Schedule.LAST. If you wish to schedule
+these non-Schedule.LAST BasicActions in sequential order you can
+collapse your BasicActions into each other by enclosing them all in a
+single method or create an 
+<a href="../api/uchicago/src/sim/engine/ActionGroup.html">ActionGroup</a>
+of the sequential type and add your BasicActions to this
+ActionGroup. This ActionGroup should then be scheduled via a schedule
+object. Some examples,
+
+<code><pre>
+class Runner2 extends BasicAction {
+  public void execute() {
+    doSomethingElse();
+  }
+};
+
+schedule.scheduleActionBeginning(1, obj1, "doSomething");
+schedule.scheduleActionBeginning(1, new Runner2());
+schedule.scheduleActionAtInterval(3, obj3, "takePicture");
+</pre></code>
+
+Here all three BasicActions will be executed in random order during
+the tick at which they execute. So assuming that doSomething() prints
+out "doSomething", likewise doSomethingElse() and takePicture(), the
+output over six iterations might look something like:
+
+<tt><pre>
+tick1: doSomething, doSomethingElse
+tick2: doSomethingElse, doSomething
+tick3: takePicture, doSomethingElse, doSomething
+tick4: doSomethingElse, doSomething
+tick5: doSomething, doSomethingElse
+tick6: doSomethingElse, takePicture, doSomething
+</pre></tt>
+
+If we change<p>
+<tt>
+schedule.scheduleActionAtInterval(3, obj3, "takePicture");
+</tt><p>
+to<p>
+<tt>
+schedule.scheduleActionAtInterval(3, obj3, "takePicture", Schedule.LAST);
+</tt><p>
+Then "takePicture" would occur last in tick3 and tick6.<p>
+
+To get doSomething() and doSomethingElse() to execute in an ordered
+sequence we can do either of the following: call the two method calls
+in another method
+
+<code><pre>
+ public void doIt() {
+    doSomething();
+    doSomethingElse();
+}
+
+where doIt is a method in the object obj1.
+
+class Runner3 extends BasicAction {
+  public void execute() {
+    takePicture();
+  }
+};
+
+schedule.scheduleActionBeginning(1, obj1, doIt);
+schedule.scheduleActionAtInterval(3, new Runner3());
+</pre></code>
+
+or we could create a sequential ActionGroup and add both Runner1 and
+Runner2 to it, and the schedule that ActionGroup for execution.
+
+<code><pre>
+class Runner1 extends BasicAction {
+  public void execute() {
+    doSomething();
+  }
+};
+
+class Runner2 extends BasicAction {
+  public void execute() {
+    doSomethingElse();
+  }
+};
+
+class Runner3 extends BasicAction {
+  public void execute() {
+    takePicture();
+  }
+};
+
+ActionGroup group = new ActionGroup(ActionGroup.SEQUENTIAL);
+group.addAction(new Runner1());
+group.addAction(new Runner2());
+
+schedule.scheduleActionBeginning(1, group);
+schedule.scheduleActionAtInterval(3, new Runner3());
+</pre></code>
+The BasicActions (Runner1 and Runner2) will be executed in the order they
+are added to the ActionGroup. Note that we could also use the createAction*
+methods of ActionGroup to create and add the BasicActions in a single
+step.<p>
+
+The schedule mechanism also provides for the execution of true
+threaded background actions. To create such an action, some
+BasicAction is scheduled for execution just as before with the
+addition of a parameter for defining the duration of such an
+action. The duration specifies how long such an action should execute
+in the background. For example, if action A is scheduled for execution
+at tick 3 with a duration of 4, it will start executing at 3 and then
+continue executing while any other actions scheduled for the
+intervening four ticks are executed. Once 4 ticks have passed, the
+execution engine will wait until this action A has finished
+executing. Its important to note here that action is A is not
+repeatedly executed here in the intervening ticks. Rather, the
+execution mechanism calls action A's execute method and then rather
+than waiting for it to finish as it normally would, it immediately
+executes the next scheduled action while A's execute method continues
+to execute in the background. Only when an amount of ticks equal to
+the duration has passed, will the execution mechanism stop and wait
+for action A to finish.<p>
+
+An example of scheduling a BasicAction with a duration:<p>
+<pre><code>
+schedule.scheduleActionAt(3, new LongRunningAction(), 4);
+</code></pre>
+Here this new LongRunningAction() is some user-defined BasicAction
+that presumeablely takes a long time to finish execution and is not
+dependent on the results of other actions. This action will be
+executed at tick 3 and continue execution in the background until tick
+7 (3 + 4) at which point the execution mechanism will wait for it to
+finish.<p>
+
+
+Its worth noting here that programming with threads (which is what you
+are doing if you use actions with duration) is tricky.  The action
+should be some quasi-independent computationally expensive process
+that does not interfere with the rest of your model.. At the very
+least, it should itself not update the display or anything visualized
+by the display, at least not until it is finished. The use of such
+threaded actions will be easier in a batch environment, but with
+sufficient care it should be possible to use them in a gui environment
+as well.<p>
+
+
+It is also possible to remove BasicActions from Schedules and
+ActionGroups. See the API <a
+href="../api/index.html">documentation</a> for these objects for more
+information on scheduling.<p>
+
+<hr>
+<a name="minar"><p>
+1. Thanks to Nelson Minar for describing how objects could be 
+scheduled in this way.
+</body>
+</html>
+
+

@@ -1,0 +1,44 @@
+/*
+ * Parameter file for heat bugs. This can
+ * be used to change the model's default parameters.
+ * Try java -cp ... uchicago.src.sim.heatBugs.HeatBugsModel bugs.pf
+ */
+ 
+runs: 1
+DiffusionConstant {
+  set: 1.0
+}
+
+EvapRate {
+  set: 0.99
+}
+
+MaxIdealTemp {
+  set: 31000
+}
+
+MaxOutputHeat {
+  set: 10000
+}
+
+MinIdealTemp {
+  set: 17000
+}
+
+MinOutputHeat {
+  set: 3000
+}
+
+NumBugs {
+  set: 100
+}
+
+WorldXSize {
+  set: 100
+}
+
+WorldYSize {
+  set: 80
+}
+
+
