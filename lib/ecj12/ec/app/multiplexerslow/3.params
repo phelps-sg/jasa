@@ -1,6 +1,0 @@
-parent.0 = 11.params
-
-# 3-Multiplexer without IF
-eval.problem.bits = 1
-gp.fs.0.size = 6
-
