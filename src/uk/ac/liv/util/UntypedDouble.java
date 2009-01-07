@@ -17,7 +17,7 @@ package uk.ac.liv.util;
 
 /**
  * <p>
- * Faster version of <code>java.lang.Double</code>.
+ * Polymorphic version of <code>java.lang.Double</code>.
  * </p>
  * 
  * @author Steve Phelps
