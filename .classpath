@@ -11,9 +11,11 @@
 	<classpathentry kind="lib" path="lib/jcommon-1.0.15.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.8.jar"/>
-	<classpathentry kind="lib" path="lib/trove-1.1b3.jar"/>
 	<classpathentry kind="lib" path="test/log4j.xml"/>
 	<classpathentry kind="lib" path="lib/ecj-18.jar"/>
 	<classpathentry kind="lib" path="lib/repastj-3.1.jar"/>
+	<classpathentry kind="lib" path="lib/trove-repast.jar"/>
+	<classpathentry kind="lib" path="lib/trove-1.1b3.jar"/>
+	<classpathentry kind="lib" path="lib/ptplot-repast.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
