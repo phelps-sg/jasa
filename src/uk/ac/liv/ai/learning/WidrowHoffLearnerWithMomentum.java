@@ -27,14 +27,9 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 
 	/**
 	 * cumulative discounted delta
-	 * 
-	 * @uml.property name="gamma"
 	 */
 	protected double gamma;
 
-	/**
-	 * @uml.property name="momentum"
-	 */
 	protected double momentum;
 
 	public static final String P_MOMENTUM = "momentum";
@@ -61,16 +56,10 @@ public class WidrowHoffLearnerWithMomentum extends WidrowHoffLearner {
 		momentum = randomParamDistribution.nextDouble();
 	}
 
-	/**
-	 * @uml.property name="momentum"
-	 */
 	public double getMomentum() {
 		return momentum;
 	}
 
-	/**
-	 * @uml.property name="momentum"
-	 */
 	public void setMomentum(double momentum) {
 		this.momentum = momentum;
 	}

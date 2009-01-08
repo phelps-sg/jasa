@@ -108,22 +108,10 @@ public class MultipleSeriesGraph extends FreeChartGraph {
 
 	public static final String P_NUM = "n";
 
-	/**
-	 * @uml.property name="fcCollections"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected FreeChartSeriesCollection fcCollections;
 
-	/**
-	 * @uml.property name="markers"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected FreeChartMarker markers[];
 
-	/**
-	 * @uml.property name="datasets"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	private XYDataset datasets[];
 
 	public MultipleSeriesGraph() {

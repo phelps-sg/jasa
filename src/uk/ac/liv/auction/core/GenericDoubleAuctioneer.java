@@ -61,16 +61,8 @@ public class GenericDoubleAuctioneer extends TransparentAuctioneer implements
 
 	protected ZeroFundsAccount account;
 
-	/**
-	 * @uml.property name="clearingCondition"
-	 * @uml.associationEnd
-	 */
 	protected MarketClearingCondition clearingCondition;
 
-	/**
-	 * @uml.property name="acceptingPolicy"
-	 * @uml.associationEnd
-	 */
 	protected ShoutAcceptingPolicy acceptingPolicy;
 
 	public static final String P_CLEARING = "clearing";

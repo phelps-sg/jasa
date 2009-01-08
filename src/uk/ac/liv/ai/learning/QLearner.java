@@ -85,80 +85,56 @@ public class QLearner extends AbstractLearner implements MDPLearner, Resetable,
 
 	/**
 	 * The number of possible states
-	 * 
-	 * @uml.property name="numStates"
 	 */
 	protected int numStates;
 
 	/**
 	 * The number of possible actions
-	 * 
-	 * @uml.property name="numActions"
 	 */
 	protected int numActions;
 
 	/**
 	 * The matrix representing the estimated payoff of each possible action in
 	 * each possible state.
-	 * 
-	 * @uml.property name="q" multiplicity="(0 -1)" dimension="2"
 	 */
 	protected double q[][];
 
 	/**
 	 * The learning rate.
-	 * 
-	 * @uml.property name="learningRate"
 	 */
 	protected double learningRate;
 
 	/**
 	 * The discount rate for future payoffs.
-	 * 
-	 * @uml.property name="discountRate"
 	 */
 	protected double discountRate;
 
 	/**
 	 * The parameter representing the probability of choosing a random action on
 	 * any given iteration.
-	 * 
-	 * @uml.property name="epsilon"
 	 */
 	protected double epsilon;
 
 	/**
 	 * The previous state
-	 * 
-	 * @uml.property name="previousState"
 	 */
 	protected int previousState;
 
 	/**
 	 * The current state
-	 * 
-	 * @uml.property name="currentState"
 	 */
 	protected int currentState;
 
 	/**
 	 * The last action that was chosen.
-	 * 
-	 * @uml.property name="lastActionChosen"
 	 */
 	protected int lastActionChosen;
 
 	/**
 	 * The best action for the current state
-	 * 
-	 * @uml.property name="bestAction"
 	 */
 	protected int bestAction;
-
-	/**
-	 * @uml.property name="randomActionDistribution"
-	 * @uml.associationEnd
-	 */
+	
 	protected Uniform randomActionDistribution;
 
 	static final double DEFAULT_EPSILON = 0.2;
@@ -293,37 +269,22 @@ public class QLearner extends AbstractLearner implements MDPLearner, Resetable,
 		initialise();
 	}
 
-	/**
-	 * @uml.property name="discountRate"
-	 */
 	public void setDiscountRate(double discountRate) {
 		this.discountRate = discountRate;
 	}
 
-	/**
-	 * @uml.property name="discountRate"
-	 */
 	public double getDiscountRate() {
 		return discountRate;
 	}
 
-	/**
-	 * @uml.property name="epsilon"
-	 */
 	public void setEpsilon(double epsilon) {
 		this.epsilon = epsilon;
 	}
 
-	/**
-	 * @uml.property name="epsilon"
-	 */
 	public double getEpsilon() {
 		return epsilon;
 	}
 
-	/**
-	 * @uml.property name="lastActionChosen"
-	 */
 	public int getLastActionChosen() {
 		return lastActionChosen;
 	}
@@ -340,37 +301,27 @@ public class QLearner extends AbstractLearner implements MDPLearner, Resetable,
 		return numActions;
 	}
 
-	/**
-	 * @uml.property name="learningRate"
-	 */
+	
 	public double getLearningRate() {
 		return learningRate;
 	}
 
-	/**
-	 * @uml.property name="learningRate"
-	 */
+	
 	public void setLearningRate(double learningRate) {
 		this.learningRate = learningRate;
 	}
 
-	/**
-	 * @uml.property name="numActions"
-	 */
+	
 	public int getNumActions() {
 		return numActions;
 	}
 
-	/**
-	 * @uml.property name="numStates"
-	 */
+	
 	public int getNumStates() {
 		return numStates;
 	}
 
-	/**
-	 * @uml.property name="previousState"
-	 */
+	
 	public int getPreviousState() {
 		return previousState;
 	}

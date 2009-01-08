@@ -39,18 +39,12 @@ import java.io.Serializable;
 
 public class SlidingWindowLearner extends AbstractLearner implements
     MimicryLearner, SelfKnowledgable, Prototypeable, Serializable {
-
-	/**
-	 * @uml.property name="randomParamDistribution"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
+	
 	protected AbstractContinousDistribution randomParamDistribution = new Uniform(
 	    1, 10, GlobalPRNG.getInstance());
 
 	/**
 	 * A parameter used to adjust the size of the window
-	 * 
-	 * @uml.property name="memorySize"
 	 */
 	protected int windowSize = 4;
 
@@ -58,8 +52,6 @@ public class SlidingWindowLearner extends AbstractLearner implements
 
 	/**
 	 * The current output level.
-	 * 
-	 * @uml.property name="currentOutput"
 	 */
 	protected double currentOutput;
 
@@ -93,9 +85,6 @@ public class SlidingWindowLearner extends AbstractLearner implements
 		windowSize = randomParamDistribution.nextInt();
 	}
 
-	/**
-	 * @uml.property name="windowSize"
-	 */
 	public void setWindowSize(int windowSize) {
 		this.windowSize = windowSize;
 	}
@@ -122,9 +111,6 @@ public class SlidingWindowLearner extends AbstractLearner implements
 		// TODO
 	}
 
-	/**
-	 * @uml.property name="currentOutput"
-	 */
 	public double getCurrentOutput() {
 		return currentOutput;
 	}

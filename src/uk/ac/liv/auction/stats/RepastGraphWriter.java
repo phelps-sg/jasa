@@ -31,15 +31,8 @@ import uk.ac.liv.util.io.DataWriter;
 
 public class RepastGraphWriter implements DataWriter, Parameterizable {
 
-	/**
-	 * @uml.property name="graphSequence"
-	 * @uml.associationEnd
-	 */
 	protected RepastGraphSequence graphSequence;
 
-	/**
-	 * @uml.property name="name"
-	 */
 	protected String name;
 
 	public static final String P_NAME = "name";
@@ -115,9 +108,6 @@ public class RepastGraphWriter implements DataWriter, Parameterizable {
 
 	}
 
-	/**
-	 * @uml.property name="graphSequence"
-	 */
 	public RepastGraphSequence getGraphSequence() {
 		return graphSequence;
 	}

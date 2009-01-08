@@ -41,14 +41,8 @@ public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
 
 	public static final String P_DEF_BASE = "pch";
 
-	/**
-	 * @uml.property name="shoutNumEachPeriod"
-	 */
 	private int shoutNumEachPeriod;
 
-	/**
-	 * @uml.property name="shoutNum"
-	 */
 	private int shoutNum;
 
 	public PeriodicClearingHouseAuctioneer() {

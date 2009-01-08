@@ -27,11 +27,6 @@ import java.util.HashMap;
 
 public class TransmissionGrid {
 
-	/**
-	 * @uml.property name="graph"
-	 * @uml.associationEnd qualifier="x:uk.ac.liv.auction.electricity.ElectricityTrader
-	 *                     java.lang.Integer"
-	 */
 	HashMap graph;
 
 	public TransmissionGrid(HashMap graph) {

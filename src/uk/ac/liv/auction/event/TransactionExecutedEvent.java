@@ -29,31 +29,21 @@ public class TransactionExecutedEvent extends AuctionEvent {
 
 	/**
 	 * The offers that led to this transaction.
-	 * 
-	 * @uml.property name="ask"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected Shout ask;
 
 	/**
 	 * The offers that led to this transaction.
-	 * 
-	 * @uml.property name="bid"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected Shout bid;
 
 	/**
 	 * The price at which the good was sold for.
-	 * 
-	 * @uml.property name="price"
 	 */
 	protected double price;
 
 	/**
 	 * The quantity of the good that was sold.
-	 * 
-	 * @uml.property name="quantity"
 	 */
 	protected int quantity;
 
@@ -66,30 +56,18 @@ public class TransactionExecutedEvent extends AuctionEvent {
 		this.quantity = quantity;
 	}
 
-	/**
-	 * @uml.property name="ask"
-	 */
 	public Shout getAsk() {
 		return ask;
 	}
 
-	/**
-	 * @uml.property name="bid"
-	 */
 	public Shout getBid() {
 		return bid;
 	}
 
-	/**
-	 * @uml.property name="price"
-	 */
 	public double getPrice() {
 		return price;
 	}
 
-	/**
-	 * @uml.property name="quantity"
-	 */
 	public int getQuantity() {
 		return quantity;
 	}

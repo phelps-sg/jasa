@@ -37,16 +37,11 @@ public class DiscreteProbabilityDistribution implements Resetable,
 
 	/**
 	 * The probability distribution.
-	 * 
-	 * @uml.property name="p"
-	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
 	protected double p[];
 
 	/**
 	 * The number of possible events for this distribution.
-	 * 
-	 * @uml.property name="k"
 	 */
 	protected int k;
 

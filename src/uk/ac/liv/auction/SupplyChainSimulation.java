@@ -104,22 +104,14 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 
 	/**
 	 * The auctions used in this simulation.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
 	 */
 	protected SupplyChainRandomRobinAuction[] auction;
 
 	/**
 	 * The number of repeatitions of this experiment to sample.
-	 * 
-	 * @uml.property name="iterations"
 	 */
 	protected int iterations = 0;
 
-	/**
-	 * @uml.property name="verbose"
-	 */
 	protected boolean verbose = true;
 
 	/**

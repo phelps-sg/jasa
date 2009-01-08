@@ -55,26 +55,12 @@ import org.apache.log4j.Logger;
 public class DataSeriesWriter extends AbstractTableModel implements DataWriter,
     Serializable {
 
-	/**
-	 * @uml.property name="isVisible"
-	 */
 	protected boolean isVisible = true;
 
-	/**
-	 * @uml.property name="isXCoordinate"
-	 */
 	protected boolean isXCoordinate = true;
 
-	/**
-	 * @uml.property name="xCoord"
-	 */
 	protected double xCoord;
 
-	/**
-	 * @uml.property name="data"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.util.io.SeriesDatum"
-	 */
 	protected Vector data = new Vector();
 
 	static Logger logger = Logger.getLogger(DataSeriesWriter.class);
@@ -254,14 +240,8 @@ public class DataSeriesWriter extends AbstractTableModel implements DataWriter,
 
 class SeriesDatum {
 
-	/**
-	 * @uml.property name="x"
-	 */
 	double x;
 
-	/**
-	 * @uml.property name="y"
-	 */
 	double y;
 
 	public SeriesDatum(double x, double y) {
@@ -269,30 +249,18 @@ class SeriesDatum {
 		this.y = y;
 	}
 
-	/**
-	 * @uml.property name="x"
-	 */
 	public void setX(double x) {
 		this.x = x;
 	}
 
-	/**
-	 * @uml.property name="y"
-	 */
 	public void setY(double y) {
 		this.y = y;
 	}
 
-	/**
-	 * @uml.property name="x"
-	 */
 	public double getX() {
 		return x;
 	}
 
-	/**
-	 * @uml.property name="y"
-	 */
 	public double getY() {
 		return y;
 	}

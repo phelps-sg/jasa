@@ -30,14 +30,8 @@ public class Ratio implements ParameterBasedCase {
 
 	public static final String P_NUMAGENTS = "numagents";
 
-	/**
-	 * @uml.property name="s"
-	 */
 	private int s;
 
-	/**
-	 * @uml.property name="b"
-	 */
 	private int b;
 
 	public Ratio() {

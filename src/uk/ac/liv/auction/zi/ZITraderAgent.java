@@ -69,35 +69,24 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
 	/**
 	 * The number of units this agent is entitlted to trade in this trading
 	 * period.
-	 * 
-	 * @uml.property name="tradeEntitlement"
 	 */
 	protected int tradeEntitlement;
 
 	/**
 	 * The initial value of tradeEntitlement
-	 * 
-	 * @uml.property name="initialTradeEntitlement"
 	 */
 	protected int initialTradeEntitlement;
 
 	/**
 	 * Flag indicating whether the last shout resulted in a transaction.
-	 * 
-	 * @uml.property name="lastShoutSuccessful"
 	 */
 	protected boolean lastShoutSuccessful;
 
 	/**
 	 * The number of units traded to date
-	 * 
-	 * @uml.property name="quantityTraded"
 	 */
 	protected int quantityTraded = 0;
 
-	/**
-	 * @uml.property name="isActive"
-	 */
 	protected boolean isActive = true;
 
 	public static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
@@ -211,9 +200,6 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
 		return initialTradeEntitlement * surplus;
 	}
 
-	/**
-	 * @uml.property name="quantityTraded"
-	 */
 	public int getQuantityTraded() {
 		return quantityTraded;
 	}
@@ -222,30 +208,18 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
 		return strategy.determineQuantity(auction);
 	}
 
-	/**
-	 * @uml.property name="tradeEntitlement"
-	 */
 	public int getTradeEntitlement() {
 		return tradeEntitlement;
 	}
 
-	/**
-	 * @uml.property name="tradeEntitlement"
-	 */
 	public void setTradeEntitlement(int tradeEntitlement) {
 		this.tradeEntitlement = tradeEntitlement;
 	}
 
-	/**
-	 * @uml.property name="initialTradeEntitlement"
-	 */
 	public int getInitialTradeEntitlement() {
 		return initialTradeEntitlement;
 	}
 
-	/**
-	 * @uml.property name="initialTradeEntitlement"
-	 */
 	public void setInitialTradeEntitlement(int initialTradeEntitlement) {
 		this.initialTradeEntitlement = initialTradeEntitlement;
 	}

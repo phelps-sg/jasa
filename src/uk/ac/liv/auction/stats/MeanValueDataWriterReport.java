@@ -37,51 +37,24 @@ import uk.ac.liv.util.io.DataWriter;
 
 public class MeanValueDataWriterReport extends DataWriterReport {
 
-	/**
-	 * @uml.property name="askQuoteStats"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats askQuoteStats = new SummaryStats(
 	    "Ask Quote");
 
-	/**
-	 * @uml.property name="bidQuoteStats"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats bidQuoteStats = new SummaryStats(
 	    "Bid Quote");
 
-	/**
-	 * @uml.property name="bidStats"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats bidStats = new SummaryStats(
 	    "Bid");
 
-	/**
-	 * @uml.property name="askStats"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats askStats = new SummaryStats(
 	    "Ask");
 
-	/**
-	 * @uml.property name="transPriceStats"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats transPriceStats = new SummaryStats(
 	    "Transaction Price");
 
-	/**
-	 * @uml.property name="allStats"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected SummaryStats[] allStats = { askQuoteStats,
 	    bidQuoteStats, askStats, bidStats, transPriceStats };
 
-	/**
-	 * @uml.property name="round"
-	 */
 	protected int round;
 
 	static Logger logger = Logger.getLogger(MeanValueDataWriterReport.class);

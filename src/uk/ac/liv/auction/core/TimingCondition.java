@@ -27,10 +27,6 @@ package uk.ac.liv.auction.core;
 
 public abstract class TimingCondition {
 
-	/**
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
-	 */
 	private Auction auction;
 
 	public TimingCondition() {
@@ -41,16 +37,10 @@ public abstract class TimingCondition {
 		setAuction(auction);
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public void setAuction(Auction auction) {
 		this.auction = auction;
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public Auction getAuction() {
 		return auction;
 	}

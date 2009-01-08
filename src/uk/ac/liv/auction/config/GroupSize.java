@@ -29,9 +29,6 @@ public class GroupSize implements ParameterBasedCase {
 
 	public static final String P_GROUPSIZE = "groupsize";
 
-	/**
-	 * @uml.property name="size"
-	 */
 	private int size;
 
 	public GroupSize() {

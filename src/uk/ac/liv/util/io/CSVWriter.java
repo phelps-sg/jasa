@@ -40,34 +40,16 @@ import ec.util.ParameterDatabase;
 
 public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 
-	/**
-	 * @uml.property name="out"
-	 */
 	protected PrintStream out;
 
-	/**
-	 * @uml.property name="autowrap"
-	 */
 	protected boolean autowrap = true;
 
-	/**
-	 * @uml.property name="numColumns"
-	 */
 	protected int numColumns;
 
-	/**
-	 * @uml.property name="currentColumn"
-	 */
 	protected int currentColumn = 0;
 
-	/**
-	 * @uml.property name="seperator"
-	 */
 	protected char seperator = DEFAULT_SEPERATOR;
 
-	/**
-	 * @uml.property name="append"
-	 */
 	protected boolean append = true;
 
 	static final char DEFAULT_SEPERATOR = '\t';
@@ -204,16 +186,10 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 		}
 	}
 
-	/**
-	 * @uml.property name="autowrap"
-	 */
 	public void setAutowrap(boolean autowrap) {
 		this.autowrap = autowrap;
 	}
 
-	/**
-	 * @uml.property name="append"
-	 */
 	public void setAppend(boolean append) {
 		this.append = append;
 	}
@@ -232,9 +208,6 @@ public class CSVWriter implements Parameterizable, Serializable, DataWriter {
 		out.close();
 	}
 
-	/**
-	 * @uml.property name="numColumns"
-	 */
 	public void setNumColumns(int numColumns) {
 		if (!autowrap)
 			new Error(

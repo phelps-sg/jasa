@@ -41,9 +41,6 @@ public class ProbabilisticClearingCondition extends RoundClearingCondition
 
 	Uniform uniformDistribution;
 
-	/**
-	 * @uml.property name="threshold"
-	 */
 	private double threshold = 1;
 
 	public static final String P_THRESHOLD = "threshold";

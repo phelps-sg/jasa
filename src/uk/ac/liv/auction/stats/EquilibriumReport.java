@@ -41,35 +41,21 @@ public class EquilibriumReport extends DirectRevelationReport implements
 
 	/**
 	 * The minimum equilibrium price.
-	 * 
-	 * @uml.property name="minPrice"
 	 */
 	protected double minPrice;
 
 	/**
 	 * The maximum equilibrium price.
-	 * 
-	 * @uml.property name="maxPrice"
 	 */
 	protected double maxPrice;
 
 	/**
 	 * Do any equilbria exist?
-	 * 
-	 * @uml.property name="equilibriaFound"
 	 */
 	protected boolean equilibriaFound = false;
 
-	/**
-	 * @uml.property name="matchedShouts"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
-	 */
 	protected List matchedShouts;
 
-	/**
-	 * @uml.property name="quantity"
-	 */
 	protected int quantity;
 
 	public static final ReportVariable VAR_EXISTS = new ReportVariable(
@@ -139,23 +125,14 @@ public class EquilibriumReport extends DirectRevelationReport implements
 		quantity = 0;
 	}
 
-	/**
-	 * @uml.property name="minPrice"
-	 */
 	public double getMinPrice() {
 		return minPrice;
 	}
 
-	/**
-	 * @uml.property name="maxPrice"
-	 */
 	public double getMaxPrice() {
 		return maxPrice;
 	}
 
-	/**
-	 * @uml.property name="quantity"
-	 */
 	public int getQuantity() {
 		return quantity;
 	}

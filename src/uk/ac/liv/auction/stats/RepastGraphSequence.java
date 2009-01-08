@@ -28,14 +28,8 @@ import uk.ac.liv.util.io.DataWriter;
 
 public class RepastGraphSequence implements Sequence, DataWriter {
 
-	/**
-	 * @uml.property name="lastValue"
-	 */
 	protected double lastValue;
 
-	/**
-	 * @uml.property name="name"
-	 */
 	protected String name;
 
 	public RepastGraphSequence(String name) {
@@ -70,9 +64,6 @@ public class RepastGraphSequence implements Sequence, DataWriter {
 
 	}
 
-	/**
-	 * @uml.property name="name"
-	 */
 	public String getName() {
 		return name;
 	}

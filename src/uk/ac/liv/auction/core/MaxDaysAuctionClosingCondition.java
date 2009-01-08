@@ -34,8 +34,6 @@ public class MaxDaysAuctionClosingCondition extends TimingCondition implements
 
 	/**
 	 * The maximum number of trading days before the auction closes
-	 * 
-	 * @uml.property name="maximumDays"
 	 */
 
 	protected int maximumDays = -1;
@@ -58,16 +56,10 @@ public class MaxDaysAuctionClosingCondition extends TimingCondition implements
 		    new Parameter(P_DEF_BASE).push(P_MAXIMUM_DAYS), -1);
 	}
 
-	/**
-	 * @uml.property name="maximumDays"
-	 */
 	public void setMaximumDays(int maximumDays) {
 		this.maximumDays = maximumDays;
 	}
 
-	/**
-	 * @uml.property name="maximumDays"
-	 */
 	public int getMaximumDays() {
 		return maximumDays;
 	}

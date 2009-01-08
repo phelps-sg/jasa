@@ -86,51 +86,21 @@ public class RepastSupplyChainSimulation extends SimModelImpl implements
 
 	/**
 	 * The auction used in this simulation.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
 	 */
 	protected SupplyChainRandomRobinAuction[] auction;
 
-	/**
-	 * @uml.property name="parameterFileName"
-	 */
 	protected String parameterFileName;
 
-	/**
-	 * @uml.property name="parameterDescriptors"
-	 */
 	protected Hashtable parameterDescriptors;
 
-	/**
-	 * @uml.property name="schedule"
-	 * @uml.associationEnd
-	 */
 	protected Schedule schedule;
 
-	/**
-	 * @uml.property name="graph"
-	 * @uml.associationEnd
-	 */
 	protected RepastAuctionConsoleGraph[] graph;
 
-	/**
-	 * @uml.property name="displaySurface"
-	 * @uml.associationEnd
-	 */
 	protected DisplaySurface[] displaySurface;
 
-	/**
-	 * @uml.property name="agentSpace"
-	 * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.RepastMarketSimulation$AgentSpace"
-	 */
 	protected AgentSpace[] agentSpace;
 
-	/**
-	 * @uml.property name="auxGraphs"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uchicago.src.sim.analysis.plot.OpenGraph"
-	 */
 	protected LinkedList auxGraphs = new LinkedList();
 
 	protected static RepastSupplyChainSimulation modelSingleton;
@@ -398,23 +368,14 @@ public class RepastSupplyChainSimulation extends SimModelImpl implements
 		return "JASA auction simulation";
 	}
 
-	/**
-	 * @uml.property name="parameterFileName"
-	 */
 	public String getParameterFileName() {
 		return parameterFileName;
 	}
 
-	/**
-	 * @uml.property name="parameterFileName"
-	 */
 	public void setParameterFileName(String parameterFileName) {
 		this.parameterFileName = parameterFileName;
 	}
 
-	/**
-	 * @uml.property name="schedule"
-	 */
 	public Schedule getSchedule() {
 		return schedule;
 	}
@@ -437,9 +398,6 @@ public class RepastSupplyChainSimulation extends SimModelImpl implements
 		logger.debug("Repast is changing the PRNG seed");
 	}
 
-	/**
-	 * @uml.property name="parameterDescriptors"
-	 */
 	public Hashtable getParameterDescriptors() {
 		return parameterDescriptors;
 	}
@@ -608,9 +566,6 @@ public class RepastSupplyChainSimulation extends SimModelImpl implements
 			matrix = new AgentMatrix(agents, width, height, auction);
 		}
 
-		/**
-		 * @uml.property name="agents"
-		 */
 		public Collection getAgents() {
 			return agents;
 		}
@@ -619,9 +574,6 @@ public class RepastSupplyChainSimulation extends SimModelImpl implements
 			this(auction, (int) Math.sqrt(auction.getNumberOfRegisteredTraders()));
 		}
 
-		/**
-		 * @uml.property name="matrix"
-		 */
 		public BaseMatrix getMatrix() {
 			return matrix;
 		}

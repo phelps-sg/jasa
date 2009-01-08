@@ -71,21 +71,13 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 
 	static Logger logger = Logger.getLogger(ContinuousDoubleAuctioneerEE.class);
 
-	/**
-	 * @uml.property name="expectedHighestAsk"
-	 */
 	private double expectedHighestAsk;
 
-	/**
-	 * @uml.property name="expectedLowestBid"
-	 */
 	private double expectedLowestBid;
 
 	/**
 	 * A parameter used to adjust the equilibrium price estimate so as to relax
 	 * the restriction.
-	 * 
-	 * @uml.property name="delta"
 	 */
 	protected double delta = 0;
 
@@ -94,8 +86,6 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 	/**
 	 * A parameter used to adjust the number of recent transaction prices to be
 	 * memorized so as to compute the average as the equilibrium price estimate
-	 * 
-	 * @uml.property name="memorySize"
 	 */
 	protected int memorySize = 4;
 

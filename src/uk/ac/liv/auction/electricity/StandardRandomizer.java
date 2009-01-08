@@ -32,37 +32,16 @@ import ec.util.ParameterDatabase;
 
 public class StandardRandomizer implements Parameterizable, Serializable {
 
-	/**
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
-	 */
 	protected RandomRobinAuction auction;
 
-	/**
-	 * @uml.property name="minPrivateValue"
-	 */
 	protected double minPrivateValue = 30;
 
-	/**
-	 * @uml.property name="maxPrivateValue"
-	 */
 	protected double maxPrivateValue = 1000;
 
-	/**
-	 * @uml.property name="experiment"
-	 * @uml.associationEnd inverse="randomizer:uk.ac.liv.auction.electricity.ElectricityExperiment"
-	 */
 	protected ElectricityExperiment experiment;
 
-	/**
-	 * @uml.property name="privValuePRNG"
-	 * @uml.associationEnd
-	 */
 	protected RandomEngine privValuePRNG;
 
-	/**
-	 * @uml.property name="seeds" multiplicity="(0 -1)" dimension="1"
-	 */
 	protected long[] seeds;
 
 	static Logger logger = Logger.getLogger(StandardRandomizer.class);
@@ -88,9 +67,6 @@ public class StandardRandomizer implements Parameterizable, Serializable {
 
 	}
 
-	/**
-	 * @uml.property name="experiment"
-	 */
 	public void setExperiment(ElectricityExperiment experiment) {
 		this.experiment = experiment;
 		this.auction = experiment.auction;

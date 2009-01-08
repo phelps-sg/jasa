@@ -26,20 +26,10 @@ import java.util.Stack;
 
 public class Permutator implements Iterator {
 
-	/**
-	 * @uml.property name="goal" multiplicity="(0 -1)" dimension="1"
-	 */
 	protected int[] goal;
 
-	/**
-	 * @uml.property name="n"
-	 */
 	protected int n;
 
-	/**
-	 * @uml.property name="stack"
-	 * @uml.associationEnd multiplicity="(0 -1)" elementType="[I"
-	 */
 	protected Stack stack;
 
 	public Permutator(int[] goal) {
@@ -99,15 +89,8 @@ public class Permutator implements Iterator {
 
 class PermutatorState {
 
-	/**
-	 * @uml.property name="solution"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected int[] solution;
 
-	/**
-	 * @uml.property name="j"
-	 */
 	protected int j;
 
 	public PermutatorState(int[] solution, int j) {

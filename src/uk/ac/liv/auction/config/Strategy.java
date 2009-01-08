@@ -44,15 +44,8 @@ public class Strategy implements ParameterBasedCase, Parameterizable {
 
 	static Logger logger = Logger.getLogger(Strategy.class);
 
-	/**
-	 * @uml.property name="c"
-	 * @uml.associationEnd
-	 */
 	private Case c;
 
-	/**
-	 * @uml.property name="isSeller"
-	 */
 	private boolean isSeller;
 
 	private static final String P_ISSELLER = "isseller";

@@ -27,9 +27,6 @@ package uk.ac.liv.util;
 
 public class UntypedLong extends UntypedNumber {
 
-	/**
-	 * @uml.property name="primitiveValue"
-	 */
 	long primitiveValue;
 
 	public UntypedLong() {

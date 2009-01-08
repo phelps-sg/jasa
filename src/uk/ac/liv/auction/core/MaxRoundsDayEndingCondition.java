@@ -34,8 +34,6 @@ public class MaxRoundsDayEndingCondition extends TimingCondition implements
 
 	/**
 	 * The maximum length in rounds of a trading day
-	 * 
-	 * @uml.property name="lengthOfDay"
 	 */
 	protected int lengthOfDay = -1;
 
@@ -57,16 +55,10 @@ public class MaxRoundsDayEndingCondition extends TimingCondition implements
 		    new Parameter(P_DEF_BASE).push(P_LENGTH_OF_DAY), -1);
 	}
 
-	/**
-	 * @uml.property name="lengthOfDay"
-	 */
 	public int getLengthOfDay() {
 		return lengthOfDay;
 	}
 
-	/**
-	 * @uml.property name="lengthOfDay"
-	 */
 	public void setLengthOfDay(int lengthOfDay) {
 		this.lengthOfDay = lengthOfDay;
 	}

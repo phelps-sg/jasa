@@ -38,15 +38,8 @@ import ec.util.ParameterDatabase;
 public class DumbRandomLearner extends AbstractLearner implements
     Parameterizable, StimuliResponseLearner, Serializable, Prototypeable {
 
-	/**
-	 * @uml.property name="numActions"
-	 */
 	protected int numActions;
 
-	/**
-	 * @uml.property name="distribution"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected Uniform distribution;
 
 	public static final int DEFAULT_NUM_ACTIONS = 10;

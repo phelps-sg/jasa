@@ -70,9 +70,6 @@ public class CaseEnumConfig extends Observable implements Parameterizable {
 	 */
 	protected static Case combo[];
 
-	/**
-	 * @uml.property name="title"
-	 */
 	protected String title;
 
 	public CaseEnumConfig() {

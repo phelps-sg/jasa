@@ -46,17 +46,11 @@ public interface Auction extends QuoteProvider {
 
 	/**
 	 * Return the last shout placed in the auction.
-	 * 
-	 * @uml.property name="lastShout"
-	 * @uml.associationEnd
 	 */
 	public Shout getLastShout() throws ShoutsNotVisibleException;
 
 	/**
 	 * Return the current auctioneer for this auction.
-	 * 
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd inverse="auction:uk.ac.liv.auction.core.Auctioneer"
 	 */
 	public Auctioneer getAuctioneer();
 

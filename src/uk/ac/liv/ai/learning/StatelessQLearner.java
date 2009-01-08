@@ -41,10 +41,6 @@ public class StatelessQLearner extends AbstractLearner implements
     StimuliResponseLearner, Parameterizable, Resetable, Serializable,
     Prototypeable {
 
-	/**
-	 * @uml.property name="qLearner"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	QLearner qLearner;
 
 	public StatelessQLearner() {

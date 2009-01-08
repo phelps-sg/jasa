@@ -48,20 +48,12 @@ public class CombiTimingCondition extends TimingCondition implements
 
 	private static final String P_RELATION = "relation";
 
-	/**
-	 * @uml.property name="conditions"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.TimingCondition"
-	 */
 	protected List conditions = null;
 
 	public static final int OR = 0;
 
 	public static final int AND = 1;
 
-	/**
-	 * @uml.property name="relation"
-	 */
 	protected int relation;
 
 	// private static Logger logger =

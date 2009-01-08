@@ -34,8 +34,6 @@ public class MaxRoundsAuctionClosingCondition extends TimingCondition implements
 
 	/**
 	 * The maximum number of rounds in the auction. Ignored if negative.
-	 * 
-	 * @uml.property name="maximumRounds"
 	 */
 	protected int maximumRounds = -1;
 
@@ -59,8 +57,6 @@ public class MaxRoundsAuctionClosingCondition extends TimingCondition implements
 
 	/**
 	 * Return the maximum number of rounds for this auction.
-	 * 
-	 * @uml.property name="maximumRounds"
 	 */
 	public int getMaximumRounds() {
 		return maximumRounds;
@@ -69,10 +65,6 @@ public class MaxRoundsAuctionClosingCondition extends TimingCondition implements
 	/**
 	 * Set the maximum number of rounds for this auction. The auction will
 	 * automatically close after this number of rounds has been dealt.
-	 * 
-	 * @param maximumRounds
-	 *          The maximum number of roudns for this auction.
-	 * @uml.property name="maximumRounds"
 	 */
 	public void setMaximumRounds(int maximumRounds) {
 		this.maximumRounds = maximumRounds;

@@ -41,50 +41,31 @@ public class DataWriterReport extends AbstractAuctionReport {
 
 	/**
 	 * output for the ask component of market quotes as time series.
-	 * 
-	 * @uml.property name="askQuoteLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter askQuoteLog = null;
 
 	/**
 	 * output for the bid component of market quotes as time series.
-	 * 
-	 * @uml.property name="bidQuoteLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter bidQuoteLog = null;
 
 	/**
 	 * output for bid data as time series.
-	 * 
-	 * @uml.property name="bidLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter bidLog = null;
 
 	/**
 	 * output for ask data as time series.
-	 * 
-	 * @uml.property name="askLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter askLog = null;
 
-	/*
-	 * output for transaction price time series.
-	 */
 	/**
-	 * @uml.property name="transPriceLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
+	 * output for transaction price time series.
 	 */
 	protected DataWriter transPriceLog = null;
 
 	/**
 	 * The auction we are keeping statistics on.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
 	 */
 	protected RandomRobinAuction auction;
 
@@ -164,9 +145,6 @@ public class DataWriterReport extends AbstractAuctionReport {
 		return new HashMap();
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public void setAuction(RandomRobinAuction auction) {
 		this.auction = auction;
 	}

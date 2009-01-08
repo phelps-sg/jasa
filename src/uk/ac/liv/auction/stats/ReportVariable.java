@@ -27,14 +27,8 @@ package uk.ac.liv.auction.stats;
 
 public class ReportVariable implements Comparable {
 
-	/**
-	 * @uml.property name="name"
-	 */
 	protected String name;
 
-	/**
-	 * @uml.property name="description"
-	 */
 	protected String description;
 
 	public ReportVariable(String name, String description) {
@@ -42,16 +36,10 @@ public class ReportVariable implements Comparable {
 		this.description = description;
 	}
 
-	/**
-	 * @uml.property name="description"
-	 */
 	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * @uml.property name="name"
-	 */
 	public String getName() {
 		return name;
 	}

@@ -51,33 +51,21 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 
 	/**
 	 * The report used to calculate the equilibrium price.
-	 * 
-	 * @uml.property name="equilibriaStats"
-	 * @uml.associationEnd
 	 */
 	protected EquilibriumReport equilibriaStats;
 
 	/**
 	 * Total theoretically available profits per agent. This table maps
 	 * AbstractTradingAgent keys onto double values.
-	 * 
-	 * @uml.property name="surplusTable"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
 	 */
 	private TObjectDoubleHashMap surplusTable = new TObjectDoubleHashMap();
 
 	/**
 	 * The quantity that each agent can theoretically trade per day. This should
 	 * normally be set equal to agents' trade entitlement.
-	 * 
-	 * @uml.property name="quantity"
 	 */
 	protected int quantity = 1;
 
-	/**
-	 * @uml.property name="efficiency"
-	 */
 	protected double efficiency;
 
 	public static final String P_DEF_BASE = "dynamicsurplusreport";
@@ -110,9 +98,6 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 		efficiency = calculateTotalProfits() / calculateTotalEquilibriumSurplus();
 	}
 
-	/**
-	 * @uml.property name="efficiency"
-	 */
 	public double getEfficiency() {
 		return efficiency;
 	}
@@ -215,16 +200,10 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 		return vars;
 	}
 
-	/**
-	 * @uml.property name="quantity"
-	 */
 	public int getQuantity() {
 		return quantity;
 	}
 
-	/**
-	 * @uml.property name="quantity"
-	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}

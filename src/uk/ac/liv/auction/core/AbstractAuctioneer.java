@@ -43,40 +43,23 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
 	/**
 	 * The auction container for this auctioneer.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
 	 */
 	protected Auction auction;
 
 	/**
 	 * The shout engine for this auction.
-	 * 
-	 * @uml.property name="shoutEngine"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected ShoutEngine shoutEngine = new FourHeapShoutEngine();
 
 	/**
 	 * The current quote
-	 * 
-	 * @uml.property name="currentQuote"
-	 * @uml.associationEnd
 	 */
 	protected MarketQuote currentQuote = null;
 
 	static Logger logger = Logger.getLogger(AbstractAuctioneer.class);
 
-	/**
-	 * @uml.property name="clearingQuote"
-	 * @uml.associationEnd
-	 */
 	protected MarketQuote clearingQuote;
 
-	/**
-	 * @uml.property name="pricingPolicy"
-	 * @uml.associationEnd
-	 */
 	protected PricingPolicy pricingPolicy;
 
 	public static final String P_PRICING = "pricing";
@@ -112,16 +95,10 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
 	}
 
-	/**
-	 * @uml.property name="pricingPolicy"
-	 */
 	public PricingPolicy getPricingPolicy() {
 		return pricingPolicy;
 	}
 
-	/**
-	 * @uml.property name="pricingPolicy"
-	 */
 	public void setPricingPolicy(PricingPolicy pricingPolicy) {
 		this.pricingPolicy = pricingPolicy;
 	}
@@ -206,18 +183,12 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
 	public abstract void generateQuote();
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public void setAuction(Auction auction) {
 		this.auction = auction;
 	}
 
-	/*
-	 * Find out which auction we are the auctioneer for.
-	 */
 	/**
-	 * @uml.property name="auction"
+	 * Find out which auction we are the auctioneer for.
 	 */
 	public Auction getAuction() {
 		return auction;

@@ -62,264 +62,98 @@ import ec.util.ParameterDatabase;
 
 public class ElectricityExperiment implements Parameterizable, Runnable {
 
-	/**
-	 * @uml.property name="outputDir"
-	 */
 	protected String outputDir = "/tmp";
 
-	/**
-	 * @uml.property name="maxRounds"
-	 */
 	protected int maxRounds = 1000;
 
-	/**
-	 * @uml.property name="iterations"
-	 */
 	protected int iterations = 100;
 
-	/**
-	 * @uml.property name="auctioneerKSamples"
-	 */
 	protected int auctioneerKSamples = 10;
 
-	/**
-	 * @uml.property name="minK"
-	 */
 	protected double minK = 0;
 
-	/**
-	 * @uml.property name="maxK"
-	 */
 	protected double maxK = 1;
 
-	/**
-	 * @uml.property name="deltaK"
-	 */
 	protected double deltaK = 0.01;
 
-	/**
-	 * @uml.property name="numBuyers"
-	 */
 	protected int numBuyers;
 
-	/**
-	 * @uml.property name="numSellers"
-	 */
 	protected int numSellers;
 
-	/**
-	 * @uml.property name="buyerCapacity"
-	 */
 	protected int buyerCapacity;
 
-	/**
-	 * @uml.property name="sellerCapacity"
-	 */
 	protected int sellerCapacity;
 
-	/**
-	 * @uml.property name="sellerStrategies"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected FixedQuantityStrategy[] sellerStrategies;
 
-	/**
-	 * @uml.property name="buyerStrategies"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected FixedQuantityStrategy[] buyerStrategies;
 
-	/**
-	 * @uml.property name="dataFile"
-	 * @uml.associationEnd
-	 */
 	protected DataWriter dataFile;
 
-	/**
-	 * @uml.property name="distributionFile"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	protected DataWriter distributionFile;
 
-	/**
-	 * @uml.property name="iterResults"
-	 * @uml.associationEnd
-	 */
 	protected DataWriter iterResults;
 
-	/**
-	 * @uml.property name="strategyData"
-	 * @uml.associationEnd
-	 */
 	protected DataWriter strategyData;
 
-	/**
-	 * @uml.property name="stats"
-	 * @uml.associationEnd
-	 */
 	protected ElectricityStats stats;
 
-	/**
-	 * @uml.property name="auction"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected RandomRobinAuction auction = new RandomRobinAuction("electricity");
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
 	protected Auctioneer auctioneer;
 
-	/**
-	 * @uml.property name="marketData"
-	 * @uml.associationEnd
-	 */
 	protected PriceStatisticsReport marketData;
 
-	/**
-	 * @uml.property name="paramSummary"
-	 */
 	protected String paramSummary;
 
-	/**
-	 * @uml.property name="collectIterData"
-	 */
 	protected boolean collectIterData = false;
 
-	/**
-	 * @uml.property name="collectStrategyData"
-	 */
 	protected boolean collectStrategyData = false;
 
-	/**
-	 * @uml.property name="randomizer"
-	 * @uml.associationEnd inverse="experiment:uk.ac.liv.auction.electricity.StandardRandomizer"
-	 */
 	protected StandardRandomizer randomizer;
 
-	/**
-	 * @uml.property name="efficiency"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats efficiency = new SummaryStats(
 	    "EA");
 
-	/**
-	 * @uml.property name="mPB"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats mPB = new SummaryStats("MPB");
 
-	/**
-	 * @uml.property name="mPS"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats mPS = new SummaryStats("MPS");
 
-	/**
-	 * @uml.property name="pSA"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats pSA = new SummaryStats("PSA");
 
-	/**
-	 * @uml.property name="pBA"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats pBA = new SummaryStats("PBA");
 
-	/**
-	 * @uml.property name="pST"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats pST = new SummaryStats("PST");
 
-	/**
-	 * @uml.property name="pBT"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats pBT = new SummaryStats("PBT");
 
-	/**
-	 * @uml.property name="eAN"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats eAN = new SummaryStats("EAN");
 
-	/**
-	 * @uml.property name="mPBN"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats mPBN = new SummaryStats("MPBN");
 
-	/**
-	 * @uml.property name="mPSN"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats mPSN = new SummaryStats("MPSN");
 
-	/**
-	 * @uml.property name="sMPB"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats sMPB = new SummaryStats("SMPB");
 
-	/**
-	 * @uml.property name="sMPS"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats sMPS = new SummaryStats("SMPS");
 
-	/**
-	 * @uml.property name="sMPBN"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats sMPBN = new SummaryStats("SMPBN");
 
-	/**
-	 * @uml.property name="sMPSN"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats sMPSN = new SummaryStats("SMPSN");
 
-	/**
-	 * @uml.property name="pBCE"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats pBCE = new SummaryStats("PBCE");
 
-	/**
-	 * @uml.property name="pSCE"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats pSCE = new SummaryStats("PSCE");
 
-	/**
-	 * @uml.property name="equilibPrice"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats equilibPrice = new SummaryStats(
 	    "EquilibPrice");
 
-	/**
-	 * @uml.property name="equilibQty"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats equilibQty = new SummaryStats(
 	    "EquilibQty");
 
-	/**
-	 * @uml.property name="learningDelta"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats learningDelta = new SummaryStats(
 	    "LD");
 
-	/**
-	 * @uml.property name="variables"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected SummaryStats[] variables = new SummaryStats[] {
 	    efficiency, mPB, mPS, pBA, pSA, pBT, pST, eAN, mPBN, mPSN, sMPB, sMPS,
 	    sMPBN, sMPSN, pBCE, pSCE, equilibPrice, equilibQty, learningDelta };

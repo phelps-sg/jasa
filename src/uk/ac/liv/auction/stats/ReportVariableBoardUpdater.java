@@ -80,31 +80,13 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
 	public static String P_TRANS_PRICE_MEMORY = "transpricememory";
 
-	/**
-	 * @uml.property name="equilPrice"
-	 */
 	protected double equilPrice;
 
-	/**
-	 * @uml.property name="transPriceMemory"
-	 */
 	protected FixedLengthQueue transPriceMemory;
-
-	/**
-	 * @uml.property name="transPriceDay"
-	 */
 
 	protected TransactionPriceTracker transPriceDay;
 
-	/**
-	 * @uml.property name="transPriceAuction"
-	 */
-
 	protected TransactionPriceTracker transPriceAuction;
-
-	/**
-	 * @uml.property name="pCE"
-	 */
 
 	protected double pCE;
 

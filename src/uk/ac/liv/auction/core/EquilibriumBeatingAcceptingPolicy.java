@@ -51,21 +51,13 @@ public class EquilibriumBeatingAcceptingPolicy extends
 
 	protected static IllegalShoutException askException = null;
 
-	/**
-	 * @uml.property name="expectedHighestAsk"
-	 */
 	private double expectedHighestAsk;
 
-	/**
-	 * @uml.property name="expectedLowestBid"
-	 */
 	private double expectedLowestBid;
 
 	/**
 	 * A parameter used to adjust the equilibrium price estimate so as to relax
 	 * the restriction.
-	 * 
-	 * @uml.property name="delta"
 	 */
 	protected double delta = 0;
 

@@ -31,10 +31,6 @@ public class StrategyCombo implements ParameterBasedCase, Parameterizable {
 
 	static Logger logger = Logger.getLogger(StrategyCombo.class);
 
-	/**
-	 * @uml.property name="cases"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	private Case cases[];
 
 	public StrategyCombo() {

@@ -30,10 +30,6 @@ import uk.ac.liv.util.io.DataWriter;
 
 public abstract class AbstractLearner implements Learner, Parameterizable {
 
-	/**
-	 * @uml.property name="monitor"
-	 * @uml.associationEnd
-	 */
 	protected LearnerMonitor monitor = null;
 
 	public static final String P_MONITOR = "monitor";

@@ -43,45 +43,31 @@ public class Shout implements Comparable, Cloneable, Serializable {
 
 	/**
 	 * The number of items offered/wanted.
-	 * 
-	 * @uml.property name="quantity"
 	 */
 	protected int quantity;
 
 	/**
 	 * The price of this offer
-	 * 
-	 * @uml.property name="price"
 	 */
 	protected double price;
 
 	/**
 	 * The agent placing this offer
-	 * 
-	 * @uml.property name="agent"
-	 * @uml.associationEnd
 	 */
 	protected TradingAgent agent;
 
 	/**
 	 * True if this shout is a bid. False if this shout is an ask.
-	 * 
-	 * @uml.property name="isBid"
 	 */
 	protected boolean isBid;
 
 	/**
 	 * The unique id of this shout
-	 * 
-	 * @uml.property name="id"
 	 */
 	protected long id = -1;
 
 	/**
 	 * The child of this shout.
-	 * 
-	 * @uml.property name="child"
-	 * @uml.associationEnd
 	 */
 	protected Shout child = null;
 
@@ -114,23 +100,14 @@ public class Shout implements Comparable, Cloneable, Serializable {
 		this.id = idAllocator.nextId();
 	}
 
-	/**
-	 * @uml.property name="quantity"
-	 */
 	public int getQuantity() {
 		return quantity;
 	}
 
-	/**
-	 * @uml.property name="price"
-	 */
 	public double getPrice() {
 		return price;
 	}
 
-	/**
-	 * @uml.property name="agent"
-	 */
 	public TradingAgent getAgent() {
 		return agent;
 	}
@@ -212,15 +189,11 @@ public class Shout implements Comparable, Cloneable, Serializable {
 	 * Get the child of this shout. Shouts have children when they are split().
 	 * 
 	 * @return The child Shout object, or null if this Shout is childless.
-	 * @uml.property name="child"
 	 */
 	public Shout getChild() {
 		return child;
 	}
 
-	/**
-	 * @uml.property name="id"
-	 */
 	public long getId() {
 		return id;
 	}
@@ -282,31 +255,18 @@ public class Shout implements Comparable, Cloneable, Serializable {
 		return newShout;
 	}
 
-	/**
-	 * @param isBid
-	 * @uml.property name="isBid"
-	 */
 	void setIsBid(boolean isBid) {
 		this.isBid = isBid;
 	}
 
-	/**
-	 * @uml.property name="agent"
-	 */
 	void setAgent(TradingAgent agent) {
 		this.agent = agent;
 	}
 
-	/**
-	 * @uml.property name="price"
-	 */
 	void setPrice(double price) {
 		this.price = price;
 	}
 
-	/**
-	 * @uml.property name="quantity"
-	 */
 	void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}

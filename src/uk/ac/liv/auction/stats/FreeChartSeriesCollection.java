@@ -25,11 +25,6 @@ import java.util.Vector;
  */
 public class FreeChartSeriesCollection {
 
-	/**
-	 * @uml.property name="collection"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.stats.FreeChartSeries"
-	 */
 	Vector collection;
 
 	public FreeChartSeriesCollection() {

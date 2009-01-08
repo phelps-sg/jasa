@@ -51,8 +51,6 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 	/**
 	 * A parameter used to control the probability of next shout being from a
 	 * seller.
-	 * 
-	 * @uml.property name="q"
 	 */
 	protected double q = 0.5;
 

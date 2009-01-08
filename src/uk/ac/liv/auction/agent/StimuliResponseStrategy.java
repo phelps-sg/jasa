@@ -56,11 +56,6 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
 
 	/**
 	 * The learning algorithm to use.
-	 * 
-	 * @uml.property name="learner"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 *                     inverse="stimuliResponseStrategy:uk.ac.liv.ai.learning.StimuliResponseLearner"
-	 * @uml.association name="uses"
 	 */
 	protected StimuliResponseLearner learner = null;
 

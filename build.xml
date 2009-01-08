@@ -99,7 +99,7 @@
 		<loadproperties srcFile="${versionFile}" />
 		<property name="versionStr" value="${majorVersion}.${minorVersion}" />
 		<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
-			<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params,lib/**" prefix="jasa-${versionStr}">
+			<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,etc/log4j.xml,.project,.classpath,LICENSE.TXT,changelog*,doc/**,src/**/*.java,test/**/*.java,src/**/*.html,src/**/*.template,examples/*.params,lib/**" prefix="jasa-${versionStr}">
 				<exclude name="src/uk/ac/liv/ec/**" />
 				<exclude name="src/uk/ac/liv/auction/ec/**" />
 				<exclude name="src/uk/ac/liv/auction/heuristic/**" />
@@ -196,7 +196,8 @@
 				<include name="**/*.template" />
 			</fileset>
 		</copy>
-		<copy file="${versionTemplate}" tofile="${versionSrc}" />
+		<delete file="${versionSrc}"/>
+		<copy verbose="on" file="${versionTemplate}" tofile="${versionSrc}" />
 		<replace file="${versionSrc}" value="value not found in version.properties" propertyFile="${versionFile}">
 			<replacefilter token="@buildDate@" property="buildDate" />
 			<replacefilter token="@buildNum@" property="buildNum" />

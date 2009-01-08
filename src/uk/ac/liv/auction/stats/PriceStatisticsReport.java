@@ -49,10 +49,6 @@ import org.apache.log4j.Logger;
 public class PriceStatisticsReport extends AbstractAuctionReport implements
     Serializable, Cloneable, Resetable {
 
-	/**
-	 * @uml.property name="stats"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected SummaryStats[] stats;
 
 	static Logger logger = Logger.getLogger(PriceStatisticsReport.class);

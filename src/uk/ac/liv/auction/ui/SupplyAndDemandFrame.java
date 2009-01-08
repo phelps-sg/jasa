@@ -42,40 +42,16 @@ import uk.ac.liv.util.io.DataSeriesWriter;
 
 public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
-	/**
-	 * @uml.property name="auction"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected RandomRobinAuction auction;
 
-	/**
-	 * @uml.property name="graph"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected RepastPlot graph;
 
-	/**
-	 * @uml.property name="supplyCurve"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected DataSeriesWriter supplyCurve;
 
-	/**
-	 * @uml.property name="demandCurve"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected DataSeriesWriter demandCurve;
 
-	/**
-	 * @uml.property name="updateButton"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JButton updateButton;
 
-	/**
-	 * @uml.property name="autoUpdate"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JCheckBox autoUpdate;
 
 	protected float maxX;
@@ -157,15 +133,8 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 		setVisible(false);
 	}
 
-	/**
-	 * @uml.property name="graphName"
-	 */
 	public abstract String getGraphName();
 
-	/**
-	 * @uml.property name="supplyAndDemandStats"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	public abstract SupplyAndDemandStats getSupplyAndDemandStats();
 
 	protected void plotSupplyAndDemand() {

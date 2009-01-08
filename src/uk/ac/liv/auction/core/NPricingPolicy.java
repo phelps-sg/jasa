@@ -54,9 +54,6 @@ import ec.util.ParameterDatabase;
 public class NPricingPolicy implements PricingPolicy, Resetable, Serializable,
     Parameterizable {
 
-	/**
-	 * @uml.property name="n"
-	 */
 	protected int n;
 
 	public static final String P_N = "n";

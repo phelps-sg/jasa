@@ -38,11 +38,6 @@ import org.apache.log4j.Logger;
 public class DailyStatsReport extends PriceStatisticsReport implements
     Parameterizable {
 
-	/**
-	 * @uml.property name="dailyStats"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.util.SummaryStats"
-	 */
 	protected Vector dailyStats;
 
 	static Logger logger = Logger.getLogger(DailyStatsReport.class);

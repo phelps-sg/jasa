@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A utility class for cummulative tracking of stats for a series of doubles.
+ * A utility class for cumulative tracking of stats for a series of doubles.
  * Moments are incremented dynamically, rather than keeping the actual cases in
  * memory.
  * </p>
@@ -50,10 +50,9 @@ public class SummaryStats implements Serializable, Cloneable,
     Resetable, Distribution {
 
 	protected SummaryStatistics stats;
+	
 	/**
 	 * The name of this series.
-	 * 
-	 * @uml.property name="varName"
 	 */
 	protected String varName;
 
@@ -81,8 +80,6 @@ public class SummaryStats implements Serializable, Cloneable,
 
 	/**
 	 * Get the number of items in the series.
-	 * 
-	 * @uml.property name="n"
 	 */
 	public int getN() {
 		return (int) stats.getN();
@@ -114,8 +111,6 @@ public class SummaryStats implements Serializable, Cloneable,
 
 	/**
 	 * Get the minimum datum.
-	 * 
-	 * @uml.property name="min"
 	 */
 	public double getMin() {
 		return stats.getMin();
@@ -123,8 +118,6 @@ public class SummaryStats implements Serializable, Cloneable,
 
 	/**
 	 * Get the maximum datum.
-	 * 
-	 * @uml.property name="max"
 	 */
 	public double getMax() {
 		return stats.getMax();
@@ -132,8 +125,6 @@ public class SummaryStats implements Serializable, Cloneable,
 
 	/**
 	 * Get the total of the data
-	 * 
-	 * @uml.property name="total"
 	 */
 	public double getTotal() {
 		return stats.getSum();
@@ -152,8 +143,9 @@ public class SummaryStats implements Serializable, Cloneable,
 	}
 
 	public String toString() {
-		return "(" + getClass() + " varName:" + varName + " stats:" + stats 
-		    + ")";
+		return "(" + getClass() + " varName:" + varName + " n:" + getN()
+				+ " min:" + getMin() + " max:" + getMax() + " mean:"
+				+ getMean() + " stdev:" + getStdDev() + ")";
 	}
 
 	public void log() {

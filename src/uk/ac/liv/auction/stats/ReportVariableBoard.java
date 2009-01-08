@@ -42,11 +42,6 @@ public class ReportVariableBoard {
 
 	private static ReportVariableBoard instance;
 
-	/**
-	 * @uml.property name="board"
-	 * @uml.associationEnd qualifier="varName:java.lang.String
-	 *                     org.jfree.data.time.TimePeriodValue"
-	 */
 	private Map board;
 
 	private ReportVariableBoard() {

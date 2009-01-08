@@ -67,14 +67,8 @@ public class ReportVariableSeries extends FreeChartSeries {
 
 	public static final String P_EVENT = "event";
 
-	/**
-	 * @uml.property name="varName"
-	 */
 	protected String varName;
 
-	/**
-	 * @uml.property name="eventClass"
-	 */
 	protected Class eventClass;
 
 	public ReportVariableSeries() {

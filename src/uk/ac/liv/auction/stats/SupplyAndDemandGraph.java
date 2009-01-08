@@ -49,46 +49,18 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 
 	static Logger logger = Logger.getLogger(SupplyAndDemandGraph.class);
 
-	/**
-	 * @uml.property name="trueSupply"
-	 * @uml.associationEnd
-	 */
 	DataWriterSeries trueSupply;
 
-	/**
-	 * @uml.property name="trueDemand"
-	 * @uml.associationEnd
-	 */
 	DataWriterSeries trueDemand;
 
-	/**
-	 * @uml.property name="reportedSupply"
-	 * @uml.associationEnd
-	 */
 	DataWriterSeries reportedSupply;
 
-	/**
-	 * @uml.property name="reportedDemand"
-	 * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.stats.SupplyAndDemandGraph$DataWriterSeries"
-	 */
 	DataWriterSeries reportedDemand;
 
-	/**
-	 * @uml.property name="combinedPlot"
-	 * @uml.associationEnd
-	 */
 	CombinedRangeXYPlot combinedPlot;
 
-	/**
-	 * @uml.property name="truePlot"
-	 * @uml.associationEnd
-	 */
 	XYPlot truePlot;
 
-	/**
-	 * @uml.property name="reportedPlot"
-	 * @uml.associationEnd
-	 */
 	XYPlot reportedPlot;
 
 	public SupplyAndDemandGraph() {

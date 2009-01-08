@@ -141,10 +141,6 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
 	/**
 	 * The collection of TraderAgents currently taking part in this auction.
-	 * 
-	 * @uml.property name="activeTraders"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.agent.TradingAgent"
 	 */
 	protected LinkedList activeTraders = new LinkedList();
 
@@ -154,61 +150,35 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
 	/**
 	 * The collection of idle TraderAgents
-	 * 
-	 * @uml.property name="defunctTraders"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.agent.TradingAgent"
 	 */
 	protected LinkedList defunctTraders = new LinkedList();
 
 	/**
 	 * The collection of all TraderAgents registered in the auction.
-	 * 
-	 * @uml.property name="registeredTraders"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.agent.TradingAgent"
 	 */
 	protected LinkedList registeredTraders = new LinkedList();
 
 	/**
 	 * The current round.
-	 * 
-	 * @uml.property name="round"
 	 */
 	protected int round;
 
-	/**
-	 * @uml.property name="age"
-	 */
 	protected int age = 0;
 
 	protected Account account = new Account();
 
 	/**
 	 * Optional graphical console
-	 * 
-	 * @uml.property name="guiConsole"
-	 * @uml.associationEnd inverse="auction:uk.ac.liv.auction.ui.AuctionConsoleFrame"
 	 */
 	protected AuctionConsoleFrame guiConsole = null;
 
 	/**
 	 * The current trading day (period)
-	 * 
-	 * @uml.property name="day"
 	 */
 	protected int day = 0;
 
-	/**
-	 * @uml.property name="closingCondition"
-	 * @uml.associationEnd
-	 */
 	protected TimingCondition closingCondition = new NullAuctionClosingCondition();
 
-	/**
-	 * @uml.property name="dayEndingCondition"
-	 * @uml.associationEnd
-	 */
 	protected TimingCondition dayEndingCondition;
 
 	protected boolean endOfRound;
@@ -488,23 +458,15 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 
 	/**
 	 * Get the current round number
-	 * 
-	 * @uml.property name="round"
 	 */
 	public int getRound() {
 		return round;
 	}
 
-	/**
-	 * @uml.property name="age"
-	 */
 	public int getAge() {
 		return age;
 	}
 
-	/**
-	 * @uml.property name="day"
-	 */
 	public int getDay() {
 		return day;
 	}
@@ -853,9 +815,6 @@ public class RandomRobinAuction extends AuctionImpl implements Runnable,
 		closingCondition = cond;
 	}
 
-	/**
-	 * @uml.property name="dayEndingCondition"
-	 */
 	public void setDayEndingCondition(TimingCondition cond) {
 		assert (cond instanceof DayEndingCondition);
 		dayEndingCondition = cond;

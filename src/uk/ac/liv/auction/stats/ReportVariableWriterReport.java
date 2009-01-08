@@ -81,9 +81,6 @@ public class ReportVariableWriterReport implements AuctionReport,
 
 	/**
 	 * The auction we are keeping statistics on.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
 	 */
 	protected RandomRobinAuction auction;
 
@@ -339,9 +336,6 @@ public class ReportVariableWriterReport implements AuctionReport,
 		return new HashMap();
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public void setAuction(RandomRobinAuction auction) {
 		this.auction = auction;
 	}

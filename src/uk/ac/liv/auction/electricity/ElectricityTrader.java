@@ -66,15 +66,11 @@ public class ElectricityTrader extends AbstractTradingAgent {
 
 	/**
 	 * The capacity of this trader in MWh
-	 * 
-	 * @uml.property name="capacity"
 	 */
 	protected int capacity;
 
 	/**
 	 * The fixed costs for this trader.
-	 * 
-	 * @uml.property name="fixedCosts"
 	 */
 	protected double fixedCosts;
 
@@ -137,9 +133,6 @@ public class ElectricityTrader extends AbstractTradingAgent {
 		return price >= valuer.determineValue(auction);
 	}
 
-	/**
-	 * @uml.property name="capacity"
-	 */
 	public int getCapacity() {
 		return capacity;
 	}

@@ -42,19 +42,11 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 
 	/**
 	 * The sorted list of agent's truthful bids (ie buyers' private values).
-	 * 
-	 * @uml.property name="bids"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
 	 */
 	protected ArrayList bids = new ArrayList();
 
 	/**
 	 * The sorted list of agents' truthful asks (ie sellers' private values).
-	 * 
-	 * @uml.property name="asks"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
 	 */
 	protected ArrayList asks = new ArrayList();
 

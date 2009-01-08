@@ -26,20 +26,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class CSVReader {
-
-	/**
-	 * @uml.property name="in"
-	 */
+	
 	BufferedReader in;
 
-	/**
-	 * @uml.property name="seperator"
-	 */
 	char seperator;
 
-	/**
-	 * @uml.property name="types" multiplicity="(0 -1)" dimension="1"
-	 */
 	Class[] types;
 
 	static final char DEFAULT_SEPERATOR = '\t';

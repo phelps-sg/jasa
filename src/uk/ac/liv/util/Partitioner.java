@@ -29,17 +29,8 @@ import java.util.Stack;
 
 public class Partitioner implements Iterator {
 
-	/**
-	 * @uml.property name="stack"
-	 * @uml.associationEnd multiplicity="(0 -1)" elementType="[I"
-	 */
 	protected Stack stack;
 
-	/**
-	 * @uml.property name="visitedStates"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.util.PartitionerState"
-	 */
 	protected HashSet visitedStates;
 
 	public Partitioner(int n, int k) {
@@ -94,15 +85,8 @@ public class Partitioner implements Iterator {
 
 class PartitionerState {
 
-	/**
-	 * @uml.property name="n"
-	 */
 	protected int n;
 
-	/**
-	 * @uml.property name="p"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected int[] p;
 
 	public PartitionerState(int[] p, int n) {

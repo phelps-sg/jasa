@@ -43,47 +43,31 @@ public class SurplusReport extends EquilibriumReport {
 
 	/**
 	 * The profits of the buyers in theoretical equilibrium.
-	 * 
-	 * @uml.property name="pBCE"
 	 */
 	protected double pBCE = 0;
 
 	/**
 	 * The profits of the sellers in theoretical equilibrium.
-	 * 
-	 * @uml.property name="pSCE"
 	 */
 	protected double pSCE = 0;
 
 	/**
 	 * The actual profits of the buyers.
-	 * 
-	 * @uml.property name="pBA"
 	 */
 	protected double pBA = 0;
 
 	/**
 	 * The actual profits of the sellers.
-	 * 
-	 * @uml.property name="pSA"
 	 */
 	protected double pSA = 0;
 
 	/**
 	 * Global market efficiency.
-	 * 
-	 * @uml.property name="eA"
 	 */
 	protected double eA;
 
-	/**
-	 * @uml.property name="mPB"
-	 */
 	protected double mPB;
 
-	/**
-	 * @uml.property name="mPS"
-	 */
 	protected double mPS;
 
 	public static final ReportVariable VAR_MPB = new ReportVariable(
@@ -92,9 +76,6 @@ public class SurplusReport extends EquilibriumReport {
 	public static final ReportVariable VAR_MPS = new ReportVariable(
 	    "surplus.mps", "The market-power of sellers");
 
-	/**
-	 * @uml.property name="percentageFormatter"
-	 */
 	private DecimalFormat percentageFormatter = new DecimalFormat("#00.00");
 
 	public static final ReportVariable VAR_EA = new ReportVariable("surplus.ea",
@@ -176,7 +157,6 @@ public class SurplusReport extends EquilibriumReport {
 	/**
 	 * @return The theoretical surplus available to buyers in competitive
 	 *         equilibrium.
-	 * @uml.property name="pBCE"
 	 */
 	public double getPBCE() {
 		return pBCE;
@@ -185,7 +165,6 @@ public class SurplusReport extends EquilibriumReport {
 	/**
 	 * @return The theoretical surplus available to sellers in competitive
 	 *         equilibrium.
-	 * @uml.property name="pSCE"
 	 */
 	public double getPSCE() {
 		return pSCE;
@@ -193,7 +172,6 @@ public class SurplusReport extends EquilibriumReport {
 
 	/**
 	 * @return The actual surplus of all buyers in the market.
-	 * @uml.property name="pBA"
 	 */
 	public double getPBA() {
 		return pBA;
@@ -201,7 +179,6 @@ public class SurplusReport extends EquilibriumReport {
 
 	/**
 	 * @return The actual surplus of all sellers in the market.
-	 * @uml.property name="pSA"
 	 */
 	public double getPSA() {
 		return pSA;
@@ -209,8 +186,6 @@ public class SurplusReport extends EquilibriumReport {
 
 	/**
 	 * Get the buyer market-power calculation.
-	 * 
-	 * @uml.property name="mPB"
 	 */
 	public double getMPB() {
 		return mPB;
@@ -218,16 +193,11 @@ public class SurplusReport extends EquilibriumReport {
 
 	/**
 	 * Get the seller market-power calculation.
-	 * 
-	 * @uml.property name="mPS"
 	 */
 	public double getMPS() {
 		return mPS;
 	}
 
-	/**
-	 * @uml.property name="eA"
-	 */
 	public double getEA() {
 		return eA;
 	}

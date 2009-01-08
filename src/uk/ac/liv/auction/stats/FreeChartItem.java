@@ -68,25 +68,12 @@ public class FreeChartItem implements AuctionEventListener, Parameterizable {
 
 	public static final String P_RENDERER = "renderer";
 
-	/**
-	 * @uml.property name="name"
-	 */
 	protected String name;
 
-	/**
-	 * @uml.property name="graph"
-	 * @uml.associationEnd
-	 */
 	protected FreeChartGraph graph;
 
-	/**
-	 * @uml.property name="axisIndex"
-	 */
 	protected int axisIndex;
 
-	/**
-	 * @uml.property name="rendererIndex"
-	 */
 	protected int rendererIndex;
 
 	public FreeChartItem() {
@@ -107,38 +94,22 @@ public class FreeChartItem implements AuctionEventListener, Parameterizable {
 	public void eventOccurred(AuctionEvent event) {
 	}
 
-	/**
-	 * @uml.property name="axisIndex"
-	 */
 	public int getAxisIndex() {
 		return axisIndex;
 	}
 
-	/**
-	 * @uml.property name="rendererIndex"
-	 */
 	public int getRendererIndex() {
 		return rendererIndex;
 	}
 
-	/**
-	 * @uml.property name="name"
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @uml.property name="name"
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	/**
-	 * @return Returns the graph.
-	 * @uml.property name="graph"
-	 */
 	public FreeChartGraph getGraph() {
 		return graph;
 	}
@@ -146,7 +117,6 @@ public class FreeChartItem implements AuctionEventListener, Parameterizable {
 	/**
 	 * @param graph
 	 *          The graph to set.
-	 * @uml.property name="graph"
 	 */
 	public void setGraph(FreeChartGraph graph) {
 		this.graph = graph;

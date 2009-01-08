@@ -55,97 +55,38 @@ import uk.ac.liv.util.Resetable;
  */
 public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 
-	/**
-	 * @uml.property name="auction"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 *                     inverse="guiConsole:uk.ac.liv.auction.core.RoundRobinAuction"
-	 */
 	protected RandomRobinAuction auction;
 
-	/**
-	 * @uml.property name="bidLabel"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JLabel bidLabel;
 
-	/**
-	 * @uml.property name="askLabel"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JLabel askLabel;
 
-	/**
-	 * @uml.property name="lastShoutLabel"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JLabel lastShoutLabel;
 
-	/**
-	 * @uml.property name="roundLabel"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JLabel roundLabel;
 
-	/**
-	 * @uml.property name="dayLabel"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JLabel dayLabel;
 
-	/**
-	 * @uml.property name="numTradersLabel"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JLabel numTradersLabel;
 
-	/**
-	 * @uml.property name="menuBar"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JMenuBar menuBar;
 
-	/**
-	 * @uml.property name="resetAgentsButton"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	protected JButton resetAgentsButton;
 
-	/**
-	 * @uml.property name="closeAuctionButton"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected JButton closeAuctionButton;
 
-	/**
-	 * @uml.property name="graphXExtrema"
-	 */
 	protected float graphXExtrema = 0f;
 
-	/**
-	 * @uml.property name="decimalFont"
-	 */
 	protected Font decimalFont = new Font("Monospaced", Font.TRUETYPE_FONT, 10);
 
-	/**
-	 * @uml.property name="currencyFormatter"
-	 */
 	protected DecimalFormat currencyFormatter = new DecimalFormat(
 	    "+000000.00;-000000.00");
 
-	/**
-	 * @uml.property name="decimalFormatter"
-	 */
 	protected DecimalFormat decimalFormatter = new DecimalFormat(
 	    " #########;-#########");
 
-	/**
-	 * @uml.property name="gridBag"
-	 */
 	protected GridBagLayout gridBag;
 
-	/**
-	 * @uml.property name="currentRound"
-	 */
 	protected int currentRound = 0;
 
 	static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);

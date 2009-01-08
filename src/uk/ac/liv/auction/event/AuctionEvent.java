@@ -28,23 +28,16 @@ public abstract class AuctionEvent {
 
 	/**
 	 * The auction that this event occurred in.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected Auction auction;
 
 	/**
 	 * The time at which this event occurred.
-	 * 
-	 * @uml.property name="time"
 	 */
 	protected int time;
 
 	/**
 	 * The physical time at which this event occurred.
-	 * 
-	 * @uml.property name="pTime"
 	 */
 
 	protected long pTime;
@@ -57,8 +50,6 @@ public abstract class AuctionEvent {
 
 	/**
 	 * Get the auction that this event occured in.
-	 * 
-	 * @uml.property name="auction"
 	 */
 	public Auction getAuction() {
 		return auction;

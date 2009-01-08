@@ -54,85 +54,61 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 	/**
 	 * The relative concentration of sellers to buyers.
-	 * 
-	 * @uml.property name="rCon"
 	 */
 	protected double rCon;
 
 	/**
 	 * The relative generating-capacity of buyers to sellers.
-	 * 
-	 * @uml.property name="rCap"
 	 */
 	protected double rCap;
 
 	/**
 	 * Strategic market-power for buyers.
-	 * 
-	 * @uml.property name="sMPB"
 	 */
 	protected double sMPB = Double.NaN;
 
 	/**
 	 * Strategic market-power for sellers.
-	 * 
-	 * @uml.property name="sMPS"
 	 */
 	protected double sMPS = Double.NaN;
 
 	/**
 	 * Profits of the buyers in truthful bidding.
-	 * 
-	 * @uml.property name="pBT"
 	 */
 	protected double pBT = Double.NaN;
 
 	/**
 	 * Profits of the sellers in truthful bidding.
-	 * 
-	 * @uml.property name="pST"
 	 */
 	protected double pST = Double.NaN;
 
 	/**
 	 * The number of sellers.
-	 * 
-	 * @uml.property name="numSellers"
 	 */
 	protected int numSellers;
 
 	/**
 	 * The number of buyers.
-	 * 
-	 * @uml.property name="numBuyers"
 	 */
 	protected int numBuyers;
 
 	/**
 	 * The total generating-capacity of buyers.
-	 * 
-	 * @uml.property name="buyerCap"
 	 */
 	protected int buyerCap;
 
 	/**
 	 * The total generating-capacity of sellers.
-	 * 
-	 * @uml.property name="sellerCap"
 	 */
 	protected int sellerCap;
 
 	/**
 	 * The approximated equilibrium price.
-	 * 
-	 * @uml.property name="equilibPrice"
 	 */
 	protected double equilibPrice;
 
 	/**
 	 * The age of the auction in rounds.
-	 * 
-	 * @uml.property name="auctionAge"
 	 */
 	protected int auctionAge;
 

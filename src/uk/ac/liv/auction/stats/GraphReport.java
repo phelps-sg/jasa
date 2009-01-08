@@ -41,41 +41,18 @@ import uchicago.src.sim.analysis.Sequence;
 public class GraphReport extends MeanValueDataWriterReport implements
     Parameterizable, Resetable {
 
-	/**
-	 * @uml.property name="currentSeries"
-	 */
 	protected int currentSeries;
 
-	/**
-	 * @uml.property name="allSeries"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected RepastGraphSequence[] allSeries;
 
 	protected static GraphReport singletonInstance;
 
-	/**
-	 * @uml.property name="askQuoteSeries"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	protected RepastGraphSequence askQuoteSeries;
 
-	/**
-	 * @uml.property name="bidQuoteSeries"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	protected RepastGraphSequence bidQuoteSeries;
 
-	/**
-	 * @uml.property name="transPriceSeries"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	protected RepastGraphSequence transPriceSeries;
 
-	/**
-	 * @uml.property name="listenerList"
-	 * @uml.associationEnd
-	 */
 	protected EventListenerList listenerList = new EventListenerList();
 
 	// protected GraphDataEvent event = new GraphDataEvent(this);

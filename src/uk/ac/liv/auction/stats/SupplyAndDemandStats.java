@@ -35,17 +35,11 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 
 	/**
 	 * The DataWriter to write the supply curve to.
-	 * 
-	 * @uml.property name="supplyStats"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter supplyStats;
 
 	/**
 	 * The DataWriter to write the demand curve to.
-	 * 
-	 * @uml.property name="demandStats"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter demandStats;
 

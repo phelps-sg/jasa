@@ -47,78 +47,32 @@ import ec.util.ParameterDatabase;
 
 public class ZIPExperiment extends MarketSimulation {
 
-	/**
-	 * @uml.property name="marketData"
-	 * @uml.associationEnd
-	 */
 	protected DailyStatsReport marketData;
 
-	/**
-	 * @uml.property name="stats"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	protected AuctionReport stats;
 
-	/**
-	 * @uml.property name="gatherStats"
-	 */
 	protected boolean gatherStats;
 
-	/**
-	 * @uml.property name="prngSeed"
-	 */
 	protected long prngSeed;
 
-	/**
-	 * @uml.property name="tradeEntitlement"
-	 */
 	protected int tradeEntitlement = 1;
 
-	/**
-	 * @uml.property name="privValueRangeMin"
-	 */
 	protected double privValueRangeMin = 75;
 
-	/**
-	 * @uml.property name="privValueIncrement"
-	 */
 	protected double privValueIncrement = 25;
 
-	/**
-	 * @uml.property name="numDays"
-	 */
 	protected int numDays = 10;
 
-	/**
-	 * @uml.property name="numSellers"
-	 */
 	protected int numSellers = 11;
 
-	/**
-	 * @uml.property name="numBuyers"
-	 */
 	protected int numBuyers = 11;
 
-	/**
-	 * @uml.property name="numSamples"
-	 */
 	protected int numSamples = 50;
 
-	/**
-	 * @uml.property name="transPriceMean"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected SummaryStats[] transPriceMean;
 
-	/**
-	 * @uml.property name="transPriceStdDev"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	protected SummaryStats[] transPriceStdDev;
 
-	/**
-	 * @uml.property name="console"
-	 */
 	protected boolean console = false;
 
 	public static final String P_SIMULATION = "simulation";

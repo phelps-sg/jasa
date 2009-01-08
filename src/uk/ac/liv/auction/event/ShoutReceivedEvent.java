@@ -31,9 +31,6 @@ public class ShoutReceivedEvent extends AuctionEvent {
 
 	/**
 	 * The shout that led to this event.
-	 * 
-	 * @uml.property name="shout"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected Shout shout;
 
@@ -42,9 +39,6 @@ public class ShoutReceivedEvent extends AuctionEvent {
 		this.shout = shout;
 	}
 
-	/**
-	 * @uml.property name="shout"
-	 */
 	public Shout getShout() {
 		return shout;
 	}

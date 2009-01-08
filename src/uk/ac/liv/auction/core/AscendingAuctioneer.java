@@ -35,16 +35,11 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
 
 	/**
 	 * The reservation price.
-	 * 
-	 * @uml.property name="reservePrice"
 	 */
 	protected double reservePrice;
 
 	/**
 	 * The seller.
-	 * 
-	 * @uml.property name="seller"
-	 * @uml.associationEnd
 	 */
 	protected TradingAgent seller;
 
@@ -52,8 +47,6 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
 
 	/**
 	 * The number of items for sale.
-	 * 
-	 * @uml.property name="quantity"
 	 */
 	int quantity;
 

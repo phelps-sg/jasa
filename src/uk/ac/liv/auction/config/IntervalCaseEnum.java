@@ -74,15 +74,8 @@ public class IntervalCaseEnum extends CaseEnum {
 
 	static Logger logger = Logger.getLogger(IntervalCaseEnum.class);
 
-	/**
-	 * @uml.property name="cases"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	private ParameterBasedCase cases[];
 
-	/**
-	 * @uml.property name="i"
-	 */
 	private int i;
 
 	private static final String P_NAME = "name";

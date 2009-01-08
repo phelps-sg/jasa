@@ -44,16 +44,8 @@ import uk.ac.liv.auction.core.Shout;
 
 public class DrawableAgentAdaptor implements Drawable {
 
-	/**
-	 * @uml.property name="agent"
-	 * @uml.associationEnd
-	 */
 	protected AbstractTradingAgent agent;
 
-	/**
-	 * @uml.property name="auction"
-	 * @uml.associationEnd readOnly="true"
-	 */
 	protected Auction auction;
 
 	protected static float minProfit = Float.POSITIVE_INFINITY;
@@ -62,9 +54,6 @@ public class DrawableAgentAdaptor implements Drawable {
 
 	protected static float maxMarkup = Float.NEGATIVE_INFINITY;
 
-	/**
-	 * @uml.property name="scale"
-	 */
 	public float scale = 1000;
 
 	public DrawableAgentAdaptor(Auction auction) {

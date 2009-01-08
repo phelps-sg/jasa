@@ -27,10 +27,6 @@ import java.util.Iterator;
 
 public class QueueDisassembler implements Iterator {
 
-	/**
-	 * @uml.property name="queue"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	private PriorityQueue queue;
 
 	public QueueDisassembler(PriorityQueue queue) {

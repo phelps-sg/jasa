@@ -89,27 +89,12 @@ public class FreeChartReport extends AbstractAuctionReport implements
 
 	public static final String P_SAVETOFILE = "savetofile";
 
-	/**
-	 * @uml.property name="saveToFile"
-	 */
 	private boolean saveToFile = false;
 
-	/**
-	 * @uml.property name="exitOnClose"
-	 */
 	private boolean exitOnClose = false;
 
-	/**
-	 * @uml.property name="frame"
-	 * @uml.associationEnd
-	 */
 	private UserFrame frame;
 
-	/**
-	 * @uml.property name="graphs"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     inverse="report:uk.ac.liv.auction.stats.FreeChartGraph"
-	 */
 	private FreeChartGraph graphs[];
 
 	public FreeChartReport() {

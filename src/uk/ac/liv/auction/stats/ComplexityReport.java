@@ -47,43 +47,16 @@ import ec.util.ParameterDatabase;
 public class ComplexityReport extends AbstractAuctionReport implements
     Resetable, Serializable, Parameterizable {
 
-	/**
-	 * @uml.property name="numStates"
-	 */
 	protected int numStates = 20;
 
-	/**
-	 * @uml.property name="globalMargin"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats globalMargin = new SummaryStats();
 
-	/**
-	 * @uml.property name="independentHistograms"
-	 * @uml.associationEnd inverse="this$0:uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
-	 *                     qualifier="agent2:uk.ac.liv.auction.agent.AbstractTradingAgent
-	 *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
-	 */
 	protected HashMap independentHistograms;
 
-	/**
-	 * @uml.property name="jointHistograms"
-	 * @uml.associationEnd qualifier="new:uk.ac.liv.auction.stats.AgentPair
-	 *                     uk.ac.liv.auction.stats.ComplexityReport$AgentStateHistogram"
-	 */
 	protected HashMap jointHistograms;
 
-	/**
-	 * @uml.property name="complexitySequence"
-	 * @uml.associationEnd
-	 */
 	protected DataWriter complexitySequence;
 
-	/**
-	 * @uml.property name="agents"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.agent.AbstractTradingAgent"
-	 */
 	protected ArrayList agents;
 
 	public static final String P_DEF_BASE = "complexityreport";
@@ -297,16 +270,8 @@ public class ComplexityReport extends AbstractAuctionReport implements
 
 class AgentPair {
 
-	/**
-	 * @uml.property name="agent1"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected AbstractTradingAgent agent1;
 
-	/**
-	 * @uml.property name="agent2"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected AbstractTradingAgent agent2;
 
 	public AgentPair(AbstractTradingAgent agent1, AbstractTradingAgent agent2) {

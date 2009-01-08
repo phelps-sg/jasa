@@ -41,7 +41,6 @@ public interface AuctionReport extends AuctionEventListener {
 	 * report then an empty Map is returned.
 	 * 
 	 * @see ReportVariable
-	 * @uml.property name="variables"
 	 */
 	public Map getVariables();
 

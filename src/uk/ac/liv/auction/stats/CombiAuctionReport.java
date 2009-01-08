@@ -53,17 +53,8 @@ import uk.ac.liv.util.Resetable;
 public class CombiAuctionReport implements AuctionReport, Parameterizable,
     Resetable {
 
-	/**
-	 * @uml.property name="reports"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.stats.AuctionReport"
-	 */
 	protected List reports = null;
 
-	/**
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
-	 */
 	protected RandomRobinAuction auction;
 
 	public static final String P_DEF_BASE = "combiauctionreport";
@@ -144,9 +135,6 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 		}
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public void setAuction(RandomRobinAuction auction) {
 		this.auction = auction;
 		Iterator i = reports.iterator();

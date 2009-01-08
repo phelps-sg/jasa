@@ -45,15 +45,8 @@ public class Schedule implements ParameterBasedCase, Parameterizable {
 
 	static Logger logger = Logger.getLogger(Schedule.class);
 
-	/**
-	 * @uml.property name="c"
-	 * @uml.associationEnd
-	 */
 	private Case c;
 
-	/**
-	 * @uml.property name="isSeller"
-	 */
 	private boolean isSeller;
 
 	// TODO: uses a number to specify which group of agents to be affected

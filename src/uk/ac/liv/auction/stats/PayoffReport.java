@@ -40,10 +40,6 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 
 	/**
 	 * Maps keys representing groups onto the PayoffStats for that group.
-	 * 
-	 * @uml.property name="table"
-	 * @uml.associationEnd qualifier="key:java.lang.Object
-	 *                     uk.ac.liv.auction.stats.PayoffStats"
 	 */
 	private HashMap table = new HashMap();
 
@@ -164,32 +160,18 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 	 * Return user-friendly description of the space of groups.
 	 * 
 	 * @return A string describing the grouping of this report.
-	 * @uml.property name="keyName"
 	 */
 	public abstract String getKeyName();
 
-	/**
-	 * @uml.property name="reportText"
-	 */
 	public abstract String getReportText();
 }
 
 class PayoffStats {
 
-	/**
-	 * @uml.property name="profits"
-	 */
 	public double profits = 0;
 
-	/**
-	 * @uml.property name="numAgents"
-	 */
 	public int numAgents = 0;
 
-	/**
-	 * @uml.property name="payoffDistribution"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected SummaryStats payoffDistribution = new SummaryStats();
 
 	public PayoffStats(int numAgents, double profits) {
@@ -201,9 +183,6 @@ class PayoffStats {
 		payoffDistribution.newData(payoff);
 	}
 
-	/**
-	 * @uml.property name="payoffDistribution"
-	 */
 	public SummaryStats getPayoffDistribution() {
 		return payoffDistribution;
 	}

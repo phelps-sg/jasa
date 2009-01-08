@@ -38,9 +38,6 @@ public abstract class AbstractAuctionReport implements AuctionReport,
 
 	/**
 	 * The auction we are keeping statistics on.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd
 	 */
 	protected RandomRobinAuction auction;
 
@@ -51,17 +48,11 @@ public abstract class AbstractAuctionReport implements AuctionReport,
 	public AbstractAuctionReport() {
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public void setAuction(RandomRobinAuction auction) {
 		this.auction = auction;
 		logger.debug("Set auction to " + auction);
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public RandomRobinAuction getAuction() {
 		return auction;
 	}

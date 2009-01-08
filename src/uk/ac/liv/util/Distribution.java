@@ -69,7 +69,6 @@ public interface Distribution {
 
 	/**
 	 * @return The name of the variable.
-	 * @uml.property name="name"
 	 */
 	public abstract String getName();
 

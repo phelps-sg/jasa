@@ -84,65 +84,46 @@ public class RothErevLearner extends AbstractLearner implements Prototypeable,
 
 	/**
 	 * The number of choices available to make at each iteration.
-	 * 
-	 * @uml.property name="k"
 	 */
 	protected int k;
 
 	/**
 	 * The recency parameter.
-	 * 
-	 * @uml.property name="r"
 	 */
 	protected double r;
 
 	/**
 	 * The experimentation parameter.
-	 * 
-	 * @uml.property name="e"
 	 */
 	protected double e;
 
 	/**
 	 * The scaling parameter.
-	 * 
-	 * @uml.property name="s1"
 	 */
 	protected double s1;
 
 	/**
 	 * Propensity for each possible action.
-	 * 
-	 * @uml.property name="q" multiplicity="(0 -1)" dimension="1"
 	 */
 	protected double q[];
 
 	/**
 	 * Probabilities for each possible action.
-	 * 
-	 * @uml.property name="p"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DiscreteProbabilityDistribution p;
 
 	/**
 	 * The current iteration.
-	 * 
-	 * @uml.property name="iteration"
 	 */
 	protected int iteration;
 
 	/**
 	 * The last action chosen.
-	 * 
-	 * @uml.property name="lastAction"
 	 */
 	protected int lastAction;
 
 	/**
 	 * The total amount of update to the probability vector on the last iteration.
-	 * 
-	 * @uml.property name="deltaP"
 	 */
 	protected double deltaP;
 
@@ -392,9 +373,6 @@ public class RothErevLearner extends AbstractLearner implements Prototypeable,
 		}
 	}
 
-	/**
-	 * @uml.property name="k"
-	 */
 	public int getK() {
 		return k;
 	}
@@ -410,38 +388,23 @@ public class RothErevLearner extends AbstractLearner implements Prototypeable,
 	public double getProbability(int i) {
 		return p.getProbability(i);
 	}
-
-	/**
-	 * @uml.property name="e"
-	 */
+	
 	public double getE() {
 		return e;
 	}
 
-	/**
-	 * @uml.property name="iteration"
-	 */
 	public int getIteration() {
 		return iteration;
 	}
 
-	/**
-	 * @uml.property name="lastAction"
-	 */
 	public int getLastAction() {
 		return lastAction;
 	}
 
-	/**
-	 * @uml.property name="r"
-	 */
 	public double getR() {
 		return r;
 	}
 
-	/**
-	 * @uml.property name="s1"
-	 */
 	public double getS1() {
 		return s1;
 	}

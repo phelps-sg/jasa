@@ -52,8 +52,6 @@ public abstract class AuctionImpl extends Observable implements Auction,
 
 	/**
 	 * The name of this auction.
-	 * 
-	 * @uml.property name="name"
 	 */
 	protected String name;
 
@@ -64,41 +62,25 @@ public abstract class AuctionImpl extends Observable implements Auction,
 
 	/**
 	 * A unique id for this auction. It's main use is in debugging.
-	 * 
-	 * @uml.property name="id"
 	 */
 	protected long id;
 
 	/**
 	 * Flag indicating whether the auction is currently closed.
-	 * 
-	 * @uml.property name="closed"
 	 */
 	protected boolean closed;
 
 	/**
 	 * The plugable auction rules to use for this auction, e.g.
 	 * AscendingAuctioneer.
-	 * 
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
 	 */
 	protected Auctioneer auctioneer = null;
 
 	/**
 	 * The optional MarketDataLogger to log data to.
-	 * 
-	 * @uml.property name="report"
-	 * @uml.associationEnd
 	 */
 	protected AuctionReport report = null;
-
-	/**
-	 * @uml.property name="eventListeners"
-	 * @uml.associationEnd multiplicity="(0 -1)" ordering="true"
-	 *                     elementType="uk.ac.liv.auction.event.AuctionEventListener"
-	 *                     qualifier="eventClass:java.lang.Class java.util.List"
-	 */
+	
 	protected HashMap eventListeners = new HashMap();
 
 	private static final Class[] allEvents = { RoundClosedEvent.class,
@@ -130,17 +112,11 @@ public abstract class AuctionImpl extends Observable implements Auction,
 		eventListeners.clear();
 	}
 
-	/**
-	 * @uml.property name="auctioneer"
-	 */
 	public void setAuctioneer(Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
 		auctioneer.setAuction(this);
 	}
 
-	/**
-	 * @uml.property name="auctioneer"
-	 */
 	public Auctioneer getAuctioneer() {
 		return auctioneer;
 	}
@@ -156,9 +132,6 @@ public abstract class AuctionImpl extends Observable implements Auction,
 		closed = true;
 	}
 
-	/**
-	 * @uml.property name="lastShout"
-	 */
 	public Shout getLastShout() throws ShoutsNotVisibleException {
 		// if ( !auctioneer.shoutsVisible() ) {
 		// throw new ShoutsNotVisibleException();
@@ -169,8 +142,6 @@ public abstract class AuctionImpl extends Observable implements Auction,
 
 	/**
 	 * Assign a data logger
-	 * 
-	 * @uml.property name="report"
 	 */
 	public void setReport(AuctionReport logger) {
 		this.report = logger;
@@ -180,8 +151,6 @@ public abstract class AuctionImpl extends Observable implements Auction,
 
 	/**
 	 * Get the current data logger
-	 * 
-	 * @uml.property name="report"
 	 */
 	public AuctionReport getReport() {
 		return report;
@@ -189,10 +158,6 @@ public abstract class AuctionImpl extends Observable implements Auction,
 
 	/**
 	 * Change the name of this auction.
-	 * 
-	 * @param name
-	 *          The new name of the auction.
-	 * @uml.property name="name"
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -202,16 +167,10 @@ public abstract class AuctionImpl extends Observable implements Auction,
 		return auctioneer.getQuote();
 	}
 
-	/**
-	 * @uml.property name="name"
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @uml.property name="id"
-	 */
 	public long getId() {
 		return id;
 	}

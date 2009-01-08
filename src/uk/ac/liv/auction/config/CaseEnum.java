@@ -29,9 +29,6 @@ import ec.util.Parameter;
  */
 public abstract class CaseEnum implements Parameterizable {
 
-	/**
-	 * @uml.property name="name"
-	 */
 	private String name;
 
 	public CaseEnum() {
@@ -42,7 +39,6 @@ public abstract class CaseEnum implements Parameterizable {
 
 	/**
 	 * @return Returns the name.
-	 * @uml.property name="name"
 	 */
 	public String getName() {
 		return name;
@@ -51,7 +47,6 @@ public abstract class CaseEnum implements Parameterizable {
 	/**
 	 * @param name
 	 *          The name to set.
-	 * @uml.property name="name"
 	 */
 	public void setName(String name) {
 		this.name = name;

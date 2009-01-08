@@ -23,9 +23,6 @@ package uk.ac.liv.util;
  */
 public class MutableDoubleWrapper {
 
-	/**
-	 * @uml.property name="value"
-	 */
 	public double value;
 
 	public MutableDoubleWrapper() {

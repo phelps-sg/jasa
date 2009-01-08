@@ -72,9 +72,6 @@ public class RandomClearingDoubleAuctioneer extends TransparentAuctioneer
 
 	Uniform uniformDistribution;
 
-	/**
-	 * @uml.property name="threshold"
-	 */
 	private double threshold = 0.5;
 
 	public static final String P_THRESHOLD = "threshold";

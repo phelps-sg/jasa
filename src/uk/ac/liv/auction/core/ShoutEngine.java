@@ -48,40 +48,26 @@ public interface ShoutEngine extends uk.ac.liv.util.Resetable {
 	 * Note that the engine's set of matched shouts will become empty as a result
 	 * of invoking this method.
 	 * </p>
-	 * 
-	 * @uml.property name="matchedShouts"
 	 */
 	public List getMatchedShouts();
 
 	/**
 	 * Get the highest unmatched bid in the auction.
-	 * 
-	 * @uml.property name="highestUnmatchedBid"
-	 * @uml.associationEnd
 	 */
 	public Shout getHighestUnmatchedBid();
 
 	/**
 	 * Get the lowest matched bid in the auction.
-	 * 
-	 * @uml.property name="lowestMatchedBid"
-	 * @uml.associationEnd
 	 */
 	public Shout getLowestMatchedBid();
 
 	/**
 	 * Get the lowest unmatched ask.
-	 * 
-	 * @uml.property name="lowestUnmatchedAsk"
-	 * @uml.associationEnd
 	 */
 	public Shout getLowestUnmatchedAsk();
 
 	/**
 	 * Get the highest matched ask.
-	 * 
-	 * @uml.property name="highestMatchedAsk"
-	 * @uml.associationEnd
 	 */
 	public Shout getHighestMatchedAsk();
 

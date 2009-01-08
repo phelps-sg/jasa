@@ -27,9 +27,6 @@ package uk.ac.liv.util;
 
 public class UntypedDouble extends UntypedNumber {
 
-	/**
-	 * @uml.property name="primitiveValue"
-	 */
 	double primitiveValue;
 
 	public UntypedDouble() {

@@ -29,16 +29,12 @@ public class MarketQuote implements Serializable {
 	/**
 	 * The current ask-quote. Buyers need to beat this in order for their offers
 	 * to get matched.
-	 * 
-	 * @uml.property name="ask"
 	 */
 	protected double ask;
 
 	/**
 	 * The current bid-quote. Sellers need to ask less than this in order for
 	 * their offers to get matched.
-	 * 
-	 * @uml.property name="bid"
 	 */
 	protected double bid;
 
@@ -60,30 +56,18 @@ public class MarketQuote implements Serializable {
 		}
 	}
 
-	/**
-	 * @uml.property name="ask"
-	 */
 	public void setAsk(double ask) {
 		this.ask = ask;
 	}
 
-	/**
-	 * @uml.property name="bid"
-	 */
 	public void setBid(double bid) {
 		this.bid = bid;
 	}
 
-	/**
-	 * @uml.property name="ask"
-	 */
 	public double getAsk() {
 		return ask;
 	}
-
-	/**
-	 * @uml.property name="bid"
-	 */
+	
 	public double getBid() {
 		return bid;
 	}

@@ -27,10 +27,6 @@ import uk.ac.liv.auction.core.Auction;
  */
 public class AgentPolledEvent extends AuctionEvent {
 
-	/**
-	 * @uml.property name="agent"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected TradingAgent agent;
 
 	public AgentPolledEvent(Auction auction, int time, TradingAgent agent) {
@@ -38,9 +34,6 @@ public class AgentPolledEvent extends AuctionEvent {
 		this.agent = agent;
 	}
 
-	/**
-	 * @uml.property name="agent"
-	 */
 	public TradingAgent getAgent() {
 		return agent;
 	}

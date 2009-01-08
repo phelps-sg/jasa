@@ -41,29 +41,19 @@ public class WidrowHoffLearner extends AbstractLearner implements
 
 	/**
 	 * The learning rate.
-	 * 
-	 * @uml.property name="learningRate"
 	 */
 	protected double learningRate;
 
 	/**
 	 * The current output level.
-	 * 
-	 * @uml.property name="currentOutput"
 	 */
 	protected double currentOutput;
 
 	/**
 	 * The current amount of adjustment to the output.
-	 * 
-	 * @uml.property name="delta"
 	 */
 	protected double delta;
 
-	/**
-	 * @uml.property name="randomParamDistribution"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected AbstractContinousDistribution randomParamDistribution = new Uniform(
 	    0.1, 0.4, GlobalPRNG.getInstance());
 
@@ -127,16 +117,10 @@ public class WidrowHoffLearner extends AbstractLearner implements
 		initialise();
 	}
 
-	/**
-	 * @uml.property name="learningRate"
-	 */
 	public void setLearningRate(double learningRate) {
 		this.learningRate = learningRate;
 	}
 
-	/**
-	 * @uml.property name="learningRate"
-	 */
 	public double getLearningRate() {
 		return learningRate;
 	}
@@ -144,17 +128,11 @@ public class WidrowHoffLearner extends AbstractLearner implements
 	public void randomInitialise() {
 		learningRate = randomParamDistribution.nextDouble();
 	}
-
-	/**
-	 * @uml.property name="currentOutput"
-	 */
+	
 	public double getCurrentOutput() {
 		return currentOutput;
 	}
-
-	/**
-	 * @uml.property name="delta"
-	 */
+	
 	public double getDelta() {
 		return delta;
 	}

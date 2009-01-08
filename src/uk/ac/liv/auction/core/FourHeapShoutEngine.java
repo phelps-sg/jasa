@@ -50,37 +50,21 @@ public class FourHeapShoutEngine implements ShoutEngine, Serializable {
 
 	/**
 	 * Matched bids in ascending order
-	 * 
-	 * @uml.property name="bIn"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
 	 */
 	protected PriorityBuffer bIn = new PriorityBuffer(greaterThan);
 
 	/**
 	 * Unmatched bids in descending order
-	 * 
-	 * @uml.property name="bOut"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
 	 */
 	protected PriorityBuffer bOut = new PriorityBuffer(lessThan);
 
 	/**
 	 * Matched asks in descending order
-	 * 
-	 * @uml.property name="sIn"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
 	 */
 	protected PriorityBuffer sIn = new PriorityBuffer(lessThan);
 
 	/**
 	 * Unmatched asks in ascending order
-	 * 
-	 * @uml.property name="sOut"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
 	 */
 	protected PriorityBuffer sOut = new PriorityBuffer(greaterThan);
 

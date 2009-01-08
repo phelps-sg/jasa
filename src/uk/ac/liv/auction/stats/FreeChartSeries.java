@@ -31,28 +31,14 @@ public class FreeChartSeries extends FreeChartItem {
 
 	static Logger logger = Logger.getLogger(FreeChartSeries.class);
 
-	/**
-	 * @uml.property name="series"
-	 * @uml.associationEnd
-	 */
 	protected Series series;
 
-	/**
-	 * @uml.property name="dataset"
-	 * @uml.associationEnd
-	 */
 	protected XYDataset dataset;
 
-	/**
-	 * @uml.property name="series"
-	 */
 	public Series getSeries() {
 		return series;
 	}
 
-	/**
-	 * @uml.property name="dataset"
-	 */
 	public XYDataset getDataset() {
 		return dataset;
 	}

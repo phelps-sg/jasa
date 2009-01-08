@@ -57,16 +57,11 @@ public interface Auctioneer extends QuoteProvider, AuctionEventListener {
 
 	/**
 	 * Specify which auction we are the auctioneer for.
-	 * 
-	 * @uml.property name="auction"
 	 */
 	public void setAuction(Auction auction);
 
 	/**
 	 * Find out which auction we are the auctioneer for.
-	 * 
-	 * @uml.property name="auction"
-	 * @uml.associationEnd inverse="auctioneer:uk.ac.liv.auction.core.Auction"
 	 */
 	public Auction getAuction();
 

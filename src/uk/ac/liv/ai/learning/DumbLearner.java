@@ -33,9 +33,6 @@ import java.io.Serializable;
 public class DumbLearner extends AbstractLearner implements DiscreteLearner,
     Parameterizable, Serializable {
 
-	/**
-	 * @uml.property name="action"
-	 */
 	protected int action;
 
 	static final String P_ACTION = "action";
@@ -48,16 +45,10 @@ public class DumbLearner extends AbstractLearner implements DiscreteLearner,
 		action = parameters.getInt(base.push(P_ACTION), null, 0);
 	}
 
-	/**
-	 * @uml.property name="action"
-	 */
 	public void setAction(int action) {
 		this.action = action;
 	}
 
-	/**
-	 * @uml.property name="action"
-	 */
 	public int getAction() {
 		return action;
 	}

@@ -31,22 +31,11 @@ import java.io.Serializable;
 
 public class MetaLearner extends AbstractLearner implements
     StimuliResponseLearner, Parameterizable, Serializable {
-
-	/**
-	 * @uml.property name="currentLearner"
-	 */
+	
 	protected int currentLearner;
-
-	/**
-	 * @uml.property name="subLearners"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
+	
 	protected StimuliResponseLearner[] subLearners;
-
-	/**
-	 * @uml.property name="masterLearner"
-	 * @uml.associationEnd
-	 */
+	
 	protected StimuliResponseLearner masterLearner;
 
 	static final String P_N = "n";

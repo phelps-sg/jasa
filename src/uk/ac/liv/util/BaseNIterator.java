@@ -29,24 +29,12 @@ import java.util.Iterator;
 
 public class BaseNIterator implements Iterator {
 
-	/**
-	 * @uml.property name="currentNumber"
-	 */
 	protected int currentNumber = 0;
 
-	/**
-	 * @uml.property name="base"
-	 */
 	protected int base;
 
-	/**
-	 * @uml.property name="numDigits"
-	 */
 	protected int numDigits;
 
-	/**
-	 * @uml.property name="maximumNumber"
-	 */
 	protected int maximumNumber;
 
 	public BaseNIterator(int base, int numDigits) {

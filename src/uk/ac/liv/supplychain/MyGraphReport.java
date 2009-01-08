@@ -14,24 +14,14 @@ public class MyGraphReport extends uk.ac.liv.auction.stats.GraphReport {
 
 	/**
 	 * output for the ask component of market quotes as time series.
-	 * 
-	 * @uml.property name="askQuoteLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter[] myAskQuoteLog = null;
 
 	/**
 	 * output for the bid component of market quotes as time series.
-	 * 
-	 * @uml.property name="bidQuoteLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected DataWriter[] myBidQuoteLog = null;
 
-	/**
-	 * @uml.property name="transPriceLog"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	protected DataWriter[] myTransPriceLog = null;
 
 	public MyGraphReport() {

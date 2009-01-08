@@ -44,18 +44,11 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 
 	/**
 	 * The auction state after forced direct revelation.
-	 * 
-	 * @uml.property name="shoutEngine"
-	 * @uml.associationEnd multiplicity="(1 1)"
 	 */
 	protected FourHeapShoutEngine shoutEngine = new FourHeapShoutEngine();
 
 	/**
 	 * The truthful shouts of all traders in the auction.
-	 * 
-	 * @uml.property name="shouts"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 *                     elementType="uk.ac.liv.auction.core.Shout"
 	 */
 	protected ArrayList shouts;
 
@@ -70,9 +63,6 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 		this(null);
 	}
 
-	/**
-	 * @uml.property name="auction"
-	 */
 	public void setAuction(RandomRobinAuction auction) {
 		this.auction = auction;
 	}

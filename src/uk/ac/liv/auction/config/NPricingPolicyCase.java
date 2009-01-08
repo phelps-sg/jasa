@@ -28,9 +28,6 @@ import ec.util.ParameterDatabase;
  */
 public class NPricingPolicyCase implements ParameterBasedCase {
 
-	/**
-	 * @uml.property name="n"
-	 */
 	private int n;
 
 	public NPricingPolicyCase() {

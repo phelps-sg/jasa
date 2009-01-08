@@ -56,9 +56,6 @@ public abstract class PRNGFactory {
 
 	public abstract RandomEngine create(long seed);
 
-	/**
-	 * @uml.property name="description"
-	 */
 	public abstract String getDescription();
 
 }

@@ -78,22 +78,10 @@ public abstract class FreeChartGraph extends JPanel implements
 
 	public static final String P_HEIGHT = "height";
 
-	/**
-	 * @uml.property name="report"
-	 * @uml.associationEnd inverse="graphs:uk.ac.liv.auction.stats.FreeChartReport"
-	 */
 	private FreeChartReport report;
 
-	/**
-	 * @uml.property name="jfreechart"
-	 * @uml.associationEnd
-	 */
 	private JFreeChart jfreechart;
 
-	/**
-	 * @uml.property name="chartPanel"
-	 * @uml.associationEnd
-	 */
 	private ChartPanel chartPanel;
 
 	public FreeChartGraph() {
@@ -146,7 +134,6 @@ public abstract class FreeChartGraph extends JPanel implements
 
 	/**
 	 * @return Returns the report.
-	 * @uml.property name="report"
 	 */
 	public FreeChartReport getReport() {
 		return report;
@@ -155,7 +142,6 @@ public abstract class FreeChartGraph extends JPanel implements
 	/**
 	 * @param report
 	 *          The report to set.
-	 * @uml.property name="report"
 	 */
 	public void setReport(FreeChartReport report) {
 		this.report = report;
