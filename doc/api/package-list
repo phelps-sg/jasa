@@ -1,0 +1,15 @@
+uk.ac.liv.ai.learning
+uk.ac.liv.auction
+uk.ac.liv.auction.agent
+uk.ac.liv.auction.config
+uk.ac.liv.auction.config.schedule
+uk.ac.liv.auction.config.strategy
+uk.ac.liv.auction.core
+uk.ac.liv.auction.electricity
+uk.ac.liv.auction.event
+uk.ac.liv.auction.stats
+uk.ac.liv.auction.ui
+uk.ac.liv.auction.zi
+uk.ac.liv.prng
+uk.ac.liv.util
+uk.ac.liv.util.io

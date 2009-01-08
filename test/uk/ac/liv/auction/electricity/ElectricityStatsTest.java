@@ -69,7 +69,7 @@ public class ElectricityStatsTest extends ElectricityTest {
 
 	public ElectricityStatsTest(String name) {
 		super(name);
-		org.apache.log4j.BasicConfigurator.configure();
+//		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public void checkSMP() {

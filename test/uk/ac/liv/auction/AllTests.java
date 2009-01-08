@@ -17,13 +17,13 @@ package uk.ac.liv.auction;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import junit.swingui.TestRunner;
+import junit.textui.TestRunner;
 
 public class AllTests {
 
 	public static void main(String[] args) {
-		org.apache.log4j.BasicConfigurator.configure();
-		TestRunner.run(AllTests.class);
+//		org.apache.log4j.BasicConfigurator.configure();
+		TestRunner.run(suite());
 	}
 
 	public static Test suite() {

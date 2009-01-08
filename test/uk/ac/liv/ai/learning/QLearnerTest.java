@@ -61,7 +61,7 @@ public class QLearnerTest extends TestCase {
 		learner1 = new QLearner(1, NUM_ACTIONS, EPSILON, LEARNING_RATE,
 		    DISCOUNT_RATE);
 		score = 0;
-		org.apache.log4j.BasicConfigurator.configure();
+//		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public void testBestAction() {

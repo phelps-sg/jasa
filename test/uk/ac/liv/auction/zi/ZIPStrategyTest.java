@@ -85,7 +85,7 @@ public class ZIPStrategyTest extends TestCase {
 
 	public ZIPStrategyTest(String name) {
 		super(name);
-		org.apache.log4j.BasicConfigurator.configure();
+//		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public void setUp() {

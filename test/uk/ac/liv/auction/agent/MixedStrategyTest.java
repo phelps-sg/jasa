@@ -58,7 +58,7 @@ public class MixedStrategyTest extends TestCase {
 
 	public MixedStrategyTest(String name) {
 		super(name);
-		org.apache.log4j.BasicConfigurator.configure();
+//		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public void setUp() {

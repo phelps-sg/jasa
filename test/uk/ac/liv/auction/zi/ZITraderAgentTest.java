@@ -64,7 +64,7 @@ public class ZITraderAgentTest extends TestCase {
 
 	public ZITraderAgentTest(String name) {
 		super(name);
-		org.apache.log4j.BasicConfigurator.configure();
+//		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public void setUp() {

@@ -59,7 +59,7 @@ public class FourHeapTest extends TestCase {
 		shoutEngine = new TestShoutEngine();
 		testTrader = new MockTrader(this, 0, 0);
 		randGenerator = new Random();
-		org.apache.log4j.BasicConfigurator.configure();
+//		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public Shout randomShout() {
