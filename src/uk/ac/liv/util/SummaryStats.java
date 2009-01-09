@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A utility class for cumulative tracking of stats for a series of doubles.
+ * A utility class for cumulative tracking of stats for a set of doubles.
  * Moments are incremented dynamically, rather than keeping the actual cases in
  * memory.
  * </p>
@@ -52,7 +52,7 @@ public class SummaryStats implements Serializable, Cloneable,
 	protected SummaryStatistics stats;
 	
 	/**
-	 * The name of this series.
+	 * The name of this data set.
 	 */
 	protected String varName;
 
@@ -72,14 +72,14 @@ public class SummaryStats implements Serializable, Cloneable,
 	}
 
 	/**
-	 * Add a new datum to the series.
+	 * Add a new datum to the set.
 	 */
 	public void newData(double i) {
 		stats.addValue(i);
 	}
 
 	/**
-	 * Get the number of items in the series.
+	 * Get the number of items in the set.
 	 */
 	public int getN() {
 		return (int) stats.getN();
@@ -91,9 +91,6 @@ public class SummaryStats implements Serializable, Cloneable,
 	public double getMean() {
 		return stats.getMean();
 	}
-
-
-	
 
 	/**
 	 * Get the variance about the mean.
