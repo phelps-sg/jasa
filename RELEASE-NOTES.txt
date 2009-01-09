@@ -1,0 +1,54 @@
+
+  Change log for JASA 0.36 - 9th January 2009
+  
+Changes since release 0.35:
+  
+New features
+------------
+
+A new package for simulation supply chains (uk.ac.liv.supplychain) 
+has been contributed by  Thierry Moyaux (Thierry.Moyaux@insa-lyon.fr ).
+
+Libraries
+---------
+
+Upgraded to the following versions of third-party libraries:
+
+Repast: version 3.1
+ECJ: version 18
+GNU Trove: version 2.0.4
+JFreeChart: version 1.0.12
+
+JASA now links with the Apache commons math library version 1.2.
+
+Refactoring
+-----------
+
+The class uk.ac.liv.util.CummulativeDistribution has been renamed 
+to uk.ac.liv.util.SummaryStats and is now a wrapper for the class
+SummaryStatistics from the apache commons-math package.
+
+The distribution now contains Eclipse .project and .classpath files,
+allowing the project archive to be imported into directly into the 
+Eclipse IDE as an Eclipse project. 
+
+The lib/ directory now only contains binary .jar files, and these have
+been added to the CVS tree.
+
+Bug fixes
+---------
+
+Fixed [1614071] - RandomRobinAuction.clear() transfers from buyers to sellers
+Fixed [1257528] - StatelessQLearner ignores learningRate parameter
+Fixed [1312859] - KaplanStrategy.smallSpread() broken
+Fixed [1068619] - ZIPExperiment is unable to replicate original results
+Fixed [1435981] - day incremented before EndofDayEvent
+Fixed [1429062] - Agents in agent display have incorrect coordinates
+Fixed [1429100] - the agent display surface does not display all agents
+Fixed [1429037] - Supply and demand graphs do not tail off correctly
+Fixed [1352562] - Reported supp/dem graph shows inactive traders
+
+For more information see http://sourceforge.net/tracker/?group_id=47257&atid=448925
+
+
+

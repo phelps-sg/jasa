@@ -45,11 +45,15 @@ Contents
 </LI>
 
 <LI>
-  <A href="#running">Running the examples</A>
+  <A href="#eclipseinst">Running JASA using Eclipse</A>
 </LI>
 
 <LI>
-  <A href="#compiling">Compiling the code</A>
+  <A href="#antinst">Running JASA using Apache Ant</A>
+</LI>
+
+<LI>
+  <A href="#parameterfiles">Parameter files</A>
 </LI>
 
 <LI>
@@ -123,7 +127,7 @@ Development Status
 <p>
 This package is currently at alpha.  This code is not stable or fully tested.
 Please report any bugs, issues or suggestions to <A
-href="mailto:sphelps@csc.liv.ac.uk">Steve Phelps</A>.  
+href="mailto:sphelps@gmail.com">Steve Phelps</A>.  
 </p>
 
 <A name="license"></A>
@@ -182,19 +186,23 @@ are available under open-source licenses:
 
 
 <li>
-<a href="http://cs.gmu.edu/~eclab/projects/ecj/">ECJ</a> version 12
+<a href="http://cs.gmu.edu/~eclab/projects/ecj/">ECJ</a> version 18
 </li>
 
 <li>
-<a href="http://repast.sourceforge.net">RePast</a> version 3.0
+<a href="http://repast.sourceforge.net">RePast</a> version 3.1
 </li>
 
 <li>
-<a href="http://jakarta.apache.org/commons/collections/">Commons Collections</a> version 3.1
+<a href="http://jakarta.apache.org/commons/collections/">Commons Collections</a> version 3.2
 </li>
 
 <li>
-<a href="http://trove4j.sourceforge.net/">GNU Trove</a> version 1.1b3
+<a href="http://commons.apache.org/math/">The Apache Commons Mathematics Library</a> version 1.2
+</li>
+
+<li>
+<a href="http://trove4j.sourceforge.net/">GNU Trove</a> version 2.0.4
 </li>
 
 
@@ -204,6 +212,62 @@ Installation
 </h3>
 
 <p>
+JASA can be run either using either 
+<a href="#apacheinst">Apache Ant</a> or the Java
+<a href="#eclipseinst">Eclipse IDE</a>.
+</p>
+
+<h3><a name="eclipseinst">
+Running JASA using the Eclipse IDE
+</h3>
+
+<li>
+<p>
+See the <a href="http://www.eclipse.org">Eclipse Web site</a> for instructions on installing and configuring Eclipse.
+</p>
+</li>
+
+<li>
+<p>
+Select the 'Import' option from the 'File' menu and choose 
+'Existing projects into Workspace' from the 'General' category.  
+Choose the 'select archive file' option and then browse to the location 
+where you downloaded the distribution .tar.gz file (eg 'jasa-0.36.tar.gz').
+</p>
+</li>
+
+<li>
+<p>
+JASA has two main classes: <code>uk.ac.liv.auction.RepastMarketSimulation</code> and
+<code>uk.ac.liv.auction.MarketSimulation</code>.  The former
+can be used to run experiments interactively with visualisation provided 
+by <a href="http://repast.sourceforge.net">Repast</a>, whereas the latter can be used 
+to run a series of experiments in batch-mode.  Both applications take a single argument specifying 
+the <a href="#parameterfiles">parameters</a> to use for each experiment.  The distribution ships with several
+example parameter files in the 'examples' directory.  To run the experiment for example2:
+</p>
+</li>
+
+<li>
+Open the run configuration dialog in Eclipse using the 'Run/Run Configurations..' menu; 
+</li>
+
+<li>
+Create
+a new 'java application' configuration and specify <code>uk.ac.liv.auction.RepastMarketSimulation</code>
+as the main class;
+</li>
+
+<li>
+Specify 
+<code>examples/example2.params</code> for the program arguments in the Arguments tab.
+</li> 
+
+<h3> <a name="apacheinst">
+Running JASA using Apache Ant
+</h4> 
+
+<p>
 <li>
 Simply unpack the distribution into a directory.
 The instructions refer to this directory as <code>JASADIR</code> from here on.
@@ -211,9 +275,9 @@ The instructions refer to this directory as <code>JASADIR</code> from here on.
 </p>
 
 <A name="compiling"></A>
-<h3>
+<h4>
 Compiling the code
-</h3>
+</h4>
 
 <p>
 JASA ships with a <code>build.xml</code> file that can be used with <a
@@ -225,12 +289,12 @@ specified by creating a file <code>build.ant.properties</code>.
 </p>
 
 <A name="running"></A>
-<h3>
+<h4>
 Running the examples
-</h3>
+</h4>
 
 <p>
-The <code>examples/</code> directory contains several parameter files
+The <code>examples/</code> directory contains several <a href="#parameterfiles">parameter files</a>
 for different example experiments.
 These can be executed using <a href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> by specifying the target <code>run</code>, and defining a property <code>params</code> specifying the parameter file you want to use for the simulation;
  e.g. <code>cd</code> into the directory <code>JASADIR</code> and execute the following command:
@@ -261,6 +325,16 @@ The <code>-server</code> option tells the JVM to use the server version of the
 just-in-time (JIT) compiler, which will perform many more optimizations than
 the standard JIT. 
  </p>
+ 
+<A name="parameterfiles"</A>
+<h3>
+Parameter files
+</h3>
+
+<p>
+JASA uses the same framework as <a href="http://www.cs.gmu.edu/~eclab/projects/ecj/">ECJ</a> for configuring experiments.  See ECJ's
+<a href="http://www.cs.gmu.edu/~eclab/projects/ecj/docs/parameters.html">primer</a> on parameter files.
+</p>
 
 <A name="acknowledgements"></A>
 <h3>
@@ -272,7 +346,7 @@ Additional contributors: Jinzhong Niu and Marek Marcinkiewicz.
 </p>
 
 <p>
-This work is currently supported by EPSRC grant GR/T10671/01 - "Market Based
+This work has been supported by EPSRC grant GR/T10671/01 - "Market Based
 Control of Complex Computational Systems." and NSF grant number IIS-9820657 -
 "Tools and Techniques for Automated Mechanism Design". It was originally
 supported by the EU IST Programme through the SLIE project.  
@@ -299,7 +373,7 @@ This product includes software developed by the Apache Software Foundation <a hr
 <hr>
 
 <p>
-(C) 2005 <a href="http://www.csc.liv.ac.uk/~sphelps">Steve Phelps</a>
+(C) 2009 <a href="http://www.essex.ac.uk/ccfea/Centre/people/staff/sphelps.htm">Steve Phelps</a>
 </p>
 
 </body>
