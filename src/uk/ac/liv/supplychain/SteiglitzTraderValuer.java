@@ -61,7 +61,7 @@ public class SteiglitzTraderValuer implements ValuationPolicy, Serializable {
 	 * @see uk.ac.liv.auction.agent.ValuationPolicy#determineValue(uk.ac.liv.auction.core.Auction)
 	 */
 	public double determineValue(Auction auction) {
-		Auction[] agentAuctions = ((SupplyChainAgent) agent).getAuction();
+//		Auction[] agentAuctions = ((SupplyChainAgent) agent).getAuction();
 		int auctionIdx = (int) ((SupplyChainRandomRobinAuction) auction).getId();
 
 		double f = 0; // food

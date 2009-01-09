@@ -7,9 +7,11 @@ import java.io.Serializable;
 
 import uk.ac.liv.auction.agent.AbstractTradingAgent;
 import uk.ac.liv.auction.agent.FixedQuantityStrategyImpl;
+
 import uk.ac.liv.auction.core.Auction;
-import uk.ac.liv.auction.core.RoundRobinAuction;
+import uk.ac.liv.auction.core.RandomRobinAuction;
 import uk.ac.liv.auction.core.Shout;
+
 import uk.ac.liv.auction.stats.EquilibriumReport;
 
 /**
@@ -40,7 +42,7 @@ public class SpeculatorStrategyAVG extends FixedQuantityStrategyImpl implements
 		// retrieve current equilibrium price (taken from
 		// uk.ac.liv.auction.agent.EquilibriumPriceStrategy)
 		EquilibriumReport eqReport = new EquilibriumReport(
-		    (RoundRobinAuction) auction);
+		    (RandomRobinAuction) auction);
 		eqReport.calculate();
 		double currentPrice = eqReport.calculateMidEquilibriumPrice();
 
@@ -79,7 +81,7 @@ public class SpeculatorStrategyAVG extends FixedQuantityStrategyImpl implements
 		// update forecasted equilibrium price (taken from
 		// uk.ac.liv.auction.agent.EquilibriumPriceStrategy)
 		EquilibriumReport eqReport = new EquilibriumReport(
-		    (RoundRobinAuction) auction);
+		    (RandomRobinAuction) auction);
 		eqReport.calculate();
 		previousPrice = eqReport.calculateMidEquilibriumPrice();
 	}

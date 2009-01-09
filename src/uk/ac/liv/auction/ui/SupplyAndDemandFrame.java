@@ -169,7 +169,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 			double lastX = curve.getXCoord(l);
 			double lastY = curve.getYCoord(l);
 			if (lastX < maxX) {
-				graph.addPoint(seriesIndex, maxX, curve.getYCoord(l), true);
+				graph.addPoint(seriesIndex, maxX, lastY, true);
 			}
 		}
 	}

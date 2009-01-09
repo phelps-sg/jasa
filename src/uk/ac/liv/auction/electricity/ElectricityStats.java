@@ -293,8 +293,6 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 	/**
 	 * Get the strategic buyer market-power calculation.
-	 * 
-	 * @uml.property name="sMPB"
 	 */
 	public double getSMPB() {
 		return sMPB;
@@ -302,8 +300,6 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 	/**
 	 * Get the strategic seller market-power calculation.
-	 * 
-	 * @uml.property name="sMPS"
 	 */
 	public double getSMPS() {
 		return sMPS;
@@ -311,8 +307,6 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 	/**
 	 * Get the truthful seller profits calculation.
-	 * 
-	 * @uml.property name="pST"
 	 */
 	public double getPST() {
 		return pST;
@@ -320,8 +314,6 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 	/**
 	 * Get the truthful buyer profits calculation.
-	 * 
-	 * @uml.property name="pBT"
 	 */
 	public double getPBT() {
 		return pBT;

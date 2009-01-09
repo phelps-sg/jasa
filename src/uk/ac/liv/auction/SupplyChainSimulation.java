@@ -263,8 +263,8 @@ public class SupplyChainSimulation implements Serializable, Runnable {
 			auction[a].setup(parameters, typeParamT);
 
 			// TODO: auctionName seems to be useless
-			String auctionName = parameters.getStringWithDefault(base
-			    .push(P_AUCTION_NAME), null, "Auction " + (auction[a]).getId());
+//			String auctionName = parameters.getStringWithDefault(base
+//			    .push(P_AUCTION_NAME), null, "Auction " + (auction[a]).getId());
 		}// for
 
 		iterations = parameters.getIntWithDefault(base.push(P_ITERATIONS), null,

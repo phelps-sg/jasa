@@ -6,7 +6,7 @@ import uchicago.src.sim.engine.Schedule;
 import uchicago.src.sim.engine.SimInit;
 import uchicago.src.sim.gui.DisplaySurface;
 import uchicago.src.sim.gui.Network2DDisplay;
-import uchicago.src.sim.gui.RectNetworkItem;
+
 import uchicago.src.sim.util.Random;
 import uk.ac.liv.auction.RepastMarketSimulation;
 import uk.ac.liv.auction.core.RandomRobinAuction;
@@ -74,9 +74,9 @@ public class SingleMarket extends RepastMarketSimulation {
 		agentList.clear();
 		// create agents
 		for (int i = 0; i < numAgent; i++) {
-			int x = Random.uniform.nextIntFromTo(0, worldXSize - 1);
-			int y = Random.uniform.nextIntFromTo(0, worldYSize - 1);
-			RectNetworkItem drawable = new RectNetworkItem(x, y);
+//			int x = Random.uniform.nextIntFromTo(0, worldXSize - 1);
+//			int y = Random.uniform.nextIntFromTo(0, worldYSize - 1);
+//			RectNetworkItem drawable = new RectNetworkItem(x, y);
 			// Company company = new Company(worldXSize, worldYSize, drawable,
 			// this);
 			// company.setBorderColor(Color.red);

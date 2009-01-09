@@ -202,8 +202,8 @@ public class RepastSupplyChainSimulation extends SimModelImpl implements
 			auction[a].setup(parameters, typeParamT);
 			auction[a].initialiseTransactionPrice(auction[0].getMaximumRounds());
 
-			String auctionName = parameters.getStringWithDefault(base
-			    .push(P_AUCTION_NAME), null, "Auction " + (auction[a]).getId());
+//			String auctionName = parameters.getStringWithDefault(base
+//			    .push(P_AUCTION_NAME), null, "Auction " + (auction[a]).getId());
 		}// for
 
 		/*

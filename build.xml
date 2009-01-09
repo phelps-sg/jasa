@@ -85,8 +85,8 @@
 		</javac>
 	</target>
 
-	<target name="doc">
-		<javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}:${testDir}" windowtitle="${projectName}">
+	<target depends="prepareDoc" name="doc">
+		<javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}" windowtitle="${projectName}">
 			<classpath refid="project.classpath" />
 		</javadoc>
 	</target>

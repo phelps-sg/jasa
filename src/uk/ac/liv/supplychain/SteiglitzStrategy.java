@@ -59,14 +59,14 @@ public class SteiglitzStrategy extends FixedQuantityStrategyImpl implements
 		boolean toReturn = false;
 		SupplyChainAgent agent = (uk.ac.liv.supplychain.SupplyChainAgent) this
 		    .getAgent();
-		boolean isBuyer = agent.isBuyer(auction);
-		boolean isSeller = agent.isSeller(auction);
+//		boolean isBuyer = agent.isBuyer(auction);
+//		boolean isSeller = agent.isSeller(auction);
 		double previousPrice = ((SupplyChainRandomRobinAuction) auction)
 		    .getTransactionPrice(auction.getAge());
 		int auctionIdx = (int) ((SupplyChainRandomRobinAuction) auction).getId();
 		double valuation = agent.getValuation(auction);
-		SteiglitzTraderValuer valuer = (SteiglitzTraderValuer) agent
-		    .getValuationPolicy();
+//		SteiglitzTraderValuer valuer = (SteiglitzTraderValuer) agent
+//		    .getValuationPolicy();
 
 		shout.setAgent(agent);
 

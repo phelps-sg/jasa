@@ -173,7 +173,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	}
 
 	public void updateTransPriceLog(TransactionExecutedEvent event) {
-		Object o;
+//		Object o;
 		currentMemoryCell = (currentMemoryCell + 1) % memorySize;
 		if (memoryAsks[currentMemoryCell] > 0 || memoryBids[currentMemoryCell] > 0) {
 			removeNShouts(memoryAsks[currentMemoryCell], asks);

@@ -72,8 +72,6 @@ public class DrawableAgentAdaptor implements Drawable {
 	}
 
 	public void draw(SimGraphics g) {
-		int cellHeight = 5;
-		int cellWidth = 5;
 		float price = Math.abs(getLastShoutPrice() - getCurrentValuation());
 		if (price > DrawableAgentAdaptor.maxMarkup) {
 			DrawableAgentAdaptor.maxMarkup = price;

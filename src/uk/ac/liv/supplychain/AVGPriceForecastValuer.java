@@ -20,11 +20,14 @@ public class AVGPriceForecastValuer implements ValuationPolicy, Serializable {
 
 	private double forecastedPrice = 0;
 
-	private TradingAgent agent;
+	protected TradingAgent agent;
 
+	/**
+	 * @nowarn
+	 */
 	public double determineValue(Auction auction) {
-		Auction[] agentAuctions = ((SupplyChainAgent) agent).getAuction();
-		int auctionIdx = (int) ((SupplyChainRandomRobinAuction) auction).getId();
+//		Auction[] agentAuctions = ((SupplyChainAgent) agent).getAuction();
+//		int auctionIdx = (int) ((SupplyChainRandomRobinAuction) auction).getId();
 		return forecastedPrice;
 	}
 

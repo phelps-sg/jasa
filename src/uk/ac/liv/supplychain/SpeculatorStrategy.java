@@ -48,7 +48,7 @@ public class SpeculatorStrategy extends FixedQuantityStrategyImpl implements
 		boolean toReturn = super.modifyShout(shout);
 		double previousPrice = ((SupplyChainRandomRobinAuction) auction)
 		    .getTransactionPrice(auction.getAge());
-		int auctionIdx = (int) ((SupplyChainRandomRobinAuction) auction).getId();
+//		int auctionIdx = (int) ((SupplyChainRandomRobinAuction) auction).getId();
 		double valuation = agent.getValuation(auction);
 
 		/*
