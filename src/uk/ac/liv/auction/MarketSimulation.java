@@ -115,7 +115,7 @@ public class MarketSimulation implements Serializable, Runnable {
 	protected RandomRobinAuction auction;
 
 	/**
-	 * The number of repeatitions of this experiment to sample.
+	 * The number of repetitions of this experiment to sample.
 	 */
 	protected int iterations = 0;
 
