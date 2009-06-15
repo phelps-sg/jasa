@@ -27,15 +27,15 @@ import java.util.Stack;
  * @version $Revision$
  */
 
-public class Partitioner implements Iterator {
+public class Partitioner implements Iterator<int[]> {
 
-	protected Stack stack;
+	protected Stack<PartitionerState> stack;
 
-	protected HashSet visitedStates;
+	protected HashSet<PartitionerState> visitedStates;
 
 	public Partitioner(int n, int k) {
-		stack = new Stack();
-		visitedStates = new HashSet();
+		stack = new Stack<PartitionerState>();
+		visitedStates = new HashSet<PartitionerState>();
 		stack.push(new PartitionerState(new int[k], n));
 	}
 
@@ -43,7 +43,7 @@ public class Partitioner implements Iterator {
 		return !stack.isEmpty();
 	}
 
-	public Object next() {
+	public int[] next() {
 		return partition();
 	}
 
@@ -53,7 +53,7 @@ public class Partitioner implements Iterator {
 
 	protected int[] partition() {
 		while (!stack.isEmpty()) {
-			PartitionerState state = (PartitionerState) stack.pop();
+			PartitionerState state = stack.pop();
 			if (state.n == 0) {
 				return state.p;
 			}
