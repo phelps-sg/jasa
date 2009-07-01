@@ -5,16 +5,15 @@
 	<classpathentry kind="src" path="etc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry exported="true" kind="lib" path="lib/colt-repast.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-math-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.15.jar"/>
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.12.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j-1.2.8.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/ecj-18.jar"/>
 	<classpathentry kind="lib" path="lib/repastj-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/trove-repast.jar"/>
 	<classpathentry kind="lib" path="lib/ptplot-repast.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/trove-2.0.4.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jabs"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -53,7 +53,7 @@ simulation.iterations = 10
 
 # Write the results of each iteration to the following 
 #  comma-separated-variables (CSV) file
-simulation.writer = uk.ac.liv.util.io.CSVWriter
+simulation.writer = net.sourceforge.jasa.imagescore.sim.report.CSVWriter
 simulation.writer.filename = cda-10-1_1-x-x-10.csv
 
 # Use a random-robin auction which will randomise the order in which agents bid

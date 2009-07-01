@@ -1,0 +1,78 @@
+/*
+ * JASA Java Auction Simulator API
+ * Copyright (C) 2001-2009 Steve Phelps
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ */
+
+package net.sourceforge.jasa.agent.strategy;
+
+import java.io.Serializable;
+
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.market.Order;
+import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.report.EquilibriumReport;
+import net.sourceforge.jasa.sim.util.Prototypeable;
+
+/**
+ * A strategy which will bid at the true equilibrium price, if profitable, or
+ * bid truthfully otherwise. Although this is not a realistic strategy, it can
+ * be useful for testing and control experiments.
+ * 
+ * @author Steve Phelps
+ * @version $Revision$
+ */
+
+public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
+    implements Serializable, Prototypeable {
+
+	public EquilibriumPriceStrategy(AbstractTradingAgent agent, double price,
+	    int quantity) {
+		super(agent);
+
+		this.quantity = quantity;
+	}
+
+	public EquilibriumPriceStrategy() {
+		super(null);
+	}
+
+	public Object protoClone() {
+		Object clonedStrategy;
+		try {
+			clonedStrategy = this.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new Error(e);
+		}
+		return clonedStrategy;
+	}
+
+	public boolean modifyShout(Order.MutableShout shout) {
+		EquilibriumReport eqReport = new EquilibriumReport(
+		    (RandomRobinAuction) auction);
+		eqReport.calculate();
+		double price = eqReport.calculateMidEquilibriumPrice();
+		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)
+		    || agent.isSeller(auction) && price >= agent.getValuation(auction)) {
+			shout.setPrice(price);
+		} else {
+			shout.setPrice(agent.getValuation(auction));
+		}
+		return super.modifyShout(shout);
+	}
+
+	public void endOfRound(Market auction) {
+		// Do nothing
+	}
+
+}
