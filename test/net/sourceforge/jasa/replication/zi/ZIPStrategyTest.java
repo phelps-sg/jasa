@@ -19,10 +19,10 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import net.sourceforge.jasa.agent.TokenTradingAgent;
+import net.sourceforge.jasa.agent.strategy.ZIPStrategy;
 import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
-import net.sourceforge.jasa.replication.zi.ZIPStrategy;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.report.AuctionReport;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
@@ -39,13 +39,13 @@ public class ZIPStrategyTest extends TestCase {
 	 * @uml.property name="buyers"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	ZITraderAgent[] buyers;
+	TokenTradingAgent[] buyers;
 
 	/**
 	 * @uml.property name="sellers"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	ZITraderAgent[] sellers;
+	TokenTradingAgent[] sellers;
 
 	/**
 	 * @uml.property name="market"
@@ -100,8 +100,8 @@ public class ZIPStrategyTest extends TestCase {
 //		marketDataLogger = new PriceStatisticsReport();
 //		auction.setReport(marketDataLogger);
 		//TODO
-		buyers = new ZITraderAgent[NUM_BUYERS];
-		sellers = new ZITraderAgent[NUM_SELLERS];
+		buyers = new TokenTradingAgent[NUM_BUYERS];
+		sellers = new TokenTradingAgent[NUM_SELLERS];
 		registerTraders(buyers, false);
 		registerTraders(sellers, true);
 		EquilibriumReport eqStats = new EquilibriumReport(auction);
@@ -119,10 +119,10 @@ public class ZIPStrategyTest extends TestCase {
 		}
 	}
 
-	public void registerTraders(ZITraderAgent[] traders, boolean areSellers) {
+	public void registerTraders(TokenTradingAgent[] traders, boolean areSellers) {
 		double privValue = PRIV_VALUE_RANGE_MIN;
 		for (int i = 0; i < traders.length; i++) {
-			traders[i] = new ZITraderAgent(privValue, TRADE_ENTITLEMENT, areSellers);
+			traders[i] = new TokenTradingAgent(privValue, TRADE_ENTITLEMENT, areSellers);
 			ZIPStrategy strategy = new ZIPStrategy();
 			double learningRate = 0.1 + prng.nextDouble() * 0.4;
 			WidrowHoffLearner learner = new WidrowHoffLearner(learningRate);

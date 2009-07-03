@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
+import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
@@ -407,7 +408,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 		for (int i = 0; i < num; i++) {
 
-			ElectricityTrader trader = new ElectricityTrader(capacity, 0, 0,
+			FixedVolumeTradingAgent trader = new FixedVolumeTradingAgent(capacity, 0,
 			    areSellers);
 
 			FixedQuantityStrategy strategy = null;
@@ -419,7 +420,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 			((Resetable) strategy).reset();
 			trader.setStrategy(strategy);
 			strategy.setAgent(trader);
-			strategy.setQuantity(trader.getCapacity());
+			strategy.setQuantity(trader.getVolume());
 
 			// Register it in the market
 			auction.register(trader);
@@ -455,7 +456,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			ElectricityTrader t = (ElectricityTrader) i.next();
+			FixedVolumeTradingAgent t = (FixedVolumeTradingAgent) i.next();
 			TradingStrategy s = t.getStrategy();
 			if (s instanceof AdaptiveStrategy) {
 				Learner l = ((AdaptiveStrategy) s).getLearner();
@@ -535,7 +536,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 		if (collectStrategyData) {
 			Iterator i = auction.getTraderIterator();
 			while (i.hasNext()) {
-				ElectricityTrader t = (ElectricityTrader) i.next();
+				FixedVolumeTradingAgent t = (FixedVolumeTradingAgent) i.next();
 				TradingStrategy s = t.getStrategy();
 				if (s instanceof AdaptiveStrategy) {
 					Learner l = ((AdaptiveStrategy) s).getLearner();

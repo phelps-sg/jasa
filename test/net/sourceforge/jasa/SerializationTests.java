@@ -21,6 +21,8 @@ import java.io.ObjectOutputStream;
 
 import cern.jet.random.engine.MersenneTwister64;
 
+import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.RandomRobinAuction;
@@ -28,8 +30,6 @@ import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-import net.sourceforge.jasa.replication.electricity.ElectricityTrader;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
 
@@ -63,13 +63,13 @@ public class SerializationTests extends TestCase {
 		    .setPricingPolicy(new UniformPricingPolicy(0.5));
 		auction.setAuctioneer(auctioneer);
 
-		ZITraderAgent seller1 = new ZITraderAgent(10, 1, true);
+		TokenTradingAgent seller1 = new TokenTradingAgent(10, 1, true);
 		seller1.setStrategy(new TruthTellingStrategy(seller1));
 
-		ZITraderAgent buyer1 = new ZITraderAgent(5, 1, false);
+		TokenTradingAgent buyer1 = new TokenTradingAgent(5, 1, false);
 		buyer1.setStrategy(new TruthTellingStrategy(buyer1));
 
-		ElectricityTrader buyer2 = new ElectricityTrader(10, 5, 0, true);
+		FixedVolumeTradingAgent buyer2 = new FixedVolumeTradingAgent(10, 5, true);
 		buyer2.setStrategy(new TruthTellingStrategy(buyer2));
 
 		auction.register(buyer1);

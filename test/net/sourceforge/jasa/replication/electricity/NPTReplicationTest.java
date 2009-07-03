@@ -17,8 +17,8 @@ package net.sourceforge.jasa.replication.electricity;
 
 import java.util.Iterator;
 
+import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
-import net.sourceforge.jasa.replication.electricity.ElectricityTrader;
 import net.sourceforge.jasa.sim.ai.learning.RothErevLearnerTest;
 import net.sourceforge.jasa.sim.learning.NPTRothErevLearner;
 
@@ -85,7 +85,7 @@ public class NPTReplicationTest extends ElectricityTest {
 	public void checkRothErevProbabilities() {
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			ElectricityTrader t = (ElectricityTrader) i.next();
+			FixedVolumeTradingAgent t = (FixedVolumeTradingAgent) i.next();
 			NPTRothErevLearner l = (NPTRothErevLearner) ((AdaptiveStrategy) t
 			    .getStrategy()).getLearner();
 			RothErevLearnerTest.checkProbabilities(l);

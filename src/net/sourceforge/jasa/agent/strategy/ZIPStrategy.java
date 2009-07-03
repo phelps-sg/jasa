@@ -13,10 +13,9 @@
  * See the GNU General Public License for more details.
  */
 
-package net.sourceforge.jasa.replication.zi;
+package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.strategy.MomentumStrategy;
 import net.sourceforge.jasa.sim.learning.MimicryLearner;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 

@@ -20,7 +20,6 @@ import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -54,7 +53,7 @@ public class AdaptiveStrategyTest extends TestCase {
 		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);
-		ZITraderAgent agent = new ZITraderAgent(10, 100, false);
+		TokenTradingAgent agent = new TokenTradingAgent(10, 100, false);
 		agent.setStrategy(strategy);
 		auction.register(agent);
 		auction.run();

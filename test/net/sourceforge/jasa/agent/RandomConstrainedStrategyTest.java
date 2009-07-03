@@ -20,7 +20,6 @@ import cern.jet.random.engine.MersenneTwister64;
 import net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy;
 import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.prng.GlobalPRNG;
@@ -41,7 +40,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
 	 * @uml.property name="testAgent"
 	 * @uml.associationEnd
 	 */
-	protected ZITraderAgent testAgent;
+	protected TokenTradingAgent testAgent;
 
 	/**
 	 * @uml.property name="auctioneer"
@@ -73,7 +72,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
 
 	public void setUp() {
 		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-		testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
+		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, true);
 		testStrategy = new RandomConstrainedStrategy(testAgent);
 		testStrategy.setMarkupDistribution(new Uniform(0, MAX_MARKUP, GlobalPRNG.getInstance()));
 		testAgent.setStrategy(testStrategy);

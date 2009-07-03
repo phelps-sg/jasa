@@ -19,11 +19,11 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
 import org.apache.log4j.Logger;
@@ -37,13 +37,13 @@ public class ZITraderAgentTest extends TestCase {
 	 * @uml.property name="buyer"
 	 * @uml.associationEnd
 	 */
-	ZITraderAgent buyer;
+	TokenTradingAgent buyer;
 
 	/**
 	 * @uml.property name="seller"
 	 * @uml.associationEnd
 	 */
-	ZITraderAgent seller;
+	TokenTradingAgent seller;
 
 	/**
 	 * @uml.property name="market"
@@ -73,8 +73,8 @@ public class ZITraderAgentTest extends TestCase {
 	}
 
 	public void setUp() {
-		buyer = new ZITraderAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT, false);
-		seller = new ZITraderAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true);
+		buyer = new TokenTradingAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT, false);
+		seller = new TokenTradingAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true);
 		buyer.setStrategy(new TruthTellingStrategy(buyer));
 		seller.setStrategy(new TruthTellingStrategy(seller));
 		auction = new RandomRobinAuction(

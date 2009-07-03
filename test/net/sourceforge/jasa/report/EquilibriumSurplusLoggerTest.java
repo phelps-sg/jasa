@@ -19,6 +19,7 @@ import java.util.Iterator;
 
 import cern.jet.random.engine.MersenneTwister64;
 
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.DailyRandomValuer;
 import net.sourceforge.jasa.event.MarketEvent;
@@ -28,7 +29,6 @@ import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.report.DynamicSurplusReport;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.report.SurplusReport;
@@ -114,7 +114,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 		eqLogger.setQuantity(tradeEnt);
 
 		for (int i = 0; i < ns + nb; i++) {
-			ZITraderAgent agent = new ZITraderAgent();
+			TokenTradingAgent agent = new TokenTradingAgent();
 
 			agent.setStrategy(new TruthTellingStrategy(agent));
 			agent.setInitialTradeEntitlement(tradeEnt);
@@ -222,7 +222,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 			double agentSurplus = 0;
 			Iterator<Agent> i = auction.getTraderIterator();
 			while (i.hasNext()) {
-				ZITraderAgent agent = (ZITraderAgent) i.next();
+				TokenTradingAgent agent = (TokenTradingAgent) i.next();
 				if (agent.isSeller(auction)) {
 					agentSurplus = (eqPrice - agent.getValuation(auction))
 					    * agent.getInitialTradeEntitlement();

@@ -23,7 +23,6 @@ import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.report.SurplusReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.prng.GlobalPRNG;
@@ -56,7 +55,7 @@ public abstract class EfficiencyTest extends TestCase {
 	 * @uml.property name="agents"
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
-	protected ZITraderAgent[] agents;
+	protected TokenTradingAgent[] agents;
 
 	static final int NS = 6;
 
@@ -93,9 +92,9 @@ public abstract class EfficiencyTest extends TestCase {
 
 	protected void registerTraders() {
 		int numAgents = getNumBuyers() + getNumSellers();
-		agents = new ZITraderAgent[numAgents];
+		agents = new TokenTradingAgent[numAgents];
 		for (int i = 0; i < numAgents; i++) {
-			agents[i] = new ZITraderAgent();
+			agents[i] = new TokenTradingAgent();
 			agents[i].setInitialTradeEntitlement(getInitialTradeEntitlement());
 			assignStrategy(agents[i]);
 			assignValuationPolicy(agents[i]);

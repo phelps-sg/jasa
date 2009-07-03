@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.market.IllegalShoutException;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
@@ -56,7 +57,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 	protected double rCon;
 
 	/**
-	 * The relative generating-capacity of buyers to sellers.
+	 * The relative generating-volume of buyers to sellers.
 	 */
 	protected double rCap;
 
@@ -91,12 +92,12 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 	protected int numBuyers;
 
 	/**
-	 * The total generating-capacity of buyers.
+	 * The total generating-volume of buyers.
 	 */
 	protected int buyerCap;
 
 	/**
-	 * The total generating-capacity of sellers.
+	 * The total generating-volume of sellers.
 	 */
 	protected int sellerCap;
 
@@ -112,7 +113,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 	public static final ReportVariable VAR_RCAP = new ReportVariable(
 	    "electricity.rcap",
-	    "The relative generating capacity of buyers to sellers");
+	    "The relative generating volume of buyers to sellers");
 
 	public static final ReportVariable VAR_RCON = new ReportVariable(
 	    "electricity.rcon", "The ratio of sellers to buyers");
@@ -180,11 +181,11 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 	 */
 
 	protected double getProfits(AbstractTradingAgent trader) {
-		return ((ElectricityTrader) trader).getProfits();
+		return ((FixedVolumeTradingAgent) trader).getProfits();
 	}
 
 	protected double getCapacity(AbstractTradingAgent trader) {
-		return ((ElectricityTrader) trader).getCapacity();
+		return ((FixedVolumeTradingAgent) trader).getVolume();
 	}
 
 	public double equilibQuant(AbstractTradingAgent t, double price) {
@@ -193,11 +194,11 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 			if (price > privateValue) {
 				return 0;
 			} else {
-				return ((ElectricityTrader) t).getCapacity();
+				return ((FixedVolumeTradingAgent) t).getVolume();
 			}
 		} else {
 			if (price > privateValue) {
-				return ((ElectricityTrader) t).getCapacity();
+				return ((FixedVolumeTradingAgent) t).getVolume();
 			} else {
 				return 0;
 			}
@@ -231,8 +232,8 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		LinkedList shouts = new LinkedList();
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			ElectricityTrader trader = (ElectricityTrader) i.next();
-			Order truth = new Order(trader, trader.getCapacity(), trader
+			FixedVolumeTradingAgent trader = (FixedVolumeTradingAgent) i.next();
+			Order truth = new Order(trader, trader.getVolume(), trader
 			    .getValuation(auction), trader.isBuyer(auction));
 			shouts.add(truth);
 			try {
@@ -259,7 +260,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		pBT = 0;
 		pST = 0;
 		while (i.hasNext()) {
-			ElectricityTrader trader = (ElectricityTrader) i.next();
+			FixedVolumeTradingAgent trader = (FixedVolumeTradingAgent) i.next();
 			double truthProfits = truthProfits(trader.getLastProfit());
 			if (trader.isBuyer(auction)) {
 				pBT += truthProfits;
@@ -326,7 +327,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		super.produceUserOutput();
 		logger.info("NPT Auction statistics");
 		logger.info("----------------------");
-		logger.info("Relative generating capacity (RCAP) =\t" + getRCAP());
+		logger.info("Relative generating volume (RCAP) =\t" + getRCAP());
 		logger.info("Relative concentration (RCON) =\t" + getRCON());
 		logger.info("Strategic buyer market-power (SMPB) =\t" + getSMPB());
 		logger.info("Strategic seller market-power (SMPS) =\t" + getSMPS());

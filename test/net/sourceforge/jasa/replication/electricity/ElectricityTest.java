@@ -19,6 +19,7 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
 import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
@@ -26,7 +27,6 @@ import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
 import net.sourceforge.jasa.replication.electricity.ElectricityStats;
-import net.sourceforge.jasa.replication.electricity.ElectricityTrader;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.learning.NPTRothErevLearner;
 import net.sourceforge.jasa.sim.prng.GlobalPRNG;
@@ -198,7 +198,7 @@ public abstract class ElectricityTest extends TestCase {
 	    int num, int capacity, double[] values) {
 		for (int i = 0; i < num; i++) {
 			double value = values[i % values.length];
-			ElectricityTrader agent = new ElectricityTrader(capacity, value, 0,
+			FixedVolumeTradingAgent agent = new FixedVolumeTradingAgent(capacity, value, 
 			    areSellers);
 			assignStrategy(agent);
 			assignValuer(agent);
@@ -224,23 +224,23 @@ public abstract class ElectricityTest extends TestCase {
 		logger.info("done.");
 	}
 
-	public void assignStrategy(ElectricityTrader agent) {
+	public void assignStrategy(FixedVolumeTradingAgent agent) {
 		StimuliResponseStrategy strategy = new StimuliResponseStrategy(agent);
-		strategy.setQuantity(agent.getCapacity());
+		strategy.setQuantity(agent.getVolume());
 		NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1);
 		strategy.setLearner(learner);
 		agent.setStrategy(strategy);
 		agent.reset();
 	}
 
-	public void assignValuer(ElectricityTrader agent) {
+	public void assignValuer(FixedVolumeTradingAgent agent) {
 		// Stick with default fixed valuation
 	}
 
 	public void traderReport() {
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			ElectricityTrader agent = (ElectricityTrader) i.next();
+			FixedVolumeTradingAgent agent = (FixedVolumeTradingAgent) i.next();
 			System.out.println(agent);
 		}
 	}

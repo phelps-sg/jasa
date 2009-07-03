@@ -13,11 +13,10 @@
  * See the GNU General Public License for more details.
  */
 
-package net.sourceforge.jasa.replication.zi;
+package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
@@ -26,43 +25,18 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * Class for "Zero Intelligence" (ZI) trader agents. Agents of this type have a
- * finite trade entitlement, which determines how many units they are able to
- * trade in a given trading period. ZITraderAgents become inactive once their
+ * Agents of this type have a
+ * finite trade entitlement, which determines how many units or "tokens" they are able to
+ * trade in a given trading period. Agents become inactive once their
  * intitial trade entitlement is used up, and their trade entitlement is
  * restored at the end of each day.
  * </p>
- * See:
- * </p>
- * <p>
- * "Minimal Intelligence Agents for Bargaining Behaviours in Market-based
- * Environments" Dave Cliff 1997.
- * </p>
- * <p>
- * and "An experimental study of competitive market behaviour", Smith, V.L. 1962
- * in The Journal of Political Economy, vol 70.
- * </p>
- * 
- * <p>
- * <b>Parameters</b><br>
- * </p>
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.initialtradeentitlement</tt><br>
- * <font size=-1>int >= 0</font></td>
- * <td valign=top>(the number of units of commodity that this agent is allowed
- * to trade)</td>
- * <tr>
- * 
- * </table>
- * 
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class ZITraderAgent extends AbstractTradingAgent implements Serializable {
+public class TokenTradingAgent extends AbstractTradingAgent implements Serializable {
 
 	/**
 	 * The number of units this agent is entitlted to trade in this trading
@@ -87,24 +61,20 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
 
 	protected boolean isActive = true;
 
-	public static final String P_INITIAL_TRADE_ENTITLEMENT = "initialtradeentitlement";
+	static Logger logger = Logger.getLogger(TokenTradingAgent.class);
 
-	public static final String P_ACTIVATION_PROBABILITY = "activationprobability";
-
-	static Logger logger = Logger.getLogger(ZITraderAgent.class);
-
-	public ZITraderAgent() {
+	public TokenTradingAgent() {
 		super();
 	}
 
-	public ZITraderAgent(int stock, double funds, double privateValue,
+	public TokenTradingAgent(int stock, double funds, double privateValue,
 	    int tradeEntitlement, boolean isSeller) {
 		super(stock, funds, privateValue, isSeller);
 		this.initialTradeEntitlement = tradeEntitlement;
 		initialise();
 	}
 
-	public ZITraderAgent(double privateValue, int tradeEntitlement,
+	public TokenTradingAgent(double privateValue, int tradeEntitlement,
 	    boolean isSeller) {
 		this(0, 0, privateValue, tradeEntitlement, isSeller);
 	}
@@ -119,7 +89,7 @@ public class ZITraderAgent extends AbstractTradingAgent implements Serializable 
 
 	public Object protoClone() {
 		try {
-			ZITraderAgent clone = (ZITraderAgent) clone();
+			TokenTradingAgent clone = (TokenTradingAgent) clone();
 			clone.reset();
 			return clone;
 		} catch (CloneNotSupportedException e) {

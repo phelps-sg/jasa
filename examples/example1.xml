@@ -90,13 +90,13 @@
 	</property>
 </bean>
 
-<bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.replication.zi.ZITraderAgent">
+<bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
 	<property name="strategy" ref="zic"/>
 </bean>
 
-<bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.replication.zi.ZITraderAgent">
+<bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="true"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
 	<property name="strategy" ref="zic"/>

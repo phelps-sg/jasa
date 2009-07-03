@@ -21,7 +21,6 @@ import net.sourceforge.jasa.agent.strategy.MixedStrategy;
 import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
-import net.sourceforge.jasa.replication.zi.ZITraderAgent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.prng.DiscreteProbabilityDistribution;
 import junit.framework.Test;
@@ -89,7 +88,7 @@ public class MixedStrategyTest extends TestCase {
 		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);
-		ZITraderAgent agent = new ZITraderAgent(10, NUM_ROUNDS, false);
+		TokenTradingAgent agent = new TokenTradingAgent(10, NUM_ROUNDS, false);
 		agent.setStrategy(mixedStrategy);
 		pureStrategy1.setAgent(agent);
 		pureStrategy2.setAgent(agent);

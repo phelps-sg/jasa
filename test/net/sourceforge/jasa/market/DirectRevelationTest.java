@@ -15,10 +15,10 @@
 
 package net.sourceforge.jasa.market;
 
+import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
 import net.sourceforge.jasa.replication.electricity.ElectricityTest;
-import net.sourceforge.jasa.replication.electricity.ElectricityTrader;
 import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -55,13 +55,13 @@ public class DirectRevelationTest extends ElectricityTest {
 		auction.setMaximumRounds(1);
 	}
 
-	public void assignStrategy(ElectricityTrader agent) {
+	public void assignStrategy(FixedVolumeTradingAgent agent) {
 		TruthTellingStrategy truthTelling = new TruthTellingStrategy();
 		agent.setStrategy(truthTelling);
 		agent.reset();
 	}
 
-	public void assignValuer(ElectricityTrader agent) {
+	public void assignValuer(FixedVolumeTradingAgent agent) {
 		agent.setValuationPolicy(new RandomValuer(VALUE_MIN, VALUE_MAX, GlobalPRNG.getInstance()));
 	}
 
