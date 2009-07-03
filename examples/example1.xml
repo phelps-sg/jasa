@@ -66,12 +66,12 @@
 	<property name="prng" ref="prng"/>
 </bean>
 
-<bean id="buyers" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="buyers" class="net.sourceforge.jasa.sim.BeanFactoryAgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
-<bean id="sellers" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="sellers" class="net.sourceforge.jasa.sim.BeanFactoryAgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="sellerFactory"/> 	
 </bean>
