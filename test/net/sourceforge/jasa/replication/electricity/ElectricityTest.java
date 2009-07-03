@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 
 import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
@@ -63,7 +63,7 @@ public abstract class ElectricityTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	/**
 	 * @uml.property name="stats"
@@ -182,7 +182,7 @@ public abstract class ElectricityTest extends TestCase {
 		this.nb = nb;
 		this.cs = cs;
 		this.cb = cb;
-		auction = new RandomRobinAuction(
+		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		((AbstractAuctioneer) auctioneer)
@@ -194,7 +194,7 @@ public abstract class ElectricityTest extends TestCase {
 		stats = new ElectricityStats(auction);
 	}
 
-	public void registerTraders(RandomRobinAuction auction, boolean areSellers,
+	public void registerTraders(MarketFacade auction, boolean areSellers,
 	    int num, int capacity, double[] values) {
 		for (int i = 0; i < num; i++) {
 			double value = values[i % values.length];

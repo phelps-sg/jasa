@@ -19,7 +19,7 @@ import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
@@ -47,7 +47,7 @@ public class KPricingPolicyTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	RandomRobinAuction auction;
+	MarketFacade auction;
 
 	/**
 	 * @uml.property name="agents"
@@ -63,7 +63,7 @@ public class KPricingPolicyTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		auction = new RandomRobinAuction(prng);
+		auction = new MarketFacade(prng);
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 

@@ -17,7 +17,7 @@ package net.sourceforge.jasa.agent;
 
 import cern.jet.random.engine.MersenneTwister64;
 import net.sourceforge.jasa.agent.valuation.IntervalValuer;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import junit.framework.TestCase;
 
@@ -29,7 +29,7 @@ public abstract class IntervalValuerTest extends TestCase {
 
 	protected IntervalValuer valuer;
 
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	public static final double MIN_VALUE = 10;
 
@@ -40,7 +40,7 @@ public abstract class IntervalValuerTest extends TestCase {
 	}
 
 	public void setUp() {
-		auction = new RandomRobinAuction(new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		auction = new MarketFacade(new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 	}
 
 	public void testStep() {

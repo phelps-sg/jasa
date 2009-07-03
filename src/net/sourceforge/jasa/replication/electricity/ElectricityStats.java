@@ -25,7 +25,7 @@ import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.market.IllegalShoutException;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.report.ReportVariable;
 import net.sourceforge.jasa.report.SurplusReport;
@@ -120,7 +120,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 	static Logger logger = Logger.getLogger(ElectricityStats.class);
 
-	public ElectricityStats(RandomRobinAuction auction) {
+	public ElectricityStats(MarketFacade auction) {
 		this.auction = auction;
 		calculate();
 	}

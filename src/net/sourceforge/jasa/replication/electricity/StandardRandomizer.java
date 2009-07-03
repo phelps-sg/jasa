@@ -20,7 +20,7 @@ import java.util.Iterator;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.sim.prng.PRNGFactory;
 import net.sourceforge.jasa.sim.util.Parameterizable;
@@ -32,7 +32,7 @@ import cern.jet.random.engine.RandomSeedGenerator;
 
 public class StandardRandomizer implements Parameterizable, Serializable {
 
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	protected double minPrivateValue = 30;
 

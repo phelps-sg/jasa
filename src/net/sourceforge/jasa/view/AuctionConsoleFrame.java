@@ -41,7 +41,7 @@ import javax.swing.JPanel;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.ShoutsNotVisibleException;
 import net.sourceforge.jasa.sim.util.Resetable;
 
@@ -56,7 +56,7 @@ import org.apache.log4j.Logger;
  */
 public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	protected JLabel bidLabel;
 
@@ -92,7 +92,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 
 	static Logger logger = Logger.getLogger(AuctionConsoleFrame.class);
 
-	public AuctionConsoleFrame(RandomRobinAuction auction, String name) {
+	public AuctionConsoleFrame(MarketFacade auction, String name) {
 
 		this.auction = auction;
 		Container contentPane = getContentPane();
@@ -372,7 +372,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 		public void toggleTrueSupplyAndDemand() {
 			if (trueSupDemGraph == null) {
 				trueSupDemGraph = new TrueSupplyAndDemandFrame(
-				    (RandomRobinAuction) auction);
+				    (MarketFacade) auction);
 
 				ComponentListener listener = new ComponentListener() {
 
@@ -400,7 +400,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 
 		public void toggleAuctionState() {
 			if (auctionStateGraph == null) {
-				auctionStateGraph = new AuctionStateFrame((RandomRobinAuction) auction);
+				auctionStateGraph = new AuctionStateFrame((MarketFacade) auction);
 
 				ComponentListener listener = new ComponentListener() {
 
@@ -430,7 +430,7 @@ public class AuctionConsoleFrame extends JFrame implements Observer, Resetable {
 		public void toggleReportedSupplyAndDemand() {
 			if (reportedSupDemGraph == null) {
 				reportedSupDemGraph = new ReportedSupplyAndDemandFrame(
-				    (RandomRobinAuction) auction);
+				    (MarketFacade) auction);
 
 				ComponentListener listener = new ComponentListener() {
 

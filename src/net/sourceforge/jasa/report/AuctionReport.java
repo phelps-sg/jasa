@@ -17,7 +17,7 @@ package net.sourceforge.jasa.report;
 
 import java.util.Map;
 
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 
 import net.sourceforge.jasa.sim.report.Report;
 
@@ -49,6 +49,6 @@ public interface AuctionReport extends Report {
 	/**
 	 * Specify the market to be used when generating the historicalDataReport.
 	 */
-	public void setAuction(RandomRobinAuction auction);
+	public void setAuction(MarketFacade auction);
 
 }

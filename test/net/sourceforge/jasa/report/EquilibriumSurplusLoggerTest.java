@@ -25,7 +25,7 @@ import net.sourceforge.jasa.agent.valuation.DailyRandomValuer;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.event.EndOfDayEvent;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
@@ -60,7 +60,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	/**
 	 * @uml.property name="eqLogger"
@@ -100,7 +100,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 	}
 
 	public void initWithParams(int ns, int nb, int tradeEnt) {
-		auction = new RandomRobinAuction(
+		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		((AbstractAuctioneer) auctioneer)

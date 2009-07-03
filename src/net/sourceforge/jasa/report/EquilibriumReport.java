@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 
 import org.apache.log4j.Logger;
 
@@ -73,7 +73,7 @@ public class EquilibriumReport extends DirectRevelationReport implements
 
 	static Logger logger = Logger.getLogger(EquilibriumReport.class);
 
-	public EquilibriumReport(RandomRobinAuction auction) {
+	public EquilibriumReport(MarketFacade auction) {
 		super(auction);
 	}
 

@@ -20,7 +20,7 @@ import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.ZeroFundsAccount;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.TransparentAuctioneer;
@@ -32,7 +32,7 @@ import junit.framework.TestSuite;
 
 public class KaplanStrategyTest extends TestCase {
 
-	RandomRobinAuction auction;
+	MarketFacade auction;
 
 	MockTrader trader;
 
@@ -53,7 +53,7 @@ public class KaplanStrategyTest extends TestCase {
 	}
 
 	public void setUp() {
-		auction = new RandomRobinAuction(new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		auction = new MarketFacade(new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		trader = new MockTrader(this, 0, 0, 10, true);
 		strategy = new KaplanStrategy();
 		strategy.setS(S);

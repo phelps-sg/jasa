@@ -36,7 +36,7 @@ import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.IllegalShoutException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.event.SimEvent;
@@ -99,7 +99,7 @@ import org.apache.log4j.Logger;
  * 
  * </table>
  * 
- * @see net.sourceforge.jasa.market.RandomRobinAuction
+ * @see net.sourceforge.jasa.market.MarketFacade
  * 
  * @author Steve Phelps
  * @version $Revision$
@@ -320,7 +320,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	}
 
 	public void auctionClosed(MarketEvent event) {
-		((RandomRobinAuction) event.getAuction()).remove(this);
+		((MarketFacade) event.getAuction()).remove(this);
 	}
 
 	public Order getCurrentShout() {
@@ -488,7 +488,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	}
 	
 	public boolean register(Market market) {
-		RandomRobinAuction auction = (RandomRobinAuction) market;
+		MarketFacade auction = (MarketFacade) market;
 //		auction.addListener(this);
 		return markets.add(market);
 	}

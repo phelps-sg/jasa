@@ -22,7 +22,7 @@ import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 
 import org.apache.log4j.Logger;
 
@@ -96,7 +96,7 @@ public class SurplusReport extends EquilibriumReport {
 
 	static Logger logger = Logger.getLogger(SurplusReport.class);
 
-	public SurplusReport(RandomRobinAuction auction) {
+	public SurplusReport(MarketFacade auction) {
 		super(auction);
 	}
 

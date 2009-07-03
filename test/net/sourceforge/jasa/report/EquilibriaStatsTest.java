@@ -22,7 +22,7 @@ import cern.jet.random.engine.MersenneTwister64;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.util.MathUtil;
@@ -37,7 +37,7 @@ public class EquilibriaStatsTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	RandomRobinAuction auction;
+	MarketFacade auction;
 
 	/**
 	 * @uml.property name="traders"
@@ -69,7 +69,7 @@ public class EquilibriaStatsTest extends TestCase {
 	}
 
 	public void setUp() {
-		auction = new RandomRobinAuction(
+		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		traders = new MockTrader[N];
 		for (int i = 0; i < N; i++) {
@@ -115,7 +115,7 @@ public class EquilibriaStatsTest extends TestCase {
 	 * Check that no equilibria exists when there are no traders.
 	 */
 	public void testNoTraders() {
-		auction = new RandomRobinAuction(
+		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		EquilibriumReport ep = new EquilibriumReport(auction);
 		ep.calculate();

@@ -24,7 +24,7 @@ import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.report.DataWriter;
 
@@ -66,7 +66,7 @@ public class DataWriterReport extends AbstractAuctionReport {
 	/**
 	 * The market we are keeping statistics on.
 	 */
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	public DataWriterReport() {
 		this(null, null, null, null, null);
@@ -141,7 +141,7 @@ public class DataWriterReport extends AbstractAuctionReport {
 		return new HashMap();
 	}
 
-	public void setAuction(RandomRobinAuction auction) {
+	public void setAuction(MarketFacade auction) {
 		this.auction = auction;
 	}
 

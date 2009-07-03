@@ -17,7 +17,7 @@ package net.sourceforge.jasa.agent;
 
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
@@ -49,7 +49,7 @@ public class AdaptiveStrategyTest extends TestCase {
 	}
 
 	public void testActionsAndRewards() {
-		RandomRobinAuction auction = new RandomRobinAuction(prng);
+		MarketFacade auction = new MarketFacade(prng);
 		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);

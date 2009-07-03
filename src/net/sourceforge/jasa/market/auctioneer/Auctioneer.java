@@ -65,12 +65,12 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	/**
 	 * Specify which market we are the auctioneer for.
 	 */
-	public void setAuction(Market auction);
+	public void setMarket(Market auction);
 
 	/**
 	 * Find out which market we are the auctioneer for.
 	 */
-	public Market getAuction();
+	public Market getMarket();
 
 	public Iterator askIterator();
 

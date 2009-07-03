@@ -17,7 +17,7 @@ package net.sourceforge.jasa.replication.electricity;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 
 /**
  * @author Steve Phelps
@@ -30,7 +30,7 @@ public class FinalRoundElectricityStats extends ElectricityStats {
 		super();
 	}
 
-	public FinalRoundElectricityStats(RandomRobinAuction auction) {
+	public FinalRoundElectricityStats(MarketFacade auction) {
 		super(auction);
 	}
 

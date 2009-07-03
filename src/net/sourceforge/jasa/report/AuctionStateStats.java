@@ -22,7 +22,7 @@ import java.util.List;
 import net.sourceforge.jasa.market.AscendingOrderComparator;
 import net.sourceforge.jasa.market.DescendingOrderComparator;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.report.DataWriter;
 
 import org.apache.log4j.Logger;
@@ -48,7 +48,7 @@ public class AuctionStateStats extends SupplyAndDemandStats {
 	 * @param demandStats
 	 *          The DataWriter to write the demand curve to.
 	 */
-	public AuctionStateStats(RandomRobinAuction auction, DataWriter supplyStats,
+	public AuctionStateStats(MarketFacade auction, DataWriter supplyStats,
 	    DataWriter demandStats) {
 		super(auction, supplyStats, demandStats);
 	}

@@ -20,7 +20,7 @@ import java.io.Serializable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 
@@ -59,7 +59,7 @@ public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
 
 	public boolean modifyShout(Order.MutableShout shout) {
 		EquilibriumReport eqReport = new EquilibriumReport(
-		    (RandomRobinAuction) auction);
+		    (MarketFacade) auction);
 		eqReport.calculate();
 		double price = eqReport.calculateMidEquilibriumPrice();
 		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)

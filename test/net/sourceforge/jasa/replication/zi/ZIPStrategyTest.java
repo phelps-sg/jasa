@@ -21,7 +21,7 @@ import junit.framework.TestSuite;
 
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.ZIPStrategy;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.report.AuctionReport;
 import net.sourceforge.jasa.report.EquilibriumReport;
@@ -51,7 +51,7 @@ public class ZIPStrategyTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	RandomRobinAuction auction;
+	MarketFacade auction;
 
 	/**
 	 * @uml.property name="auctioneer"
@@ -93,7 +93,7 @@ public class ZIPStrategyTest extends TestCase {
 	}
 
 	public void setUp() {
-		auction = new RandomRobinAuction(prng);
+		auction = new MarketFacade(prng);
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);

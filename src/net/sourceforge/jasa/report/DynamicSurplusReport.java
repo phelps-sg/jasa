@@ -25,7 +25,7 @@ import java.util.Map;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.util.Resetable;
@@ -78,7 +78,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 
 	static Logger logger = Logger.getLogger(DynamicSurplusReport.class);
 
-	public void setAuction(RandomRobinAuction auction) {
+	public void setAuction(MarketFacade auction) {
 		super.setAuction(auction);
 		equilibriaStats = new EquilibriumReport(auction);
 	}

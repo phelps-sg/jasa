@@ -22,7 +22,7 @@ import junit.framework.TestSuite;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.market.AuctionClosedException;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
@@ -49,7 +49,7 @@ public class ZITraderAgentTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	RandomRobinAuction auction;
+	MarketFacade auction;
 
 	/**
 	 * @uml.property name="auctioneer"
@@ -77,7 +77,7 @@ public class ZITraderAgentTest extends TestCase {
 		seller = new TokenTradingAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true);
 		buyer.setStrategy(new TruthTellingStrategy(buyer));
 		seller.setStrategy(new TruthTellingStrategy(seller));
-		auction = new RandomRobinAuction(
+		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		auction.register(buyer);
 		auction.register(seller);

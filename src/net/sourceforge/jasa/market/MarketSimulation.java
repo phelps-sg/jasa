@@ -17,22 +17,16 @@ package net.sourceforge.jasa.market;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.event.AgentPolledEvent;
 import net.sourceforge.jasa.event.DayOpeningEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
-import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.RoundClosingEvent;
-import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.event.OrderReceivedEvent;
-import net.sourceforge.jasa.event.TransactionExecutedEvent;
+
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
+
 import net.sourceforge.jasa.market.rules.AuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.CombiTimingCondition;
 import net.sourceforge.jasa.market.rules.DayEndingCondition;
@@ -41,112 +35,18 @@ import net.sourceforge.jasa.market.rules.MaxRoundsAuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.MaxRoundsDayEndingCondition;
 import net.sourceforge.jasa.market.rules.NullAuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.TimingCondition;
-import net.sourceforge.jasa.report.AuctionReport;
-import net.sourceforge.jasa.report.ReportVariableBoard;
+
 import net.sourceforge.jasa.sim.AbstractSimulation;
 import net.sourceforge.jasa.sim.SimulationController;
+
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
 import net.sourceforge.jasa.sim.event.SimulationTerminatedEvent;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
-import net.sourceforge.jasa.sim.util.Parameterizable;
-import net.sourceforge.jasa.sim.util.Resetable;
+
 import net.sourceforge.jasa.view.AuctionConsoleFrame;
 
 import org.apache.log4j.Logger;
 
-import cern.jet.random.engine.RandomEngine;
-
 /**
- * <p>
- * A class representing an market in which RoundRobinTraders can trade by
- * placing shouts in a synchronous round-robin shedule.
- * </p>
- * 
- * <p>
- * TraderAgents are notified that it is their turn to bid by invokation of the
- * requestShout() method on each agent.
- * </p>
- * 
- * <p>
- * This class implements Runnable so auctions can be run as threads, e.g.:
- * </p>
- * 
- * <code>
- *  Thread t = new Thread(market);
- *  t.start();
- * </code><br>
- * 
- * <p>
- * However, this class is not necessarily itself thread-safe.
- * </p>
- * 
- * <p>
- * <b>Parameters </b> <br>
- * </p>
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.maximumrounds</tt><br>
- * <font size=-1>int >= 0 </font></td>
- * <td valign=top>(the number of market rounds)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.maximumdays</tt><br>
- * <font size=-1>int >= 0 </font></td>
- * <td valign=top>(the number of days in the market)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.lengthofday</tt><br>
- * <font size=-1>int >= 0 </font></td>
- * <td valign=top>(the maximum number of rounds in a trading day)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.auctioneer</tt><br>
- * <font size=-1>class, inherits net.sourceforge.jasa.market.Auctioneer </font></td>
- * <td valign=top>(the market protocol to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.logger</tt><br>
- * <font size=-1>class, inherits net.sourceforge.jasa.report.MarketDataLogger
- * </font></td>
- * <td valign=top>(the MarketDataLogger to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.stats</tt><br>
- * <font size=-1>class, inherits net.sourceforge.jasa.report.MarketStats </font>
- * </td>
- * <td valign=top>(the MarketStats to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.name</tt><br>
- * <font size=-1>string </font></td>
- * <td valign=top>(the name of this market)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.agenttype.</tt> <i>n </i> <br>
- * <font size=-1>int </font></td>
- * <td valign=top>(the number of different agent types)</td>
- * </tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.agenttype.</tt> <i>i </i> <br>
- * <font size=-1>classname, inherits net.sourceforge.jasa.agent.RoundRobinTrader
- * </font></td>
- * <td valign=top>(the class for agent type # <i>i </i>)</td>
- * </tr>
- * 
- * </table>
- * 
- * 
- * @see net.sourceforge.jasa.agent.TradingAgent
- * 
  * @author Steve Phelps
  * @version $Revision$
  * 

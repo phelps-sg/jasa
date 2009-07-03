@@ -174,14 +174,14 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
 	public abstract void generateQuote();
 
-	public void setAuction(Market auction) {
+	public void setMarket(Market auction) {
 		this.market = auction;
 	}
 
 	/**
 	 * Find out which market we are the auctioneer for.
 	 */
-	public Market getAuction() {
+	public Market getMarket() {
 		return market;
 	}
 

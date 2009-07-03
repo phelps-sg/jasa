@@ -23,7 +23,7 @@ import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.AscendingOrderComparator;
 import net.sourceforge.jasa.market.DescendingOrderComparator;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.report.DataWriter;
 
 import org.apache.log4j.Logger;
@@ -53,7 +53,7 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 
 	static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
 
-	public ReportedSupplyAndDemandStats(RandomRobinAuction auction,
+	public ReportedSupplyAndDemandStats(MarketFacade auction,
 	    DataWriter supplyStats, DataWriter demandStats) {
 		super(auction, supplyStats, demandStats);
 	}

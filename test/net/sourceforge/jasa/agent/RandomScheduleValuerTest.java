@@ -20,7 +20,7 @@ import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.valuation.RandomScheduleValuer;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import junit.framework.Test;
@@ -48,7 +48,7 @@ public class RandomScheduleValuerTest extends TestCase {
 	}
 
 	public void testValueChanges() {
-		RandomRobinAuction auction = new RandomRobinAuction(
+		MarketFacade auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		agent.shoutAccepted(auction, new Order(agent, 1, 100, true), 100, 1);
 		assertTrue(valuer.consumed);

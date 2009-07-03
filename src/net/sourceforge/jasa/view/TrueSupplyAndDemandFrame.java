@@ -17,7 +17,7 @@ package net.sourceforge.jasa.view;
 
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 import net.sourceforge.jasa.report.TrueSupplyAndDemandStats;
 
@@ -30,7 +30,7 @@ public class TrueSupplyAndDemandFrame extends SupplyAndDemandFrame {
 
 	public static final String TITLE = "Supply and Demand Graph";
 
-	public TrueSupplyAndDemandFrame(RandomRobinAuction auction) {
+	public TrueSupplyAndDemandFrame(MarketFacade auction) {
 		super(auction);
 	}
 

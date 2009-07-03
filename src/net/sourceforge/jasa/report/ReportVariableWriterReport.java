@@ -28,7 +28,7 @@ import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.report.CSVWriter;
 import net.sourceforge.jasa.sim.util.Parameterizable;
@@ -80,7 +80,7 @@ public class ReportVariableWriterReport implements AuctionReport,
 	/**
 	 * The market we are keeping statistics on.
 	 */
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	static DecimalFormat formatter = new DecimalFormat(
 	    "+#########0.000;-#########.000");
@@ -334,7 +334,7 @@ public class ReportVariableWriterReport implements AuctionReport,
 		return new HashMap();
 	}
 
-	public void setAuction(RandomRobinAuction auction) {
+	public void setAuction(MarketFacade auction) {
 		this.auction = auction;
 	}
 

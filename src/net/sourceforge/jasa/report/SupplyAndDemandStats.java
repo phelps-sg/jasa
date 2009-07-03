@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.report.DataWriter;
 
 
@@ -54,7 +54,7 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 	 * @param demandStats
 	 *          The DataWriter to write the demand curve to.
 	 */
-	public SupplyAndDemandStats(RandomRobinAuction auction,
+	public SupplyAndDemandStats(MarketFacade auction,
 	    DataWriter supplyStats, DataWriter demandStats) {
 		super(auction);
 		this.supplyStats = supplyStats;

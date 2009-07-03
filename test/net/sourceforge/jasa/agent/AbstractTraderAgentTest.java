@@ -19,7 +19,7 @@ import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
@@ -51,7 +51,7 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	RandomRobinAuction auction;	
+	MarketFacade auction;	
 
 	public static final int TRADER1_STOCK = 0;
 
@@ -90,7 +90,7 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 		    new Order(trader2, 1, TRADER2_VALUE + 100, true) }));
 
 		RandomEngine prng = new MersenneTwister64();		
-		auction = new RandomRobinAuction(prng);		
+		auction = new MarketFacade(prng);		
 		AbstractAuctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
 		auction.setAuctioneer(auctioneer);

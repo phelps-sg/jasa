@@ -17,7 +17,7 @@ package net.sourceforge.jasa.report;
 
 
 
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
@@ -40,21 +40,21 @@ public abstract class AbstractAuctionReport implements AuctionReport,
 	/**
 	 * The market we are keeping statistics on.
 	 */
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
-	public AbstractAuctionReport(RandomRobinAuction auction) {
+	public AbstractAuctionReport(MarketFacade auction) {
 		this.auction = auction;
 	}
 
 	public AbstractAuctionReport() {
 	}
 
-	public void setAuction(RandomRobinAuction auction) {
+	public void setAuction(MarketFacade auction) {
 		this.auction = auction;
 		logger.debug("Set market to " + auction);
 	}
 
-	public RandomRobinAuction getAuction() {
+	public MarketFacade getAuction() {
 		return auction;
 	}
 

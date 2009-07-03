@@ -61,119 +61,17 @@ import org.apache.log4j.Logger;
 import cern.jet.random.engine.RandomEngine;
 
 /**
- * <p>
- * A class representing an market in which RoundRobinTraders can trade by
- * placing shouts in a synchronous round-robin shedule.
- * </p>
- * 
- * <p>
- * TraderAgents are notified that it is their turn to bid by invokation of the
- * requestShout() method on each agent.
- * </p>
- * 
- * <p>
- * This class implements Runnable so auctions can be run as threads, e.g.:
- * </p>
- * 
- * <code>
- *  Thread t = new Thread(market);
- *  t.start();
- * </code><br>
- * 
- * <p>
- * However, this class is not necessarily itself thread-safe.
- * </p>
- * 
- * <p>
- * <b>Parameters </b> <br>
- * </p>
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.maximumrounds</tt><br>
- * <font size=-1>int >= 0 </font></td>
- * <td valign=top>(the number of market rounds)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.maximumdays</tt><br>
- * <font size=-1>int >= 0 </font></td>
- * <td valign=top>(the number of days in the market)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.lengthofday</tt><br>
- * <font size=-1>int >= 0 </font></td>
- * <td valign=top>(the maximum number of rounds in a trading day)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.auctioneer</tt><br>
- * <font size=-1>class, inherits net.sourceforge.jasa.market.Auctioneer </font></td>
- * <td valign=top>(the market protocol to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.logger</tt><br>
- * <font size=-1>class, inherits net.sourceforge.jasa.report.MarketDataLogger
- * </font></td>
- * <td valign=top>(the MarketDataLogger to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.stats</tt><br>
- * <font size=-1>class, inherits net.sourceforge.jasa.report.MarketStats </font>
- * </td>
- * <td valign=top>(the MarketStats to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.name</tt><br>
- * <font size=-1>string </font></td>
- * <td valign=top>(the name of this market)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.agenttype.</tt> <i>n </i> <br>
- * <font size=-1>int </font></td>
- * <td valign=top>(the number of different agent types)</td>
- * </tr>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.agenttype.</tt> <i>i </i> <br>
- * <font size=-1>classname, inherits net.sourceforge.jasa.agent.RoundRobinTrader
- * </font></td>
- * <td valign=top>(the class for agent type # <i>i </i>)</td>
- * </tr>
- * 
- * </table>
- * 
- * 
- * @see net.sourceforge.jasa.agent.TradingAgent
- * 
  * @author Steve Phelps
  * @version $Revision$
- * 
  */
 
-public class RandomRobinAuction  implements Market, Serializable, Runnable {
+public class MarketFacade  implements Market, Serializable, Runnable {
 
-	/**
-	 * The plugable market rules to use for this market, e.g.
-	 * AscendingAuctioneer.
-	 */
 	protected Auctioneer auctioneer = null;
 	
 	protected MarketSimulation marketSimulation;
 	
 	protected SimulationController controller;	
-
-	protected Account account = new Account();
-
-	/**
-	 * Optional graphical console
-	 */
-	protected AuctionConsoleFrame guiConsole = null;
 
 	/**
 	 * The current trading day (period)
@@ -183,13 +81,13 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 
 	public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
 
-	static Logger logger = Logger.getLogger(RandomRobinAuction.class);
+	static Logger logger = Logger.getLogger(MarketFacade.class);
 	
 	
-	public RandomRobinAuction() {
+	public MarketFacade() {
 	}
 	
-	public RandomRobinAuction(RandomEngine prng, Population traders, Auctioneer auctioneer) {
+	public MarketFacade(RandomEngine prng, Population traders, Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
 		controller = new SimulationController(new BasicAgentInitialiser(), traders);
 		controller.setAgentMixer(new RandomRobinAgentMixer(prng));
@@ -197,17 +95,17 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 		marketSimulation = new MarketSimulation(controller, this);
 	}
 	
-	public RandomRobinAuction(MarketSimulation marketSimulation, Auctioneer auctioneer) {
+	public MarketFacade(MarketSimulation marketSimulation, Auctioneer auctioneer) {
 		this.controller = controller;
 		this.auctioneer = auctioneer;
 		this.marketSimulation = marketSimulation;
 	}
 	
-	public RandomRobinAuction(RandomEngine prng, Auctioneer auctioneer) {
+	public MarketFacade(RandomEngine prng, Auctioneer auctioneer) {
 		this(prng, new Population(prng), auctioneer);			
 	}
 	
-	public RandomRobinAuction(RandomEngine prng) {
+	public MarketFacade(RandomEngine prng) {
 		this(prng, new ContinuousDoubleAuctioneer());
 	}
 	
@@ -398,14 +296,6 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 		controller.setPopulation(traders);
 	}
 
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
 	public void reset() {
 		marketSimulation.reset();
 	}
@@ -518,10 +408,10 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	}
 	
 	public static void main(String[] args) {
-		RandomRobinAuction rra = 
-			(RandomRobinAuction) BeanFactorySingleton.getBean("rra");
+		Runnable market = 
+			(Runnable) BeanFactorySingleton.getBean("market");
 		logger.info("Starting...");
-		rra.run();	
+		market.run();	
 		logger.info("done.");
 	}
 }

@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.util.Parameterizable;
 
 /**
@@ -96,7 +96,7 @@ public class CombiTimingCondition extends TimingCondition implements
 		return conditions.iterator();
 	}
 
-	public void setAuction(RandomRobinAuction auction) {
+	public void setAuction(MarketFacade auction) {
 		super.setAuction(auction);
 		Iterator i = conditionIterator();
 		while (i.hasNext()) {

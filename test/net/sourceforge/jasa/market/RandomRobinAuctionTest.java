@@ -23,7 +23,7 @@ import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.ShoutsNotVisibleException;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
@@ -51,7 +51,7 @@ public class RandomRobinAuctionTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	RandomRobinAuction auction;
+	MarketFacade auction;
 
 	/**
 	 * @uml.property name="traders"
@@ -99,11 +99,11 @@ public class RandomRobinAuctionTest extends TestCase {
 		((AbstractAuctioneer) auctioneer)
 		    .setPricingPolicy(new UniformPricingPolicy(1));
 		auction.setAuctioneer(auctioneer);
-		auctioneer.setAuction(auction);
+		auctioneer.setMarket(auction);
 	}
 
 	public void setUpAuction() {
-		auction = new RandomRobinAuction(prng);
+		auction = new MarketFacade(prng);
 		auction.setMaximumRounds(3);
 		for (int i = 0; i < traders.length; i++) {
 			System.out.println("Registering trader " + traders[i]);

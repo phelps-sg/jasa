@@ -20,7 +20,7 @@ import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.market.IllegalShoutException;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import junit.framework.TestCase;
@@ -37,7 +37,7 @@ public abstract class AuctioneerTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	RandomRobinAuction auction;
+	MarketFacade auction;
 
 	/**
 	 * @uml.property name="traders"
@@ -53,7 +53,7 @@ public abstract class AuctioneerTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		auction = new RandomRobinAuction(prng);
+		auction = new MarketFacade(prng);
 
 		traders = new MockTrader[5];
 		traders[0] = new MockTrader(this, 30, 1000, 1000, false);

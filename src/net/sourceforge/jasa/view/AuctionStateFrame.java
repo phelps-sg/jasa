@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.view;
 
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.AuctionStateStats;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 
@@ -29,7 +29,7 @@ public class AuctionStateFrame extends SupplyAndDemandFrame {
 
 	public static final String TITLE = "Auction State";
 
-	public AuctionStateFrame(RandomRobinAuction auction) {
+	public AuctionStateFrame(MarketFacade auction) {
 		super(auction);
 	}
 

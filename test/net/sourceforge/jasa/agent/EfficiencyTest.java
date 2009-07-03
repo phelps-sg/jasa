@@ -19,7 +19,7 @@ import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
@@ -49,7 +49,7 @@ public abstract class EfficiencyTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	/**
 	 * @uml.property name="agents"
@@ -86,7 +86,7 @@ public abstract class EfficiencyTest extends TestCase {
 	protected void assignAuctioneer() {
 		auctioneer = new ContinuousDoubleAuctioneer();
 		auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
-		auctioneer.setAuction(auction);
+		auctioneer.setMarket(auction);
 		auction.setAuctioneer(auctioneer);
 	}
 
@@ -143,7 +143,7 @@ public abstract class EfficiencyTest extends TestCase {
 
 	protected void initialiseAuction() {
 		RandomEngine prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		auction = new RandomRobinAuction(prng);
+		auction = new MarketFacade(prng);
 		auction.setLengthOfDay(DAY_LENGTH);
 		auction.setMaximumDays(MAX_DAYS);
 	}

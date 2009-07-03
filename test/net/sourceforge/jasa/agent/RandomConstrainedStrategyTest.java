@@ -18,7 +18,7 @@ package net.sourceforge.jasa.agent;
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.MersenneTwister64;
 import net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
@@ -52,7 +52,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	/**
 	 * @uml.property name="logger"
@@ -76,7 +76,7 @@ public class RandomConstrainedStrategyTest extends TestCase {
 		testStrategy = new RandomConstrainedStrategy(testAgent);
 		testStrategy.setMarkupDistribution(new Uniform(0, MAX_MARKUP, GlobalPRNG.getInstance()));
 		testAgent.setStrategy(testStrategy);
-		auction = new RandomRobinAuction(new MersenneTwister64(
+		auction = new MarketFacade(new MersenneTwister64(
 				PRNGTestSeeds.UNIT_TEST_SEED));
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);

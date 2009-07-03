@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-<bean id="rra" class="net.sourceforge.jasa.market.RandomRobinAuction">
+<bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
 	<property name="auctioneer" ref="cda"/>
 	<property name="controller" ref="simulationController"/>
 	<property name="marketSimulation" ref="marketSimulation"/>
@@ -29,7 +29,7 @@
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
-	<constructor-arg ref="rra"/>
+	<constructor-arg ref="market"/>
 	<property name="maximumRounds" value="100"/>
 </bean>
 
@@ -38,7 +38,7 @@
 
 <bean id="cda" class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
 	<property name="pricingPolicy" ref="midPointDiscriminatoryPricingPolicy"/>
-	<property name="auction" ref="rra"/>
+	<property name="market" ref="market"/>
 </bean>
 
 <bean id="midPointDiscriminatoryPricingPolicy" 
@@ -66,12 +66,12 @@
 	<property name="prng" ref="prng"/>
 </bean>
 
-<bean id="buyers" class="net.sourceforge.jasa.sim.BeanFactoryAgentList">
+<bean id="buyers" class="net.sourceforge.jasa.sim.AgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
-<bean id="sellers" class="net.sourceforge.jasa.sim.BeanFactoryAgentList">
+<bean id="sellers" class="net.sourceforge.jasa.sim.AgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="sellerFactory"/> 	
 </bean>
@@ -103,9 +103,9 @@
 </bean>
 
 <bean id="markupDistribution" class="cern.jet.random.Uniform">
-			<constructor-arg index="0" value="0.0" />
-			<constructor-arg index="1" value="10.0" />
-			<constructor-arg index="2" ref="prng" />
+	<constructor-arg index="0" value="0.0" />
+	<constructor-arg index="1" value="10.0" />
+	<constructor-arg index="2" ref="prng" />
 </bean>
 
 <bean id="zic" scope="prototype" class="net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy">

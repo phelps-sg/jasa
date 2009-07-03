@@ -25,7 +25,7 @@ import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.rules.KPricingPolicy;
@@ -97,7 +97,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 	protected ElectricityStats stats;
 
-	protected RandomRobinAuction auction; //TODO = new RandomRobinAuction("electricity");
+	protected MarketFacade auction; //TODO = new MarketFacade("electricity");
 
 	protected Auctioneer auctioneer;
 
@@ -403,7 +403,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 	}
 
-	protected void registerTraders(RandomRobinAuction auction,
+	protected void registerTraders(MarketFacade auction,
 	    boolean areSellers, int num, int capacity) {
 
 		for (int i = 0; i < num; i++) {

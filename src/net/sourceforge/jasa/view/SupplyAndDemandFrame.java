@@ -28,7 +28,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 import net.sourceforge.jasa.sim.report.DataSeriesWriter;
 
@@ -43,7 +43,7 @@ import uchicago.src.sim.analysis.plot.RepastPlot;
 
 public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	protected RepastPlot graph;
 
@@ -63,7 +63,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 
 	static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
-	public SupplyAndDemandFrame(RandomRobinAuction auction) {
+	public SupplyAndDemandFrame(MarketFacade auction) {
 
 		this.auction = auction;
 		Container contentPane = getContentPane();

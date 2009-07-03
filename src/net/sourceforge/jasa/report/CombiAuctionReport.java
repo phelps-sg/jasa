@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.market.RandomRobinAuction;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.util.Parameterizable;
 import net.sourceforge.jasa.sim.util.Resetable;
@@ -53,7 +53,7 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 
 	protected List reports = null;
 
-	protected RandomRobinAuction auction;
+	protected MarketFacade auction;
 
 	public static final String P_DEF_BASE = "combiauctionreport";
 
@@ -133,7 +133,7 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 		}
 	}
 
-	public void setAuction(RandomRobinAuction auction) {
+	public void setAuction(MarketFacade auction) {
 		this.auction = auction;
 		Iterator i = reports.iterator();
 		while (i.hasNext()) {
