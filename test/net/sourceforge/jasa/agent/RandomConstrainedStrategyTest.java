@@ -15,6 +15,7 @@
 
 package net.sourceforge.jasa.agent;
 
+import cern.jet.random.Uniform;
 import cern.jet.random.engine.MersenneTwister64;
 import net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy;
 import net.sourceforge.jasa.market.RandomRobinAuction;
@@ -73,7 +74,8 @@ public class RandomConstrainedStrategyTest extends TestCase {
 	public void setUp() {
 		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
 		testAgent = new ZITraderAgent(PRIV_VALUE, 100, true);
-		testStrategy = new RandomConstrainedStrategy(testAgent, MAX_MARKUP);
+		testStrategy = new RandomConstrainedStrategy(testAgent);
+		testStrategy.setMarkupDistribution(new Uniform(0, MAX_MARKUP, GlobalPRNG.getInstance()));
 		testAgent.setStrategy(testStrategy);
 		auction = new RandomRobinAuction(new MersenneTwister64(
 				PRNGTestSeeds.UNIT_TEST_SEED));

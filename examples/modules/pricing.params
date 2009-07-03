@@ -1,5 +1,0 @@
-##############
-# pricing
-
-kpricingpolicy.k = 0.5
-npricingpolicy.n = 4

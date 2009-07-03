@@ -53,31 +53,17 @@ import cern.jet.random.Uniform;
 public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
     implements Serializable {
 
-	protected double maxMarkup = DEFAULT_MARKUP;
-
 	protected AbstractContinousDistribution markupDistribution;
 
-	public static final String P_MAX_MARKUP = "maxmarkup";
-
-	public static final double DEFAULT_MARKUP = 50;
-
 	public RandomConstrainedStrategy() {
-		this(null, DEFAULT_MARKUP);
+		this(null);
 	}
 
-	public RandomConstrainedStrategy(AbstractTradingAgent agent, double maxMarkup) {
+	public RandomConstrainedStrategy(AbstractTradingAgent agent) {
 		super(agent);
-		this.maxMarkup = maxMarkup;
-		initialise();
-	}
-
-	public void initialise() {
-		super.initialise();
-		markupDistribution = new Uniform(0, maxMarkup, GlobalPRNG.getInstance());
 	}
 
 	public boolean modifyShout(Order.MutableShout shout) {
-
 		double markup = markupDistribution.nextDouble();
 		double price = 0;
 		if (agent.isBuyer(auction)) {
@@ -99,17 +85,19 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 		// Do nothing
 	}
 
-	public double getMaxMarkup() {
-		return maxMarkup;
-	}
-
-	public void setMaxMarkup(double maxMarkup) {
-		this.maxMarkup = maxMarkup;
-	}
-
 	public String toString() {
-		return "(" + getClass() + " maxmarkup:" + maxMarkup + " quantity:"
+		return "(" + getClass() + " markupDistribution:" + markupDistribution + " quantity:"
 		    + quantity + ")";
 	}
 
+	public AbstractContinousDistribution getMarkupDistribution() {
+		return markupDistribution;
+	}
+
+	public void setMarkupDistribution(
+			AbstractContinousDistribution markupDistribution) {
+		this.markupDistribution = markupDistribution;
+	}
+
+	
 }

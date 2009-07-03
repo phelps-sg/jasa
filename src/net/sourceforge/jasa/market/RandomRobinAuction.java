@@ -51,6 +51,7 @@ import net.sourceforge.jasa.sim.event.SimulationTerminatedEvent;
 import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
 import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.report.Report;
+import net.sourceforge.jasa.sim.util.BeanFactorySingleton;
 import net.sourceforge.jasa.sim.util.Parameterizable;
 import net.sourceforge.jasa.sim.util.Resetable;
 import net.sourceforge.jasa.view.AuctionConsoleFrame;
@@ -185,19 +186,35 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
 
 	static Logger logger = Logger.getLogger(RandomRobinAuction.class);
-
-	public RandomRobinAuction(RandomEngine prng, Auctioneer auctioneer) {
-		traders = new Population(prng);
+	
+	
+	public RandomRobinAuction() {
+	}
+	
+	public RandomRobinAuction(RandomEngine prng, Population traders, Auctioneer auctioneer) {
+		this.traders = traders;
+		this.auctioneer = auctioneer;
 		controller = new SimulationController(new BasicAgentInitialiser(), traders);
 		controller.setAgentMixer(new RandomRobinAgentMixer(prng));
 		marketSimulation = new MarketSimulation(controller, this);
-		this.auctioneer = auctioneer;		
+	}
+	
+	public RandomRobinAuction(MarketSimulation marketSimulation,
+			SimulationController controller, Auctioneer auctioneer) {
+		this.controller = controller;
+		this.auctioneer = auctioneer;
+		this.marketSimulation = marketSimulation;
+		this.traders = controller.getPopulation();
+	}
+	
+	public RandomRobinAuction(RandomEngine prng, Auctioneer auctioneer) {
+		this(prng, new Population(prng), auctioneer);			
 	}
 	
 	public RandomRobinAuction(RandomEngine prng) {
 		this(prng, new ContinuousDoubleAuctioneer());
 	}
-
+	
 	public void clear(Order ask, Order bid, double transactionPrice) {
 		assert ask.getQuantity() == bid.getQuantity();
 		assert transactionPrice >= ask.getPrice();
@@ -361,6 +378,38 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 		return marketSimulation.getMaximumRounds();
 	}
 
+	public MarketSimulation getMarketSimulation() {
+		return marketSimulation;
+	}
+
+	public void setMarketSimulation(MarketSimulation marketSimulation) {
+		this.marketSimulation = marketSimulation;
+	}
+
+	public SimulationController getController() {
+		return controller;
+	}
+
+	public void setController(SimulationController controller) {
+		this.controller = controller;
+	}
+
+	public Population getTraders() {
+		return traders;
+	}
+
+	public void setTraders(Population traders) {
+		this.traders = traders;
+	}
+
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
 	public void reset() {
 		marketSimulation.reset();
 	}
@@ -470,5 +519,13 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 
 	public void fireEvent(SimEvent event) {
 		controller.fireEvent(event);
+	}
+	
+	public static void main(String[] args) {
+		RandomRobinAuction rra = 
+			(RandomRobinAuction) BeanFactorySingleton.getBean("rra");
+		logger.info("Starting...");
+		rra.run();	
+		logger.info("done.");
 	}
 }

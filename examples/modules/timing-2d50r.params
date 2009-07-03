@@ -1,7 +1,0 @@
-parent.0 = timing.params
-
-simulation.auction.closing = uk.ac.liv.auction.core.MaxDaysAuctionClosingCondition
-simulation.auction.closing.maximumdays = 2
-simulation.auction.dayending = uk.ac.liv.auction.core.MaxRoundsDayEndingCondition
-simulation.auction.dayending.lengthofday = 50
-

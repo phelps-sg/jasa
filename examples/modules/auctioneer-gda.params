@@ -1,3 +1,0 @@
-parent.0 = auctioneer.params
-
-simulation.auction.auctioneer = uk.ac.liv.auction.core.GenericDoubleAuctioneer

@@ -1,6 +1,0 @@
-parent.0 = auctioneer.params
-
-simulation.auction.auctioneer = uk.ac.liv.auction.core.GenericDoubleAuctioneer
-simulation.auction.auctioneer.pricing = uk.ac.liv.auction.core.DiscriminatoryPricingPolicy
-simulation.auction.auctioneer.clearing = uk.ac.liv.auction.core.ProbabilisticClearingCondition
-simulation.auction.auctioneer.accepting = uk.ac.liv.auction.core.EquilibriumBeatingAcceptingPolicy
