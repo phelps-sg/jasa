@@ -67,7 +67,8 @@ public class DrawableAgentAdaptor implements Drawable {
 		if (agent != null) {
 			ValuationPolicy valuer = agent.getValuationPolicy();
 			if (valuer instanceof AbstractRandomValuer) {
-				scale = (float) ((AbstractRandomValuer) valuer).getMaxValue() / 2;
+//				scale = (float) ((AbstractRandomValuer) valuer).getMaxValue() / 2;
+				//TODO
 			}
 		}
 	}

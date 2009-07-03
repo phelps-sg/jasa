@@ -36,6 +36,7 @@ public class ZIPEfficiencyTest extends EfficiencyTest {
 	protected void assignAuctioneer() {
 		auctioneer = new ContinuousDoubleAuctioneer();
 		auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+		auctioneer.setAuction(auction);
 		auction.setAuctioneer(auctioneer);
 	}
 

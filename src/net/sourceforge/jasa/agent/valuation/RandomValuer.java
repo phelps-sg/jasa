@@ -16,7 +16,10 @@
 package net.sourceforge.jasa.agent.valuation;
 
 
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.AbstractDistribution;
 import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
 
 import java.io.Serializable;
 
@@ -52,54 +55,25 @@ import org.apache.log4j.Logger;
 
 public class RandomValuer extends AbstractRandomValuer implements Serializable {
 
-	/**
-	 * The minimum valuation to use.
-	 */
-	protected double minValue;
-
-	/**
-	 * The maximum valuation to use.
-	 */
-	protected double maxValue;
-
-	public static final String P_DEF_BASE = "randomvaluer";
-
-	public static final String P_MINVALUE = "minvalue";
-
-	public static final String P_MAXVALUE = "maxvalue";
-
 	static Logger logger = Logger.getLogger(RandomValuer.class);
 
 	public RandomValuer() {
 		super();
 	}
+	
+	public RandomValuer(AbstractContinousDistribution distribution) {
+		this.distribution = distribution;
+		initialise();
+	}
 
-	public RandomValuer(double minValue, double maxValue) {
+	public RandomValuer(double minValue, double maxValue, RandomEngine prng) {
 		super();
-		this.minValue = minValue;
-		this.maxValue = maxValue;
+		distribution = new Uniform(minValue, maxValue, prng);
 		initialise();
 	}
 
 	public void initialise() {
-		distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
 		drawRandomValue();
-	}
-
-	public double getMaxValue() {
-		return maxValue;
-	}
-
-	public void setMaxValue(double maxValue) {
-		this.maxValue = maxValue;
-	}
-
-	public double getMinValue() {
-		return minValue;
-	}
-
-	public void setMinValue(double minValue) {
-		this.minValue = minValue;
 	}
 
 	public void setAgent(TradingAgent agent) {

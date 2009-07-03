@@ -19,6 +19,7 @@ import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
 import net.sourceforge.jasa.replication.electricity.ElectricityTest;
 import net.sourceforge.jasa.replication.electricity.ElectricityTrader;
+import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -61,7 +62,7 @@ public class DirectRevelationTest extends ElectricityTest {
 	}
 
 	public void assignValuer(ElectricityTrader agent) {
-		agent.setValuationPolicy(new RandomValuer(VALUE_MIN, VALUE_MAX));
+		agent.setValuationPolicy(new RandomValuer(VALUE_MIN, VALUE_MAX, GlobalPRNG.getInstance()));
 	}
 
 	public static void main(String[] args) {

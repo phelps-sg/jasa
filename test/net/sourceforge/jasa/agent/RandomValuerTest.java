@@ -48,7 +48,7 @@ public class RandomValuerTest extends TestCase {
 
 	public void setUp() {
 		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-		valuer = new RandomValuer(MIN_VALUE, MAX_VALUE);
+		valuer = new RandomValuer(MIN_VALUE, MAX_VALUE, GlobalPRNG.getInstance());
 	}
 
 	public void testDistribution() {

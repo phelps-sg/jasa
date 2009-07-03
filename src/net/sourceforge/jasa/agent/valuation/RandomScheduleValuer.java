@@ -17,6 +17,8 @@ package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
+import cern.jet.random.engine.RandomEngine;
+
 import net.sourceforge.jasa.market.Market;
 
 
@@ -30,8 +32,8 @@ import net.sourceforge.jasa.market.Market;
 
 public class RandomScheduleValuer extends RandomValuer implements Serializable {
 
-	public RandomScheduleValuer(double min, double max) {
-		super(min, max);
+	public RandomScheduleValuer(double min, double max, RandomEngine prng) {
+		super(min, max, prng);
 	}
 
 	public RandomScheduleValuer() {

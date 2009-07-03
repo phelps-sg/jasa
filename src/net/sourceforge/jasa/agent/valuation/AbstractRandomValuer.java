@@ -40,10 +40,10 @@ public abstract class AbstractRandomValuer implements ValuationPolicy,
 	}
 
 	public abstract void initialise();
-
-	public abstract double getMaxValue();
-
-	public abstract double getMinValue();
+//
+//	public abstract double getMaxValue();
+//
+//	public abstract double getMinValue();
 
 	public double determineValue(Market auction) {
 		return value;
@@ -67,6 +67,14 @@ public abstract class AbstractRandomValuer implements ValuationPolicy,
 
 	public void drawRandomValue() {
 		value = distribution.nextDouble();
+	}
+
+	public AbstractContinousDistribution getDistribution() {
+		return distribution;
+	}
+
+	public void setDistribution(AbstractContinousDistribution distribution) {
+		this.distribution = distribution;
 	}
 
 }

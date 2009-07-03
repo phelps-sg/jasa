@@ -15,6 +15,8 @@
 
 package net.sourceforge.jasa.agent.valuation;
 
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 
@@ -32,8 +34,12 @@ public class DailyRandomValuer extends RandomValuer {
 		super();
 	}
 
-	public DailyRandomValuer(double minValue, double maxValue) {
-		super(minValue, maxValue);
+	public DailyRandomValuer(AbstractContinousDistribution distribution) {
+		super(distribution);
+	}
+	
+	public DailyRandomValuer(double minValue, double maxValue, RandomEngine prng) {
+		super(minValue, maxValue, prng);
 	}
 
 	public void eventOccurred(MarketEvent event) {

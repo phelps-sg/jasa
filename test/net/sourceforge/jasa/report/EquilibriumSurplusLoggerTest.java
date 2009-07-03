@@ -121,11 +121,11 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 			if (i < ns) {
 				agent.setIsSeller(true);
 				agent.setValuationPolicy(new DailyRandomValuer(SELLER_MIN_VALUE,
-				    SELLER_MAX_VALUE));
+				    SELLER_MAX_VALUE, GlobalPRNG.getInstance()));
 			} else {
 				agent.setIsSeller(false);
 				agent.setValuationPolicy(new DailyRandomValuer(BUYER_MIN_VALUE,
-				    BUYER_MAX_VALUE));
+				    BUYER_MAX_VALUE, GlobalPRNG.getInstance()));
 			}
 			auction.register(agent);
 		}

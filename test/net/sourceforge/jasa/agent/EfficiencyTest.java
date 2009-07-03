@@ -87,6 +87,7 @@ public abstract class EfficiencyTest extends TestCase {
 	protected void assignAuctioneer() {
 		auctioneer = new ContinuousDoubleAuctioneer();
 		auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+		auctioneer.setAuction(auction);
 		auction.setAuctioneer(auctioneer);
 	}
 
@@ -157,7 +158,7 @@ public abstract class EfficiencyTest extends TestCase {
 	}
 
 	protected void assignValuationPolicy(AbstractTradingAgent agent) {
-		agent.setValuationPolicy(new RandomValuer(MIN_VALUE, MAX_VALUE));
+		agent.setValuationPolicy(new RandomValuer(MIN_VALUE, MAX_VALUE, GlobalPRNG.getInstance()));
 	}
 
 	protected int getInitialTradeEntitlement() {

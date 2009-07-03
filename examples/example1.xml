@@ -114,8 +114,9 @@
 </bean>
 
 <bean id="randomValuationPolicy" class="net.sourceforge.jasa.agent.valuation.RandomValuer">
-	<property name="minValue" value="10"/>
-	<property name="maxValue" value="100"/>
+	<constructor-arg value="10"/>
+	<constructor-arg value="100"/>
+	<constructor-arg ref="prng"/>
 </bean>
 
 </beans>
