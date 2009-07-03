@@ -17,7 +17,7 @@
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.report.EquilibriumReport">
-				<constructor-arg ref="rra"/>
+				<constructor-arg ref="market"/>
 			</bean>
 		</list>
 	</property>
@@ -66,12 +66,12 @@
 	<property name="prng" ref="prng"/>
 </bean>
 
-<bean id="buyers" class="net.sourceforge.jasa.sim.BeanFactoryAgentList">
+<bean id="buyers" class="net.sourceforge.jasa.sim.AgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
-<bean id="sellers" class="net.sourceforge.jasa.sim.BeanFactoryAgentList">
+<bean id="sellers" class="net.sourceforge.jasa.sim.AgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="sellerFactory"/> 	
 </bean>
