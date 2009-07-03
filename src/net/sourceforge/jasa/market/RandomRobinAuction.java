@@ -166,9 +166,7 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	
 	protected MarketSimulation marketSimulation;
 	
-	protected SimulationController controller;
-	
-	protected Population traders;
+	protected SimulationController controller;	
 
 	protected Account account = new Account();
 
@@ -192,19 +190,17 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	}
 	
 	public RandomRobinAuction(RandomEngine prng, Population traders, Auctioneer auctioneer) {
-		this.traders = traders;
 		this.auctioneer = auctioneer;
 		controller = new SimulationController(new BasicAgentInitialiser(), traders);
 		controller.setAgentMixer(new RandomRobinAgentMixer(prng));
+		controller.setPopulation(traders);
 		marketSimulation = new MarketSimulation(controller, this);
 	}
 	
-	public RandomRobinAuction(MarketSimulation marketSimulation,
-			SimulationController controller, Auctioneer auctioneer) {
+	public RandomRobinAuction(MarketSimulation marketSimulation, Auctioneer auctioneer) {
 		this.controller = controller;
 		this.auctioneer = auctioneer;
 		this.marketSimulation = marketSimulation;
-		this.traders = controller.getPopulation();
 	}
 	
 	public RandomRobinAuction(RandomEngine prng, Auctioneer auctioneer) {
@@ -300,7 +296,7 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	 * Return the number of traders currently active in the market.
 	 */
 	public int getNumberOfTraders() {
-		return traders.getAgentList().size();
+		return getTraders().getAgentList().size();
 	}
 
 	/**
@@ -395,11 +391,11 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	}
 
 	public Population getTraders() {
-		return traders;
+		return controller.getPopulation();
 	}
 
 	public void setTraders(Population traders) {
-		this.traders = traders;
+		controller.setPopulation(traders);
 	}
 
 	public Account getAccount() {
@@ -416,7 +412,7 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 
 	public void setAuctioneer(Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
-		auctioneer.setAuction(getMarket());
+//		auctioneer.setAuction(getMarket());
 	}
 
 	public Auctioneer getAuctioneer() {
@@ -488,7 +484,7 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	}
 	
 	public void register(TradingAgent trader) {
-		traders.add(trader);
+		getTraders().add(trader);
 		trader.register(this);
 	}
 
@@ -502,7 +498,7 @@ public class RandomRobinAuction  implements Market, Serializable, Runnable {
 	}
 	
 	public Iterator<Agent> getTraderIterator() {
-		return traders.getAgents().iterator();
+		return getTraders().getAgents().iterator();
 	}
 
 	public void addListener(EventListener listener) {

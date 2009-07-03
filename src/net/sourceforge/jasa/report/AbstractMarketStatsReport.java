@@ -19,6 +19,7 @@ import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.RandomRobinAuction;
 import net.sourceforge.jasa.sim.event.SimEvent;
+import net.sourceforge.jasa.sim.event.SimulationTerminatedEvent;
 
 /**
  * A historicalDataReport that performs additional calculations at the end of an market
@@ -41,6 +42,9 @@ public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
 		if (event instanceof MarketClosedEvent) {
 			calculate();
 //			ReportVariableBoard.getInstance().reportValues(getVariables(), event);
+		}
+		if (event instanceof SimulationTerminatedEvent) {
+			produceUserOutput();
 		}
 	}
 

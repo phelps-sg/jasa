@@ -13,6 +13,18 @@
 <bean id="simulationController" class="net.sourceforge.jasa.sim.SimulationController">
 	<constructor-arg ref="agentInitialiser"/>
 	<constructor-arg ref="population"/>
+	<property name="agentMixer" ref="agentMixer"/>
+	<property name="reports">
+		<list>
+			<bean class="net.sourceforge.jasa.report.EquilibriumReport">
+				<constructor-arg ref="rra"/>
+			</bean>
+		</list>
+	</property>
+</bean>
+
+<bean id="agentMixer" class="net.sourceforge.jasa.sim.RandomRobinAgentMixer">
+	<constructor-arg ref="prng"/>
 </bean>
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
@@ -26,6 +38,7 @@
 
 <bean id="cda" class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
 	<property name="pricingPolicy" ref="midPointDiscriminatoryPricingPolicy"/>
+	<property name="auction" ref="rra"/>
 </bean>
 
 <bean id="midPointDiscriminatoryPricingPolicy" 
@@ -89,15 +102,15 @@
 	<property name="strategy" ref="zic"/>
 </bean>
 
+<bean id="markupDistribution" class="cern.jet.random.Uniform">
+			<constructor-arg index="0" value="0.0" />
+			<constructor-arg index="1" value="10.0" />
+			<constructor-arg index="2" ref="prng" />
+</bean>
+
 <bean id="zic" scope="prototype" class="net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy">
-	<property name="quantity" value="1"/>	
-	<property name="markupDistribution">
-		<bean class="cern.jet.random.Uniform">
-			<constructor-arg value="0"/>
-			<constructor-arg value="10"/>
-			<constructor-arg ref="prng"/>
-		</bean>
-	</property>
+	<property name="quantity" value="1" />
+	<property name="markupDistribution" ref="markupDistribution"/>		
 </bean>
 
 <bean id="randomValuationPolicy" class="net.sourceforge.jasa.agent.valuation.RandomValuer">

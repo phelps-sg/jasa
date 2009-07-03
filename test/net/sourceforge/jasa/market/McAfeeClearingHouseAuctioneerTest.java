@@ -49,6 +49,7 @@ public class McAfeeClearingHouseAuctioneerTest extends TestCase {
 		auction = new RandomRobinAuction(prng);
 		auctioneer = new McAfeeClearingHouseAuctioneer();
 		auction.setAuctioneer(auctioneer);
+		auctioneer.setAuction(auction);
 
 		traders = new MockTrader[N];
 		for (int i = 0; i < N; i++) {
