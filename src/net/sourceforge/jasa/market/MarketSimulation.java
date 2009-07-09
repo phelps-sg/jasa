@@ -40,7 +40,7 @@ import net.sourceforge.jasa.sim.AbstractSimulation;
 import net.sourceforge.jasa.sim.SimulationController;
 
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
-import net.sourceforge.jasa.sim.event.SimulationTerminatedEvent;
+import net.sourceforge.jasa.sim.event.SimulationFinishedEvent;
 
 import net.sourceforge.jasa.view.AuctionConsoleFrame;
 
@@ -232,7 +232,7 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 
 		if (getAuctioneer() == null) {
 			throw new AuctionRuntimeException(
-			    "No getAuctioneer() has been assigned");
+			    "No auctioneer has been assigned");
 		}
 
 		begin();
@@ -257,7 +257,7 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 
 	public void end() {
 		informAuctionClosed();
-		fireEvent(new SimulationTerminatedEvent(this));
+		fireEvent(new SimulationFinishedEvent(this));
 	}
 
 	public void step() throws AuctionClosedException {

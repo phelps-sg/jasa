@@ -47,7 +47,7 @@ import net.sourceforge.jasa.sim.SimulationController;
 import net.sourceforge.jasa.sim.event.EventListener;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
-import net.sourceforge.jasa.sim.event.SimulationTerminatedEvent;
+import net.sourceforge.jasa.sim.event.SimulationFinishedEvent;
 import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
 import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.report.Report;
