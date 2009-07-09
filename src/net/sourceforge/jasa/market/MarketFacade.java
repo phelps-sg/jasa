@@ -72,10 +72,10 @@ public class MarketFacade implements Market, Serializable, Runnable {
 		controller.setAgentMixer(new RandomRobinAgentMixer(prng));
 		controller.setPopulation(traders);
 		marketSimulation = new MarketSimulation(controller, this);
+		controller.setSimulation(marketSimulation);
 	}
 	
 	public MarketFacade(MarketSimulation marketSimulation, Auctioneer auctioneer) {
-		this.controller = controller;
 		this.auctioneer = auctioneer;
 		this.marketSimulation = marketSimulation;
 	}
@@ -358,8 +358,9 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	}
 
 	public void run() {
-		controller.setListeners();
-		marketSimulation.run();
+		controller.run();
+//		controller.setListeners();
+//		marketSimulation.run();
 	}
 
 	public void step() throws AuctionClosedException {

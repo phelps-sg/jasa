@@ -25,11 +25,10 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * Agents of this type have a
- * finite trade entitlement, which determines how many units or "tokens" they are able to
- * trade in a given trading period. Agents become inactive once their
- * intitial trade entitlement is used up, and their trade entitlement is
- * restored at the end of each day.
+ * Agents of this type have a finite trade entitlement, which determines how
+ * many units or "tokens" they are able to trade in a given trading period.
+ * Agents become inactive once their intitial trade entitlement is used up, and
+ * their trade entitlement is restored at the end of each day.
  * </p>
  * 
  * @author Steve Phelps

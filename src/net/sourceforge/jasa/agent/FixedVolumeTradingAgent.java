@@ -23,8 +23,7 @@ import net.sourceforge.jasa.market.Market;
 
 /**
  * <p>
- * Agents of this
- * type have a fixed volume, and they trade units equal to their
+ * Agents of this type have a fixed volume, and they trade units equal to their
  * volume in each round of the market.
  * </p>
  * 
