@@ -17,44 +17,23 @@ package net.sourceforge.jasa.market;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.event.AgentPolledEvent;
-import net.sourceforge.jasa.event.MarketEventListener;
-import net.sourceforge.jasa.event.RoundClosedEvent;
-import net.sourceforge.jasa.event.RoundClosingEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
-import net.sourceforge.jasa.market.rules.AuctionClosingCondition;
-import net.sourceforge.jasa.market.rules.CombiTimingCondition;
-import net.sourceforge.jasa.market.rules.DayEndingCondition;
-import net.sourceforge.jasa.market.rules.MaxDaysAuctionClosingCondition;
-import net.sourceforge.jasa.market.rules.MaxRoundsAuctionClosingCondition;
-import net.sourceforge.jasa.market.rules.MaxRoundsDayEndingCondition;
-import net.sourceforge.jasa.market.rules.NullAuctionClosingCondition;
-import net.sourceforge.jasa.market.rules.TimingCondition;
-import net.sourceforge.jasa.report.AuctionReport;
-import net.sourceforge.jasa.report.ReportVariableBoard;
+
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.Population;
 import net.sourceforge.jasa.sim.RandomRobinAgentMixer;
 import net.sourceforge.jasa.sim.SimulationController;
 import net.sourceforge.jasa.sim.event.EventListener;
 import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
-import net.sourceforge.jasa.sim.event.SimulationFinishedEvent;
 import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.report.Report;
 import net.sourceforge.jasa.sim.util.BeanFactorySingleton;
-import net.sourceforge.jasa.sim.util.Parameterizable;
-import net.sourceforge.jasa.sim.util.Resetable;
-import net.sourceforge.jasa.view.AuctionConsoleFrame;
 
 import org.apache.log4j.Logger;
 
@@ -65,7 +44,7 @@ import cern.jet.random.engine.RandomEngine;
  * @version $Revision$
  */
 
-public class MarketFacade  implements Market, Serializable, Runnable {
+public class MarketFacade implements Market, Serializable, Runnable {
 
 	protected Auctioneer auctioneer = null;
 	
