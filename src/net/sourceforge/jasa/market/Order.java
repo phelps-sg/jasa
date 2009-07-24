@@ -63,19 +63,9 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	protected boolean isBid;
 
 	/**
-	 * The unique id of this shout
-	 */
-//	protected long id = -1;
-
-	/**
 	 * The child of this shout.
 	 */
 	protected Order child = null;
-
-	/**
-	 * Used to allocate each agent with a unique id.
-	 */
-//	static IdAllocator idAllocator = new IdAllocator();
 
 	static DecimalFormat currencyFormatter = new DecimalFormat(
 	    "+#########0.00;-#########.00");
@@ -214,7 +204,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		}
 	}
 
-	void copyFrom(Order other) {
+	public void copyFrom(Order other) {
 		this.price = other.getPrice();
 		this.agent = other.getAgent();
 		this.quantity = other.getQuantity();
@@ -250,56 +240,21 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return newShout;
 	}
 
-	void setIsBid(boolean isBid) {
+	public void setIsBid(boolean isBid) {
 		this.isBid = isBid;
 	}
 
-	void setAgent(TradingAgent agent) {
+	public void setAgent(TradingAgent agent) {
 		this.agent = agent;
 	}
 
-	void setPrice(double price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
-	void setQuantity(int quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
-	/**
-	 * A Shout that is publically mutable.
-	 * 
-	 * @author Steve Phelps
-	 */
-	public static class MutableShout extends Order {
-
-		public MutableShout() {
-			super();
-		}
-
-		public MutableShout(Order existing) {
-			super(existing);
-		}
-
-		public void setPrice(double price) {
-			super.setPrice(price);
-		}
-
-		public void setAgent(TradingAgent agent) {
-			super.setAgent(agent);
-		}
-
-		public void setQuantity(int quantity) {
-			super.setQuantity(quantity);
-		}
-
-		public void setIsBid(boolean isBid) {
-			super.setIsBid(isBid);
-		}
-
-		public void copyFrom(Order other) {
-			super.copyFrom(other);
-		}
-	}
-
+	
 }

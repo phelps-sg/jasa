@@ -74,14 +74,13 @@ import org.apache.log4j.Logger;
 public class HistoricalDataReport extends AbstractAuctionReport implements
     Serializable, Resetable {
 
-	protected LinkedList asks = new LinkedList();
+	protected LinkedList<Order> asks = new LinkedList<Order>();
 
-	protected LinkedList bids = new LinkedList();
+	protected LinkedList<Order> bids = new LinkedList<Order>();
 
 	protected TreeBag sortedShouts = new TreeBag();
 
-	protected HashSet acceptedShouts = new HashSet();
-
+	protected HashSet<Order> acceptedShouts = new HashSet<Order>();
 
 	protected Map shoutMap = Collections.synchronizedMap(new HashMap());
 
@@ -360,7 +359,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		return getNumberOfShouts(bids, price, accepted);
 	}
 
-	public Iterator sortedShoutIterator() {
+	public Iterator<Order> sortedShoutIterator() {
 		return sortedShouts.iterator();
 	}
 
@@ -503,9 +502,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 			Order s;
 
-			Iterator i = asks.iterator();
+			Iterator<Order> i = asks.iterator();
 			while (i.hasNext()) {
-				s = (Order) i.next();
+				s = i.next();
 				if (acceptedShouts.contains(s)) {
 					sortedAcceptedAsks.add(s);
 				} else {
@@ -515,7 +514,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 			i = bids.iterator();
 			while (i.hasNext()) {
-				s = (Order) i.next();
+				s = i.next();
 				if (acceptedShouts.contains(s)) {
 					sortedAcceptedBids.add(s);
 				} else {

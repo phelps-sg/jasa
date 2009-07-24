@@ -44,7 +44,7 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 
 	protected AbstractTradingAgent agent;
 
-	protected Order.MutableShout currentShout;
+	protected Order currentShout;
 
 	protected Market auction;
 
@@ -91,14 +91,14 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 	 * 
 	 * @return false if no shout is to be placed at this time
 	 */
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		shout.setIsBid(agent.isBuyer(auction));
 		shout.setAgent(agent);
 		return true;
 	}
 
 	public void initialise() {
-		currentShout = new Order.MutableShout();
+		currentShout = new Order();
 	}
 
 	public void eventOccurred(SimEvent event) {

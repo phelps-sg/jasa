@@ -63,7 +63,7 @@ public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
 		this.distribution = distribution;
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 
 		double price = distribution.nextDouble();
 		shout.setPrice(price);

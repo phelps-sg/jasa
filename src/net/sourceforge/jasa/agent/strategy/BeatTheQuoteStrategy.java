@@ -15,9 +15,11 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
-import net.sourceforge.jasa.market.Order.MutableShout;
+import net.sourceforge.jasa.market.Order;
+
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 
@@ -39,7 +41,7 @@ public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
 	public void endOfRound(Market auction) {
 	}
 
-	public boolean modifyShout(MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		MarketQuote quote = auction.getQuote();
 		if (agent.isBuyer(auction)) {
 			double p = quote.getAsk();

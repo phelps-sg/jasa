@@ -57,7 +57,7 @@ public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
 		return clonedStrategy;
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		EquilibriumReport eqReport = new EquilibriumReport(
 		    (MarketFacade) auction);
 		eqReport.calculate();

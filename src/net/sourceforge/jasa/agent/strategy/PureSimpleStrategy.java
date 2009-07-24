@@ -75,7 +75,7 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl implements
 		return clonedStrategy;
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		double delta;
 		if (agent.isSeller(auction)) {
 			delta = margin;

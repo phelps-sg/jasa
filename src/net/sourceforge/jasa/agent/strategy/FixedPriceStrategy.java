@@ -57,7 +57,7 @@ public class FixedPriceStrategy extends FixedQuantityStrategyImpl implements
 		return clonedStrategy;
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)
 		    || agent.isSeller(auction) && price >= agent.getValuation(auction)) {
 			shout.setPrice(price);

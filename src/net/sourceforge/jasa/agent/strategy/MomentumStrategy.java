@@ -108,7 +108,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 		initialMarginDistribution = new Uniform(0.05, 0.35, prng);
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		shout.setPrice(currentPrice);
 		return super.modifyShout(shout);
 	}

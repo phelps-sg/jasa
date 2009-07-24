@@ -43,12 +43,12 @@ public class TrueSupplyAndDemandStats extends SupplyAndDemandStats {
 	/**
 	 * The sorted list of agent's truthful bids (ie buyers' private values).
 	 */
-	protected ArrayList bids = new ArrayList();
+	protected ArrayList<Order> bids = new ArrayList<Order>();
 
 	/**
 	 * The sorted list of agents' truthful asks (ie sellers' private values).
 	 */
-	protected ArrayList asks = new ArrayList();
+	protected ArrayList<Order> asks = new ArrayList<Order>();
 
 	static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
 
@@ -66,7 +66,7 @@ public class TrueSupplyAndDemandStats extends SupplyAndDemandStats {
 	}
 
 	protected void enumerateTruthfulShout(Order shout) {
-		Order.MutableShout copyOfShout = new Order.MutableShout();
+		Order copyOfShout = new Order();
 		copyOfShout.copyFrom(shout);
 
 		if (shout.isBid()) {
@@ -83,8 +83,8 @@ public class TrueSupplyAndDemandStats extends SupplyAndDemandStats {
 		bids.clear();
 	}
 
-	public Map getVariables() {
-		return new HashMap();
+	public Map<Object,Number> getVariables() {
+		return new HashMap<Object,Number>();
 	}
 
 }

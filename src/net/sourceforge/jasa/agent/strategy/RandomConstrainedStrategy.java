@@ -62,7 +62,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 		super(agent);
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		double markup = markupDistribution.nextDouble();
 		double price = 0;
 		if (agent.isBuyer(auction)) {

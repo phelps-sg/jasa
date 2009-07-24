@@ -109,7 +109,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 //		}
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 
 		super.modifyShout(shout);
 

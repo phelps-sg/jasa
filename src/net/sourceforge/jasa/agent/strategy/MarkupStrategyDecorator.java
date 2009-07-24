@@ -53,7 +53,7 @@ public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
 		super(null);
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		assert agent.equals(((AbstractStrategy) subStrategy).getAgent());
 		double delta;
 		Order strategicShout = subStrategy.modifyOrder(shout, auction);

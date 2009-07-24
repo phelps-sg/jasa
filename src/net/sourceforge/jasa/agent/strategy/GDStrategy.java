@@ -104,11 +104,11 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
 		}
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 
 		super.modifyShout(shout);
 
-		Iterator sortedShouts = historyStats.sortedShoutIterator();
+		Iterator<Order> sortedShouts = historyStats.sortedShoutIterator();
 
 		double lastPoint = 0;
 		double lastP = 0;

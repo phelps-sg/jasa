@@ -20,7 +20,6 @@ import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.ShoutsNotVisibleException;
-import net.sourceforge.jasa.market.Order.MutableShout;
 
 public abstract class TransparentAuctioneer extends AbstractAuctioneer {
 
@@ -28,11 +27,11 @@ public abstract class TransparentAuctioneer extends AbstractAuctioneer {
 	 * The set of shouts that have been matched in the current round.
 	 * 
 	 */
-	protected HashSet acceptedShouts = new HashSet();
+	protected HashSet<Order> acceptedShouts = new HashSet<Order>();
 
-	protected Order.MutableShout lastAsk = new Order.MutableShout();
+	protected Order lastAsk = new Order();
 
-	protected Order.MutableShout lastBid = new Order.MutableShout();
+	protected Order lastBid = new Order();
 
 	protected Order lastShout;
 

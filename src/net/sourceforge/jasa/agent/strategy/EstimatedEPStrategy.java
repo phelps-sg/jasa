@@ -16,9 +16,10 @@ package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.MarketOpenEvent;
+
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.Order.MutableShout;
+import net.sourceforge.jasa.market.Order;
+
 import net.sourceforge.jasa.report.HistoricalDataReport;
 
 public class EstimatedEPStrategy extends FixedQuantityStrategyImpl {
@@ -43,7 +44,7 @@ public class EstimatedEPStrategy extends FixedQuantityStrategyImpl {
 		super.eventOccurred(event);
 	}
 
-	public boolean modifyShout(MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		double a = estimatedAskQuote();
 		double b = estimatedBidQuote();
 		double t = agent.getValuation(auction);

@@ -82,7 +82,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 		}
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 
 		// Generate an action from the learning algorithm
 		int action = act();

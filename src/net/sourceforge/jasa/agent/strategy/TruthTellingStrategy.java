@@ -38,7 +38,7 @@ public class TruthTellingStrategy extends FixedQuantityStrategyImpl implements
 		super();
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		shout.setPrice(agent.getValuation(auction));
 		return super.modifyShout(shout);
 	}

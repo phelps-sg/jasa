@@ -16,10 +16,11 @@
 package net.sourceforge.jasa.agent;
 
 import net.sourceforge.jasa.agent.strategy.AbstractStrategy;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
+
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+
 import net.sourceforge.jasa.sim.event.SimEvent;
 
 /**
@@ -29,20 +30,10 @@ import net.sourceforge.jasa.sim.event.SimEvent;
 
 public class MockStrategy extends AbstractStrategy {
 
-	/**
-	 * @uml.property name="currentOrder"
-	 */
 	protected int currentShout = 0;
 
-	/**
-	 * @uml.property name="shouts"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	public Order[] shouts;
 
-	/**
-	 * @uml.property name="lastShoutAccepted"
-	 */
 	public boolean lastShoutAccepted;
 
 	public MockStrategy(Order[] shouts) {
@@ -63,7 +54,7 @@ public class MockStrategy extends AbstractStrategy {
 		return shouts[currentShout].getQuantity();
 	}
 
-	public boolean modifyShout(Order.MutableShout shout) {
+	public boolean modifyShout(Order shout) {
 		if (currentShout >= shouts.length) {
 			return false;
 		}
