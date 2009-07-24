@@ -123,36 +123,6 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 		fireEvent(new MarketOpenEvent(market, getRound()));
 	}
 
-//
-//	/**
-//	 * Register a new trader in the market.
-//	 */
-//	public void register(TradingAgent trader) {
-////		registeredTraders.add(trader);
-////		activate(trader);
-//	}
-//
-//	/**
-//	 * Remove a trader from the market.
-//	 */
-//	public void remove(TradingAgent trader) {
-////		if (!defunctTraders.contains(trader)) {
-////			defunctTraders.add(trader);
-////		}
-//	}
-
-	/**
-	 * Invokes the requestShout() method on each trader in the market, giving
-	 * each trader the opportunity to bid in the market.
-	 */
-//	public void requestShouts() {
-//		Iterator i = activeTraders.iterator();
-//		while (i.hasNext()) {
-//			TradingAgent trader = (TradingAgent) i.next();
-//			requestShout(trader);
-//		}
-//	}
-
 	public void beginRound() {
 		if (closingCondition.eval()) {
 			close();
@@ -160,21 +130,6 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 			endOfRound = false;
 		}
 	}
-
-//	public void requestNextShout() {
-//		if (currentTrader < shoutingTraders.length) {
-//			requestShout((TradingAgent) shoutingTraders[currentTrader++]);
-//		} else {
-//			endOfRound = true;
-//		}
-//		setChanged();
-//		notifyObservers();
-//	}
-//
-//	public void requestShout(TradingAgent trader) {
-//		trader.requestShout(this);
-//		fireEvent(new AgentPolledEvent(this, getRound(), trader));
-//	}
 
 	/**
 	 * Return the number of traders currently active in the market.

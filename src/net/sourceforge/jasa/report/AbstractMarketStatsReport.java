@@ -17,6 +17,7 @@ package net.sourceforge.jasa.report;
 
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.sim.SimulationController;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationFinishedEvent;
 
@@ -42,7 +43,7 @@ public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
 			calculate();
 //			ReportVariableBoard.getInstance().reportValues(getVariables(), event);
 		}
-		if (event instanceof SimulationFinishedEvent) {
+		if (event instanceof SimulationFinishedEvent) {			
 			produceUserOutput();
 		}
 	}

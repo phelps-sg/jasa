@@ -55,7 +55,7 @@ public class EquilibriumReport extends DirectRevelationReport implements
 	 */
 	protected boolean equilibriaFound = false;
 
-	protected List matchedShouts;
+	protected List<Order> matchedShouts;
 
 	protected int quantity;
 
@@ -102,10 +102,10 @@ public class EquilibriumReport extends DirectRevelationReport implements
 
 	protected void calculateEquilibriaQuantity() {
 		quantity = 0;
-		Iterator i = matchedShouts.iterator();
+		Iterator<Order> i = matchedShouts.iterator();
 		while (i.hasNext()) {
-			Order bid = (Order) i.next();
-			Order ask = (Order) i.next();
+			Order bid = i.next();
+			Order ask = i.next();
 			quantity += ask.getQuantity();
 		}
 	}
@@ -152,19 +152,23 @@ public class EquilibriumReport extends DirectRevelationReport implements
 	}
 
 	public void produceUserOutput() {
-		logger.info("");
-		logger.info("Equilibrium analysis historicalDataReport");
-		logger.info("---------------------------");
-		logger.info("");
-		logger.info("\tEquilibria Found?\t" + equilibriaFound);
-		logger.info("\n\tquantity:\t" + quantity + "\n");
-		logger.info("\n\tprice:\n\t\tmin:\t" + minPrice + "\tmax:\t" + maxPrice);
-		logger.info("");
+		logger.debug("");
+		logger.debug("Equilibrium analysis historicalDataReport");
+		logger.debug("---------------------------");
+		logger.debug("");
+		logger.debug("\tEquilibria Found?\t" + equilibriaFound);
+		logger.debug("\n\tquantity:\t" + quantity + "\n");
+		logger.debug("\n\tprice:\n\t\tmin:\t" + minPrice + "\tmax:\t" + maxPrice);
+		logger.debug("");
 	}
 
-	public Map getVariables() {
-		HashMap reportVars = new HashMap();
-		reportVars.put(VAR_EXISTS, new Boolean(equilibriaFound));
+	public Map<Object,Number> getVariables() {
+		HashMap<Object,Number> reportVars = new HashMap<Object,Number>();
+		if (equilibriaFound) {
+			reportVars.put(VAR_EXISTS, new Integer(1));
+		} else {
+			reportVars.put(VAR_EXISTS, new Integer(0));
+		}
 		reportVars.put(VAR_QUANTITY, new Long(quantity));
 		reportVars.put(VAR_MINPRICE, new Double(minPrice));
 		reportVars.put(VAR_MAXPRICE, new Double(maxPrice));

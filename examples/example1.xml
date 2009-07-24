@@ -15,13 +15,22 @@
 	<constructor-arg ref="population"/>
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="simulation" ref="marketSimulation"/>
+	<property name="numSimulations" value="100"/>
 	<property name="reports">
 		<list>
-			<bean class="net.sourceforge.jasa.report.EquilibriumReport">
-				<constructor-arg ref="market"/>
+			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
+				<constructor-arg>
+					<list>
+						<ref bean="equilibriumReport"/>
+					</list>
+				</constructor-arg>
 			</bean>
 		</list>
 	</property>
+</bean>
+
+<bean id="equilibriumReport" class="net.sourceforge.jasa.report.EquilibriumReport">
+	<constructor-arg ref="market" />
 </bean>
 
 <bean id="agentMixer" class="net.sourceforge.jasa.sim.RandomRobinAgentMixer">
