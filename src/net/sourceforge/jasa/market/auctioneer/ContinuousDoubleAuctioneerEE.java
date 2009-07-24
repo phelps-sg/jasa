@@ -20,7 +20,7 @@ import java.io.Serializable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.ReportVariableBoard;
@@ -135,7 +135,7 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 		initialise();
 	}
 
-	public void checkImprovement(Order shout) throws IllegalShoutException {
+	public void checkImprovement(Order shout) throws IllegalOrderException {
 		super.checkImprovement(shout);
 
 		if (shout.isBid()) {

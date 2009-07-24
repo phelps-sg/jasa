@@ -23,7 +23,7 @@ import java.util.Map;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -239,10 +239,10 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 			    .getValuation(auction), trader.isBuyer(auction));
 			shouts.add(truth);
 			try {
-				auctioneer.newShout(truth);
+				auctioneer.newOrder(truth);
 			} catch (NotAnImprovementOverQuoteException e) {
 				// do nothing
-			} catch (IllegalShoutException e) {
+			} catch (IllegalOrderException e) {
 				e.printStackTrace();
 				throw new Error(e.getMessage());
 			}

@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.market.rules;
 
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Order;
 
 /**
@@ -30,6 +30,6 @@ public class AlwaysAcceptPolicy extends OrderAcceptancePolicy {
 	/**
 	 * accepts all shouts.
 	 */
-	public void check(Order shout) throws IllegalShoutException {
+	public void check(Order shout) throws IllegalOrderException {
 	}
 }

@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 import java.io.Serializable;
 
 import net.sourceforge.jasa.agent.TradingAgent;
+import net.sourceforge.jasa.sim.SimulationTime;
 import net.sourceforge.jasa.sim.util.IdAllocator;
 
 /**
@@ -61,6 +62,8 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	 * True if this shout is a bid. False if this shout is an ask.
 	 */
 	protected boolean isBid;
+	
+	protected SimulationTime timeStamp;
 
 	/**
 	 * The child of this shout.
@@ -75,6 +78,11 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		this.quantity = quantity;
 		this.price = price;
 		this.isBid = isBid;
+	}
+	
+	public Order(TradingAgent agent, int quantity, double price, boolean isBid, SimulationTime timeStamp) {
+		this(agent, quantity, price, isBid);
+		this.timeStamp = timeStamp;
 	}
 
 	public Order(Order existing) {
@@ -254,6 +262,14 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public SimulationTime getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(SimulationTime timeStamp) {
+		this.timeStamp = timeStamp;
 	}
 
 	

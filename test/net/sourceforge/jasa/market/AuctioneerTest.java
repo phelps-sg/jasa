@@ -18,7 +18,7 @@ package net.sourceforge.jasa.market;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.MockTrader;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
@@ -68,14 +68,14 @@ public abstract class AuctioneerTest extends TestCase {
 		// round 0
 		Order testShout = null;
 		try {
-			auctioneer.newShout(new Order(traders[0], 1, 21, true));
-			auctioneer.newShout(new Order(traders[1], 1, 42, true));
+			auctioneer.newOrder(new Order(traders[0], 1, 21, true));
+			auctioneer.newOrder(new Order(traders[1], 1, 42, true));
 			testShout = new Order(traders[2], 1, 43, false);
-			auctioneer.newShout(testShout);
-			auctioneer.newShout(new Order(traders[3], 1, 23, false));
-			auctioneer.newShout(new Order(traders[4], 1, 10, false));
-		} catch (IllegalShoutException e) {
-			fail("invalid IllegalShoutException exception thrown " + e);
+			auctioneer.newOrder(testShout);
+			auctioneer.newOrder(new Order(traders[3], 1, 23, false));
+			auctioneer.newOrder(new Order(traders[4], 1, 10, false));
+		} catch (IllegalOrderException e) {
+			fail("invalid IllegalOrderException exception thrown " + e);
 			e.printStackTrace();
 		}
 

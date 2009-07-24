@@ -53,20 +53,6 @@ public class MDPStrategy extends DiscreteLearnerStrategy implements
 
 	protected boolean firstShout = true;
 
-	public static final String P_DEF_BASE = "mdpstrategy";
-
-	public static final String P_LEARNER = "learner";
-
-	public static final String P_QUOTEBINS = "quotebins";
-
-	public static final String P_ASKBINSTART = "askbinstart";
-
-	public static final String P_ASKBINWIDTH = "askbinwidth";
-
-	public static final String P_BIDBINSTART = "bidbinstart";
-
-	public static final String P_BIDBINWIDTH = "bidbinwidth";
-
 	public MDPStrategy(AbstractTradingAgent agent, double askBinStart,
 	    double askBinWidth, double bidBinStart, double bidBinWidth) {
 		super(agent);
@@ -79,28 +65,6 @@ public class MDPStrategy extends DiscreteLearnerStrategy implements
 	public MDPStrategy() {
 		super();
 	}
-
-//	public void setup(ParameterDatabase parameters, Parameter base) {
-//
-//		super.setup(parameters, base);
-//
-//		Parameter defBase = new Parameter(P_DEF_BASE);
-//		Parameter learnerParameter = base.push(P_LEARNER);
-//		learner = (MDPLearner) parameters.getInstanceForParameter(learnerParameter,
-//		    defBase.push(P_LEARNER), MDPLearner.class);
-//		((Parameterizable) learner).setup(parameters, learnerParameter);
-//
-//		askBinStart = parameters.getDouble(base.push(P_ASKBINSTART), defBase
-//		    .push(P_ASKBINSTART), 0);
-//		askBinWidth = parameters.getDouble(base.push(P_ASKBINWIDTH), defBase
-//		    .push(P_ASKBINWIDTH), 0);
-//		bidBinStart = parameters.getDouble(base.push(P_BIDBINSTART), defBase
-//		    .push(P_BIDBINSTART), 0);
-//		bidBinWidth = parameters.getDouble(base.push(P_BIDBINWIDTH), defBase
-//		    .push(P_BIDBINWIDTH), 0);
-//		quoteBins = parameters.getInt(base.push(P_QUOTEBINS), defBase
-//		    .push(P_QUOTEBINS), 1);
-//	}
 
 	public int act() {
 		return learner.act();

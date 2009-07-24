@@ -22,13 +22,13 @@ package net.sourceforge.jasa.market;
  * @author Steve Phelps
  * @version $Revision$
  */
-public class IllegalShoutException extends AuctionException {
+public class IllegalOrderException extends AuctionException {
 
-	public IllegalShoutException(String message) {
+	public IllegalOrderException(String message) {
 		super(message);
 	}
 
-	public IllegalShoutException() {
+	public IllegalOrderException() {
 		super();
 	}
 

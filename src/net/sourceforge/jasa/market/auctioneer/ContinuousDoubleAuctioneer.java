@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.DuplicateShoutException;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
@@ -73,12 +73,12 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 		clear();
 	}
 
-	protected void checkShoutValidity(Order shout) throws IllegalShoutException {
+	protected void checkShoutValidity(Order shout) throws IllegalOrderException {
 		super.checkShoutValidity(shout);
 		checkImprovement(shout);
 	}
 
-	protected void checkImprovement(Order shout) throws IllegalShoutException {
+	protected void checkImprovement(Order shout) throws IllegalOrderException {
 		double quote;
 		if (shout.isBid()) {
 			quote = bidQuote();

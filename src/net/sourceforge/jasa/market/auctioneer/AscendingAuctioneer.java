@@ -19,7 +19,7 @@ import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.DuplicateShoutException;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
@@ -80,11 +80,11 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
 	public void initialise() {
 		super.initialise();
 		try {
-			newShout(new Order(seller, quantity, 0, false));
+			newOrder(new Order(seller, quantity, 0, false));
 		} catch (DuplicateShoutException e) {
 			throw new AuctionRuntimeException(
 			    "Fatal error: invalid market state on initialisation!");
-		} catch (IllegalShoutException e) {
+		} catch (IllegalOrderException e) {
 			throw new AuctionRuntimeException(
 			    "Fatal error: invalid market state on initialisation!");
 		}
@@ -125,10 +125,10 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
 		currentQuote = new MarketQuote(null, orderBook.getLowestMatchedBid());
 	}
 
-	protected void checkShoutValidity(Order shout) throws IllegalShoutException {
+	protected void checkShoutValidity(Order shout) throws IllegalOrderException {
 		super.checkShoutValidity(shout);
 		if (shout.isAsk()) {
-			throw new IllegalShoutException(
+			throw new IllegalOrderException(
 			    "asks are not allowed in an ascending market");
 		}
 		// TODO: Additional logic to enforce bid amounts at round nos and/or

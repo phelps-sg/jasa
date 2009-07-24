@@ -17,7 +17,7 @@ package net.sourceforge.jasa.market.rules;
 
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.sim.event.SimEvent;
@@ -66,12 +66,12 @@ public abstract class OrderAcceptancePolicy implements Parameterizable,
 	 * <p>
 	 * shout
 	 * </p>
-	 * is acceptable or not. If not, an IllegalShoutException is thrown.
+	 * is acceptable or not. If not, an IllegalOrderException is thrown.
 	 * 
 	 * @param shout
-	 * @throws IllegalShoutException
+	 * @throws IllegalOrderException
 	 */
-	public abstract void check(Order shout) throws IllegalShoutException;
+	public abstract void check(Order shout) throws IllegalOrderException;
 
 	public void eventOccurred(SimEvent event) {
 	}

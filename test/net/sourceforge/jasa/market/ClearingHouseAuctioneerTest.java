@@ -14,7 +14,7 @@
  */
 package net.sourceforge.jasa.market;
 
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
@@ -48,11 +48,11 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 
 		// round 0
 		try {
-			auctioneer.newShout(new Order(traders[0], 1, 500, true));
-			auctioneer.newShout(new Order(traders[1], 1, 400, true));
-			auctioneer.newShout(new Order(traders[2], 2, 900, false));
-		} catch (IllegalShoutException e) {
-			fail("invalid IllegalShoutException exception thrown " + e);
+			auctioneer.newOrder(new Order(traders[0], 1, 500, true));
+			auctioneer.newOrder(new Order(traders[1], 1, 400, true));
+			auctioneer.newOrder(new Order(traders[2], 2, 900, false));
+		} catch (IllegalOrderException e) {
+			fail("invalid IllegalOrderException exception thrown " + e);
 			e.printStackTrace();
 		}
 
@@ -67,11 +67,11 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 		// round 1
 		System.out.println("round1");
 		try {
-			auctioneer.newShout(new Order(traders[0], 1, 920, true));
-			auctioneer.newShout(new Order(traders[1], 1, 950, true));
+			auctioneer.newOrder(new Order(traders[0], 1, 920, true));
+			auctioneer.newOrder(new Order(traders[1], 1, 950, true));
 
-		} catch (IllegalShoutException e) {
-			fail("invalid IllegalShoutException thrown " + e);
+		} catch (IllegalOrderException e) {
+			fail("invalid IllegalOrderException thrown " + e);
 			e.printStackTrace();
 		}
 
@@ -109,11 +109,11 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 
 			// bid: 5
 			System.out.println("Bidding $5");
-			auctioneer.newShout(new Order(traders[0], 1, 5, true));
+			auctioneer.newOrder(new Order(traders[0], 1, 5, true));
 
 			// ask: 10
 			System.out.println("Asking $10");
-			auctioneer.newShout(new Order(traders[3], 1, 10, false));
+			auctioneer.newOrder(new Order(traders[3], 1, 10, false));
 
 			// quote should not have changed yet
 			quote = auctioneer.getQuote();
@@ -135,7 +135,7 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 
 			// ok, now lets match the bid by placing an ask for $4
 			System.out.println("Bidding $4");
-			auctioneer.newShout(new Order(traders[2], 1, 4, false));
+			auctioneer.newOrder(new Order(traders[2], 1, 4, false));
 			auctioneer.clear();
 			((AbstractAuctioneer) auctioneer).generateQuote();
 			auctioneer.printState();
@@ -150,7 +150,7 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 
 			// ok, lets match that ask by bidding $11
 			System.out.println("Bidding $11");
-			auctioneer.newShout(new Order(traders[0], 1, 11, true));
+			auctioneer.newOrder(new Order(traders[0], 1, 11, true));
 			auctioneer.clear();
 			((AbstractAuctioneer) auctioneer).generateQuote();
 			auctioneer.printState();
@@ -163,7 +163,7 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 
 			// now see what happens when we have a single unmatched bid of $4
 			System.out.println("Bidding $4");
-			auctioneer.newShout(new Order(traders[1], 1, 4, true));
+			auctioneer.newOrder(new Order(traders[1], 1, 4, true));
 			((AbstractAuctioneer) auctioneer).generateQuote();
 			;
 			auctioneer.printState();
@@ -175,7 +175,7 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 			// but we cannot guarantee a successful bid because there are no asks
 			assertTrue(quote.getAsk() == Double.POSITIVE_INFINITY);
 
-		} catch (IllegalShoutException e) {
+		} catch (IllegalOrderException e) {
 			fail("illegal shout " + e.getMessage());
 		}
 	}

@@ -22,7 +22,7 @@ import java.util.List;
 
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
@@ -101,10 +101,10 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	 * @param shout
 	 *          The new shout to be processed
 	 * 
-	 * @exception IllegalShoutException
+	 * @exception IllegalOrderException
 	 *              Thrown if the shout is invalid in some way.
 	 */
-	public void newShout(Order shout) throws IllegalShoutException,
+	public void newOrder(Order shout) throws IllegalOrderException,
 	    DuplicateShoutException {
 		checkShoutValidity(shout);
 		newShoutInternal(shout);
@@ -118,13 +118,13 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	 * 
 	 * @param shout
 	 *          The new shout to be processed
-	 * @throws IllegalShoutException
+	 * @throws IllegalOrderException
 	 *           Thrown if the shout is invalid in some way.
 	 */
-	protected void checkShoutValidity(Order shout) throws IllegalShoutException {
+	protected void checkShoutValidity(Order shout) throws IllegalOrderException {
 		if (!shout.isValid()) {
 			logger.error("malformed shout: " + shout);
-			throw new IllegalShoutException("Malformed shout");
+			throw new IllegalOrderException("Malformed shout");
 		}
 	}
 

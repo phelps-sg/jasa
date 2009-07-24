@@ -33,7 +33,7 @@ import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -236,8 +236,8 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 		} catch (AuctionClosedException e) {
 			logger.debug("requestShout(): Received AuctionClosedException");
 			// do nothing
-		} catch (IllegalShoutException e) {
-			logger.debug("requestShout(): Received IllegalShoutException");
+		} catch (IllegalOrderException e) {
+			logger.debug("requestShout(): Received IllegalOrderException");
 			// do nothing
 		} catch (AuctionException e) {
 			logger.warn(e.getMessage());

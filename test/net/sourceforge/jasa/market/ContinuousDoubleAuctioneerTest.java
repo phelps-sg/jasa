@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.market;
 
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
@@ -58,11 +58,11 @@ public class ContinuousDoubleAuctioneerTest extends AuctioneerTest {
 
 	public boolean shoutOK(Order newShout) {
 		try {
-			auctioneer.newShout(newShout);
+			auctioneer.newOrder(newShout);
 		} catch (NotAnImprovementOverQuoteException e) {
 			System.out.println("Shout " + newShout + " did not beat quote.");
 			return false;
-		} catch (IllegalShoutException e) {
+		} catch (IllegalOrderException e) {
 			fail("illegal shout " + e.getMessage());
 		}
 		System.out.println("Placed shout " + newShout);

@@ -330,16 +330,17 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	 * @param shout
 	 *          The new shout in the market.
 	 */
-	public void placeOrder(Order shout) throws AuctionException {
+	public void placeOrder(Order order) throws AuctionException {
 		if (closed()) {
 			throw new AuctionClosedException("Auction is closed.");
 		}
-		if (shout == null) {
-			throw new IllegalShoutException("null shout");
+		if (order == null) {
+			throw new IllegalOrderException("null shout");
 		}
-		fireEvent(new OrderReceivedEvent(this, marketSimulation.getRound(), shout));
-		auctioneer.newShout(shout);
-		fireEvent(new OrderPlacedEvent(this, marketSimulation.getRound(), shout));
+		fireEvent(new OrderReceivedEvent(this, marketSimulation.getRound(), order));
+		order.setTimeStamp(controller.getSimulation().getSimulationTime());
+		auctioneer.newOrder(order);
+		fireEvent(new OrderPlacedEvent(this, marketSimulation.getRound(), order));
 
 		// notifyObservers();
 	}

@@ -19,7 +19,7 @@ import java.util.Iterator;
 
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Account;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.QuoteProvider;
@@ -47,15 +47,15 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	 * @param shout
 	 *          The new shout to be processed
 	 * 
-	 * @exception IllegalShoutException
+	 * @exception IllegalOrderException
 	 *              Thrown if the shout is invalid in some way.
 	 */
-	public void newShout(Order shout) throws IllegalShoutException;
+	public void newOrder(Order order) throws IllegalOrderException;
 
 	/**
 	 * Handle a request to retract a shout.
 	 */
-	public void removeShout(Order shout);
+	public void removeShout(Order order);
 
 	/**
 	 * Log the current state of the market.

@@ -34,14 +34,13 @@ public class TimePriorityPricingPolicy extends DiscriminatoryPricingPolicy {
 
 	public double determineClearingPrice(Order bid, Order ask,
 	    MarketQuote clearingQuote) {
-//TODO
-//		if (bid.getId() > ask.getId()) {
-			// ask comes first
-//			return kInterval(ask.getPrice(), bid.getPrice());
-//		} else {
-			// bid comes first
+		if (bid.getTimeStamp().compareTo(ask.getTimeStamp()) > 0) {
+//			 ask comes first
+			return kInterval(ask.getPrice(), bid.getPrice());
+		} else {
+//			 bid comes first
 			return kInterval(bid.getPrice(), ask.getPrice());
-//		}
+		}
 	}
 
 }

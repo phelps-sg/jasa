@@ -20,7 +20,7 @@ package net.sourceforge.jasa.market;
  * @version $Revision$
  */
 
-public class DuplicateShoutException extends IllegalShoutException {
+public class DuplicateShoutException extends IllegalOrderException {
 
 	public DuplicateShoutException(String message) {
 		super(message);

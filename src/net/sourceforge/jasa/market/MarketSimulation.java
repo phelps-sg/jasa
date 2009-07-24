@@ -38,6 +38,7 @@ import net.sourceforge.jasa.market.rules.TimingCondition;
 
 import net.sourceforge.jasa.sim.AbstractSimulation;
 import net.sourceforge.jasa.sim.SimulationController;
+import net.sourceforge.jasa.sim.SimulationTime;
 
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
 import net.sourceforge.jasa.sim.event.SimulationFinishedEvent;
@@ -437,6 +438,11 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 
 	public void setMarket(Market market) {
 		this.market = market;
+	}
+
+	@Override
+	public SimulationTime getSimulationTime() {
+		return new SimulationTime(age);
 	}
 	
 }

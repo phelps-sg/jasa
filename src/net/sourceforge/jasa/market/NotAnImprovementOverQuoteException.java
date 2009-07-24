@@ -23,7 +23,7 @@ package net.sourceforge.jasa.market;
  * @author Steve Phelps
  * @version $Revision$
  */
-public class NotAnImprovementOverQuoteException extends IllegalShoutException {
+public class NotAnImprovementOverQuoteException extends IllegalOrderException {
 
 	public NotAnImprovementOverQuoteException(String message) {
 		super(message);

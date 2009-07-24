@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.market.rules;
 
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -45,9 +45,9 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 	/**
 	 * Reusable exceptions for performance
 	 */
-	protected static IllegalShoutException bidException = null;
+	protected static IllegalOrderException bidException = null;
 
-	protected static IllegalShoutException askException = null;
+	protected static IllegalOrderException askException = null;
 
 	protected AbstractDistribution distribution;
 
@@ -86,7 +86,7 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 	 * </p>
 	 * can beat the estimated equilibrium.
 	 */
-	public void check(Order shout) throws IllegalShoutException {
+	public void check(Order shout) throws IllegalOrderException {
 		super.check(shout);
 
 		double d = distribution.nextDouble();
@@ -101,20 +101,20 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 		}
 	}
 
-	protected void askExpectedException() throws IllegalShoutException {
+	protected void askExpectedException() throws IllegalOrderException {
 		if (bidException == null) {
 			// Only construct a new exception the once (for improved
 			// performance)
-			bidException = new IllegalShoutException("Ask expected!");
+			bidException = new IllegalOrderException("Ask expected!");
 		}
 		throw bidException;
 	}
 
-	protected void bidExpectedException() throws IllegalShoutException {
+	protected void bidExpectedException() throws IllegalOrderException {
 		if (askException == null) {
 			// Only construct a new exception the once (for improved
 			// performance)
-			askException = new IllegalShoutException("Bid expected!");
+			askException = new IllegalOrderException("Bid expected!");
 		}
 		throw askException;
 	}

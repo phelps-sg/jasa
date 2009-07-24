@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.market.rules;
 
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
 
@@ -41,7 +41,7 @@ public class QuoteBeatingAcceptingPolicy extends OrderAcceptancePolicy {
 	/**
 	 * implements the NYSE shout improvement rule.
 	 */
-	public void check(Order shout) throws IllegalShoutException {
+	public void check(Order shout) throws IllegalOrderException {
 		double quote;
 		if (shout.isBid()) {
 			quote = auctioneer.bidQuote();

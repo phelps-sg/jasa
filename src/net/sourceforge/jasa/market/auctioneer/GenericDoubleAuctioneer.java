@@ -21,7 +21,7 @@ import java.util.Observer;
 
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Account;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
@@ -157,7 +157,7 @@ public class GenericDoubleAuctioneer extends TransparentAuctioneer implements
 		currentQuote = new MarketQuote(askQuote(), bidQuote());
 	}
 
-	protected void checkShoutValidity(Order shout) throws IllegalShoutException {
+	protected void checkShoutValidity(Order shout) throws IllegalOrderException {
 		super.checkShoutValidity(shout);
 		if (acceptingPolicy != null) {
 			acceptingPolicy.check(shout);

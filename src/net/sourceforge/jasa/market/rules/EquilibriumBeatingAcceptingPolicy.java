@@ -17,7 +17,7 @@ package net.sourceforge.jasa.market.rules;
 
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
-import net.sourceforge.jasa.market.IllegalShoutException;
+import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.ReportVariableBoard;
 import net.sourceforge.jasa.sim.learning.MimicryLearner;
@@ -47,9 +47,9 @@ public class EquilibriumBeatingAcceptingPolicy extends
 	/**
 	 * Reusable exceptions for performance
 	 */
-	protected static IllegalShoutException bidException = null;
+	protected static IllegalOrderException bidException = null;
 
-	protected static IllegalShoutException askException = null;
+	protected static IllegalOrderException askException = null;
 
 	private double expectedHighestAsk;
 
@@ -103,7 +103,7 @@ public class EquilibriumBeatingAcceptingPolicy extends
 	 * </p>
 	 * can beat the estimated equilibrium.
 	 */
-	public void check(Order shout) throws IllegalShoutException {
+	public void check(Order shout) throws IllegalOrderException {
 		super.check(shout);
 
 		if (shout.isBid()) {
@@ -117,21 +117,21 @@ public class EquilibriumBeatingAcceptingPolicy extends
 		}
 	}
 
-	protected void bidNotAnImprovementException() throws IllegalShoutException {
+	protected void bidNotAnImprovementException() throws IllegalOrderException {
 		if (bidException == null) {
 			// Only construct a new exception the once (for improved
 			// performance)
-			bidException = new IllegalShoutException(
+			bidException = new IllegalOrderException(
 			    "Bid cannot beat the estimated equilibrium!");
 		}
 		throw bidException;
 	}
 
-	protected void askNotAnImprovementException() throws IllegalShoutException {
+	protected void askNotAnImprovementException() throws IllegalOrderException {
 		if (askException == null) {
 			// Only construct a new exception the once (for improved
 			// performance)
-			askException = new IllegalShoutException(
+			askException = new IllegalOrderException(
 			    "Ask cannot beat the estimated equilibrium!");
 		}
 		throw askException;
