@@ -65,7 +65,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	/**
 	 * The unique id of this shout
 	 */
-	protected long id = -1;
+//	protected long id = -1;
 
 	/**
 	 * The child of this shout.
@@ -75,7 +75,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	/**
 	 * Used to allocate each agent with a unique id.
 	 */
-	static IdAllocator idAllocator = new IdAllocator();
+//	static IdAllocator idAllocator = new IdAllocator();
 
 	static DecimalFormat currencyFormatter = new DecimalFormat(
 	    "+#########0.00;-#########.00");
@@ -98,7 +98,6 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public Order() {
-		this.id = idAllocator.nextId();
 	}
 
 	public int getQuantity() {
@@ -158,7 +157,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public String toString() {
-		return "(" + getClass() + " id:" + id + " quantity:" + quantity + " price:"
+		return "(" + getClass() + " id:" + hashCode() + " quantity:" + quantity + " price:"
 		    + price + " isBid:" + isBid + " agent:" + agent + ")";
 	}
 
@@ -197,13 +196,6 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return child;
 	}
 
-	public long getId() {
-		return id;
-	}
-
-	public int hashCode() {
-		return (int) id; // * getAgent().hashCode();
-	}
 
 	// public boolean equals( Object other ) {
 	// return id == ((Shout) other).id &&
@@ -227,7 +219,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		this.agent = other.getAgent();
 		this.quantity = other.getQuantity();
 		this.isBid = other.isBid();
-		this.id = other.getId();
+//		this.id = other.getId();
 		child = null;
 	}
 

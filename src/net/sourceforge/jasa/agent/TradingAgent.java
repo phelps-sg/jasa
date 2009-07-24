@@ -63,22 +63,4 @@ public interface TradingAgent extends Agent, Resetable, MarketEventListener {
 	public void shoutAccepted(Market auction, Order shout, double price,
 	    int quantity);
 
-	/**
-	 * This method is used by an market to notify a buyer that one of its bids
-	 * has been successful.
-	 * 
-	 * @param seller
-	 *          The seller whose ask has been matched
-	 * @param price
-	 *          The price of the goods as determined by the market
-	 */
-	// public void informOfSeller( Auction market, Shout winningShout,
-	// TradingAgent seller, double price, int quantity );
-	/**
-	 * This method is used by a buyer to notify a seller that one of its bids has
-	 * been successful.
-	 */
-	// public void informOfBuyer( Auction market, TradingAgent buyer, double
-	// price,
-	// int quantity );
 }
