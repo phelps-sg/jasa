@@ -72,7 +72,7 @@ public class FourHeapTest extends TestCase {
 			shoutEngine.newShout(sell);
 			// No match should result because the orders are from the same trader
 			List<Order> matched = shoutEngine.getMatchedShouts();
-			assertTrue(matched.isEmpty());
+			assertTrue("Matching shouts from the same agent", matched.isEmpty());
 		} catch (DuplicateShoutException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
