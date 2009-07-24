@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.report;
 
 import net.sourceforge.jasa.event.MarketClosedEvent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationFinishedEvent;

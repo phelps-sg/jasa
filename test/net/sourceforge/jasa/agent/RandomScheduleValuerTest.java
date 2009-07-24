@@ -22,7 +22,6 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -32,6 +31,8 @@ public class RandomScheduleValuerTest extends TestCase {
 	protected MockTrader agent;
 
 	protected MockRandomScheduleValuer valuer;
+	
+	protected RandomEngine prng;
 
 	public static final double MIN = 10;
 
@@ -42,8 +43,9 @@ public class RandomScheduleValuerTest extends TestCase {
 	}
 
 	public void setUp() {
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		agent = new MockTrader(this, 2, 0);
-		valuer = new MockRandomScheduleValuer(MIN, MAX, GlobalPRNG.getInstance());
+		valuer = new MockRandomScheduleValuer(MIN, MAX, prng);
 		agent.setValuationPolicy(valuer);
 	}
 

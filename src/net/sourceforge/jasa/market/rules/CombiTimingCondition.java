@@ -55,7 +55,7 @@ public class CombiTimingCondition extends TimingCondition implements
 
 	protected int relation;
 
-	// private static Logger logger =
+	// private static Logger report =
 	// Logger.getLogger(CombiTimingCondition.class);
 
 	public CombiTimingCondition() {

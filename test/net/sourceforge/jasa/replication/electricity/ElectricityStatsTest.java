@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.replication.electricity;
 
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.strategy.PureSimpleStrategy;
 import net.sourceforge.jasa.sim.util.SummaryStats;
 import junit.framework.Test;
@@ -118,7 +118,7 @@ public class ElectricityStatsTest extends ElectricityTest {
 		pST.newData(stats.getPST());
 	}
 
-	public void assignStrategy(FixedVolumeTradingAgent agent) {
+	public void assignStrategy(SimpleTradingAgent agent) {
 		PureSimpleStrategy strategy = new PureSimpleStrategy(agent, 0, agent
 		    .getVolume());
 		agent.setStrategy(strategy);

@@ -115,7 +115,7 @@ public class UserFrame extends JFrame implements Parameterizable {
 
 	public static final String P_ICON = "icon";
 
-	// private static Logger logger = Logger.getLogger(UserFrame.class);
+	// private static Logger report = Logger.getLogger(UserFrame.class);
 
 	private String getDimName() {
 		Dimension dimension = getToolkit().getScreenSize();

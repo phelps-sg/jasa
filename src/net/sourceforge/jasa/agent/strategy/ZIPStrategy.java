@@ -21,6 +21,8 @@ import net.sourceforge.jasa.sim.util.Prototypeable;
 
 import org.apache.log4j.Logger;
 
+import cern.jet.random.engine.RandomEngine;
+
 
 /**
  * <p>
@@ -40,16 +42,16 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 
 	static Logger logger = Logger.getLogger(ZIPStrategy.class);
 
-	public ZIPStrategy(AbstractTradingAgent agent) {
-		super(agent);
+	public ZIPStrategy(AbstractTradingAgent agent, RandomEngine prng) {
+		super(agent, prng);
 	}
 
-	public ZIPStrategy() {
-		this(null);
+	public ZIPStrategy(RandomEngine prng) {
+		this(null, prng);
 	}
 
 	public Object protoClone() {
-		ZIPStrategy clone = new ZIPStrategy();
+		ZIPStrategy clone = new ZIPStrategy(prng);
 		clone.scaling = this.scaling;
 		clone.learner = (MimicryLearner) ((Prototypeable) this.learner)
 		    .protoClone();

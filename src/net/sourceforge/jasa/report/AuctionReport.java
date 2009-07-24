@@ -37,16 +37,6 @@ public interface AuctionReport extends Report {
 	public void produceUserOutput();
 
 	/**
-	 * Returns a Map of all of the variables that are produced in the historicalDataReport. The
-	 * Map maps variables, represented by objects of type ReportVariable, onto
-	 * values, which may be of any class. If no variables are produced by this
-	 * historicalDataReport then an empty Map is returned.
-	 * 
-	 * @see ReportVariable
-	 */
-	public Map getVariables();
-
-	/**
 	 * Specify the market to be used when generating the historicalDataReport.
 	 */
 	public void setAuction(MarketFacade auction);

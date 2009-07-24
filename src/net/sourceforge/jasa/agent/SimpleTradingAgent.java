@@ -31,38 +31,23 @@ import net.sourceforge.jasa.market.Market;
  * @version $Revision$
  */
 
-public class FixedVolumeTradingAgent extends AbstractTradingAgent {
-
-	/**
-	 * The volume of this trader in MWh
-	 */
-	protected int volume;
+public class SimpleTradingAgent extends AbstractTradingAgent {
 
 
-	public FixedVolumeTradingAgent(int capacity, double privateValue,
+	public SimpleTradingAgent(double privateValue,
 			boolean isSeller, TradingStrategy strategy) {
 		super(0, 0, privateValue, isSeller, strategy);
-		this.volume = capacity;
-		initialise();
 	}
 
-	public FixedVolumeTradingAgent(int capacity, double privateValue, boolean isSeller) {
+	public SimpleTradingAgent(double privateValue, boolean isSeller) {
 		super(0, 0, privateValue, isSeller);
-		this.volume = capacity;		
-		initialise();
 	}
 
-	public FixedVolumeTradingAgent() {
-		this(0, 0, false);
+	public SimpleTradingAgent() {
+		this(0, false);
 	}
 
-	public void initialise() {
-		super.initialise();
-		if (strategy instanceof FixedQuantityStrategy) {
-			((FixedQuantityStrategy) strategy).setQuantity(volume);
-		}
-	}
-
+	
 	public void requestShout(Market auction) {
 		super.requestShout(auction);
 		lastProfit = 0;
@@ -74,12 +59,12 @@ public class FixedVolumeTradingAgent extends AbstractTradingAgent {
 	}
 
 	public int getVolume() {
-		return volume;
+		return ((FixedQuantityStrategy) strategy).getQuantity();
 	}
-	
-	public void setVolume(int volume) {
-		this.volume = volume;
-	}
+//	
+//	public void setVolume(int volume) {
+//		this.volume = volume;
+//	}
 
 	public double getLastProfit() {
 		return lastProfit;
@@ -109,7 +94,7 @@ public class FixedVolumeTradingAgent extends AbstractTradingAgent {
 	}
 
 	public String toString() {
-		return "(" + getClass() + " id:" + id + " volume:" + volume
+		return "(" + getClass() + " id:" + id 
 		    + " valuer:" + valuer + 
 		    + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit
 		    + " strategy:" + strategy + ")";

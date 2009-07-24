@@ -72,9 +72,9 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	 */
 	public Market getMarket();
 
-	public Iterator askIterator();
+	public Iterator<Order> askIterator();
 
-	public Iterator bidIterator();
+	public Iterator<Order> bidIterator();
 
 	/**
 	 * Return true if the shouts of others are visible.

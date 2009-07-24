@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.sim.prng.PRNGFactory;
@@ -79,7 +79,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
 		Iterator i = auction.getTraderIterator();
 		int traderNumber = 0;
 		while (i.hasNext()) {
-			FixedVolumeTradingAgent trader = (FixedVolumeTradingAgent) i.next();
+			SimpleTradingAgent trader = (SimpleTradingAgent) i.next();
 			trader.setPrivateValue(values[iteration][traderNumber++]);
 		}
 	}

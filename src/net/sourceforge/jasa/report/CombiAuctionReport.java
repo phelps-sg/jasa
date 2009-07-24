@@ -87,7 +87,7 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 //	}
 
 	/**
-	 * Add a new logger
+	 * Add a new report
 	 */
 	public void addReport(AuctionReport report) {
 		reports.add(report);

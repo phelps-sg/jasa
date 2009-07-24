@@ -18,6 +18,7 @@ package net.sourceforge.jasa.report;
 import java.util.Iterator;
 
 import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
@@ -35,7 +36,6 @@ import net.sourceforge.jasa.report.SurplusReport;
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.util.MathUtil;
 
 import junit.framework.Test;
@@ -50,27 +50,14 @@ import junit.framework.TestSuite;
 public class EquilibriumSurplusLoggerTest extends TestCase implements
     MarketEventListener {
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
 	protected ClearingHouseAuctioneer auctioneer;
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
 	protected MarketFacade auction;
 
-	/**
-	 * @uml.property name="eqLogger"
-	 * @uml.associationEnd
-	 */
 	protected DynamicSurplusReport eqLogger;
+	
+	protected RandomEngine prng;
 
-	/**
-	 * @uml.property name="computedSurplus"
-	 */
 	protected double computedSurplus = 0;
 
 	protected static final int NUM_SELLERS = 11;
@@ -96,7 +83,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 	}
 
 	public void setUp() {
-		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 	}
 
 	public void initWithParams(int ns, int nb, int tradeEnt) {
@@ -121,11 +108,11 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 			if (i < ns) {
 				agent.setIsSeller(true);
 				agent.setValuationPolicy(new DailyRandomValuer(SELLER_MIN_VALUE,
-				    SELLER_MAX_VALUE, GlobalPRNG.getInstance()));
+				    SELLER_MAX_VALUE, prng));
 			} else {
 				agent.setIsSeller(false);
 				agent.setValuationPolicy(new DailyRandomValuer(BUYER_MIN_VALUE,
-				    BUYER_MAX_VALUE, GlobalPRNG.getInstance()));
+				    BUYER_MAX_VALUE, prng));
 			}
 			auction.register(agent);
 		}

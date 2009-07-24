@@ -24,7 +24,6 @@ import cern.jet.random.engine.RandomEngine;
 import java.io.Serializable;
 
 import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 
 import org.apache.log4j.Logger;
 

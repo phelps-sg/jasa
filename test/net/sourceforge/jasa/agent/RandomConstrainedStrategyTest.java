@@ -17,12 +17,12 @@ package net.sourceforge.jasa.agent;
 
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.util.SummaryStats;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -55,10 +55,12 @@ public class RandomConstrainedStrategyTest extends TestCase {
 	protected MarketFacade auction;
 
 	/**
-	 * @uml.property name="logger"
+	 * @uml.property name="report"
 	 * @uml.associationEnd
 	 */
-	protected PriceStatisticsReport logger;
+	protected PriceStatisticsReport report;
+	
+	protected RandomEngine prng;
 
 	static final double MAX_MARKUP = 100.0;
 
@@ -71,17 +73,17 @@ public class RandomConstrainedStrategyTest extends TestCase {
 	}
 
 	public void setUp() {
-		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, true);
 		testStrategy = new RandomConstrainedStrategy(testAgent);
-		testStrategy.setMarkupDistribution(new Uniform(0, MAX_MARKUP, GlobalPRNG.getInstance()));
+		testStrategy.setMarkupDistribution(new Uniform(0, MAX_MARKUP, prng));
 		testAgent.setStrategy(testStrategy);
 		auction = new MarketFacade(new MersenneTwister64(
 				PRNGTestSeeds.UNIT_TEST_SEED));
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
-		logger = new PriceStatisticsReport();
-		auction.addReport(logger);
+		report = new PriceStatisticsReport();
+		auction.addReport(report);
 		auction.register(testAgent);
 		auction.setMaximumRounds(MAX_ROUNDS);
 	}
@@ -91,8 +93,8 @@ public class RandomConstrainedStrategyTest extends TestCase {
 		System.out.println("testAgent = " + testAgent);
 		System.out.println("testStrategy = " + testStrategy);
 		auction.run();
-		logger.produceUserOutput();
-		SummaryStats askStats = logger.getAskPriceStats();
+		report.produceUserOutput();
+		SummaryStats askStats = report.getAskPriceStats();
 		assertTrue(approxEqual(askStats.getMin(), PRIV_VALUE));
 		assertTrue(approxEqual(askStats.getMax(), MAX_MARKUP + PRIV_VALUE));
 		assertTrue(approxEqual(askStats.getMean(), (MAX_MARKUP / 2) + PRIV_VALUE));
@@ -104,8 +106,8 @@ public class RandomConstrainedStrategyTest extends TestCase {
 		System.out.println("testAgent = " + testAgent);
 		System.out.println("testStrategy = " + testStrategy);
 		auction.run();
-		logger.produceUserOutput();
-		SummaryStats bidStats = logger.getBidPriceStats();
+		report.produceUserOutput();
+		SummaryStats bidStats = report.getBidPriceStats();
 		assertTrue(bidStats.getMin() >= 0);
 		assertTrue(bidStats.getMax() <= PRIV_VALUE);
 	}

@@ -45,7 +45,7 @@ import org.apache.log4j.Logger;
 /**
  * <p>
  * A historicalDataReport that keeps a historical record of the shouts in the market that lead
- * to the last N transactions. This logger is used to keep historical data that
+ * to the last N transactions. This report is used to keep historical data that
  * is used by various different trading strategies.
  * </p>
  * <p>
@@ -202,8 +202,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	public void updateShoutLog(OrderPlacedEvent event) {
 		Order shout = event.getShout();
 //		if (sortedShouts.getCount(shout) > 0) {
-//			logger.info(sortedShouts.getCount(shout) + "\n" + shout);
-//			logger.info(shoutMap.get(shout.getId()));
+//			report.info(sortedShouts.getCount(shout) + "\n" + shout);
+//			report.info(shoutMap.get(shout.getId()));
 //		}
 //		
 //		shoutMap.put(shout.getId(), shout);

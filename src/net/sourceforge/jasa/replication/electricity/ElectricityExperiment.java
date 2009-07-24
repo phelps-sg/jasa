@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
@@ -32,7 +32,6 @@ import net.sourceforge.jasa.market.rules.KPricingPolicy;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
 import net.sourceforge.jasa.sim.learning.DiscreteLearner;
 import net.sourceforge.jasa.sim.learning.Learner;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.report.CSVWriter;
 import net.sourceforge.jasa.sim.report.DataWriter;
 import net.sourceforge.jasa.sim.util.Parameterizable;
@@ -408,7 +407,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 		for (int i = 0; i < num; i++) {
 
-			FixedVolumeTradingAgent trader = new FixedVolumeTradingAgent(capacity, 0,
+			SimpleTradingAgent trader = new SimpleTradingAgent(0,
 			    areSellers);
 
 			FixedQuantityStrategy strategy = null;
@@ -420,7 +419,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 			((Resetable) strategy).reset();
 			trader.setStrategy(strategy);
 			strategy.setAgent(trader);
-			strategy.setQuantity(trader.getVolume());
+			strategy.setQuantity(capacity);
 
 			// Register it in the market
 			auction.register(trader);
@@ -456,7 +455,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			FixedVolumeTradingAgent t = (FixedVolumeTradingAgent) i.next();
+			SimpleTradingAgent t = (SimpleTradingAgent) i.next();
 			TradingStrategy s = t.getStrategy();
 			if (s instanceof AdaptiveStrategy) {
 				Learner l = ((AdaptiveStrategy) s).getLearner();
@@ -536,7 +535,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 		if (collectStrategyData) {
 			Iterator i = auction.getTraderIterator();
 			while (i.hasNext()) {
-				FixedVolumeTradingAgent t = (FixedVolumeTradingAgent) i.next();
+				SimpleTradingAgent t = (SimpleTradingAgent) i.next();
 				TradingStrategy s = t.getStrategy();
 				if (s instanceof AdaptiveStrategy) {
 					Learner l = ((AdaptiveStrategy) s).getLearner();

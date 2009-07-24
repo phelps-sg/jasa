@@ -20,7 +20,6 @@ import java.io.Serializable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Uniform;
@@ -55,16 +54,13 @@ public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
 
 	public static final double DEFAULT_MAX_PRICE = 200;
 
-	protected double maxPrice;
-
 	protected AbstractContinousDistribution distribution;
 
-	public RandomUnconstrainedStrategy() {
-		super(null);
-	}
 
-	public RandomUnconstrainedStrategy(AbstractTradingAgent agent) {
+	public RandomUnconstrainedStrategy(AbstractContinousDistribution distribution,
+											AbstractTradingAgent agent) {
 		super(agent);
+		this.distribution = distribution;
 	}
 
 	public boolean modifyShout(Order.MutableShout shout) {
@@ -82,16 +78,24 @@ public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
 
 	public void initialise() {
 		super.initialise();
-		distribution = new Uniform(0, maxPrice, GlobalPRNG.getInstance());
+	}
+	
+//
+//	public double getMaxPrice() {
+//		return maxPrice;
+//	}
+//
+//	public void setMaxPrice(double maxPrice) {
+//		this.maxPrice = maxPrice;
+//		initialise();
+//	}
+
+	public AbstractContinousDistribution getDistribution() {
+		return distribution;
 	}
 
-	public double getMaxPrice() {
-		return maxPrice;
-	}
-
-	public void setMaxPrice(double maxPrice) {
-		this.maxPrice = maxPrice;
-		initialise();
+	public void setDistribution(AbstractContinousDistribution distribution) {
+		this.distribution = distribution;
 	}
 
 	public String toString() {

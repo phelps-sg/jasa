@@ -35,7 +35,7 @@ public class QLearnerEfficiencyTest extends EfficiencyTest {
 
 	protected void assignStrategy(AbstractTradingAgent agent) {
 		StimuliResponseStrategy strategy = new StimuliResponseStrategy();
-		StatelessQLearner ql = new StatelessQLearner();
+		StatelessQLearner ql = new StatelessQLearner(prng);
 		ql.setNumberOfActions(100);
 		strategy.setLearner(ql);
 		agent.setStrategy(strategy);

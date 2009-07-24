@@ -184,9 +184,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
 	
-	/**
-	 * Construct a trader with given stock level and funds.
-	 * 
+	/**	
 	 * @param stock
 	 *          The quantity of stock for this trader.
 	 * @param funds
@@ -216,46 +214,13 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	public AbstractTradingAgent(int stock, double funds) {
 		this(stock, funds, 0, false);
 	}
-
-	/**
-	 * Construct a truthful buyer with no money and no funds.
-	 */
+	
 	public AbstractTradingAgent() {
 		this(0, 0, 0, false);
 	}
 
-//	public void setup(ParameterDatabase parameters, Parameter base) {
-//
-//		initialStock = parameters.getIntWithDefault(base.push(P_INITIAL_STOCK),
-//		    null, 0);
-//
-//		initialFunds = parameters.getDoubleWithDefault(base.push(P_INITIAL_FUNDS),
-//		    null, 0);
-//
-//		isSeller = parameters.getBoolean(base.push(P_IS_SELLER), null, false);
-//
-//		valuer = (ValuationPolicy) parameters.getInstanceForParameter(base
-//		    .push(P_VALUER), null, ValuationPolicy.class);
-//		valuer.setup(parameters, base.push(P_VALUER));
-//		valuer.setAgent(this);
-//
-//		strategy = (AbstractStrategy) parameters.getInstanceForParameter(base
-//		    .push(P_STRATEGY), null, AbstractStrategy.class);
-//		((Parameterizable) strategy).setup(parameters, base.push(P_STRATEGY));
-//		((AbstractStrategy) strategy).setAgent(this);
-//
-//		int groupNumber = parameters
-//		    .getIntWithDefault(base.push(P_GROUP), null, -1);
-//		if (groupNumber >= 0) {
-//			setGroup(AgentGroup.getAgentGroup(groupNumber));
-//		}
-//
-//		initialise();
-//	}
-
 	/**
-	 * Place a shout in the market as determined by our currently configured
-	 * strategy.
+	 * Place a shout in the market as determined by the agent's strategy.
 	 */
 	public void requestShout(Market market) {
 		try {
@@ -527,9 +492,8 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	}
 
 	@Override
-	public double getFitness() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getPayoff() {
+		return profits;
 	}
 
 	@Override
@@ -540,28 +504,11 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	}
 
 	@Override
-	public boolean isAlive() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean isInteracted() {
 		// TODO Auto-generated method stub
-		return false;
+		return active();
 	}
 
-	@Override
-	public void kill() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Agent reproduce() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void setStrategy(Strategy strategy) {

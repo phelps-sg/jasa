@@ -45,8 +45,8 @@ public class PriestVanTolEfficiencyTest extends EfficiencyTest {
 	}
 
 	protected void assignStrategy(AbstractTradingAgent agent) {
-		PriestVanTolStrategy strategy = new PriestVanTolStrategy();
-		strategy.setLearner(new WidrowHoffLearnerWithMomentum());
+		PriestVanTolStrategy strategy = new PriestVanTolStrategy(agent, prng);
+		strategy.setLearner(new WidrowHoffLearnerWithMomentum(prng));
 		agent.setStrategy(strategy);
 		strategy.setAgent(agent);
 	}

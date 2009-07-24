@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
  * </p>
  * 
  * <p>
- * Note that you must configure a logger of type DailyStatsMarketDataLogger in
+ * Note that you must configure a report of type DailyStatsMarketDataLogger in
  * order to use this strategy.
  * </p>
  * 

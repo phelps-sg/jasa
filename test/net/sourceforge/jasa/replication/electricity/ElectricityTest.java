@@ -19,23 +19,26 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
+
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
+
 import net.sourceforge.jasa.replication.electricity.ElectricityStats;
+
+import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import net.sourceforge.jasa.sim.learning.NPTRothErevLearner;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.util.SummaryStats;
 
 import org.apache.log4j.Logger;
 
 import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomSeedGenerator;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * 
@@ -75,7 +78,6 @@ public abstract class ElectricityTest extends TestCase {
 
 	protected static double sellerValues[] = { 35, 16, 11 };
 
-	protected static long seeds[] = null;
 
 	/**
 	 * @uml.property name="mPB"
@@ -114,6 +116,8 @@ public abstract class ElectricityTest extends TestCase {
 	 * @uml.property name="cb"
 	 */
 	protected int cb;
+	
+	protected RandomEngine prng;
 
 	static final int ITERATIONS = 100;
 
@@ -134,12 +138,15 @@ public abstract class ElectricityTest extends TestCase {
 	static Logger logger = Logger.getLogger(ElectricityTest.class);
 
 	public ElectricityTest(String name) {
-		super(name);
-		generatePRNGseeds();
+		super(name);		
+	}
+	
+	public void setUp() {
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 	}
 
 	public void runExperiment() {
-		System.out.println("\nAttempting to replicate NPT results with");
+		logger.info("\nAttempting to replicate NPT results with");
 		System.out.println("NS = " + ns + " NB = " + nb + " CS = " + cs + " CB = "
 		    + cb);
 		System.out.println("R = " + R + " E = " + E + " K = " + K + " S1 = " + S1);
@@ -147,16 +154,15 @@ public abstract class ElectricityTest extends TestCase {
 		    + " market rounds.");
 		initStats();
 		for (int i = 0; i < ITERATIONS; i++) {
-			System.out.println("Iteration " + i);
+			logger.debug("Iteration " + i);
 			auction.reset();
-			GlobalPRNG.initialiseWithSeed(seeds[i]);
 			auction.run();
 			stats.calculate();
 			if (stats.equilibriaExists()) {
 				updateStats();
-				System.out.println("EA = " + stats.getEA());
+				logger.debug("EA = " + stats.getEA());
 			} else {
-				System.out.println("no equilibrium price");
+				logger.debug("no equilibrium price");
 			}
 		}
 		System.out.println(eA);
@@ -182,8 +188,7 @@ public abstract class ElectricityTest extends TestCase {
 		this.nb = nb;
 		this.cs = cs;
 		this.cb = cb;
-		auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		auction = new MarketFacade(prng);
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		((AbstractAuctioneer) auctioneer)
 		    .setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
@@ -198,49 +203,33 @@ public abstract class ElectricityTest extends TestCase {
 	    int num, int capacity, double[] values) {
 		for (int i = 0; i < num; i++) {
 			double value = values[i % values.length];
-			FixedVolumeTradingAgent agent = new FixedVolumeTradingAgent(capacity, value, 
+			SimpleTradingAgent agent = new SimpleTradingAgent(value, 
 			    areSellers);
-			assignStrategy(agent);
+			assignStrategy(capacity, agent);
 			assignValuer(agent);
 			auction.register(agent);
 		}
 	}
 
-	public void generatePRNGseeds() {
-
-		if (seeds != null) {
-			return;
-		}
-
-		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-		logger.info(this + ": generating PRNG seeds using default seed.. ");
-
-		seeds = new long[ITERATIONS];
-
-		RandomSeedGenerator seedGenerator = new RandomSeedGenerator();
-		for (int i = 0; i < ITERATIONS; i++) {
-			seeds[i] = (long) seedGenerator.nextSeed();
-		}
-		logger.info("done.");
-	}
-
-	public void assignStrategy(FixedVolumeTradingAgent agent) {
+	
+	public void assignStrategy(int capacity, SimpleTradingAgent agent) {
 		StimuliResponseStrategy strategy = new StimuliResponseStrategy(agent);
-		strategy.setQuantity(agent.getVolume());
-		NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1);
+		strategy.setQuantity(capacity);
+		NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1, prng);
 		strategy.setLearner(learner);
 		agent.setStrategy(strategy);
+		assert agent.getVolume() == capacity;
 		agent.reset();
 	}
 
-	public void assignValuer(FixedVolumeTradingAgent agent) {
+	public void assignValuer(SimpleTradingAgent agent) {
 		// Stick with default fixed valuation
 	}
 
 	public void traderReport() {
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			FixedVolumeTradingAgent agent = (FixedVolumeTradingAgent) i.next();
+			SimpleTradingAgent agent = (SimpleTradingAgent) i.next();
 			System.out.println(agent);
 		}
 	}

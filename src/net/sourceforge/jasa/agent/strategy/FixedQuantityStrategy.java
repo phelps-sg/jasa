@@ -34,4 +34,5 @@ public interface FixedQuantityStrategy extends TradingStrategy {
 	 */
 	public void setQuantity(int quantity);
 
+	public int getQuantity();
 }

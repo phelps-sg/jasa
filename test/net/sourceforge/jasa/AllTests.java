@@ -34,8 +34,6 @@ public class AllTests {
 		suite.addTest(net.sourceforge.jasa.sim.util.CummulativeDistributionTest.suite());
 		suite.addTest(net.sourceforge.jasa.sim.util.FixedLengthQueueTest.suite());
 
-		suite.addTest(net.sourceforge.jasa.sim.prng.GlobalPRNGTest.suite());
-
 		suite.addTest(net.sourceforge.jasa.replication.electricity.NPTReplicationTest.suite());
 		suite.addTest(net.sourceforge.jasa.market.DirectRevelationTest.suite());
 		// suite.addTest(test.uk.ac.liv.auction.SerializationTests.suite());

@@ -16,7 +16,7 @@
 package net.sourceforge.jasa.replication.electricity;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.market.MarketFacade;
 
 /**
@@ -35,7 +35,7 @@ public class FinalRoundElectricityStats extends ElectricityStats {
 	}
 
 	protected double getProfits(AbstractTradingAgent trader) {
-		return ((FixedVolumeTradingAgent) trader).getLastProfit();
+		return ((SimpleTradingAgent) trader).getLastProfit();
 	}
 
 	/*

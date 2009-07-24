@@ -49,7 +49,7 @@ public interface OrderBook extends net.sourceforge.jasa.sim.util.Resetable {
 	 * of invoking this method.
 	 * </p>
 	 */
-	public List getMatchedShouts();
+	public List<Order> getMatchedShouts();
 
 	/**
 	 * Get the highest unmatched bid in the market.
@@ -75,12 +75,12 @@ public interface OrderBook extends net.sourceforge.jasa.sim.util.Resetable {
 	 * Return an iterator that non-destructively iterates over every ask in the
 	 * market (both matched and unmatched).
 	 */
-	public Iterator askIterator();
+	public Iterator<Order> askIterator();
 
 	/**
 	 * Return an iterator that non-destructively iterates over every bid in the
 	 * market (both matched and unmatched).
 	 */
-	public Iterator bidIterator();
+	public Iterator<Order> bidIterator();
 
 }

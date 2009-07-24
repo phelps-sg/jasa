@@ -15,7 +15,10 @@
 
 package net.sourceforge.jasa.agent;
 
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.strategy.MomentumStrategy;
+import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -38,6 +41,8 @@ public class MomentumStrategyTest extends TestCase {
 	 * @uml.associationEnd
 	 */
 	MockMomentumStrategy testStrategy;
+	
+	RandomEngine prng;
 
 	/**
 	 * @uml.property name="pRIV_VALUE"
@@ -49,8 +54,9 @@ public class MomentumStrategyTest extends TestCase {
 	}
 
 	public void setUp() {
-		testStrategy = new MockMomentumStrategy();
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, true);
+		testStrategy = new MockMomentumStrategy(testTrader, prng);
 		testTrader.setStrategy(testStrategy);
 		testStrategy.setAgent(testTrader);
 	}
@@ -89,6 +95,11 @@ public class MomentumStrategyTest extends TestCase {
 }
 
 class MockMomentumStrategy extends MomentumStrategy {
+
+	public MockMomentumStrategy(AbstractTradingAgent agent, RandomEngine prng) {
+		super(agent, prng);
+		// TODO Auto-generated constructor stub
+	}
 
 	protected void adjustMargin() {
 		// For a mock strategy do nothing

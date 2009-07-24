@@ -35,7 +35,7 @@ public class RothErevEfficiencyTest extends EfficiencyTest {
 
 	protected void assignStrategy(AbstractTradingAgent agent) {
 		StimuliResponseStrategy strategy = new StimuliResponseStrategy();
-		strategy.setLearner(new NPTRothErevLearner());
+		strategy.setLearner(new NPTRothErevLearner(prng));
 		agent.setStrategy(strategy);
 		strategy.setAgent(agent);
 	}

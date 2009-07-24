@@ -18,19 +18,22 @@ import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order.MutableShout;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
 
 public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
 
 	protected double perterb = 0.20;
+	
+	protected RandomEngine prng;
 
-	public BeatTheQuoteStrategy() {
-		super();
+	public BeatTheQuoteStrategy(RandomEngine prng) {
+		this(null, prng);
 	}
 
-	public BeatTheQuoteStrategy(AbstractTradingAgent agent) {
+	public BeatTheQuoteStrategy(AbstractTradingAgent agent, RandomEngine prng) {
 		super(agent);
+		this.prng = prng;
 	}
 
 	public void endOfRound(Market auction) {
@@ -44,7 +47,7 @@ public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
 				// shout.setPrice(p + p * GlobalPRNG.getInstance().uniform(0,
 				// perterb));
 				shout.setPrice(p + p
-				    * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
+				    * new Uniform(0, perterb, prng).nextDouble());
 			} else {
 				shout.setPrice(agent.getValuation(auction));
 			}
@@ -54,7 +57,7 @@ public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
 				// shout.setPrice(p - p * GlobalPRNG.getInstance().uniform(0,
 				// perterb));
 				shout.setPrice(p - p
-				    * new Uniform(0, perterb, GlobalPRNG.getInstance()).nextDouble());
+				    * new Uniform(0, perterb, prng).nextDouble());
 			} else {
 				shout.setPrice(agent.getValuation(auction));
 			}

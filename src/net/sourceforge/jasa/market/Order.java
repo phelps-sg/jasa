@@ -40,7 +40,7 @@ import net.sourceforge.jasa.sim.util.IdAllocator;
  * @version $Revision$
  */
 
-public class Order implements Comparable, Cloneable, Serializable {
+public class Order implements Comparable<Order>, Cloneable, Serializable {
 
 	/**
 	 * The number of items offered/wanted.
@@ -121,7 +121,10 @@ public class Order implements Comparable, Cloneable, Serializable {
 		return !isBid;
 	}
 
-	public boolean satisfies(Order other) {
+	public boolean matches(Order other) {
+		if (this.getAgent() == other.getAgent()) {
+			return false;
+		}
 		if (this.isBid()) {
 			return other.isAsk() && this.getPrice() >= other.getPrice();
 		} else {
@@ -129,8 +132,7 @@ public class Order implements Comparable, Cloneable, Serializable {
 		}
 	}
 
-	public int compareTo(Object o) {
-		Order other = (Order) o;
+	public int compareTo(Order other) {
 		if (price > other.price) {
 			return 1;
 		} else if (price < other.price) {

@@ -364,7 +364,7 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 	 */
 	protected void endDay() {
 		logger.debug("endDay()");
-		// logger.debug("day = " + day + " of " + getMaximumDays());
+		// report.debug("day = " + day + " of " + getMaximumDays());
 		round = 0;
 		informEndOfDay();
 		getAuctioneer().endOfDayProcessing();

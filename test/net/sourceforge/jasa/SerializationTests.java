@@ -21,7 +21,7 @@ import java.io.ObjectOutputStream;
 
 import cern.jet.random.engine.MersenneTwister64;
 
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.market.AuctionClosedException;
@@ -69,7 +69,7 @@ public class SerializationTests extends TestCase {
 		TokenTradingAgent buyer1 = new TokenTradingAgent(5, 1, false);
 		buyer1.setStrategy(new TruthTellingStrategy(buyer1));
 
-		FixedVolumeTradingAgent buyer2 = new FixedVolumeTradingAgent(10, 5, true);
+		SimpleTradingAgent buyer2 = new SimpleTradingAgent(5, true);
 		buyer2.setStrategy(new TruthTellingStrategy(buyer2));
 
 		auction.register(buyer1);

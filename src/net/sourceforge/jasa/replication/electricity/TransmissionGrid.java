@@ -17,7 +17,7 @@ package net.sourceforge.jasa.replication.electricity;
 
 import java.util.HashMap;
 
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
 
 /**
  * A class representing a fully-connected, bi-directional graph of available
@@ -39,7 +39,7 @@ public class TransmissionGrid {
 	 * Get the available transmission capacitity (ATC) between two traders in the
 	 * grid.
 	 */
-	public int getATC(FixedVolumeTradingAgent x, FixedVolumeTradingAgent y) {
+	public int getATC(SimpleTradingAgent x, SimpleTradingAgent y) {
 		HashMap edges = (HashMap) graph.get(x);
 		Integer atc = (Integer) edges.get(y);
 		return atc.intValue();

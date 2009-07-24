@@ -124,7 +124,7 @@ public class RandomRobinAuctionTest extends TestCase {
 //		auction.run();
 //
 //		Distribution transPrice = dailyStatsReport.getPreviousDayTransPriceStats();
-//		logger.info("Previous day transaction price statistics = " + transPrice);
+//		report.info("Previous day transaction price statistics = " + transPrice);
 //		assertTrue(transPrice.getMean() == 725);
 //	}
 
@@ -152,7 +152,7 @@ public class RandomRobinAuctionTest extends TestCase {
 	}
 
 //	public void testHistoryStats() {
-//		logger.info("testHistoryStats()");
+//		report.info("testHistoryStats()");
 //
 //		HistoricalDataReport stats = new HistoricalDataReport();
 //		stats.setAuction(auction);

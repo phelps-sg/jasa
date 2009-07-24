@@ -20,7 +20,6 @@ import java.util.List;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;

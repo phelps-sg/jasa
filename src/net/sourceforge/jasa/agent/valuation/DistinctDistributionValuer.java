@@ -18,9 +18,9 @@ package net.sourceforge.jasa.agent.valuation;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 
 import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * 
@@ -40,42 +40,34 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
 	protected static double minValue;
 
 	protected static double maxValue;
+	
+	protected RandomEngine prng;
 
-	public static final String P_DEF_BASE = "distinctdistributionvaluer";
-
-	public static final String P_MINVALUEMIN = "minvaluemin";
-
-	public static final String P_MINVALUEMAX = "minvaluemax";
-
-	public static final String P_RANGEMIN = "rangemin";
-
-	public static final String P_RANGEMAX = "rangemax";
-
-	public DistinctDistributionValuer() {
+	public DistinctDistributionValuer(RandomEngine prng) {
 		super();
+		this.prng = prng;
 	}
 
 	public DistinctDistributionValuer(double minValueMin, double minValueMax,
-	    double rangeMin, double rangeMax) {
+	    double rangeMin, double rangeMax, RandomEngine prng) {
 		this.minValueMin = minValueMin;
 		this.minValueMax = minValueMax;
 		this.rangeMin = rangeMin;
+		this.prng = prng;
 	}
 
 	public void initialise() {
-		Uniform minValueDist = new Uniform(minValueMin, minValueMax, GlobalPRNG
-		    .getInstance());
-		Uniform rangeDist = new Uniform(rangeMin, rangeMax, GlobalPRNG
-		    .getInstance());
+		Uniform minValueDist = new Uniform(minValueMin, minValueMax, prng);
+		Uniform rangeDist = new Uniform(rangeMin, rangeMax, prng);
 		minValue = minValueDist.nextDouble();
 		maxValue = minValue + rangeDist.nextDouble();
-		distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
+		distribution = new Uniform(minValue, maxValue, prng);
 	}
 
 	public void eventOccurred(MarketEvent event) {
 		super.eventOccurred(event);
 		if (event instanceof MarketOpenEvent) {
-			distribution = new Uniform(minValue, maxValue, GlobalPRNG.getInstance());
+			distribution = new Uniform(minValue, maxValue, prng);
 			drawRandomValue();
 		}
 	}

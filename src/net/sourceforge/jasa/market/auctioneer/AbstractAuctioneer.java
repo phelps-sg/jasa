@@ -20,7 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 
 
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
 import net.sourceforge.jasa.market.IllegalShoutException;
@@ -164,11 +163,11 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 		return currentQuote;
 	}
 
-	public Iterator askIterator() {
+	public Iterator<Order> askIterator() {
 		return orderBook.askIterator();
 	}
 
-	public Iterator bidIterator() {
+	public Iterator<Order> bidIterator() {
 		return orderBook.bidIterator();
 	}
 
@@ -191,11 +190,11 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
 	public void clear() {
 		clearingQuote = new MarketQuote(askQuote(), bidQuote());
-		List shouts = orderBook.getMatchedShouts();
-		Iterator i = shouts.iterator();
+		List<Order> shouts = orderBook.getMatchedShouts();
+		Iterator<Order> i = shouts.iterator();
 		while (i.hasNext()) {
-			Order bid = (Order) i.next();
-			Order ask = (Order) i.next();
+			Order bid = i.next();
+			Order ask = i.next();
 			double price = determineClearingPrice(bid, ask);
 			clear(ask, bid, price);
 		}

@@ -17,15 +17,19 @@ package net.sourceforge.jasa.agent;
 
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
+
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
+
 import net.sourceforge.jasa.market.MarketFacade;
+
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
+
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
+
 import net.sourceforge.jasa.report.SurplusReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.util.SummaryStats;
 import junit.framework.TestCase;
 
@@ -56,6 +60,8 @@ public abstract class EfficiencyTest extends TestCase {
 	 * @uml.associationEnd multiplicity="(0 -1)"
 	 */
 	protected TokenTradingAgent[] agents;
+	
+	protected RandomEngine prng;
 
 	static final int NS = 6;
 
@@ -105,7 +111,7 @@ public abstract class EfficiencyTest extends TestCase {
 	}
 
 	public void testEfficiency() {
-		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		System.out.println("\ntestEfficiency()");
 		SummaryStats efficiency = new SummaryStats(
 		    "efficiency");
@@ -157,7 +163,7 @@ public abstract class EfficiencyTest extends TestCase {
 	}
 
 	protected void assignValuationPolicy(AbstractTradingAgent agent) {
-		agent.setValuationPolicy(new RandomValuer(MIN_VALUE, MAX_VALUE, GlobalPRNG.getInstance()));
+		agent.setValuationPolicy(new RandomValuer(MIN_VALUE, MAX_VALUE, prng));
 	}
 
 	protected int getInitialTradeEntitlement() {

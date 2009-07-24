@@ -41,8 +41,8 @@ public class ZIPEfficiencyTest extends EfficiencyTest {
 	}
 
 	protected void assignStrategy(AbstractTradingAgent agent) {
-		ZIPStrategy strategy = new ZIPStrategy();
-		WidrowHoffLearnerWithMomentum learner = new WidrowHoffLearnerWithMomentum();
+		ZIPStrategy strategy = new ZIPStrategy(prng);
+		WidrowHoffLearnerWithMomentum learner = new WidrowHoffLearnerWithMomentum(prng);
 		learner.setMomentum(0.9);
 		learner.setLearningRate(0.45);
 		strategy.setLearner(learner);

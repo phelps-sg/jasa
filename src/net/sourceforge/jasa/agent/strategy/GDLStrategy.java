@@ -44,7 +44,7 @@ import org.apache.log4j.Logger;
  * </p>
  * 
  * <p>
- * Note that you must configure a logger of type HistoricalDataReport in order
+ * Note that you must configure a report of type HistoricalDataReport in order
  * to use this strategy.
  * </p>
  * 

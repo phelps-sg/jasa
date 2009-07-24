@@ -17,11 +17,11 @@ package net.sourceforge.jasa.market.rules;
 
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 
+import cern.jet.random.AbstractDistribution;
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 
@@ -38,7 +38,7 @@ import cern.jet.random.engine.RandomEngine;
 public class ProbabilisticClearingCondition extends RoundClearingCondition
     implements Parameterizable {
 
-	Uniform uniformDistribution;
+	AbstractDistribution distribution;
 
 	private double threshold = 1;
 
@@ -46,16 +46,18 @@ public class ProbabilisticClearingCondition extends RoundClearingCondition
 
 	static Logger logger = Logger.getLogger(ProbabilisticClearingCondition.class);
 
-	protected void initialise() {
-		RandomEngine prng = GlobalPRNG.getInstance();
-		uniformDistribution = new Uniform(0, 1, prng);
+	
+	public ProbabilisticClearingCondition(AbstractDistribution distribution) {
+		super();
+		this.distribution = distribution;
 	}
+
 
 	public void eventOccurred(MarketEvent event) {
 		super.eventOccurred(event);
 
 		if (event instanceof OrderPlacedEvent) {
-			double d = uniformDistribution.nextDouble();
+			double d = distribution.nextDouble();
 			if (d < threshold) {
 				setChanged();
 				notifyObservers();

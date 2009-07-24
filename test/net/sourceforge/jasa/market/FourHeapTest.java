@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import net.sourceforge.jasa.agent.MockTrader;
+import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
 import net.sourceforge.jasa.market.Order;
@@ -38,21 +39,8 @@ import org.apache.commons.collections.buffer.PriorityBuffer;
 
 public class FourHeapTest extends TestCase {
 
-	/**
-	 * @uml.property name="orderBook"
-	 * @uml.associationEnd
-	 */
 	TestShoutEngine shoutEngine;
 
-	/**
-	 * @uml.property name="testTrader"
-	 * @uml.associationEnd
-	 */
-	MockTrader testTrader;
-
-	/**
-	 * @uml.property name="randGenerator"
-	 */
 	Random randGenerator;
 
 	public FourHeapTest(String name) {
@@ -61,7 +49,6 @@ public class FourHeapTest extends TestCase {
 
 	public void setUp() {
 		shoutEngine = new TestShoutEngine();
-		testTrader = new MockTrader(this, 0, 0);
 		randGenerator = new Random();
 //		org.apache.log4j.BasicConfigurator.configure();
 	}
@@ -70,7 +57,43 @@ public class FourHeapTest extends TestCase {
 		int quantity = randGenerator.nextInt(50);
 		double price = randGenerator.nextDouble() * 100;
 		boolean isBid = randGenerator.nextBoolean();
-		return new Order(testTrader, quantity, price, isBid);
+		return new Order(new MockTrader(this, 0, 0), quantity, price, isBid);
+	}
+	
+	/**
+	 * Test for bug #2803011
+	 */
+	public void testSameSide() {
+		try {
+			TradingAgent trader1 = new MockTrader(this, 10, 0);
+			Order buy = new Order(trader1, 1, 10.0, true);
+			Order sell = new Order(trader1, 1, 5.0, false);
+			shoutEngine.newShout(buy);
+			shoutEngine.newShout(sell);
+			// No match should result because the orders are from the same trader
+			List<Order> matched = shoutEngine.getMatchedShouts();
+			assertTrue(matched.isEmpty());
+		} catch (DuplicateShoutException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	public void testSimpleMatch() {
+		try {
+			TradingAgent trader1 = new MockTrader(this, 0, 0);
+			TradingAgent trader2 = new MockTrader(this, 0, 0);
+			Order buy = new Order(trader1, 1, 10.0, true);
+			Order sell = new Order(trader2, 1, 5.0, false);
+			shoutEngine.newShout(buy);
+			shoutEngine.newShout(sell);		
+			List<Order> matched = shoutEngine.getMatchedShouts();
+			assertTrue(matched.contains(buy));
+			assertTrue(matched.contains(sell));
+		} catch (DuplicateShoutException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 
 	public void testRandom() {
@@ -93,7 +116,6 @@ public class FourHeapTest extends TestCase {
 				}
 
 				shoutEngine.newShout(testRemoveShout = randomShout());
-				testRemoveShout2 = (Order) testRemoveShout.clone();
 				testRemoveShout2 = new Order(testRemoveShout.getAgent(),
 				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
 				    !testRemoveShout.isBid());
@@ -103,12 +125,12 @@ public class FourHeapTest extends TestCase {
 					continue;
 				}
 
-				List matched = shoutEngine.getMatchedShouts();
-				Iterator i = matched.iterator();
+				List<Order> matched = shoutEngine.getMatchedShouts();
+				Iterator<Order> i = matched.iterator();
 				while (i.hasNext()) {
 					matches++;
-					Order bid = (Order) i.next();
-					Order ask = (Order) i.next();
+					Order bid = i.next();
+					Order ask = i.next();
 					assertTrue(bid.isBid());
 					assertTrue(ask.isAsk());
 					assertTrue(bid.getPrice() >= ask.getPrice());
@@ -172,7 +194,7 @@ class TestShoutEngine extends FourHeapOrderBook {
 			printState();
 			System.out.println("shout1 = " + s1);
 			System.out.println("shout2 = " + s2);
-			throw new Error("Heaps not balanced! - " + condition);
+			throw new RuntimeException("Heaps not balanced! - " + condition);
 		}
 	}
 

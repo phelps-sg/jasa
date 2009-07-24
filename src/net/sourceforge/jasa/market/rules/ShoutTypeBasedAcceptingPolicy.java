@@ -17,10 +17,10 @@ package net.sourceforge.jasa.market.rules;
 
 import net.sourceforge.jasa.market.IllegalShoutException;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 
 import org.apache.log4j.Logger;
 
+import cern.jet.random.AbstractDistribution;
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 //import ec.util.Parameter;
@@ -49,7 +49,7 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 
 	protected static IllegalShoutException askException = null;
 
-	protected Uniform uniformDistribution;
+	protected AbstractDistribution distribution;
 
 	/**
 	 * A parameter used to control the probability of next shout being from a
@@ -57,10 +57,8 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 	 */
 	protected double q = 0.5;
 
-	public static final String P_Q = "q";
-
-	public static final String P_DEF_BASE = "shouttypebasedaccepting";
-
+	
+	
 //	public void setup(ParameterDatabase parameters, Parameter base) {
 //		super.setup(parameters, base);
 //
@@ -70,9 +68,11 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 //		assert (0 <= q && q <= 1);
 //	}
 
-	public void initialise() {
-		RandomEngine prng = GlobalPRNG.getInstance();
-		uniformDistribution = new Uniform(0, 1, prng);
+
+
+	public ShoutTypeBasedAcceptingPolicy(AbstractDistribution distribution) {
+		super();
+		this.distribution = distribution;
 	}
 
 	public void reset() {
@@ -89,7 +89,7 @@ public class ShoutTypeBasedAcceptingPolicy extends QuoteBeatingAcceptingPolicy {
 	public void check(Order shout) throws IllegalShoutException {
 		super.check(shout);
 
-		double d = uniformDistribution.nextDouble();
+		double d = distribution.nextDouble();
 		if (d <= q) {
 			if (shout.isBid()) {
 				askExpectedException();

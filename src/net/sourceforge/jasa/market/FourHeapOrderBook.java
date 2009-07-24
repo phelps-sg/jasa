@@ -287,7 +287,6 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	protected void newBid(Order bid) throws DuplicateShoutException {
 
 		double bidVal = bid.getPrice();
-
 		int uninsertedUnits = bid.getQuantity();
 
 		while (uninsertedUnits > 0) {
@@ -315,8 +314,6 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 
 	protected void newAsk(Order ask) throws DuplicateShoutException {
 
-		double askVal = ask.getPrice();
-
 		int uninsertedUnits = ask.getQuantity();
 
 		while (uninsertedUnits > 0) {
@@ -324,12 +321,12 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 			Order sInTop = getHighestMatchedAsk();
 			Order bOutTop = getHighestUnmatchedBid();
 
-			if (bOutTop != null && askVal <= bOutTop.getPrice()
-			    && (sInTop == null || sInTop.getPrice() <= bOutTop.getPrice())) {
+			if (bOutTop != null && bOutTop.matches(ask)
+			    && (sInTop == null || sInTop.matches(bOutTop))) {
 
 				uninsertedUnits -= promoteHighestUnmatchedBid(ask);
 
-			} else if (sInTop != null && askVal <= sInTop.getPrice()) {
+			} else if (sInTop != null && ask.getPrice() <= sInTop.getPrice()) {
 
 				uninsertedUnits -= displaceHighestMatchedAsk(ask);
 
@@ -354,11 +351,11 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	// protected Iterator matchedAskDisassembler() {
 	// return new QueueDisassembler(sIn);
 	// }
-	public Iterator askIterator() {
+	public Iterator<Order> askIterator() {
 		return new CollatingIterator(greaterThan, sIn.iterator(), sOut.iterator());
 	}
 
-	public Iterator bidIterator() {
+	public Iterator<Order> bidIterator() {
 		return new CollatingIterator(lessThan, bIn.iterator(), bOut.iterator());
 	}
 
@@ -373,8 +370,8 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * clear by matching bi with ai for all i at some price.
 	 * </p>
 	 */
-	public List getMatchedShouts() {
-		ArrayList result = new ArrayList(sIn.size() + bIn.size());
+	public List<Order> getMatchedShouts() {
+		ArrayList<Order> result = new ArrayList<Order>(sIn.size() + bIn.size());
 		while (!sIn.isEmpty()) {
 			Order sInTop = (Order) sIn.remove();
 			Order bInTop = (Order) bIn.remove();

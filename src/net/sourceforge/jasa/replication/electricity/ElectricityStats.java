@@ -21,7 +21,8 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.FixedVolumeTradingAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
+import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.IllegalShoutException;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
@@ -29,6 +30,7 @@ import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.report.ReportVariable;
 import net.sourceforge.jasa.report.SurplusReport;
+import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 
 import org.apache.log4j.Logger;
@@ -181,11 +183,11 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 	 */
 
 	protected double getProfits(AbstractTradingAgent trader) {
-		return ((FixedVolumeTradingAgent) trader).getProfits();
+		return ((SimpleTradingAgent) trader).getProfits();
 	}
 
 	protected double getCapacity(AbstractTradingAgent trader) {
-		return ((FixedVolumeTradingAgent) trader).getVolume();
+		return ((SimpleTradingAgent) trader).getVolume();
 	}
 
 	public double equilibQuant(AbstractTradingAgent t, double price) {
@@ -194,11 +196,11 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 			if (price > privateValue) {
 				return 0;
 			} else {
-				return ((FixedVolumeTradingAgent) t).getVolume();
+				return ((SimpleTradingAgent) t).getVolume();
 			}
 		} else {
 			if (price > privateValue) {
-				return ((FixedVolumeTradingAgent) t).getVolume();
+				return ((SimpleTradingAgent) t).getVolume();
 			} else {
 				return 0;
 			}
@@ -229,10 +231,10 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 	protected void simulateTruthfulBidding() {
 		Auctioneer auctioneer = (Auctioneer) ((Prototypeable) auction
 		    .getAuctioneer()).protoClone();
-		LinkedList shouts = new LinkedList();
-		Iterator i = auction.getTraderIterator();
+		LinkedList<Order> shouts = new LinkedList<Order>();
+		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			FixedVolumeTradingAgent trader = (FixedVolumeTradingAgent) i.next();
+			SimpleTradingAgent trader = (SimpleTradingAgent) i.next();
 			Order truth = new Order(trader, trader.getVolume(), trader
 			    .getValuation(auction), trader.isBuyer(auction));
 			shouts.add(truth);
@@ -246,21 +248,20 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 			}
 		}
 		auctioneer.clear();
-		Iterator shoutIterator = shouts.iterator();
+		Iterator<Order> shoutIterator = shouts.iterator();
 		while (shoutIterator.hasNext()) {
-			Order s = (Order) shoutIterator.next();
+			Order s = shoutIterator.next();
 			auctioneer.removeShout(s);
 		}
-
 	}
 
 	public void calculateStrategicMarketPower() {
 		simulateTruthfulBidding();
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		pBT = 0;
 		pST = 0;
 		while (i.hasNext()) {
-			FixedVolumeTradingAgent trader = (FixedVolumeTradingAgent) i.next();
+			SimpleTradingAgent trader = (SimpleTradingAgent) i.next();
 			double truthProfits = truthProfits(trader.getLastProfit());
 			if (trader.isBuyer(auction)) {
 				pBT += truthProfits;

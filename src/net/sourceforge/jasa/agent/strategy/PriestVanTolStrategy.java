@@ -18,6 +18,7 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
@@ -26,6 +27,8 @@ import net.sourceforge.jasa.sim.event.SimEvent;
 
 import org.apache.log4j.Logger;
 
+import cern.jet.random.engine.RandomEngine;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -33,6 +36,10 @@ import org.apache.log4j.Logger;
 
 public class PriestVanTolStrategy extends MomentumStrategy implements
     Serializable {
+
+	public PriestVanTolStrategy(AbstractTradingAgent agent, RandomEngine prng) {
+		super(agent, prng);
+	}
 
 	protected HistoricalDataReport historicalDataReport;
 

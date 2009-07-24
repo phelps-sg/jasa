@@ -16,6 +16,7 @@
 package net.sourceforge.jasa.agent;
 
 import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.strategy.AbstractStrategy;
 import net.sourceforge.jasa.agent.strategy.MixedStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -52,6 +53,8 @@ public class MixedStrategyTest extends TestCase {
 	 * @uml.associationEnd
 	 */
 	DiscreteProbabilityDistribution probabilities;
+	
+	RandomEngine prng;
 
 	static final int NUM_ROUNDS = 1000;
 
@@ -65,14 +68,16 @@ public class MixedStrategyTest extends TestCase {
 	}
 
 	public void setUp() {
-
+		
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
+		
 		pureStrategy1 = new TestLearnerStrategy();
 		pureStrategy1.setQuantity(1);
 
 		pureStrategy2 = new TestLearnerStrategy();
 		pureStrategy2.setQuantity(1);
 
-		probabilities = new DiscreteProbabilityDistribution(2);
+		probabilities = new DiscreteProbabilityDistribution(prng, 2);
 		// probabilities.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
 		probabilities.setProbability(0, STRATEGY1_PROBABILITY);
 		probabilities.setProbability(1, STRATEGY2_PROBABILITY);

@@ -158,8 +158,8 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 		}
 	}
 
-	public Map getVariables() {
-		HashMap vars = new HashMap();
+	public Map<Object,Double> getVariables() {
+		HashMap<Object,Double> vars = new HashMap<Object,Double>();
 		createReportVars(vars, "transactionprice", stats[TRANS_PRICE]);
 		createReportVars(vars, "askprice", stats[ASK_PRICE]);
 		createReportVars(vars, "bidprice", stats[BID_PRICE]);
@@ -180,7 +180,7 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 		logger.info("");
 	}
 
-	protected void createReportVars(Map vars, String var, Distribution stats) {
+	protected void createReportVars(Map<Object,Double> vars, String var, Distribution stats) {
 		vars.put(makeVar(var, "mean"), new Double(stats.getMean()));
 		vars.put(makeVar(var, "min"), new Double(stats.getMin()));
 		vars.put(makeVar(var, "max"), new Double(stats.getMax()));

@@ -19,22 +19,22 @@ import java.io.Serializable;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.AgentPolledEvent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
+
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.learning.Learner;
 import net.sourceforge.jasa.sim.learning.MimicryLearner;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
 
 
 /**
@@ -61,28 +61,23 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 
 	protected double trPrice, trBidPrice, trAskPrice;
 
-	protected AbstractContinousDistribution initialMarginDistribution = new Uniform(
-	    0.05, 0.35, GlobalPRNG.getInstance());
+	protected AbstractContinousDistribution initialMarginDistribution;
 
 	protected AbstractContinousDistribution relativePerterbationDistribution;
 
 	protected AbstractContinousDistribution absolutePerterbationDistribution;
 
-	public static final String P_DEF_BASE = "momentumstrategy";
-
-	public static final String P_SCALING = "scaling";
-
-	public static final String P_LEARNER = "learner";
-
+	protected RandomEngine prng;
+	
 	static Logger logger = Logger.getLogger(MomentumStrategy.class);
 
-	public MomentumStrategy(AbstractTradingAgent agent) {
+	public MomentumStrategy(AbstractTradingAgent agent, RandomEngine prng) {
 		super(agent);
+		this.prng = prng;
+		initialise();		
 	}
 
-	public MomentumStrategy() {
-		this(null);
-	}
+	
 
 //	public void setup(ParameterDatabase parameters, Parameter base) {
 //
@@ -101,17 +96,16 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 //
 //		initialise();
 //
-//		logger.debug("Initialised with scaling = " + scaling + " and learner = "
+//		report.debug("Initialised with scaling = " + scaling + " and learner = "
 //		    + learner);
 //
 //	}
 
 	public void initialise() {
 		super.initialise();
-		relativePerterbationDistribution = new Uniform(0, scaling, GlobalPRNG
-		    .getInstance());
-		absolutePerterbationDistribution = new Uniform(0, 0.05, GlobalPRNG
-		    .getInstance());
+		relativePerterbationDistribution = new Uniform(0, scaling, prng);
+		absolutePerterbationDistribution = new Uniform(0, 0.05, prng);
+		initialMarginDistribution = new Uniform(0.05, 0.35, prng);
 	}
 
 	public boolean modifyShout(Order.MutableShout shout) {

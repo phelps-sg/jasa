@@ -15,9 +15,10 @@
 
 package net.sourceforge.jasa.agent;
 
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.util.MathUtil;
 import net.sourceforge.jasa.sim.util.SummaryStats;
 import junit.framework.Test;
@@ -35,6 +36,8 @@ public class RandomValuerTest extends TestCase {
 	 * @uml.associationEnd
 	 */
 	protected RandomValuer valuer;
+	
+	protected RandomEngine prng;
 
 	public static final double MIN_VALUE = 0;
 
@@ -47,8 +50,8 @@ public class RandomValuerTest extends TestCase {
 	}
 
 	public void setUp() {
-		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
-		valuer = new RandomValuer(MIN_VALUE, MAX_VALUE, GlobalPRNG.getInstance());
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
+		valuer = new RandomValuer(MIN_VALUE, MAX_VALUE, prng);
 	}
 
 	public void testDistribution() {

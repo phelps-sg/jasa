@@ -17,6 +17,9 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import cern.jet.random.engine.RandomEngine;
+
 
 /**
  * 
@@ -26,6 +29,11 @@ import java.io.Serializable;
 
 public class SimpleMomentumStrategy extends MomentumStrategy implements
     Serializable {
+
+	public SimpleMomentumStrategy(AbstractTradingAgent agent, RandomEngine prng) {
+		super(agent, prng);
+		// TODO Auto-generated constructor stub
+	}
 
 	protected void adjustMargin() {
 		if (agent.lastShoutAccepted()) {

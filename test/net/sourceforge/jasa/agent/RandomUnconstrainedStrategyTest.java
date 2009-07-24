@@ -15,13 +15,14 @@
 
 package net.sourceforge.jasa.agent;
 
+import cern.jet.random.Uniform;
 import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.strategy.RandomUnconstrainedStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.prng.GlobalPRNG;
 import net.sourceforge.jasa.sim.util.SummaryStats;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -54,10 +55,12 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
 	protected MarketFacade auction;
 
 	/**
-	 * @uml.property name="logger"
+	 * @uml.property name="report"
 	 * @uml.associationEnd
 	 */
 	protected PriceStatisticsReport logger;
+	
+	protected RandomEngine prng;
 
 	static final double MAX_PRICE = 100.0;
 
@@ -70,10 +73,10 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
 	}
 
 	public void setUp() {
-		GlobalPRNG.initialiseWithSeed(PRNGTestSeeds.UNIT_TEST_SEED);
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, true);
-		testStrategy = new RandomUnconstrainedStrategy(testAgent);
-		testStrategy.setMaxPrice(MAX_PRICE);
+		Uniform distribution = new Uniform(0, MAX_PRICE, prng);
+		testStrategy = new RandomUnconstrainedStrategy(distribution, testAgent);
 		testAgent.setStrategy(testStrategy);
 		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
