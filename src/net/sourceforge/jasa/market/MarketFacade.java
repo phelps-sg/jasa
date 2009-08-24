@@ -22,6 +22,7 @@ import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
+
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
 
@@ -56,7 +57,6 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	 * The current trading day (period)
 	 */
 	protected int day = 0;
-
 
 	public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
 

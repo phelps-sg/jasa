@@ -32,10 +32,6 @@ public class FixedPriceStrategy extends FixedQuantityStrategyImpl implements
 
 	protected double price;
 
-	public static final String P_DEF_BASE = "fixedpricestrategy";
-
-	static final String P_PRICE = "price";
-
 	public FixedPriceStrategy(AbstractTradingAgent agent, double price,
 	    int quantity) {
 		super(agent);

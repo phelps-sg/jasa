@@ -33,20 +33,6 @@ import net.sourceforge.jasa.sim.util.Resetable;
  * rounds by using the agent's profits in the last round as a reward signal.
  * </p>
  * 
- * </p>
- * <p>
- * <b>Parameters</b><br>
- * 
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.learner</tt><br>
- * <font size=-1>classname, inherits StimuliResponseLearner</font></td>
- * <td valign=top>(the learning algorithm to use)</td>
- * </tr>
- * 
- * </table>
- * 
  * @author Steve Phelps
  * @version $Revision$
  */

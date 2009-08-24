@@ -127,15 +127,14 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 
 	@Override
 	public void setAgent(Agent agent) {
-		// TODO Auto-generated method stub
-		
+		this.agent = (AbstractTradingAgent) agent;
 	}
 
-	@Override
-	public Strategy transfer(Agent newAgent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Strategy transfer(Agent newAgent) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	public abstract void endOfRound(Market auction);
 }
