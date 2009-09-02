@@ -219,7 +219,7 @@ public abstract class ElectricityTest extends TestCase {
 		strategy.setLearner(learner);
 		agent.setStrategy(strategy);
 		assert agent.getVolume() == capacity;
-		agent.reset();
+		agent.initialise();
 	}
 
 	public void assignValuer(SimpleTradingAgent agent) {

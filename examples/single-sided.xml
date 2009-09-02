@@ -15,7 +15,7 @@
 	<constructor-arg ref="population"/>
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="simulation" ref="marketSimulation"/>
-	<property name="numSimulations" value="100"/>
+	<property name="numSimulations" value="10"/>
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -43,7 +43,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
 	<constructor-arg ref="market"/>
-	<property name="maximumRounds" value="10"/>
+	<property name="maximumRounds" value="1"/>
 </bean>
 
 <bean id="agentInitialiser" class="net.sourceforge.jasa.sim.init.BasicAgentInitialiser">
@@ -126,12 +126,14 @@
 	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
 	<property name="strategy" ref="zic"/>
+	<property name="initialTradeEntitlement" value="1"/>
 </bean>
 
 <bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="true"/>
-	<property name="valuationPolicy" ref="randomValuationPolicy"/>
+	<property name="valuationPolicy" ref="sellerValuationPolicy"/>
 	<property name="strategy" ref="zic"/>
+	<property name="initialTradeEntitlement" value="1"/>
 </bean>
 
 <bean id="markupDistribution" class="cern.jet.random.Uniform">
@@ -149,6 +151,10 @@
 	<constructor-arg value="10"/>
 	<constructor-arg value="100"/>
 	<constructor-arg ref="prng"/>
+</bean>
+
+<bean id="sellerValuationPolicy" class="net.sourceforge.jasa.agent.valuation.FixedValuer">	
+	<property name="value" value="10"/>
 </bean>
 
 </beans>

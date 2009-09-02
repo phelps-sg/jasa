@@ -34,10 +34,6 @@ public class FixedValuer implements ValuationPolicy, Serializable {
 
 	protected double value;
 
-	public static final String P_DEF_BASE = "fixedvaluer";
-
-	public static final String P_VALUE = "value";
-
 	public FixedValuer() {
 	}
 

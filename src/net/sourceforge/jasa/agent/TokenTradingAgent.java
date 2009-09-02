@@ -89,7 +89,7 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	public Object protoClone() {
 		try {
 			TokenTradingAgent clone = (TokenTradingAgent) clone();
-			clone.reset();
+			clone.initialise();
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			throw new Error(e);

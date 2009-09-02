@@ -33,7 +33,7 @@ import net.sourceforge.jasa.sim.util.Resetable;
  * @version $Revision$
  */
 
-public interface TradingAgent extends Agent, Resetable, MarketEventListener {
+public interface TradingAgent extends Agent, MarketEventListener {
 	
 	public boolean register(Market market);
 	/**

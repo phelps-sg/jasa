@@ -352,10 +352,10 @@ public class MarketFacade implements Market, Serializable, Runnable {
 
 	public void initialiseAgents() {
 		marketSimulation.initialiseAgents();
-		for(Agent agent : getTraders().getAgentList().getAgents()) {
-			AbstractTradingAgent trader = (AbstractTradingAgent) agent;
-			trader.register(this);
-		}
+//		for(Agent agent : getTraders().getAgentList().getAgents()) {
+//			AbstractTradingAgent trader = (AbstractTradingAgent) agent;
+//			trader.register(this);
+//		}
 	}
 	
 	public void register(TradingAgent trader) {

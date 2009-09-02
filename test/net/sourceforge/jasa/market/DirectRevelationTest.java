@@ -60,7 +60,7 @@ public class DirectRevelationTest extends ElectricityTest {
 		TruthTellingStrategy truthTelling = new TruthTellingStrategy();
 		truthTelling.setQuantity(capacity);
 		agent.setStrategy(truthTelling);
-		agent.reset();
+		agent.initialise();
 	}
 
 	public void assignValuer(SimpleTradingAgent agent) {
