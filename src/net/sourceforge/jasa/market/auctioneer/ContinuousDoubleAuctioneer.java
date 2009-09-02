@@ -41,9 +41,9 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 
 	protected ZeroFundsAccount account;
 
-	public ContinuousDoubleAuctioneer() {
-		this(null);
-	}
+//	public ContinuousDoubleAuctioneer() {
+//		this(null);
+//	}
 
 	public ContinuousDoubleAuctioneer(Market auction) {
 		super(auction);

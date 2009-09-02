@@ -8,6 +8,7 @@
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>examples/example1.xml</config>
+		<config>examples/single-sided.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

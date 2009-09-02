@@ -5,7 +5,7 @@
 
 
 <bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
-	<property name="auctioneer" ref="cda"/>
+	<property name="auctioneer" ref="clearingHouse"/>
 	<property name="controller" ref="simulationController"/>
 	<property name="marketSimulation" ref="marketSimulation"/>
 </bean>
@@ -21,7 +21,7 @@
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
 				<constructor-arg>
 					<list>
-						<ref bean="equilibriumReport"/>
+						<ref bean="priceStatisticsReport"/>
 					</list>
 				</constructor-arg>
 			</bean>
@@ -33,6 +33,9 @@
 	<constructor-arg ref="market" />
 </bean>
 
+<bean id="priceStatisticsReport" class="net.sourceforge.jasa.report.PriceStatisticsReport">
+</bean>
+
 <bean id="agentMixer" class="net.sourceforge.jasa.sim.RandomRobinAgentMixer">
 	<constructor-arg ref="prng"/>
 </bean>
@@ -40,7 +43,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
 	<constructor-arg ref="market"/>
-	<property name="maximumRounds" value="100"/>
+	<property name="maximumRounds" value="10"/>
 </bean>
 
 <bean id="agentInitialiser" class="net.sourceforge.jasa.sim.init.BasicAgentInitialiser">
@@ -53,9 +56,26 @@
 	<property name="pricingPolicy" ref="midPointDiscriminatoryPricingPolicy"/>
 </bean>
 
+<bean id="clearingHouse" class="net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer">
+	<constructor-arg>
+		<ref bean="market"/>
+	</constructor-arg>
+	<property name="pricingPolicy" ref="payAsBidPricingPolicy"/>
+</bean>
+
 <bean id="midPointDiscriminatoryPricingPolicy" 
 		class="net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy">
 	<property name="k" value="0.5"/>
+</bean>
+
+<bean id="payAsBidPricingPolicy" 
+		class="net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy">
+	<property name="k" value="1.0"/>
+</bean>
+
+<bean id="payAsAskPricingPolicy" 
+		class="net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy">
+	<property name="k" value="0.0"/>
 </bean>
 
 <bean id="prng" class="cern.jet.random.engine.MersenneTwister64">
@@ -84,7 +104,7 @@
 </bean>
 
 <bean id="sellers" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="10"/>
+	<constructor-arg value="1"/>
 	<constructor-arg ref="sellerFactory"/> 	
 </bean>
 

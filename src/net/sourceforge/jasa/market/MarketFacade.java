@@ -18,6 +18,7 @@ package net.sourceforge.jasa.market;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
@@ -85,7 +86,7 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	}
 	
 	public MarketFacade(RandomEngine prng) {
-		this(prng, new ContinuousDoubleAuctioneer());
+		this(prng, null);
 	}
 	
 	public void clear(Order ask, Order bid, double transactionPrice) {
@@ -351,6 +352,10 @@ public class MarketFacade implements Market, Serializable, Runnable {
 
 	public void initialiseAgents() {
 		marketSimulation.initialiseAgents();
+		for(Agent agent : getTraders().getAgentList().getAgents()) {
+			AbstractTradingAgent trader = (AbstractTradingAgent) agent;
+			trader.register(this);
+		}
 	}
 	
 	public void register(TradingAgent trader) {
@@ -359,6 +364,7 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	}
 
 	public void run() {
+		initialiseAgents();
 		controller.run();
 //		controller.setListeners();
 //		marketSimulation.run();

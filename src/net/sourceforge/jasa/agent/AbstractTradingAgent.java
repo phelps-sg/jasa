@@ -16,6 +16,7 @@
 package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -442,7 +443,6 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	public CommodityHolding getCommodityHolding() {
 		return stock;
 	}
-
 	
 	public Collection<Market> getMarkets() {
 		return markets;
@@ -450,6 +450,15 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 
 	public void setMarkets(Collection<Market> markets) {
 		this.markets = markets;
+	}
+	
+	public void setMarket(Market market) {
+		markets = new ArrayList<Market>(1);
+		markets.add(market);
+	}
+	
+	public Market getMarket() {
+		return markets.iterator().next();
 	}
 	
 	public boolean register(Market market) {
@@ -498,6 +507,9 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 
 	@Override
 	public void interact(List<Agent> other) {
+		if (markets == null || markets.isEmpty()) {
+			throw new RuntimeException("Agent is not configured in any markets");
+		}
 		for(Market market : markets) {
 			requestShout(market);
 		}
@@ -509,10 +521,10 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 		return active();
 	}
 
-
 	@Override
 	public void setStrategy(Strategy strategy) {
 		this.strategy = (TradingStrategy) strategy;
+		strategy.setAgent(this);
 	}
 
 	/**

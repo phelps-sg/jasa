@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
 
@@ -32,6 +33,10 @@ import net.sourceforge.jasa.market.Order;
 
 public class ContinuousDoubleAuctioneerNoQueue extends
     ContinuousDoubleAuctioneer implements Serializable {
+
+	public ContinuousDoubleAuctioneerNoQueue(Market auction) {
+		super(auction);
+	}
 
 	public void clear() {
 		clearingQuote = new MarketQuote(askQuote(), bidQuote());

@@ -90,9 +90,8 @@ public abstract class EfficiencyTest extends TestCase {
 	}
 
 	protected void assignAuctioneer() {
-		auctioneer = new ContinuousDoubleAuctioneer();
+		auctioneer = new ContinuousDoubleAuctioneer(auction);
 		auctioneer.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
-		auctioneer.setMarket(auction);
 		auction.setAuctioneer(auctioneer);
 	}
 
