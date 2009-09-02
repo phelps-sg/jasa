@@ -46,7 +46,8 @@
 	<property name="maximumRounds" value="1"/>
 </bean>
 
-<bean id="agentInitialiser" class="net.sourceforge.jasa.sim.init.BasicAgentInitialiser">
+<bean id="agentInitialiser" class="net.sourceforge.jasa.agent.MarketAgentInitialiser">
+	<property name="market" ref="market"/>
 </bean>
 
 <bean id="cda" class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
