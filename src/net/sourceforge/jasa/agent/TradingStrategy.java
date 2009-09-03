@@ -50,4 +50,6 @@ public interface TradingStrategy extends Strategy, Prototypeable, MarketEventLis
 
 	public int determineQuantity(Market auction);
 
+	public void initialise();
+
 }

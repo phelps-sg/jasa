@@ -18,8 +18,10 @@ package net.sourceforge.jasa.agent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
 import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
@@ -180,7 +182,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	 */
 	protected AgentGroup group = null;
 	
-	protected Collection<Market> markets = new LinkedList<Market>();
+	protected Set<Market> markets = new HashSet<Market>();
 
 	static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
@@ -331,6 +333,12 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 		profits = 0;
 		lastShoutAccepted = false;
 		currentOrder = null;
+		if (strategy != null) {
+			strategy.initialise();
+		}
+		if (valuer != null) {
+			valuer.initialise();
+		}
 	}
 
 	public void reset() {
@@ -449,11 +457,11 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	}
 
 	public void setMarkets(Collection<Market> markets) {
-		this.markets = markets;
+		this.markets = new HashSet<Market>(markets);
 	}
 	
 	public void setMarket(Market market) {
-		markets = new ArrayList<Market>(1);
+		markets = new HashSet<Market>();
 		markets.add(market);
 	}
 	

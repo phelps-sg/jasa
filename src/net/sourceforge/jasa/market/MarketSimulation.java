@@ -101,7 +101,7 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 		round = 0;
 		endOfRound = false;
 		age = 0;
-		closed = false;
+		closed = false;	
 	}
 	
 	public void reset() {
@@ -186,6 +186,8 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 	 */
 	public void run() {
 
+		initialise();
+		
 		if (getAuctioneer() == null) {
 			throw new AuctionRuntimeException(
 			    "No auctioneer has been assigned");

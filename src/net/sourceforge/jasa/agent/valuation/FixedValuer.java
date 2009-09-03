@@ -56,6 +56,9 @@ public class FixedValuer implements ValuationPolicy, Serializable {
 
 	public void reset() {
 	}
+	
+	public void initialise() {
+	}
 
 	public void setValue(double value) {
 		this.value = value;

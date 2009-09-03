@@ -76,5 +76,9 @@ public abstract class AbstractRandomValuer implements ValuationPolicy,
 	public void setDistribution(AbstractContinousDistribution distribution) {
 		this.distribution = distribution;
 	}
+	
+	public String toString() {
+		return "(" + getClass() + " value:" + value + " distribution:" + distribution + ")";
+	}
 
 }

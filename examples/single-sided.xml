@@ -15,7 +15,7 @@
 	<constructor-arg ref="population"/>
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="simulation" ref="marketSimulation"/>
-	<property name="numSimulations" value="10"/>
+	<property name="numSimulations" value="8"/>
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -100,7 +100,7 @@
 </bean>
 
 <bean id="buyers" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="10"/>
+	<constructor-arg value="5"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
@@ -148,10 +148,11 @@
 	<property name="markupDistribution" ref="markupDistribution"/>		
 </bean>
 
-<bean id="randomValuationPolicy" class="net.sourceforge.jasa.agent.valuation.RandomValuer">
-	<constructor-arg value="10"/>
-	<constructor-arg value="100"/>
-	<constructor-arg ref="prng"/>
+<bean id="randomValuationPolicy" scope="prototype"
+	class="net.sourceforge.jasa.agent.valuation.RandomValuer">
+	<constructor-arg value="10" />
+	<constructor-arg value="100" />
+	<constructor-arg ref="prng" />
 </bean>
 
 <bean id="sellerValuationPolicy" class="net.sourceforge.jasa.agent.valuation.FixedValuer">	

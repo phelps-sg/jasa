@@ -71,4 +71,9 @@ public class TransactionExecutedEvent extends MarketEvent {
 	public int getQuantity() {
 		return quantity;
 	}
+	
+	public String toString() {
+		return "(" + getClass() + " price:" + price + " quantity:" + quantity
+				+ " bid:" + bid + " ask:" + ask + ")";
+	}
 }

@@ -78,5 +78,5 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
 	public void setAgent(TradingAgent agent) {
 		// No action required
 	}
-
+	
 }

@@ -76,10 +76,10 @@ public class MarketFacade implements Market, Serializable, Runnable {
 		controller.setSimulation(marketSimulation);
 	}
 	
-	public MarketFacade(MarketSimulation marketSimulation, Auctioneer auctioneer) {
-		this.auctioneer = auctioneer;
-		this.marketSimulation = marketSimulation;
-	}
+//	public MarketFacade(MarketSimulation marketSimulation, Auctioneer auctioneer) {
+//		this.auctioneer = auctioneer;
+//		this.marketSimulation = marketSimulation;
+//	}
 	
 	public MarketFacade(RandomEngine prng, Auctioneer auctioneer) {
 		this(prng, new Population(prng), auctioneer);			
@@ -108,6 +108,8 @@ public class MarketFacade implements Market, Serializable, Runnable {
 		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
 		    marketSimulation.getMarket(), marketSimulation.getRound(), ask, bid, buyerCharge, ask.getQuantity());
 		fireEvent(transactionEvent);
+		
+		System.out.println(transactionEvent);
 
 		auctioneer.getAccount().doubleEntry(buyer.getAccount(), buyerCharge,
 		    seller.getAccount(), sellerPayment);
@@ -341,6 +343,7 @@ public class MarketFacade implements Market, Serializable, Runnable {
 		fireEvent(new OrderReceivedEvent(this, marketSimulation.getRound(), order));
 		order.setTimeStamp(controller.getSimulation().getSimulationTime());
 		auctioneer.newOrder(order);
+		System.out.println(order);
 		fireEvent(new OrderPlacedEvent(this, marketSimulation.getRound(), order));
 
 		// notifyObservers();
@@ -350,8 +353,9 @@ public class MarketFacade implements Market, Serializable, Runnable {
 		auctioneer.printState();
 	}
 
-	public void initialiseAgents() {
+	public void initialise() {
 		marketSimulation.initialiseAgents();
+		controller.addListener(auctioneer);
 //		for(Agent agent : getTraders().getAgentList().getAgents()) {
 //			AbstractTradingAgent trader = (AbstractTradingAgent) agent;
 //			trader.register(this);
@@ -364,7 +368,7 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	}
 
 	public void run() {
-		initialiseAgents();
+		initialise();
 		controller.run();
 //		controller.setListeners();
 //		marketSimulation.run();

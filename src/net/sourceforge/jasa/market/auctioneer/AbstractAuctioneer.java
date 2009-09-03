@@ -29,6 +29,7 @@ import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.OrderBook;
 import net.sourceforge.jasa.market.rules.PricingPolicy;
 import net.sourceforge.jasa.sim.event.SimEvent;
+import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
 import net.sourceforge.jasa.sim.util.Parameterizable;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 import net.sourceforge.jasa.sim.util.Resetable;
@@ -230,7 +231,9 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	}
 
 	public void eventOccurred(SimEvent event) {
-		// default is do nothing
+		if (event instanceof SimulationStartingEvent) {
+			reset();
+		}
 	}
 
 	public void endOfAuctionProcessing() {

@@ -47,4 +47,6 @@ public interface ValuationPolicy extends Resetable, Parameterizable,
 
 	public void setAgent(TradingAgent agent);
 
+	public void initialise();
+
 }
