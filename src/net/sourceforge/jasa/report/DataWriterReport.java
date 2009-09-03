@@ -116,7 +116,7 @@ public class DataWriterReport extends AbstractAuctionReport {
 	}
 
 	public void updateShoutLog(OrderPlacedEvent event) {
-		Order shout = event.getShout();
+		Order shout = event.getOrder();
 		int time = event.getTime();
 		if (shout.isBid()) {
 			if (bidLog != null) {

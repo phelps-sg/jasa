@@ -37,7 +37,7 @@ public class OrderPlacedEvent extends MarketEvent {
 		this.shout = shout;
 	}
 
-	public Order getShout() {
+	public Order getOrder() {
 		return shout;
 	}
 }

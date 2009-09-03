@@ -199,7 +199,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	}
 
 	public void updateShoutLog(OrderPlacedEvent event) {
-		Order shout = event.getShout();
+		Order shout = event.getOrder();
 //		if (sortedShouts.getCount(shout) > 0) {
 //			report.info(sortedShouts.getCount(shout) + "\n" + shout);
 //			report.info(shoutMap.get(shout.getId()));

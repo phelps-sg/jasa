@@ -17,6 +17,9 @@ package net.sourceforge.jasa.report;
 
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
@@ -68,6 +71,8 @@ public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
 		}
 	}
 	
-	
+	public Map<Object, Number> getVariables() {
+		return new HashMap<Object,Number>();
+	}
 
 }

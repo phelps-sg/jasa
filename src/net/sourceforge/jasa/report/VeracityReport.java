@@ -57,7 +57,7 @@ public class VeracityReport extends AbstractAuctionReport {
 
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof OrderPlacedEvent) {
-			recordVeracity(((OrderPlacedEvent) event).getShout());
+			recordVeracity(((OrderPlacedEvent) event).getOrder());
 		}
 	}
 

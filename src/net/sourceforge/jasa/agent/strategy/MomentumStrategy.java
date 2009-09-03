@@ -139,7 +139,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 	}
 
 	protected void shoutPlaced(OrderPlacedEvent event) {
-		lastShout = event.getShout();
+		lastShout = event.getOrder();
 		lastShoutAccepted = false;
 	}
 
