@@ -18,7 +18,10 @@ package net.sourceforge.jasa.report;
 
 
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.sim.event.SimEvent;
+import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
 import net.sourceforge.jasa.sim.util.Parameterizable;
+import net.sourceforge.jasa.sim.util.Resetable;
 
 import org.apache.log4j.Logger;
 
@@ -32,7 +35,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class AbstractAuctionReport implements AuctionReport,
+public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
     Parameterizable {
 
 	static Logger logger = Logger.getLogger(AbstractAuctionReport.class);
@@ -57,5 +60,14 @@ public abstract class AbstractAuctionReport implements AuctionReport,
 	public MarketFacade getAuction() {
 		return auction;
 	}
+
+	@Override
+	public void eventOccurred(SimEvent event) {
+		if (event instanceof SimulationStartingEvent) {
+			reset();
+		}
+	}
+	
+	
 
 }

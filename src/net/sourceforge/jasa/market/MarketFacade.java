@@ -109,7 +109,7 @@ public class MarketFacade implements Market, Serializable, Runnable {
 		    marketSimulation.getMarket(), marketSimulation.getRound(), ask, bid, buyerCharge, ask.getQuantity());
 		fireEvent(transactionEvent);
 		
-		System.out.println(transactionEvent);
+//		System.out.println(transactionEvent);
 
 		auctioneer.getAccount().doubleEntry(buyer.getAccount(), buyerCharge,
 		    seller.getAccount(), sellerPayment);
@@ -343,7 +343,7 @@ public class MarketFacade implements Market, Serializable, Runnable {
 		fireEvent(new OrderReceivedEvent(this, marketSimulation.getRound(), order));
 		order.setTimeStamp(controller.getSimulation().getSimulationTime());
 		auctioneer.newOrder(order);
-		System.out.println(order);
+//		System.out.println(order);
 		fireEvent(new OrderPlacedEvent(this, marketSimulation.getRound(), order));
 
 		// notifyObservers();
@@ -370,7 +370,6 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	public void run() {
 		initialise();
 		controller.run();
-//		controller.setListeners();
 //		marketSimulation.run();
 	}
 

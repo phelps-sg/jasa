@@ -214,4 +214,8 @@ public class FreeChartReport extends AbstractAuctionReport implements
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void reset() {
+	}
 }

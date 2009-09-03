@@ -251,6 +251,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	}
 
 	public void eventOccurred(SimEvent event) {
+		super.eventOccurred(event);
 		if (event instanceof RoundClosedEvent) {
 			roundClosed((RoundClosedEvent) event);
 		} else if (event instanceof OrderPlacedEvent) {
@@ -277,10 +278,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			return highestUnacceptedBid.getPrice();
 		}
 
-		Iterator i = bids.iterator();
+		Iterator<Order> i = bids.iterator();
 		double highestUnacceptedBidPrice = Double.NEGATIVE_INFINITY;
 		while (i.hasNext()) {
-			Order s = (Order) i.next();
+			Order s = i.next();
 			if (!accepted(s)) {
 				if (s.getPrice() > highestUnacceptedBidPrice) {
 					highestUnacceptedBidPrice = s.getPrice();
@@ -292,10 +293,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	}
 
 	public double getLowestAcceptedBidPrice() {
-		Iterator i = bids.iterator();
+		Iterator<Order> i = bids.iterator();
 		double lowestAcceptedBidPrice = Double.POSITIVE_INFINITY;
 		while (i.hasNext()) {
-			Order s = (Order) i.next();
+			Order s = i.next();
 			if (accepted(s)) {
 				if (s.getPrice() < lowestAcceptedBidPrice) {
 					lowestAcceptedBidPrice = s.getPrice();
@@ -311,10 +312,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			return lowestUnacceptedAsk.getPrice();
 		}
 
-		Iterator i = asks.iterator();
+		Iterator<Order> i = asks.iterator();
 		double lowestUnacceptedBidPrice = Double.POSITIVE_INFINITY;
 		while (i.hasNext()) {
-			Order s = (Order) i.next();
+			Order s = i.next();
 			if (!accepted(s)) {
 				if (s.getPrice() < lowestUnacceptedBidPrice) {
 					lowestUnacceptedBidPrice = s.getPrice();
@@ -326,10 +327,10 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	}
 
 	public double getHighestAcceptedAskPrice() {
-		Iterator i = asks.iterator();
+		Iterator<Order> i = asks.iterator();
 		double highestAcceptedAskPrice = Double.NEGATIVE_INFINITY;
 		while (i.hasNext()) {
-			Order s = (Order) i.next();
+			Order s = i.next();
 			if (accepted(s)) {
 				if (s.getPrice() > highestAcceptedAskPrice) {
 					highestAcceptedAskPrice = s.getPrice();
@@ -339,11 +340,11 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		return highestAcceptedAskPrice;
 	}
 
-	public List getBids() {
+	public List<Order> getBids() {
 		return bids;
 	}
 
-	public List getAsks() {
+	public List<Order> getAsks() {
 		return asks;
 	}
 
@@ -379,9 +380,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	public int getNumberOfShouts(List shouts, double price, boolean accepted) {
 
 		int numShouts = 0;
-		Iterator i = shouts.iterator();
+		Iterator<Order> i = shouts.iterator();
 		while (i.hasNext()) {
-			Order shout = (Order) i.next();
+			Order shout = i.next();
 			if ((price >= 0 && shout.getPrice() >= price)
 			    || (price < 0 && shout.getPrice() <= -price)) {
 				if (accepted) {

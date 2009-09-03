@@ -43,8 +43,8 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
     Resetable, Cloneable {
 
 	protected AbstractTradingAgent agent;
-
-	protected Order currentShout;
+//
+//	protected Order currentShout;
 
 	protected Market auction;
 
@@ -75,8 +75,11 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 		}
 	}
 
-	public Order modifyOrder(Order shout, Market auction) {
+	public Order modifyOrder(Order currentShout, Market auction) {
 		this.auction = auction;
+		if (currentShout == null) {
+			currentShout = new Order();
+		}
 		if (modifyShout(currentShout)) {
 			return new Order(currentShout.getAgent(), currentShout.getQuantity(),
 			    currentShout.getPrice(), currentShout.isBid());
@@ -98,7 +101,7 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 	}
 
 	public void initialise() {
-		currentShout = new Order();
+//		currentShout = new Order();
 	}
 
 	public void eventOccurred(SimEvent event) {

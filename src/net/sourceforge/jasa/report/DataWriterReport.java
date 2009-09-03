@@ -83,6 +83,7 @@ public class DataWriterReport extends AbstractAuctionReport {
 
 
 	public void eventOccurred(SimEvent event) {
+		super.eventOccurred(event);
 		if (event instanceof TransactionExecutedEvent) {
 			updateTransPriceLog((TransactionExecutedEvent) event);
 		} else if (event instanceof OrderPlacedEvent) {
@@ -143,6 +144,10 @@ public class DataWriterReport extends AbstractAuctionReport {
 
 	public void setAuction(MarketFacade auction) {
 		this.auction = auction;
+	}
+
+	@Override
+	public void reset() {
 	}
 
 }
