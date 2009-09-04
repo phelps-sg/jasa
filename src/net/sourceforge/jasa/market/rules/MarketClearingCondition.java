@@ -34,8 +34,6 @@ import net.sourceforge.jasa.sim.event.SimEvent;
 public class MarketClearingCondition extends Observable implements
     MarketEventListener {
 
-	public static final String P_DEF_BASE = "marketclearingcondition";
-
 	public MarketClearingCondition() {
 		initialise();
 	}

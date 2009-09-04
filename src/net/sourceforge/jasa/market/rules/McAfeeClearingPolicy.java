@@ -13,14 +13,15 @@
  * See the GNU General Public License for more details.
  */
 
-package net.sourceforge.jasa.market.auctioneer;
+package net.sourceforge.jasa.market.rules;
 
 import java.util.Iterator;
 
 import net.sourceforge.jasa.market.Account;
-import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+import net.sourceforge.jasa.market.OrderBook;
 import net.sourceforge.jasa.market.ZeroCreditAccount;
+import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 
 /**
  * An implementation of the mechanism described in
@@ -31,16 +32,13 @@ import net.sourceforge.jasa.market.ZeroCreditAccount;
  * @author Steve Phelps
  * @version $Revision$
  */
-public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
+public class McAfeeClearingPolicy implements ClearingPolicy {
 
 	protected ZeroCreditAccount account;
+	
+	protected AbstractAuctioneer auctioneer;
 
-	public McAfeeClearingHouseAuctioneer() {
-		this(null);
-	}
-
-	public McAfeeClearingHouseAuctioneer(Market auction) {
-		super(auction);
+	public McAfeeClearingPolicy(AbstractAuctioneer auctioneer) {
 		account = new ZeroCreditAccount(this);
 	}
 
@@ -49,6 +47,7 @@ public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
 		double a0 = -1, a1 = -1;
 		double b0 = -1, b1 = -1;
 		double p0 = -1;
+		OrderBook orderBook = auctioneer.getOrderBook();
 		if (orderBook.getLowestMatchedBid() == null) {
 			return;
 		}
@@ -66,15 +65,15 @@ public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
 			a1 = orderBook.getLowestMatchedBid().getPrice();
 			b1 = orderBook.getHighestMatchedAsk().getPrice();
 		}
-		Iterator matchedShouts = orderBook.getMatchedShouts().iterator();
+		Iterator<Order> matchedShouts = orderBook.matchOrders().iterator();
 		while (matchedShouts.hasNext()) {
-			Order bid = (Order) matchedShouts.next();
-			Order ask = (Order) matchedShouts.next();
+			Order bid = matchedShouts.next();
+			Order ask = matchedShouts.next();
 			if (efficientClearing) {
-				clear(ask, bid, p0);
+				auctioneer.clear(ask, bid, p0);
 			} else {
 				if (bid.getPrice() > a1) {
-					clear(ask, bid, a1, b1, ask.getQuantity());
+					auctioneer.clear(ask, bid, a1, b1, ask.getQuantity());
 				}
 			}
 		}
@@ -85,7 +84,6 @@ public class McAfeeClearingHouseAuctioneer extends ClearingHouseAuctioneer {
 	}
 
 	public void reset() {
-		super.reset();
 		account.setFunds(0);
 	}
 

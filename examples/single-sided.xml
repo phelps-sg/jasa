@@ -15,7 +15,7 @@
 	<constructor-arg ref="population"/>
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="simulation" ref="marketSimulation"/>
-	<property name="numSimulations" value="100"/>
+	<property name="numSimulations" value="1000"/>
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -23,7 +23,7 @@
 					<list>
 						<ref bean="transactionPriceReport"/>
 						<ref bean="bidPriceReport"/>
-						<ref bean="eventReport"/>
+						<!-- <ref bean="eventReport"/>  -->
 					</list>
 				</constructor-arg>
 			</bean>
@@ -54,7 +54,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
 	<constructor-arg ref="market"/>
-	<property name="maximumRounds" value="1"/>
+	<property name="maximumRounds" value="100"/>
 </bean>
 
 <bean id="agentInitialiser" class="net.sourceforge.jasa.agent.MarketAgentInitialiser">
@@ -68,11 +68,13 @@
 	<property name="pricingPolicy" ref="midPointDiscriminatoryPricingPolicy"/>
 </bean>
 
-<bean id="clearingHouse" class="net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer">
+<bean id="clearingHouse" 
+		class="net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer">
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
 	<property name="pricingPolicy" ref="payAsBidPricingPolicy"/>
+	<property name="clearingPolicy" ref="noQueueClearingPolicy"/>
 </bean>
 
 <bean id="midPointDiscriminatoryPricingPolicy" 
@@ -88,6 +90,13 @@
 <bean id="payAsAskPricingPolicy" 
 		class="net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy">
 	<property name="k" value="0.0"/>
+</bean>
+
+<bean id="noQueueClearingPolicy"
+		class="net.sourceforge.jasa.market.rules.NoQueueClearingPolicy">
+		<constructor-arg>
+			<ref bean="clearingHouse"/>
+		</constructor-arg>
 </bean>
 
 <bean id="prng" class="cern.jet.random.engine.MersenneTwister64">
@@ -137,14 +146,14 @@
 <bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
-	<property name="strategy" ref="zic"/>
+	<property name="strategy" ref="stimuliResponse"/>
 	<property name="initialTradeEntitlement" value="1"/>
 </bean>
 
 <bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="true"/>
 	<property name="valuationPolicy" ref="sellerValuationPolicy"/>
-	<property name="strategy" ref="zic"/>
+	<property name="strategy" ref="tt"/>
 	<property name="initialTradeEntitlement" value="1"/>
 </bean>
 
@@ -157,6 +166,21 @@
 <bean id="zic" scope="prototype" class="net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy">
 	<property name="quantity" value="1" />
 	<property name="markupDistribution" ref="markupDistribution"/>		
+</bean>
+
+<bean id="tt" scope="prototype" class="net.sourceforge.jasa.agent.strategy.TruthTellingStrategy">
+</bean>
+
+<bean id="stimuliResponse" scope="prototype" class="net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy">
+	<property name="learner" ref="rothErev"/>
+	<property name="markupScale" value="1"/>
+</bean>
+
+<bean id="rothErev" scope="prototype" class="net.sourceforge.jasa.sim.learning.RothErevLearner">
+	<constructor-arg>
+		<ref bean="prng"/>
+	</constructor-arg>
+	<property name="k" value="10"/>
 </bean>
 
 <bean id="randomValuationPolicy" scope="prototype"

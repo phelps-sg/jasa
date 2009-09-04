@@ -103,7 +103,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 	 */
 	protected void enumerateTruthfulShout(Order shout) {
 		try {
-			shoutEngine.newShout(shout);
+			shoutEngine.add(shout);
 		} catch (DuplicateShoutException e) {
 			logger.error(e.getMessage());
 			throw new Error(e);

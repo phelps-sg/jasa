@@ -71,12 +71,6 @@ public class GenericDoubleAuctioneer extends TransparentAuctioneer implements
 
 	protected OrderAcceptancePolicy acceptingPolicy;
 
-	public static final String P_CLEARING = "clearing";
-
-	public static final String P_ACCEPTING = "accepting";
-
-	public static final String P_DEF_BASE = "gda";
-
 	public GenericDoubleAuctioneer() {
 		this(null);
 	}

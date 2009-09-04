@@ -95,7 +95,7 @@ public class EquilibriumReport extends DirectRevelationReport implements
 		} else {
 			calculateEquilibriaPriceRange();
 			equilibriaFound = true;
-			matchedShouts = shoutEngine.getMatchedShouts();
+			matchedShouts = shoutEngine.matchOrders();
 			calculateEquilibriaQuantity();
 		}
 	}

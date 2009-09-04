@@ -243,7 +243,7 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 			shouts.add(shout);
 
 			try {
-				shoutEngine.newShout(shout);
+				shoutEngine.add(shout);
 			} catch (DuplicateShoutException e) {
 				logger.error(e.getMessage());
 				throw new Error(e);
@@ -264,7 +264,7 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
 			double midEquilibriumPrice = (minPrice + maxPrice) / 2;
 
-			List matchedShouts = shoutEngine.getMatchedShouts();
+			List matchedShouts = shoutEngine.matchOrders();
 			if (matchedShouts != null) {
 				Iterator i = matchedShouts.iterator();
 				while (i.hasNext()) {

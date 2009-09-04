@@ -68,10 +68,10 @@ public class FourHeapTest extends TestCase {
 			TradingAgent trader1 = new MockTrader(this, 10, 0);
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader1, 1, 5.0, false);
-			shoutEngine.newShout(buy);
-			shoutEngine.newShout(sell);
+			shoutEngine.add(buy);
+			shoutEngine.add(sell);
 			// No match should result because the orders are from the same trader
-			List<Order> matched = shoutEngine.getMatchedShouts();
+			List<Order> matched = shoutEngine.matchOrders();
 			assertTrue("Matching shouts from the same agent", matched.isEmpty());
 		} catch (DuplicateShoutException e) {
 			e.printStackTrace();
@@ -85,9 +85,9 @@ public class FourHeapTest extends TestCase {
 			TradingAgent trader2 = new MockTrader(this, 0, 0);
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader2, 1, 5.0, false);
-			shoutEngine.newShout(buy);
-			shoutEngine.newShout(sell);		
-			List<Order> matched = shoutEngine.getMatchedShouts();
+			shoutEngine.add(buy);
+			shoutEngine.add(sell);		
+			List<Order> matched = shoutEngine.matchOrders();
 			assertTrue(matched.contains(buy));
 			assertTrue(matched.contains(sell));
 		} catch (DuplicateShoutException e) {
@@ -107,25 +107,25 @@ public class FourHeapTest extends TestCase {
 			for (int round = 0; round < 700; round++) {
 
 				if (testRemoveShout != null) {
-					shoutEngine.removeShout(testRemoveShout);
-					shoutEngine.removeShout(testRemoveShout2);
+					shoutEngine.remove(testRemoveShout);
+					shoutEngine.remove(testRemoveShout2);
 				}
 
 				for (int shout = 0; shout < 200; shout++) {
-					shoutEngine.newShout(randomShout());
+					shoutEngine.add(randomShout());
 				}
 
-				shoutEngine.newShout(testRemoveShout = randomShout());
+				shoutEngine.add(testRemoveShout = randomShout());
 				testRemoveShout2 = new Order(testRemoveShout.getAgent(),
 				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
 				    !testRemoveShout.isBid());
-				shoutEngine.newShout(testRemoveShout2);
+				shoutEngine.add(testRemoveShout2);
 
 				if ((round & 0x01) > 0) {
 					continue;
 				}
 
-				List<Order> matched = shoutEngine.getMatchedShouts();
+				List<Order> matched = shoutEngine.matchOrders();
 				Iterator<Order> i = matched.iterator();
 				while (i.hasNext()) {
 					matches++;
@@ -208,11 +208,11 @@ class TestShoutEngine extends FourHeapOrderBook {
 		return qty;
 	}
 
-	public void newShout(Order shout) throws DuplicateShoutException {
+	public void add(Order shout) throws DuplicateShoutException {
 		if (shout.isAsk()) {
-			newAsk(shout);
+			addAsk(shout);
 		} else {
-			newBid(shout);
+			addBid(shout);
 		}
 	}
 

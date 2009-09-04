@@ -21,6 +21,7 @@ import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.ZeroFundsAccount;
+import net.sourceforge.jasa.market.rules.McAfeeClearingPolicy;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
 
 /**
@@ -59,5 +60,6 @@ public class ClearingHouseAuctioneer extends TransparentAuctioneer implements
 	public Account getAccount() {
 		return account;
 	}
+
 
 }

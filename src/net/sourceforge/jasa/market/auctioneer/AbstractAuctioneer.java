@@ -27,6 +27,8 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.OrderBook;
+import net.sourceforge.jasa.market.rules.ClearingPolicy;
+import net.sourceforge.jasa.market.rules.EquilibriumClearingPolicy;
 import net.sourceforge.jasa.market.rules.PricingPolicy;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
@@ -57,6 +59,8 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	protected MarketQuote clearingQuote;
 
 	protected PricingPolicy pricingPolicy;
+	
+	protected ClearingPolicy clearingPolicy = new EquilibriumClearingPolicy(this);
 
 	static Logger logger = Logger.getLogger(AbstractAuctioneer.class);
 	
@@ -112,7 +116,7 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	}
 
 	protected void newShoutInternal(Order shout) throws DuplicateShoutException {
-		orderBook.newShout(shout);
+		orderBook.add(shout);
 	}
 
 	/**
@@ -133,7 +137,7 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	 * Handle a request to retract a shout.
 	 */
 	public void removeShout(Order shout) {
-		orderBook.removeShout(shout);
+		orderBook.remove(shout);
 	}
 
 	/**
@@ -190,18 +194,10 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	}
 
 	public void clear() {
-		clearingQuote = new MarketQuote(askQuote(), bidQuote());
-		List<Order> shouts = orderBook.getMatchedShouts();
-		Iterator<Order> i = shouts.iterator();
-		while (i.hasNext()) {
-			Order bid = i.next();
-			Order ask = i.next();
-			double price = determineClearingPrice(bid, ask);
-			clear(ask, bid, price);
-		}
+		clearingPolicy.clear();
 	}
 
-	protected void clear(Order ask, Order bid, double price) {
+	public void clear(Order ask, Order bid, double price) {
 		assert ask.isAsk();
 		assert bid.isBid();
 		recordMatch(ask, bid);
@@ -242,6 +238,30 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
 	public void recordMatch(Order ask, Order bid) {
 		// default is do nothing
+	}
+
+	public OrderBook getOrderBook() {
+		return orderBook;
+	}
+
+	public void setOrderBook(OrderBook orderBook) {
+		this.orderBook = orderBook;
+	}
+
+	public MarketQuote getClearingQuote() {
+		return clearingQuote;
+	}
+
+	public void setClearingQuote(MarketQuote clearingQuote) {
+		this.clearingQuote = clearingQuote;
+	}
+
+	public ClearingPolicy getClearingPolicy() {
+		return clearingPolicy;
+	}
+
+	public void setClearingPolicy(ClearingPolicy clearingPolicy) {
+		this.clearingPolicy = clearingPolicy;
 	}
 
 	public String toString() {

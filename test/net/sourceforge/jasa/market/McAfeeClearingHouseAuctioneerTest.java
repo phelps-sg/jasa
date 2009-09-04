@@ -22,7 +22,8 @@ import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.market.auctioneer.McAfeeClearingHouseAuctioneer;
+import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
+import net.sourceforge.jasa.market.rules.McAfeeClearingPolicy;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -30,7 +31,7 @@ import junit.framework.TestSuite;
 
 public class McAfeeClearingHouseAuctioneerTest extends TestCase {
 
-	McAfeeClearingHouseAuctioneer auctioneer;
+	ClearingHouseAuctioneer auctioneer;
 
 	MarketFacade auction;
 
@@ -47,7 +48,8 @@ public class McAfeeClearingHouseAuctioneerTest extends TestCase {
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		auction = new MarketFacade(prng);
-		auctioneer = new McAfeeClearingHouseAuctioneer();
+		auctioneer = new ClearingHouseAuctioneer(auction);
+		auctioneer.setClearingPolicy(new McAfeeClearingPolicy(auctioneer));
 		auction.setAuctioneer(auctioneer);
 		auctioneer.setMarket(auction);
 

@@ -68,7 +68,7 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 	}
 
 	public void newShoutInternal(Order shout) throws DuplicateShoutException {
-		orderBook.newShout(shout);
+		orderBook.add(shout);
 		generateQuote();
 		clear();
 	}

@@ -41,10 +41,6 @@ public abstract class KPricingPolicy implements Serializable, PricingPolicy,
 
 	protected double k = 0.5;
 
-	public static final String P_K = "k";
-
-	public static final String P_DEF_BASE = "kpricingpolicy";
-
 	public KPricingPolicy() {
 		this(0);
 	}

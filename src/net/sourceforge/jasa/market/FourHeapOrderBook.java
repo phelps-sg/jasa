@@ -78,7 +78,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		initialise();
 	}
 
-	public synchronized void removeShout(Order shout) {
+	public synchronized void remove(Order shout) {
 		preRemovalProcessing();
 		if (shout.isAsk()) {
 			removeAsk(shout);
@@ -276,15 +276,15 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		return promoteShout(bid, sOut, sIn, bIn);
 	}
 
-	public void newShout(Order shout) throws DuplicateShoutException {
+	public void add(Order shout) throws DuplicateShoutException {
 		if (shout.isBid()) {
-			newBid(shout);
+			addBid(shout);
 		} else {
-			newAsk(shout);
+			addAsk(shout);
 		}
 	}
 
-	protected void newBid(Order bid) throws DuplicateShoutException {
+	protected void addBid(Order bid) throws DuplicateShoutException {
 
 		double bidVal = bid.getPrice();
 		int uninsertedUnits = bid.getQuantity();
@@ -312,7 +312,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		}
 	}
 
-	protected void newAsk(Order ask) throws DuplicateShoutException {
+	protected void addAsk(Order ask) throws DuplicateShoutException {
 
 		int uninsertedUnits = ask.getQuantity();
 
@@ -370,7 +370,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * clear by matching bi with ai for all i at some price.
 	 * </p>
 	 */
-	public List<Order> getMatchedShouts() {
+	public List<Order> matchOrders() {
 		ArrayList<Order> result = new ArrayList<Order>(sIn.size() + bIn.size());
 		while (!sIn.isEmpty()) {
 			Order sInTop = (Order) sIn.remove();
@@ -445,9 +445,9 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 
 			try {
 				if (top.isBid()) {
-					newBid(top);
+					addBid(top);
 				} else {
-					newAsk(top);
+					addAsk(top);
 				}
 			} catch (DuplicateShoutException e) {
 				throw new AuctionRuntimeException("Invalid market state");

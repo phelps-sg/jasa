@@ -25,10 +25,10 @@ import java.util.List;
 
 public interface OrderBook extends net.sourceforge.jasa.sim.util.Resetable {
 
-	public void newShout(Order shout) throws DuplicateShoutException;
+	public void add(Order shout) throws DuplicateShoutException;
 
-	public void removeShout(Order shout);
-
+	public void remove(Order shout);
+	
 	/**
 	 * Log the current state of the market.
 	 */
@@ -41,7 +41,7 @@ public interface OrderBook extends net.sourceforge.jasa.sim.util.Resetable {
 	 * </p>
 	 * <br> ( b0, a0, b1, a1 .. bn, an )<br>
 	 * <p>
-	 * where bi is the ith bid and a0 is the ith ask. A typical auctioneer would
+	 * where bi is the ith bid and ai is the ith ask. A typical auctioneer would
 	 * clear by matching bi with ai for all i at some price.
 	 * </p>
 	 * <p>
@@ -49,7 +49,7 @@ public interface OrderBook extends net.sourceforge.jasa.sim.util.Resetable {
 	 * of invoking this method.
 	 * </p>
 	 */
-	public List<Order> getMatchedShouts();
+	public List<Order> matchOrders();
 
 	/**
 	 * Get the highest unmatched bid in the market.
