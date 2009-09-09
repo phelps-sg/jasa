@@ -130,8 +130,7 @@ public class MarketFacade implements Market, Serializable, Runnable {
 	 * of trading.
 	 */
 	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException {
-
-		return auctioneer.shoutAccepted(shout);
+		return auctioneer.orderAccepted(shout);
 	}
 
 	/**

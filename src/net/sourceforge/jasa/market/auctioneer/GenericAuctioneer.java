@@ -37,33 +37,14 @@ import org.apache.log4j.Logger;
  * An modular auctioneer for a double market.
  * </p>
  * 
- * <p>
- * <b>Parameters </b>
- * </p>
- * 
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base </i> <tt>.clearing</tt><br>
- * <font size=-1> MarketClearingCondition </font></td>
- * <td valign=top>(the market-clearing condition)</td>
- * <tr>
- * <tr>
- * <td valign=top><i>base </i> <tt>.accepting</tt><br>
- * <font size=-1> ShoutAcceptingPolicy </font></td>
- * <td valign=top>(the shout-accepting policy)</td>
- * <tr>
- * 
- * </table>
- * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
 
-public class GenericDoubleAuctioneer extends TransparentAuctioneer implements
+public class GenericAuctioneer extends TransparentAuctioneer implements
     Serializable, Observer {
 
-	static Logger logger = Logger.getLogger(GenericDoubleAuctioneer.class);
+	static Logger logger = Logger.getLogger(GenericAuctioneer.class);
 
 	protected ZeroFundsAccount account;
 
@@ -71,11 +52,11 @@ public class GenericDoubleAuctioneer extends TransparentAuctioneer implements
 
 	protected OrderAcceptancePolicy acceptingPolicy;
 
-	public GenericDoubleAuctioneer() {
+	public GenericAuctioneer() {
 		this(null);
 	}
 
-	public GenericDoubleAuctioneer(Market auction) {
+	public GenericAuctioneer(Market auction) {
 		super(auction);
 		account = new ZeroFundsAccount(this);
 	}

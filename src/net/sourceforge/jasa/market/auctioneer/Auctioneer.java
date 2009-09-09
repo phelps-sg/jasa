@@ -81,7 +81,7 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	 */
 	public boolean shoutsVisible();
 
-	public boolean shoutAccepted(Order shout) throws ShoutsNotVisibleException;
+	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException;
 
 	public boolean transactionsOccurred() throws ShoutsNotVisibleException;
 

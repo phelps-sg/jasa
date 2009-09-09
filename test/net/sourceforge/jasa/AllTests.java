@@ -65,6 +65,7 @@ public class AllTests {
 		suite.addTest(net.sourceforge.jasa.market.RandomRobinAuctionTest.suite());
 		suite.addTest(net.sourceforge.jasa.market.FourHeapTest.suite());
 		suite.addTest(net.sourceforge.jasa.market.KPricingPolicyTest.suite());
+		suite.addTest(net.sourceforge.jasa.market.auctioneer.SingleSidedPricingTest.suite());
 
 		suite.addTest(net.sourceforge.jasa.sim.ai.learning.RothErevLearnerTest.suite());
 		suite.addTest(net.sourceforge.jasa.sim.ai.learning.QLearnerTest.suite());
