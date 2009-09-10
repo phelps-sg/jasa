@@ -50,7 +50,7 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 	
 	public void requestShout(Market auction) {
 		super.requestShout(auction);
-		lastProfit = 0;
+		lastPayoff = 0;
 	}
 
 	public boolean acceptDeal(Market auction, double price, int quantity) {
@@ -67,7 +67,7 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 //	}
 
 	public double getLastProfit() {
-		return lastProfit;
+		return lastPayoff;
 	}
 
 	public double equilibriumProfits(Market auction, double equilibriumPrice,
@@ -96,7 +96,7 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 	public String toString() {
 		return "(" + getClass() + " id:" + id 
 		    + " valuer:" + valuer + 
-		    + profits + " isSeller:" + isSeller + " lastProfit:" + lastProfit
+		    + totalPayoff + " isSeller:" + isSeller + " lastProfit:" + lastPayoff
 		    + " strategy:" + strategy + ")";
 	}
 

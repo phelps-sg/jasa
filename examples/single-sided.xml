@@ -73,7 +73,7 @@
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
-	<property name="pricingPolicy" ref="secondPrice"/>
+	<property name="pricingPolicy" ref="firstPrice"/>
 	<property name="clearingPolicy" ref="noQueueClearingPolicy"/>
 </bean>
 
@@ -163,7 +163,7 @@
 <bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="true"/>
 	<property name="valuationPolicy" ref="sellerValuationPolicy"/>
-	<property name="strategy" ref="tt"/>
+	<property name="strategy" ref="truthTelling"/>
 	<property name="initialTradeEntitlement" value="1000"/>
 </bean>
 
@@ -179,7 +179,7 @@
 	<property name="markupDistribution" ref="markupDistribution"/>		
 </bean>
 
-<bean id="tt" scope="prototype" 
+<bean id="truthTelling" scope="prototype" 
 			class="net.sourceforge.jasa.agent.strategy.TruthTellingStrategy">
 </bean>
 

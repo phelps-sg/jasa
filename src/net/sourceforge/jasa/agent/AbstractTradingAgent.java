@@ -58,52 +58,6 @@ import org.apache.log4j.Logger;
  * market. Traders of this type deal in a single commodity for which they have
  * a well-defined valuation.
  * 
- * </p>
- * <p>
- * <b>Parameters</b><br>
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.isseller</tt><br>
- * <font size=-1>boolean</font></td>
- * <td valign=top>(is this agent a seller)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.strategy</tt><br>
- * <font size=-1>class</font></td>
- * <td valign=top>(the trading strategy to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.initialstock</tt><br>
- * <font size=-1>int &gt;= 0</font></td>
- * <td valign=top>(the initial quantity of the commoditiy possessed by this
- * agent)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.initialfunds</tt><br>
- * <font size=-1>double</font></td>
- * <td valign=top>(the initial funds)</td>
- * <tr>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.valuer</tt><br>
- * <font size=-1>class, inherits net.sourceforge.jasa.agent.Valuer</td>
- * <td valign=top>(the valuation policy to use)</td>
- * <tr>
- * 
- * <tr>
- * <td valign-top><i>base</i><tt>.group</tt><br>
- * <font size=-1>int &gt;= 0</font></td>
- * <td valign=top>(the group that this agent belongs to)</td>
- * <tr>
- * 
- * </table>
- * 
- * @see net.sourceforge.jasa.market.MarketFacade
- * 
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -160,12 +114,12 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	/**
 	 * The profit made in the last round.
 	 */
-	protected double lastProfit = 0;
+	protected double lastPayoff = 0;
 
 	/**
 	 * The total profits to date
 	 */
-	protected double profits = 0;
+	protected double totalPayoff = 0;
 
 	/**
 	 * Did the last shout we place in the market result in a transaction?
@@ -231,7 +185,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 				market.removeOrder(currentOrder);
 			}
 			currentOrder = strategy.modifyOrder(currentOrder, market);
-			lastProfit = 0;
+			lastPayoff = 0;
 			lastShoutAccepted = false;
 			if (active() && currentOrder != null) {
 				market.placeOrder(currentOrder);
@@ -260,9 +214,9 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 			} else if (event instanceof EndOfDayEvent) {
 				endOfDay(event);
 			}
-			valuer.eventOccurred(event);
-			strategy.eventOccurred(event);
 		}
+		valuer.eventOccurred(ev);
+		strategy.eventOccurred(ev);
 	}
 
 	public void roundClosed(MarketEvent event) {
@@ -329,8 +283,8 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	public void initialise() {
 		stock.setQuantity(initialStock);
 		account.setFunds(initialFunds);
-		lastProfit = 0;
-		profits = 0;
+		lastPayoff = 0;
+		totalPayoff = 0;
 		lastShoutAccepted = false;
 		currentOrder = null;
 		if (strategy != null) {
@@ -385,11 +339,11 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	 * as, e.g. input to a re-inforcement learning algorithm.
 	 */
 	public double getLastProfit() {
-		return lastProfit;
+		return lastPayoff;
 	}
 
 	public double getProfits() {
-		return profits;
+		return totalPayoff;
 	}
 
 	public int determineQuantity(Market auction) {
@@ -408,22 +362,23 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 		return copy;
 	}
 
-	public void cashIn(Market auction, int quantity, double price) {
-		assert isBuyer(auction);
-		stock.remove(quantity);
-		lastProfit = (getValuation(auction) - price) * quantity;
-		profits += lastProfit;
-		account.credit(lastProfit);
+	public double calculatePayoff(Market auction, int quantity, double price) {
+		if (isBuyer(auction)) {
+			return (getValuation(auction) - price) * quantity;
+		} else {
+			return  (price - getValuation(auction)) * quantity;
+		}
 	}
 
 	public void shoutAccepted(Market auction, Order shout, double price,
 	    int quantity) {
 		lastShoutAccepted = true;
+		lastPayoff = calculatePayoff(auction, quantity, price);
+		totalPayoff += lastPayoff;
 		if (isBuyer(auction)) {
-			cashIn(auction, quantity, price);
+			stock.remove(quantity);
 		} else {
-			lastProfit = (price - getValuation(auction)) * quantity;
-			profits += lastProfit;
+			account.credit((price - getValuation(auction)) * quantity);
 		}
 		valuer.consumeUnit(auction);
 	}
@@ -510,7 +465,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 
 	@Override
 	public double getPayoff() {
-		return profits;
+		return totalPayoff;
 	}
 
 	@Override

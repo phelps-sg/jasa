@@ -25,6 +25,7 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.HistoricalDataReport;
 import net.sourceforge.jasa.sim.util.Prototypeable;
+import net.sourceforge.jasa.sim.event.SimEvent;
 
 import org.apache.log4j.Logger;
 
@@ -42,19 +43,6 @@ import org.apache.log4j.Logger;
  * Note that you must configure a report of type HistoricalDataReport in order
  * to use this strategy.
  * </p>
- * 
- * </p>
- * <p>
- * <b>Parameters </b> <br>
- * <table>
- * <tr>
- * <td valign=top><i>base </i> <tt>.maxprice</tt><br>
- * <font size=-1>double &gt;= 0 </font></td>
- * <td valign=top>(max price in market)</td>
- * <tr>
- * 
- * </table>
- * 
  * @see net.sourceforge.jasa.report.HistoricalDataReport
  * 
  * @author Marek Marcinkiewicz
@@ -70,10 +58,6 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
 
 	protected HistoricalDataReport historyStats;
 
-	public static final String P_DEF_BASE = "gdstrategy";
-
-	public static final String P_MAXPRICE = "maxprice";
-
 	public static double MAX_PRICE = 200;
 
 	static Logger logger = Logger.getLogger(GDStrategy.class);
@@ -86,7 +70,7 @@ public class GDStrategy extends FixedQuantityStrategyImpl implements
 		return clone;
 	}
 
-	public void eventOccurred(MarketEvent event) {
+	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
 		if (event instanceof MarketOpenEvent) {
 			auctionOpen((MarketOpenEvent) event);

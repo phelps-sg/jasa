@@ -81,8 +81,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	protected TreeBag sortedShouts = new TreeBag();
 
 	protected HashSet<Order> acceptedShouts = new HashSet<Order>();
-
-	protected Map shoutMap = Collections.synchronizedMap(new HashMap());
+//
+//	protected Map shoutMap = Collections.synchronizedMap(new HashMap());
 
 	protected int memorySize = 10;
 
@@ -100,21 +100,14 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	protected Order lowestUnacceptedAsk;
 
-	public static final String P_DEF_BASE = "historicaldatareport";
-
-	static final String P_MEMORYSIZE = "memorysize";
-
-	static Logger logger = Logger.getLogger(HistoricalDataReport.class);
-
 	protected IncreasingQueryAccelerator accelerator;
 
 	protected SortedView view;
 
 	protected Observable observableProxy;
 	
-	protected static boolean flag = true;
-	
-	boolean debug = false;
+	static Logger logger = Logger.getLogger(HistoricalDataReport.class);
+
 
 	public HistoricalDataReport() {
 		observableProxy = new Observable() {
@@ -123,11 +116,6 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 				super.notifyObservers();
 			}
 		};
-		
-		if (flag) {
-			debug = flag;
-			flag = !flag;
-		}
 	}
 
 	public void addObserver(Observer o) {
@@ -139,14 +127,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	}
 	
 	public void checkConsistency() {
-		if (debug) {
-			if (asks.size() + bids.size() != sortedShouts.size()) {
-				logger.info("inconsistency found !");
-				logger.info(asks.size() + " " + getAsks() + "\n");
-				logger.info(bids.size() + " " + getBids() + "\n");
-				logger.info(sortedShouts.size() + " " + sortedShouts.iterator() + "\n");
-			}
-		}
+		assert asks.size() + bids.size() == sortedShouts.size();
 	}
 
 	protected void removeNShouts(int n, LinkedList shouts) {
@@ -168,7 +149,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			markMatched(asks);
 			markMatched(bids);
 			
-//			checkConsistency();
+			checkConsistency();
 		}
 
 		if (event.getAsk() == lowestUnacceptedAsk) {
@@ -235,7 +216,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		markMatched(asks);
 		markMatched(bids);
 		
-//		checkConsistency();
+		checkConsistency();
 		
 		observableProxy.notifyObservers();
 	}
