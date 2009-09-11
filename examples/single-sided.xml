@@ -77,7 +77,7 @@
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
-	<property name="pricingPolicy" ref="firstPrice"/>
+	<property name="pricingPolicy" ref="secondPrice"/>
 	<property name="clearingPolicy" ref="noQueueClearingPolicy"/>
 </bean>
 
@@ -160,7 +160,7 @@
 <bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
-	<property name="utilityFunction" ref="riskNeutral"/>
+	<property name="utilityFunction" ref="riskAverse"/>
 	<property name="strategy" ref="stimuliResponse"/>
 	<property name="initialTradeEntitlement" value="10000"/>
 </bean>
