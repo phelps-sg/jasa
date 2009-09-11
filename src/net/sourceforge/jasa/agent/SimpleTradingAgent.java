@@ -66,7 +66,7 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 //		this.volume = volume;
 //	}
 
-	public double getLastProfit() {
+	public double getLastPayoff() {
 		return lastPayoff;
 	}
 

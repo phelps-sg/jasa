@@ -15,6 +15,8 @@
 
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jasa.agent.utility.AbstractUtilityFunction;
+import net.sourceforge.jasa.agent.utility.UtilityFunction;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.Market;
@@ -62,5 +64,11 @@ public interface TradingAgent extends Agent, MarketEventListener {
 
 	public void shoutAccepted(Market auction, Order shout, double price,
 	    int quantity);
+	
+	public double getValuation(Market auction);
+	
+	public void setUtilityFunction(UtilityFunction utilityFunction);
+	
+	public UtilityFunction getUtilityFunction();
 
 }

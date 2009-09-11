@@ -15,7 +15,7 @@
 	<constructor-arg ref="population"/>
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="simulation" ref="marketSimulation"/>
-	<property name="numSimulations" value="10000"/>
+	<property name="numSimulations" value="1000"/>
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -23,7 +23,8 @@
 					<list>
 						<ref bean="transactionPriceReport"/>
 						<ref bean="bidPriceReport"/>
-						<!-- <ref bean="eventReport"/>  -->
+						<ref bean="veracityReport"/>
+						<!--  <ref bean="eventReport"/> -->  
 					</list>
 				</constructor-arg>
 			</bean>
@@ -44,6 +45,9 @@
 <bean id="bidPriceReport" class="net.sourceforge.jasa.report.BidPriceReport">
 </bean>
 
+<bean id="veracityReport" class="net.sourceforge.jasa.report.VeracityReport">
+</bean>
+
 <bean id="eventReport" class="net.sourceforge.jasa.report.EventReport">
 </bean>
 
@@ -54,7 +58,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
 	<constructor-arg ref="market"/>
-	<property name="maximumRounds" value="1000"/>
+	<property name="maximumRounds" value="200"/>
 </bean>
 
 <bean id="agentInitialiser" class="net.sourceforge.jasa.agent.MarketAgentInitialiser">
@@ -130,7 +134,7 @@
 </bean>
 
 <bean id="buyers" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="5"/>
+	<constructor-arg value="3"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
@@ -156,15 +160,16 @@
 <bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
+	<property name="utilityFunction" ref="riskNeutral"/>
 	<property name="strategy" ref="stimuliResponse"/>
-	<property name="initialTradeEntitlement" value="1000"/>
+	<property name="initialTradeEntitlement" value="10000"/>
 </bean>
 
 <bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<property name="isSeller" value="true"/>
 	<property name="valuationPolicy" ref="sellerValuationPolicy"/>
 	<property name="strategy" ref="truthTelling"/>
-	<property name="initialTradeEntitlement" value="1000"/>
+	<property name="initialTradeEntitlement" value="10000"/>
 </bean>
 
 <bean id="markupDistribution" class="cern.jet.random.Uniform">
@@ -186,7 +191,7 @@
 <bean id="stimuliResponse" scope="prototype" 
 		class="net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy">
 	<property name="learner" ref="rothErev"/>
-	<property name="markupScale" value="1"/>
+	<property name="markupScale" value="0.1"/>
 </bean>
 
 <bean id="rothErev" scope="prototype" 
@@ -194,18 +199,28 @@
 	<constructor-arg>
 		<ref bean="prng"/>
 	</constructor-arg>
-	<property name="k" value="100"/>
+	<property name="k" value="10"/>
+	<property name="recency" value="0.0"/>
+	<property name="experimentation" value="0.05"/>
 </bean>
 
 <bean id="randomValuationPolicy" scope="prototype"
 	class="net.sourceforge.jasa.agent.valuation.RandomValuer">
-	<constructor-arg value="10" />
-	<constructor-arg value="100" />
+	<constructor-arg value="0" />
+	<constructor-arg value="1" />
 	<constructor-arg ref="prng" />
 </bean>
 
+<bean id="riskNeutral" scope="prototype"
+	class="net.sourceforge.jasa.agent.utility.RiskNeutralUtilityFunction">
+</bean>
+
+<bean id="riskAverse" scope="prototype"
+	class="net.sourceforge.jasa.agent.utility.LogUtilityFunction">
+</bean>
+
 <bean id="sellerValuationPolicy" class="net.sourceforge.jasa.agent.valuation.FixedValuer">	
-	<property name="value" value="10"/>
+	<property name="value" value="0"/>
 </bean>
 
 </beans>

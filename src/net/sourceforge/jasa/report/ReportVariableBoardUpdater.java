@@ -219,7 +219,7 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-			pA += agent.getProfits();
+			pA += agent.getTotalPayoff();
 		}
 
 		return pA;

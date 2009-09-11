@@ -132,7 +132,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-			totalProfits += agent.getProfits();
+			totalProfits += agent.getTotalPayoff();
 		}
 		return totalProfits;
 	}

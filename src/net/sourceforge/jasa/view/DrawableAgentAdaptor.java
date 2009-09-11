@@ -120,7 +120,7 @@ public class DrawableAgentAdaptor implements Drawable {
 	public float getLastProfit() {
 		float profit = 0;
 		if (agent != null) {
-			profit = (float) agent.getLastProfit();
+			profit = (float) agent.getLastPayoff();
 		}
 		return profit;
 	}
@@ -128,7 +128,7 @@ public class DrawableAgentAdaptor implements Drawable {
 	public float getTotalProfits() {
 		float profit = 0;
 		if (agent != null) {
-			profit = (float) agent.getProfits();
+			profit = (float) agent.getTotalPayoff();
 		}
 		return profit;
 	}

@@ -23,6 +23,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import net.sourceforge.jasa.agent.utility.RiskNeutralUtilityFunction;
+import net.sourceforge.jasa.agent.utility.UtilityFunction;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
 import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
 
@@ -95,6 +97,8 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	 */
 	protected ValuationPolicy valuer;
 
+	protected UtilityFunction utilityFunction;
+	
 	/**
 	 * Unique id for this trader. Its used mainly for debugging purposes.
 	 */
@@ -158,6 +162,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 		initialFunds = funds;
 		account = new Account(this, initialFunds);
 		this.valuer = new FixedValuer(privateValue);
+		this.utilityFunction = new RiskNeutralUtilityFunction(this);
 		this.isSeller = isSeller;
 		initialise();
 	}
@@ -338,11 +343,11 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	 * Return the profit made in the most recent market round. This can be used
 	 * as, e.g. input to a re-inforcement learning algorithm.
 	 */
-	public double getLastProfit() {
+	public double getLastPayoff() {
 		return lastPayoff;
 	}
 
-	public double getProfits() {
+	public double getTotalPayoff() {
 		return totalPayoff;
 	}
 
@@ -363,11 +368,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	}
 
 	public double calculatePayoff(Market auction, int quantity, double price) {
-		if (isBuyer(auction)) {
-			return (getValuation(auction) - price) * quantity;
-		} else {
-			return  (price - getValuation(auction)) * quantity;
-		}
+		return utilityFunction.calculatePayoff(auction, quantity, price);
 	}
 
 	public void shoutAccepted(Market auction, Order shout, double price,
@@ -393,6 +394,15 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 
 	public void setValuationPolicy(ValuationPolicy valuer) {
 		this.valuer = valuer;
+	}
+	
+	public UtilityFunction getUtilityFunction() {
+		return utilityFunction;
+	}
+
+	public void setUtilityFunction(UtilityFunction utilityFunction) {
+		this.utilityFunction = utilityFunction;
+		utilityFunction.setAgent(this);
 	}
 
 	public AgentGroup getGroup() {

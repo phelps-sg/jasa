@@ -112,13 +112,13 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 		trader1.initialise();
 		assertTrue(trader1.getFunds() == TRADER1_FUNDS);
 		assertTrue(trader1.getStock() == TRADER1_STOCK);
-		assertTrue(trader1.getLastProfit() == 0);
-		assertTrue(trader1.getProfits() == 0);
+		assertTrue(trader1.getLastPayoff() == 0);
+		assertTrue(trader1.getTotalPayoff() == 0);
 		trader2.initialise();
 		assertTrue(trader2.getFunds() == TRADER2_FUNDS);
 		assertTrue(trader2.getStock() == TRADER2_STOCK);
-		assertTrue(trader2.getLastProfit() == 0);
-		assertTrue(trader2.getProfits() == 0);
+		assertTrue(trader2.getLastPayoff() == 0);
+		assertTrue(trader2.getTotalPayoff() == 0);
 
 	}
 
@@ -162,28 +162,28 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 
 	public void testLastProfit() {
 
-		assertTrue(trader1.getLastProfit() == 0);
-		assertTrue(trader2.getLastProfit() == 0);
+		assertTrue(trader1.getLastPayoff() == 0);
+		assertTrue(trader2.getLastPayoff() == 0);
 
 		auction.begin();
 
 		try {
 
 			auction.step();
-			assertTrue(trader1.getLastProfit() == 0);
-			assertTrue(trader2.getLastProfit() == 0);
+			assertTrue(trader1.getLastPayoff() == 0);
+			assertTrue(trader2.getLastPayoff() == 0);
 
 			auction.step();
-			assertTrue(trader1.getLastProfit() == 55);
-			assertTrue(trader2.getLastProfit() == 55);
+			assertTrue(trader1.getLastPayoff() == 55);
+			assertTrue(trader2.getLastPayoff() == 55);
 
 			auction.step();
-			assertTrue(trader1.getLastProfit() == 55);
-			assertTrue(trader2.getLastProfit() == 55);
+			assertTrue(trader1.getLastPayoff() == 55);
+			assertTrue(trader2.getLastPayoff() == 55);
 
 			auction.step();
-			assertTrue(trader1.getLastProfit() == 0);
-			assertTrue(trader2.getLastProfit() == 0);
+			assertTrue(trader1.getLastPayoff() == 0);
+			assertTrue(trader2.getLastPayoff() == 0);
 
 		} catch (AuctionClosedException e) {
 			fail("we tried to step through a closed market.");

@@ -49,7 +49,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-			double profits = agent.getProfits();
+			double profits = agent.getTotalPayoff();
 			double payoff = 1;
 			if (averageSurplus != 0) {
 				payoff = profits / averageSurplus;

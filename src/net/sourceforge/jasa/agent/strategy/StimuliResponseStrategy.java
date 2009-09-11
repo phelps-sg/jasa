@@ -45,10 +45,6 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
 	 */
 	protected StimuliResponseLearner learner = null;
 
-	public static final String P_DEF_BASE = "stimuliresponsestrategy";
-
-	public static final String P_LEARNER = "learner";
-
 	public StimuliResponseStrategy(AbstractTradingAgent agent) {
 		super(agent);
 	}
@@ -86,7 +82,7 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
 	}
 
 	public void learn(Market auction) {
-		learner.reward(agent.getLastProfit());
+		learner.reward(agent.getLastPayoff());
 	}
 
 	public void reset() {

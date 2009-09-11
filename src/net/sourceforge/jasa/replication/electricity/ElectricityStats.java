@@ -183,7 +183,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 	 */
 
 	protected double getProfits(AbstractTradingAgent trader) {
-		return ((SimpleTradingAgent) trader).getProfits();
+		return ((SimpleTradingAgent) trader).getTotalPayoff();
 	}
 
 	protected double getCapacity(AbstractTradingAgent trader) {
@@ -262,7 +262,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		pST = 0;
 		while (i.hasNext()) {
 			SimpleTradingAgent trader = (SimpleTradingAgent) i.next();
-			double truthProfits = truthProfits(trader.getLastProfit());
+			double truthProfits = truthProfits(trader.getLastPayoff());
 			if (trader.isBuyer(auction)) {
 				pBT += truthProfits;
 			} else {

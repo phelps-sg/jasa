@@ -65,7 +65,8 @@ public class VeracityReport extends AbstractAuctionReport {
 		double shoutPrice = shout.getPrice();
 		AbstractTradingAgent agent = (AbstractTradingAgent) shout.getAgent();
 		double value = agent.getValuation(auction);
-		veracity.newData(Math.abs(value - shoutPrice));
+		double diff = value - shoutPrice;
+		veracity.newData(diff*diff);
 	}
 
 	public void reset() {

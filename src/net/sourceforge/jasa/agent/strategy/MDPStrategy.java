@@ -71,7 +71,7 @@ public class MDPStrategy extends DiscreteLearnerStrategy implements
 	}
 
 	public void learn(Market auction) {
-		learner.newState(agent.getLastProfit(), auctionState(auction));
+		learner.newState(agent.getLastPayoff(), auctionState(auction));
 	}
 
 	/**
