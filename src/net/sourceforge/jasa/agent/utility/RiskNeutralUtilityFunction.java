@@ -6,6 +6,8 @@ import net.sourceforge.jasa.market.Market;
 public class RiskNeutralUtilityFunction extends AbstractUtilityFunction
 		implements UtilityFunction {
 
+	protected double coefficient = 1.0;
+	
 	public RiskNeutralUtilityFunction() {
 		super();
 	}
@@ -15,7 +17,17 @@ public class RiskNeutralUtilityFunction extends AbstractUtilityFunction
 	}
 
 	public double calculatePayoff(Market auction, int quantity, double price) {
-		return calculateProfit(auction, quantity, price);
+		return coefficient * calculateProfit(auction, quantity, price);
 	}
+
+	public double getCoefficient() {
+		return coefficient;
+	}
+
+	public void setCoefficient(double coefficient) {
+		this.coefficient = coefficient;
+	}
+	
+	
 
 }

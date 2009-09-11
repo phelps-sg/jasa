@@ -15,7 +15,7 @@
 	<constructor-arg ref="population"/>
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="simulation" ref="marketSimulation"/>
-	<property name="numSimulations" value="1000"/>
+	<property name="numSimulations" value="100000"/>
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -202,6 +202,7 @@
 	<property name="k" value="10"/>
 	<property name="recency" value="0.0"/>
 	<property name="experimentation" value="0.05"/>
+	<property name="scaling" value="1.0"/>
 </bean>
 
 <bean id="randomValuationPolicy" scope="prototype"
@@ -213,10 +214,12 @@
 
 <bean id="riskNeutral" scope="prototype"
 	class="net.sourceforge.jasa.agent.utility.RiskNeutralUtilityFunction">
+	<property name="coefficient" value="10"/>
 </bean>
 
 <bean id="riskAverse" scope="prototype"
 	class="net.sourceforge.jasa.agent.utility.LogUtilityFunction">
+	<property name="coefficient" value="10"/>
 </bean>
 
 <bean id="sellerValuationPolicy" class="net.sourceforge.jasa.agent.valuation.FixedValuer">	
