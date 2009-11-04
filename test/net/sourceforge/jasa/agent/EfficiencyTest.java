@@ -67,7 +67,7 @@ public abstract class EfficiencyTest extends TestCase {
 
 	static final int NB = 6;
 
-	static int ITERATIONS = 200;
+	static int NUM_EXPERIMENTS = 200;
 
 	static final double MIN_VALUE = 50;
 
@@ -115,13 +115,13 @@ public abstract class EfficiencyTest extends TestCase {
 		SummaryStats efficiency = new SummaryStats(
 		    "efficiency");
 		initialiseExperiment();
-		for (int i = 0; i < ITERATIONS; i++) {
+		for (int i = 0; i < NUM_EXPERIMENTS; i++) {
 			auction.reset();
 			auction.run();
 			SurplusReport surplus = new SurplusReport(auction);
 			surplus.calculate();
 			System.out
-			    .println("Iteration " + i + ": efficiency = " + surplus.getEA());
+			    .println("Experiment " + i + ": efficiency = " + surplus.getEA());
 			if (!Double.isNaN(surplus.getEA())) {
 				efficiency.newData(surplus.getEA());
 			}

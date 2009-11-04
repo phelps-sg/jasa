@@ -29,7 +29,7 @@ import net.sourceforge.jasa.agent.AbstractTradingAgent;
 public class AgentPayoffReport extends PayoffReport {
 
 	public Object getKey(AbstractTradingAgent agent) {
-		return new Long(agent.getId());
+		return new Long(agent.hashCode());
 	}
 
 	public String getKeyName() {

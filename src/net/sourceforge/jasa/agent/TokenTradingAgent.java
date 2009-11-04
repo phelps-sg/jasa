@@ -192,7 +192,7 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	}
 
 	public String toString() {
-		return "(" + getClass() + " id:" + id + " isSeller:" + isSeller
+		return "(" + getClass() + " id:" + hashCode() + " isSeller:" + isSeller
 		    + " valuer:" + valuer + " strategy:" + strategy + " tradeEntitlement:"
 		    + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
 	}

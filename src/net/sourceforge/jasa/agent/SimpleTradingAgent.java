@@ -94,7 +94,7 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 	}
 
 	public String toString() {
-		return "(" + getClass() + " id:" + id 
+		return "(" + getClass() + " id:" + hashCode() 
 		    + " valuer:" + valuer + 
 		    + totalPayoff + " isSeller:" + isSeller + " lastProfit:" + lastPayoff
 		    + " strategy:" + strategy + ")";

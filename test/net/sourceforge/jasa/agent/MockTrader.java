@@ -166,7 +166,7 @@ public class MockTrader extends AbstractTradingAgent {
 	}
 
 	public String toString() {
-		return "(" + getClass() + " id:" + id + " isSeller:" + isSeller
+		return "(" + getClass() + " id:" + hashCode() + " isSeller:" + isSeller
 		    + " valuer:" + valuer + " lastProfit:" + getLastPayoff() + " funds:"
 		    + account + " account:" + account + ")";
 	}

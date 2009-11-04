@@ -143,7 +143,7 @@ public class DrawableAgentAdaptor implements Drawable {
 
 	public long getId() {
 		if (agent != null) {
-			return agent.getId();
+			return agent.hashCode();
 		} else {
 			return -1;
 		}

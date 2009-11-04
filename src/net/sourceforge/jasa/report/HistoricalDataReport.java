@@ -54,18 +54,6 @@ import org.apache.log4j.Logger;
  * IncreasingQueryAccelerator are introduced to speed up GDStrategy's queries
  * based on the pattern of prices of concern.
  * </p>
- * <p>
- * <b>Parameters </b> <br>
- * <table>
- * <tr>
- * <td valign=top><i>base </i> <tt>.memorysize</tt><br>
- * <font size=-1>int > 0 </font></td>
- * <td valign=top>(the length of most recent historicalDataReport to be recorded)</td>
- * <tr>
- * 
- * </table>
- * 
- * 
  * 
  * @author Steve Phelps
  * @version $Revision$
@@ -133,7 +121,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	protected void removeNShouts(int n, LinkedList shouts) {
 		for (int i = 0; i < n; i++) {
 			Order shout = (Order) shouts.removeFirst();
-			sortedShouts.remove(shout);
+			if (!sortedShouts.remove(shout, 1)) {
+				throw new AuctionRuntimeException("Could not process " + shout);
+			}
 			acceptedShouts.remove(shout);
 		}
 	}
@@ -358,7 +348,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	 * @param accepted
 	 * @return the number of shouts that meet the specified condition
 	 */
-	public int getNumberOfShouts(List shouts, double price, boolean accepted) {
+	public int getNumberOfShouts(List<Order> shouts, double price, boolean accepted) {
 
 		int numShouts = 0;
 		Iterator<Order> i = shouts.iterator();
@@ -394,11 +384,11 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		lowestUnacceptedAsk = null;
 	}
 
-	protected void markMatched(List shouts) {
+	protected void markMatched(List<Order> shouts) {
 		try {
-			Iterator i = shouts.iterator();
+			Iterator<Order> i = shouts.iterator();
 			while (i.hasNext()) {
-				Order s = (Order) i.next();
+				Order s = i.next();
 				if (auction.orderAccepted(s)) {
 					acceptedShouts.add(s);
 				}

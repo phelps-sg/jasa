@@ -12,8 +12,8 @@
 	<classpathentry kind="lib" path="lib/repastj-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/trove-repast.jar"/>
 	<classpathentry kind="lib" path="lib/ptplot-repast.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/trove-2.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar" sourcepath="C:/cygwin/usr/local/java/lib/commons-collections-3.2.1/commons-collections-3.2.1-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jabs"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -100,11 +100,6 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	protected UtilityFunction utilityFunction;
 	
 	/**
-	 * Unique id for this trader. Its used mainly for debugging purposes.
-	 */
-	protected long id;
-
-	/**
 	 * Flag indicating whether this trader is a seller or buyer.
 	 */
 	protected boolean isSeller = false;
@@ -157,7 +152,6 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	 */
 	public AbstractTradingAgent(int stock, double funds, double privateValue,
 	    boolean isSeller) {
-		id = idAllocator.nextId();
 		initialStock = stock;
 		initialFunds = funds;
 		account = new Account(this, initialFunds);
@@ -189,11 +183,11 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 			if (currentOrder != null) {
 				market.removeOrder(currentOrder);
 			}
-			currentOrder = strategy.modifyOrder(currentOrder, market);
+			Order newOrder = strategy.modifyOrder(currentOrder, market);
 			lastPayoff = 0;
 			lastShoutAccepted = false;
-			if (active() && currentOrder != null) {
-				market.placeOrder(currentOrder);
+			if (active() && newOrder != null) {
+				market.placeOrder(newOrder);
 			}
 		} catch (AuctionClosedException e) {
 			logger.debug("requestShout(): Received AuctionClosedException");
@@ -271,10 +265,6 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	 */
 	public synchronized void pay(double amount) {
 		account.credit(amount);
-	}
-
-	public long getId() {
-		return id;
 	}
 
 	public double getFunds() {
@@ -359,7 +349,6 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 		AbstractTradingAgent copy = null;
 		try {
 			copy = (AbstractTradingAgent) clone();
-			copy.id = idAllocator.nextId();
 			copy.strategy = (TradingStrategy) ((Prototypeable) strategy).protoClone();
 			copy.reset();
 		} catch (CloneNotSupportedException e) {
@@ -438,14 +427,6 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 		MarketFacade auction = (MarketFacade) market;
 //		auction.addListener(this);
 		return markets.add(market);
-	}
-
-	public boolean equals(Object other) {
-		return this.id == ((AbstractTradingAgent) other).id;
-	}
-
-	public int hashCode() {
-		return (int) id;
 	}
 
 	/**
