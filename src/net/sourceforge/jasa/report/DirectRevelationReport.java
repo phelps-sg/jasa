@@ -24,6 +24,7 @@ import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.util.Resetable;
 
 import org.apache.log4j.Logger;
@@ -38,7 +39,7 @@ import org.apache.log4j.Logger;
  */
 
 public abstract class DirectRevelationReport extends AbstractMarketStatsReport
-    implements Resetable, Serializable {
+		implements Resetable, Serializable {
 
 	/**
 	 * The market state after forced direct revelation.
@@ -48,13 +49,13 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 	/**
 	 * The truthful shouts of all traders in the market.
 	 */
-	protected ArrayList shouts;
+	protected ArrayList<Order> shouts;
 
 	static Logger logger = Logger.getLogger(DirectRevelationReport.class);
 
 	public DirectRevelationReport(MarketFacade auction) {
 		super(auction);
-		shouts = new ArrayList();
+		shouts = new ArrayList<Order>();
 	}
 
 	public DirectRevelationReport() {
@@ -74,7 +75,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 	 * Update the market state with a truthful shout from each trader.
 	 */
 	protected void simulateDirectRevelation() {
-		Iterator traders = auction.getTraderIterator();
+		Iterator<Agent> traders = auction.getTraderIterator();
 		while (traders.hasNext()) {
 			AbstractTradingAgent trader = (AbstractTradingAgent) traders.next();
 			int quantity = trader.determineQuantity(auction);
@@ -99,7 +100,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 	 * Process a truthful shout from an agent
 	 * 
 	 * @param shout
-	 *          The truthful shout
+	 *            The truthful shout
 	 */
 	protected void enumerateTruthfulShout(Order shout) {
 		try {

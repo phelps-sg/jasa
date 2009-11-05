@@ -145,10 +145,7 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 		} else {
 			surplus = getValuation(auction) - equilibriumPrice;
 		}
-		// TODO
-		if (surplus < 0) {
-			surplus = 0;
-		}
+			
 		return auction.getDay() * initialTradeEntitlement * surplus;
 	}
 

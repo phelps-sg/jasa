@@ -23,6 +23,7 @@ import java.util.Map;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.sim.Agent;
 
 import org.apache.log4j.Logger;
 
@@ -107,10 +108,12 @@ public class SurplusReport extends EquilibriumReport {
 	public void calculate() {
 		super.calculate();
 		if (matchedShouts != null) {
-			Iterator i = matchedShouts.iterator();
+			Iterator<Order> i = matchedShouts.iterator();
 			while (i.hasNext()) {
-				Order bid = (Order) i.next();
-				Order ask = (Order) i.next();
+				Order bid = i.next();
+				Order ask = i.next();
+				
+				assert bid.isBid() && ask.isAsk();
 
 				pBCE += equilibriumProfits(bid.getQuantity(),
 				    (AbstractTradingAgent) bid.getAgent());
@@ -128,12 +131,13 @@ public class SurplusReport extends EquilibriumReport {
 		mPB = (pBA - pBCE) / pBCE;
 		mPS = (pSA - pSCE) / pSCE;
 
+		assert eA <= 100 + 10E-6 && eA >= 0;
 	}
 
 	protected void calculateActualProfits() {
 		pSA = 0;
 		pBA = 0;
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
 			if (agent.isSeller(auction)) {
