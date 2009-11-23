@@ -54,7 +54,7 @@ public class KaplanStrategyTest extends TestCase {
 
 	public void setUp() {
 		auction = new MarketFacade(new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
-		trader = new MockTrader(this, 0, 0, 10, true);
+		trader = new MockTrader(this, 0, 0, 10, true, auction);
 		strategy = new KaplanStrategy();
 		strategy.setS(S);
 		strategy.setT(T);

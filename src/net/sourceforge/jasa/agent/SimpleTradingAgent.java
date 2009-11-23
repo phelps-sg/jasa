@@ -20,6 +20,7 @@ import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
 import net.sourceforge.jasa.event.MarketEvent;
 
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.sim.EventScheduler;
 
 /**
  * <p>
@@ -35,16 +36,16 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 
 
 	public SimpleTradingAgent(double privateValue,
-			boolean isSeller, TradingStrategy strategy) {
-		super(0, 0, privateValue, isSeller, strategy);
+			boolean isSeller, TradingStrategy strategy, EventScheduler scheduler) {
+		super(0, 0, privateValue, isSeller, strategy, scheduler);
 	}
 
-	public SimpleTradingAgent(double privateValue, boolean isSeller) {
-		super(0, 0, privateValue, isSeller);
+	public SimpleTradingAgent(double privateValue, boolean isSeller, EventScheduler scheduler) {
+		super(0, 0, privateValue, isSeller, scheduler);
 	}
 
-	public SimpleTradingAgent() {
-		this(0, false);
+	public SimpleTradingAgent(EventScheduler scheduler) {
+		this(0, false, scheduler);
 	}
 
 	

@@ -44,7 +44,7 @@ public class RandomScheduleValuerTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		agent = new MockTrader(this, 2, 0);
+		agent = new MockTrader(this, 2, 0, null);
 		valuer = new MockRandomScheduleValuer(MIN, MAX, prng);
 		agent.setValuationPolicy(valuer);
 	}

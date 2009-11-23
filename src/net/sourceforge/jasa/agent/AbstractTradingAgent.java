@@ -45,6 +45,7 @@ import net.sourceforge.jasa.market.MarketFacade;
 
 import net.sourceforge.jasa.sim.AbstractAgent;
 import net.sourceforge.jasa.sim.Agent;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.EventListener;
 import net.sourceforge.jasa.sim.strategy.Strategy;
@@ -152,7 +153,8 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	 *          Whether or not this trader is a seller.
 	 */
 	public AbstractTradingAgent(int stock, double funds, double privateValue,
-	    boolean isSeller) {
+	    boolean isSeller, EventScheduler scheduler) {
+		super(scheduler);
 		initialStock = stock;
 		initialFunds = funds;
 		account = new Account(this, initialFunds);
@@ -163,17 +165,17 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	}
 
 	public AbstractTradingAgent(int stock, double funds, double privateValue,
-	    boolean isSeller, TradingStrategy strategy) {
-		this(stock, funds, privateValue, isSeller);
+	    boolean isSeller, TradingStrategy strategy, EventScheduler scheduler) {
+		this(stock, funds, privateValue, isSeller, scheduler);
 		this.strategy = strategy;
 	}
 
-	public AbstractTradingAgent(int stock, double funds) {
-		this(stock, funds, 0, false);
+	public AbstractTradingAgent(int stock, double funds, EventScheduler scheduler) {
+		this(stock, funds, 0, false, scheduler);
 	}
 	
-	public AbstractTradingAgent() {
-		this(0, 0, 0, false);
+	public AbstractTradingAgent(EventScheduler scheduler) {
+		this(0, 0, 0, false, scheduler);
 	}
 
 	/**
@@ -450,11 +452,11 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		return super.clone();
 	}
 
-	@Override
-	public void addListener(EventListener listener) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void addListener(EventListener listener) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public double getPayoff() {

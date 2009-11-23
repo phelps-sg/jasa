@@ -69,11 +69,18 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 
 	public void setUp() {
 
+		RandomEngine prng = new MersenneTwister64();		
+		auction = new MarketFacade(prng);		
+		AbstractAuctioneer auctioneer = new ClearingHouseAuctioneer(auction);
+		auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
+		auction.setAuctioneer(auctioneer);
+		
+
 		trader1 = new MockTrader(this, TRADER1_STOCK, TRADER1_FUNDS, TRADER1_VALUE,
-		    false);
+		    false, auction);
 
 		trader2 = new MockTrader(this, TRADER2_STOCK, TRADER2_FUNDS, TRADER2_VALUE,
-		    true);
+		    true, auction);
 
 		trader1.setStrategy(new MockStrategy(new Order[] {
 		    new Order(trader1, 1, TRADER1_VALUE - 100, true),
@@ -87,11 +94,6 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 		    new Order(trader2, 1, TRADER2_VALUE, true),
 		    new Order(trader2, 1, TRADER2_VALUE + 100, true) }));
 
-		RandomEngine prng = new MersenneTwister64();		
-		auction = new MarketFacade(prng);		
-		AbstractAuctioneer auctioneer = new ClearingHouseAuctioneer(auction);
-		auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
-		auction.setAuctioneer(auctioneer);
 		auction.register(trader1);
 		auction.register(trader2);
 		auction.addListener(this);

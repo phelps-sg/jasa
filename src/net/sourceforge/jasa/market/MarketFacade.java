@@ -28,6 +28,7 @@ import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
 
 import net.sourceforge.jasa.sim.Agent;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.Population;
 import net.sourceforge.jasa.sim.RandomRobinAgentMixer;
 import net.sourceforge.jasa.sim.SimulationController;
@@ -46,7 +47,7 @@ import cern.jet.random.engine.RandomEngine;
  * @version $Revision$
  */
 
-public class MarketFacade implements Market, Serializable, Runnable {
+public class MarketFacade implements EventScheduler, Market, Serializable, Runnable {
 
 	protected Auctioneer auctioneer = null;
 	

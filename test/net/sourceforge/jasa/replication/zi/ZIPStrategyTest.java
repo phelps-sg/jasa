@@ -122,10 +122,12 @@ public class ZIPStrategyTest extends TestCase {
 	public void registerTraders(TokenTradingAgent[] traders, boolean areSellers) {
 		double privValue = PRIV_VALUE_RANGE_MIN;
 		for (int i = 0; i < traders.length; i++) {
-			traders[i] = new TokenTradingAgent(privValue, TRADE_ENTITLEMENT, areSellers);
+			traders[i] = new TokenTradingAgent(privValue, TRADE_ENTITLEMENT,
+					areSellers, auction);
 			ZIPStrategy strategy = new ZIPStrategy(prng);
 			double learningRate = 0.1 + prng.nextDouble() * 0.4;
-			WidrowHoffLearner learner = new WidrowHoffLearner(learningRate, prng);
+			WidrowHoffLearner learner = new WidrowHoffLearner(learningRate,
+					prng);
 			strategy.setLearner(learner);
 			traders[i].setStrategy(strategy);
 			auction.register(traders[i]);

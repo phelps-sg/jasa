@@ -53,7 +53,7 @@ public class AdaptiveStrategyTest extends TestCase {
 		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);
-		TokenTradingAgent agent = new TokenTradingAgent(10, 100, false);
+		TokenTradingAgent agent = new TokenTradingAgent(10, 100, false, auction);
 		agent.setStrategy(strategy);
 		auction.register(agent);
 		auction.run();

@@ -88,12 +88,13 @@ public class MixedStrategyTest extends TestCase {
 	}
 
 	public void testActionsAndRewards() {
-		MarketFacade auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		MarketFacade auction = new MarketFacade(new MersenneTwister64(
+				PRNGTestSeeds.UNIT_TEST_SEED));
 		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);
-		TokenTradingAgent agent = new TokenTradingAgent(10, NUM_ROUNDS, false);
+		TokenTradingAgent agent = new TokenTradingAgent(10, NUM_ROUNDS, false,
+				auction);
 		agent.setStrategy(mixedStrategy);
 		pureStrategy1.setAgent(agent);
 		pureStrategy2.setAgent(agent);
@@ -102,9 +103,9 @@ public class MixedStrategyTest extends TestCase {
 		System.out.println("pureStrategy1 count = " + pureStrategy1.actions);
 		System.out.println("pureStrategy2 couint = " + pureStrategy2.actions);
 		assertTrue(Math.abs((STRATEGY1_PROBABILITY * NUM_ROUNDS)
-		    - pureStrategy1.actions) < 0.05 * NUM_ROUNDS);
+				- pureStrategy1.actions) < 0.05 * NUM_ROUNDS);
 		assertTrue(Math.abs((STRATEGY2_PROBABILITY * NUM_ROUNDS)
-		    - pureStrategy2.actions) < 0.05 * NUM_ROUNDS);
+				- pureStrategy2.actions) < 0.05 * NUM_ROUNDS);
 	}
 
 	public static void main(String[] args) {

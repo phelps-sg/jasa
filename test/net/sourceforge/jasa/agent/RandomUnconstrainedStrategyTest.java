@@ -74,14 +74,15 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, true);
-		Uniform distribution = new Uniform(0, MAX_PRICE, prng);
-		testStrategy = new RandomUnconstrainedStrategy(distribution, testAgent);
-		testAgent.setStrategy(testStrategy);
 		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
+		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, true, auction);
+		Uniform distribution = new Uniform(0, MAX_PRICE, prng);
+		testStrategy = new RandomUnconstrainedStrategy(distribution, testAgent);
+		testAgent.setStrategy(testStrategy);
+		
 		logger = new PriceStatisticsReport();
 		auction.addReport(logger);
 		auction.register(testAgent);

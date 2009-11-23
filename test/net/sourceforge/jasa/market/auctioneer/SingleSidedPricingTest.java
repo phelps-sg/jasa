@@ -22,10 +22,10 @@ public class SingleSidedPricingTest extends TestCase {
 	public static final double RESERVE_PRICE = 80;
 	
 	public void setUp() {
-			buyer1 = new SimpleTradingAgent();
-			buyer2 = new SimpleTradingAgent();
-			seller = new SimpleTradingAgent();
-			auctioneer = new GenericAuctioneer();
+		auctioneer = new GenericAuctioneer();
+		buyer1 = new SimpleTradingAgent(null);
+		buyer2 = new SimpleTradingAgent(null);
+		seller = new SimpleTradingAgent(null);
 	}
 	
 	/**

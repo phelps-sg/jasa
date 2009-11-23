@@ -103,12 +103,18 @@
 </bean>
 
 <bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
+	<constructor-arg>
+		<ref bean="market"/>
+	</constructor-arg>
 	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
 	<property name="strategy" ref="zic"/>
 </bean>
 
 <bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
+	<constructor-arg>
+		<ref bean="market"/>
+	</constructor-arg>
 	<property name="isSeller" value="true"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
 	<property name="strategy" ref="zic"/>

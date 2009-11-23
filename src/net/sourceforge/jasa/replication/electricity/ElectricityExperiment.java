@@ -408,7 +408,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 		for (int i = 0; i < num; i++) {
 
 			SimpleTradingAgent trader = new SimpleTradingAgent(0,
-			    areSellers);
+			    areSellers, auction);
 
 			FixedQuantityStrategy strategy = null;
 			if (areSellers) {

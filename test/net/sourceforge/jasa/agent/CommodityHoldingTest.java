@@ -33,7 +33,7 @@ public class CommodityHoldingTest extends TestCase {
 	}
 
 	public void testSetOwner() {
-		MockTrader owner = new MockTrader(this, 0, 0);
+		MockTrader owner = new MockTrader(this, 0, 0, null);
 		holding.setOwner(owner);
 		assertTrue(holding.getOwner().equals(owner));
 	}

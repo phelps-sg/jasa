@@ -57,7 +57,7 @@ public class FourHeapTest extends TestCase {
 		int quantity = randGenerator.nextInt(50);
 		double price = randGenerator.nextDouble() * 100;
 		boolean isBid = randGenerator.nextBoolean();
-		return new Order(new MockTrader(this, 0, 0), quantity, price, isBid);
+		return new Order(new MockTrader(this, 0, 0, null), quantity, price, isBid);
 	}
 	
 	/**
@@ -65,7 +65,7 @@ public class FourHeapTest extends TestCase {
 	 */
 	public void testSameSide() {
 		try {
-			TradingAgent trader1 = new MockTrader(this, 10, 0);
+			TradingAgent trader1 = new MockTrader(this, 10, 0, null);
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader1, 1, 5.0, false);
 			shoutEngine.add(buy);
@@ -81,8 +81,8 @@ public class FourHeapTest extends TestCase {
 	
 	public void testSimpleMatch() {
 		try {
-			TradingAgent trader1 = new MockTrader(this, 0, 0);
-			TradingAgent trader2 = new MockTrader(this, 0, 0);
+			TradingAgent trader1 = new MockTrader(this, 0, 0, null);
+			TradingAgent trader2 = new MockTrader(this, 0, 0, null);
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader2, 1, 5.0, false);
 			shoutEngine.add(buy);

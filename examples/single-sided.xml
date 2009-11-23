@@ -158,6 +158,9 @@
 </bean>
 
 <bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
+	<constructor-arg>
+		<ref bean="market"/>
+	</constructor-arg>
 	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
 	<property name="utilityFunction" ref="riskAverse"/>
@@ -166,6 +169,9 @@
 </bean>
 
 <bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
+	<constructor-arg>
+		<ref bean="market"/>
+	</constructor-arg>
 	<property name="isSeller" value="true"/>
 	<property name="valuationPolicy" ref="sellerValuationPolicy"/>
 	<property name="strategy" ref="truthTelling"/>
@@ -196,10 +202,10 @@
 
 <bean id="rothErev" scope="prototype" 
 		class="net.sourceforge.jasa.sim.learning.RothErevLearner">
+	<constructor-arg value="10"/>
 	<constructor-arg>
 		<ref bean="prng"/>
 	</constructor-arg>
-	<property name="k" value="10"/>
 	<property name="recency" value="0.0"/>
 	<property name="experimentation" value="0.05"/>
 	<property name="scaling" value="1.0"/>

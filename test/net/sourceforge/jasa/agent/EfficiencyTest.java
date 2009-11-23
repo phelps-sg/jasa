@@ -99,7 +99,7 @@ public abstract class EfficiencyTest extends TestCase {
 		int numAgents = getNumBuyers() + getNumSellers();
 		agents = new TokenTradingAgent[numAgents];
 		for (int i = 0; i < numAgents; i++) {
-			agents[i] = new TokenTradingAgent();
+			agents[i] = new TokenTradingAgent(auction);
 			agents[i].setInitialTradeEntitlement(getInitialTradeEntitlement());
 			assignStrategy(agents[i]);
 			assignValuationPolicy(agents[i]);

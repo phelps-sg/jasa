@@ -204,7 +204,7 @@ public abstract class ElectricityTest extends TestCase {
 		for (int i = 0; i < num; i++) {
 			double value = values[i % values.length];
 			SimpleTradingAgent agent = new SimpleTradingAgent(value, 
-			    areSellers);
+			    areSellers, auction);
 			assignStrategy(capacity, agent);
 			assignValuer(agent);
 			auction.register(agent);

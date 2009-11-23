@@ -55,7 +55,7 @@ public class MomentumStrategyTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, true);
+		testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, true, null);
 		testStrategy = new MockMomentumStrategy(testTrader, prng);
 		testTrader.setStrategy(testStrategy);
 		testStrategy.setAgent(testTrader);

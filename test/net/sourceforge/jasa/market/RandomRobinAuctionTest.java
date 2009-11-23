@@ -71,9 +71,9 @@ public class RandomRobinAuctionTest extends TestCase {
 	public void setUpTraders() {
 		traders = new MockTrader[3];
 
-		traders[0] = new MockTrader(this, 30, 1000, 500, false);
-		traders[1] = new MockTrader(this, 10, 10000, 500, false);
-		traders[2] = new MockTrader(this, 15, 10000, 725, true);
+		traders[0] = new MockTrader(this, 30, 1000, 500, false, auction);
+		traders[1] = new MockTrader(this, 10, 10000, 500, false, auction);
+		traders[2] = new MockTrader(this, 15, 10000, 725, true, auction);
 
 		MockTrader trader = traders[0];
 		trader.setStrategy(new MockStrategy(new Order[] {
@@ -89,12 +89,17 @@ public class RandomRobinAuctionTest extends TestCase {
 		trader.setStrategy(new MockStrategy(new Order[] {
 		    new Order(trader, 1, 900, false), new Order(trader, 1, 950, false),
 		    new Order(trader, 1, 725, false) }));
+		
+		for (int i = 0; i < traders.length; i++) {
+			System.out.println("Registering trader " + traders[i]);
+			auction.register(traders[i]);
+		}
 	}
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		setUpTraders();
 		setUpAuction();
+		setUpTraders();
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		((AbstractAuctioneer) auctioneer)
 		    .setPricingPolicy(new UniformPricingPolicy(1));
@@ -105,10 +110,7 @@ public class RandomRobinAuctionTest extends TestCase {
 	public void setUpAuction() {
 		auction = new MarketFacade(prng);
 		auction.setMaximumRounds(3);
-		for (int i = 0; i < traders.length; i++) {
-			System.out.println("Registering trader " + traders[i]);
-			auction.register(traders[i]);
-		}
+		
 	}
 
 //	public void testDailyStats() {

@@ -101,7 +101,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 		eqLogger.setQuantity(tradeEnt);
 
 		for (int i = 0; i < ns + nb; i++) {
-			TokenTradingAgent agent = new TokenTradingAgent();
+			TokenTradingAgent agent = new TokenTradingAgent(auction);
 
 			agent.setStrategy(new TruthTellingStrategy(agent));
 			agent.setInitialTradeEntitlement(tradeEnt);

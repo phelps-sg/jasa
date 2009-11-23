@@ -55,7 +55,7 @@ public class McAfeeClearingHouseAuctioneerTest extends TestCase {
 
 		traders = new MockTrader[N];
 		for (int i = 0; i < N; i++) {
-			traders[i] = new MockTrader(this, 0, 0);
+			traders[i] = new MockTrader(this, 0, 0, auction);
 			auction.register(traders[i]);
 		}
 	}

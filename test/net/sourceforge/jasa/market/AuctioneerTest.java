@@ -56,11 +56,11 @@ public abstract class AuctioneerTest extends TestCase {
 		auction = new MarketFacade(prng);
 
 		traders = new MockTrader[5];
-		traders[0] = new MockTrader(this, 30, 1000, 1000, false);
-		traders[1] = new MockTrader(this, 10, 10000, 1000, false);
-		traders[2] = new MockTrader(this, 15, 10000, 400, true);
-		traders[3] = new MockTrader(this, 10, 10000, 400, true);
-		traders[4] = new MockTrader(this, 15, 10000, 400, true);
+		traders[0] = new MockTrader(this, 30, 1000, 1000, false, auction);
+		traders[1] = new MockTrader(this, 10, 10000, 1000, false, auction);
+		traders[2] = new MockTrader(this, 15, 10000, 400, true, auction);
+		traders[3] = new MockTrader(this, 10, 10000, 400, true, auction);
+		traders[4] = new MockTrader(this, 15, 10000, 400, true, auction);
 	}
 
 	public void testDelete() {

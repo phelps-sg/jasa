@@ -69,11 +69,11 @@ public class KPricingPolicyTest extends TestCase {
 
 		agents = new MockTrader[4];
 
-		agents[0] = new MockTrader(this, 0, 0, 200, false);
-		agents[1] = new MockTrader(this, 0, 0, 150, false);
+		agents[0] = new MockTrader(this, 0, 0, 200, false, auction);
+		agents[1] = new MockTrader(this, 0, 0, 150, false, auction);
 
-		agents[2] = new MockTrader(this, 0, 0, 100, true);
-		agents[3] = new MockTrader(this, 0, 0, 50, true);
+		agents[2] = new MockTrader(this, 0, 0, 100, true, auction);
+		agents[3] = new MockTrader(this, 0, 0, 50, true, auction);
 
 		for (int i = 0; i < agents.length; i++) {
 			agents[i].setStrategy(new TruthTellingStrategy(agents[i]));

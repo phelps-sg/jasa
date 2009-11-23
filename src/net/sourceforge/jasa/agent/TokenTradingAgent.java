@@ -20,6 +20,7 @@ import java.io.Serializable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+import net.sourceforge.jasa.sim.EventScheduler;
 
 import org.apache.log4j.Logger;
 
@@ -62,20 +63,20 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 
 	static Logger logger = Logger.getLogger(TokenTradingAgent.class);
 
-	public TokenTradingAgent() {
-		super();
+	public TokenTradingAgent(EventScheduler scheduler) {
+		super(scheduler);
 	}
 
 	public TokenTradingAgent(int stock, double funds, double privateValue,
-	    int tradeEntitlement, boolean isSeller) {
-		super(stock, funds, privateValue, isSeller);
+	    int tradeEntitlement, boolean isSeller, EventScheduler scheduler) {
+		super(stock, funds, privateValue, isSeller, scheduler);
 		this.initialTradeEntitlement = tradeEntitlement;
 		initialise();
 	}
 
 	public TokenTradingAgent(double privateValue, int tradeEntitlement,
-	    boolean isSeller) {
-		this(0, 0, privateValue, tradeEntitlement, isSeller);
+	    boolean isSeller, EventScheduler scheduler) {
+		this(0, 0, privateValue, tradeEntitlement, isSeller, scheduler);
 	}
 
 //	public void setup(ParameterDatabase parameters, Parameter base) {
