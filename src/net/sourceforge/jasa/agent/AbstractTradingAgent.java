@@ -43,6 +43,7 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 
+import net.sourceforge.jasa.sim.AbstractAgent;
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.EventListener;
@@ -64,7 +65,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class AbstractTradingAgent implements TradingAgent,
+public abstract class AbstractTradingAgent extends AbstractAgent implements TradingAgent,
     Serializable, Parameterizable, Prototypeable, Cloneable {
 
 	/**
@@ -202,6 +203,7 @@ public abstract class AbstractTradingAgent implements TradingAgent,
 	}
 
 	public void eventOccurred(SimEvent ev) {
+		super.eventOccurred(ev);
 		if (ev instanceof MarketEvent) {
 			MarketEvent event = (MarketEvent) ev;
 			if (event instanceof MarketOpenEvent) {
