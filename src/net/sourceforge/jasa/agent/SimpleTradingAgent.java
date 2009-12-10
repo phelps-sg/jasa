@@ -34,7 +34,6 @@ import net.sourceforge.jasa.sim.EventScheduler;
 
 public class SimpleTradingAgent extends AbstractTradingAgent {
 
-
 	public SimpleTradingAgent(double privateValue,
 			boolean isSeller, TradingStrategy strategy, EventScheduler scheduler) {
 		super(0, 0, privateValue, isSeller, strategy, scheduler);
@@ -46,6 +45,10 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 
 	public SimpleTradingAgent(EventScheduler scheduler) {
 		this(0, false, scheduler);
+	}
+	
+	public SimpleTradingAgent() {
+		this(null);
 	}
 
 	

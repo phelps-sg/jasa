@@ -30,13 +30,13 @@ public class MarketQuote implements Serializable {
 	 * The current ask-quote. Buyers need to beat this in order for their offers
 	 * to get matched.
 	 */
-	protected double ask;
+	protected Double ask;
 
 	/**
 	 * The current bid-quote. Sellers need to ask less than this in order for
 	 * their offers to get matched.
 	 */
-	protected double bid;
+	protected Double bid;
 
 	public MarketQuote(double ask, double bid) {
 		this.ask = ask;
@@ -45,12 +45,12 @@ public class MarketQuote implements Serializable {
 
 	public MarketQuote(Order ask, Order bid) {
 		if (ask == null) {
-			this.ask = Double.MAX_VALUE;
+			this.ask = Double.NaN;
 		} else {
 			this.ask = ask.getPrice();
 		}
 		if (bid == null) {
-			this.bid = 0;
+			this.bid = Double.NaN;
 		} else {
 			this.bid = bid.getPrice();
 		}
@@ -70,6 +70,14 @@ public class MarketQuote implements Serializable {
 	
 	public double getBid() {
 		return bid;
+	}
+	
+	public double getMidPoint() {
+		if (Double.isNaN(ask) || Double.isNaN(bid)) {
+			return 0;
+		} else {
+			return (ask + bid) / 2.0;
+		}
 	}
 
 	public String toString() {

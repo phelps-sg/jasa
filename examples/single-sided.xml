@@ -57,7 +57,7 @@
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
-	<constructor-arg ref="market"/>
+    <property name="market" ref="market"/>
 	<property name="maximumRounds" value="200"/>
 </bean>
 

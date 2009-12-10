@@ -95,6 +95,7 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 	 * @return false if no shout is to be placed at this time
 	 */
 	public boolean modifyShout(Order shout) {
+		//TODO Introduce a new abstract class FixedDirectionStrategy
 		shout.setIsBid(agent.isBuyer(auction));
 		shout.setAgent(agent);
 		return true;

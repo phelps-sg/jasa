@@ -73,7 +73,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 		controller = new SimulationController(new BasicAgentInitialiser(), traders);
 		controller.setAgentMixer(new RandomRobinAgentMixer(prng));
 		controller.setPopulation(traders);
-		marketSimulation = new MarketSimulation(controller, this);
+		marketSimulation = new MarketSimulation(controller);
+		marketSimulation.setMarket(this);
 		controller.setSimulation(marketSimulation);
 	}
 	

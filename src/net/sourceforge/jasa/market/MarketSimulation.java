@@ -90,9 +90,8 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 	static Logger logger = Logger.getLogger(MarketSimulation.class);
 
 
-	public MarketSimulation(SimulationController controller, Market market) {
+	public MarketSimulation(SimulationController controller) {
 		super(controller);
-		this.market = market;
 		initialise();
 	}
 	
