@@ -56,6 +56,7 @@ public interface TradingAgent extends Agent, MarketEventListener {
 	/**
 	 * Returns true if the agent is a seller in the specified market.
 	 */
+	//TODO delete
 	public boolean isSeller(Market auction);
 
 	public Account getAccount();

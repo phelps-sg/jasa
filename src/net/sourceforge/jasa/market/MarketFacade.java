@@ -104,8 +104,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 		TradingAgent buyer = (TradingAgent) bid.getAgent();
 		TradingAgent seller = (TradingAgent) ask.getAgent();
 
-		assert buyer.isBuyer(getMarket());
-		assert seller.isSeller(getMarket());
+//		assert buyer.isBuyer(getMarket());
+//		assert seller.isSeller(getMarket());
 
 		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
 		    marketSimulation.getMarket(), marketSimulation.getRound(), ask, bid, buyerCharge, ask.getQuantity());
