@@ -1,5 +1,6 @@
 package net.sourceforge.jasa.agent.strategy;
 
+import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
@@ -11,24 +12,28 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	protected ReturnForecaster forecaster;
 	
 	protected RandomEngine prng;
+	
+	protected AbstractContinousDistribution markupDistribution;
 
 	public double getReturnForecast(double currentPrice) {
 		return forecaster.getReturnForecast(currentPrice);
 	}
 	
 	public double getPriceForecast(double currentPrice) {
-		double forecastedReturn = getReturnForecast(currentPrice);
 		if (Double.isInfinite(currentPrice) || 
 				Double.isNaN(currentPrice) || currentPrice < 10E-100) {
 			currentPrice = 100;
 		}
+		double forecastedReturn = getReturnForecast(currentPrice);
 		return currentPrice * Math.exp(forecastedReturn);
 	}
 	
 	@Override
 	public boolean modifyShout(Order shout) {
+		boolean result = super.modifyShout(shout);
 		double currentPrice = auction.getQuote().getMidPoint();
 		double forecastedPrice = getPriceForecast(currentPrice);
+		double markup = markupDistribution.nextDouble();
 		boolean isBid = false;
 		if (Double.isNaN(currentPrice) || Double.isInfinite(currentPrice)) {
 			isBid = prng.nextDouble() > 0.5;
@@ -36,8 +41,12 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 			isBid = forecastedPrice > currentPrice;
 		}
 		shout.setIsBid(isBid);
-		shout.setPrice(forecastedPrice);
-		return super.modifyShout(shout);
+		if (isBid) {
+			shout.setPrice(forecastedPrice * (1 + markup));
+		} else {
+			shout.setPrice(forecastedPrice * (1 - markup));
+		}
+		return result;
 	}
 
 	@Override
@@ -61,4 +70,14 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		this.prng = prng;
 	}
 
+	public AbstractContinousDistribution getMarkupDistribution() {
+		return markupDistribution;
+	}
+
+	public void setMarkupDistribution(
+			AbstractContinousDistribution markupDistribution) {
+		this.markupDistribution = markupDistribution;
+	}
+
+	
 }

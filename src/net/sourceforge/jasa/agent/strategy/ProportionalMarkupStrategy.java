@@ -35,8 +35,6 @@ public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
 
 	protected double markup;
 
-	public static final String P_MARKUP = "markup";
-
 	public ProportionalMarkupStrategy(AbstractTradingAgent agent, double markup,
 	    int quantity) {
 		super(agent);
@@ -78,4 +76,13 @@ public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
 		// Do nothing
 	}
 
+	public double getMarkup() {
+		return markup;
+	}
+
+	public void setMarkup(double markup) {
+		this.markup = markup;
+	}
+
+	
 }

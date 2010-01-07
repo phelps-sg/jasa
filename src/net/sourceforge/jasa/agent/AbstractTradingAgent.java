@@ -190,6 +190,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 			lastPayoff = 0;
 			lastShoutAccepted = false;
 			if (active() && newOrder != null) {
+				if (logger.isDebugEnabled()) logger.debug(newOrder);
 				market.placeOrder(newOrder);
 			}
 		} catch (AuctionClosedException e) {

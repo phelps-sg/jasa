@@ -66,6 +66,10 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	public TokenTradingAgent(EventScheduler scheduler) {
 		super(scheduler);
 	}
+	
+	public TokenTradingAgent() {
+		super(null);
+	}
 
 	public TokenTradingAgent(int stock, double funds, double privateValue,
 	    int tradeEntitlement, boolean isSeller, EventScheduler scheduler) {
