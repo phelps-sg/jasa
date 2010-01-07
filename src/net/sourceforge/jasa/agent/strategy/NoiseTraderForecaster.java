@@ -16,7 +16,7 @@ public class NoiseTraderForecaster implements ReturnForecaster {
 	}
 	
 	@Override
-	public double getReturnForecast() {
+	public double getReturnForecast(double currentPrice) {
 		return noiseDistribution.nextDouble();
 	}
 

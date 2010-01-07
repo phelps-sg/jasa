@@ -225,17 +225,17 @@ public class RandomRobinAuctionTest extends TestCase {
 	public void testTransactionsOccured() {
 		try {
 
-			assertTrue(!auction.transactionsOccured());
+			assertTrue(!auction.transactionsOccurred());
 			auction.begin();
 
 			auction.step();
-			assertTrue(!auction.transactionsOccured());
+			assertTrue(!auction.transactionsOccurred());
 
 			auction.step();
-			assertTrue(!auction.transactionsOccured());
+			assertTrue(!auction.transactionsOccurred());
 
 			auction.step();
-			assertTrue(auction.transactionsOccured());
+			assertTrue(auction.transactionsOccurred());
 
 		} catch (AuctionClosedException e) {
 			fail("we tried to step through an market past its closure");

@@ -22,6 +22,7 @@
 				<constructor-arg>
 					<list>
 						<ref bean="transactionPriceTimeSeriesReport"/>
+						<ref bean="orderFlowTimeSeriesReport"/>
 					</list>
 				</constructor-arg>
 			</bean>
@@ -31,7 +32,12 @@
 
 <bean id="transactionPriceTimeSeriesReport" 
     class="net.sourceforge.jasa.report.TransactionPriceTimeSeriesReport">
-    <constructor-arg value="transprice.csv"/>
+    <constructor-arg value="transprice"/>
+</bean>
+
+<bean id="orderFlowTimeSeriesReport"
+    class="net.sourceforge.jasa.report.OrderFlowTimeSeriesReport">
+    <constructor-arg value="orderflow"/>
 </bean>
 
 <bean id="equilibriumReport" class="net.sourceforge.jasa.report.EquilibriumReport">
@@ -81,6 +87,7 @@
 			<constructor-arg>
 				<list>
 					<ref bean="noiseTraders"/>
+					<ref bean="fundamentalists"/>
 				</list>
 			</constructor-arg>
 		</bean>
@@ -89,8 +96,13 @@
 </bean>
 
 <bean id="noiseTraders" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="100"/>
+	<constructor-arg value="20"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
+</bean>
+
+<bean id="fundamentalists" class="net.sourceforge.jasa.sim.AgentList">
+    <constructor-arg value="20"/>
+    <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 
 <bean id="noiseTraderFactory"
@@ -100,14 +112,33 @@
 	</property>
 </bean>
 
+<bean id="fundamentalistFactory"
+    class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+    <property name="targetBeanName">
+        <idref local="fundamentalistPrototype" />
+    </property>
+</bean>
+
 <bean id="noiseTraderPrototype" scope="prototype" 
         class="net.sourceforge.jasa.agent.SimpleTradingAgent">
 	<property name="strategy" ref="noiseTraderStrategy"/>
 </bean>
 
+<bean id="fundamentalistPrototype" scope="prototype" 
+        class="net.sourceforge.jasa.agent.SimpleTradingAgent">
+    <property name="strategy" ref="fundamentalistStrategy"/>
+</bean>
+
 <bean id="noiseTraderStrategy" scope="prototype" 
         class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
     <property name="forecaster" ref="noiseTraderForecaster"/>
+    <property name="prng" ref="prng"/>
+</bean>
+
+<bean id="fundamentalistStrategy" scope="prototype" 
+        class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
+    <property name="forecaster" ref="fundamentalistForecaster"/>
+    <property name="prng" ref="prng"/>
 </bean>
 
 <bean id="noiseTraderForecaster" scope="prototype"
@@ -115,6 +146,12 @@
     <constructor-arg>
         <ref bean="prng"/>
     </constructor-arg>
+</bean>
+
+<bean id="fundamentalistForecaster" scope="prototype"
+        class="net.sourceforge.jasa.agent.strategy.FundamentalistForecaster">
+    <property name="fundamentalPrice" value="100"/>
+    <property name="timeHorizon" value="10"/>
 </bean>
 
 <bean id="markupDistribution" class="cern.jet.random.Uniform">

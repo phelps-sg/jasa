@@ -147,7 +147,7 @@ public class ReturnForecastStrategyTest extends TestCase {
 		}
 
 		@Override
-		public boolean transactionsOccured() throws ShoutsNotVisibleException {
+		public boolean transactionsOccurred() throws ShoutsNotVisibleException {
 			// TODO Auto-generated method stub
 			return false;
 		}

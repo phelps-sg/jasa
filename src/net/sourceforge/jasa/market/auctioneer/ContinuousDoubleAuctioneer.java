@@ -75,7 +75,8 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 
 	protected void checkShoutValidity(Order shout) throws IllegalOrderException {
 		super.checkShoutValidity(shout);
-		checkImprovement(shout);
+		//TODO
+//		checkImprovement(shout);
 	}
 
 	protected void checkImprovement(Order shout) throws IllegalOrderException {

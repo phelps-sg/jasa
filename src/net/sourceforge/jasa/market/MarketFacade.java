@@ -139,7 +139,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 	 * Determines whether or not any transactions have occured in the current
 	 * round of trading.
 	 */
-	public boolean transactionsOccured() throws ShoutsNotVisibleException {
+	public boolean transactionsOccurred() throws ShoutsNotVisibleException {
 		return auctioneer.transactionsOccurred();
 	}
 

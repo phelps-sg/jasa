@@ -94,10 +94,10 @@ public interface Market extends QuoteProvider {
 	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException;
 
 	/**
-	 * Determine whether or not any transactions have occured in the current round
+	 * Determine whether or not any transactions have occurred in the current round
 	 * of trading.
 	 */
-	public boolean transactionsOccured() throws ShoutsNotVisibleException;
+	public boolean transactionsOccurred() throws ShoutsNotVisibleException;
 
 //	public AuctionReport getReport(Class reportClass);
 
