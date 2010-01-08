@@ -12,7 +12,11 @@ public class NoiseTraderForecaster implements ReturnForecaster {
 	}
 	
 	public NoiseTraderForecaster(RandomEngine prng) {
-		noiseDistribution = new Normal(0, 1, prng);
+		this(1.0, prng);
+	}
+	
+	public NoiseTraderForecaster(double stdev, RandomEngine prng) {
+		noiseDistribution = new Normal(0, stdev, prng);
 	}
 	
 	@Override
@@ -34,5 +38,4 @@ public class NoiseTraderForecaster implements ReturnForecaster {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

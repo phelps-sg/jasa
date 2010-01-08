@@ -55,10 +55,6 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 
 	protected MarketFacade auction;
 
-	public static final String P_DEF_BASE = "combiauctionreport";
-
-	public static final String P_NUMLOGGERS = "n";
-
 	public CombiAuctionReport(List reports) {
 		this.reports = reports;
 	}
@@ -106,7 +102,7 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 	public void produceUserOutput() {
 		Iterator i = reports.iterator();
 		while (i.hasNext()) {
-			AuctionReport logger = (AuctionReport) i.next();
+			AbstractAuctionReport logger = (AbstractAuctionReport) i.next();
 			logger.produceUserOutput();
 		}
 	}
@@ -132,14 +128,14 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 			logger.eventOccurred(event);
 		}
 	}
-
-	public void setAuction(MarketFacade auction) {
-		this.auction = auction;
-		Iterator i = reports.iterator();
-		while (i.hasNext()) {
-			AuctionReport logger = (AuctionReport) i.next();
-			logger.setAuction(auction);
-		}
-	}
+//
+//	public void setAuction(MarketFacade auction) {
+//		this.auction = auction;
+//		Iterator i = reports.iterator();
+//		while (i.hasNext()) {
+//			AuctionReport logger = (AuctionReport) i.next();
+//			logger.setAuction(auction);
+//		}
+//	}
 
 }

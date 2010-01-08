@@ -20,10 +20,10 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	}
 	
 	public double getPriceForecast(double currentPrice) {
-		if (Double.isInfinite(currentPrice) || 
-				Double.isNaN(currentPrice) || currentPrice < 10E-100) {
-			currentPrice = 100;
-		}
+//		if (Double.isInfinite(currentPrice) || 
+//				Double.isNaN(currentPrice) || currentPrice < 10E-100) {
+//			currentPrice = 100;
+//		}
 		double forecastedReturn = getReturnForecast(currentPrice);
 		return currentPrice * Math.exp(forecastedReturn);
 	}
@@ -33,7 +33,8 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		boolean result = super.modifyShout(shout);
 		double currentPrice = auction.getQuote().getMidPoint();
 		double forecastedPrice = getPriceForecast(currentPrice);
-		double markup = markupDistribution.nextDouble();
+//		double markup = markupDistribution.nextDouble();
+		double markup = 0;
 		boolean isBid = false;
 		if (Double.isNaN(currentPrice) || Double.isInfinite(currentPrice)) {
 			isBid = prng.nextDouble() > 0.5;

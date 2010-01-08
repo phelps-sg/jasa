@@ -29,16 +29,16 @@ import net.sourceforge.jasa.sim.report.Report;
 
 public interface AuctionReport extends Report {
 
-	/**
-	 * Produce the final historicalDataReport for the user. Implementors can do whatever they
-	 * see fit, for example by writing a historicalDataReport on stdout, or they may choose to
-	 * do nothing.
-	 */
-	public void produceUserOutput();
+//	/**
+//	 * Produce the final historicalDataReport for the user. Implementors can do whatever they
+//	 * see fit, for example by writing a historicalDataReport on stdout, or they may choose to
+//	 * do nothing.
+//	 */
+//	public void produceUserOutput();
 
 	/**
 	 * Specify the market to be used when generating the historicalDataReport.
 	 */
-	public void setAuction(MarketFacade auction);
+//	public void setAuction(MarketFacade auction);
 
 }

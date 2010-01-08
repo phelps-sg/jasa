@@ -73,10 +73,10 @@ public class MarketQuote implements Serializable {
 	}
 	
 	public double getMidPoint() {
-		if (Double.isNaN(ask)) {
+		if (Double.isNaN(ask) || Double.isInfinite(ask)) {
 			return bid;
 		}
-		if (Double.isNaN(bid)) {
+		if (Double.isNaN(bid) || Double.isInfinite(bid)) {
 			return ask;
 		} 
 		return (ask + bid) / 2.0;

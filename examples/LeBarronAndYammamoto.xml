@@ -15,7 +15,7 @@
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="agentInitialiser" ref="agentInitialiser"/>
 	<property name="simulation" ref="marketSimulation"/>
-	<property name="numSimulations" value="100"/>
+	<property name="numSimulations" value="10"/>
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -24,6 +24,7 @@
 						<ref bean="transactionPriceTimeSeriesReport"/>
 						<ref bean="orderFlowTimeSeriesReport"/>
 						<ref bean="midPointTimeSeriesReport"/>
+						<ref bean="setInitialSpreadReport"/>
 					</list>
 				</constructor-arg>
 			</bean>
@@ -46,6 +47,14 @@
     <constructor-arg value="orderflow"/>
 </bean>
 
+<bean id="setInitialSpreadReport"
+    class="net.sourceforge.jasa.report.SetInitialSpreadReport">
+    <property name="askPrice" value="1000"/>
+    <property name="bidPrice" value="900"/>
+    <property name="market" ref="market"/>
+    <property name="tradingAgent" ref="fixedPriceBuyerPrototype"/>
+</bean>
+
 <bean id="equilibriumReport" class="net.sourceforge.jasa.report.EquilibriumReport">
 	<constructor-arg ref="market" />
 </bean>
@@ -61,7 +70,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
 	<property name="market" ref="market"/>
-	<property name="maximumRounds" value="100"/>
+	<property name="maximumRounds" value="1000"/>
 </bean>
 
 <bean id="cda" 
@@ -107,7 +116,7 @@
 </bean>
 
 <bean id="fundamentalists" class="net.sourceforge.jasa.sim.AgentList">
-    <constructor-arg value="10"/>
+    <constructor-arg value="3"/>
     <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 
@@ -208,12 +217,13 @@
 <bean id="markupDistribution" scope="singleton"
     class="cern.jet.random.Uniform">
     <constructor-arg value="0"/>
-    <constructor-arg value="1"/>
+    <constructor-arg value="0.1"/>
     <constructor-arg ref="prng"/>
 </bean>
 
 <bean id="noiseTraderForecaster" scope="prototype"
         class="net.sourceforge.jasa.agent.strategy.NoiseTraderForecaster">
+    <constructor-arg value="0.1"/>
     <constructor-arg>
         <ref bean="prng"/>
     </constructor-arg>
