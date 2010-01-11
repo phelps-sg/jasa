@@ -102,7 +102,8 @@
 	</property>
 </bean>
 
-<bean id="buyerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
+<bean id="buyerPrototype" scope="prototype" 
+        class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
@@ -111,7 +112,8 @@
 	<property name="strategy" ref="zic"/>
 </bean>
 
-<bean id="sellerPrototype" scope="prototype" class="net.sourceforge.jasa.agent.TokenTradingAgent">
+<bean id="sellerPrototype" scope="prototype" 
+        class="net.sourceforge.jasa.agent.TokenTradingAgent">
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
@@ -126,7 +128,8 @@
 	<constructor-arg index="2" ref="prng" />
 </bean>
 
-<bean id="zic" scope="prototype" class="net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy">
+<bean id="zic" scope="prototype" 
+        class="net.sourceforge.jasa.agent.strategy.RandomConstrainedStrategy">
 	<property name="quantity" value="1" />
 	<property name="markupDistribution" ref="markupDistribution"/>		
 </bean>

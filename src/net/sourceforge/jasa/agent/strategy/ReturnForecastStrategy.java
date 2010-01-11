@@ -29,7 +29,7 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 //		}
 		double currentPrice = auction.getQuote().getMidPoint();
 		double forecastedReturn = getReturnForecast();
-		return currentPrice * Math.exp(forecastedReturn);
+		return currentPrice * Math.exp(forecastedReturn / 100);
 	}
 	
 	@Override

@@ -19,7 +19,7 @@ public class FundamentalistForecaster extends AbstractReturnForecaster {
 			return 0.0;
 		} 
 		double r = Math.log(fundamentalPrice / currentPrice);
-		return r / timeHorizon;
+		return r ;
 	}
 
 	public int getTimeHorizon() {

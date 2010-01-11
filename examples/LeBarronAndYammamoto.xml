@@ -120,12 +120,12 @@
 </bean>
 
 <bean id="noiseTraders" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="50"/>
+	<constructor-arg value="900"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
 </bean>
 
 <bean id="fundamentalists" class="net.sourceforge.jasa.sim.AgentList">
-    <constructor-arg value="10"/>
+    <constructor-arg value="1"/>
     <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 
@@ -236,9 +236,9 @@
         <ref bean="prng"/>
     </constructor-arg>
     <property name="volatilityDistribution">
-        <bean class="cern.jet.random.Uniform">
-            <constructor-arg value="0"/>
-            <constructor-arg value="0.05"/>
+        <bean class="cern.jet.random.Normal">
+            <constructor-arg value="0.0"/>
+            <constructor-arg value="3"/>
             <constructor-arg ref="prng"/>
         </bean>
     </property>
