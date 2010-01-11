@@ -161,11 +161,13 @@
 <bean id="noiseTraderPrototype" scope="prototype" 
         class="net.sourceforge.jasa.agent.SimpleTradingAgent">
 	<property name="strategy" ref="noiseTraderStrategy"/>
+	<property name="valuationPolicy" ref="noiseTraderForecaster"/>
 </bean>
 
 <bean id="fundamentalistPrototype" scope="prototype" 
         class="net.sourceforge.jasa.agent.SimpleTradingAgent">
     <property name="strategy" ref="fundamentalistStrategy"/>
+    <property name="valuationPolicy" ref="noiseTraderForecaster"/>
 </bean>
 
 <bean id="fixedPriceBuyerPrototype" scope="prototype"
@@ -202,14 +204,12 @@
 
 <bean id="noiseTraderStrategy" scope="prototype" 
         class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
-    <property name="forecaster" ref="noiseTraderForecaster"/>
     <property name="markupDistribution" ref="markupDistribution"/>
     <property name="prng" ref="prng"/>
 </bean>
 
 <bean id="fundamentalistStrategy" scope="prototype" 
         class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
-    <property name="forecaster" ref="fundamentalistForecaster"/>
     <property name="markupDistribution" ref="markupDistribution"/>
     <property name="prng" ref="prng"/>
 </bean>
@@ -217,13 +217,13 @@
 <bean id="markupDistribution" scope="singleton"
     class="cern.jet.random.Uniform">
     <constructor-arg value="0"/>
-    <constructor-arg value="0.1"/>
+    <constructor-arg value="0.01"/>
     <constructor-arg ref="prng"/>
 </bean>
 
 <bean id="noiseTraderForecaster" scope="prototype"
         class="net.sourceforge.jasa.agent.strategy.NoiseTraderForecaster">
-    <constructor-arg value="0.1"/>
+    <constructor-arg value="0.01"/>
     <constructor-arg>
         <ref bean="prng"/>
     </constructor-arg>

@@ -15,6 +15,7 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 
 import net.sourceforge.jasa.market.Market;
@@ -22,7 +23,7 @@ import net.sourceforge.jasa.market.Order;
 
 import net.sourceforge.jasa.report.HistoricalDataReport;
 
-public class EstimatedEPStrategy extends FixedQuantityStrategyImpl {
+public class EstimatedEPStrategy extends FixedDirectionStrategy {
 
 	protected HistoricalDataReport historicalDataReport;
 
@@ -54,7 +55,7 @@ public class EstimatedEPStrategy extends FixedQuantityStrategyImpl {
 		} else {
 			p = (a + b) / 2;
 		}
-		if (agent.isBuyer(auction)) {
+		if (((TokenTradingAgent) agent).isBuyer()) {
 			// p *= 1 - GlobalPRNG.getInstance().uniform(0, perterb);
 			if (p < t) {
 				shout.setPrice(p);

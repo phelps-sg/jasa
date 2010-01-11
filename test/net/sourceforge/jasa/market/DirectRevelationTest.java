@@ -16,6 +16,7 @@
 package net.sourceforge.jasa.market;
 
 import cern.jet.random.engine.RandomEngine;
+import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
@@ -37,7 +38,6 @@ public class DirectRevelationTest extends ElectricityTest {
 	public DirectRevelationTest(String name) {
 		super(name);		
 	}
-
 	
 	/*
 	 * Test that truth-telling in a DA (CH) always results in 100% efficiency
@@ -56,14 +56,16 @@ public class DirectRevelationTest extends ElectricityTest {
 		auction.setMaximumRounds(1);
 	}
 
-	public void assignStrategy(int capacity, SimpleTradingAgent agent) {
+	@Override
+	public void assignStrategy(int capacity, FixedDirectionTradingAgent agent) {
 		TruthTellingStrategy truthTelling = new TruthTellingStrategy();
 		truthTelling.setQuantity(capacity);
 		agent.setStrategy(truthTelling);
 		agent.initialise();
 	}
 
-	public void assignValuer(SimpleTradingAgent agent) {
+	@Override
+	public void assignValuer(FixedDirectionTradingAgent agent) {
 		agent.setValuationPolicy(new RandomValuer(VALUE_MIN, VALUE_MAX, prng));
 	}
 

@@ -55,8 +55,9 @@ public class MomentumStrategyTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, true, null);
+		testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, null);
 		testStrategy = new MockMomentumStrategy(testTrader, prng);
+		testStrategy.setBuy(false);
 		testTrader.setStrategy(testStrategy);
 		testStrategy.setAgent(testTrader);
 	}
@@ -67,7 +68,7 @@ public class MomentumStrategyTest extends TestCase {
 	}
 
 	public void testBuyerMargin() {
-		testTrader.setIsSeller(false);
+		testStrategy.setBuy(true);
 
 		double margin = testStrategy.targetMargin(PRIV_VALUE + 10);
 		assertTrue(margin == 10 / PRIV_VALUE);
@@ -77,7 +78,7 @@ public class MomentumStrategyTest extends TestCase {
 	}
 
 	public void testSellerMargin() {
-		testTrader.setIsSeller(true);
+		testStrategy.setBuy(false);
 		double margin = testStrategy.targetMargin(PRIV_VALUE + 10);
 		assertTrue(margin == 10 / PRIV_VALUE);
 

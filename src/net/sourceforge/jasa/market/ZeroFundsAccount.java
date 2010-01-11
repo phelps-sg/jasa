@@ -14,9 +14,11 @@
  */
 package net.sourceforge.jasa.market;
 
+import java.io.Serializable;
+
 import net.sourceforge.jasa.sim.util.MathUtil;
 
-public class ZeroFundsAccount extends Account {
+public class ZeroFundsAccount extends Account implements Serializable {
 
 	public ZeroFundsAccount(Object owner) {
 		super(owner, 0);

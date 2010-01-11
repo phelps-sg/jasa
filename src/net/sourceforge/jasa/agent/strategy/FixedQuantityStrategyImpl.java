@@ -45,10 +45,6 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
 
 	int quantity = 1;
 
-	public static final String P_DEF_BASE = "fixedquantitystrategy";
-
-	static final String P_QUANTITY = "quantity";
-
 	public FixedQuantityStrategyImpl(AbstractTradingAgent agent) {
 		super(agent);
 	}

@@ -49,7 +49,7 @@ import cern.jet.random.Uniform;
  * @version $Revision$
  */
 
-public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
+public class RandomConstrainedStrategy extends FixedDirectionStrategy
     implements Serializable {
 
 	protected AbstractContinousDistribution markupDistribution;
@@ -65,7 +65,7 @@ public class RandomConstrainedStrategy extends FixedQuantityStrategyImpl
 	public boolean modifyShout(Order shout) {
 		double markup = markupDistribution.nextDouble();
 		double price = 0;
-		if (agent.isBuyer(auction)) {
+		if (isBuy()) {
 			price = agent.getValuation(auction) - markup;
 		} else {
 			price = agent.getValuation(auction) + markup;

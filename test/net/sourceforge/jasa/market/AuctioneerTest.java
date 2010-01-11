@@ -27,22 +27,10 @@ import junit.framework.TestCase;
 
 public abstract class AuctioneerTest extends TestCase {
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
 	Auctioneer auctioneer;
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
 	MarketFacade auction;
 
-	/**
-	 * @uml.property name="traders"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	MockTrader[] traders;
 	
 	RandomEngine prng;
@@ -56,11 +44,11 @@ public abstract class AuctioneerTest extends TestCase {
 		auction = new MarketFacade(prng);
 
 		traders = new MockTrader[5];
-		traders[0] = new MockTrader(this, 30, 1000, 1000, false, auction);
-		traders[1] = new MockTrader(this, 10, 10000, 1000, false, auction);
-		traders[2] = new MockTrader(this, 15, 10000, 400, true, auction);
-		traders[3] = new MockTrader(this, 10, 10000, 400, true, auction);
-		traders[4] = new MockTrader(this, 15, 10000, 400, true, auction);
+		traders[0] = new MockTrader(this, 30, 1000, 1000, auction);
+		traders[1] = new MockTrader(this, 10, 10000, 1000, auction);
+		traders[2] = new MockTrader(this, 15, 10000, 400, auction);
+		traders[3] = new MockTrader(this, 10, 10000, 400, auction);
+		traders[4] = new MockTrader(this, 15, 10000, 400, auction);
 	}
 
 	public void testDelete() {

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
 import net.sourceforge.jasa.market.Order;
@@ -80,7 +81,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 			AbstractTradingAgent trader = (AbstractTradingAgent) traders.next();
 			int quantity = trader.determineQuantity(auction);
 			double value = trader.getValuation(auction);
-			boolean isBid = trader.isBuyer(auction);
+			boolean isBid = trader.isBuyer();
 			Order shout = new Order(trader, quantity, value, isBid);
 			shouts.add(shout);
 			enumerateTruthfulShout(shout);

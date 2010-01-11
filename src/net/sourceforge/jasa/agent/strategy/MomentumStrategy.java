@@ -42,7 +42,7 @@ import cern.jet.random.engine.RandomEngine;
  * @version $Revision$
  */
 
-public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
+public abstract class MomentumStrategy extends FixedDirectionStrategy implements
     Serializable {
 
 	protected MimicryLearner learner;
@@ -122,7 +122,7 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 		} else if (event instanceof AgentPolledEvent) {
 			agentPolled((AgentPolledEvent) event);
 		} else if (event instanceof MarketOpenEvent) {
-			if (agent.isSeller(auction)) {
+			if (isSell()) {
 				setMargin(initialMarginDistribution.nextDouble());
 			} else {
 				setMargin(-initialMarginDistribution.nextDouble());
@@ -208,8 +208,8 @@ public abstract class MomentumStrategy extends AdaptiveStrategyImpl implements
 	}
 
 	protected double calculatePrice(double margin) {
-		if ((agent.isBuyer(auction) && margin <= 0.0 && margin > -1.0)
-		    || (agent.isSeller(auction) && margin >= 0.0)) {
+		if ((isBuy() && margin <= 0.0 && margin > -1.0)
+		    || (isSell() && margin >= 0.0)) {
 			return agent.getValuation(auction) * (1 + margin);
 		} else {
 			return currentPrice;

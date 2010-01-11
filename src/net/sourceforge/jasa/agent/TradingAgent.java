@@ -38,6 +38,7 @@ import net.sourceforge.jasa.sim.util.Resetable;
 public interface TradingAgent extends Agent, MarketEventListener {
 	
 	public boolean register(Market market);
+	
 	/**
 	 * Request a shout from this trader. The trader will perform any bidding
 	 * activity in this method and return when it is done. An market invokes this
@@ -46,24 +47,24 @@ public interface TradingAgent extends Agent, MarketEventListener {
 	 * @param market
 	 *          The market in which to trade
 	 */
-	public void requestShout(Market auction);
+//	public void onAgentArrival(Market auction);
 
 	/**
 	 * Returns true if the agent is a buyer in the specified market.
 	 */
-	public boolean isBuyer(Market auction);
+//	public boolean isBuyer(Market auction);
 
 	/**
 	 * Returns true if the agent is a seller in the specified market.
 	 */
 	//TODO delete
-	public boolean isSeller(Market auction);
+//	public boolean isSeller(Market auction);
 
 	public Account getAccount();
 
 	public CommodityHolding getCommodityHolding();
 
-	public void shoutAccepted(Market auction, Order shout, double price,
+	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity);
 	
 	public double getValuation(Market auction);
@@ -71,5 +72,7 @@ public interface TradingAgent extends Agent, MarketEventListener {
 	public void setUtilityFunction(UtilityFunction utilityFunction);
 	
 	public UtilityFunction getUtilityFunction();
+	
+	public double calculateProfit(Market auction, int quantity, double price);
 
 }

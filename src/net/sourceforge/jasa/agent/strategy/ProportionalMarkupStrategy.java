@@ -30,7 +30,7 @@ import net.sourceforge.jasa.sim.util.Prototypeable;
  * @version $Revision$
  */
 
-public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
+public class ProportionalMarkupStrategy extends FixedDirectionStrategy
     implements Serializable, Prototypeable {
 
 	protected double markup;
@@ -59,7 +59,7 @@ public class ProportionalMarkupStrategy extends FixedQuantityStrategyImpl
 
 	public boolean modifyShout(Order shout) {
 		double delta;
-		if (agent.isSeller(auction)) {
+		if (isSell()) {
 			delta = markup * agent.getValuation(auction);
 		} else {
 			delta = -markup * agent.getValuation(auction);

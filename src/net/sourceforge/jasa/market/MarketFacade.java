@@ -118,8 +118,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 		seller.getCommodityHolding()
 		    .transfer(buyer.getCommodityHolding(), quantity);
 
-		buyer.shoutAccepted(getMarket(), bid, buyerCharge, quantity);
-		seller.shoutAccepted(getMarket(), ask, sellerPayment, quantity);
+		buyer.orderFilled(getMarket(), bid, buyerCharge, quantity);
+		seller.orderFilled(getMarket(), ask, sellerPayment, quantity);
 
 	}
 

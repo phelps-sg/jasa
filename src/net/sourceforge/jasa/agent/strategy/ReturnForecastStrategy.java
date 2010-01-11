@@ -9,22 +9,25 @@ import net.sourceforge.jasa.market.Order;
 
 public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 
-	protected ReturnForecaster forecaster;
+//	protected ReturnForecaster forecaster;
 	
 	protected RandomEngine prng;
 	
 	protected AbstractContinousDistribution markupDistribution;
 
-	public double getReturnForecast(double currentPrice) {
-		return forecaster.getReturnForecast(currentPrice);
+	public double getReturnForecast() {
+		ReturnForecaster forecaster = 
+			(ReturnForecaster) agent.getValuationPolicy();
+		return forecaster.determineValue(auction);
 	}
 	
-	public double getPriceForecast(double currentPrice) {
+	public double getPriceForecast() {
 //		if (Double.isInfinite(currentPrice) || 
 //				Double.isNaN(currentPrice) || currentPrice < 10E-100) {
 //			currentPrice = 100;
 //		}
-		double forecastedReturn = getReturnForecast(currentPrice);
+		double currentPrice = auction.getQuote().getMidPoint();
+		double forecastedReturn = getReturnForecast();
 		return currentPrice * Math.exp(forecastedReturn);
 	}
 	
@@ -32,7 +35,7 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	public boolean modifyShout(Order shout) {
 		boolean result = super.modifyShout(shout);
 		double currentPrice = auction.getQuote().getMidPoint();
-		double forecastedPrice = getPriceForecast(currentPrice);
+		double forecastedPrice = getPriceForecast();
 //		double markup = markupDistribution.nextDouble();
 		double markup = 0;
 		boolean isBid = false;
@@ -54,14 +57,13 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	public void endOfRound(Market auction) {
 	}
 
-	public ReturnForecaster getForecaster() {
-		return forecaster;
-	}
-
-	public void setForecaster(ReturnForecaster forecaster) {
-		this.forecaster = forecaster;
-		forecaster.setStrategy(this);
-	}
+//	public ReturnForecaster getForecaster() {
+//		return forecaster;
+//	}
+//
+//	public void setForecaster(ReturnForecaster forecaster) {
+//		this.forecaster = forecaster;
+//	}
 
 	public RandomEngine getPrng() {
 		return prng;

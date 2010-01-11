@@ -30,28 +30,12 @@ import junit.framework.TestSuite;
 
 public class MixedStrategyTest extends TestCase {
 
-	/**
-	 * @uml.property name="pureStrategy1"
-	 * @uml.associationEnd
-	 */
 	TestLearnerStrategy pureStrategy1;
 
-	/**
-	 * @uml.property name="pureStrategy2"
-	 * @uml.associationEnd
-	 */
 	TestLearnerStrategy pureStrategy2;
 
-	/**
-	 * @uml.property name="mixedStrategy"
-	 * @uml.associationEnd
-	 */
 	MixedStrategy mixedStrategy;
 
-	/**
-	 * @uml.property name="probabilities"
-	 * @uml.associationEnd
-	 */
 	DiscreteProbabilityDistribution probabilities;
 	
 	RandomEngine prng;
@@ -64,7 +48,6 @@ public class MixedStrategyTest extends TestCase {
 
 	public MixedStrategyTest(String name) {
 		super(name);
-//		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public void setUp() {
@@ -73,9 +56,11 @@ public class MixedStrategyTest extends TestCase {
 		
 		pureStrategy1 = new TestLearnerStrategy();
 		pureStrategy1.setQuantity(1);
+		pureStrategy1.setBuy(true);
 
 		pureStrategy2 = new TestLearnerStrategy();
 		pureStrategy2.setQuantity(1);
+		pureStrategy2.setBuy(true);
 
 		probabilities = new DiscreteProbabilityDistribution(prng, 2);
 		// probabilities.setSeed(PRNGTestSeeds.UNIT_TEST_SEED);
@@ -93,7 +78,7 @@ public class MixedStrategyTest extends TestCase {
 		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);
-		TokenTradingAgent agent = new TokenTradingAgent(10, NUM_ROUNDS, false,
+		TokenTradingAgent agent = new TokenTradingAgent(10, NUM_ROUNDS,
 				auction);
 		agent.setStrategy(mixedStrategy);
 		pureStrategy1.setAgent(agent);

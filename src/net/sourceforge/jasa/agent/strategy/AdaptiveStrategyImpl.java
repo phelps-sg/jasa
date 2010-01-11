@@ -23,7 +23,7 @@ import net.sourceforge.jasa.market.Market;
  * @version $Revision$
  */
 
-public abstract class AdaptiveStrategyImpl extends FixedQuantityStrategyImpl
+public abstract class AdaptiveStrategyImpl extends FixedDirectionStrategy
     implements AdaptiveStrategy {
 
 	public AdaptiveStrategyImpl(AbstractTradingAgent agent) {

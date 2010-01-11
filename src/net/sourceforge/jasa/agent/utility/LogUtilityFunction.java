@@ -1,14 +1,14 @@
 package net.sourceforge.jasa.agent.utility;
 
-import net.sourceforge.jasa.market.Market;
+import java.io.Serializable;
 
-public class LogUtilityFunction extends AbstractUtilityFunction {
+public class LogUtilityFunction extends AbstractUtilityFunction implements
+		Serializable {
 
 	protected double coefficient = 1.0;
 	
 	@Override
-	public double calculatePayoff(Market auction, int quantity, double price) {
-		double profit = calculateProfit(auction, quantity, price);
+	public double calculatePayoff(double profit) {
 		return Math.log(1 + coefficient*profit);
 	}
 

@@ -1,9 +1,12 @@
 package net.sourceforge.jasa.agent.utility;
 
+import java.io.Serializable;
+
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.Market;
 
-public class QuadraticUtilityFunction extends AbstractUtilityFunction {
+public class QuadraticUtilityFunction extends AbstractUtilityFunction implements
+		Serializable {
 
 	protected double alpha;
 	
@@ -22,8 +25,7 @@ public class QuadraticUtilityFunction extends AbstractUtilityFunction {
 	}
 
 	@Override
-	public double calculatePayoff(Market auction, int quantity, double price) {
-		double profit = calculateProfit(auction, quantity, price);
+	public double calculatePayoff(double profit) {
 		return alpha * profit  +  beta * profit * profit;
 	}
 

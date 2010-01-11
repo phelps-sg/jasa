@@ -44,7 +44,7 @@ import net.sourceforge.jasa.sim.util.Prototypeable;
  * @version $Revision$
  */
 
-public class PureSimpleStrategy extends FixedQuantityStrategyImpl implements
+public class PureSimpleStrategy extends FixedDirectionStrategy implements
     Serializable, Prototypeable {
 
 	protected double margin;
@@ -77,7 +77,7 @@ public class PureSimpleStrategy extends FixedQuantityStrategyImpl implements
 
 	public boolean modifyShout(Order shout) {
 		double delta;
-		if (agent.isSeller(auction)) {
+		if (isSell()) {
 			delta = margin;
 		} else {
 			delta = -margin;

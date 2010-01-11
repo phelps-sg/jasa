@@ -23,6 +23,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -105,7 +106,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 
 		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
+			TokenTradingAgent agent = (TokenTradingAgent) i.next();
 			double surplus = equilibriumSurplus(agent, ep, quantity);
 			updateStats(agent, surplus);
 		}
@@ -159,10 +160,10 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 	 *          The hypothetical quantity that this agent is able to trade in any
 	 *          given day.
 	 */
-	protected double equilibriumSurplus(AbstractTradingAgent agent, double ep,
+	protected double equilibriumSurplus(TokenTradingAgent agent, double ep,
 	    int quantity) {
 		double surplus;
-		if (agent.isSeller(auction)) {
+		if (agent.isSeller()) {
 			surplus = (ep - agent.getValuation(auction)) * quantity;
 		} else {
 			surplus = (agent.getValuation(auction) - ep) * quantity;

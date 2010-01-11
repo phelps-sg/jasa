@@ -59,10 +59,11 @@ public class MockStrategy extends AbstractStrategy {
 			return false;
 		}
 		super.modifyShout(shout);
-		lastShoutAccepted = agent.lastShoutAccepted();
+		lastShoutAccepted = agent.lastOrderFilled();
 		Order current = shouts[currentShout];
 		shout.setPrice(current.getPrice());
 		shout.setQuantity(current.getQuantity());
+		shout.setIsBid(current.isBid());
 		System.out.println("Placing order " + shout);
 		return true;
 	}

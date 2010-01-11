@@ -23,7 +23,7 @@ public class NoiseTraderForecastTest extends TestCase {
 	public void testForecast() {
 		SummaryStatistics stats = new SummaryStatistics();
 		for(int i=0; i<10000; i++) {
-			double forecast = forecaster.getReturnForecast(0);
+			double forecast = forecaster.determineValue(null);
 			stats.addValue(forecast);
 		}
 		assertEquals(0, stats.getMean(), 0.01);

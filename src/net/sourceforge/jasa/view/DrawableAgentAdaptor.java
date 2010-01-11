@@ -18,6 +18,7 @@ package net.sourceforge.jasa.view;
 import java.awt.Color;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
 import net.sourceforge.jasa.agent.valuation.AbstractRandomValuer;
@@ -45,7 +46,7 @@ import uchicago.src.sim.gui.SimGraphics;
 
 public class DrawableAgentAdaptor implements Drawable {
 
-	protected AbstractTradingAgent agent;
+	protected TokenTradingAgent agent;
 
 	protected Market auction;
 
@@ -61,7 +62,7 @@ public class DrawableAgentAdaptor implements Drawable {
 		this(auction, null);
 	}
 
-	public DrawableAgentAdaptor(Market auction, AbstractTradingAgent agent) {
+	public DrawableAgentAdaptor(Market auction, TokenTradingAgent agent) {
 		this.agent = agent;
 		this.auction = auction;
 		if (agent != null) {
@@ -93,7 +94,7 @@ public class DrawableAgentAdaptor implements Drawable {
 
 		if (relProfit > 0.01) {
 			relProfit = 0.4f + 0.6f * relProfit;
-			if (agent.isBuyer(auction)) {
+			if (agent.isBuyer()) {
 				color = new Color(relProfit, 0, 0);
 			} else {
 				color = new Color(0, 0, relProfit);
@@ -151,7 +152,7 @@ public class DrawableAgentAdaptor implements Drawable {
 
 	public String getRole() {
 		if (agent != null) {
-			if (agent.isSeller(auction)) {
+			if (agent.isSeller()) {
 				return "Seller";
 			} else {
 				return "Buyer";
@@ -164,7 +165,7 @@ public class DrawableAgentAdaptor implements Drawable {
 	public float getLastShoutPrice() {
 		float price = 0;
 		if (agent != null) {
-			Order shout = agent.getCurrentShout();
+			Order shout = agent.getCurrentOrder();
 			if (shout != null) {
 				price = (float) shout.getPrice();
 			}
@@ -178,7 +179,7 @@ public class DrawableAgentAdaptor implements Drawable {
 
 	public boolean getLastShoutAccepted() {
 		if (agent != null) {
-			return agent.lastShoutAccepted();
+			return agent.lastOrderFilled();
 		} else {
 			return false;
 		}

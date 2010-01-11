@@ -68,7 +68,7 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 		double aMin = historicalDataReport.getLowestUnacceptedAskPrice();
 		double bMax = historicalDataReport.getHighestUnacceptedBidPrice();
 
-		if (agent.isBuyer(auction)) {
+		if (isBuy()) {
 			if (aMin > bMax) {
 				adjustMargin(targetMargin(bMax + perterb(bMax)));
 			} else {
@@ -86,7 +86,7 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 	protected double calculatePrice(double margin) {
 		double price = super.calculatePrice(margin);
 		if (!agent.active()) {
-			if (agent.isBuyer(auction)) {
+			if (isBuy()) {
 				if (price > currentPrice) {
 					return currentPrice;
 				}

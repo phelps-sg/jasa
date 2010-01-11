@@ -70,7 +70,7 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 		// super.enumerateTruthfulShout(truthfulShout);
 		AbstractTradingAgent agent = (AbstractTradingAgent) truthfulShout
 		    .getAgent();
-		Order actualShout = agent.getCurrentShout();
+		Order actualShout = agent.getCurrentOrder();
 		if (agent.active() && actualShout != null) {
 			if (actualShout.isBid()) {
 				bids.add(actualShout);

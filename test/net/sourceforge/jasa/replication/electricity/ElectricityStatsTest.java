@@ -120,7 +120,7 @@ public class ElectricityStatsTest extends ElectricityTest {
 
 	public void assignStrategy(SimpleTradingAgent agent) {
 		PureSimpleStrategy strategy = new PureSimpleStrategy(agent, 0, agent
-		    .getVolume());
+		    .getVolume(auction));
 		agent.setStrategy(strategy);
 	}
 

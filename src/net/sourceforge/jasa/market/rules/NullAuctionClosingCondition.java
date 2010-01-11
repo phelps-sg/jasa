@@ -15,8 +15,10 @@
 
 package net.sourceforge.jasa.market.rules;
 
+import java.io.Serializable;
+
 public class NullAuctionClosingCondition extends TimingCondition implements
-    AuctionClosingCondition {
+    Serializable, AuctionClosingCondition {
 
 	public boolean eval() {
 		return false;

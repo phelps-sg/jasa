@@ -33,37 +33,45 @@ import net.sourceforge.jasa.sim.EventScheduler;
  */
 
 public class SimpleTradingAgent extends AbstractTradingAgent {
+	
+	public SimpleTradingAgent(int stock, double funds, double privateValue,
+			EventScheduler scheduler) {
+		super(stock, funds, privateValue, scheduler);
+	}
+
+	public SimpleTradingAgent(int stock, double funds, double privateValue,
+			TradingStrategy strategy, EventScheduler scheduler) {
+		super(stock, funds, privateValue, strategy, scheduler);
+	}
+
+	public SimpleTradingAgent(int stock, double funds, EventScheduler scheduler) {
+		super(stock, funds, scheduler);
+	}
 
 	public SimpleTradingAgent(double privateValue,
 			boolean isSeller, TradingStrategy strategy, EventScheduler scheduler) {
-		super(0, 0, privateValue, isSeller, strategy, scheduler);
+		super(0, 0, privateValue, strategy, scheduler);
 	}
 
-	public SimpleTradingAgent(double privateValue, boolean isSeller, EventScheduler scheduler) {
-		super(0, 0, privateValue, isSeller, scheduler);
+	public SimpleTradingAgent(double privateValue, EventScheduler scheduler) {
+		super(0, 0, privateValue, scheduler);
 	}
 
 	public SimpleTradingAgent(EventScheduler scheduler) {
-		this(0, false, scheduler);
+		this(0, scheduler);
 	}
 	
 	public SimpleTradingAgent() {
 		this(null);
 	}
-
 	
-	public void requestShout(Market auction) {
-		super.requestShout(auction);
+	public void onAgentArrival(Market auction) {
+		super.onAgentArrival(auction);
 		lastPayoff = 0;
 	}
 
 	public boolean acceptDeal(Market auction, double price, int quantity) {
-		assert isSeller;
 		return price >= valuer.determineValue(auction);
-	}
-
-	public int getVolume() {
-		return ((FixedQuantityStrategy) strategy).getQuantity();
 	}
 //	
 //	public void setVolume(int volume) {
@@ -74,34 +82,37 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 		return lastPayoff;
 	}
 
-	public double equilibriumProfits(Market auction, double equilibriumPrice,
-	    int quantity) {
-		double surplus = 0;
-		if (isSeller) {
-			surplus = equilibriumPrice - getValuation(auction);
-		} else {
-			surplus = getValuation(auction) - equilibriumPrice;
-		}
-		// TODO
-		if (surplus < 0) {
-			surplus = 0;
-		}
-		return auction.getAge() * quantity * surplus;
-	}
-
 	public boolean active() {
 		return true;
 	}
 
-	public void endOfDay(MarketEvent event) {
+	public void onEndOfDay(MarketEvent event) {
 		// reset();
 	}
 
 	public String toString() {
 		return "(" + getClass() + " id:" + hashCode() 
 		    + " valuer:" + valuer + 
-		    + totalPayoff + " isSeller:" + isSeller + " lastProfit:" + lastPayoff
+		    + totalPayoff + " lastProfit:" + lastPayoff
 		    + " strategy:" + strategy + ")";
 	}
 
+	
+	@Override
+	public double calculateProfit(Market auction, int quantity, double price) {
+		if (currentOrder == null) {
+			return 0;
+		}
+		return super.calculateProfit(auction, quantity, price);
+	}
+	
+//	@Override
+//	public double calculateProfit(Market auction, int quantity, double price) {
+//		if (isBuyer()) {
+//			return (getValuation(auction) - price) * quantity;
+//		} else {
+//			return  (price - getValuation(auction)) * quantity;
+//		}
+//	}
+	
 }

@@ -58,8 +58,6 @@ public class AllTests {
 		suite.addTest(net.sourceforge.jasa.report.EquilibriaStatsTest.suite());
 
 		suite.addTest(net.sourceforge.jasa.market.ClearingHouseAuctioneerTest.suite());
-		suite.addTest(net.sourceforge.jasa.market.McAfeeClearingHouseAuctioneerTest
-		    .suite());
 		suite
 		    .addTest(net.sourceforge.jasa.market.ContinuousDoubleAuctioneerTest.suite());
 		suite.addTest(net.sourceforge.jasa.market.RandomRobinAuctionTest.suite());

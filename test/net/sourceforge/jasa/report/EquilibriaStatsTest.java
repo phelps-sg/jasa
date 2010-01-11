@@ -73,8 +73,10 @@ public class EquilibriaStatsTest extends TestCase {
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		traders = new MockTrader[N];
 		for (int i = 0; i < N; i++) {
-			traders[i] = new MockTrader(this, 0, 0, 0, i < NS, auction);
-			traders[i].setStrategy(new TruthTellingStrategy(traders[i]));
+			traders[i] = new MockTrader(this, 0, 0, 0, auction);
+			TruthTellingStrategy strategy = new TruthTellingStrategy(traders[i]);
+			traders[i].setStrategy(strategy);
+			strategy.setBuy(i >= NS);
 			auction.register(traders[i]);
 		}
 	}

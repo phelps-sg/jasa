@@ -22,8 +22,10 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
+import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
@@ -82,9 +84,9 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 	protected int sellerCapacity;
 
-	protected FixedQuantityStrategy[] sellerStrategies;
+	protected FixedDirectionStrategy[] sellerStrategies;
 
-	protected FixedQuantityStrategy[] buyerStrategies;
+	protected FixedDirectionStrategy[] buyerStrategies;
 
 	protected DataWriter dataFile;
 
@@ -407,14 +409,15 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 		for (int i = 0; i < num; i++) {
 
-			SimpleTradingAgent trader = new SimpleTradingAgent(0,
-			    areSellers, auction);
+			TokenTradingAgent trader = new TokenTradingAgent(0, 1, auction);
 
-			FixedQuantityStrategy strategy = null;
+			FixedDirectionStrategy strategy = null;
 			if (areSellers) {
 				strategy = sellerStrategies[i];
+				strategy.setBuy(false);
 			} else {
 				strategy = buyerStrategies[i];
+				strategy.setBuy(true);
 			}
 			((Resetable) strategy).reset();
 			trader.setStrategy(strategy);

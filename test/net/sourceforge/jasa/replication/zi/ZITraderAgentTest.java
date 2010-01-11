@@ -75,10 +75,14 @@ public class ZITraderAgentTest extends TestCase {
 	public void setUp() {
 		auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
-		buyer = new TokenTradingAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT, false, auction);
-		seller = new TokenTradingAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT, true, auction);
+		buyer = new TokenTradingAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT,
+				 auction);
+		seller = new TokenTradingAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT,
+				auction);
 		buyer.setStrategy(new TruthTellingStrategy(buyer));
 		seller.setStrategy(new TruthTellingStrategy(seller));
+		buyer.setIsBuyer(true);
+		seller.setIsBuyer(false);
 		auction.register(buyer);
 		auction.register(seller);
 		auctioneer = new ClearingHouseAuctioneer(auction);

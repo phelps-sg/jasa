@@ -19,7 +19,9 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
 
 import net.sourceforge.jasa.market.MarketFacade;
@@ -41,82 +43,42 @@ import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
 /**
- * 
  * Superclass for tests based on
  * 
  * "Market Power and Efficiency in a Computational Electricity Market with
  * Discriminatory Double-Auction Pricing" <br>
  * Nicolaisen, Petrov, and Tesfatsion <i>IEEE Transactions on Evolutionary
- * Computation, Vol. 5, No. 5. 2001</I>
- * </p>
+ * Computation, Vol. 5, No. 5. 2001</I> </p>
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
-
 public abstract class ElectricityTest extends TestCase {
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
 	protected Auctioneer auctioneer;
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
 	protected MarketFacade auction;
 
-	/**
-	 * @uml.property name="stats"
-	 * @uml.associationEnd
-	 */
 	protected ElectricityStats stats;
 
 	protected static double buyerValues[] = { 37, 17, 12 };
 
 	protected static double sellerValues[] = { 35, 16, 11 };
 
-
-	/**
-	 * @uml.property name="mPB"
-	 * @uml.associationEnd
-	 */
 	protected SummaryStats mPB;
 
-	/**
-	 * @uml.property name="mPS"
-	 * @uml.associationEnd
-	 */
 	protected SummaryStats mPS;
 
-	/**
-	 * @uml.property name="eA"
-	 * @uml.associationEnd
-	 */
 	protected SummaryStats eA;
 
-	/**
-	 * @uml.property name="ns"
-	 */
 	protected int ns;
 
-	/**
-	 * @uml.property name="nb"
-	 */
 	protected int nb;
 
-	/**
-	 * @uml.property name="cs"
-	 */
 	protected int cs;
 
-	/**
-	 * @uml.property name="cb"
-	 */
 	protected int cb;
-	
+
 	protected RandomEngine prng;
 
 	static final int ITERATIONS = 100;
@@ -138,20 +100,21 @@ public abstract class ElectricityTest extends TestCase {
 	static Logger logger = Logger.getLogger(ElectricityTest.class);
 
 	public ElectricityTest(String name) {
-		super(name);		
+		super(name);
 	}
-	
+
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 	}
 
 	public void runExperiment() {
 		logger.info("\nAttempting to replicate NPT results with");
-		System.out.println("NS = " + ns + " NB = " + nb + " CS = " + cs + " CB = "
-		    + cb);
-		System.out.println("R = " + R + " E = " + E + " K = " + K + " S1 = " + S1);
-		System.out.println("with " + ITERATIONS + " iterations and " + MAX_ROUNDS
-		    + " market rounds.");
+		System.out.println("NS = " + ns + " NB = " + nb + " CS = " + cs
+				+ " CB = " + cb);
+		System.out.println("R = " + R + " E = " + E + " K = " + K + " S1 = "
+				+ S1);
+		System.out.println("with " + ITERATIONS + " iterations and "
+				+ MAX_ROUNDS + " market rounds.");
 		initStats();
 		for (int i = 0; i < ITERATIONS; i++) {
 			logger.debug("Iteration " + i);
@@ -191,7 +154,7 @@ public abstract class ElectricityTest extends TestCase {
 		auction = new MarketFacade(prng);
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		((AbstractAuctioneer) auctioneer)
-		    .setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
+				.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(MAX_ROUNDS);
 		registerTraders(auction, true, ns, cs, sellerValues);
@@ -200,36 +163,36 @@ public abstract class ElectricityTest extends TestCase {
 	}
 
 	public void registerTraders(MarketFacade auction, boolean areSellers,
-	    int num, int capacity, double[] values) {
+			int num, int capacity, double[] values) {
 		for (int i = 0; i < num; i++) {
 			double value = values[i % values.length];
-			SimpleTradingAgent agent = new SimpleTradingAgent(value, 
-			    areSellers, auction);
+			FixedDirectionTradingAgent agent = new FixedDirectionTradingAgent(value, auction);
 			assignStrategy(capacity, agent);
+			agent.setIsSeller(areSellers);
 			assignValuer(agent);
 			auction.register(agent);
 		}
 	}
 
-	
-	public void assignStrategy(int capacity, SimpleTradingAgent agent) {
+	public void assignStrategy(int capacity, FixedDirectionTradingAgent agent) {
 		StimuliResponseStrategy strategy = new StimuliResponseStrategy(agent);
 		strategy.setQuantity(capacity);
 		NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1, prng);
 		strategy.setLearner(learner);
 		agent.setStrategy(strategy);
-		assert agent.getVolume() == capacity;
+		assert agent.getVolume(auction) == capacity;
 		agent.initialise();
 	}
 
-	public void assignValuer(SimpleTradingAgent agent) {
+	public void assignValuer(FixedDirectionTradingAgent agent) {
 		// Stick with default fixed valuation
 	}
 
 	public void traderReport() {
 		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			SimpleTradingAgent agent = (SimpleTradingAgent) i.next();
+			FixedDirectionTradingAgent agent = 
+				(FixedDirectionTradingAgent) i.next();
 			System.out.println(agent);
 		}
 	}

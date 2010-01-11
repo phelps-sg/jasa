@@ -31,12 +31,16 @@ public class ReturnForecastStrategyTest extends TestCase {
 		trader = new MockTrader(this, 1, 0, null);
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		forecaster = new NoiseTraderForecaster(prng);
-		strategy.setForecaster(forecaster);
+		trader.setValuationPolicy(forecaster);
 		strategy.setAgent(trader);
+		strategy.auction = market;
+		strategy.setPrng(prng);
 	}
 	
 	public void testNoiseTraderForecast() {
-		double priceForecast = strategy.getPriceForecast(1.00);
+		MarketQuote quote = new MarketQuote(1.00, 1.00);
+		market.setQuote(quote);
+		double priceForecast = strategy.getPriceForecast();
 		System.out.println("priceForecast = " + priceForecast);
 		assertTrue(priceForecast <= Math.exp(1));
 	}

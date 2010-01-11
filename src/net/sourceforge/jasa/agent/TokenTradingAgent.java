@@ -17,6 +17,7 @@ package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
 
+import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
@@ -35,8 +36,8 @@ import org.apache.log4j.Logger;
  * @author Steve Phelps
  * @version $Revision$
  */
-
-public class TokenTradingAgent extends AbstractTradingAgent implements Serializable {
+public class TokenTradingAgent extends FixedDirectionTradingAgent implements
+		Serializable {
 
 	/**
 	 * The number of units this agent is entitlted to trade in this trading
@@ -48,11 +49,6 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	 * The initial value of tradeEntitlement
 	 */
 	protected int initialTradeEntitlement;
-
-	/**
-	 * Flag indicating whether the last shout resulted in a transaction.
-	 */
-	protected boolean lastShoutSuccessful;
 
 	/**
 	 * The number of units traded to date
@@ -72,16 +68,17 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	}
 
 	public TokenTradingAgent(int stock, double funds, double privateValue,
-	    int tradeEntitlement, boolean isSeller, EventScheduler scheduler) {
-		super(stock, funds, privateValue, isSeller, scheduler);
+			int tradeEntitlement, EventScheduler scheduler) {
+		super(stock, funds, privateValue, scheduler);
 		this.initialTradeEntitlement = tradeEntitlement;
 		initialise();
 	}
 
 	public TokenTradingAgent(double privateValue, int tradeEntitlement,
-	    boolean isSeller, EventScheduler scheduler) {
-		this(0, 0, privateValue, tradeEntitlement, isSeller, scheduler);
+			EventScheduler scheduler) {
+		this(0, 0, privateValue, tradeEntitlement, scheduler);
 	}
+	
 
 //	public void setup(ParameterDatabase parameters, Parameter base) {
 //
@@ -101,29 +98,29 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 		}
 	}
 
-	public void requestShout(Market auction) {
+	public void onAgentArrival(Market auction) {
 		if (tradeEntitlement <= 0) {
 			isActive = false;
 		}
-		super.requestShout(auction);
+		super.onAgentArrival(auction);
 	}
 
 	public void initialise() {
 		super.initialise();
-		lastShoutSuccessful = false;
+		lastOrderFilled = false;
 		tradeEntitlement = initialTradeEntitlement;
 		quantityTraded = 0;
 		isActive = true;
 		logger.debug(this + ": initialised.");
 	}
 
-	public void endOfDay(MarketEvent event) {
+	public void onEndOfDay(MarketEvent event) {
 		logger.debug("Performing end-of-day processing..");
-		super.endOfDay(event);
+		super.onEndOfDay(event);
 		tradeEntitlement = initialTradeEntitlement;
 		isActive = true;
 		// quantityTraded = 0;
-		lastShoutSuccessful = false;
+		lastOrderFilled = false;
 		logger.debug("done.");
 	}
 
@@ -131,13 +128,13 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 		return isActive;
 	}
 
-	public void shoutAccepted(Market auction, Order shout, double price,
+	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity) {
-		super.shoutAccepted(auction, shout, price, quantity);
-		if ((isBuyer(auction) && price > valuer.determineValue(auction))
-		    || (isSeller(auction) && price < valuer.determineValue(auction))) {
-			logger.debug("Unprofitable transaction");
-		}
+		super.orderFilled(auction, shout, price, quantity);
+//		if ((isBuyer(auction) && price > valuer.determineValue(auction))
+//		    || (isSeller(auction) && price < valuer.determineValue(auction))) {
+//			logger.debug("Unprofitable transaction");
+//		}
 		quantityTraded += quantity;
 		tradeEntitlement -= quantity;
 	}
@@ -145,19 +142,18 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	public double equilibriumProfits(Market auction, double equilibriumPrice,
 	    int quantity) {
 		double surplus = 0;
-		if (isSeller) {
+		if (isSeller()) {
 			surplus = equilibriumPrice - getValuation(auction);
 		} else {
 			surplus = getValuation(auction) - equilibriumPrice;
 		}
-			
 		return auction.getDay() * initialTradeEntitlement * surplus;
 	}
 
 	public double equilibriumProfitsEachDay(Market auction,
 	    double equilibriumPrice, int quantity) {
 		double surplus = 0;
-		if (isSeller) {
+		if (isSeller()) {
 			surplus = equilibriumPrice - getValuation(auction);
 		} else {
 			surplus = getValuation(auction) - equilibriumPrice;
@@ -176,6 +172,7 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	public int determineQuantity(Market auction) {
 		return strategy.determineQuantity(auction);
 	}
+	
 
 	public int getTradeEntitlement() {
 		return tradeEntitlement;
@@ -194,9 +191,13 @@ public class TokenTradingAgent extends AbstractTradingAgent implements Serializa
 	}
 
 	public String toString() {
-		return "(" + getClass() + " id:" + hashCode() + " isSeller:" + isSeller
+		return "(" + getClass() + " id:" + hashCode()
 		    + " valuer:" + valuer + " strategy:" + strategy + " tradeEntitlement:"
 		    + tradeEntitlement + " quantityTraded:" + quantityTraded + ")";
 	}
+	
+	
+	
+
 
 }

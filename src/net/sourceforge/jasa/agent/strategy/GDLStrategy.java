@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import java.util.Iterator;
 
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.market.Market;
@@ -66,7 +67,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class GDLStrategy extends FixedQuantityStrategyImpl implements
+public class GDLStrategy extends FixedDirectionStrategy implements
     Serializable, Prototypeable {
 
 	protected double maxPoint = 0;
@@ -121,12 +122,12 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 		double currentP = 0;
 		maxPoint = 0;
 		max = 0;
-
+		
 		// from 0 to MAX_PRICE
 		// probability of seller's offer is 1 at 0 and 0 at MAX_PRICE
 		// probability of buyer's offer is 0 at 0 and 1 at MAX_PRICE
 
-		if (!agent.isBuyer(auction)) {
+		if (!getAgent().isBuyer()) {
 			lastP = 1;
 			currentP = 1;
 		}
@@ -146,7 +147,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 
 		currentPoint = MAX_PRICE;
 		currentP = 1;
-		if (!agent.isBuyer(auction)) {
+		if (!getAgent().isBuyer()) {
 			currentP = 0;
 		}
 		getMax(lastPoint, lastP, currentPoint, currentP);
@@ -160,6 +161,10 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 		}
 
 	}
+	
+	public TokenTradingAgent getAgent() {
+		return (TokenTradingAgent) agent;
+	}
 
 	private double calculateProbability(double price) {
 		// (taken bids below price) + (all asks below price)
@@ -167,7 +172,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 		// (taken bids below price) + (all asks below price) + (rejected bids
 		// above
 		// price)
-		if (agent.isBuyer(auction)) {
+		if (getAgent().isBuyer()) {
 			// return ((double) (historicalDataReport.getNumberOfBids(-1 * price, true)
 			// + historicalDataReport
 			// .getNumberOfAsks(-1 * price, false)))
@@ -242,7 +247,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 
 		double start = a1;
 		double end = a2;
-		if (agent.isBuyer(auction)) {
+		if (getAgent().isBuyer()) {
 			if (a2 > pvalue) {
 				end = pvalue;
 			}
@@ -254,7 +259,7 @@ public class GDLStrategy extends FixedQuantityStrategyImpl implements
 
 		for (double i = start; i < end; i++) {
 			p = p1 + ((p2 - p1) * ((i - a1) / (a2 - a1)));
-			if (agent.isBuyer(auction)) {
+			if (getAgent().isBuyer()) {
 				temp = p * (pvalue - i);
 			} else {
 				temp = p * (i - pvalue);

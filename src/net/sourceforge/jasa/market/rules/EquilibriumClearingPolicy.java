@@ -1,5 +1,6 @@
 package net.sourceforge.jasa.market.rules;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.OrderBook;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 
-public class EquilibriumClearingPolicy implements ClearingPolicy {
+public class EquilibriumClearingPolicy implements Serializable, ClearingPolicy {
 
 	protected AbstractAuctioneer auctioneer;
 	

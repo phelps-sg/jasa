@@ -27,7 +27,7 @@ import net.sourceforge.jasa.market.Order;
  * @version $Revision$
  */
 
-public class TruthTellingStrategy extends FixedQuantityStrategyImpl implements
+public class TruthTellingStrategy extends FixedDirectionStrategy implements
     Serializable {
 
 	public TruthTellingStrategy(AbstractTradingAgent agent) {

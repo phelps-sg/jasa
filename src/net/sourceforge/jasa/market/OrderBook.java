@@ -83,4 +83,6 @@ public interface OrderBook extends net.sourceforge.jasa.sim.util.Resetable {
 	 */
 	public Iterator<Order> bidIterator();
 
+	public boolean isEmpty();
+
 }

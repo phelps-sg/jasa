@@ -18,6 +18,7 @@ package net.sourceforge.jasa.agent.strategy;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
@@ -62,7 +63,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class GDQStrategy extends FixedQuantityStrategyImpl implements
+public class GDQStrategy extends FixedDirectionStrategy implements
     Serializable, Prototypeable {
 
 	protected double maxPoint = 0;
@@ -104,6 +105,10 @@ public class GDQStrategy extends FixedQuantityStrategyImpl implements
 //			    + " requires a HistoricalDataReport to be configured");
 //		}
 	}
+	
+	public TokenTradingAgent getAgent() {
+		return (TokenTradingAgent) agent;
+	}
 
 	public boolean modifyShout(Order shout) {
 
@@ -119,7 +124,7 @@ public class GDQStrategy extends FixedQuantityStrategyImpl implements
 		maxPoint = 0;
 		max = 0;
 
-		if (!agent.isBuyer(auction)) {
+		if (!getAgent().isBuyer()) {
 			lastP = 1;
 			currentP = 1;
 		}
@@ -137,7 +142,7 @@ public class GDQStrategy extends FixedQuantityStrategyImpl implements
 
 		currentPoint = MAX_PRICE;
 		currentP = 1;
-		if (!agent.isBuyer(auction)) {
+		if (!getAgent().isBuyer()) {
 			currentP = 0;
 		}
 		getMax(lastPoint, lastP, currentPoint, currentP, slope);
@@ -157,7 +162,7 @@ public class GDQStrategy extends FixedQuantityStrategyImpl implements
 		// (taken bids below price) + (all asks below price) + (rejected bids
 		// above
 		// price)
-		if (agent.isBuyer(auction)) {
+		if (getAgent().isBuyer()) {
 			// return ((double) (historicalDataReport.getNumberOfBids(-1 * price, true)
 			// + historicalDataReport
 			// .getNumberOfAsks(-1 * price, false)))
@@ -237,7 +242,7 @@ public class GDQStrategy extends FixedQuantityStrategyImpl implements
 
 		double start = a1;
 		double end = a2;
-		if (agent.isBuyer(auction)) {
+		if (getAgent().isBuyer()) {
 			if (a2 > pvalue) {
 				end = pvalue;
 			}
@@ -249,7 +254,7 @@ public class GDQStrategy extends FixedQuantityStrategyImpl implements
 
 		for (double i = start; i < end; i++) {
 			p = (alpha2 * i * i) + (alpha1 * i) + alpha0;
-			if (agent.isBuyer(auction)) {
+			if (getAgent().isBuyer()) {
 				temp = p * (pvalue - i);
 			} else {
 				temp = p * (i - pvalue);

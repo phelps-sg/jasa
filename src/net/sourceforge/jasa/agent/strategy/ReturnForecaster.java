@@ -1,8 +1,11 @@
 package net.sourceforge.jasa.agent.strategy;
 
-public interface ReturnForecaster {
+import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
+import net.sourceforge.jasa.market.Market;
 
-	public double getReturnForecast(double currentPrice);
+public interface ReturnForecaster extends ValuationPolicy {
 
-	public void setStrategy(ReturnForecastStrategy strategy);
+//	public double determineValue(Market market);
+
+//	public void setStrategy(ReturnForecastStrategy strategy);
 }

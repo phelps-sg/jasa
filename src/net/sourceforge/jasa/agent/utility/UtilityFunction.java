@@ -5,7 +5,7 @@ import net.sourceforge.jasa.market.Market;
 
 public interface UtilityFunction {
 
-	public double calculatePayoff(Market auction, int quantity, double price);
+	public double calculatePayoff(double profit);
 
 	public void setAgent(TradingAgent tradingAgent);
 	

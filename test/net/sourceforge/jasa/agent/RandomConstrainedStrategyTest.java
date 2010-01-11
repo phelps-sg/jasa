@@ -76,8 +76,9 @@ public class RandomConstrainedStrategyTest extends TestCase {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		auction = new MarketFacade(new MersenneTwister64(
 				PRNGTestSeeds.UNIT_TEST_SEED));
-		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, true, auction);
+		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, auction);
 		testStrategy = new RandomConstrainedStrategy(testAgent);
+		testStrategy.setBuy(false);
 		testStrategy.setMarkupDistribution(new Uniform(0, MAX_MARKUP, prng));
 		testAgent.setStrategy(testStrategy);
 		auctioneer = new ClearingHouseAuctioneer(auction);

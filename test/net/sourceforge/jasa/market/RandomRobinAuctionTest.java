@@ -71,9 +71,9 @@ public class RandomRobinAuctionTest extends TestCase {
 	public void setUpTraders() {
 		traders = new MockTrader[3];
 
-		traders[0] = new MockTrader(this, 30, 1000, 500, false, auction);
-		traders[1] = new MockTrader(this, 10, 10000, 500, false, auction);
-		traders[2] = new MockTrader(this, 15, 10000, 725, true, auction);
+		traders[0] = new MockTrader(this, 30, 1000, 500, auction);
+		traders[1] = new MockTrader(this, 10, 10000, 500, auction);
+		traders[2] = new MockTrader(this, 15, 10000, 725, auction);
 
 		MockTrader trader = traders[0];
 		trader.setStrategy(new MockStrategy(new Order[] {

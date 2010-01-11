@@ -32,7 +32,7 @@ import net.sourceforge.jasa.sim.util.Prototypeable;
  * @version $Revision$
  */
 
-public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
+public class MarkupStrategyDecorator extends FixedDirectionStrategy
     implements Serializable, Prototypeable {
 
 	/**
@@ -59,7 +59,7 @@ public class MarkupStrategyDecorator extends FixedQuantityStrategyImpl
 		Order strategicShout = subStrategy.modifyOrder(shout, auction);
 		double strategicPrice = strategicShout.getPrice();
 		if (strategicShout != null) {
-			if (agent.isSeller(auction)) {
+			if (isSell()) {
 				delta = markup * strategicPrice;
 			} else {
 				delta = -markup * strategicPrice;

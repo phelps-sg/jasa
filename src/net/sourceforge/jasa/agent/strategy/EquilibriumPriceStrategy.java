@@ -18,6 +18,7 @@ package net.sourceforge.jasa.agent.strategy;
 import java.io.Serializable;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -33,7 +34,7 @@ import net.sourceforge.jasa.sim.util.Prototypeable;
  * @version $Revision$
  */
 
-public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
+public class EquilibriumPriceStrategy extends FixedDirectionStrategy
     implements Serializable, Prototypeable {
 
 	public EquilibriumPriceStrategy(AbstractTradingAgent agent, double price,
@@ -62,11 +63,14 @@ public class EquilibriumPriceStrategy extends FixedQuantityStrategyImpl
 		    (MarketFacade) auction);
 		eqReport.calculate();
 		double price = eqReport.calculateMidEquilibriumPrice();
-		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)
-		    || agent.isSeller(auction) && price >= agent.getValuation(auction)) {
+		TokenTradingAgent tokenTradingAgent = (TokenTradingAgent) agent;
+		if (tokenTradingAgent.isBuyer()
+				&& price <= tokenTradingAgent.getValuation(auction)
+				|| tokenTradingAgent.isSeller()
+				&& price >= tokenTradingAgent.getValuation(auction)) {
 			shout.setPrice(price);
 		} else {
-			shout.setPrice(agent.getValuation(auction));
+			shout.setPrice(tokenTradingAgent.getValuation(auction));
 		}
 		return super.modifyShout(shout);
 	}

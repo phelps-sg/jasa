@@ -1,6 +1,8 @@
 package net.sourceforge.jasa.agent.strategy;
 
-public class FundamentalistForecaster implements ReturnForecaster {
+import net.sourceforge.jasa.market.Market;
+
+public class FundamentalistForecaster extends AbstractReturnForecaster {
 
 	protected int timeHorizon;
 	
@@ -10,19 +12,13 @@ public class FundamentalistForecaster implements ReturnForecaster {
 	}
 	
 	@Override
-	public double getReturnForecast(double currentPrice) {
+	public double determineValue(Market market) {
+		double currentPrice = market.getQuote().getMidPoint();
 		if (Double.isInfinite(currentPrice) || Double.isNaN(currentPrice)) {
 			return 0.0;
 		} 
 		double r = Math.log(fundamentalPrice / currentPrice);
 		return r / timeHorizon;
-	}
-
-
-	@Override
-	public void setStrategy(ReturnForecastStrategy strategy) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public int getTimeHorizon() {

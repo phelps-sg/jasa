@@ -23,15 +23,18 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
+import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
 import net.sourceforge.jasa.market.Order;
+import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.util.FixedLengthQueue;
 import net.sourceforge.jasa.sim.util.Parameterizable;
@@ -230,23 +233,23 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
 		// init
 		FourHeapOrderBook shoutEngine = new FourHeapOrderBook();
-		ArrayList shouts = new ArrayList();
+		ArrayList<Order> orders = new ArrayList();
 
 		// simulate a direct revelation process
-		Iterator traders = auction.getTraderIterator();
+		Iterator<Agent> traders = auction.getTraderIterator();
 		while (traders.hasNext()) {
-			AbstractTradingAgent trader = (AbstractTradingAgent) traders.next();
+			TokenTradingAgent trader = (TokenTradingAgent) traders.next();
 			int quantity = trader.determineQuantity(auction);
 			double value = trader.getValuation(auction);
-			boolean isBid = trader.isBuyer(getAuction());
-			Order shout = new Order(trader, quantity, value, isBid);
-			shouts.add(shout);
+			boolean isBid = trader.isBuyer();
+			Order order = new Order(trader, quantity, value, isBid);
+			orders.add(order);
 
 			try {
-				shoutEngine.add(shout);
+				shoutEngine.add(order);
 			} catch (DuplicateShoutException e) {
 				logger.error(e.getMessage());
-				throw new Error(e);
+				throw new AuctionRuntimeException(e);
 			}
 		}
 

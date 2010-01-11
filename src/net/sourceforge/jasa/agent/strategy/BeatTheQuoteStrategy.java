@@ -23,7 +23,7 @@ import net.sourceforge.jasa.market.Order;
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 
-public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
+public class BeatTheQuoteStrategy extends FixedDirectionStrategy {
 
 	protected double perterb = 0.20;
 	
@@ -43,7 +43,7 @@ public class BeatTheQuoteStrategy extends FixedQuantityStrategyImpl {
 
 	public boolean modifyShout(Order shout) {
 		MarketQuote quote = auction.getQuote();
-		if (agent.isBuyer(auction)) {
+		if (isBuy()) {
 			double p = quote.getAsk();
 			if (!Double.isInfinite(p) && p < agent.getValuation(auction)) {
 				// shout.setPrice(p + p * GlobalPRNG.getInstance().uniform(0,

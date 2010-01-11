@@ -26,70 +26,41 @@ import net.sourceforge.jasa.sim.EventScheduler;
 
 import org.apache.log4j.Logger;
 
+public class MockTrader extends SimpleTradingAgent {
 
-public class MockTrader extends AbstractTradingAgent {
-
-	/**
-	 * @uml.property name="lastWinningShout"
-	 * @uml.associationEnd
-	 */
 	public Order lastWinningShout = null;
 
-	/**
-	 * @uml.property name="lastWinningPrice"
-	 */
 	public double lastWinningPrice = 0;
 
-	/**
-	 * @uml.property name="lastWinningQuantity"
-	 */
 	public int lastWinningQuantity;
 
 	public int requestShoutDay = -1;
 
-	/**
-	 * @uml.property name="receivedAuctionOpen"
-	 */
 	public boolean receivedAuctionOpen = false;
 
-	/**
-	 * @uml.property name="receivedAuctionClosed"
-	 */
 	public boolean receivedAuctionClosed = false;
 
-	/**
-	 * @uml.property name="receivedAuctionClosedAfterAuctionOpen"
-	 */
 	public boolean receivedAuctionClosedAfterAuctionOpen = false;
 
 	public boolean receivedEndOfDayAfterRequestShout = true;
 
-	/**
-	 * @uml.property name="receivedRoundClosed"
-	 */
 	public int receivedRoundClosed = 0;
 
-	/**
-	 * @uml.property name="receivedRequestShout"
-	 */
 	public int receivedRequestShout = 0;
 
-	/**
-	 * @uml.property name="test"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	TestCase test;
 
 	static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
-	public MockTrader(TestCase test, int stock, long funds, EventScheduler scheduler) {
+	public MockTrader(TestCase test, int stock, long funds,
+			EventScheduler scheduler) {
 		super(stock, funds, scheduler);
 		this.test = test;
 	}
 
 	public MockTrader(TestCase test, int stock, double funds,
-	    double privateValue, boolean isSeller, EventScheduler scheduler) {
-		super(stock, funds, privateValue, isSeller, scheduler);
+	    double privateValue, EventScheduler scheduler) {
+		super(stock, funds, privateValue, scheduler);
 		this.test = test;
 	}
 
@@ -113,9 +84,9 @@ public class MockTrader extends AbstractTradingAgent {
 	// lastWinningShout = getCurrentShout();
 	// }
 
-	public void shoutAccepted(Market auction, Order shout, double price,
+	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity) {
-		super.shoutAccepted(auction, shout, price, quantity);
+		super.orderFilled(auction, shout, price, quantity);
 		System.out.println("order accepted " + shout + " at price " + price
 		    + " and quantity " + quantity);
 		lastWinningShout = shout;
@@ -126,32 +97,32 @@ public class MockTrader extends AbstractTradingAgent {
 		return 1;
 	}
 
-	public void requestShout(Market auction) {
-		super.requestShout(auction);
+	public void onAgentArrival(Market auction) {
+		super.onAgentArrival(auction);
 		System.out.println(this + ": placed " + currentOrder);
 		receivedRequestShout++;
 		requestShoutDay = auction.getDay();
 	}
 
-	public void auctionOpen(MarketEvent event) {
-		super.auctionOpen(event);
+	public void onMarketOpen(MarketEvent event) {
+		super.onMarketOpen(event);
 		receivedAuctionOpen = true;
 	}
 
-	public void auctionClosed(MarketEvent event) {
-		super.auctionClosed(event);
+	public void onMarketClosed(MarketEvent event) {
+		super.onMarketClosed(event);
 		logger.debug(this + ": recieved auctionClosed()");
 		((MarketFacade) event.getAuction()).remove(this);
 		receivedAuctionClosed = true;
 		receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
 	}
 
-	public void roundClosed(MarketEvent event) {
-		super.roundClosed(event);
+	public void onRoundClosed(MarketEvent event) {
+		super.onRoundClosed(event);
 		receivedRoundClosed++;
 	}
 
-	public void endOfDay(MarketEvent event) {
+	public void onEndOfDay(MarketEvent event) {
 		int day = event.getAuction().getDay();
 		receivedEndOfDayAfterRequestShout = day <= requestShoutDay;
 	}
@@ -160,16 +131,19 @@ public class MockTrader extends AbstractTradingAgent {
 		return true;
 	}
 
-	public double equilibriumProfits(Market auction, double equilibriumPrice,
-	    int quantity) {
-		// TODO
-		return -1;
-	}
+//	public double equilibriumProfits(Market auction, double equilibriumPrice,
+//	    int quantity) {
+//		// TODO
+//		return -1;
+//	}
 
 	public String toString() {
-		return "(" + getClass() + " id:" + hashCode() + " isSeller:" + isSeller
+		return "(" + getClass() + " id:" + hashCode() 
 		    + " valuer:" + valuer + " lastProfit:" + getLastPayoff() + " funds:"
 		    + account + " account:" + account + ")";
 	}
+
+	
+
 
 }

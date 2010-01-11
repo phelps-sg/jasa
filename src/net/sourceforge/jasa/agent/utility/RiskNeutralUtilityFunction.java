@@ -1,10 +1,11 @@
 package net.sourceforge.jasa.agent.utility;
 
+import java.io.Serializable;
+
 import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.market.Market;
 
 public class RiskNeutralUtilityFunction extends AbstractUtilityFunction
-		implements UtilityFunction {
+		implements Serializable, UtilityFunction {
 
 	protected double coefficient = 1.0;
 	
@@ -16,8 +17,8 @@ public class RiskNeutralUtilityFunction extends AbstractUtilityFunction
 		super(agent);
 	}
 
-	public double calculatePayoff(Market auction, int quantity, double price) {
-		return coefficient * calculateProfit(auction, quantity, price);
+	public double calculatePayoff(double profit) {
+		return coefficient * profit;
 	}
 
 	public double getCoefficient() {
@@ -28,6 +29,4 @@ public class RiskNeutralUtilityFunction extends AbstractUtilityFunction
 		this.coefficient = coefficient;
 	}
 	
-	
-
 }

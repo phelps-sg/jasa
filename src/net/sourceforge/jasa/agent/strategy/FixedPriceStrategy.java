@@ -27,7 +27,7 @@ import net.sourceforge.jasa.sim.util.Prototypeable;
  * @version $Revision$
  */
 
-public class FixedPriceStrategy extends FixedQuantityStrategyImpl implements
+public class FixedPriceStrategy extends FixedDirectionStrategy implements
     Serializable, Prototypeable {
 
 	protected double price;
@@ -54,12 +54,12 @@ public class FixedPriceStrategy extends FixedQuantityStrategyImpl implements
 	}
 
 	public boolean modifyShout(Order shout) {
-		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)
-		    || agent.isSeller(auction) && price >= agent.getValuation(auction)) {
+//		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)
+//		    || agent.isSeller(auction) && price >= agent.getValuation(auction)) {
 			shout.setPrice(price);
-		} else {
-			shout.setPrice(agent.getValuation(auction));
-		}
+//		} else {
+//			shout.setPrice(agent.getValuation(auction));
+//		}
 
 		return super.modifyShout(shout);
 	}

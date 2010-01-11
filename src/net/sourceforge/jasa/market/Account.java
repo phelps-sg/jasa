@@ -14,7 +14,9 @@
  */
 package net.sourceforge.jasa.market;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable {
 
 	protected double funds;
 

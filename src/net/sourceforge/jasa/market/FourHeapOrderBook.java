@@ -453,7 +453,12 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 				throw new AuctionRuntimeException("Invalid market state");
 			}
 		}
+	}
 
+	@Override
+	public boolean isEmpty() {
+		return bIn.isEmpty() && sIn.isEmpty() && 
+					bOut.isEmpty() && bIn.isEmpty();
 	}
 
 }

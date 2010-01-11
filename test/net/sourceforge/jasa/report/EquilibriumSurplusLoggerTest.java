@@ -20,6 +20,7 @@ import java.util.Iterator;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
+import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.DailyRandomValuer;
@@ -210,7 +211,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 			Iterator<Agent> i = auction.getTraderIterator();
 			while (i.hasNext()) {
 				TokenTradingAgent agent = (TokenTradingAgent) i.next();
-				if (agent.isSeller(auction)) {
+				if (agent.isSeller()) {
 					agentSurplus = (eqPrice - agent.getValuation(auction))
 					    * agent.getInitialTradeEntitlement();
 				} else {

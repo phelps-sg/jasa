@@ -69,14 +69,18 @@ public class KPricingPolicyTest extends TestCase {
 
 		agents = new MockTrader[4];
 
-		agents[0] = new MockTrader(this, 0, 0, 200, false, auction);
-		agents[1] = new MockTrader(this, 0, 0, 150, false, auction);
+		agents[0] = new MockTrader(this, 0, 0, 200, auction);
+		agents[1] = new MockTrader(this, 0, 0, 150, auction);
 
-		agents[2] = new MockTrader(this, 0, 0, 100, true, auction);
-		agents[3] = new MockTrader(this, 0, 0, 50, true, auction);
+		agents[2] = new MockTrader(this, 0, 0, 100, auction);
+		agents[3] = new MockTrader(this, 0, 0, 50, auction);
 
 		for (int i = 0; i < agents.length; i++) {
-			agents[i].setStrategy(new TruthTellingStrategy(agents[i]));
+			TruthTellingStrategy strategy = new TruthTellingStrategy(agents[i]);
+			agents[i].setStrategy(strategy);
+			if (i < 2) {
+				strategy.setBuy(true);
+			}
 			auction.register(agents[i]);
 		}
 
@@ -110,7 +114,7 @@ public class KPricingPolicyTest extends TestCase {
 		auction.run();
 
 		for (int i = 0; i < agents.length; i++) {
-			if (agents[i].isBuyer(auction)) {
+			if (agents[i].lastOrderFilled() && agents[i].isBuyer()) {
 				assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i]
 				    .getValuation(auction)));
 			}
@@ -124,7 +128,7 @@ public class KPricingPolicyTest extends TestCase {
 		auction.run();
 
 		for (int i = 0; i < agents.length; i++) {
-			if (agents[i].isSeller(auction)) {
+			if (agents[i].isSeller()) {
 				assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i]
 				    .getValuation(auction)));
 			}

@@ -47,7 +47,7 @@ import cern.jet.random.Uniform;
  * @version $Revision$
  */
 
-public class RandomUnconstrainedStrategy extends FixedQuantityStrategyImpl
+public class RandomUnconstrainedStrategy extends FixedDirectionStrategy
     implements Serializable {
 
 	public static final String P_MAXPRICE = "maxprice";

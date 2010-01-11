@@ -21,7 +21,9 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
@@ -141,10 +143,11 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 
 		equilibPrice = calculateEquilibriumPrice();
 
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			AbstractTradingAgent trader = (AbstractTradingAgent) i.next();
-			if (trader.isSeller(auction)) {
+			FixedDirectionTradingAgent trader = 
+				(FixedDirectionTradingAgent) i.next();
+			if (trader.isSeller()) {
 				numSellers++;
 				sellerCap += getCapacity(trader);
 			} else {
@@ -187,20 +190,20 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 	}
 
 	protected double getCapacity(AbstractTradingAgent trader) {
-		return ((SimpleTradingAgent) trader).getVolume();
+		return trader.getVolume(auction);
 	}
 
-	public double equilibQuant(AbstractTradingAgent t, double price) {
+	public double equilibQuant(TokenTradingAgent t, double price) {
 		double privateValue = t.getValuation(auction);
-		if (t.isBuyer(auction)) {
+		if (t.isBuyer()) {
 			if (price > privateValue) {
 				return 0;
 			} else {
-				return ((SimpleTradingAgent) t).getVolume();
+				return t.getVolume(auction);
 			}
 		} else {
 			if (price > privateValue) {
-				return ((SimpleTradingAgent) t).getVolume();
+				return t.getVolume(auction);
 			} else {
 				return 0;
 			}
@@ -234,9 +237,9 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		LinkedList<Order> shouts = new LinkedList<Order>();
 		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			SimpleTradingAgent trader = (SimpleTradingAgent) i.next();
-			Order truth = new Order(trader, trader.getVolume(), trader
-			    .getValuation(auction), trader.isBuyer(auction));
+			TokenTradingAgent trader = (TokenTradingAgent) i.next();
+			Order truth = new Order(trader, trader.getVolume(auction), trader
+			    .getValuation(auction), trader.isBuyer());
 			shouts.add(truth);
 			try {
 				auctioneer.newOrder(truth);
@@ -261,9 +264,9 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		pBT = 0;
 		pST = 0;
 		while (i.hasNext()) {
-			SimpleTradingAgent trader = (SimpleTradingAgent) i.next();
+			TokenTradingAgent trader = (TokenTradingAgent) i.next();
 			double truthProfits = truthProfits(trader.getLastPayoff());
-			if (trader.isBuyer(auction)) {
+			if (trader.isBuyer()) {
 				pBT += truthProfits;
 			} else {
 				pST += truthProfits;

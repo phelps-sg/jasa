@@ -52,7 +52,7 @@ public class RandomScheduleValuerTest extends TestCase {
 	public void testValueChanges() {
 		MarketFacade auction = new MarketFacade(
 				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
-		agent.shoutAccepted(auction, new Order(agent, 1, 100, true), 100, 1);
+		agent.orderFilled(auction, new Order(agent, 1, 100, true), 100, 1);
 		assertTrue(valuer.consumed);
 	}
 

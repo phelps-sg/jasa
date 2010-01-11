@@ -63,14 +63,21 @@ public class SerializationTests extends TestCase {
 		    .setPricingPolicy(new UniformPricingPolicy(0.5));
 		auction.setAuctioneer(auctioneer);
 
-		TokenTradingAgent seller1 = new TokenTradingAgent(10, 1, true, auction);
-		seller1.setStrategy(new TruthTellingStrategy(seller1));
+		TokenTradingAgent seller1 = new TokenTradingAgent(10, 1, auction);
+		TruthTellingStrategy seller1Strategy = new TruthTellingStrategy(seller1);
+		seller1Strategy.setBuy(false);
+		seller1.setStrategy(seller1Strategy);
 
-		TokenTradingAgent buyer1 = new TokenTradingAgent(5, 1, false, auction);
-		buyer1.setStrategy(new TruthTellingStrategy(buyer1));
+		TokenTradingAgent buyer1 = new TokenTradingAgent(5, 1, auction);
+		TruthTellingStrategy buyer1Strategy = new TruthTellingStrategy(buyer1);
+		buyer1Strategy.setBuy(true);
+		buyer1.setStrategy(buyer1Strategy);
 
-		SimpleTradingAgent buyer2 = new SimpleTradingAgent(5, true, auction);
-		buyer2.setStrategy(new TruthTellingStrategy(buyer2));
+		SimpleTradingAgent buyer2 = new SimpleTradingAgent(5, auction);
+		TruthTellingStrategy buyer2Strategy = 
+				new TruthTellingStrategy(buyer2);
+		buyer2Strategy.setBuy(true);
+		buyer2.setStrategy(buyer2Strategy);
 
 		auction.register(buyer1);
 		auction.register(buyer2);

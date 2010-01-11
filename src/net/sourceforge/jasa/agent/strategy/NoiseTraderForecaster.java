@@ -1,10 +1,11 @@
 package net.sourceforge.jasa.agent.strategy;
 
+import net.sourceforge.jasa.market.Market;
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Normal;
 import cern.jet.random.engine.RandomEngine;
 
-public class NoiseTraderForecaster implements ReturnForecaster {
+public class NoiseTraderForecaster extends AbstractReturnForecaster {
 
 	protected AbstractContinousDistribution noiseDistribution;
 
@@ -20,7 +21,7 @@ public class NoiseTraderForecaster implements ReturnForecaster {
 	}
 	
 	@Override
-	public double getReturnForecast(double currentPrice) {
+	public double determineValue(Market market) {
 		return noiseDistribution.nextDouble();
 	}
 
@@ -33,9 +34,4 @@ public class NoiseTraderForecaster implements ReturnForecaster {
 		this.noiseDistribution = noiseDistribution;
 	}
 
-	@Override
-	public void setStrategy(ReturnForecastStrategy strategy) {
-		// TODO Auto-generated method stub
-		
-	}
 }

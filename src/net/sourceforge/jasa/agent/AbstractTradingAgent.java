@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
 import net.sourceforge.jasa.agent.utility.RiskNeutralUtilityFunction;
 import net.sourceforge.jasa.agent.utility.UtilityFunction;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
@@ -101,10 +102,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 
 	protected UtilityFunction utilityFunction;
 	
-	/**
-	 * Flag indicating whether this trader is a seller or buyer.
-	 */
-	protected boolean isSeller = false;
 
 	/**
 	 * The bidding strategy for this trader. The default strategy is to bid
@@ -125,22 +122,21 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	/**
 	 * Did the last shout we place in the market result in a transaction?
 	 */
-	protected boolean lastShoutAccepted = false;
+	protected boolean lastOrderFilled = false;
 
 	/**
-	 * The current shout for this trader.
+	 * The current position for this trader.
 	 */
 	protected Order currentOrder;
 
 	/**
-	 * The arbitrary grouping that this agent belongs to.
+	 * The grouping that this agent belongs to.
 	 */
 	protected AgentGroup group = null;
 	
 	protected Set<Market> markets = new HashSet<Market>();
 
 	static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
-
 	
 	/**	
 	 * @param stock
@@ -153,46 +149,47 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	 *          Whether or not this trader is a seller.
 	 */
 	public AbstractTradingAgent(int stock, double funds, double privateValue,
-	    boolean isSeller, EventScheduler scheduler) {
+			EventScheduler scheduler) {
 		super(scheduler);
 		initialStock = stock;
 		initialFunds = funds;
 		account = new Account(this, initialFunds);
 		this.valuer = new FixedValuer(privateValue);
 		this.utilityFunction = new RiskNeutralUtilityFunction(this);
-		this.isSeller = isSeller;
 		initialise();
 	}
 
 	public AbstractTradingAgent(int stock, double funds, double privateValue,
-	    boolean isSeller, TradingStrategy strategy, EventScheduler scheduler) {
-		this(stock, funds, privateValue, isSeller, scheduler);
+			TradingStrategy strategy, EventScheduler scheduler) {
+		this(stock, funds, privateValue, scheduler);
 		this.strategy = strategy;
 	}
 
-	public AbstractTradingAgent(int stock, double funds, EventScheduler scheduler) {
-		this(stock, funds, 0, false, scheduler);
+	public AbstractTradingAgent(int stock, double funds,
+			EventScheduler scheduler) {
+		this(stock, funds, 0, scheduler);
 	}
 	
 	public AbstractTradingAgent(EventScheduler scheduler) {
-		this(0, 0, 0, false, scheduler);
+		this(0, 0, 0, scheduler);
 	}
 
 	/**
 	 * Place a shout in the market as determined by the agent's strategy.
 	 */
-	public void requestShout(Market market) {
+	public void onAgentArrival(Market market) {
 		try {
 			if (currentOrder != null) {
 				market.removeOrder(currentOrder);
 			}
 			Order newOrder = strategy.modifyOrder(currentOrder, market);
 			lastPayoff = 0;
-			lastShoutAccepted = false;
+			lastOrderFilled = false;
 			if (active() && newOrder != null) {
 				if (logger.isDebugEnabled()) logger.debug(newOrder);
 				market.placeOrder(newOrder);
 			}
+			currentOrder = newOrder;
 		} catch (AuctionClosedException e) {
 			logger.debug("requestShout(): Received AuctionClosedException");
 			// do nothing
@@ -210,29 +207,29 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		if (ev instanceof MarketEvent) {
 			MarketEvent event = (MarketEvent) ev;
 			if (event instanceof MarketOpenEvent) {
-				auctionOpen(event);
+				onMarketOpen(event);
 			} else if (event instanceof MarketClosedEvent) {
-				auctionClosed(event);
+				onMarketClosed(event);
 			} else if (event instanceof RoundClosedEvent) {
-				roundClosed(event);
+				onRoundClosed(event);
 			} else if (event instanceof EndOfDayEvent) {
-				endOfDay(event);
+				onEndOfDay(event);
 			}
 		}
 		valuer.eventOccurred(ev);
 		strategy.eventOccurred(ev);
 	}
 
-	public void roundClosed(MarketEvent event) {
+	public void onRoundClosed(MarketEvent event) {
 		// Do nothing
 	}
 
-	public void endOfDay(MarketEvent event) {
+	public void onEndOfDay(MarketEvent event) {
 		// Do nothing
 	}
 
-	public void auctionOpen(MarketEvent event) {
-		lastShoutAccepted = false;
+	public void onMarketOpen(MarketEvent event) {
+		lastOrderFilled = false;
 
 		if (valuer == null) {
 			throw new AuctionRuntimeException(
@@ -245,11 +242,11 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		}
 	}
 
-	public void auctionClosed(MarketEvent event) {
+	public void onMarketClosed(MarketEvent event) {
 		((MarketFacade) event.getAuction()).remove(this);
 	}
 
-	public Order getCurrentShout() {
+	public Order getCurrentOrder() {
 		return currentOrder;
 	}
 
@@ -257,7 +254,8 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		return account;
 	}
 
-	public synchronized void giveFunds(AbstractTradingAgent recipient, double amount) {
+	public synchronized void giveFunds(AbstractTradingAgent recipient,
+			double amount) {
 		account.transfer(recipient.getAccount(), amount);
 	}
 
@@ -285,7 +283,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		account.setFunds(initialFunds);
 		lastPayoff = 0;
 		totalPayoff = 0;
-		lastShoutAccepted = false;
+		lastOrderFilled = false;
 		currentOrder = null;
 		if (strategy != null) {
 			strategy.initialise();
@@ -313,21 +311,9 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		((FixedValuer) valuer).setValue(privateValue);
 	}
 
-	public boolean isSeller(Market auction) {
-		return isSeller;
-	}
-
-	public boolean isBuyer(Market auction) {
-		return !isSeller;
-	}
-
 	public void setStrategy(TradingStrategy strategy) {
 		this.strategy = strategy;
 		strategy.setAgent(this);
-	}
-
-	public void setIsSeller(boolean isSeller) {
-		this.isSeller = isSeller;
 	}
 
 	public TradingStrategy getStrategy() {
@@ -362,15 +348,19 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	}
 
 	public double calculatePayoff(Market auction, int quantity, double price) {
-		return utilityFunction.calculatePayoff(auction, quantity, price);
+		double profit = calculateProfit(auction, quantity, price);
+		return utilityFunction.calculatePayoff(profit);
 	}
 
-	public void shoutAccepted(Market auction, Order shout, double price,
+//	public abstract double calculateProfit(Market auction, int quantity,
+//			double price);
+
+	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity) {
-		lastShoutAccepted = true;
+		lastOrderFilled = true;
 		lastPayoff = calculatePayoff(auction, quantity, price);
 		totalPayoff += lastPayoff;
-		if (isBuyer(auction)) {
+		if (shout.isBid()) {
 			stock.remove(quantity);
 		} else {
 			account.credit((price - getValuation(auction)) * quantity);
@@ -378,8 +368,8 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		valuer.consumeUnit(auction);
 	}
 
-	public boolean lastShoutAccepted() {
-		return lastShoutAccepted;
+	public boolean lastOrderFilled() {
+		return lastOrderFilled;
 	}
 
 	public ValuationPolicy getValuationPolicy() {
@@ -434,13 +424,8 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		return markets.add(market);
 	}
 
-	/**
-	 * Calculate the hypothetical surplus this agent will receive if the market
-	 * had cleared uniformly at the specified equilibrium price and quantity.
-	 */
-	public abstract double equilibriumProfits(Market auction,
-	    double equilibriumPrice, int quantity);
-
+	
+	
 	// TODO: jniu
 	public double equilibriumProfitsEachDay(Market auction,
 	    double equilibriumPrice, int quantity) {
@@ -470,7 +455,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 			throw new RuntimeException("Agent is not configured in any markets");
 		}
 		for(Market market : markets) {
-			requestShout(market);
+			onAgentArrival(market);
 		}
 	}
 
@@ -486,6 +471,40 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		strategy.setAgent(this);
 	}
 
+	public int getVolume(Market auction) {
+		return ((FixedQuantityStrategy) strategy).getQuantity();
+	}
+
+	public boolean isBuyer() {
+		return currentOrder.isBid();
+	}
+	
+	public boolean isSeller() {
+		return !isBuyer();
+	}
+
+	@Override
+	public double calculateProfit(Market auction, int quantity, double price) {
+//		if (currentOrder == null) {
+//			return 0;
+//		}
+		if (isBuyer()) {
+			return (getValuation(auction) - price) * quantity;
+		} else {
+			return  (price - getValuation(auction)) * quantity;
+		}
+	}
+	
+	/**
+	 * Calculate the hypothetical surplus this agent will receive if the market
+	 * had cleared uniformly at the specified equilibrium price and quantity.
+	 */
+	public double equilibriumProfits(Market auction, double equilibriumPrice,
+			int quantity) {
+		// TODO Auto-generated method stub
+		return calculateProfit(auction, quantity, equilibriumPrice);
+	}
+	
 	/**
 	 * Determine whether or not this trader is active. Inactive traders do not
 	 * place shouts in the market, but do carry on learning through their

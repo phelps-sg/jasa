@@ -54,10 +54,11 @@ public class KaplanStrategyTest extends TestCase {
 
 	public void setUp() {
 		auction = new MarketFacade(new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
-		trader = new MockTrader(this, 0, 0, 10, true, auction);
+		trader = new MockTrader(this, 0, 0, 10, auction);
 		strategy = new KaplanStrategy();
 		strategy.setS(S);
 		strategy.setT(T);
+		strategy.setBuy(true);
 		trader.setStrategy(strategy);
 		strategy.setAgent(trader);
 		auction.setMaximumRounds(100);
@@ -93,7 +94,7 @@ public class KaplanStrategyTest extends TestCase {
 		try {
 			auction.step();
 
-			trader.setIsSeller(true);
+			strategy.setBuy(false);
 
 			quote.setAsk(109);
 			quote.setBid(100);
@@ -111,7 +112,7 @@ public class KaplanStrategyTest extends TestCase {
 			quote.setBid(1100);
 			assertTrue(strategy.smallSpread());
 
-			trader.setIsSeller(false);
+			strategy.setBuy(true);
 
 			quote.setAsk(1000);
 			quote.setBid(1100);

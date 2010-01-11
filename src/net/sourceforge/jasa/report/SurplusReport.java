@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
+import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.Agent;
@@ -139,8 +141,9 @@ public class SurplusReport extends EquilibriumReport {
 		pBA = 0;
 		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
-			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
-			if (agent.isSeller(auction)) {
+			FixedDirectionTradingAgent agent = 
+				(FixedDirectionTradingAgent) i.next();
+			if (agent.isSeller()) {
 				pSA += agent.getTotalPayoff();
 			} else {
 				pBA += agent.getTotalPayoff();
@@ -149,8 +152,8 @@ public class SurplusReport extends EquilibriumReport {
 	}
 
 	public double equilibriumProfits(int quantity, AbstractTradingAgent trader) {
-		return trader.equilibriumProfits(auction, calculateMidEquilibriumPrice(),
-		    quantity);
+		return trader.equilibriumProfits(auction,
+				calculateMidEquilibriumPrice(), quantity);
 	}
 
 	public void initialise() {
