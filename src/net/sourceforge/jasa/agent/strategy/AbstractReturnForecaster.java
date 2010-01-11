@@ -1,6 +1,7 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.TradingAgent;
+import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.sim.event.SimEvent;
 

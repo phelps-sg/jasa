@@ -1,5 +1,6 @@
-package net.sourceforge.jasa.agent.strategy;
+package net.sourceforge.jasa.agent.valuation;
 
+import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
 
 public class FundamentalistForecaster extends AbstractReturnForecaster {

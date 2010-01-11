@@ -1,6 +1,7 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.MockTrader;
+import net.sourceforge.jasa.agent.valuation.NoiseTraderForecaster;
 import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
