@@ -33,28 +33,12 @@ import cern.jet.random.engine.MersenneTwister64;
 
 public class ZITraderAgentTest extends TestCase {
 
-	/**
-	 * @uml.property name="buyer"
-	 * @uml.associationEnd
-	 */
 	TokenTradingAgent buyer;
 
-	/**
-	 * @uml.property name="seller"
-	 * @uml.associationEnd
-	 */
 	TokenTradingAgent seller;
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
 	MarketFacade auction;
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
 	ClearingHouseAuctioneer auctioneer;
 
 	static final int NUM_ROUNDS = 1000;
@@ -88,6 +72,7 @@ public class ZITraderAgentTest extends TestCase {
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);
+		auction.initialise();
 	}
 
 	/**

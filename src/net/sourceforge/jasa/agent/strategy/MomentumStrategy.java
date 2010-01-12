@@ -116,34 +116,38 @@ public abstract class MomentumStrategy extends FixedDirectionStrategy implements
 	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
 		if (event instanceof TransactionExecutedEvent) {
-			transactionExecuted((TransactionExecutedEvent) event);
+			onTransactionExecuted((TransactionExecutedEvent) event);
 		} else if (event instanceof OrderPlacedEvent) {
-			shoutPlaced((OrderPlacedEvent) event);
+			onOrderPlaced((OrderPlacedEvent) event);
 		} else if (event instanceof AgentPolledEvent) {
-			agentPolled((AgentPolledEvent) event);
+			onAgentPolled((AgentPolledEvent) event);
 		} else if (event instanceof MarketOpenEvent) {
-			if (isSell()) {
-				setMargin(initialMarginDistribution.nextDouble());
-			} else {
-				setMargin(-initialMarginDistribution.nextDouble());
-			}
-			updateCurrentPrice();
+			onMarketOpen();
 		}
 	}
 
-	protected void agentPolled(AgentPolledEvent event) {
+	public void onMarketOpen() {
+		if (isSell()) {
+			setMargin(initialMarginDistribution.nextDouble());
+		} else {
+			setMargin(-initialMarginDistribution.nextDouble());
+		}
+		updateCurrentPrice();
+	}
+
+	protected void onAgentPolled(AgentPolledEvent event) {
 		auction = event.getAuction();
 		if (event.getAgent() != agent) {
 			adjustMargin();
 		}
 	}
 
-	protected void shoutPlaced(OrderPlacedEvent event) {
+	protected void onOrderPlaced(OrderPlacedEvent event) {
 		lastShout = event.getOrder();
 		lastShoutAccepted = false;
 	}
 
-	protected void transactionExecuted(TransactionExecutedEvent event) {
+	protected void onTransactionExecuted(TransactionExecutedEvent event) {
 		lastShoutAccepted = lastShout.isAsk() && event.getAsk().equals(lastShout)
 		    || lastShout.isBid() && event.getBid().equals(lastShout);
 		if (lastShoutAccepted) {
@@ -153,7 +157,7 @@ public abstract class MomentumStrategy extends FixedDirectionStrategy implements
 		}
 	}
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 
 	}
 

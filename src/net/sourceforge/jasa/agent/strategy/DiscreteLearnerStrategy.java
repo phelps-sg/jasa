@@ -76,7 +76,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 	}
 
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 		if (agent.active()) {
 			learn(auction);
 		}

@@ -149,12 +149,12 @@ class MockAuctioneer extends TransparentAuctioneer {
 		currentQuote = staticQuote;
 	}
 
-	public void endOfAuctionProcessing() {
-		super.endOfAuctionProcessing();
-	}
+//	public void endOfAuctionProcessing() {
+//		super.endOfAuctionProcessing();
+//	}
 
-	public void endOfRoundProcessing() {
-		super.endOfRoundProcessing();
+	public void onRoundClosed() {
+		super.onRoundClosed();
 	}
 
 	public boolean shoutsVisible() {

@@ -18,7 +18,6 @@ package net.sourceforge.jasa.market;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import net.sourceforge.jasa.event.DayOpeningEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
@@ -53,7 +52,8 @@ import org.apache.log4j.Logger;
  * 
  */
 
-public class MarketSimulation extends AbstractSimulation implements Serializable {
+public class MarketSimulation extends AbstractSimulation 
+		implements Serializable {
 
 	protected Market market;
 	
@@ -69,33 +69,29 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 	protected Account account = new Account();
 
 	/**
-	 * Optional graphical console
-	 */
-	protected AuctionConsoleFrame guiConsole = null;
-
-	/**
 	 * The current trading day (period)
 	 */
 	protected int day = 0;
 
-	protected TimingCondition closingCondition = new NullAuctionClosingCondition();
+	protected TimingCondition closingCondition 
+		= new NullAuctionClosingCondition();
 
 	protected TimingCondition dayEndingCondition;
 
 	protected boolean endOfRound = false;
-		
 
-	public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
+	public static final String ERROR_SHOUTSVISIBLE 
+	= "Auctioneer does not permit shout inspection";
 
 	static Logger logger = Logger.getLogger(MarketSimulation.class);
 
 
 	public MarketSimulation(SimulationController controller) {
 		super(controller);
-		initialise();
+		initialiseCounters();
 	}
 	
-	public void initialise() {
+	public void initialiseCounters() {
 		day = 0;
 		round = 0;
 		endOfRound = false;
@@ -103,8 +99,13 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 		closed = false;	
 	}
 	
+	public void initialise() {
+		initialiseCounters();
+		addListener(market.getAuctioneer());
+	}
+	
 	public void reset() {
-		initialise();
+		initialiseCounters();
 	}
 	
 	public void informAuctionClosed() {
@@ -115,9 +116,9 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 		fireEvent(new EndOfDayEvent(market, getRound()));
 	}
 
-	public void informBeginOfDay() {
-		fireEvent(new DayOpeningEvent(market, getRound()));
-	}
+//	public void informBeginOfDay() {
+//		fireEvent(new DayOpeningEvent(market, getRound()));
+//	}
 
 	public void informAuctionOpen() {
 		fireEvent(new MarketOpenEvent(market, getRound()));
@@ -129,22 +130,6 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 		} else {			
 			endOfRound = false;
 		}
-	}
-
-	/**
-	 * Return the number of traders currently active in the market.
-	 */
-	public int getNumberOfTraders() {
-//		return activeTraders.size();
-		return 0;
-	}
-
-	/**
-	 * Return the total number of traders registered in the market.
-	 */
-	public int getNumberOfRegisteredTraders() {
-//		return registeredTraders.size();
-		return 0;
 	}
 
 	/**
@@ -224,7 +209,7 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 	public void endRound() {
 		informRoundClosing();
 
-		getAuctioneer().endOfRoundProcessing();
+//		getAuctioneer().endOfRoundProcessing();
 
 		endOfRound = true;
 		round++;
@@ -324,7 +309,7 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 		// report.debug("day = " + day + " of " + getMaximumDays());
 		round = 0;
 		informEndOfDay();
-		getAuctioneer().endOfDayProcessing();
+//		getAuctioneer().endOfDayProcessing();
 		day++;
 	}
 
@@ -373,14 +358,15 @@ public class MarketSimulation extends AbstractSimulation implements Serializable
 	}
 
 	public void setMaximumRounds(int maximumRounds) {
-		MaxRoundsAuctionClosingCondition cond = new MaxRoundsAuctionClosingCondition(
-		    market);
+		MaxRoundsAuctionClosingCondition cond = 
+			new MaxRoundsAuctionClosingCondition(market);
 		cond.setMaximumRounds(maximumRounds);
 		setAuctionClosingCondition(cond);
 	}
 
 	public int getMaximumRounds() {
-		TimingCondition cond = getAuctionClosingCondition(MaxRoundsAuctionClosingCondition.class);
+		TimingCondition cond = 
+			getAuctionClosingCondition(MaxRoundsAuctionClosingCondition.class);
 
 		if (cond != null) {
 			return ((MaxRoundsAuctionClosingCondition) cond).getMaximumRounds();

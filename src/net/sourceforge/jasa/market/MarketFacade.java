@@ -47,7 +47,8 @@ import cern.jet.random.engine.RandomEngine;
  * @version $Revision$
  */
 
-public class MarketFacade implements EventScheduler, Market, Serializable, Runnable {
+public class MarketFacade implements EventScheduler, Market, Serializable,
+		Runnable {
 
 	protected Auctioneer auctioneer = null;
 	
@@ -108,7 +109,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 //		assert seller.isSeller(getMarket());
 
 		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
-		    marketSimulation.getMarket(), marketSimulation.getRound(), ask, bid, buyerCharge, ask.getQuantity());
+				marketSimulation.getMarket(), marketSimulation.getRound(), ask,
+				bid, buyerCharge, ask.getQuantity());
 		fireEvent(transactionEvent);
 		
 //		System.out.println(transactionEvent);
@@ -120,7 +122,6 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 
 		buyer.orderFilled(getMarket(), bid, buyerCharge, quantity);
 		seller.orderFilled(getMarket(), ask, sellerPayment, quantity);
-
 	}
 
 	public Market getMarket() {
@@ -132,7 +133,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 	 * of trading.
 	 */
 	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException {
-		return auctioneer.orderAccepted(shout);
+		return auctioneer.orderFilled(shout);
 	}
 
 	/**
@@ -285,6 +286,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 
 	public void setAuctioneer(Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
+//		addListener(auctioneer);
 //		auctioneer.setAuction(getMarket());
 	}
 
@@ -354,25 +356,22 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 		auctioneer.printState();
 	}
 
-	public void initialise() {
-		marketSimulation.initialiseAgents();
-		controller.addListener(auctioneer);
-//		for(Agent agent : getTraders().getAgentList().getAgents()) {
-//			AbstractTradingAgent trader = (AbstractTradingAgent) agent;
-//			trader.register(this);
-//		}
-	}
+//	public void initialise() {
+//		marketSimulation.initialiseAgents();
+//		marketSimulation.addListener(auctioneer);
+//		controller.addListener(auctioneer);
+//	}
 	
 	public void register(TradingAgent trader) {
 		getTraders().add(trader);
 		trader.register(this);
 	}
 
-	public void run() {
-		initialise();
-		controller.run();
-//		marketSimulation.run();
-	}
+//	public void run() {
+//		initialise();
+//		controller.run();
+////		marketSimulation.run();
+//	}
 
 	public void step() throws AuctionClosedException {
 		marketSimulation.step();
@@ -404,5 +403,14 @@ public class MarketFacade implements EventScheduler, Market, Serializable, Runna
 		logger.info("Starting...");
 		market.run();	
 		logger.info("done.");
+	}
+	
+	public void initialise() {
+		addListener(auctioneer);
+	}
+
+	public void run() {
+		initialise();
+		controller.run();
 	}
 }

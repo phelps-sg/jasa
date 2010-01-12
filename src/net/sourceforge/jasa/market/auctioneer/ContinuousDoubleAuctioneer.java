@@ -55,12 +55,21 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 		currentQuote = new MarketQuote(askQuote(), bidQuote());
 	}
 
-	public void endOfRoundProcessing() {
-		super.endOfRoundProcessing();
+	@Override
+	public void onRoundClosed() {
+		super.onRoundClosed();
+	}
+	
+	@Override
+	public void onEndOfDay() {
+		super.onEndOfDay();
+		orderBook.reset();
 	}
 
-	public void endOfAuctionProcessing() {
-		super.endOfAuctionProcessing();
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
 	}
 
 	public boolean shoutsVisible() {

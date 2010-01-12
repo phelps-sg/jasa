@@ -108,8 +108,8 @@ public class MixedStrategy extends AbstractStrategy implements Parameterizable,
 		return currentStrategy.modifyShout(shout);
 	}
 
-	public void endOfRound(Market auction) {
-		currentStrategy.endOfRound(auction);
+	public void onRoundClosed(Market auction) {
+		currentStrategy.onRoundClosed(auction);
 	}
 
 	public TradingStrategy getCurrentStrategy() {

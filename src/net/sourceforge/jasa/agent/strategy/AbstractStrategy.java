@@ -107,15 +107,13 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof RoundClosedEvent) {
-			endOfRound(((RoundClosedEvent) event).getAuction());
+			onRoundClosed(((RoundClosedEvent) event).getAuction());
 		}
 	}
 
 	public AbstractTradingAgent getAgent() {
 		return agent;
 	}
-	
-	
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
@@ -140,5 +138,5 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 //		return null;
 //	}
 
-	public abstract void endOfRound(Market auction);
+	public abstract void onRoundClosed(Market auction);
 }

@@ -85,6 +85,7 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 		auction.register(trader1);
 		auction.register(trader2);
 		auction.addListener(this);
+		auction.initialise();
 	}
 
 	public void testPurchase() {

@@ -47,15 +47,15 @@ public class ClearingHouseAuctioneer extends TransparentAuctioneer implements
 		currentQuote = new MarketQuote(askQuote(), bidQuote());
 	}
 
-	public void endOfRoundProcessing() {
-		super.endOfRoundProcessing();
+	public void onRoundClosed() {
+		super.onRoundClosed();
 		generateQuote();
 		clear();
 	}
 
-	public void endOfAuctionProcessing() {
-		super.endOfAuctionProcessing();
-	}
+//	public void endOfAuctionProcessing() {
+//		super.endOfAuctionProcessing();
+//	}
 
 	public Account getAccount() {
 		return account;

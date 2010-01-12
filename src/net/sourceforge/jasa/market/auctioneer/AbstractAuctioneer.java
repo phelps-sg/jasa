@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 
 
+import net.sourceforge.jasa.event.EndOfDayEvent;
+import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
 import net.sourceforge.jasa.market.IllegalOrderException;
@@ -189,8 +191,7 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 		return market;
 	}
 
-	public void endOfDayProcessing() {
-		orderBook.reset();
+	public void onEndOfDay() {
 	}
 
 	public void clear() {
@@ -227,14 +228,17 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	}
 
 	public void eventOccurred(SimEvent event) {
+		if (event instanceof EndOfDayEvent) {
+			onEndOfDay();
+		} else if (event instanceof RoundClosedEvent) {
+			onRoundClosed();
+		}
 		if (event instanceof SimulationStartingEvent) {
 			reset();
 		}
 	}
-
-	public void endOfAuctionProcessing() {
-		// default is do nothing
-	}
+	
+	public abstract void onRoundClosed();
 
 	public void recordMatch(Order ask, Order bid) {
 		// default is do nothing

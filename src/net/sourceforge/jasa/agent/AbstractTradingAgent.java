@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
 import net.sourceforge.jasa.agent.utility.RiskNeutralUtilityFunction;
 import net.sourceforge.jasa.agent.utility.UtilityFunction;
@@ -476,7 +477,11 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	}
 
 	public boolean isBuyer() {
-		return currentOrder.isBid();
+		if (currentOrder == null) {
+			return ((FixedDirectionStrategy) strategy).isBuy();
+		} else {
+			return currentOrder.isBid();
+		}
 	}
 	
 	public boolean isSeller() {

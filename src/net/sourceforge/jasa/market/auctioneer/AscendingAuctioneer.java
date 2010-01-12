@@ -108,18 +108,18 @@ public class AscendingAuctioneer extends TransparentAuctioneer implements
 //		initialise();
 //	}
 
-	public void endOfRoundProcessing() {
-		super.endOfRoundProcessing();
+	public void onRoundClosed() {
+		super.onRoundClosed();
 		generateQuote();
 	}
 
-	public void endOfAuctionProcessing() {
-		super.endOfAuctionProcessing();
-		logger.debug("Clearing at end of market..");
-		orderBook.printState();
-		clear();
-		logger.debug("clearing done.");
-	}
+//	public void endOfAuctionProcessing() {
+//		super.endOfAuctionProcessing();
+//		logger.debug("Clearing at end of market..");
+//		orderBook.printState();
+//		clear();
+//		logger.debug("clearing done.");
+//	}
 
 	public void generateQuote() {
 		currentQuote = new MarketQuote(null, orderBook.getLowestMatchedBid());

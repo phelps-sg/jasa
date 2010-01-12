@@ -81,7 +81,7 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	 */
 	public boolean shoutsVisible();
 
-	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException;
+	public boolean orderFilled(Order shout) throws ShoutsNotVisibleException;
 
 	public boolean transactionsOccurred() throws ShoutsNotVisibleException;
 
@@ -90,27 +90,6 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	public Order getLastBid() throws ShoutsNotVisibleException;
 
 	public Order getLastShout() throws ShoutsNotVisibleException;
-
-	/**
-	 * Perform any auctioneer-specific EndOfRoundEvent processing. Different
-	 * market types are implemented by different auctioneers, which perform
-	 * different operations at the end of each round.
-	 */
-	public void endOfRoundProcessing();
-
-	/**
-	 * Perform any auctioneer-specific EndOfAuctionEvent processing. Different
-	 * market types are implemented by different auctioneers, which perform
-	 * different operations at the end of each market.
-	 */
-	public void endOfAuctionProcessing();
-
-	/**
-	 * Perform any auctioneer-specific EndOfDayEvent processing. Different market
-	 * types are implemented by different auctioneers, which perform different
-	 * operations at the end of each day.
-	 */
-	public void endOfDayProcessing();
 
 	/**
 	 * Get the account which holds any budget surplus or deficit for the

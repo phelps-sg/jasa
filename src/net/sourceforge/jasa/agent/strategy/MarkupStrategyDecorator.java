@@ -75,7 +75,7 @@ public class MarkupStrategyDecorator extends FixedDirectionStrategy
 		}
 	}
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 
 	}
 

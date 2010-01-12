@@ -262,7 +262,7 @@ public class GDStrategy extends FixedDirectionStrategy implements
 		}
 	}
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 		// Do nothing
 	}
 

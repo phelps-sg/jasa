@@ -61,7 +61,7 @@ public abstract class TransparentAuctioneer extends AbstractAuctioneer {
 		lastShout = shout;
 	}
 
-	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException {
+	public boolean orderFilled(Order shout) throws ShoutsNotVisibleException {
 		return acceptedShouts.contains(shout);
 	}
 
@@ -69,7 +69,7 @@ public abstract class TransparentAuctioneer extends AbstractAuctioneer {
 		return !acceptedShouts.isEmpty();
 	}
 
-	public void endOfRoundProcessing() {
+	public void onRoundClosed() {
 		acceptedShouts.clear();
 	}
 

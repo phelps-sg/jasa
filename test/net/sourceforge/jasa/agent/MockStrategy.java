@@ -42,11 +42,11 @@ public class MockStrategy extends AbstractStrategy {
 
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof RoundClosedEvent) {
-			endOfRound(((RoundClosedEvent) event).getAuction());
+			onRoundClosed(((RoundClosedEvent) event).getAuction());
 		}
 	}
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 		currentShout++;
 	}
 

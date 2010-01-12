@@ -268,7 +268,7 @@ public class GDQStrategy extends FixedDirectionStrategy implements
 		return 2 * alpha2 * a2 + alpha1;
 	}
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 		// Do nothing
 	}
 

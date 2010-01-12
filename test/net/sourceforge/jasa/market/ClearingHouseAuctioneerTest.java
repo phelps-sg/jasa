@@ -14,6 +14,7 @@
  */
 package net.sourceforge.jasa.market;
 
+import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
@@ -56,7 +57,7 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 			e.printStackTrace();
 		}
 
-		auctioneer.endOfRoundProcessing();
+		auctioneer.eventOccurred(new RoundClosedEvent(auction, 0));
 		auctioneer.printState();
 
 		quote = auctioneer.getQuote();
@@ -75,7 +76,7 @@ public class ClearingHouseAuctioneerTest extends AuctioneerTest {
 			e.printStackTrace();
 		}
 
-		auctioneer.endOfRoundProcessing();
+		auctioneer.eventOccurred(new RoundClosedEvent(auction, 1));
 		auctioneer.printState();
 
 		quote = auctioneer.getQuote();

@@ -105,12 +105,12 @@ public class RandomRobinAuctionTest extends TestCase {
 		    .setPricingPolicy(new UniformPricingPolicy(1));
 		auction.setAuctioneer(auctioneer);
 		auctioneer.setMarket(auction);
+		auction.initialise();
 	}
 
 	public void setUpAuction() {
 		auction = new MarketFacade(prng);
 		auction.setMaximumRounds(3);
-		
 	}
 
 //	public void testDailyStats() {

@@ -38,7 +38,7 @@ public class BeatTheQuoteStrategy extends FixedDirectionStrategy {
 		this.prng = prng;
 	}
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 	}
 
 	public boolean modifyShout(Order shout) {

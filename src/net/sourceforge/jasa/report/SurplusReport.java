@@ -133,7 +133,7 @@ public class SurplusReport extends EquilibriumReport {
 		mPB = (pBA - pBCE) / pBCE;
 		mPS = (pSA - pSCE) / pSCE;
 
-		assert eA <= 100 + 10E-6 && eA >= 0;
+//		assert eA <= 100 + 10E-6 && eA >= 0;
 	}
 
 	protected void calculateActualProfits() {

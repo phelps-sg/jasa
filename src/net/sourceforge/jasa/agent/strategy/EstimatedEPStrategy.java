@@ -74,7 +74,7 @@ public class EstimatedEPStrategy extends FixedDirectionStrategy {
 		return super.modifyShout(shout);
 	}
 
-	public void endOfRound(Market auction) {
+	public void onRoundClosed(Market auction) {
 
 	}
 

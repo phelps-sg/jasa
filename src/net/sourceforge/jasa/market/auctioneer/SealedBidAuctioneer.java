@@ -29,7 +29,7 @@ public abstract class SealedBidAuctioneer extends AbstractAuctioneer {
 		return false;
 	}
 
-	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException {
+	public boolean orderFilled(Order shout) throws ShoutsNotVisibleException {
 		throw new ShoutsNotVisibleException(getClass()
 		    + " implements a sealed-bid policy");
 	}
