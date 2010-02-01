@@ -41,7 +41,7 @@ public class ReturnForecastStrategyTest extends TestCase {
 	public void testNoiseTraderForecast() {
 		MarketQuote quote = new MarketQuote(1.00, 1.00);
 		market.setQuote(quote);
-		double priceForecast = strategy.getPriceForecast();
+		double priceForecast = strategy.getPriceForecast(1);
 		System.out.println("priceForecast = " + priceForecast);
 		assertTrue(priceForecast <= Math.exp(1));
 	}
@@ -165,8 +165,12 @@ public class ReturnForecastStrategyTest extends TestCase {
 		public void setQuote(MarketQuote quote) {
 			this.quote = quote;
 		}
-		
-		
+
+		@Override
+		public double getLastTransactionPrice() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 		
 	}
 }

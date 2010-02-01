@@ -48,6 +48,7 @@ import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.AbstractAgent;
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.EventScheduler;
+import net.sourceforge.jasa.sim.event.AgentArrivalEvent;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.EventListener;
 import net.sourceforge.jasa.sim.strategy.Strategy;
@@ -463,7 +464,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	}
 
 	@Override
-	public void interact(List<Agent> other) {
+	public void onAgentArrival(AgentArrivalEvent event) {
 		if (markets == null || markets.isEmpty()) {
 			throw new RuntimeException("Agent is not configured in any markets");
 		}
