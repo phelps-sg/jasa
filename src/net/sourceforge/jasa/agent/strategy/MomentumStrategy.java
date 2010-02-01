@@ -26,6 +26,7 @@ import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.learning.Learner;
 import net.sourceforge.jasa.sim.learning.MimicryLearner;
@@ -111,6 +112,17 @@ public abstract class MomentumStrategy extends FixedDirectionStrategy implements
 	public boolean modifyShout(Order shout) {
 		shout.setPrice(currentPrice);
 		return super.modifyShout(shout);
+	}
+	
+	
+
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		super.subscribeToEvents(scheduler);
+		scheduler.addListener(TransactionExecutedEvent.class, this);
+		scheduler.addListener(OrderPlacedEvent.class, this);
+		scheduler.addListener(AgentPolledEvent.class, this);
+		scheduler.addListener(MarketOpenEvent.class, this);
 	}
 
 	public void eventOccurred(SimEvent event) {

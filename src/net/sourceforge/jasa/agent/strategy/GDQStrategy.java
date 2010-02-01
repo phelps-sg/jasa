@@ -25,6 +25,7 @@ import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.HistoricalDataReport;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 
 import org.apache.log4j.Logger;
@@ -88,24 +89,6 @@ public class GDQStrategy extends FixedDirectionStrategy implements
 		return clone;
 	}
 
-	public void eventOccurred(MarketEvent event) {
-		super.eventOccurred(event);
-		if (event instanceof MarketOpenEvent) {
-			auctionOpen((MarketOpenEvent) event);
-		}
-	}
-
-	public void auctionOpen(MarketOpenEvent event) {
-//		auction = event.getAuction();
-//		historicalDataReport = (HistoricalDataReport) auction
-//		    .getReport(HistoricalDataReport.class);
-//
-//		if (historicalDataReport == null) {
-//			throw new AuctionRuntimeException(getClass()
-//			    + " requires a HistoricalDataReport to be configured");
-//		}
-	}
-	
 	public TokenTradingAgent getAgent() {
 		return (TokenTradingAgent) agent;
 	}

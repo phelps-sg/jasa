@@ -53,9 +53,9 @@ public abstract class AbstractRandomValuer implements ValuationPolicy,
 		// Do nothing
 	}
 
-	public void eventOccurred(SimEvent event) {
-		// Do nothing
-	}
+//	public void eventOccurred(SimEvent event) {
+//		// Do nothing
+//	}
 
 	public void reset() {
 		initialise();

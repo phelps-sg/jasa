@@ -3,6 +3,7 @@ package net.sourceforge.jasa.agent.strategy;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.event.SimEvent;
 
 public abstract class AbstractReturnForecaster implements ReturnForecaster {
@@ -32,7 +33,11 @@ public abstract class AbstractReturnForecaster implements ReturnForecaster {
 
 	@Override
 	public void eventOccurred(SimEvent event) {
-
+		// Do nothing
+	}
+	
+	public void subscribeToEvents(EventScheduler scheduler) {
+		// Do nothing
 	}
 
 }

@@ -18,6 +18,8 @@ package net.sourceforge.jasa.agent.valuation;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
+import net.sourceforge.jasa.sim.EventScheduler;
+import net.sourceforge.jasa.sim.event.SimEvent;
 
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
@@ -63,9 +65,14 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
 		maxValue = minValue + rangeDist.nextDouble();
 		distribution = new Uniform(minValue, maxValue, prng);
 	}
+	
 
-	public void eventOccurred(MarketEvent event) {
-		super.eventOccurred(event);
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		scheduler.addListener(MarketOpenEvent.class, this);
+	}
+
+	public void eventOccurred(SimEvent event) {
 		if (event instanceof MarketOpenEvent) {
 			distribution = new Uniform(minValue, maxValue, prng);
 			drawRandomValue();
@@ -83,5 +90,6 @@ public class DistinctDistributionValuer extends AbstractRandomValuer {
 	public void setAgent(TradingAgent agent) {
 		// No action required
 	}
+
 
 }

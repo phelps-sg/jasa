@@ -24,6 +24,7 @@ import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.sim.Agent;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.strategy.Strategy;
 import net.sourceforge.jasa.sim.util.Resetable;
@@ -109,6 +110,11 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 		if (event instanceof RoundClosedEvent) {
 			onRoundClosed(((RoundClosedEvent) event).getAuction());
 		}
+	}
+	
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		scheduler.addListener(RoundClosedEvent.class, this);
 	}
 
 	public AbstractTradingAgent getAgent() {

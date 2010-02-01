@@ -52,7 +52,13 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 	}
 
 	public void generateQuote() {
-		currentQuote = new MarketQuote(askQuote(), bidQuote());
+//		if (!orderBook.isEmpty()) {
+			double ask = askQuote();
+			double bid = bidQuote();
+			currentQuote = new MarketQuote(ask, bid);
+//		} else {
+//			currentQuote = new MarketQuote(Double.NaN, Double.NaN);
+//		}
 	}
 
 	@Override
@@ -63,7 +69,7 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 	@Override
 	public void onEndOfDay() {
 		super.onEndOfDay();
-		orderBook.reset();
+//		orderBook.reset();
 	}
 
 	@Override
@@ -80,17 +86,18 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 		orderBook.add(shout);
 		generateQuote();
 		clear();
+		generateQuote();
 	}
 
 	protected void checkShoutValidity(Order shout) throws IllegalOrderException {
 		super.checkShoutValidity(shout);
-//		checkImprovement(shout);
+		checkImprovement(shout);
 	}
 
 	protected void checkImprovement(Order shout) throws IllegalOrderException {
-		if (orderBook.isEmpty()) {
-			return;
-		}
+//		if (orderBook.isEmpty()) {
+//			return;
+//		}
 		double quote;
 		if (shout.isBid()) {
 			quote = bidQuote();

@@ -25,6 +25,7 @@ import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.HistoricalDataReport;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 
 import org.apache.log4j.Logger;
@@ -97,6 +98,12 @@ public class GDLStrategy extends FixedDirectionStrategy implements
 		if (event instanceof MarketOpenEvent) {
 			auctionOpen((MarketOpenEvent) event);
 		}
+	}
+	
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		super.subscribeToEvents(scheduler);
+		scheduler.addListener(MarketOpenEvent.class, this);
 	}
 
 	public void auctionOpen(MarketOpenEvent event) {

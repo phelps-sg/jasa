@@ -22,23 +22,23 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		return forecaster.determineValue(auction);
 	}
 	
-	public double getPriceForecast() {
-//		if (Double.isInfinite(currentPrice) || 
-//				Double.isNaN(currentPrice) || currentPrice < 10E-100) {
-//			currentPrice = 100;
-//		}
-		double currentPrice = auction.getQuote().getMidPoint();
+	public double getPriceForecast(double currentPrice) {
 		double forecastedReturn = getReturnForecast();
-		return currentPrice * Math.exp(forecastedReturn / 100);
+		return currentPrice * Math.exp(forecastedReturn);
 	}
 	
 	@Override
 	public boolean modifyShout(Order shout) {
 		boolean result = super.modifyShout(shout);
 		double currentPrice = auction.getQuote().getMidPoint();
-		double forecastedPrice = getPriceForecast();
-//		double markup = markupDistribution.nextDouble();
-		double markup = 0;
+		if (Double.isInfinite(currentPrice) || Double.isNaN(currentPrice)) {
+			currentPrice = auction.getLastTransactionPrice();
+		}
+		assert currentPrice > 0;
+		double forecastedPrice = getPriceForecast(currentPrice);
+		assert forecastedPrice > 0;
+		double markup = markupDistribution.nextDouble();
+//		double markup = 0;
 		boolean isBid = false;
 		if (Double.isNaN(currentPrice) || Double.isInfinite(currentPrice)) {
 			isBid = prng.nextDouble() > 0.5;
@@ -47,9 +47,9 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		}
 		shout.setIsBid(isBid);
 		if (isBid) {
-			shout.setPrice(forecastedPrice * (1 + markup));
-		} else {
 			shout.setPrice(forecastedPrice * (1 - markup));
+		} else {
+			shout.setPrice(forecastedPrice * (1 + markup));
 		}
 		return result;
 	}

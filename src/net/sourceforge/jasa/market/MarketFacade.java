@@ -32,6 +32,7 @@ import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.Population;
 import net.sourceforge.jasa.sim.RandomRobinAgentMixer;
 import net.sourceforge.jasa.sim.SimulationController;
+import net.sourceforge.jasa.sim.SimulationTime;
 import net.sourceforge.jasa.sim.event.EventListener;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
@@ -61,6 +62,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	 */
 	protected int day = 0;
 
+	protected double lastTransactionPrice;
+
 	public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
 
 	static Logger logger = Logger.getLogger(MarketFacade.class);
@@ -77,6 +80,10 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		marketSimulation = new MarketSimulation(controller);
 		marketSimulation.setMarket(this);
 		controller.setSimulation(marketSimulation);
+	}
+	
+	public SimulationTime getSimulationTime() {
+		return marketSimulation.getSimulationTime();
 	}
 	
 //	public MarketFacade(MarketSimulation marketSimulation, Auctioneer auctioneer) {
@@ -96,6 +103,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		assert ask.getQuantity() == bid.getQuantity();
 		assert transactionPrice >= ask.getPrice();
 		assert transactionPrice <= bid.getPrice();
+		lastTransactionPrice = transactionPrice;
 		clear(ask, bid, transactionPrice, transactionPrice, ask.getQuantity());
 	}
 
@@ -108,6 +116,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 //		assert buyer.isBuyer(getMarket());
 //		assert seller.isSeller(getMarket());
 
+		
 		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
 				marketSimulation.getMarket(), marketSimulation.getRound(), ask,
 				bid, buyerCharge, ask.getQuantity());
@@ -382,8 +391,14 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	}
 
 	public void addListener(EventListener listener) {
-		marketSimulation.addListener(listener);
+		controller.addListener(listener);
 	}
+
+	@Override
+	public void addListener(Class eventClass, EventListener listener) {
+		controller.addListener(eventClass, listener);
+	}
+
 	
 	public void addReport(Report report) {
 		controller.addReport(report);
@@ -397,6 +412,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		controller.fireEvent(event);
 	}
 	
+	
+	
 	public static void main(String[] args) {
 		Runnable market = 
 			(Runnable) BeanFactorySingleton.getBean("market");
@@ -409,6 +426,14 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		addListener(auctioneer);
 	}
 
+	public double getLastTransactionPrice() {
+		return lastTransactionPrice;
+	}
+
+	public void setLastTransactionPrice(double lastTransactionPrice) {
+		this.lastTransactionPrice = lastTransactionPrice;
+	}
+	
 	public void run() {
 		initialise();
 		controller.run();

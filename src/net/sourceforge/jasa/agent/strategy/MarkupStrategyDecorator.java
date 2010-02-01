@@ -22,6 +22,7 @@ import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 
 /**
@@ -78,10 +79,16 @@ public class MarkupStrategyDecorator extends FixedDirectionStrategy
 	public void onRoundClosed(Market auction) {
 
 	}
+	
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		//TODO
+		super.subscribeToEvents(scheduler);
+	}
 
 	public void eventOccurred(MarketEvent event) {
 		super.eventOccurred(event);
-		subStrategy.eventOccurred(event);
+//		subStrategy.eventOccurred(event);
 	}
 
 	public void setAgent(AbstractTradingAgent agent) {

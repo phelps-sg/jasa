@@ -49,8 +49,8 @@
 
 <bean id="setInitialSpreadReport"
     class="net.sourceforge.jasa.report.SetInitialSpreadReport">
-    <property name="askPrice" value="1000"/>
-    <property name="bidPrice" value="900"/>
+    <property name="askPrice" value="1500"/>
+    <property name="bidPrice" value="500"/>
     <property name="market" ref="market"/>
     <property name="tradingAgent" ref="fixedPriceBuyerPrototype"/>
 </bean>
@@ -73,7 +73,7 @@
     <constructor-arg ref="prng"/>
     <!--  In this model the probability of an agent arriving represents the
             total liquidity of the market  -->
-    <property name="arrivalProbability" value="0.9"/>
+    <property name="arrivalProbability" value="0.5"/>
 </bean>
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
@@ -227,7 +227,7 @@
 <bean id="markupDistribution" scope="singleton"
     class="cern.jet.random.Uniform">
     <constructor-arg value="0"/>
-    <constructor-arg value="0.01"/>
+    <constructor-arg value="0.2"/>
     <constructor-arg ref="prng"/>
 </bean>
 
@@ -239,7 +239,7 @@
     <property name="volatilityDistribution">
         <bean class="cern.jet.random.Normal">
             <constructor-arg value="0.0"/>
-            <constructor-arg value="3"/>
+            <constructor-arg value="0.1"/>
             <constructor-arg ref="prng"/>
         </bean>
     </property>

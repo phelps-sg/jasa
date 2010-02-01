@@ -203,6 +203,18 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		}
 	}
 
+	
+	@Override
+	public void subscribeToEvents() {
+		scheduler.addListener(SimEvent.class, this);
+		if (valuer != null) {
+			valuer.subscribeToEvents(scheduler);
+		}
+		if (strategy != null) {
+			strategy.subscribeToEvents(scheduler);
+		}
+	} 
+
 	public void eventOccurred(SimEvent ev) {
 		super.eventOccurred(ev);
 		if (ev instanceof MarketEvent) {
@@ -217,8 +229,8 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 				onEndOfDay(event);
 			}
 		}
-		valuer.eventOccurred(ev);
-		strategy.eventOccurred(ev);
+//		valuer.eventOccurred(ev);
+//		strategy.eventOccurred(ev);
 	}
 
 	public void onRoundClosed(MarketEvent event) {

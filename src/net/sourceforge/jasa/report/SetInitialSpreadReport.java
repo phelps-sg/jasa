@@ -44,10 +44,10 @@ public class SetInitialSpreadReport extends AbstractAuctionReport {
 	
 	public void initialiseSpread() {
 		try {
-			market.placeOrder(new Order(tradingAgent, 1, bidPrice, true));
-			market.placeOrder(new Order(tradingAgent, 1, askPrice, false));
+			market.placeOrder(new Order(tradingAgent, 1, bidPrice, false));
+			market.placeOrder(new Order(tradingAgent, 1, askPrice, true));
 		} catch (AuctionException e) {
-			throw new AuctionRuntimeException(e);
+			logger.warn(e);
 		}
 	}
 

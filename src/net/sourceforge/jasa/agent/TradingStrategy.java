@@ -18,6 +18,7 @@ package net.sourceforge.jasa.agent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.strategy.Strategy;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 
@@ -32,7 +33,8 @@ import net.sourceforge.jasa.sim.util.Prototypeable;
  * @version $Revision$
  */
 
-public interface TradingStrategy extends Strategy, Prototypeable, MarketEventListener {
+public interface TradingStrategy extends Strategy, Prototypeable, 
+		MarketEventListener {
 
 	/**
 	 * Modify the trader's current shout according to the trading strategy being
@@ -51,5 +53,7 @@ public interface TradingStrategy extends Strategy, Prototypeable, MarketEventLis
 	public int determineQuantity(Market auction);
 
 	public void initialise();
+
+	public void subscribeToEvents(EventScheduler scheduler);
 
 }

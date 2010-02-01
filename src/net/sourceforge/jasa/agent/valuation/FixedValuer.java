@@ -20,6 +20,7 @@ import java.io.Serializable;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.event.SimEvent;
 
 /**
@@ -70,6 +71,11 @@ public class FixedValuer implements ValuationPolicy, Serializable {
 
 	public String toString() {
 		return "(" + getClass() + " value:" + value + ")";
+	}
+
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		// Do nothing
 	}
 
 }

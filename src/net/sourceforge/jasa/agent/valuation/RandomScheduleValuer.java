@@ -20,6 +20,8 @@ import java.io.Serializable;
 import cern.jet.random.engine.RandomEngine;
 
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.sim.EventScheduler;
+import net.sourceforge.jasa.sim.event.SimEvent;
 
 
 /**
@@ -42,6 +44,16 @@ public class RandomScheduleValuer extends RandomValuer implements Serializable {
 
 	public void consumeUnit(Market auction) {
 		drawRandomValue();
+	}
+
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		// Do nothing
+	}
+
+	@Override
+	public void eventOccurred(SimEvent event) {
+		// Do nothing
 	}
 
 }

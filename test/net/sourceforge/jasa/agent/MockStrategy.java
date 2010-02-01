@@ -40,12 +40,6 @@ public class MockStrategy extends AbstractStrategy {
 		this.shouts = shouts;
 	}
 
-	public void eventOccurred(SimEvent event) {
-		if (event instanceof RoundClosedEvent) {
-			onRoundClosed(((RoundClosedEvent) event).getAuction());
-		}
-	}
-
 	public void onRoundClosed(Market auction) {
 		currentShout++;
 	}

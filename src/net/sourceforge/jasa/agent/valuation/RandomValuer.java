@@ -24,6 +24,8 @@ import cern.jet.random.engine.RandomEngine;
 import java.io.Serializable;
 
 import net.sourceforge.jasa.agent.TradingAgent;
+import net.sourceforge.jasa.sim.EventScheduler;
+import net.sourceforge.jasa.sim.event.SimEvent;
 
 import org.apache.log4j.Logger;
 
@@ -77,6 +79,16 @@ public class RandomValuer extends AbstractRandomValuer implements Serializable {
 
 	public void setAgent(TradingAgent agent) {
 		// No action required
+	}
+
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		// Do nothing
+	}
+
+	@Override
+	public void eventOccurred(SimEvent event) {
+		// Do nothing
 	}
 	
 }

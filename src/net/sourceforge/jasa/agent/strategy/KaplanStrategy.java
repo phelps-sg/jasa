@@ -25,6 +25,8 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.DailyStatsReport;
+import net.sourceforge.jasa.sim.EventScheduler;
+import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.util.Distribution;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 
@@ -109,15 +111,22 @@ public class KaplanStrategy extends FixedDirectionStrategy implements
 		}
 		return clone;
 	}
+	
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		super.subscribeToEvents(scheduler);
+		scheduler.addListener(MarketOpenEvent.class, this);
+	}
 
-	public void eventOccurred(MarketEvent event) {
+
+	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
 		if (event instanceof MarketOpenEvent) {
-			auctionOpen((MarketOpenEvent) event);
+			onMarketOpen((MarketOpenEvent) event);
 		}
 	}
 
-	public void auctionOpen(MarketOpenEvent event) {
+	public void onMarketOpen(MarketOpenEvent event) {
 //		dailyStatsReport = (DailyStatsReport) event.getAuction().getReport(
 //		    DailyStatsReport.class);
 //		if (dailyStatsReport == null) {

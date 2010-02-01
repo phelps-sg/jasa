@@ -46,14 +46,8 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 	static Logger logger = Logger.getLogger(PriestVanTolStrategy.class);
 
 
-	public void eventOccurred(SimEvent event) {
-		super.eventOccurred(event);
-		if (event instanceof MarketOpenEvent) {
-			auctionOpen((MarketOpenEvent) event);
-		}
-	}
 
-	public void auctionOpen(MarketOpenEvent event) {
+	public void onMarketOpen(MarketOpenEvent event) {
 //		historicalDataReport = (HistoricalDataReport) event.getAuction().getReport(
 //		    HistoricalDataReport.class);
 //

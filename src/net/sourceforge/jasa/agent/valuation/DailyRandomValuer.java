@@ -19,6 +19,8 @@ import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
+import net.sourceforge.jasa.sim.EventScheduler;
+import net.sourceforge.jasa.sim.event.SimEvent;
 
 /**
  * A valuation policy in which we are allocated a new random valuation at the
@@ -42,11 +44,15 @@ public class DailyRandomValuer extends RandomValuer {
 		super(minValue, maxValue, prng);
 	}
 
-	public void eventOccurred(MarketEvent event) {
-		super.eventOccurred(event);
+	public void eventOccurred(SimEvent event) {
 		if (event instanceof EndOfDayEvent) {
 			drawRandomValue();
 		}
+	}
+
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		scheduler.addListener(EndOfDayEvent.class, this);
 	}
 
 }

@@ -25,6 +25,7 @@ import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.HistoricalDataReport;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.util.Prototypeable;
 import net.sourceforge.jasa.sim.event.SimEvent;
 
@@ -70,15 +71,21 @@ public class GDStrategy extends FixedDirectionStrategy implements
 		GDStrategy clone = new GDStrategy();
 		return clone;
 	}
+	
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		super.subscribeToEvents(scheduler);
+		scheduler.addListener(MarketOpenEvent.class, this);
+	}
 
 	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
 		if (event instanceof MarketOpenEvent) {
-			auctionOpen((MarketOpenEvent) event);
+			onMarketOpen((MarketOpenEvent) event);
 		}
 	}
 
-	public void auctionOpen(MarketOpenEvent event) {
+	public void onMarketOpen(MarketOpenEvent event) {
 		auction = event.getAuction();
 //		historicalDataReport = (HistoricalDataReport) auction
 //		    .getReport(HistoricalDataReport.class);
