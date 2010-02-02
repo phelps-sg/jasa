@@ -127,11 +127,11 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 		return super.clone();
 	}
 
-	@Override
-	public void execute(List<Agent> otherAgents) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void execute(List<Agent> otherAgents) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	@Override
 	public void setAgent(Agent agent) {
