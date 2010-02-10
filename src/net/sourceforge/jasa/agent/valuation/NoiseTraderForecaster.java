@@ -2,6 +2,7 @@ package net.sourceforge.jasa.agent.valuation;
 
 import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
 
@@ -68,6 +69,12 @@ public class NoiseTraderForecaster extends AbstractReturnForecaster {
 
 	public void setPrng(RandomEngine prng) {
 		this.prng = prng;
+	}
+
+	@Override
+	public void subscribeToEvents(EventScheduler scheduler) {
+		super.subscribeToEvents(scheduler);
+		scheduler.addListener(SimulationStartingEvent.class, this);
 	}
 	
 
