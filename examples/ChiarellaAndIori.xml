@@ -109,6 +109,7 @@
 				<list>
 					<ref bean="noiseTraders"/>
 					<ref bean="fundamentalists"/> 
+					<ref bean="chartists"/>
 				</list>
 			</constructor-arg>
 		</bean>
@@ -117,13 +118,18 @@
 </bean>
 
 <bean id="noiseTraders" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="990"/>
+	<constructor-arg value="800"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
 </bean>
 
 <bean id="fundamentalists" class="net.sourceforge.jasa.sim.AgentList">
-    <constructor-arg value="10"/>
+    <constructor-arg value="50"/>
     <constructor-arg ref="fundamentalistFactory"/>
+</bean>
+
+<bean id="chartists" class="net.sourceforge.jasa.sim.AgentList">
+    <constructor-arg value="150"/>
+    <constructor-arg ref="chartistFactory"/>
 </bean>
 
 <bean id="fixedPriceBuyers" class="net.sourceforge.jasa.sim.AgentList">
@@ -164,16 +170,29 @@
     </property>
 </bean>
 
+<bean id="chartistFactory"
+    class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+    <property name="targetBeanName">
+        <idref local="chartistPrototype" />
+    </property>
+</bean>
+
 <bean id="noiseTraderPrototype" scope="prototype" 
         class="net.sourceforge.jasa.agent.SimpleTradingAgent">
-	<property name="strategy" ref="noiseTraderStrategy"/>
+	<property name="strategy" ref="returnForecastStrategy"/>
 	<property name="valuationPolicy" ref="noiseTraderForecaster"/>
 </bean>
 
 <bean id="fundamentalistPrototype" scope="prototype" 
         class="net.sourceforge.jasa.agent.SimpleTradingAgent">
-    <property name="strategy" ref="fundamentalistStrategy"/>
+    <property name="strategy" ref="returnForecastStrategy"/>
     <property name="valuationPolicy" ref="fundamentalistForecaster"/>
+</bean>
+
+<bean id="chartistPrototype" scope="prototype"
+        class="net.sourceforge.jasa.agent.SimpleTradingAgent">
+        <property name="strategy" ref="returnForecastStrategy"/>
+        <property name="valuationPolicy" ref="chartistForecaster"/>
 </bean>
 
 <bean id="fixedPriceBuyerPrototype" scope="prototype"
@@ -208,13 +227,7 @@
     <constructor-arg value="90"/>
 </bean>
 
-<bean id="noiseTraderStrategy" scope="prototype" 
-        class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
-    <property name="markupDistribution" ref="markupDistribution"/>
-    <property name="prng" ref="prng"/>
-</bean>
-
-<bean id="fundamentalistStrategy" scope="prototype" 
+<bean id="returnForecastStrategy" scope="prototype" 
         class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
     <property name="markupDistribution" ref="markupDistribution"/>
     <property name="prng" ref="prng"/>
@@ -245,6 +258,11 @@
         class="net.sourceforge.jasa.agent.valuation.FundamentalistForecaster">
     <property name="fundamentalPrice" value="500"/>
     <property name="timeHorizon" value="10"/>
+</bean>
+
+<bean id="chartistForecaster" scope="prototype"
+            class="net.sourceforge.jasa.agent.valuation.ChartistForecaster">
+    <constructor-arg value="10"/>      
 </bean>
 
 <bean id="randomValuationPolicy" class="net.sourceforge.jasa.agent.valuation.RandomValuer">
