@@ -75,7 +75,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
 	<property name="market" ref="market"/>
-	<property name="maximumDays" value="1000"/>
+	<property name="maximumDays" value="100"/>
 	<property name="lengthOfDay" value="100"/>
 </bean>
 
@@ -117,12 +117,12 @@
 </bean>
 
 <bean id="noiseTraders" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="700"/>
+	<constructor-arg value="990"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
 </bean>
 
 <bean id="fundamentalists" class="net.sourceforge.jasa.sim.AgentList">
-    <constructor-arg value="300"/>
+    <constructor-arg value="10"/>
     <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 

@@ -9,13 +9,13 @@ import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
 
 public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
-
-//	protected ReturnForecaster forecaster;
 	
 	protected RandomEngine prng;
 	
+	protected double markup;
+	
 	protected AbstractContinousDistribution markupDistribution;
-
+	
 	public double getReturnForecast() {
 		ReturnForecaster forecaster = 
 			(ReturnForecaster) agent.getValuationPolicy();
@@ -23,28 +23,34 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	}
 	
 	public double getPriceForecast(double currentPrice) {
+		if (currentPrice < 10E-5) {
+			currentPrice = 10E-5;
+		}
 		double forecastedReturn = getReturnForecast();
 		return currentPrice * Math.exp(forecastedReturn);
+	}
+	
+	public boolean decideDirection(double currentPrice, 
+									double forecastedPrice) {
+		if (Double.isNaN(currentPrice)) {
+			return prng.nextDouble() >= 0.5;
+		} else if (Math.abs(forecastedPrice - currentPrice) < 10E-5) {
+			return prng.nextDouble() >= 0.5;
+		} else {
+			return forecastedPrice > currentPrice;
+		}
 	}
 	
 	@Override
 	public boolean modifyShout(Order shout) {
 		boolean result = super.modifyShout(shout);
-		double currentPrice = auction.getQuote().getMidPoint();
-		if (Double.isInfinite(currentPrice) || Double.isNaN(currentPrice)) {
-			currentPrice = auction.getLastTransactionPrice();
+		double currentPrice = auction.getCurrentPrice();
+		if (!(currentPrice >= 0)) {
+			assert currentPrice >= 0;
 		}
-		assert currentPrice > 0;
 		double forecastedPrice = getPriceForecast(currentPrice);
-		assert forecastedPrice > 0;
-		double markup = markupDistribution.nextDouble();
-//		double markup = 0;
-		boolean isBid = false;
-		if (Double.isNaN(currentPrice) || Double.isInfinite(currentPrice)) {
-			isBid = prng.nextDouble() > 0.5;
-		} else {
-			isBid = forecastedPrice > currentPrice;
-		}
+		assert forecastedPrice >= -10E-5;
+		boolean isBid = decideDirection(currentPrice, forecastedPrice);
 		shout.setIsBid(isBid);
 		if (isBid) {
 			shout.setPrice(forecastedPrice * (1 - markup));
@@ -81,7 +87,11 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	public void setMarkupDistribution(
 			AbstractContinousDistribution markupDistribution) {
 		this.markupDistribution = markupDistribution;
+		initialiseMarkup();
+	}
+	
+	public void initialiseMarkup() {
+		this.markup = markupDistribution.nextDouble();
 	}
 
-	
 }

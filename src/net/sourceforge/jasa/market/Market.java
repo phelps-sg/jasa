@@ -100,6 +100,8 @@ public interface Market extends QuoteProvider {
 	public boolean transactionsOccurred() throws ShoutsNotVisibleException;
 
 	public double getLastTransactionPrice();
+	
+	public double getCurrentPrice();
 
 //	public double getLastTransactionPrice();
 

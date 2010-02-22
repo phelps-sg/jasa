@@ -9,7 +9,6 @@
 	<configs>
 		<config>examples/example1.xml</config>
 		<config>examples/single-sided.xml</config>
-		<config>examples/LeBarronAndYammamoto.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

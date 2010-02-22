@@ -18,14 +18,12 @@ package net.sourceforge.jasa.market;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
-import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
 
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.EventScheduler;
@@ -414,8 +412,6 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	public void fireEvent(SimEvent event) {
 		controller.fireEvent(event);
 	}
-	
-	
 	
 	public static void main(String[] args) {
 		Runnable market = 

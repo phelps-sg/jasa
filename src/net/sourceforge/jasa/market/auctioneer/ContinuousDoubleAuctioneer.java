@@ -69,7 +69,7 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 	@Override
 	public void onEndOfDay() {
 		super.onEndOfDay();
-//		orderBook.reset();
+		orderBook.reset();
 	}
 
 	@Override
@@ -101,12 +101,12 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 		double quote;
 		if (shout.isBid()) {
 			quote = bidQuote();
-			if (shout.getPrice() < quote) {
+			if (shout.getPrice() <= quote) {
 				bidNotAnImprovementException();
 			}
 		} else {
 			quote = askQuote();
-			if (shout.getPrice() > quote) {
+			if (shout.getPrice() >= quote) {
 				askNotAnImprovementException();
 			}
 		}

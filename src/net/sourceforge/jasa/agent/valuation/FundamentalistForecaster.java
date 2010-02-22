@@ -2,7 +2,6 @@ package net.sourceforge.jasa.agent.valuation;
 
 import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.sim.EventScheduler;
 
 public class FundamentalistForecaster extends AbstractReturnForecaster {
 
@@ -15,10 +14,13 @@ public class FundamentalistForecaster extends AbstractReturnForecaster {
 	
 	@Override
 	public double determineValue(Market market) {
-		double currentPrice = market.getQuote().getMidPoint();
+		double currentPrice = market.getCurrentPrice();
 		if (Double.isInfinite(currentPrice) || Double.isNaN(currentPrice)) {
 			return 0.0;
 		} 
+		if (currentPrice < 10E-5) {
+			currentPrice = 10E-5;
+		}
 		double r = Math.log(fundamentalPrice / currentPrice);
 		return r ;
 	}

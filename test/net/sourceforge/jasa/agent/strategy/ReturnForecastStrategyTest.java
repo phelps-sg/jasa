@@ -171,6 +171,12 @@ public class ReturnForecastStrategyTest extends TestCase {
 			// TODO Auto-generated method stub
 			return 0;
 		}
+
+		@Override
+		public double getCurrentPrice() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
 		
 	}
 }

@@ -22,5 +22,7 @@ package net.sourceforge.jasa.market;
 public interface QuoteProvider {
 
 	public MarketQuote getQuote();
+	
+//	public double getCurrentPrice();
 
 }

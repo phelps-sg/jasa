@@ -23,7 +23,7 @@ public class NoiseTraderForecaster extends AbstractReturnForecaster {
 
 	public NoiseTraderForecaster(RandomEngine prng) {
 		this.prng = prng;
-		noiseDistribution = new Normal(0.0, 1.0, prng);
+		noiseDistribution = new Normal(0, 1.0, prng);
 		volatilityDistribution = new Uniform(0.0, 1.0, prng);
 		initialiseVolatility();
 	}

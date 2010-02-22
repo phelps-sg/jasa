@@ -1,14 +1,23 @@
 package net.sourceforge.jasa.report;
 
 import net.sourceforge.jasa.agent.TradingAgent;
+
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
+
 import net.sourceforge.jasa.market.AuctionException;
-import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+
 import net.sourceforge.jasa.sim.event.SimEvent;
 
+/**
+ * This class provides a mechanism for initialising the quote
+ * prior to actual trading.  It allows the initial price of the
+ * market to be set without having to simulate a batch auction.
+ * 
+ * @author Steve Phelps
+ */
 public class SetInitialSpreadReport extends AbstractAuctionReport {
 
 	protected Market market;
@@ -35,7 +44,7 @@ public class SetInitialSpreadReport extends AbstractAuctionReport {
 	}
 
 	public void onEndOfDay(EndOfDayEvent event) {
-		initialiseSpread();
+//		initialiseSpread();
 	}
 
 	public void onMarketOpen(MarketOpenEvent event) {
@@ -47,7 +56,7 @@ public class SetInitialSpreadReport extends AbstractAuctionReport {
 			market.placeOrder(new Order(tradingAgent, 1, bidPrice, false));
 			market.placeOrder(new Order(tradingAgent, 1, askPrice, true));
 		} catch (AuctionException e) {
-			logger.warn(e);
+			logger.debug(e);
 		}
 	}
 
