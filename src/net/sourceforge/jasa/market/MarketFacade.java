@@ -44,6 +44,9 @@ import org.apache.log4j.Logger;
 import cern.jet.random.engine.RandomEngine;
 
 /**
+ * A facade for managing an agent-based market simulation comprising an
+ *  simulation controller, a market simulation and an auctioneer agent.
+ *   
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -432,6 +435,15 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 
 	public void setLastTransactionPrice(double lastTransactionPrice) {
 		this.lastTransactionPrice = lastTransactionPrice;
+	}
+
+	@Override
+	public double getCurrentPrice() {
+		double result = getQuote().getMidPoint();
+		if (Double.isNaN(result)) {
+			result = getLastTransactionPrice();
+		}
+		return result;
 	}
 	
 	public void run() {

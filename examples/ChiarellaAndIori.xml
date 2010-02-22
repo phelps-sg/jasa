@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
+	<property name="auctioneer" ref="cda"/>
+	<property name="controller" ref="simulationController"/>
+	<property name="marketSimulation" ref="marketSimulation"/>
+</bean>
+
+<bean id="simulationController" class="net.sourceforge.jasa.sim.SimulationController">
+	<constructor-arg ref="population"/>
+	<property name="agentMixer" ref="randomArrivalAgentMixer"/>
+	<property name="agentInitialiser" ref="agentInitialiser"/>
+	<property name="simulation" ref="marketSimulation"/>
+	<property name="numSimulations" value="1"/>
+	<property name="reports">
+		<list>
+			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
+				<constructor-arg>
+					<list>
+						<ref bean="transactionPriceTimeSeriesReport"/>
+						<ref bean="orderFlowTimeSeriesReport"/>
+						<ref bean="midPointTimeSeriesReport"/>
+						<ref bean="setInitialSpreadReport"/> 
+					</list>
+				</constructor-arg>
+			</bean>
+		</list>
+	</property>
+</bean>
+
+<bean id="transactionPriceTimeSeriesReport" 
+    class="net.sourceforge.jasa.report.TransactionPriceTimeSeriesReport">
+    <constructor-arg value="data/transprice"/>
+</bean>
+
+<bean id="midPointTimeSeriesReport"
+    class="net.sourceforge.jasa.report.MidPointTimeSeriesReport">
+    <constructor-arg value="data/midpoint"/>
+</bean>
+
+<bean id="orderFlowTimeSeriesReport"
+    class="net.sourceforge.jasa.report.OrderFlowTimeSeriesReport">
+    <constructor-arg value="data/orderflow"/>
+</bean>
+
+<bean id="setInitialSpreadReport"
+    class="net.sourceforge.jasa.report.SetInitialSpreadReport">
+    <property name="askPrice" value="1500"/>
+    <property name="bidPrice" value="500"/>
+    <property name="market" ref="market"/>
+    <property name="tradingAgent" ref="fixedPriceBuyerPrototype"/>
+</bean>
+
+<bean id="agentInitialiser" class="net.sourceforge.jasa.agent.MarketAgentInitialiser">
+    <property name="market" ref="market"/>
+</bean>
+
+<bean id="randomRobinAgentMixer" 
+        class="net.sourceforge.jasa.sim.RandomRobinAgentMixer">
+	<constructor-arg ref="prng"/>
+</bean>
+
+<bean id="randomArrivalAgentMixer" 
+        class="net.sourceforge.jasa.sim.RandomArrivalAgentMixer">
+    <constructor-arg ref="prng"/>
+    <!--  In this model the probability of an agent arriving represents the
+            total liquidity of the market  -->
+    <property name="arrivalProbability" value="0.2"/>
+</bean>
+
+<bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
+	<constructor-arg ref="simulationController"/>
+	<property name="market" ref="market"/>
+	<property name="maximumDays" value="1000"/>
+	<property name="lengthOfDay" value="100"/>
+</bean>
+
+<bean id="cda" 
+        class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
+	<constructor-arg>
+		<ref bean="market"/>
+	</constructor-arg>
+	<property name="pricingPolicy" ref="timePriorityPricing"/>
+</bean>
+
+<bean id="midPointDiscriminatoryPricingPolicy" 
+		class="net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy">
+	<property name="k" value="0.5"/>
+</bean>
+
+<bean id="timePriorityPricing" 
+        class="net.sourceforge.jasa.market.rules.TimePriorityPricingPolicy">
+</bean>
+
+<bean id="prng" class="cern.jet.random.engine.MersenneTwister64">
+	<constructor-arg>
+		<bean class="java.util.Date"/>
+	</constructor-arg>
+</bean>
+
+<bean id="population" class="net.sourceforge.jasa.sim.Population">
+	<property name="agentList">
+		<bean class="net.sourceforge.jasa.sim.AgentList">
+			<constructor-arg>
+				<list>
+					<ref bean="noiseTraders"/>
+					<ref bean="fundamentalists"/> 
+				</list>
+			</constructor-arg>
+		</bean>
+	</property>
+	<property name="prng" ref="prng"/>
+</bean>
+
+<bean id="noiseTraders" class="net.sourceforge.jasa.sim.AgentList">
+	<constructor-arg value="700"/>
+	<constructor-arg ref="noiseTraderFactory"/> 	
+</bean>
+
+<bean id="fundamentalists" class="net.sourceforge.jasa.sim.AgentList">
+    <constructor-arg value="300"/>
+    <constructor-arg ref="fundamentalistFactory"/>
+</bean>
+
+<bean id="fixedPriceBuyers" class="net.sourceforge.jasa.sim.AgentList">
+    <constructor-arg value="1"/>
+    <constructor-arg ref="fixedPriceBuyerFactory"/>
+</bean>
+
+<bean id="fixedPriceSellers" class="net.sourceforge.jasa.sim.AgentList">
+    <constructor-arg value="1"/>
+    <constructor-arg ref="fixedPriceSellerFactory"/>
+</bean>
+
+<bean id="fixedPriceBuyerFactory"
+    class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+    <property name="targetBeanName">
+        <idref local="fixedPriceBuyerPrototype" />
+    </property>
+</bean>
+
+<bean id="fixedPriceSellerFactory"
+    class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+    <property name="targetBeanName">
+        <idref local="fixedPriceSellerPrototype" />
+    </property>
+</bean>
+
+<bean id="noiseTraderFactory"
+	class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+	<property name="targetBeanName">
+		<idref local="noiseTraderPrototype" />
+	</property>
+</bean>
+
+<bean id="fundamentalistFactory"
+    class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+    <property name="targetBeanName">
+        <idref local="fundamentalistPrototype" />
+    </property>
+</bean>
+
+<bean id="noiseTraderPrototype" scope="prototype" 
+        class="net.sourceforge.jasa.agent.SimpleTradingAgent">
+	<property name="strategy" ref="noiseTraderStrategy"/>
+	<property name="valuationPolicy" ref="noiseTraderForecaster"/>
+</bean>
+
+<bean id="fundamentalistPrototype" scope="prototype" 
+        class="net.sourceforge.jasa.agent.SimpleTradingAgent">
+    <property name="strategy" ref="fundamentalistStrategy"/>
+    <property name="valuationPolicy" ref="fundamentalistForecaster"/>
+</bean>
+
+<bean id="fixedPriceBuyerPrototype" scope="prototype"
+        class="net.sourceforge.jasa.agent.TokenTradingAgent">
+   <!--  <property name="market" ref="market"/> -->
+    <property name="strategy" ref="truthTellingStrategy"/>
+    <property name="valuationPolicy" ref="fixedValuation90"/>
+    <property name="isSeller" value="false"/>
+    <property name="initialTradeEntitlement" value="100"/>
+</bean>
+
+<bean id="fixedPriceSellerPrototype" scope="prototype"
+        class="net.sourceforge.jasa.agent.TokenTradingAgent">
+    <property name="strategy" ref="truthTellingStrategy"/>
+    <property name="valuationPolicy" ref="fixedValuation100"/>
+    <property name="isSeller" value="true"/>
+    <property name="initialTradeEntitlement" value="100"/>
+</bean>
+
+<bean id="truthTellingStrategy" 
+        class="net.sourceforge.jasa.agent.strategy.TruthTellingStrategy"
+        scope="prototype">
+</bean>
+
+<bean id="fixedValuation100" class="net.sourceforge.jasa.agent.valuation.FixedValuer"
+    scope="prototype">
+    <constructor-arg value="100"/>
+</bean>
+
+<bean id="fixedValuation90" class="net.sourceforge.jasa.agent.valuation.FixedValuer"
+    scope="prototype">
+    <constructor-arg value="90"/>
+</bean>
+
+<bean id="noiseTraderStrategy" scope="prototype" 
+        class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
+    <property name="markupDistribution" ref="markupDistribution"/>
+    <property name="prng" ref="prng"/>
+</bean>
+
+<bean id="fundamentalistStrategy" scope="prototype" 
+        class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
+    <property name="markupDistribution" ref="markupDistribution"/>
+    <property name="prng" ref="prng"/>
+</bean>
+
+<bean id="markupDistribution" scope="singleton"
+    class="cern.jet.random.Uniform">
+    <constructor-arg value="0"/>
+    <constructor-arg value="0.2"/>
+    <constructor-arg ref="prng"/>
+</bean>
+
+<bean id="noiseTraderForecaster" scope="prototype"
+        class="net.sourceforge.jasa.agent.valuation.NoiseTraderForecaster">
+    <constructor-arg>
+        <ref bean="prng"/>
+    </constructor-arg>
+    <property name="volatilityDistribution">
+        <bean class="cern.jet.random.Normal">
+            <constructor-arg value="0.0"/>
+            <constructor-arg value="0.2"/>
+            <constructor-arg ref="prng"/>
+        </bean>
+    </property>
+</bean>
+
+<bean id="fundamentalistForecaster" scope="prototype"
+        class="net.sourceforge.jasa.agent.valuation.FundamentalistForecaster">
+    <property name="fundamentalPrice" value="500"/>
+    <property name="timeHorizon" value="10"/>
+</bean>
+
+<bean id="randomValuationPolicy" class="net.sourceforge.jasa.agent.valuation.RandomValuer">
+	<constructor-arg value="10"/>
+	<constructor-arg value="100"/>
+	<constructor-arg ref="prng"/>
+</bean>
+
+</beans>
