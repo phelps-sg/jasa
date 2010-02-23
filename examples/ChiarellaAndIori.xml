@@ -3,7 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
 <bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
 	<property name="auctioneer" ref="cda"/>
 	<property name="controller" ref="simulationController"/>
@@ -103,18 +102,13 @@
 </bean>
 
 <bean id="population" class="net.sourceforge.jasa.sim.Population">
-	<property name="agentList">
-		<bean class="net.sourceforge.jasa.sim.AgentList">
-			<constructor-arg>
-				<list>
-					<ref bean="noiseTraders"/>
-					<ref bean="fundamentalists"/> 
-					<ref bean="chartists"/>
-				</list>
-			</constructor-arg>
-		</bean>
-	</property>
+	<property name="agentList" ref="linearCombinationTraders"/>
 	<property name="prng" ref="prng"/>
+</bean>
+
+<bean id="linearCombinationTraders" class="net.sourceforge.jasa.sim.AgentList">
+    <constructor-arg value="1000"/>
+    <constructor-arg ref="linearCombinationTraderFactory"/>
 </bean>
 
 <bean id="noiseTraders" class="net.sourceforge.jasa.sim.AgentList">
@@ -149,6 +143,13 @@
     </property>
 </bean>
 
+<bean id="linearCombinationTraderFactory"
+        class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+    <property name="targetBeanName">
+        <idref local="linearCombinationTraderPrototype"/>
+    </property>        
+</bean>
+
 <bean id="fixedPriceSellerFactory"
     class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
@@ -175,6 +176,12 @@
     <property name="targetBeanName">
         <idref local="chartistPrototype" />
     </property>
+</bean>
+
+<bean id="linearCombinationTraderPrototype" scope="prototype"
+            class="net.sourceforge.jasa.agent.SimpleTradingAgent">
+    <property name="strategy" ref="returnForecastStrategy"/>
+    <property name="valuationPolicy" ref="linearCombinationForecaster"/>
 </bean>
 
 <bean id="noiseTraderPrototype" scope="prototype" 
@@ -245,13 +252,6 @@
     <constructor-arg>
         <ref bean="prng"/>
     </constructor-arg>
-    <property name="volatilityDistribution">
-        <bean class="cern.jet.random.Normal">
-            <constructor-arg value="0.0"/>
-            <constructor-arg value="0.2"/>
-            <constructor-arg ref="prng"/>
-        </bean>
-    </property>
 </bean>
 
 <bean id="fundamentalistForecaster" scope="prototype"
@@ -262,10 +262,65 @@
 
 <bean id="chartistForecaster" scope="prototype"
             class="net.sourceforge.jasa.agent.valuation.ChartistForecaster">
-    <constructor-arg value="10"/>      
+    <constructor-arg ref="chartistWindowSizeDistribution"/>      
 </bean>
 
-<bean id="randomValuationPolicy" class="net.sourceforge.jasa.agent.valuation.RandomValuer">
+<bean id="linearCombinationForecaster" scope="prototype"
+            class="net.sourceforge.jasa.agent.valuation.LinearWeightedReturnForecaster">
+    
+    <property name="forecasters">
+        <list>
+            <ref bean="fundamentalistForecaster"/>
+            <ref bean="chartistForecaster"/>
+            <ref bean="noiseTraderForecaster"/>
+        </list>
+    </property>
+    
+    <property name="distributions">
+        <list>
+            <ref bean="fundamentalistWeightDistribution"/>
+            <ref bean="chartistWeightDistribution"/>
+            <ref bean="noiseTraderWeightDistribution"/>
+        </list>
+    </property>
+              
+</bean>
+
+<bean id="fundamentalistWeightDistribution" 
+        class="net.sourceforge.jasa.sim.util.AbsoluteContinuousDistribution"
+        scope="prototype">
+        <constructor-arg>
+	        <bean class="cern.jet.random.Normal">
+		        <constructor-arg value="0"/>
+		        <constructor-arg value="0.1"/>
+		        <constructor-arg ref="prng"/>
+	        </bean>
+        </constructor-arg>
+</bean>
+
+<bean id="chartistWeightDistribution" class="cern.jet.random.Normal"
+        scope="prototype">
+        <constructor-arg value="0"/>
+        <constructor-arg value="1"/>
+        <constructor-arg ref="prng"/>
+</bean>
+
+<bean id="noiseTraderWeightDistribution" class="cern.jet.random.Normal"
+        scope="prototype">
+    <constructor-arg value="0"/>
+    <constructor-arg value="0.3"/>
+    <constructor-arg ref="prng"/>
+</bean>
+
+<bean id="chartistWindowSizeDistribution" class="cern.jet.random.Uniform"
+        scope="prototype">
+	<constructor-arg value="1.0"/>
+	<constructor-arg value="100.0"/>
+	<constructor-arg ref="prng"/>
+</bean>
+
+<bean id="randomValuationPolicy" 
+            class="net.sourceforge.jasa.agent.valuation.RandomValuer">
 	<constructor-arg value="10"/>
 	<constructor-arg value="100"/>
 	<constructor-arg ref="prng"/>

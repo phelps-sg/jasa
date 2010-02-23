@@ -19,7 +19,7 @@ public class NoiseTraderForecastTest extends TestCase {
 		RandomEngine prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		Uniform distribution = new Uniform(0, 1, prng);
 		forecaster = new NoiseTraderForecaster(prng);
-		forecaster.setVolatilityDistribution(distribution);
+//		forecaster.setVolatilityDistribution(distribution);
 	}
 	
 	public void testForecast() {
