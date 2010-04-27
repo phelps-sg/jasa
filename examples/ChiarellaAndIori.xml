@@ -59,12 +59,12 @@
 </bean>
 
 <bean id="randomRobinAgentMixer" 
-        class="net.sourceforge.jasa.sim.RandomRobinAgentMixer">
+        class="net.sourceforge.jasa.sim.mixing.RandomRobinAgentMixer">
 	<constructor-arg ref="prng"/>
 </bean>
 
 <bean id="randomArrivalAgentMixer" 
-        class="net.sourceforge.jasa.sim.RandomArrivalAgentMixer">
+        class="net.sourceforge.jasa.sim.mixing.RandomArrivalAgentMixer">
     <constructor-arg ref="prng"/>
     <!--  In this model the probability of an agent arriving represents the
             total liquidity of the market  -->

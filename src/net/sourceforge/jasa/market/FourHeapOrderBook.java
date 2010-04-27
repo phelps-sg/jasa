@@ -152,7 +152,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	}
 
 	/**
-	 * Insert an unmatched ask into the approriate heap.
+	 * Insert an unmatched ask into the appropriate heap.
 	 */
 	public void insertUnmatchedAsk(Order ask) throws DuplicateShoutException {
 		assert ask.isAsk();
@@ -160,7 +160,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	}
 
 	/**
-	 * Insert an unmatched bid into the approriate heap.
+	 * Insert an unmatched bid into the appropriate heap.
 	 */
 	public void insertUnmatchedBid(Order bid) throws DuplicateShoutException {
 		assert bid.isBid();

@@ -50,8 +50,8 @@ public class LinearWeightedReturnForecaster extends AbstractReturnForecaster
 
 	@Override
 	public void subscribeToEvents(EventScheduler scheduler) {
-		scheduler.addListener(SimulationStartingEvent.class, this);
 		super.subscribeToEvents(scheduler);
+		scheduler.addListener(SimulationStartingEvent.class, this);
 		for(int i=0; i<forecasters.length; i++) {
 			forecasters[i].subscribeToEvents(scheduler);
 		}

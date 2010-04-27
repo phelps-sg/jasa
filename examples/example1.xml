@@ -33,7 +33,7 @@
 	<constructor-arg ref="market" />
 </bean>
 
-<bean id="agentMixer" class="net.sourceforge.jasa.sim.RandomRobinAgentMixer">
+<bean id="agentMixer" class="net.sourceforge.jasa.sim.mixing.RandomRobinAgentMixer">
 	<constructor-arg ref="prng"/>
 </bean>
 

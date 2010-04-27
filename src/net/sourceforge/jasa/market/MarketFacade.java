@@ -28,12 +28,12 @@ import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.EventScheduler;
 import net.sourceforge.jasa.sim.Population;
-import net.sourceforge.jasa.sim.RandomRobinAgentMixer;
 import net.sourceforge.jasa.sim.SimulationController;
 import net.sourceforge.jasa.sim.SimulationTime;
 import net.sourceforge.jasa.sim.event.EventListener;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
+import net.sourceforge.jasa.sim.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jasa.sim.report.Report;
 import net.sourceforge.jasa.sim.util.BeanFactorySingleton;
 
