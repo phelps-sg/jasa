@@ -330,8 +330,8 @@ public class ReportVariableWriterReport implements AuctionReport,
 	public void produceUserOutput() {
 	}
 
-	public Map getVariables() {
-		return new HashMap();
+	public Map<Object, Number> getVariableBindings() {
+		return new HashMap<Object, Number>();
 	}
 
 	public void setAuction(MarketFacade auction) {

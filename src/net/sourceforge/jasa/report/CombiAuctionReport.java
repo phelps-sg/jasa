@@ -51,7 +51,7 @@ import net.sourceforge.jasa.sim.util.Resetable;
 public class CombiAuctionReport implements AuctionReport, Parameterizable,
     Resetable {
 
-	protected List reports = null;
+	protected List<AuctionReport> reports = null;
 
 	protected MarketFacade auction;
 
@@ -111,21 +111,18 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 		return reports.iterator();
 	}
 
-	public Map getVariables() {
-		HashMap variableMap = new HashMap();
-		Iterator i = reports.iterator();
-		while (i.hasNext()) {
-			AuctionReport logger = (AuctionReport) i.next();
-			variableMap.putAll(logger.getVariables());
+	@Override
+	public Map<Object, Number> getVariableBindings() {
+		HashMap<Object, Number> bindings = new HashMap<Object, Number>();
+		for(AuctionReport report : reports) {
+			bindings.putAll(report.getVariableBindings());
 		}
-		return variableMap;
+		return bindings;
 	}
 
 	public void eventOccurred(SimEvent event) {
-		Iterator i = reports.iterator();
-		while (i.hasNext()) {
-			AuctionReport logger = (AuctionReport) i.next();
-			logger.eventOccurred(event);
+		for(AuctionReport report : reports) {
+			report.eventOccurred(event);
 		}
 	}
 //

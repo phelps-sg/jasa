@@ -71,7 +71,8 @@ public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
 		}
 	}
 	
-	public Map<Object, Number> getVariables() {
+	@Override
+	public Map<Object, Number> getVariableBindings() {
 		return new HashMap<Object,Number>();
 	}
 	

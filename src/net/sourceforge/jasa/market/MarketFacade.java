@@ -391,8 +391,14 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		return getTraders().getAgents().iterator();
 	}
 
+	@Override
 	public void addListener(EventListener listener) {
 		controller.addListener(listener);
+	}
+	
+	@Override
+	public void removeListener(EventListener listener) {
+		controller.removeListener(listener);
 	}
 
 	@Override
