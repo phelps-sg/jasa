@@ -405,7 +405,6 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	public void addListener(Class eventClass, EventListener listener) {
 		controller.addListener(eventClass, listener);
 	}
-
 	
 	public void addReport(Report report) {
 		controller.addReport(report);
