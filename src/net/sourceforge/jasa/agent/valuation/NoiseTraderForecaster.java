@@ -18,17 +18,11 @@ public class NoiseTraderForecaster extends AbstractReturnForecaster
 
 	protected AbstractContinousDistribution noiseDistribution;
 	
-//	protected AbstractContinousDistribution volatilityDistribution;
-//	
-//	protected double volatility;
-	
 	protected RandomEngine prng;
 
 	public NoiseTraderForecaster(RandomEngine prng) {
 		this.prng = prng;
 		noiseDistribution = new Normal(0, 1.0, prng);
-//		volatilityDistribution = new Uniform(0.0, 1.0, prng);
-//		initialiseVolatility();
 	}
 	
 	@Override
@@ -36,36 +30,11 @@ public class NoiseTraderForecaster extends AbstractReturnForecaster
 		return noiseDistribution.nextDouble();
 	}
 
-//	public AbstractContinousDistribution getNoiseDistribution() {
-//		return noiseDistribution;
-//	}
-//
-//	public void setNoiseDistribution(
-//			AbstractContinousDistribution noiseDistribution) {
-//		this.noiseDistribution = noiseDistribution;
-//	}
-	
 	@Override
 	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
-//		if (event instanceof SimulationStartingEvent) {
-//			initialiseVolatility();
-//		}
 	}
 	
-//	public void initialiseVolatility() {
-//		volatility = Math.abs(volatilityDistribution.nextDouble());
-//	}
-//
-//	public AbstractContinousDistribution getVolatilityDistribution() {
-//		return volatilityDistribution;
-//	}
-//
-//	public void setVolatilityDistribution(
-//			AbstractContinousDistribution volatilityDistribution) {
-//		this.volatilityDistribution = volatilityDistribution;
-//	}
-
 	public RandomEngine getPrng() {
 		return prng;
 	}
