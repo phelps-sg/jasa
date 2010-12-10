@@ -102,8 +102,9 @@
 </bean>
 
 <bean id="population" class="net.sourceforge.jasa.sim.Population">
-	<property name="agentList" ref="linearCombinationTraders"/>
-	<property name="prng" ref="prng"/>
+	<constructor-arg ref="prng"/>
+	<constructor-arg ref="linearCombinationTraderFactory"/>
+	<property name="size" value="1000"/>
 </bean>
 
 <bean id="linearCombinationTraders" class="net.sourceforge.jasa.sim.AgentList">
