@@ -2,11 +2,10 @@ package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
 
-import java.util.Collection;
-
 import net.sourceforge.jasa.market.MarketFacade;
 
 import net.sourceforge.jasa.sim.Agent;
+import net.sourceforge.jasa.sim.Population;
 import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
 
 public class MarketAgentInitialiser extends BasicAgentInitialiser implements
@@ -15,9 +14,9 @@ public class MarketAgentInitialiser extends BasicAgentInitialiser implements
 	protected MarketFacade market;
 
 	@Override
-	public void initialise(Collection<Agent> agents) {
-		super.initialise(agents);
-		for (Agent agent : agents) {
+	public void initialise(Population population) {
+		super.initialise(population);
+		for (Agent agent : population.getAgents()) {
 			TradingAgent trader = (TradingAgent) agent;
 			trader.register(market);
 		}

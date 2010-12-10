@@ -11,8 +11,8 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketSimulation;
 
 import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.RoundFinishedEvent;
 
+import net.sourceforge.jasa.sim.event.RoundFinishedEvent;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
 
