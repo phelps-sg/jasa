@@ -6,15 +6,16 @@
 <bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
 	<property name="auctioneer" ref="cda"/>
 	<property name="controller" ref="simulationController"/>
-	<property name="marketSimulation" ref="marketSimulation"/>
 </bean>
 
-<bean id="simulationController" class="net.sourceforge.jasa.sim.SimulationController">
-	<constructor-arg ref="population"/>
-	<property name="agentMixer" ref="randomArrivalAgentMixer"/>
-	<property name="agentInitialiser" ref="agentInitialiser"/>
-	<property name="simulation" ref="marketSimulation"/>
+<bean id="simulationController" class="net.sourceforge.jasa.sim.SpringSimulationController">
+	<property name="simulationBeanName">
+	   <idref local="marketSimulation"/>
+	</property>
 	<property name="numSimulations" value="1"/>
+	<!-- <property name="simulationInitialiser">
+	   <bean class="net.sourceforge.jasa.init.ResetterSimulationInitialiser"/>
+	</property> --> 
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -76,6 +77,9 @@
 	<property name="market" ref="market"/>
 	<property name="maximumDays" value="100"/>
 	<property name="lengthOfDay" value="100"/>
+	<property name="population" ref="population"/>
+    <property name="agentMixer" ref="randomArrivalAgentMixer"/>
+    <property name="agentInitialiser" ref="agentInitialiser"/>
 </bean>
 
 <bean id="cda" 

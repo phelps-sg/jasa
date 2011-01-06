@@ -22,6 +22,7 @@ import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
+import net.sourceforge.jasa.init.ResetterSimulationInitialiser;
 
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 
@@ -35,7 +36,7 @@ import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
 import net.sourceforge.jasa.sim.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jasa.sim.report.Report;
-import net.sourceforge.jasa.sim.util.BeanFactorySingleton;
+import net.sourceforge.jasa.sim.spring.BeanFactorySingleton;
 
 import org.apache.log4j.Logger;
 
@@ -54,8 +55,6 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 
 	protected Auctioneer auctioneer = null;
 	
-	protected MarketSimulation marketSimulation;
-	
 	protected SimulationController controller;	
 
 	/**
@@ -65,7 +64,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 
 	protected double lastTransactionPrice;
 
-	public static final String ERROR_SHOUTSVISIBLE = "Auctioneer does not permit shout inspection";
+	public static final String ERROR_SHOUTSVISIBLE = 
+		"Auctioneer does not permit shout inspection";
 
 	static Logger logger = Logger.getLogger(MarketFacade.class);
 	
@@ -75,22 +75,15 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	
 	public MarketFacade(RandomEngine prng, Population traders, Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
-		controller = new SimulationController(new BasicAgentInitialiser(), traders);
-		controller.setAgentMixer(new RandomRobinAgentMixer(prng));
-		controller.setPopulation(traders);
-		marketSimulation = new MarketSimulation(controller);
+		controller = new SimulationController();
+		MarketSimulation marketSimulation = new MarketSimulation(controller);
 		marketSimulation.setMarket(this);
+		marketSimulation.setAgentMixer(new RandomRobinAgentMixer(prng));
+		marketSimulation.setPopulation(traders);
+		marketSimulation.setAgentInitialiser(new BasicAgentInitialiser());
 		controller.setSimulation(marketSimulation);
+		controller.setSimulationInitialiser(new ResetterSimulationInitialiser());
 	}
-	
-	public SimulationTime getSimulationTime() {
-		return marketSimulation.getSimulationTime();
-	}
-	
-//	public MarketFacade(MarketSimulation marketSimulation, Auctioneer auctioneer) {
-//		this.auctioneer = auctioneer;
-//		this.marketSimulation = marketSimulation;
-//	}
 	
 	public MarketFacade(RandomEngine prng, Auctioneer auctioneer) {
 		this(prng, new Population(prng), auctioneer);			
@@ -99,6 +92,18 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	public MarketFacade(RandomEngine prng) {
 		this(prng, null);
 	}
+	
+	
+	public SimulationTime getSimulationTime() {
+		return getSimulation().getSimulationTime();
+	}
+	
+//	public MarketFacade(MarketSimulation marketSimulation, Auctioneer auctioneer) {
+//		this.auctioneer = auctioneer;
+//		this.marketSimulation = marketSimulation;
+//	}
+	
+	
 	
 	public void clear(Order ask, Order bid, double transactionPrice) {
 		assert ask.getQuantity() == bid.getQuantity();
@@ -119,7 +124,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 
 		
 		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
-				marketSimulation.getMarket(), marketSimulation.getRound(), ask,
+				getMarket(), getSimulation().getRound(), ask,
 				bid, buyerCharge, ask.getQuantity());
 		fireEvent(transactionEvent);
 		
@@ -135,7 +140,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	}
 
 	public Market getMarket() {
-		return marketSimulation.getMarket();
+		return getSimulation().getMarket();
 	}
 	
 	/**
@@ -177,11 +182,11 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 //	}
 
 	public void beginRound() {
-		marketSimulation.beginRound();
+		getSimulation().beginRound();
 	}
 	
 	public void runSingleRound() throws AuctionClosedException {
-		marketSimulation.runSingleRound();
+		getSimulation().runSingleRound();
 	}
 
 	/**
@@ -202,15 +207,15 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	 * Get the current round number
 	 */
 	public int getRound() {
-		return marketSimulation.getRound();
+		return getSimulation().getRound();
 	}
 
 	public int getAge() {
-		return marketSimulation.getAge();
+		return getSimulation().getAge();
 	}
 
 	public int getDay() {
-		return marketSimulation.getDay();
+		return getSimulation().getDay();
 	}
 
 	/**
@@ -235,43 +240,35 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	 * Terminate the current trading period (day)
 	 */
 	protected void endDay() {
-		marketSimulation.endDay();
+		getSimulation().endDay();
 	}
 
 	public int getRemainingTime() {
-		return marketSimulation.getRemainingTime();
+		return getSimulation().getRemainingTime();
 	}
 
 	public int getLengthOfDay() {
-		return marketSimulation.getLengthOfDay();
+		return getSimulation().getLengthOfDay();
 	}
 
 	public void setLengthOfDay(int lengthOfDay) {
-		marketSimulation.setLengthOfDay(lengthOfDay);
+		getSimulation().setLengthOfDay(lengthOfDay);
 	}
 
 	public int getMaximumDays() {
-		return marketSimulation.getMaximumDays();
+		return getSimulation().getMaximumDays();
 	}
 	
 	public void setMaximumDays(int maximumDays) {
-		marketSimulation.setMaximumDays(maximumDays);
+		getSimulation().setMaximumDays(maximumDays);
 	}
 
 	public void setMaximumRounds(int maximumRounds) {
-		marketSimulation.setMaximumRounds(maximumRounds);
+		getSimulation().setMaximumRounds(maximumRounds);
 	}
 	
 	public int getMaximumRounds() {
-		return marketSimulation.getMaximumRounds();
-	}
-
-	public MarketSimulation getMarketSimulation() {
-		return marketSimulation;
-	}
-
-	public void setMarketSimulation(MarketSimulation marketSimulation) {
-		this.marketSimulation = marketSimulation;
+		return getSimulation().getMaximumRounds();
 	}
 
 	public SimulationController getController() {
@@ -286,12 +283,8 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		return controller.getPopulation();
 	}
 
-	public void setTraders(Population traders) {
-		controller.setPopulation(traders);
-	}
-
 	public void reset() {
-		marketSimulation.reset();
+		getSimulation().reset();
 	}
 
 	public void setAuctioneer(Auctioneer auctioneer) {
@@ -305,14 +298,14 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	}
 
 	public boolean closed() {
-		return marketSimulation.isClosed();
+		return getSimulation().isClosed();
 	}
 
 	/**
 	 * Close the market.
 	 */
 	public void close() {
-		marketSimulation.close();
+		getSimulation().close();
 	}
 
 	public Order getLastOrder() throws ShoutsNotVisibleException {
@@ -353,11 +346,11 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		if (order == null) {
 			throw new IllegalOrderException("null shout");
 		}
-		fireEvent(new OrderReceivedEvent(this, marketSimulation.getRound(), order));
+		fireEvent(new OrderReceivedEvent(this, getSimulation().getRound(), order));
 		order.setTimeStamp(controller.getSimulation().getSimulationTime());
 		auctioneer.newOrder(order);
 //		System.out.println(order);
-		fireEvent(new OrderPlacedEvent(this, marketSimulation.getRound(), order));
+		fireEvent(new OrderPlacedEvent(this, getSimulation().getRound(), order));
 
 		// notifyObservers();
 	}
@@ -384,7 +377,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 //	}
 
 	public void step() throws AuctionClosedException {
-		marketSimulation.step();
+		getSimulation().step();
 	}
 	
 	public Iterator<Agent> getTraderIterator() {
@@ -411,7 +404,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	}
 
 	public void begin() {
-		marketSimulation.begin();
+		getSimulation().begin();
 	}
 
 	public void fireEvent(SimEvent event) {
@@ -437,7 +430,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	public void setLastTransactionPrice(double lastTransactionPrice) {
 		this.lastTransactionPrice = lastTransactionPrice;
 	}
-
+	
 	@Override
 	public double getCurrentPrice() {
 		double result = getQuote().getMidPoint();
@@ -450,5 +443,9 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	public void run() {
 		initialise();
 		controller.run();
+	}
+	
+	public MarketSimulation getSimulation() {
+		return (MarketSimulation) controller.getSimulation();
 	}
 }

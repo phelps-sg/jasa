@@ -7,14 +7,10 @@
 <bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
 	<property name="auctioneer" ref="cda"/>
 	<property name="controller" ref="simulationController"/>
-	<property name="marketSimulation" ref="marketSimulation"/>
 </bean>
 
-<bean id="simulationController" class="net.sourceforge.jasa.sim.SimulationController">
-	<constructor-arg ref="agentInitialiser"/>
-	<constructor-arg ref="population"/>
-	<property name="agentMixer" ref="agentMixer"/>
-	<property name="simulation" ref="marketSimulation"/>
+<bean id="simulationController" class="net.sourceforge.jasa.sim.SpringSimulationController">
+	<property name="simulationBeanName" ref="marketSimulation"/>
 	<property name="numSimulations" value="100"/>
 	<property name="reports">
 		<list>
@@ -41,6 +37,9 @@
 	<constructor-arg ref="simulationController"/>
 	<property name="market" ref="market"/>
 	<property name="maximumRounds" value="100"/>
+	<property name="agentMixer" ref="agentMixer"/>
+	<property name="population" ref="populaton"/>
+	<property name="agentInitialiser" ref="agentInitialiser"/>
 </bean>
 
 <bean id="agentInitialiser" class="net.sourceforge.jasa.sim.init.BasicAgentInitialiser">
