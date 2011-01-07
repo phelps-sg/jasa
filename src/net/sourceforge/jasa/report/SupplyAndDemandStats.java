@@ -66,10 +66,6 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 		writeDemandStats();
 	}
 
-	public Map getVariables() {
-		return new HashMap();
-	}
-
 	public abstract void writeSupplyStats();
 
 	public abstract void writeDemandStats();

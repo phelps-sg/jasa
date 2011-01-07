@@ -97,8 +97,9 @@ public class BidPriceReport extends AbstractAuctionReport implements
 		printStats(stats);
 	}
 
-	public Map<Object,Number> getVariables() {
-		HashMap<Object,Number> vars = new HashMap<Object,Number>();
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
 		createReportVars(vars, "bidprice", stats);
 		return vars;
 	}
@@ -106,7 +107,7 @@ public class BidPriceReport extends AbstractAuctionReport implements
 	protected void reportHeader() {
 		logger.info("");
 		logger.info("Bid price statistics");
-		logger.info("------------------");
+		logger.info("--------------------");
 		logger.info("");
 	}
 

@@ -372,10 +372,6 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	public void produceUserOutput() {
 	}
 
-	public Map getVariables() {
-		return new HashMap();
-	}
-
 	protected void initialisePriceRanges() {
 		highestBidPrice = Double.NEGATIVE_INFINITY;
 		lowestAskPrice = Double.POSITIVE_INFINITY;

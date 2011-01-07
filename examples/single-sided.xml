@@ -11,8 +11,10 @@
 
 <bean id="simulationController" class="net.sourceforge.jasa.sim.SpringSimulationController">
 	
-	<property name="simulation" ref="marketSimulation"/>
-	<property name="numSimulations" value="100000"/>
+	<property name="simulationBeanName">
+	   <idref local="marketSimulation"/>
+	</property>
+	<property name="numSimulations" value="10"/>
 	<property name="reports">
 		<list>
 			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
@@ -134,7 +136,7 @@
 </bean>
 
 <bean id="buyers" class="net.sourceforge.jasa.sim.AgentList">
-	<constructor-arg value="3"/>
+	<constructor-arg value="100"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
@@ -161,10 +163,10 @@
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
-	<property name="isSeller" value="false"/>
 	<property name="valuationPolicy" ref="randomValuationPolicy"/>
 	<property name="utilityFunction" ref="riskAverse"/>
 	<property name="strategy" ref="stimuliResponse"/>
+	<property name="isSeller" value="false"/>
 	<property name="initialTradeEntitlement" value="10000"/>
 </bean>
 
@@ -172,9 +174,9 @@
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
-	<property name="isSeller" value="true"/>
 	<property name="valuationPolicy" ref="sellerValuationPolicy"/>
 	<property name="strategy" ref="truthTelling"/>
+	<property name="isSeller" value="true"/>
 	<property name="initialTradeEntitlement" value="10000"/>
 </bean>
 
@@ -196,8 +198,23 @@
 
 <bean id="stimuliResponse" scope="prototype" 
 		class="net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy">
-	<property name="learner" ref="rothErev"/>
+	<property name="learner" ref="qLearner"/>
 	<property name="markupScale" value="0.1"/>
+</bean>
+
+<bean id="qLearner" scope="prototype"
+    class="net.sourceforge.jasa.sim.learning.StatelessQLearner">
+    <constructor-arg ref="prng"/>
+    <property name="numberOfActions" value="10"/>
+    <property name="learningRate" value="0.5"/>
+    <property name="discountRate" value="0.5"/>
+    <property name="actionSelector" ref="epsilonGreedyActionSelector"/>
+</bean>
+
+<bean id="epsilonGreedyActionSelector" 
+        class="net.sourceforge.jasa.sim.learning.EpsilonGreedyActionSelector">
+            <constructor-arg ref="prng"/>
+            <property name="epsilon" value="0.05"/>
 </bean>
 
 <bean id="rothErev" scope="prototype" 
@@ -206,7 +223,7 @@
 	<constructor-arg>
 		<ref bean="prng"/>
 	</constructor-arg>
-	<property name="recency" value="0.0"/>
+	<property name="recency" value="0.5"/>
 	<property name="experimentation" value="0.05"/>
 	<property name="scaling" value="1.0"/>
 </bean>

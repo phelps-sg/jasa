@@ -158,8 +158,9 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 		}
 	}
 
-	public Map<Object,Number> getVariables() {
-		HashMap<Object,Number> vars = new HashMap<Object,Number>();
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
 		createReportVars(vars, "transactionprice", stats[TRANS_PRICE]);
 		createReportVars(vars, "askprice", stats[ASK_PRICE]);
 		createReportVars(vars, "bidprice", stats[BID_PRICE]);

@@ -115,8 +115,9 @@ public class DynamicConvergenceReport extends AbstractMarketStatsReport
 		logger.info("");
 	}
 
-	public Map getVariables() {
-		HashMap vars = new HashMap();
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
 		vars.put(VAR_ALPHA, new Double(alpha));
 		return vars;
 	}

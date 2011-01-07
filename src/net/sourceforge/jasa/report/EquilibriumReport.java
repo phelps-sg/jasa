@@ -162,8 +162,9 @@ public class EquilibriumReport extends DirectRevelationReport implements
 		logger.debug("");
 	}
 
-	public Map<Object,Number> getVariables() {
-		HashMap<Object,Number> reportVars = new HashMap<Object,Number>();
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> reportVars = super.getVariableBindings();
 		if (equilibriaFound) {
 			reportVars.put(VAR_EXISTS, new Integer(1));
 		} else {

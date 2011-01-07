@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.util.SummaryStats;
 
 import org.apache.log4j.Logger;
@@ -37,7 +38,8 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 	/**
 	 * Maps keys representing groups onto the PayoffStats for that group.
 	 */
-	private HashMap table = new HashMap();
+	protected HashMap<Object,PayoffStats> table = 
+		new HashMap<Object,PayoffStats>();
 
 	static Logger logger = Logger.getLogger(PayoffReport.class);
 
@@ -46,7 +48,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 		int numAgents = auction.getNumberOfRegisteredTraders();
 		double averageSurplus = calculateTotalEquilibriumSurplus() / numAgents;
 		table.clear();
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
 			double profits = agent.getTotalPayoff();
@@ -55,7 +57,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 				payoff = profits / averageSurplus;
 			}
 			Object key = getKey(agent);
-			PayoffStats stats = (PayoffStats) table.get(key);
+			PayoffStats stats = table.get(key);
 			if (stats == null) {
 				stats = new PayoffStats(1, profits);
 				table.put(key, stats);
@@ -68,7 +70,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 	}
 
 	public double getProfits(Object key) {
-		PayoffStats stats = (PayoffStats) table.get(key);
+		PayoffStats stats = table.get(key);
 		if (stats != null) {
 			return stats.profits;
 		} else {
@@ -77,7 +79,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 	}
 
 	public double getMeanPayoff(Object key) {
-		PayoffStats stats = (PayoffStats) table.get(key);
+		PayoffStats stats = table.get(key);
 		if (stats != null) {
 			return stats.getPayoffDistribution().getMean();
 		} else {
@@ -86,7 +88,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 	}
 
 	public int getNumberOfAgents(Object key) {
-		PayoffStats stats = (PayoffStats) table.get(key);
+		PayoffStats stats = table.get(key);
 		if (stats != null) {
 			return stats.numAgents;
 		} else {
@@ -96,7 +98,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 	}
 
 	public SummaryStats getPayoffDistribution(Object key) {
-		PayoffStats stats = (PayoffStats) table.get(key);
+		PayoffStats stats = table.get(key);
 		if (stats == null) {
 			return null;
 		} else {
@@ -120,13 +122,13 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 		super.produceUserOutput();
 	}
 
-	public Map getVariables() {
-		HashMap vars = new HashMap();
-		vars.putAll(super.getVariables());
-		Iterator i = table.keySet().iterator();
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
+		Iterator<Object> i = table.keySet().iterator();
 		while (i.hasNext()) {
 			Object key = i.next();
-			PayoffStats stats = (PayoffStats) table.get(key);
+			PayoffStats stats = table.get(key);
 			String varName = "payoff." + key.toString();
 			ReportVariable var = new ReportVariable(varName, "Payoff to " + key);
 			vars.put(var, new Double(stats.getPayoffDistribution().getMean()));

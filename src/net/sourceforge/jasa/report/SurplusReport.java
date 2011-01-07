@@ -236,10 +236,8 @@ public class SurplusReport extends EquilibriumReport {
 		logger.info("");
 	}
 
-	public Map getVariables() {
-		HashMap vars = new HashMap();
-		vars.putAll(super.getVariables());
-		vars.put(VAR_PBCE, new Double(pBCE));
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
 		vars.put(VAR_PSCE, new Double(pSCE));
 		vars.put(VAR_PBA, new Double(pBA));
 		vars.put(VAR_PSA, new Double(pSA));

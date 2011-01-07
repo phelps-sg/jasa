@@ -87,8 +87,5 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 		bids.clear();
 	}
 
-	public Map getVariables() {
-		return new HashMap();
-	}
 
 }

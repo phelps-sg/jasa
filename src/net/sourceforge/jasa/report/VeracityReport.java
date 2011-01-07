@@ -48,8 +48,9 @@ public class VeracityReport extends AbstractAuctionReport {
 		logger.info("");
 	}
 
-	public Map getVariables() {
-		HashMap vars = new HashMap();
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
 		vars.put(VAR_VERACITY_MEAN, new Double(veracity.getMean()));
 		vars.put(VAR_VERACITY_STDEV, new Double(veracity.getStdDev()));
 		return vars;

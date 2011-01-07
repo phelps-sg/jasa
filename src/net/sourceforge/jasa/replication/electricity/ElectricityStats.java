@@ -337,9 +337,9 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		logger.info("Strategic seller market-power (SMPS) =\t" + getSMPS());
 	}
 
-	public Map getVariables() {
-		HashMap vars = new HashMap();
-		vars.putAll(super.getVariables());
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
 		vars.put(VAR_RCAP, new Double(getRCAP()));
 		vars.put(VAR_RCON, new Double(getRCON()));
 		return vars;

@@ -138,10 +138,6 @@ public class DataWriterReport extends AbstractAuctionReport {
 	public void produceUserOutput() {
 	}
 
-	public Map getVariables() {
-		return new HashMap();
-	}
-
 	public void setAuction(MarketFacade auction) {
 		this.auction = auction;
 	}

@@ -191,8 +191,9 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 		logger.info("");
 	}
 
-	public Map getVariables() {
-		HashMap vars = new HashMap();
+	@Override
+	public Map<Object,Number> getVariableBindings() {
+		Map<Object,Number> vars = super.getVariableBindings();
 		vars.put(VAR_EFFICIENCY, new Double(efficiency));
 		return vars;
 	}

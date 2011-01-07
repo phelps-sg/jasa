@@ -83,8 +83,5 @@ public class TrueSupplyAndDemandStats extends SupplyAndDemandStats {
 		bids.clear();
 	}
 
-	public Map<Object,Number> getVariables() {
-		return new HashMap<Object,Number>();
-	}
 
 }

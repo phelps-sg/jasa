@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.sim.event.BatchFinishedEvent;
 import net.sourceforge.jasa.sim.event.SimEvent;
 import net.sourceforge.jasa.sim.event.SimulationStartingEvent;
 import net.sourceforge.jasa.sim.util.Parameterizable;
@@ -68,7 +69,7 @@ public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof SimulationStartingEvent) {
 			reset();
-		}
+		} 
 	}
 	
 	@Override
