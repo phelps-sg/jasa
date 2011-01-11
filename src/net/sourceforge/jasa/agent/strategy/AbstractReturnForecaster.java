@@ -2,11 +2,11 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 public abstract class AbstractReturnForecaster 
 		implements ReturnForecaster, Serializable {

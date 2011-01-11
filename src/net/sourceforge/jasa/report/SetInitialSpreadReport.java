@@ -1,5 +1,6 @@
 package net.sourceforge.jasa.report;
 
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.TradingAgent;
 
 import net.sourceforge.jasa.event.EndOfDayEvent;
@@ -9,7 +10,6 @@ import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 /**
  * This class provides a mechanism for initialising the quote

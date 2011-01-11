@@ -20,9 +20,9 @@ import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartPanel;

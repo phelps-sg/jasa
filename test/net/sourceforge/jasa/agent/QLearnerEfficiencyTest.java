@@ -15,9 +15,9 @@
 
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.learning.StatelessQLearner;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
-import net.sourceforge.jasa.sim.learning.StatelessQLearner;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

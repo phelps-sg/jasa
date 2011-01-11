@@ -17,6 +17,7 @@ package net.sourceforge.jasa.market;
 
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
+import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -25,7 +26,6 @@ import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.util.MathUtil;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

@@ -19,6 +19,9 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.learning.NPTRothErevLearner;
+import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
@@ -32,10 +35,7 @@ import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
 
 import net.sourceforge.jasa.replication.electricity.ElectricityStats;
 
-import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.learning.NPTRothErevLearner;
-import net.sourceforge.jasa.sim.util.SummaryStats;
 
 import org.apache.log4j.Logger;
 

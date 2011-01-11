@@ -17,13 +17,13 @@ package net.sourceforge.jasa.agent;
 
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
+import net.sourceforge.jabm.prng.DiscreteProbabilityDistribution;
 import net.sourceforge.jasa.agent.strategy.AbstractStrategy;
 import net.sourceforge.jasa.agent.strategy.MixedStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.prng.DiscreteProbabilityDistribution;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

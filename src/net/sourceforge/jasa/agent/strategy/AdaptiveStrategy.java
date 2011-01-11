@@ -15,8 +15,8 @@
 
 package net.sourceforge.jasa.agent.strategy;
 
+import net.sourceforge.jabm.learning.Learner;
 import net.sourceforge.jasa.agent.TradingStrategy;
-import net.sourceforge.jasa.sim.learning.Learner;
 
 /**
  * <p>

@@ -18,12 +18,12 @@ package net.sourceforge.jasa.agent.strategy;
 import java.io.Serializable;
 import java.util.Collection;
 
+import net.sourceforge.jabm.prng.DiscreteProbabilityDistribution;
+import net.sourceforge.jabm.util.Parameterizable;
+import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.prng.DiscreteProbabilityDistribution;
-import net.sourceforge.jasa.sim.util.Parameterizable;
-import net.sourceforge.jasa.sim.util.Resetable;
 
 import org.apache.log4j.Logger;
 

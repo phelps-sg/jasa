@@ -15,12 +15,12 @@
 
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.strategy.Strategy;
+import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.strategy.Strategy;
-import net.sourceforge.jasa.sim.util.Prototypeable;
 
 
 /**

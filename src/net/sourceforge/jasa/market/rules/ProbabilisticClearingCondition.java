@@ -15,9 +15,9 @@
 
 package net.sourceforge.jasa.market.rules;
 
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 

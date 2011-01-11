@@ -17,6 +17,7 @@ package net.sourceforge.jasa.market.auctioneer;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.util.FixedLengthQueue;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
@@ -24,7 +25,6 @@ import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.ReportVariableBoard;
-import net.sourceforge.jasa.sim.util.FixedLengthQueue;
 
 import org.apache.log4j.Logger;
 

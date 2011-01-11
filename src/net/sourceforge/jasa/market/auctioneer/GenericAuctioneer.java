@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.IllegalOrderException;
@@ -28,7 +29,6 @@ import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.ZeroFundsAccount;
 import net.sourceforge.jasa.market.rules.MarketClearingCondition;
 import net.sourceforge.jasa.market.rules.OrderAcceptancePolicy;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 

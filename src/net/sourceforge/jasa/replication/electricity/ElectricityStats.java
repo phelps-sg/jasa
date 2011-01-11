@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
@@ -32,8 +34,6 @@ import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.report.ReportVariable;
 import net.sourceforge.jasa.report.SurplusReport;
-import net.sourceforge.jasa.sim.Agent;
-import net.sourceforge.jasa.sim.util.Prototypeable;
 
 import org.apache.log4j.Logger;
 

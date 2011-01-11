@@ -28,9 +28,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.sourceforge.jabm.report.DataSeriesWriter;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
-import net.sourceforge.jasa.sim.report.DataSeriesWriter;
 
 import org.apache.log4j.Logger;
 

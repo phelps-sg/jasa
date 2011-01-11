@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.event;
 
-import net.sourceforge.jasa.sim.event.EventListener;
+import net.sourceforge.jabm.event.EventListener;
 
 /**
  * @author Steve Phelps

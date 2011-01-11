@@ -15,10 +15,10 @@
 
 package net.sourceforge.jasa.report;
 
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 

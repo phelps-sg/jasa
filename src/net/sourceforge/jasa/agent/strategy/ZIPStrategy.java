@@ -15,9 +15,9 @@
 
 package net.sourceforge.jasa.agent.strategy;
 
+import net.sourceforge.jabm.learning.MimicryLearner;
+import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.sim.learning.MimicryLearner;
-import net.sourceforge.jasa.sim.util.Prototypeable;
 
 import org.apache.log4j.Logger;
 

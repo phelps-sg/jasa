@@ -17,12 +17,12 @@ package net.sourceforge.jasa.replication.electricity;
 
 import java.util.Iterator;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.learning.NPTRothErevLearner;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
-import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.ai.learning.RothErevLearnerTest;
-import net.sourceforge.jasa.sim.learning.NPTRothErevLearner;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

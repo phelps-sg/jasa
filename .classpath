@@ -13,6 +13,6 @@
 	<classpathentry kind="lib" path="lib/ptplot-repast.jar"/>
 	<classpathentry kind="lib" path="lib/trove-2.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.1.jar" sourcepath="C:/cygwin/usr/local/java/lib/commons-collections-3.2.1/commons-collections-3.2.1-sources.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/jabs"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/jabm"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

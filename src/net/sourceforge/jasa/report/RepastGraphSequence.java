@@ -17,7 +17,7 @@ package net.sourceforge.jasa.report;
 
 import java.util.Iterator;
 
-import net.sourceforge.jasa.sim.report.DataWriter;
+import net.sourceforge.jabm.report.DataWriter;
 
 import uchicago.src.sim.analysis.Sequence;
 

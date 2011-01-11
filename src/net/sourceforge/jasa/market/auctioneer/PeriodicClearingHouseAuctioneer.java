@@ -17,10 +17,10 @@ package net.sourceforge.jasa.market.auctioneer;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 
 /**

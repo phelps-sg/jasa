@@ -17,9 +17,9 @@ package net.sourceforge.jasa.market.rules;
 
 import java.util.Observable;
 
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 
 /**

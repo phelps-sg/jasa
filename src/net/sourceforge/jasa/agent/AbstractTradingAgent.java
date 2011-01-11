@@ -16,12 +16,19 @@
 package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
+
+import net.sourceforge.jabm.AbstractAgent;
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.AgentArrivalEvent;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.strategy.Strategy;
+import net.sourceforge.jabm.util.IdAllocator;
+import net.sourceforge.jabm.util.Parameterizable;
+import net.sourceforge.jabm.util.Prototypeable;
+import net.sourceforge.jabm.util.Resetable;
 
 import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
@@ -42,21 +49,9 @@ import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 
-import net.sourceforge.jasa.sim.AbstractAgent;
-import net.sourceforge.jasa.sim.Agent;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.event.AgentArrivalEvent;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.event.EventListener;
-import net.sourceforge.jasa.sim.strategy.Strategy;
-import net.sourceforge.jasa.sim.util.IdAllocator;
-import net.sourceforge.jasa.sim.util.Parameterizable;
-import net.sourceforge.jasa.sim.util.Prototypeable;
-import net.sourceforge.jasa.sim.util.Resetable;
 
 import org.apache.log4j.Logger;
 

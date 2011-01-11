@@ -18,16 +18,16 @@ package net.sourceforge.jasa.agent.strategy;
 import java.io.Serializable;
 import java.util.List;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.strategy.Strategy;
+import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.Agent;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.strategy.Strategy;
-import net.sourceforge.jasa.sim.util.Resetable;
 
 
 

@@ -18,12 +18,12 @@ package net.sourceforge.jasa.replication.electricity;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import net.sourceforge.jabm.prng.PRNGFactory;
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.EquilibriumReport;
-import net.sourceforge.jasa.sim.prng.PRNGFactory;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 

@@ -17,9 +17,9 @@ package net.sourceforge.jasa.report;
 
 import java.util.Map;
 
+import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jasa.market.MarketFacade;
 
-import net.sourceforge.jasa.sim.report.Report;
 
 
 /**

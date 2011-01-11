@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import net.sourceforge.jasa.sim.event.SimEvent;
+import net.sourceforge.jabm.event.SimEvent;
 
 public class EventReport extends AbstractAuctionReport {
 

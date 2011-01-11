@@ -14,9 +14,9 @@
 
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.learning.Learner;
 import net.sourceforge.jasa.agent.strategy.DiscreteLearnerStrategy;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.sim.learning.Learner;
 
 class TestLearnerStrategy extends DiscreteLearnerStrategy {
 

@@ -15,6 +15,7 @@
 
 package net.sourceforge.jasa.market.auctioneer;
 
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
@@ -24,7 +25,6 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 import org.apache.log4j.Logger;
 

@@ -15,15 +15,13 @@
 
 package net.sourceforge.jasa.market.rules;
 
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.util.Parameterizable;
-//import ec.util.Parameter;
-//import ec.util.ParameterDatabase;
 
 /**
  * Classes implementing this interface define policies for accepting shouts. A

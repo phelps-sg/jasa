@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jasa.market.AscendingOrderComparator;
 import net.sourceforge.jasa.market.DescendingOrderComparator;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.sim.report.DataWriter;
 
 import org.apache.log4j.Logger;
 

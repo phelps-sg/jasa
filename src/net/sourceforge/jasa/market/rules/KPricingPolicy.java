@@ -17,7 +17,7 @@ package net.sourceforge.jasa.market.rules;
 
 import java.io.Serializable;
 
-import net.sourceforge.jasa.sim.util.Parameterizable;
+import net.sourceforge.jabm.util.Parameterizable;
 
 /**
  * Abstract superclass for auctioneer pricing policies parameterised by k.

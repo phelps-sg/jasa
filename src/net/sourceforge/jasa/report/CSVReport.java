@@ -19,8 +19,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import net.sourceforge.jasa.sim.report.CSVWriter;
-import net.sourceforge.jasa.sim.util.Parameterizable;
+import net.sourceforge.jabm.report.CSVWriter;
+import net.sourceforge.jabm.util.Parameterizable;
 
 /**
  * A historicalDataReport that records data in CSV (comma-separated values) files.

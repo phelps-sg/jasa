@@ -17,11 +17,11 @@ package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.EventScheduler;
 
 import org.apache.log4j.Logger;
 

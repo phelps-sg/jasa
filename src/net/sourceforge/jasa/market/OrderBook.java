@@ -23,7 +23,7 @@ import java.util.List;
  * @version $Revision$
  */
 
-public interface OrderBook extends net.sourceforge.jasa.sim.util.Resetable {
+public interface OrderBook extends net.sourceforge.jabm.util.Resetable {
 
 	public void add(Order shout) throws DuplicateShoutException;
 

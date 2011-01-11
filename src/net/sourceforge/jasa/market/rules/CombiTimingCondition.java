@@ -19,8 +19,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 /**
  * The class for expressing the combination of timing conditions.
@@ -63,7 +63,7 @@ public class CombiTimingCondition extends TimingCondition implements
 	}
 
 	/*
-	 * @see net.sourceforge.jasa.sim.util.Parameterizable#setup(ec.util.ParameterDatabase,
+	 * @see net.sourceforge.jabm.util.Parameterizable#setup(ec.util.ParameterDatabase,
 	 *      ec.util.Parameter)
 	 */
 //	public void setup(ParameterDatabase parameters, Parameter base) {

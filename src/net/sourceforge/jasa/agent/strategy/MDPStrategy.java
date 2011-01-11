@@ -17,13 +17,13 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.learning.Learner;
+import net.sourceforge.jabm.learning.MDPLearner;
+import net.sourceforge.jabm.util.Parameterizable;
+import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
-import net.sourceforge.jasa.sim.learning.Learner;
-import net.sourceforge.jasa.sim.learning.MDPLearner;
-import net.sourceforge.jasa.sim.util.Parameterizable;
-import net.sourceforge.jasa.sim.util.Resetable;
 
 /**
  * <p>

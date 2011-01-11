@@ -17,6 +17,10 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.learning.Learner;
+import net.sourceforge.jabm.learning.MimicryLearner;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.AgentPolledEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
@@ -26,10 +30,6 @@ import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.learning.Learner;
-import net.sourceforge.jasa.sim.learning.MimicryLearner;
 
 import org.apache.log4j.Logger;
 

@@ -19,6 +19,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import net.sourceforge.jabm.learning.WidrowHoffLearner;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.ZIPStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -27,7 +28,6 @@ import net.sourceforge.jasa.report.AuctionReport;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.learning.WidrowHoffLearner;
 
 import org.apache.log4j.Logger;
 

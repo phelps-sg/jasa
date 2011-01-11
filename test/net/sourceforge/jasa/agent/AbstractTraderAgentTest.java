@@ -18,14 +18,14 @@ package net.sourceforge.jasa.agent;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
+import net.sourceforge.jabm.event.EventListener;
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.event.EventListener;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

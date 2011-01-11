@@ -20,6 +20,9 @@ import java.util.Iterator;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
@@ -34,10 +37,7 @@ import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
 import net.sourceforge.jasa.report.DynamicSurplusReport;
 import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.report.SurplusReport;
-import net.sourceforge.jasa.sim.Agent;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.util.MathUtil;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

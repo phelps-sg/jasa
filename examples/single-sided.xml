@@ -9,7 +9,7 @@
 	<property name="controller" ref="simulationController"/>
 </bean>
 
-<bean id="simulationController" class="net.sourceforge.jasa.sim.SpringSimulationController">
+<bean id="simulationController" class="net.sourceforge.jabm.SpringSimulationController">
 	
 	<property name="simulationBeanName">
 	   <idref local="marketSimulation"/>
@@ -17,7 +17,7 @@
 	<property name="numSimulations" value="10"/>
 	<property name="reports">
 		<list>
-			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
+			<bean class="net.sourceforge.jabm.report.BatchMetaReport">
 				<constructor-arg>
 					<list>
 						<ref bean="transactionPriceReport"/>
@@ -50,7 +50,7 @@
 <bean id="eventReport" class="net.sourceforge.jasa.report.EventReport">
 </bean>
 
-<bean id="agentMixer" class="net.sourceforge.jasa.sim.mixing.RandomRobinAgentMixer">
+<bean id="agentMixer" class="net.sourceforge.jabm.mixing.RandomRobinAgentMixer">
 	<constructor-arg ref="prng"/>
 </bean>
 
@@ -121,9 +121,9 @@
 	</constructor-arg>
 </bean>
 
-<bean id="population" class="net.sourceforge.jasa.sim.Population">
+<bean id="population" class="net.sourceforge.jabm.Population">
 	<property name="agentList">
-		<bean class="net.sourceforge.jasa.sim.AgentList">
+		<bean class="net.sourceforge.jabm.AgentList">
 			<constructor-arg>
 				<list>
 					<ref bean="buyers"/>
@@ -135,12 +135,12 @@
 	<property name="prng" ref="prng"/>
 </bean>
 
-<bean id="buyers" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="buyers" class="net.sourceforge.jabm.AgentList">
 	<constructor-arg value="100"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
-<bean id="sellers" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="sellers" class="net.sourceforge.jabm.AgentList">
 	<constructor-arg value="1"/>
 	<constructor-arg ref="sellerFactory"/> 	
 </bean>
@@ -203,7 +203,7 @@
 </bean>
 
 <bean id="qLearner" scope="prototype"
-    class="net.sourceforge.jasa.sim.learning.StatelessQLearner">
+    class="net.sourceforge.jabm.learning.StatelessQLearner">
     <constructor-arg ref="prng"/>
     <property name="numberOfActions" value="10"/>
     <property name="learningRate" value="0.5"/>
@@ -212,13 +212,13 @@
 </bean>
 
 <bean id="epsilonGreedyActionSelector" 
-        class="net.sourceforge.jasa.sim.learning.EpsilonGreedyActionSelector">
+        class="net.sourceforge.jabm.learning.EpsilonGreedyActionSelector">
             <constructor-arg ref="prng"/>
             <property name="epsilon" value="0.05"/>
 </bean>
 
 <bean id="rothErev" scope="prototype" 
-		class="net.sourceforge.jasa.sim.learning.RothErevLearner">
+		class="net.sourceforge.jabm.learning.RothErevLearner">
 	<constructor-arg value="10"/>
 	<constructor-arg>
 		<ref bean="prng"/>

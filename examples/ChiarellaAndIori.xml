@@ -8,7 +8,7 @@
 	<property name="controller" ref="simulationController"/>
 </bean>
 
-<bean id="simulationController" class="net.sourceforge.jasa.sim.SpringSimulationController">
+<bean id="simulationController" class="net.sourceforge.jabm.SpringSimulationController">
 	<property name="simulationBeanName">
 	   <idref local="marketSimulation"/>
 	</property>
@@ -18,7 +18,7 @@
 	</property> --> 
 	<property name="reports">
 		<list>
-			<bean class="net.sourceforge.jasa.sim.report.BatchMetaReport">
+			<bean class="net.sourceforge.jabm.report.BatchMetaReport">
 				<constructor-arg>
 					<list>
 						<ref bean="transactionPriceTimeSeriesReport"/>
@@ -60,12 +60,12 @@
 </bean>
 
 <bean id="randomRobinAgentMixer" 
-        class="net.sourceforge.jasa.sim.mixing.RandomRobinAgentMixer">
+        class="net.sourceforge.jabm.mixing.RandomRobinAgentMixer">
 	<constructor-arg ref="prng"/>
 </bean>
 
 <bean id="randomArrivalAgentMixer" 
-        class="net.sourceforge.jasa.sim.mixing.RandomArrivalAgentMixer">
+        class="net.sourceforge.jabm.mixing.RandomArrivalAgentMixer">
     <constructor-arg ref="prng"/>
     <!--  In this model the probability of an agent arriving represents the
             total liquidity of the market  -->
@@ -105,38 +105,38 @@
 	</constructor-arg>
 </bean>
 
-<bean id="population" class="net.sourceforge.jasa.sim.Population">
+<bean id="population" class="net.sourceforge.jabm.Population">
 	<constructor-arg ref="prng"/>
 	<constructor-arg ref="linearCombinationTraderFactory"/>
 	<property name="size" value="1000"/>
 </bean>
 
-<bean id="linearCombinationTraders" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="linearCombinationTraders" class="net.sourceforge.jabm.AgentList">
     <constructor-arg value="1000"/>
     <constructor-arg ref="linearCombinationTraderFactory"/>
 </bean>
 
-<bean id="noiseTraders" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="noiseTraders" class="net.sourceforge.jabm.AgentList">
 	<constructor-arg value="800"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
 </bean>
 
-<bean id="fundamentalists" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="fundamentalists" class="net.sourceforge.jabm.AgentList">
     <constructor-arg value="50"/>
     <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 
-<bean id="chartists" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="chartists" class="net.sourceforge.jabm.AgentList">
     <constructor-arg value="150"/>
     <constructor-arg ref="chartistFactory"/>
 </bean>
 
-<bean id="fixedPriceBuyers" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="fixedPriceBuyers" class="net.sourceforge.jabm.AgentList">
     <constructor-arg value="1"/>
     <constructor-arg ref="fixedPriceBuyerFactory"/>
 </bean>
 
-<bean id="fixedPriceSellers" class="net.sourceforge.jasa.sim.AgentList">
+<bean id="fixedPriceSellers" class="net.sourceforge.jabm.AgentList">
     <constructor-arg value="1"/>
     <constructor-arg ref="fixedPriceSellerFactory"/>
 </bean>
@@ -292,7 +292,7 @@
 </bean>
 
 <bean id="fundamentalistWeightDistribution" 
-        class="net.sourceforge.jasa.sim.util.AbsoluteContinuousDistribution"
+        class="net.sourceforge.jabm.util.AbsoluteContinuousDistribution"
         scope="prototype">
         <constructor-arg>
 	        <bean class="cern.jet.random.Normal">

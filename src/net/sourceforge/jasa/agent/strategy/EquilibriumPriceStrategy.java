@@ -17,13 +17,13 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.EquilibriumReport;
-import net.sourceforge.jasa.sim.util.Prototypeable;
 
 /**
  * A strategy which will bid at the true equilibrium price, if profitable, or

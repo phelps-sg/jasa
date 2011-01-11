@@ -18,6 +18,17 @@ package net.sourceforge.jasa.market;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.SimulationTime;
+import net.sourceforge.jabm.event.EventListener;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
+import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jabm.spring.BeanFactorySingleton;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
@@ -26,17 +37,6 @@ import net.sourceforge.jasa.init.ResetterSimulationInitialiser;
 
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 
-import net.sourceforge.jasa.sim.Agent;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.Population;
-import net.sourceforge.jasa.sim.SimulationController;
-import net.sourceforge.jasa.sim.SimulationTime;
-import net.sourceforge.jasa.sim.event.EventListener;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
-import net.sourceforge.jasa.sim.mixing.RandomRobinAgentMixer;
-import net.sourceforge.jasa.sim.report.Report;
-import net.sourceforge.jasa.sim.spring.BeanFactorySingleton;
 
 import org.apache.log4j.Logger;
 

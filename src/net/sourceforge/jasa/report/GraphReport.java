@@ -19,8 +19,8 @@ import javax.swing.event.EventListenerList;
 
 import java.util.Iterator;
 
-import net.sourceforge.jasa.sim.util.Parameterizable;
-import net.sourceforge.jasa.sim.util.Resetable;
+import net.sourceforge.jabm.util.Parameterizable;
+import net.sourceforge.jabm.util.Resetable;
 
 import org.apache.log4j.Logger;
 

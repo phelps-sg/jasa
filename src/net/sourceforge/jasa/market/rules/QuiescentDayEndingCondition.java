@@ -15,10 +15,10 @@
 
 package net.sourceforge.jasa.market.rules;
 
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 /**
  * The interface for expressing the condition of closing an market.

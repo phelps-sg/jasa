@@ -15,11 +15,11 @@
 
 package net.sourceforge.jasa.report;
 
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.sim.SimulationController;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.event.SimulationFinishedEvent;
 
 /**
  * A historicalDataReport that performs additional calculations at the end of an market

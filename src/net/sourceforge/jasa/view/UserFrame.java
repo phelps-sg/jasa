@@ -23,8 +23,8 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import net.sourceforge.jasa.sim.util.ObjectConverter;
-import net.sourceforge.jasa.sim.util.Parameterizable;
+import net.sourceforge.jabm.util.ObjectConverter;
+import net.sourceforge.jabm.util.Parameterizable;
 
 /**
  * Defines a JFrame whose properties can be customized by parameters.

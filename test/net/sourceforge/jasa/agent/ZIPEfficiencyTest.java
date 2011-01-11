@@ -14,11 +14,11 @@
  */
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.learning.WidrowHoffLearnerWithMomentum;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.strategy.ZIPStrategy;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
-import net.sourceforge.jasa.sim.learning.WidrowHoffLearnerWithMomentum;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

@@ -17,13 +17,13 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.util.Prototypeable;
 
 /**
  * This strategy decorates a component strategy by bidding a fixed proportional

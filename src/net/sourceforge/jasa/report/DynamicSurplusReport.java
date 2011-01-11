@@ -22,14 +22,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.sim.Agent;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.util.Resetable;
 
 import org.apache.log4j.Logger;
 

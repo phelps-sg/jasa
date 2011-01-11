@@ -2,11 +2,11 @@ package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
 import net.sourceforge.jasa.market.MarketFacade;
 
-import net.sourceforge.jasa.sim.Agent;
-import net.sourceforge.jasa.sim.Population;
-import net.sourceforge.jasa.sim.init.BasicAgentInitialiser;
 
 public class MarketAgentInitialiser extends BasicAgentInitialiser implements
 		Serializable {

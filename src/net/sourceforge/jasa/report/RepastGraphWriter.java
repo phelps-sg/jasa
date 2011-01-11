@@ -17,8 +17,8 @@ package net.sourceforge.jasa.report;
 
 import java.util.Iterator;
 
-import net.sourceforge.jasa.sim.report.DataWriter;
-import net.sourceforge.jasa.sim.util.Parameterizable;
+import net.sourceforge.jabm.report.DataWriter;
+import net.sourceforge.jabm.util.Parameterizable;
 
 
 /**

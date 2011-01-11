@@ -19,9 +19,9 @@ import java.io.Serializable;
 
 import cern.jet.random.engine.RandomEngine;
 
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 
 /**

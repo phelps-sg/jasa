@@ -18,6 +18,7 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import net.sourceforge.jabm.util.Distribution;
 import net.sourceforge.jasa.agent.MockStrategy;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.market.AuctionClosedException;
@@ -32,7 +33,6 @@ import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
 import net.sourceforge.jasa.report.DailyStatsReport;
 import net.sourceforge.jasa.report.HistoricalDataReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.util.Distribution;
 
 import org.apache.log4j.Logger;
 

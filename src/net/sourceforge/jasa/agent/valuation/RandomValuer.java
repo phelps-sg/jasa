@@ -23,9 +23,9 @@ import cern.jet.random.engine.RandomEngine;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.sim.EventScheduler;
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 import org.apache.log4j.Logger;
 

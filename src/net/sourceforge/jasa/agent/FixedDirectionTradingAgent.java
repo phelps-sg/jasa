@@ -1,7 +1,7 @@
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
-import net.sourceforge.jasa.sim.EventScheduler;
 
 public class FixedDirectionTradingAgent extends AbstractTradingAgent {
 

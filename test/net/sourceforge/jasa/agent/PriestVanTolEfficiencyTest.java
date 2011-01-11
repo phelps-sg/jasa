@@ -15,10 +15,10 @@
 
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.learning.WidrowHoffLearnerWithMomentum;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.strategy.PriestVanTolStrategy;
 import net.sourceforge.jasa.report.HistoricalDataReport;
-import net.sourceforge.jasa.sim.learning.WidrowHoffLearnerWithMomentum;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

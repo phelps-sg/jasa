@@ -17,10 +17,10 @@ package net.sourceforge.jasa.agent;
 
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
+import net.sourceforge.jabm.util.MathUtil;
+import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import net.sourceforge.jasa.sim.util.MathUtil;
-import net.sourceforge.jasa.sim.util.SummaryStats;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

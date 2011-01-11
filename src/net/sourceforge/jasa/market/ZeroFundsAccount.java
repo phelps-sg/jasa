@@ -16,7 +16,7 @@ package net.sourceforge.jasa.market;
 
 import java.io.Serializable;
 
-import net.sourceforge.jasa.sim.util.MathUtil;
+import net.sourceforge.jabm.util.MathUtil;
 
 public class ZeroFundsAccount extends Account implements Serializable {
 

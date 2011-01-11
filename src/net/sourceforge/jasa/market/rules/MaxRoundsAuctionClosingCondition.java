@@ -15,8 +15,8 @@
 
 package net.sourceforge.jasa.market.rules;
 
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 
 /**
  * The interface for expressing the condition of closing an market.

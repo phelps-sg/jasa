@@ -28,9 +28,9 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.sim.event.SimEvent;
-import net.sourceforge.jasa.sim.util.Parameterizable;
 import net.sourceforge.jasa.view.UserFrame;
 
 import org.apache.log4j.Logger;

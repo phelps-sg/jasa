@@ -17,11 +17,11 @@ package net.sourceforge.jasa.market.rules;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.util.FixedLengthQueue;
+import net.sourceforge.jabm.util.Parameterizable;
+import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.sim.util.FixedLengthQueue;
-import net.sourceforge.jasa.sim.util.Parameterizable;
-import net.sourceforge.jasa.sim.util.Resetable;
 
 import org.apache.log4j.Logger;
 

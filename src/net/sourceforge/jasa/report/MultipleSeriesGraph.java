@@ -17,8 +17,8 @@ package net.sourceforge.jasa.report;
 
 import java.awt.Color;
 
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.sim.event.SimEvent;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.axis.NumberAxis;
