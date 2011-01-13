@@ -92,8 +92,9 @@ public class RandomRobinAuctionTest extends TestCase {
 		
 		for (int i = 0; i < traders.length; i++) {
 			System.out.println("Registering trader " + traders[i]);
-			auction.register(traders[i]);
+			auction.register(traders[i]);			
 		}
+		
 	}
 
 	public void setUp() {

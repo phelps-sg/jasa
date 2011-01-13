@@ -17,14 +17,11 @@ package net.sourceforge.jasa.report;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -118,9 +115,9 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		assert asks.size() + bids.size() == sortedShouts.size();
 	}
 
-	protected void removeNShouts(int n, LinkedList shouts) {
+	protected void removeNShouts(int n, LinkedList<Order> shouts) {
 		for (int i = 0; i < n; i++) {
-			Order shout = (Order) shouts.removeFirst();
+			Order shout = shouts.removeFirst();
 			if (!sortedShouts.remove(shout, 1)) {
 				throw new AuctionRuntimeException("Could not process " + shout);
 			}

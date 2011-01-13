@@ -119,17 +119,11 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		TradingAgent buyer = (TradingAgent) bid.getAgent();
 		TradingAgent seller = (TradingAgent) ask.getAgent();
 
-//		assert buyer.isBuyer(getMarket());
-//		assert seller.isSeller(getMarket());
-
-		
 		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
 				getMarket(), getSimulation().getRound(), ask,
 				bid, buyerCharge, ask.getQuantity());
 		fireEvent(transactionEvent);
 		
-//		System.out.println(transactionEvent);
-
 		auctioneer.getAccount().doubleEntry(buyer.getAccount(), buyerCharge,
 		    seller.getAccount(), sellerPayment);
 		seller.getCommodityHolding()
@@ -367,7 +361,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	
 	public void register(TradingAgent trader) {
 		getTraders().add(trader);
-		trader.register(this);
+		trader.register(this);		
 	}
 
 //	public void run() {
@@ -409,15 +403,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 
 	public void fireEvent(SimEvent event) {
 		controller.fireEvent(event);
-	}
-	
-	public static void main(String[] args) {
-		Runnable market = 
-			(Runnable) BeanFactorySingleton.getBean("market");
-		logger.info("Starting...");
-		market.run();	
-		logger.info("done.");
-	}
+	}	
 	
 	public void initialise() {
 		addListener(auctioneer);
@@ -448,4 +434,14 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	public MarketSimulation getSimulation() {
 		return (MarketSimulation) controller.getSimulation();
 	}
+	
+
+	public static void main(String[] args) {
+		Runnable market = 
+			(Runnable) BeanFactorySingleton.getBean("market");
+		logger.info("Starting...");
+		market.run();	
+		logger.info("all done.");
+	}
+	
 }

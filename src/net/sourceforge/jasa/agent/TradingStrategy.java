@@ -22,7 +22,6 @@ import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
-
 /**
  * <p>
  * Classes implementing this interface define trading strategies for round-robin

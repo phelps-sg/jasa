@@ -34,12 +34,11 @@ public class MockStrategy extends AbstractStrategy {
 
 	public Order[] shouts;
 
-	public boolean lastShoutAccepted;
-
 	public MockStrategy(Order[] shouts) {
 		this.shouts = shouts;
 	}
 
+	@Override
 	public void onRoundClosed(Market auction) {
 		currentShout++;
 	}
@@ -53,7 +52,7 @@ public class MockStrategy extends AbstractStrategy {
 			return false;
 		}
 		super.modifyShout(shout);
-		lastShoutAccepted = agent.lastOrderFilled();
+//		lastShoutAccepted = agent.lastOrderFilled();
 		Order current = shouts[currentShout];
 		shout.setPrice(current.getPrice());
 		shout.setQuantity(current.getQuantity());
@@ -61,5 +60,7 @@ public class MockStrategy extends AbstractStrategy {
 		System.out.println("Placing order " + shout);
 		return true;
 	}
+	
+	
 
 }

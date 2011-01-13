@@ -15,8 +15,8 @@
 
 package net.sourceforge.jasa.report;
 
-import gnu.trove.TObjectDoubleHashMap;
-import gnu.trove.TObjectDoubleIterator;
+import gnu.trove.iterator.TObjectDoubleIterator;
+import gnu.trove.map.hash.TObjectDoubleHashMap;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -60,7 +60,8 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 	 * Total theoretically available profits per agent. This table maps
 	 * AbstractTradingAgent keys onto double values.
 	 */
-	private TObjectDoubleHashMap surplusTable = new TObjectDoubleHashMap();
+	private TObjectDoubleHashMap<AbstractTradingAgent> surplusTable = 
+		new TObjectDoubleHashMap<AbstractTradingAgent>();
 
 	/**
 	 * The quantity that each agent can theoretically trade per day. This should
@@ -119,10 +120,10 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 
 	public double calculateTotalEquilibriumSurplus() {
 		double totalSurplus = 0;
-		TObjectDoubleIterator i = surplusTable.iterator();
+		TObjectDoubleIterator<AbstractTradingAgent> i = surplusTable.iterator();
 		while (i.hasNext()) {
 			i.advance();
-			AbstractTradingAgent agent = (AbstractTradingAgent) i.key();
+			AbstractTradingAgent agent = i.key();
 			totalSurplus += i.value();
 		}
 		return totalSurplus;

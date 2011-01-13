@@ -84,6 +84,13 @@ public class MockTrader extends SimpleTradingAgent {
 	// lastWinningShout = getCurrentShout();
 	// }
 
+	public MockTrader(TestCase test, int stock, double funds, double privateValue,
+			TradingStrategy strategy, EventScheduler scheduler) {
+		super(stock, funds, privateValue, strategy, scheduler);
+		this.test = test;
+	}
+
+	@Override
 	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity) {
 		super.orderFilled(auction, shout, price, quantity);
@@ -97,6 +104,7 @@ public class MockTrader extends SimpleTradingAgent {
 		return 1;
 	}
 
+	@Override
 	public void onAgentArrival(Market auction) {
 		super.onAgentArrival(auction);
 		System.out.println(this + ": placed " + currentOrder);
@@ -104,11 +112,13 @@ public class MockTrader extends SimpleTradingAgent {
 		requestShoutDay = auction.getDay();
 	}
 
+	@Override
 	public void onMarketOpen(MarketEvent event) {
 		super.onMarketOpen(event);
 		receivedAuctionOpen = true;
 	}
 
+	@Override
 	public void onMarketClosed(MarketEvent event) {
 		super.onMarketClosed(event);
 		logger.debug(this + ": recieved auctionClosed()");
@@ -117,11 +127,13 @@ public class MockTrader extends SimpleTradingAgent {
 		receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
 	}
 
+	@Override
 	public void onRoundClosed(MarketEvent event) {
 		super.onRoundClosed(event);
 		receivedRoundClosed++;
 	}
 
+	@Override
 	public void onEndOfDay(MarketEvent event) {
 		int day = event.getAuction().getDay();
 		receivedEndOfDayAfterRequestShout = day <= requestShoutDay;
@@ -136,14 +148,14 @@ public class MockTrader extends SimpleTradingAgent {
 //		// TODO
 //		return -1;
 //	}
+	
+	
 
 	public String toString() {
 		return "(" + getClass() + " id:" + hashCode() 
 		    + " valuer:" + valuer + " lastProfit:" + getLastPayoff() + " funds:"
 		    + account + " account:" + account + ")";
 	}
-
-	
 
 
 }

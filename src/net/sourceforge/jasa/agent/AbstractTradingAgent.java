@@ -148,19 +148,22 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	 */
 	public AbstractTradingAgent(int stock, double funds, double privateValue,
 			EventScheduler scheduler) {
+		this(stock, funds, privateValue, null, scheduler);
+	}
+
+	public AbstractTradingAgent(int stock, double funds, double privateValue,
+			TradingStrategy strategy, EventScheduler scheduler) {
 		super(scheduler);
+		this.strategy = strategy;
+		if (strategy != null) {
+			strategy.setAgent(this);
+		}
 		initialStock = stock;
 		initialFunds = funds;
 		account = new Account(this, initialFunds);
 		this.valuer = new FixedValuer(privateValue);
 		this.utilityFunction = new RiskNeutralUtilityFunction(this);
 		initialise();
-	}
-
-	public AbstractTradingAgent(int stock, double funds, double privateValue,
-			TradingStrategy strategy, EventScheduler scheduler) {
-		this(stock, funds, privateValue, scheduler);
-		this.strategy = strategy;
 	}
 
 	public AbstractTradingAgent(int stock, double funds,
@@ -297,6 +300,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		currentOrder = null;
 		if (strategy != null) {
 			strategy.initialise();
+			strategy.subscribeToEvents(scheduler);
 		}
 		if (valuer != null) {
 			valuer.initialise();

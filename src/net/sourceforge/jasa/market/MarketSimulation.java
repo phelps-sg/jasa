@@ -91,6 +91,10 @@ public class MarketSimulation extends AbstractSimulation
 		initialiseCounters();
 	}
 	
+	public MarketSimulation() {
+		this(null);
+	}
+	
 	public void initialiseCounters() {
 		day = 0;
 		round = 0;

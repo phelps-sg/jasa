@@ -1,211 +1,255 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="compile" name="JASA">
-	<property file="build.ant.properties" />
-
-	<property name="build.compiler" value="modern" />
-	<property name="sourceDir" value="./src" />
-	<property name="testDir" value="./test" />
-	<property name="buildDir" value="./build" />
-	<property name="buildSrc" value="${buildDir}/src" />
-	<property name="outputDir" value="${buildDir}/classes" />
-	<property name="projectName" value="JASA" />
-
-	<property name="versionFile" value="version.properties" />
-	<property name="versionTemplate" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.template" />
-	<property name="versionSrc" value="${buildSrc}/uk/ac/liv/auction/JASAVersion.java" />
-
-	<property name="packages" value="uk.ac.liv.auction,uk.ac.liv.auction.core,uk.ac.liv.auction.agent,uk.ac.liv.auction.stats,uk.ac.liv.auction.electricity,uk.ac.liv.auction.zi,uk.ac.liv.ai.learning,uk.ac.liv.util,uk.ac.liv.util.io,uk.ac.liv.auction.ui,uk.ac.liv.prng,uk.ac.liv.auction.event,uk.ac.liv.auction.config,uk.ac.liv.auction.config.schedule,uk.ac.liv.auction.config.strategy" />
-
-	<property name="docDir" value="doc/api/" />
-
-	<property name="javaLibPath" value="./lib" />
-	<property name="troveLoc" value="${javaLibPath}/trove-2.0.4.jar" />
-	<property name="ecjLoc" value="${javaLibPath}/ecj-18.jar" />
-	<property name="junitLoc" value="${javaLibPath}/junit-3.8.2.jar" />
-	<property name="log4jLoc" value="${javaLibPath}/log4j-1.2.8.jar" />
-	<property name="collectionsLoc" value="${javaLibPath}/commons-collections-3.2.jar" />
-	<property name="commonsMathLoc" value="${javaLibPath}/commons-math-1.2.jar" />
-	<property name="repastPath" value="${javaLibPath}/repastj-3.1.jar:${javaLibPath}/colt-repast.jar:${javaLibPath}/ptplot-repast.jar:${javaLibPath}/trove-repast.jar" />
-	<property name="jfreechartPath" value="${javaLibPath}/jfreechart-1.0.12.jar:${javaLibPath}/jcommon-1.0.15.jar" />
-	<property name="configLoc" value="./etc/" />
-
-	<path id="project.classpath">
-		<pathelement location="${ecjLoc}" />
-		<pathelement location="${junitLoc}" />
-		<pathelement location="${log4jLoc}" />
-		<pathelement location="${troveLoc}" />
-		<pathelement location="${collectionsLoc}" />
-		<pathelement location="${commonsMathLoc}" />
-		<pathelement path="${repastPath}" />
-		<pathelement path="${jfreechartPath}" />
-		<pathelement location="${outputDir}" />
-		<pathelement location="./jasa.jar" />
-		<pathelement path="${java.class.path}" />
-		<pathelement location="${configLoc}" />
-	</path>
-	
-	<target name="removeBuildDir">
-		<delete dir="${buildDir}" />
-	</target>
-
-	<target name="cleanOutput">
-		<delete dir="${outputDir}" />
-		<delete file="jasa.jar" failonerror="false" />
-	</target>
-
-	<target depends="cleanOutput" name="prepareOutput">
-		<mkdir dir="${outputDir}" />
-	</target>
-
-	<target name="cleanDoc">
-		<delete dir="${docDir}" />
-	</target>
-
-	<target depends="cleanDoc" name="prepareDoc">
-		<mkdir dir="${docDir}" />
-	</target>
-
-	<target name="cleanTar">
-		<delete file="jasa.tar.gz" />
-	</target>
-
-	<target name="cleanBuild">
-		<delete dir="${buildSrc}" />
-	</target>
-
-	<target depends="prepareOutput,copysrc" name="compile">
-		<javac debug="on" optimize="on" deprecation="on" destdir="${outputDir}" source="1.4" srcdir="${buildSrc}">
-			<classpath refid="project.classpath" />
-		</javac>
-	</target>
-
-	<target depends="compile" name="compiletests">
-		<javac debug="on" optimize="on" deprecation="off" destdir="${outputDir}" source="1.4" srcdir="${testDir}">
-			<classpath refid="project.classpath" />
-		</javac>
-	</target>
-
-	<target depends="prepareDoc" name="doc">
-		<javadoc author="true" destdir="${docDir}" packagenames="${packages}" source="1.4" sourcepath="${sourceDir}" windowtitle="${projectName}">
-			<classpath refid="project.classpath" />
-		</javadoc>
-	</target>
-
-	<target depends="compile,compiletests" name="jar">
-		<jar basedir="${outputDir}" jarfile="jasa.jar" />
-	</target>
-
-	<target depends="jar,doc,cleanTar,removeBuildDir" name="tar">
-		<loadproperties srcFile="${versionFile}" />
-		<property name="versionStr" value="${majorVersion}.${minorVersion}" />
-		<tar compression="gzip" tarfile="jasa-${versionStr}.tar.gz">
-			<tarfileset dir="." includes="jasa.jar,${versionFile},build.xml,readme.html,etc/log4j.xml,.project,.classpath,LICENSE.TXT,changelog*,doc/**,src/**/*.java,test/**/*.java,src/**/*.html,src/**/*.template,examples/*.params,lib/**" prefix="jasa-${versionStr}">
-				<exclude name="src/uk/ac/liv/ec/**" />
-				<exclude name="src/uk/ac/liv/auction/ec/**" />
-				<exclude name="src/uk/ac/liv/auction/heuristic/**" />
-			</tarfileset>
-		</tar>
-	</target>
-
-	<target depends="cleanTar" name="srctar">
-		<loadproperties srcFile="${versionFile}" />
-		<property name="versionStr" value="${majorVersion}.${minorVersion}" />
-		<tar compression="gzip" tarfile="jasa-src-${versionStr}.tar.gz">
-			<tarfileset dir="." includes="${versionFile},build.xml,readme.html,LICENSE.TXT,changelog*,doc/**,src/**/*.java,src/**/*.html,src/**/*.template,examples/*.params" prefix="jasa-${versionStr}">
-				<exclude name="src/uk/ac/liv/ec/**" />
-				<exclude name="src/uk/ac/liv/auction/ec/**" />
-				<exclude name="src/uk/ac/liv/auction/heuristic/**" />
-			</tarfileset>
-		</tar>
-	</target>
-
-
-
-	<target name="anoncvspass">
-		<cvspass cvsroot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" password="" />
-	</target>
-
-	<target depends="anoncvspass" name="cvsupdate">
-		<cvs command="update" compression="3" cvsRoot=":pserver:anonymous@cvs.sourceforge.net:/cvsroot/jasa" cvsRsh="rsh" />
-	</target>
-
-	<target depends="jar,removeBuildDir" name="test">
-		<java classname="uk.ac.liv.auction.AllTests" fork="true">
-			<classpath refid="project.classpath" />
-			<jvmarg value="-ea" />
-		</java>
-	</target>
-
-	<target name="libtar">
-		<tar basedir="." compression="gzip" includes="lib/**" tarfile="lib.tar.gz" />
-	</target>
-
-	<target name="batchrun">
-		<java classname="uk.ac.liv.auction.MarketSimulation" fork="true">
-			<classpath refid="project.classpath" />
-			<arg value="${params}" />
-		</java>
-	</target>
-
-	<target name="run">
-		<java classname="uk.ac.liv.auction.RepastMarketSimulation" fork="true">
-			<classpath refid="project.classpath" />
-			<arg value="${params}" />
-		</java>
-	</target>
-
-	<target name="customrun">
-		<echo message="The main class is ${main}." />
-		<java classname="${main}" fork="true">
-			<classpath refid="project.classpath" />
-			<arg value="${params}" />
-		</java>
-	</target>
-
-
-	<target name="gethostname" description="Stores the current machines hostname in a property named 'hostname'">
-		<property environment="env" />
-		<condition property="hostname" value="${env.HOSTNAME}">
-			<os family="unix" />
-		</condition>
-		<condition property="hostname" value="${env.COMPUTERNAME}">
-			<os family="windows" />
-		</condition>
-		<echo message="host = ${hostname}" />
-	</target>
-
-	<target name="incminorversion">
-		<propertyfile file="${versionFile}" comment="Build version info">
-			<entry key="minorVersion" type="int" operation="+" value="1" />
-			<entry key="buildNum" type="int" value="1" />
-		</propertyfile>
-	</target>
-
-	<target name="incbuildnum" depends="gethostname">
-		<propertyfile file="${versionFile}" comment="Build version info">
-			<entry key="buildDate" type="date" value="now" />
-			<entry key="buildNum" default="0" type="int" operation="+" value="1" />
-			<entry key="buildHost" type="string" value="${hostname}" />
-		</propertyfile>
-	</target>
-
-	<target depends="incbuildnum,cleanBuild" name="copysrc">
-		<copy todir="${buildSrc}">
-			<fileset dir="${sourceDir}" casesensitive="yes">
-				<include name="**/*.java" />
-				<include name="**/*.template" />
-			</fileset>
-		</copy>
-		<delete file="${versionSrc}"/>
-		<copy verbose="on" file="${versionTemplate}" tofile="${versionSrc}" />
-		<replace file="${versionSrc}" value="value not found in version.properties" propertyFile="${versionFile}">
-			<replacefilter token="@buildDate@" property="buildDate" />
-			<replacefilter token="@buildNum@" property="buildNum" />
-			<replacefilter token="@buildHost@" property="buildHost" />
-			<replacefilter token="@minorVersion@" property="minorVersion" />
-			<replacefilter token="@majorVersion@" property="majorVersion" />
-		</replace>
-	</target>
-
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="jasa">
+    <property environment="env"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="jabm.location" value="../jabm"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <import file="jasa.xml"/>
+    <path id="JUnit 3.libraryclasspath">
+        <pathelement location="../../../../../../Program Files/eclipse/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/junit.jar"/>
+    </path>
+    <path id="jabm.classpath">
+        <pathelement location="${jabm.location}/bin"/>
+        <pathelement location="${jabm.location}/lib/spring-framework-3.0.5.RELEASE/dist/org.springframework.beans-3.0.5.RELEASE.jar"/>
+        <pathelement location="${jabm.location}/lib/spring-framework-3.0.5.RELEASE/dist/org.springframework.core-3.0.5.RELEASE.jar"/>
+        <pathelement location="${jabm.location}/lib/commons-math-2.1/commons-math-2.1.jar"/>
+        <pathelement location="${jabm.location}/lib/commons-collections-3.2.1/commons-collections-3.2.1.jar"/>
+        <pathelement location="${jabm.location}/lib/apache-log4j-1.2.16/log4j-1.2.16.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-3d-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-3d-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-3d-demos-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-3d-demos-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-algorithms-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-algorithms-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-api-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-api-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-graph-impl-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-graph-impl-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-io-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-io-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-jai-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-jai-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-jai-samples-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-jai-samples-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-samples-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-samples-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-visualization-2.0.1-sources.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/jung-visualization-2.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jfreechart-1.0.13/lib/jfreechart-1.0.13.jar"/>
+        <pathelement location="${jabm.location}/lib/jfreechart-1.0.13/lib/jcommon-1.0.16.jar"/>
+        <pathelement location="${jabm.location}/lib/commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
+        <path refid="JUnit 3.libraryclasspath"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/collections-generic-4.01.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/colt-1.2.0.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/concurrent-1.3.4.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/stax-api-1.0.1.jar"/>
+        <pathelement location="${jabm.location}/lib/jung-2.0.1/wstx-asl-3.2.6.jar"/>
+    </path>
+    <path id="jasa.classpath">
+        <pathelement location="bin"/>
+        <path refid="JUnit 3.libraryclasspath"/>
+        <pathelement location="lib/jfreechart-1.0.12.jar"/>
+        <pathelement location="lib/trove-repast.jar"/>
+        <pathelement location="lib/ptplot-repast.jar"/>
+        <pathelement location="lib/repastj-3.1.jar"/>
+        <pathelement location="lib/trove-3.0.0a7/lib/trove-3.0.0a7.jar"/>
+        <path refid="jabm.classpath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="test">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="etc">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall">
+        <ant antfile="build.xml" dir="${jabm.location}" inheritAll="false" target="clean"/>
+    </target>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects">
+        <ant antfile="build.xml" dir="${jabm.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="jasa.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="test"/>
+            <classpath refid="jasa.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="etc"/>
+            <classpath refid="jasa.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="jasa ChiarellaAndIori.xml">
+        <java classname="net.sourceforge.jasa.market.MarketFacade" failonerror="true" fork="yes">
+            <jvmarg line="-server -Djabm.config=examples/ChiarellaAndIori.xml"/>
+            <classpath refid="jasa.classpath"/>
+        </java>
+    </target>
+    <target name="jasa tests">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="net.sourceforge.jasa.AllTests" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.SerializationTests" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.AbstractTraderAgentTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.AdaptiveStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.BuyerIntervalValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.CommodityHoldingTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.EPEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.GDEfficiencyCHTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.GDEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.KaplanStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.MomentumStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.PriestVanTolEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.QLearnerEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomConstrainedStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomScheduleValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomUnconstrainedStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RothErevEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.SellerIntervalValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.ZIPEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.strategy.NoiseTraderForecastTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.market.ClearingHouseAuctioneerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.market.ContinuousDoubleAuctioneerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.market.DirectRevelationTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.market.FourHeapTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.market.KPricingPolicyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.market.RandomRobinAuctionTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.market.auctioneer.SingleSidedPricingTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.replication.electricity.ElectricityStatsTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.replication.electricity.NPTReplicationTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.replication.zi.ZIPStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.replication.zi.ZITraderAgentTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.report.EquilibriaStatsTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.report.EquilibriumSurplusLoggerTest" todir="${junit.output.dir}"/>
+            <jvmarg line="-server -ea -Xms100m -Xmx100m"/>
+            <classpath refid="jasa.classpath"/>
+        </junit>
+    </target>
+    <target name="AbstractTraderAgentTest">
+        <java classname="net.sourceforge.jasa.agent.AbstractTraderAgentTest" failonerror="true" fork="yes">
+            <classpath refid="jasa.classpath"/>
+        </java>
+    </target>
+    <target name="AbstractTraderAgentTest (1)">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="net.sourceforge.jasa.agent.AbstractTraderAgentTest" todir="${junit.output.dir}"/>
+            <classpath refid="jasa.classpath"/>
+        </junit>
+    </target>
+    <target name="net.sourceforge.jasa.report">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="net.sourceforge.jasa.report.EquilibriaStatsTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.report.EquilibriumSurplusLoggerTest" todir="${junit.output.dir}"/>
+            <classpath refid="jasa.classpath"/>
+        </junit>
+    </target>
+    <target name="net.sourceforge.jasa">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="net.sourceforge.jasa.AllTests" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.SerializationTests" todir="${junit.output.dir}"/>
+            <classpath refid="jasa.classpath"/>
+        </junit>
+    </target>
+    <target name="RandomRobinAuctionTest">
+        <java classname="net.sourceforge.jasa.market.RandomRobinAuctionTest" failonerror="true" fork="yes">
+            <classpath refid="jasa.classpath"/>
+        </java>
+    </target>
+    <target name="net.sourceforge.jasa.agent">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="net.sourceforge.jasa.agent.AbstractTraderAgentTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.AdaptiveStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.BuyerIntervalValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.CommodityHoldingTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.EPEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.GDEfficiencyCHTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.GDEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.KaplanStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.MomentumStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.PriestVanTolEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.QLearnerEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomConstrainedStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomScheduleValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomUnconstrainedStrategyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RandomValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.RothErevEfficiencyTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.SellerIntervalValuerTest" todir="${junit.output.dir}"/>
+            <test name="net.sourceforge.jasa.agent.ZIPEfficiencyTest" todir="${junit.output.dir}"/>
+            <classpath refid="jasa.classpath"/>
+        </junit>
+    </target>
+    <target name="AdaptiveStrategyTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="net.sourceforge.jasa.agent.AdaptiveStrategyTest" todir="${junit.output.dir}"/>
+            <classpath refid="jasa.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
 </project>

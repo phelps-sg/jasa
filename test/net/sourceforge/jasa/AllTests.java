@@ -40,7 +40,6 @@ public class AllTests {
 
 		suite.addTest(net.sourceforge.jasa.agent.AbstractTraderAgentTest.suite());
 		suite.addTest(net.sourceforge.jasa.agent.AdaptiveStrategyTest.suite());
-		suite.addTest(net.sourceforge.jasa.agent.MixedStrategyTest.suite());
 		suite
 		    .addTest(net.sourceforge.jasa.agent.RandomConstrainedStrategyTest.suite());
 		suite.addTest(net.sourceforge.jasa.agent.RandomUnconstrainedStrategyTest

@@ -26,22 +26,7 @@ import org.apache.log4j.Logger;
 /**
  * A class representing a strategy in which we adapt our bids using a discrete
  * learning algorithm.
- * 
- * </p>
- * <p>
- * <b>Parameters</b><br>
- * 
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.markupscale</tt><br>
- * <font size=-1>double &gt;= 0</font></td>
- * <td valign=top>(scaling factor by which to multiply the output from the
- * learner)</td>
- * </tr>
- * 
- * </table>
- * 
+ *
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -54,10 +39,6 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 	 * algorithm.
 	 */
 	protected double markupScale = 1;
-
-	public static final String P_DEF_BASE = "discretelearnerstrategy";
-
-	static final String P_MARKUPSCALE = "markupscale";
 
 	static Logger logger = Logger.getLogger(DiscreteLearnerStrategy.class);
 

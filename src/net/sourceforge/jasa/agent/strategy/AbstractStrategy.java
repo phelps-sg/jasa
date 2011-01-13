@@ -16,20 +16,16 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
-import java.util.List;
 
 import net.sourceforge.jabm.Agent;
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.strategy.Strategy;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-
-
 
 /**
  * <p>
@@ -106,6 +102,7 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 //		currentShout = new Order();
 	}
 
+	@Override
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof RoundClosedEvent) {
 			onRoundClosed(((RoundClosedEvent) event).getAuction());

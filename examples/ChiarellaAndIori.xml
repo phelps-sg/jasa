@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--  A JASA implementation of the model described in the following paper:
+
+		Iori, G., Chiarella, C., November 2002. 
+		A Simulation Analysis of the Microstructure of Double Auction Markets. 
+		Quantitative Finance 2, 346-353.
+		http://ssrn.com/abstract=841608
+
+ -->
+ 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
@@ -73,7 +83,7 @@
 </bean>
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
-	<constructor-arg ref="simulationController"/>
+	<property name="simulationController" ref="simulationController"/>
 	<property name="market" ref="market"/>
 	<property name="maximumDays" value="100"/>
 	<property name="lengthOfDay" value="100"/>
@@ -106,8 +116,8 @@
 </bean>
 
 <bean id="population" class="net.sourceforge.jabm.Population">
-	<constructor-arg ref="prng"/>
-	<constructor-arg ref="linearCombinationTraderFactory"/>
+	<property name="prng" ref="prng"/>
+	<property name="agentFactory" ref="linearCombinationTraderFactory"/>
 	<property name="size" value="1000"/>
 </bean>
 
