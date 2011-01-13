@@ -1,4 +1,4 @@
-<HTML>
+﻿<HTML>
   <HEAD>
     <TITLE>README for JASA</TITLE>
   </HEAD>
@@ -14,55 +14,6 @@ Last modified: $Author$<br>
 $Date$<br>
 $Revision$<br>
 </p>
-
-
-<H3>
-Contents
-</H3>
-
-<LI>
-  <A href="#about">About</A>
-</LI>
-
-<LI>
-  <A href="#status">Development Status</A>
-</LI>
-
-<LI>
-  <A href="#license">Licensing information</A>
-</LI>
-
-<LI>
-  <A href="#prerequisites">Prerequisites</A>
-</LI>
-
-<LI>
-  <A href="#downloading">Obtaining the latest release</A>
-</LI>
-
-<LI>
-  <A href="#installation">Installation</A>
-</LI>
-
-<LI>
-  <A href="#eclipseinst">Running JASA using Eclipse</A>
-</LI>
-
-<LI>
-  <A href="#antinst">Running JASA using Apache Ant</A>
-</LI>
-
-<LI>
-  <A href="#parameterfiles">Parameter files</A>
-</LI>
-
-<LI>
-  <A href="#documentation">Documentation</A>
-</LI>
-
-<LI>
-  <A href="#acknowledgements">Acknowledgements</A>
-</LI>
 
 <a name="About"></a>
 <h3>
@@ -82,7 +33,7 @@ Development Status
 <p>
 This package is currently at alpha.  This code is not stable or fully tested.
 Please report any bugs, issues or suggestions to <A
-href="mailto:sphelps@gmail.com">Steve Phelps</A>.  
+href="mailto:phelps.sg@gmail.com">Steve Phelps</A>.  
 </p>
 
 <A name="license"></A>
@@ -122,152 +73,74 @@ Documentation
 Prerequisites
 </h3>
 
+<ul>
 <LI>
 <a href="http://java.sun.com">Java</a> JVM 1.6.0 or later
 </LI>
 
-<LI>
-<a href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> version 1.6.2 or later.
-
-<A name="dependencies"></A>
-<h3>
-Dependencies
-</h3>
-
-<p>
-JASA is built on top of the <a href="jabm.sourceforge.net"/>JABM framework</a>
+<li>
+JASA is built on top of the <a href="http://jabm.sourceforge.net"/>JABM framework</a>
 which must be installed before using JASA.
-</p>
-
-<A name="installation"></A>
-<h3>
-Installation
-</h3>
-
-<p>
-JASA can be run either using either 
-<a href="#apacheinst">Apache Ant</a> or the Java
-<a href="#eclipseinst">Eclipse IDE</a>.
-</p>
-
-<h3><a name="eclipseinst">
-Running JASA using the Eclipse IDE
-</h3>
-
-<li>
-<p>
-See the <a href="http://www.eclipse.org">Eclipse Web site</a> for instructions on installing and configuring Eclipse.
-</p>
 </li>
+</ul>
 
-<li>
-<p>
-Select the 'Import' option from the 'File' menu and choose 
-'Existing projects into Workspace' from the 'General' category.  
-Choose the 'select archive file' option and then browse to the location 
-where you downloaded the distribution .tar.gz file (eg 'jasa-0.36.tar.gz').
-</p>
-</li>
-
-<li>
-<p>
-JASA has two main classes: <code>uk.ac.liv.auction.RepastMarketSimulation</code> and
-<code>uk.ac.liv.auction.MarketSimulation</code>.  The former
-can be used to run experiments interactively with visualisation provided 
-by <a href="http://repast.sourceforge.net">Repast</a>, whereas the latter can be used 
-to run a series of experiments in batch-mode.  Both applications take a single argument specifying 
-the <a href="#parameterfiles">parameters</a> to use for each experiment.  The distribution ships with several
-example parameter files in the 'examples' directory.  To run the experiment for example2:
-</p>
-</li>
-
-<li>
-Open the run configuration dialog in Eclipse using the 'Run/Run Configurations..' menu; 
-</li>
-
-<li>
-Create
-a new 'java application' configuration and specify <code>uk.ac.liv.auction.RepastMarketSimulation</code>
-as the main class;
-</li>
-
-<li>
-Specify 
-<code>examples/example2.params</code> for the program arguments in the Arguments tab.
-</li> 
-
-<h3> <a name="apacheinst">
-Running JASA using Apache Ant
-</h4> 
-
-<p>
-<li>
-Simply unpack the distribution into a directory.
-The instructions refer to this directory as <code>JASADIR</code> from here on.
-</li>
-</p>
-
-<A name="compiling"></A>
-<h4>
-Compiling the code
-</h4>
-
-<p>
-JASA ships with a <code>build.xml</code> file that can be used with <a
-href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> to build the
-project.  The default settings in <code>build.xml</code> expect to find the
-various third-party class libraries used by JASA either in the CLASSPATH or in
-the directory </code>jasa/lib</code>, however alternative locations can be
-specified by creating a file <code>build.ant.properties</code>.
-</p>
-
-<A name="running"></A>
-<h4>
+<H2>
 Running the examples
-</h4>
+</H2>
 
-<p>
-The <code>examples/</code> directory contains several <a href="#parameterfiles">parameter files</a>
-for different example experiments.
-These can be executed using <a href="http://jakarta.apache.org/ant/index.html">Apache Ant</a> by specifying the target <code>run</code>, and defining a property <code>params</code> specifying the parameter file you want to use for the simulation;
- e.g. <code>cd</code> into the directory <code>JASADIR</code> and execute the following command:
-<p>
-<code>
-ant run -Dparams=examples/example2.params
-</code>
-</p>
-
-<p>
-To run a batch experiment, use the 'batchrun' command, eg:
-</p>
-<code>
-ant batchrun -Dparams=examples/example1.params
-</code>
-</p>
-
-<p>
-Alternatively, for maximum performance, set your CLASSPATH environment to include all the libraries used by JASA, and then execute the following command:
-</p>
+<h3>Using Apache Ant</h3>
+<P>
+The examples can be run using <A href="ant.apache.org">Apache Ant</A>.  Launch a 
+command window or shell and set your working directory to the <code>jasa/</code> subdirectory.
+Next <a href="http://ant.apache.org/manual/running.html">run ant</a>
+ and pass it the argument </code>ChiarellaAndIori</code> in order to run the Chiarella and Iori example.  For example:
+</P>
 
 <code>
-java -server uk.ac.liv.auction.MarketSimulation examples/example1.params
+ant ChiarellaAndIori
 </code>
 
-<p>
-The <code>-server</code> option tells the JVM to use the server version of the
-just-in-time (JIT) compiler, which will perform many more optimizations than
-the standard JIT. 
- </p>
+<h3>From the command line</h3>
+
+<P>
+Alternatively, configure the
+
+<a href="http://download.oracle.com/javase/tutorial/essential/environment/paths.html">CLASSPATH</a> 
+
+environment variable to include all the <code>jar</code> files in the <code>lib/</code> directory and the <code>dist/</code>
+directory and use a command similar to the following:
+</P>
+
+<code>
+ java -Djabm.config=config/ChiarellaAndIori.xml
+  		net.sourceforge.jasa.market.MarketFacade
+</code> 		
+
+<h3>From the Eclipse IDE</h3>
+
+<P>
+The distribution archive can be imported directly into the <a href="http://www.eclipse.org/">Eclipse IDE</a> by
+using the <a href="http://help.eclipse.org/helios/index.jsp?topic=/org.eclipse.platform.doc.user/tasks/tasks-importproject.htm">File/Import</a> menu item.
+Create a <a href="http://help.eclipse.org/helios/index.jsp?topic=/org.eclipse.jdt.doc.user/tasks/tasks-java-local-configuration.htm">launch configuration</a> with the main class <code>net.sourceforge.jasa.market.MarketFacade</code>
+and specify which configuration file you want to use by setting the system property <code>jabm.config</code> using 
+the JVM argument <code>-D</code>, for example
+</P>
+
+ <code>-Djabm.config=config/ChiarellaAndIori.xml</code>
  
-<A name="parameterfiles"</A>
-<h3>
-Parameter files
-</h3>
+<H3>
+Documentation
+</H3>
 
-<p>
-JASA uses the same framework as <a href="http://www.cs.gmu.edu/~eclab/projects/ecj/">ECJ</a> for configuring experiments.  See ECJ's
-<a href="http://www.cs.gmu.edu/~eclab/projects/ecj/docs/parameters.html">primer</a> on parameter files.
-</p>
+<ul>
+<li>
+<a href="doc/javadoc/index.html">Javadoc</a>
+</li>
+<li>
+<a href="doc/uml/">UML</a>
+</li>
+</ul>
+
 
 <A name="acknowledgements"></A>
 <h3>
@@ -305,8 +178,9 @@ This product includes software developed by the Apache Software Foundation <a hr
 
 <hr>
 
+
 <p>
-(C) 2009 <a href="http://www.essex.ac.uk/ccfea/Centre/people/staff/sphelps.htm">Steve Phelps</a>
+(C) 2011 <a href="http://www.essex.ac.uk/ccfea/Centre/people/staff/sphelps.htm">Steve Phelps</a>
 </p>
 
 </body>

@@ -11,7 +11,7 @@
 	</target>
 	
 	<target name="doc">
-		<javadoc classpathref="jabm.classpath" author="true" sourcepath="src/"
+		<javadoc classpathref="jasa.classpath" author="true" sourcepath="src/"
 			 destdir="doc/api/">
 		</javadoc>
 	</target>
@@ -20,6 +20,7 @@
 		<zip  destfile="../jasa-${version}.zip"
 			  basedir="../"
 			  includes="jasa/**"
+			  excludes="jasa/data/**"
 			  >
 		</zip>
 	</target>

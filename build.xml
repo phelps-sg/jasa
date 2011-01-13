@@ -126,13 +126,7 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="jasa ChiarellaAndIori.xml">
-        <java classname="net.sourceforge.jasa.market.MarketFacade" failonerror="true" fork="yes">
-            <jvmarg line="-server -Djabm.config=examples/ChiarellaAndIori.xml"/>
-            <classpath refid="jasa.classpath"/>
-        </java>
-    </target>
-    <target name="jasa tests">
+    <target name="test">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
@@ -171,78 +165,14 @@
             <test name="net.sourceforge.jasa.replication.zi.ZITraderAgentTest" todir="${junit.output.dir}"/>
             <test name="net.sourceforge.jasa.report.EquilibriaStatsTest" todir="${junit.output.dir}"/>
             <test name="net.sourceforge.jasa.report.EquilibriumSurplusLoggerTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-server -ea -Xms100m -Xmx100m"/>
             <classpath refid="jasa.classpath"/>
         </junit>
     </target>
-    <target name="AbstractTraderAgentTest">
-        <java classname="net.sourceforge.jasa.agent.AbstractTraderAgentTest" failonerror="true" fork="yes">
+    <target name="ChiarellaAndIori">
+        <java classname="net.sourceforge.jasa.market.MarketFacade" failonerror="true" fork="yes">
+            <jvmarg line="-server -Djabm.config=examples/ChiarellaAndIori.xml"/>
             <classpath refid="jasa.classpath"/>
         </java>
-    </target>
-    <target name="AbstractTraderAgentTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="net.sourceforge.jasa.agent.AbstractTraderAgentTest" todir="${junit.output.dir}"/>
-            <classpath refid="jasa.classpath"/>
-        </junit>
-    </target>
-    <target name="net.sourceforge.jasa.report">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="net.sourceforge.jasa.report.EquilibriaStatsTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.report.EquilibriumSurplusLoggerTest" todir="${junit.output.dir}"/>
-            <classpath refid="jasa.classpath"/>
-        </junit>
-    </target>
-    <target name="net.sourceforge.jasa">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="net.sourceforge.jasa.AllTests" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.SerializationTests" todir="${junit.output.dir}"/>
-            <classpath refid="jasa.classpath"/>
-        </junit>
-    </target>
-    <target name="RandomRobinAuctionTest">
-        <java classname="net.sourceforge.jasa.market.RandomRobinAuctionTest" failonerror="true" fork="yes">
-            <classpath refid="jasa.classpath"/>
-        </java>
-    </target>
-    <target name="net.sourceforge.jasa.agent">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="net.sourceforge.jasa.agent.AbstractTraderAgentTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.AdaptiveStrategyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.BuyerIntervalValuerTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.CommodityHoldingTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.EPEfficiencyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.GDEfficiencyCHTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.GDEfficiencyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.KaplanStrategyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.MomentumStrategyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.PriestVanTolEfficiencyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.QLearnerEfficiencyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.RandomConstrainedStrategyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.RandomScheduleValuerTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.RandomUnconstrainedStrategyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.RandomValuerTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.RothErevEfficiencyTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.SellerIntervalValuerTest" todir="${junit.output.dir}"/>
-            <test name="net.sourceforge.jasa.agent.ZIPEfficiencyTest" todir="${junit.output.dir}"/>
-            <classpath refid="jasa.classpath"/>
-        </junit>
-    </target>
-    <target name="AdaptiveStrategyTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="net.sourceforge.jasa.agent.AdaptiveStrategyTest" todir="${junit.output.dir}"/>
-            <classpath refid="jasa.classpath"/>
-        </junit>
     </target>
     <target name="junitreport">
         <junitreport todir="${junit.output.dir}">
