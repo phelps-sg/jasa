@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -43,6 +45,8 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 	 * The DataWriter to write the demand curve to.
 	 */
 	protected DataWriter demandStats;
+	
+	static Logger logger = Logger.getLogger(SupplyAndDemandStats.class);
 
 	/**
 	 * Constructor.
@@ -70,16 +74,18 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 
 	public abstract void writeDemandStats();
 
-	public void writeStats(DataWriter stats, List shouts, Comparator comparator) {
+	public void writeStats(DataWriter stats, List<Order> shouts, 
+							Comparator<Order> comparator) {
 		int qty = 0, qty1 = 0;
 		if (shouts.isEmpty()) {
 			return;
 		}
 		Collections.sort(shouts, comparator);
 		Order shout = (Order) shouts.get(0);
-		Iterator i = shouts.iterator();
+		Iterator<Order> i = shouts.iterator();
 		while (i.hasNext()) {
-			shout = (Order) i.next();
+			shout = i.next();
+			if (logger.isDebugEnabled()) logger.debug(shout);
 			qty1 = qty + shout.getQuantity();
 			stats.newData(qty);
 			stats.newData(shout.getPrice());

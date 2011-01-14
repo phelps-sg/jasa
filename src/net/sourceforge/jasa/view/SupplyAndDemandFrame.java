@@ -20,6 +20,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -28,7 +30,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.event.SimulationFinishedEvent;
+import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.report.DataSeriesWriter;
+import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 
@@ -41,7 +48,7 @@ import uchicago.src.sim.analysis.plot.RepastPlot;
  * @version $Revision$
  */
 
-public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
+public abstract class SupplyAndDemandFrame extends JFrame implements Report, Observer {
 
 	protected MarketFacade auction;
 
@@ -71,7 +78,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 		contentPane.setLayout(layout);
 
 		graph = new RepastPlot(null);
-		plotSupplyAndDemand();
+//		plotSupplyAndDemand();
 		graph.addLegend(SERIES_SUPPLY, "Supply", Color.BLUE);
 		graph.addLegend(SERIES_DEMAND, "Demand", Color.RED);
 
@@ -122,8 +129,8 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 	}
 
 	public void updateTitle() {
-		setTitle(getGraphName() + " at time "
-		    + auction.getRound());
+//		setTitle(getGraphName() + " at time "
+//		    + auction.getRound());
 	}
 
 	public void open() {
@@ -175,4 +182,21 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Observer {
 			}
 		}
 	}
+
+	@Override
+	public void eventOccurred(SimEvent event) {
+		if (event instanceof RoundClosedEvent) {
+//			updateGraph();
+		} else if (event instanceof SimulationStartingEvent) {
+			open();
+		} else if (event instanceof SimulationFinishedEvent) {
+			close();
+		}
+	}
+	
+	@Override
+	public Map<Object, Number> getVariableBindings() {
+		return new HashMap<Object, Number>();
+	}
+
 }

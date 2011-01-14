@@ -54,5 +54,7 @@ public interface TradingStrategy extends Strategy, Prototypeable,
 	public void initialise();
 
 	public void subscribeToEvents(EventScheduler scheduler);
+	
+	public boolean isBuy();
 
 }

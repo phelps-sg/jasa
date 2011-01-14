@@ -61,6 +61,8 @@ public class MockStrategy extends AbstractStrategy {
 		return true;
 	}
 	
-	
+	public boolean isBuy() {
+		return shouts[currentShout].isBid();
+	}
 
 }

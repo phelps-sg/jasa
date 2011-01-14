@@ -491,7 +491,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 
 	public boolean isBuyer() {
 		if (currentOrder == null) {
-			return ((FixedDirectionStrategy) strategy).isBuy();
+			return strategy.isBuy();
 		} else {
 			return currentOrder.isBid();
 		}

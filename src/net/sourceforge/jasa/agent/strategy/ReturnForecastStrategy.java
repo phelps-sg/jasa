@@ -15,6 +15,8 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	protected double markup;
 	
 	protected AbstractContinousDistribution markupDistribution;
+
+	protected boolean isBuy;
 	
 	public double getReturnForecast() {
 		ReturnForecaster forecaster = 
@@ -50,9 +52,9 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		}
 		double forecastedPrice = getPriceForecast(currentPrice);
 		assert forecastedPrice >= -10E-5;
-		boolean isBid = decideDirection(currentPrice, forecastedPrice);
-		shout.setIsBid(isBid);
-		if (isBid) {
+		this.isBuy = decideDirection(currentPrice, forecastedPrice);
+		shout.setIsBid(isBuy);
+		if (isBuy) {
 			shout.setPrice(forecastedPrice * (1 - markup));
 		} else {
 			shout.setPrice(forecastedPrice * (1 + markup));
@@ -92,6 +94,10 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	
 	public void initialiseMarkup() {
 		this.markup = markupDistribution.nextDouble();
+	}
+	
+	public boolean isBuy() {
+		return isBuy;
 	}
 
 }

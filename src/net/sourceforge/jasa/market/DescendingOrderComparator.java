@@ -27,14 +27,13 @@ import java.io.Serializable;
  * @version $Revision$
  */
 
-public class DescendingOrderComparator implements Comparator, Serializable {
+public class DescendingOrderComparator implements 
+		Comparator<Order>, Serializable {
 
 	public DescendingOrderComparator() {
 	}
 
-	public int compare(Object parm1, Object parm2) {
-		Order shout1 = (Order) parm1;
-		Order shout2 = (Order) parm2;
+	public int compare(Order shout1, Order shout2) {
 		return shout2.compareTo(shout1);
 	}
 }

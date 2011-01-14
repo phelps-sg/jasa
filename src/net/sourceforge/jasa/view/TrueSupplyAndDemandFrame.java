@@ -15,6 +15,9 @@
 
 package net.sourceforge.jasa.view;
 
+import java.util.Map;
+
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -42,10 +45,5 @@ public class TrueSupplyAndDemandFrame extends SupplyAndDemandFrame {
 		return new TrueSupplyAndDemandStats(auction, supplyCurve, demandCurve);
 	}
 
-	public void eventOccurred(MarketEvent event) {
-		if (event instanceof RoundClosedEvent) {
-			updateGraph();
-		}
-	}
 
 }

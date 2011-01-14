@@ -22,7 +22,7 @@
 	<property name="simulationBeanName">
 	   <idref local="marketSimulation"/>
 	</property>
-	<property name="numSimulations" value="1"/>
+	<property name="numSimulations" value="2"/>
 	<!-- <property name="simulationInitialiser">
 	   <bean class="net.sourceforge.jasa.init.ResetterSimulationInitialiser"/>
 	</property> --> 
@@ -35,6 +35,7 @@
 						<ref bean="orderFlowTimeSeriesReport"/>
 						<ref bean="midPointTimeSeriesReport"/>
 						<ref bean="setInitialSpreadReport"/> 
+						<ref bean="supplyAndDemandGraph"/> 
 					</list>
 				</constructor-arg>
 			</bean>
@@ -339,6 +340,11 @@
 	<constructor-arg value="10"/>
 	<constructor-arg value="100"/>
 	<constructor-arg ref="prng"/>
+</bean>
+
+<bean id="supplyAndDemandGraph"
+		class="net.sourceforge.jasa.view.ReportedSupplyAndDemandFrame">
+		<constructor-arg ref="market"/>
 </bean>
 
 </beans>
