@@ -12,6 +12,10 @@ public class MidPointTimeSeriesReport extends TimeSeriesReport {
 	public MidPointTimeSeriesReport(String filename) {
 		super(filename);
 	}
+	
+	public MidPointTimeSeriesReport() {
+		super();
+	}
 
 	@Override
 	public void produceUserOutput() {

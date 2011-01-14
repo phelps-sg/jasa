@@ -20,7 +20,7 @@
 		<zip  destfile="../jasa-${version}.zip"
 			  basedir="../"
 			  includes="jasa/**"
-			  excludes="jasa/data/**"
+			  excludes="jasa/data/**/*"
 			  >
 		</zip>
 	</target>

@@ -1,14 +1,16 @@
 package net.sourceforge.jasa.report;
 
-import net.sourceforge.jabm.event.BatchFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 public class TransactionPriceTimeSeriesReport extends TimeSeriesReport {
 
 	public TransactionPriceTimeSeriesReport(String filename) {
 		super(filename);
+	}
+	
+	public TransactionPriceTimeSeriesReport() {
+		super();
 	}
 
 	@Override

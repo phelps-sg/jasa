@@ -29,7 +29,8 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 			currentPrice = 10E-5;
 		}
 		double forecastedReturn = getReturnForecast();
-		return currentPrice * Math.exp(forecastedReturn);
+		double result = currentPrice * Math.exp(forecastedReturn);
+		return result;
 	}
 	
 	public boolean decideDirection(double currentPrice, 
@@ -51,6 +52,7 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 			assert currentPrice >= 0;
 		}
 		double forecastedPrice = getPriceForecast(currentPrice);
+		assert !Double.isNaN(forecastedPrice);
 		assert forecastedPrice >= -10E-5;
 		this.isBuy = decideDirection(currentPrice, forecastedPrice);
 		shout.setIsBid(isBuy);

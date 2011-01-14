@@ -81,6 +81,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 //		plotSupplyAndDemand();
 		graph.addLegend(SERIES_SUPPLY, "Supply", Color.BLUE);
 		graph.addLegend(SERIES_DEMAND, "Demand", Color.RED);
+		graph.setDoubleBuffered(true);
 
 		contentPane.add(graph, BorderLayout.CENTER);
 
@@ -88,18 +89,19 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 		updateButton = new JButton("Update");
 		updateButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				updateGraph();
+				graph.clear(0);
+				graph.clear(1);
 			}
 		});
 		controlPanel.add(updateButton);
 
-		autoUpdate = new JCheckBox("Auto Update");
-		autoUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				toggleAutoUpdate();
-			}
-		});
-		controlPanel.add(autoUpdate);
+//		autoUpdate = new JCheckBox("Auto Update");
+//		autoUpdate.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent event) {
+//				toggleAutoUpdate();
+//			}
+//		});
+//		controlPanel.add(autoUpdate);
 
 		contentPane.add(controlPanel, BorderLayout.SOUTH);
 
@@ -118,12 +120,12 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 	}
 
 	public void update(Observable auction, Object o) {
-		updateGraph();
 	}
 
 	public void updateGraph() {
-		graph.clear(0);
-		graph.clear(1);
+//		graph.clear(0);
+//		graph.clear(1);
+		graph.clearPoints();
 		plotSupplyAndDemand();
 		updateTitle();
 	}
@@ -186,7 +188,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 	@Override
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof RoundClosedEvent) {
-//			updateGraph();
+			updateGraph();
 		} else if (event instanceof SimulationStartingEvent) {
 			open();
 		} else if (event instanceof SimulationFinishedEvent) {

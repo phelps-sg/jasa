@@ -11,6 +11,10 @@ public class OrderFlowTimeSeriesReport extends TimeSeriesReport {
 	public OrderFlowTimeSeriesReport(String filename) {
 		super(filename);
 	}
+	
+	public OrderFlowTimeSeriesReport() {
+		super();
+	}
 
 	@Override
 	public void produceUserOutput() {

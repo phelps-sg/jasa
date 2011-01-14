@@ -3,6 +3,8 @@ package net.sourceforge.jasa.report;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import net.sourceforge.jabm.event.BatchFinishedEvent;
 import net.sourceforge.jabm.event.BatchStartingEvent;
 import net.sourceforge.jabm.event.SimEvent;
@@ -18,12 +20,18 @@ public abstract class TimeSeriesReport extends AbstractAuctionReport {
 
 	protected CSVWriter csvWriter;
 	
-	protected String filename;
+	protected String baseFilename;
 	
 	protected int n = 0;
 	
+	static Logger logger = Logger.getLogger(TimeSeriesReport.class);
+	
 	public TimeSeriesReport(String filename) {
-		this.filename = filename;
+		this.baseFilename = filename;
+	}
+	
+	public TimeSeriesReport() {
+		this(null);
 	}
 	
 	@Override
@@ -48,6 +56,26 @@ public abstract class TimeSeriesReport extends AbstractAuctionReport {
 	public void reset() {
 	}
 
+
+	public void onSimulationFinished() {
+		csvWriter.close();
+	}
+	
+	public void onSimulationStarting() {
+		try {
+			String filename = baseFilename + n + ".csv";
+			logger.info("Writing time series to " + filename);
+			csvWriter = 
+				new CSVWriter(new FileOutputStream(filename), 2);
+			n++;
+		} catch (IOException e) {
+			throw new AuctionRuntimeException(e);
+		}
+	}
+	
+	public void onBatchFinished() {
+	}
+	
 	public DataWriter getCsvWriter() {
 		return csvWriter;
 	}
@@ -56,23 +84,12 @@ public abstract class TimeSeriesReport extends AbstractAuctionReport {
 		this.csvWriter = dataWriter;
 	}
 
+	public String getBaseFilename() {
+		return baseFilename;
+	}
 
-	public void onSimulationFinished() {
-		csvWriter.close();
-	}
-	
-	public void onSimulationStarting() {
-		try {
-			csvWriter = 
-				new CSVWriter(new FileOutputStream(filename + n + ".csv"), 2);
-			n++;
-		} catch (IOException e) {
-			throw new AuctionRuntimeException(e);
-		}
-	}
-	
-	public void onBatchFinished() {
-//		csvWriter.close();
+	public void setBaseFilename(String baseFilename) {
+		this.baseFilename = baseFilename;
 	}
 
 	

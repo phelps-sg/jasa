@@ -48,7 +48,8 @@ public class ChartistForecaster extends AbstractReturnForecaster
 			}
 			stats.addValue(r);
 		}
-		return stats.getMean();
+		double result = stats.getMean();
+		return result;
 	}
 	
 	public void updatePriceHistory(RoundFinishedEvent event) {

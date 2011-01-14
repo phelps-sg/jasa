@@ -22,7 +22,7 @@
 	<property name="simulationBeanName">
 	   <idref local="marketSimulation"/>
 	</property>
-	<property name="numSimulations" value="2"/>
+	<property name="numSimulations" value="1"/>
 	<!-- <property name="simulationInitialiser">
 	   <bean class="net.sourceforge.jasa.init.ResetterSimulationInitialiser"/>
 	</property> --> 
@@ -35,7 +35,7 @@
 						<ref bean="orderFlowTimeSeriesReport"/>
 						<ref bean="midPointTimeSeriesReport"/>
 						<ref bean="setInitialSpreadReport"/> 
-						<ref bean="supplyAndDemandGraph"/> 
+						<!-- <ref bean="supplyAndDemandGraph"/> --> 
 					</list>
 				</constructor-arg>
 			</bean>
@@ -45,17 +45,17 @@
 
 <bean id="transactionPriceTimeSeriesReport" 
     class="net.sourceforge.jasa.report.TransactionPriceTimeSeriesReport">
-    <constructor-arg value="data/transprice"/>
+    <property name="baseFilename" value="data/transprice"/>
 </bean>
 
 <bean id="midPointTimeSeriesReport"
     class="net.sourceforge.jasa.report.MidPointTimeSeriesReport">
-    <constructor-arg value="data/midpoint"/>
+    <property name="baseFilename" value="data/midpoint"/>
 </bean>
 
 <bean id="orderFlowTimeSeriesReport"
     class="net.sourceforge.jasa.report.OrderFlowTimeSeriesReport">
-    <constructor-arg value="data/orderflow"/>
+    <property name="baseFilename" value="data/orderflow"/>
 </bean>
 
 <bean id="setInitialSpreadReport"
@@ -119,7 +119,7 @@
 <bean id="population" class="net.sourceforge.jabm.Population">
 	<property name="prng" ref="prng"/>
 	<property name="agentFactory" ref="linearCombinationTraderFactory"/>
-	<property name="size" value="1000"/>
+	<property name="size" value="100"/>
 </bean>
 
 <bean id="linearCombinationTraders" class="net.sourceforge.jabm.AgentList">
@@ -330,7 +330,7 @@
 
 <bean id="chartistWindowSizeDistribution" class="cern.jet.random.Uniform"
         scope="prototype">
-	<constructor-arg value="1.0"/>
+	<constructor-arg value="2.0"/>
 	<constructor-arg value="100.0"/>
 	<constructor-arg ref="prng"/>
 </bean>
