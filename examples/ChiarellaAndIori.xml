@@ -35,7 +35,7 @@
 						<ref bean="orderFlowTimeSeriesReport"/>
 						<ref bean="midPointTimeSeriesReport"/>
 						<ref bean="setInitialSpreadReport"/> 
-						<!-- <ref bean="supplyAndDemandGraph"/> --> 
+						<ref bean="supplyAndDemandGraph"/> 
 					</list>
 				</constructor-arg>
 			</bean>

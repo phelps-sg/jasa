@@ -1,0 +1,12 @@
+net.sourceforge.jasa.agent
+net.sourceforge.jasa.agent.strategy
+net.sourceforge.jasa.agent.utility
+net.sourceforge.jasa.agent.valuation
+net.sourceforge.jasa.event
+net.sourceforge.jasa.init
+net.sourceforge.jasa.market
+net.sourceforge.jasa.market.auctioneer
+net.sourceforge.jasa.market.rules
+net.sourceforge.jasa.replication.electricity
+net.sourceforge.jasa.report
+net.sourceforge.jasa.view
