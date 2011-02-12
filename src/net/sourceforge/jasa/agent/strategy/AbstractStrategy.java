@@ -16,6 +16,8 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.sourceforge.jabm.Agent;
 import net.sourceforge.jabm.EventScheduler;
@@ -95,6 +97,7 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 		//TODO Introduce a new class FixedDirectionStrategy
 //		shout.setIsBid(agent.isBuyer(auction));
 		shout.setAgent(agent);
+		execute(new LinkedList<Agent>());
 		return true;
 	}
 
@@ -119,16 +122,29 @@ public abstract class AbstractStrategy implements Serializable, TradingStrategy,
 	}
 
 	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
+	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
+	}	
+
+	@Override
+	public void execute(List<Agent> otherAgents) {		
 	}
 
-//	@Override
-//	public void execute(List<Agent> otherAgents) {
-//		// TODO Auto-generated method stub
-//		
-//	}
+	@Override
+	public void unsubscribeFromEvents() {
+	}
+
+	@Override
+	public int determineQuantity(Market auction) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isBuy() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	@Override
 	public void setAgent(Agent agent) {
