@@ -18,7 +18,7 @@ package net.sourceforge.jasa.agent;
 import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;
-import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
+import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
@@ -98,11 +98,11 @@ public class TokenTradingAgent extends FixedDirectionTradingAgent implements
 		}
 	}
 
-	public void onAgentArrival(Market auction) {
+	public void onAgentArrival(Market auction, AgentArrivalEvent event) {
 		if (tradeEntitlement <= 0) {
 			isActive = false;
 		}
-		super.onAgentArrival(auction);
+		super.onAgentArrival(auction, event);
 	}
 
 	public void initialise() {
@@ -170,7 +170,7 @@ public class TokenTradingAgent extends FixedDirectionTradingAgent implements
 	}
 
 	public int determineQuantity(Market auction) {
-		return strategy.determineQuantity(auction);
+		return getTradingStrategy().determineQuantity(auction);
 	}
 	
 

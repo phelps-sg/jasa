@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.2.8.200911091054-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[2.5.2.201101201000-SR2]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -9,6 +9,7 @@
 	<configs>
 		<config>examples/example1.xml</config>
 		<config>examples/single-sided.xml</config>
+		<config>examples/ChiarellaAndIori.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

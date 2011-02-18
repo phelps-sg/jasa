@@ -100,13 +100,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 
 	protected UtilityFunction utilityFunction;
 	
-
-	/**
-	 * The bidding strategy for this trader. The default strategy is to bid
-	 * truthfully for a single unit.
-	 */
-	protected TradingStrategy strategy = null;
-
 	/**
 	 * The profit made in the last round.
 	 */
@@ -174,16 +167,21 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	public AbstractTradingAgent(EventScheduler scheduler) {
 		this(0, 0, 0, scheduler);
 	}
+	
+	public TradingStrategy getTradingStrategy() {
+		return (TradingStrategy) strategy;
+	}
 
 	/**
 	 * Place a shout in the market as determined by the agent's strategy.
 	 */
-	public void onAgentArrival(Market market) {
+	public void onAgentArrival(Market market, AgentArrivalEvent event) {
 		try {
 			if (currentOrder != null) {
 				market.removeOrder(currentOrder);
 			}
-			Order newOrder = strategy.modifyOrder(currentOrder, market);
+			Order newOrder = 
+				getTradingStrategy().modifyOrder(currentOrder, market);
 			lastPayoff = 0;
 			lastOrderFilled = false;
 			if (active() && newOrder != null) {
@@ -191,6 +189,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 				market.placeOrder(newOrder);
 			}
 			currentOrder = newOrder;
+			super.onAgentArrival(event);
 		} catch (AuctionClosedException e) {
 			logger.debug("requestShout(): Received AuctionClosedException");
 			// do nothing
@@ -299,7 +298,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		lastOrderFilled = false;
 		currentOrder = null;
 		if (strategy != null) {
-			strategy.initialise();
+			getTradingStrategy().initialise();
 			strategy.subscribeToEvents(scheduler);
 		}
 		if (valuer != null) {
@@ -325,14 +324,14 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		((FixedValuer) valuer).setValue(privateValue);
 	}
 
-	public void setStrategy(TradingStrategy strategy) {
-		this.strategy = strategy;
-		strategy.setAgent(this);
-	}
-
-	public TradingStrategy getStrategy() {
-		return strategy;
-	}
+//	public void setStrategy(TradingStrategy strategy) {
+//		this.strategy = strategy;
+//		strategy.setAgent(this);
+//	}
+//
+//	public TradingStrategy getStrategy() {
+//		return strategy;
+//	}
 
 	/**
 	 * Return the profit made in the most recent market round. This can be used
@@ -347,7 +346,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	}
 
 	public int determineQuantity(Market auction) {
-		return strategy.determineQuantity(auction);
+		return getTradingStrategy().determineQuantity(auction);
 	}
 
 	public Object protoClone() {
@@ -469,7 +468,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 			throw new RuntimeException("Agent is not configured in any markets");
 		}
 		for(Market market : markets) {
-			onAgentArrival(market);
+			onAgentArrival(market, event);
 		}
 	}
 
@@ -479,19 +478,13 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		return active();
 	}
 
-	@Override
-	public void setStrategy(Strategy strategy) {
-		this.strategy = (TradingStrategy) strategy;
-		strategy.setAgent(this);
-	}
-
 	public int getVolume(Market auction) {
 		return ((FixedQuantityStrategy) strategy).getQuantity();
 	}
 
 	public boolean isBuyer() {
 		if (currentOrder == null) {
-			return strategy.isBuy();
+			return getTradingStrategy().isBuy();
 		} else {
 			return currentOrder.isBid();
 		}

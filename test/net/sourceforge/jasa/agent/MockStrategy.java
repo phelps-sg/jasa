@@ -16,7 +16,7 @@
 package net.sourceforge.jasa.agent;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.agent.strategy.AbstractStrategy;
+import net.sourceforge.jasa.agent.strategy.AbstractTradingStrategy;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 
 import net.sourceforge.jasa.market.Market;
@@ -28,7 +28,7 @@ import net.sourceforge.jasa.market.Order;
  * @version $Revision$
  */
 
-public class MockStrategy extends AbstractStrategy {
+public class MockStrategy extends AbstractTradingStrategy {
 
 	protected int currentShout = 0;
 

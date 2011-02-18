@@ -16,9 +16,7 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
-import java.util.List;
 
-import net.sourceforge.jabm.Agent;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
@@ -42,7 +40,7 @@ import net.sourceforge.jasa.market.Order;
  * @version $Revision$
  */
 
-public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
+public abstract class FixedQuantityStrategyImpl extends AbstractTradingStrategy
     implements FixedQuantityStrategy, Parameterizable, Serializable {
 
 	int quantity = 1;
@@ -71,5 +69,5 @@ public abstract class FixedQuantityStrategyImpl extends AbstractStrategy
 		shout.setQuantity(quantity);
 		return super.modifyShout(shout);
 	}
-	
+
 }

@@ -18,6 +18,7 @@ package net.sourceforge.jasa.agent;
 import junit.framework.TestCase;
 
 import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
@@ -105,8 +106,8 @@ public class MockTrader extends SimpleTradingAgent {
 	}
 
 	@Override
-	public void onAgentArrival(Market auction) {
-		super.onAgentArrival(auction);
+	public void onAgentArrival(Market auction, AgentArrivalEvent event) {
+		super.onAgentArrival(auction, event);
 		System.out.println(this + ": placed " + currentOrder);
 		receivedRequestShout++;
 		requestShoutDay = auction.getDay();

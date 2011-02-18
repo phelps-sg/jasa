@@ -55,7 +55,7 @@ public class MarkupStrategyDecorator extends FixedDirectionStrategy
 	}
 
 	public boolean modifyShout(Order shout) {
-		assert agent.equals(((AbstractStrategy) subStrategy).getAgent());
+		assert agent.equals(((AbstractTradingStrategy) subStrategy).getAgent());
 		double delta;
 		Order strategicShout = subStrategy.modifyOrder(shout, auction);
 		double strategicPrice = strategicShout.getPrice();

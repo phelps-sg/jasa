@@ -16,6 +16,7 @@
 package net.sourceforge.jasa.agent;
 
 import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
 
 import net.sourceforge.jasa.event.MarketEvent;
@@ -65,8 +66,8 @@ public class SimpleTradingAgent extends AbstractTradingAgent {
 		this(null);
 	}
 	
-	public void onAgentArrival(Market auction) {
-		super.onAgentArrival(auction);
+	public void onAgentArrival(Market auction, AgentArrivalEvent event) {
+		super.onAgentArrival(auction, event);
 		lastPayoff = 0;
 	}
 

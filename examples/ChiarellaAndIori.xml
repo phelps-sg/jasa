@@ -235,7 +235,7 @@
     <property name="initialTradeEntitlement" value="100"/>
 </bean>
 
-<bean id="truthTellingStrategy" 
+<bean id="truthTellingStrategy" parent="strategy"
         class="net.sourceforge.jasa.agent.strategy.TruthTellingStrategy"
         scope="prototype">
 </bean>
@@ -250,7 +250,12 @@
     <constructor-arg value="90"/>
 </bean>
 
-<bean id="returnForecastStrategy" scope="prototype" 
+<bean id="strategy" scope="prototype" 
+	class="net.sourceforge.jabm.strategy.AbstractStrategy">
+	<property name="scheduler" ref="simulationController"/>
+</bean>
+
+<bean id="returnForecastStrategy" scope="prototype" parent="strategy"
         class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
     <property name="markupDistribution" ref="markupDistribution"/>
     <property name="prng" ref="prng"/>

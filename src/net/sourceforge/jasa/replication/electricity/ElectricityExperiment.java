@@ -459,7 +459,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 		Iterator i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			SimpleTradingAgent t = (SimpleTradingAgent) i.next();
-			TradingStrategy s = t.getStrategy();
+			TradingStrategy s = (TradingStrategy) t.getStrategy();
 			if (s instanceof AdaptiveStrategy) {
 				Learner l = ((AdaptiveStrategy) s).getLearner();
 				learningDelta.newData(l.getLearningDelta());
@@ -539,7 +539,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 			Iterator i = auction.getTraderIterator();
 			while (i.hasNext()) {
 				SimpleTradingAgent t = (SimpleTradingAgent) i.next();
-				TradingStrategy s = t.getStrategy();
+				TradingStrategy s = (TradingStrategy) t.getStrategy();
 				if (s instanceof AdaptiveStrategy) {
 					Learner l = ((AdaptiveStrategy) s).getLearner();
 					l.dumpState(strategyData);
