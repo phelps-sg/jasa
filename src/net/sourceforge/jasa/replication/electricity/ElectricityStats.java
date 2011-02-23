@@ -20,7 +20,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;

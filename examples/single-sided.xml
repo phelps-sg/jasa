@@ -123,7 +123,7 @@
 
 <bean id="population" class="net.sourceforge.jabm.Population">
 	<property name="agentList">
-		<bean class="net.sourceforge.jabm.AgentList">
+		<bean class="net.sourceforge.jabm.agent.AgentList">
 			<constructor-arg>
 				<list>
 					<ref bean="buyers"/>
@@ -135,12 +135,12 @@
 	<property name="prng" ref="prng"/>
 </bean>
 
-<bean id="buyers" class="net.sourceforge.jabm.AgentList">
+<bean id="buyers" class="net.sourceforge.jabm.agent.AgentList">
 	<constructor-arg value="100"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
-<bean id="sellers" class="net.sourceforge.jabm.AgentList">
+<bean id="sellers" class="net.sourceforge.jabm.agent.AgentList">
 	<constructor-arg value="1"/>
 	<constructor-arg ref="sellerFactory"/> 	
 </bean>
@@ -236,12 +236,12 @@
 </bean>
 
 <bean id="riskNeutral" scope="prototype"
-	class="net.sourceforge.jasa.agent.utility.RiskNeutralUtilityFunction">
+	class="net.sourceforge.jabm.agent.utility.RiskNeutralUtilityFunction">
 	<property name="coefficient" value="10"/>
 </bean>
 
 <bean id="riskAverse" scope="prototype"
-	class="net.sourceforge.jasa.agent.utility.LogUtilityFunction">
+	class="net.sourceforge.jabm.agent.utility.LogUtilityFunction">
 	<property name="coefficient" value="10"/>
 </bean>
 

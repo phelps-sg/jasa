@@ -20,20 +20,18 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.sourceforge.jabm.AbstractAgent;
 import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.agent.AbstractAgent;
+import net.sourceforge.jabm.agent.utility.RiskNeutralUtilityFunction;
+import net.sourceforge.jabm.agent.utility.UtilityFunction;
 import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.strategy.Strategy;
 import net.sourceforge.jabm.util.IdAllocator;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jabm.util.Resetable;
 
-import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
-import net.sourceforge.jasa.agent.utility.RiskNeutralUtilityFunction;
-import net.sourceforge.jasa.agent.utility.UtilityFunction;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
 import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
 
@@ -51,7 +49,6 @@ import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
-
 
 import org.apache.log4j.Logger;
 
@@ -155,7 +152,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		initialFunds = funds;
 		account = new Account(this, initialFunds);
 		this.valuer = new FixedValuer(privateValue);
-		this.utilityFunction = new RiskNeutralUtilityFunction(this);
+		this.utilityFunction = new RiskNeutralUtilityFunction();
 		initialise();
 	}
 
@@ -399,7 +396,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 
 	public void setUtilityFunction(UtilityFunction utilityFunction) {
 		this.utilityFunction = utilityFunction;
-		utilityFunction.setAgent(this);
 	}
 
 	public AgentGroup getGroup() {

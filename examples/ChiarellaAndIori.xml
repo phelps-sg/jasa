@@ -122,32 +122,32 @@
 	<property name="size" value="100"/>
 </bean>
 
-<bean id="linearCombinationTraders" class="net.sourceforge.jabm.AgentList">
+<bean id="linearCombinationTraders" class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="1000"/>
     <constructor-arg ref="linearCombinationTraderFactory"/>
 </bean>
 
-<bean id="noiseTraders" class="net.sourceforge.jabm.AgentList">
+<bean id="noiseTraders" class="net.sourceforge.jabm.agent.AgentList">
 	<constructor-arg value="800"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
 </bean>
 
-<bean id="fundamentalists" class="net.sourceforge.jabm.AgentList">
+<bean id="fundamentalists" class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="50"/>
     <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 
-<bean id="chartists" class="net.sourceforge.jabm.AgentList">
+<bean id="chartists" class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="150"/>
     <constructor-arg ref="chartistFactory"/>
 </bean>
 
-<bean id="fixedPriceBuyers" class="net.sourceforge.jabm.AgentList">
+<bean id="fixedPriceBuyers" class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="1"/>
     <constructor-arg ref="fixedPriceBuyerFactory"/>
 </bean>
 
-<bean id="fixedPriceSellers" class="net.sourceforge.jabm.AgentList">
+<bean id="fixedPriceSellers" class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="1"/>
     <constructor-arg ref="fixedPriceSellerFactory"/>
 </bean>

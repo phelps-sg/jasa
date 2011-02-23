@@ -17,7 +17,7 @@ package net.sourceforge.jasa.replication.electricity;
 
 import java.util.Iterator;
 
-import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.learning.NPTRothErevLearner;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;

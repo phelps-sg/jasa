@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 

@@ -65,7 +65,7 @@
 
 <bean id="population" class="net.sourceforge.jabm.Population">
 	<property name="agentList">
-		<bean class="net.sourceforge.jabm.AgentList">
+		<bean class="net.sourceforge.jabm.agent.AgentList">
 			<constructor-arg>
 				<list>
 					<ref bean="buyers"/>
@@ -77,12 +77,12 @@
 	<property name="prng" ref="prng"/>
 </bean>
 
-<bean id="buyers" class="net.sourceforge.jabm.AgentList">
+<bean id="buyers" class="net.sourceforge.jabm.agent.AgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="buyerFactory"/> 	
 </bean>
 
-<bean id="sellers" class="net.sourceforge.jabm.AgentList">
+<bean id="sellers" class="net.sourceforge.jabm.agent.AgentList">
 	<constructor-arg value="10"/>
 	<constructor-arg ref="sellerFactory"/> 	
 </bean>

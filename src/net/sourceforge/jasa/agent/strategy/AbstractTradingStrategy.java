@@ -18,8 +18,8 @@ package net.sourceforge.jasa.agent.strategy;
 import java.io.Serializable;
 import java.util.List;
 
-import net.sourceforge.jabm.Agent;
 import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.StrategyExecutedEvent;
 import net.sourceforge.jabm.strategy.AbstractStrategy;

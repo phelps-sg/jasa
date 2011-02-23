@@ -22,7 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.FixedLengthQueue;
 import net.sourceforge.jabm.util.Parameterizable;

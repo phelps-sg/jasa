@@ -20,7 +20,7 @@ import java.util.Iterator;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
-import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;

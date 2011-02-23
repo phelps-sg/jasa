@@ -2,8 +2,8 @@ package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
 
-import net.sourceforge.jabm.Agent;
 import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.init.BasicAgentInitialiser;
 import net.sourceforge.jasa.market.MarketFacade;
 

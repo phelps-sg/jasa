@@ -18,11 +18,11 @@ package net.sourceforge.jasa.market;
 import java.io.Serializable;
 import java.util.Iterator;
 
-import net.sourceforge.jabm.Agent;
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SimulationTime;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.EventListener;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.init.BasicAgentInitialiser;

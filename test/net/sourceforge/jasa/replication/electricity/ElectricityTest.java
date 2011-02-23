@@ -19,7 +19,7 @@ import java.util.Iterator;
 
 import junit.framework.TestCase;
 
-import net.sourceforge.jabm.Agent;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.learning.NPTRothErevLearner;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
