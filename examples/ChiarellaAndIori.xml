@@ -31,6 +31,7 @@
 			<bean class="net.sourceforge.jabm.report.BatchMetaReport">
 				<constructor-arg>
 					<list>
+						<ref bean="transactionPriceTimeSeriesChart"/>
 						<ref bean="transactionPriceTimeSeriesReport"/>
 						<ref bean="orderFlowTimeSeriesReport"/>
 						<ref bean="midPointTimeSeriesReport"/>
@@ -40,6 +41,22 @@
 				</constructor-arg>
 			</bean>
 		</list>
+	</property>
+</bean>
+
+<bean id="transactionPriceTimeSeriesChart" 
+		class="net.sourceforge.jabm.report.TimeSeriesReport">
+	<property name="reportVariables">
+		<bean class="net.sourceforge.jabm.view.TimeSeriesChart">
+			<property name="series">
+				<bean class="net.sourceforge.jabm.report.SeriesReportVariables">
+					<property name="reportVariables">
+						<bean class="net.sourceforge.jasa.report.TransactionPriceReportVariables">
+						</bean>
+					</property>
+				</bean>
+			</property>
+		</bean>
 	</property>
 </bean>
 
@@ -86,7 +103,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<property name="simulationController" ref="simulationController"/>
 	<property name="market" ref="market"/>
-	<property name="maximumDays" value="100"/>
+	<property name="maximumDays" value="300"/>
 	<property name="lengthOfDay" value="100"/>
 	<property name="population" ref="population"/>
     <property name="agentMixer" ref="randomArrivalAgentMixer"/>

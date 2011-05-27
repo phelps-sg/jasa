@@ -120,7 +120,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		TradingAgent seller = (TradingAgent) ask.getAgent();
 
 		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
-				getMarket(), getSimulation().getRound(), ask,
+				getMarket(), getSimulation().getAge(), ask,
 				bid, buyerCharge, ask.getQuantity());
 		fireEvent(transactionEvent);
 		
