@@ -34,19 +34,17 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 
 	@Override
 	public void compute(SimulationEvent event) {
-		// TODO Auto-generated method stub
-
+		// Do nothing
 	}
 
 	@Override
 	public void dispose(SimEvent event) {
-		// TODO Auto-generated method stub
-
+		// Do nothing
 	}
 
 	@Override
 	public void initialise(SimEvent event) {
-		// TODO Auto-generated method stub
+		// Do nothing
 
 	}
 
@@ -56,13 +54,17 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 	}
 
 	@Override
-	public Number getX() {
+	public Number getX(int seriesIndex) {
 		return this.time;
 	}
 
 	@Override
-	public Number getY() {
+	public Number getY(int seriesIndex) {
 		return this.lastTransactionPrice;
+	}
+	
+	public int getNumberOfSeries() {
+		return 1;
 	}
 
 }
