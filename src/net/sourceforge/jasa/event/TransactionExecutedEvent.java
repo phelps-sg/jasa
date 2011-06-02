@@ -55,6 +55,10 @@ public class TransactionExecutedEvent extends MarketEvent {
 		this.price = price;
 		this.quantity = quantity;
 	}
+	
+	public TransactionExecutedEvent() {
+		super(null, 0);
+	}
 
 	public Order getAsk() {
 		return ask;

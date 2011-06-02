@@ -24,17 +24,8 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 	}
 
 	@Override
-	public void eventOccurred(SimEvent ev) {
-		if (ev instanceof TransactionExecutedEvent) {
-			TransactionExecutedEvent event = (TransactionExecutedEvent) ev;
-			this.lastTransactionPrice = event.getPrice();
-			this.time = event.getTime();
-		}
-	}
-
-	@Override
-	public void compute(SimulationEvent event) {
-		// Do nothing
+	public void compute(SimEvent ev) {
+		
 	}
 
 	@Override
@@ -65,6 +56,15 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 	
 	public int getNumberOfSeries() {
 		return 1;
+	}
+
+	@Override
+	public void eventOccurred(SimEvent ev) {
+		if (ev instanceof TransactionExecutedEvent) {
+			TransactionExecutedEvent event = (TransactionExecutedEvent) ev;
+			this.lastTransactionPrice = event.getPrice();
+			this.time = event.getTime();
+		}
 	}
 
 }
