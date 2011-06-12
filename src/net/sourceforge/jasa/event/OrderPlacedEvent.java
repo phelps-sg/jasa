@@ -36,6 +36,10 @@ public class OrderPlacedEvent extends MarketEvent {
 		super(auction, time);
 		this.shout = shout;
 	}
+	
+	public OrderPlacedEvent() {
+		this(null, 0, null);
+	}
 
 	public Order getOrder() {
 		return shout;

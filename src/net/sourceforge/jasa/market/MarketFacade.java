@@ -344,7 +344,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		order.setTimeStamp(controller.getSimulation().getSimulationTime());
 		auctioneer.newOrder(order);
 //		System.out.println(order);
-		fireEvent(new OrderPlacedEvent(this, getSimulation().getRound(), order));
+		fireEvent(new OrderPlacedEvent(this, getSimulation().getAge(), order));
 
 		// notifyObservers();
 	}

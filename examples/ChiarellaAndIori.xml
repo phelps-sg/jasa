@@ -31,13 +31,15 @@
 			<bean class="net.sourceforge.jabm.report.BatchMetaReport">
 				<constructor-arg>
 					<list>
-						<ref bean="transactionPriceTimeSeriesChart"/>
+						<ref bean="priceTimeSeriesChart"/>
 						<ref bean="transactionPriceTimeSeriesReport"/>
+						<ref bean="midPriceTimeSeriesReport"/>
 						<ref bean="transactionPriceReportVariables" />
+						<ref bean="midPriceReportVariables" />
 						<ref bean="orderFlowTimeSeriesReport"/>
 						<ref bean="midPointTimeSeriesReport"/>
 						<ref bean="setInitialSpreadReport"/> 
-						<ref bean="supplyAndDemandGraph"/> 
+<!--						<ref bean="supplyAndDemandGraph"/> -->
 					</list>
 				</constructor-arg>
 			</bean>
@@ -53,6 +55,24 @@
 	<property name="reportVariables" ref="transactionPriceTimeSeries"/>
 </bean>
 
+
+<bean id="midPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
+	<property name="eventPrototype">
+		<bean class="net.sourceforge.jasa.event.OrderPlacedEvent">
+		</bean>
+	</property>
+	<property name="reportVariables" ref="midPriceTimeSeries"/>
+</bean>
+
+<bean id="priceTimeSeries" class="net.sourceforge.jabm.report.CombiSeriesReportVariables">
+	<property name="seriesList">
+		<list>
+			<ref bean="transactionPriceTimeSeries"/>
+			<ref bean="midPriceTimeSeries"/>
+		</list>
+	</property>
+</bean>
+
 <bean id="transactionPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
 	<property name="reportVariables" ref="transactionPriceReportVariables"/>
 </bean>
@@ -60,14 +80,19 @@
 <bean id="transactionPriceReportVariables" class="net.sourceforge.jasa.report.TransactionPriceReportVariables">
 </bean>
 
-<bean id="transactionPriceTimeSeriesChart" 
-		class="net.sourceforge.jabm.view.TimeSeriesChart">
-	<property name="series" ref="transactionPriceTimeSeries"/>
-	<property name="chartTitle" value="Transaction price time series"/>
-	<property name="rangeAxisLabel" value="Transaction price ($)"/>
+<bean id="midPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
+	<property name="reportVariables" ref="midPriceReportVariables"/>
 </bean>
 
+<bean id="midPriceReportVariables" class="net.sourceforge.jasa.report.MidpriceReportVariables">
+</bean>
 
+<bean id="priceTimeSeriesChart" 
+		class="net.sourceforge.jabm.view.TimeSeriesChart">
+	<property name="series" ref="priceTimeSeries"/>
+	<property name="chartTitle" value="Price time series"/>
+	<property name="rangeAxisLabel" value="Price ($)"/>
+</bean>
 
 <!-- <bean id="transactionPriceTimeSeriesReport"  -->
 <!--     class="net.sourceforge.jasa.report.TransactionPriceTimeSeriesReport"> -->
