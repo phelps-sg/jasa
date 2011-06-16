@@ -27,24 +27,18 @@
 	   <bean class="net.sourceforge.jasa.init.ResetterSimulationInitialiser"/>
 	</property> --> 
 	<property name="reports">
-		<list>
-			<bean class="net.sourceforge.jabm.report.BatchMetaReport">
-				<constructor-arg>
-					<list>
-						<ref bean="priceTimeSeriesChart"/>
-						<ref bean="transactionPriceTimeSeriesReport"/>
-						<ref bean="midPriceTimeSeriesReport"/>
-						<ref bean="transactionPriceReportVariables" />
-						<ref bean="midPriceReportVariables" />
-						<ref bean="orderFlowTimeSeriesReport"/>
-						<ref bean="midPointTimeSeriesReport"/>
-						<ref bean="setInitialSpreadReport"/> 
-<!--						<ref bean="supplyAndDemandGraph"/> -->
-					</list>
-				</constructor-arg>
-			</bean>
-		</list>
-	</property>
+	<list>
+		<ref bean="priceTimeSeriesChart" />
+		<ref bean="transactionPriceTimeSeriesReport" />
+		<ref bean="transactionPriceReportVariables" />
+		<ref bean="midPriceTimeSeriesReport" />
+		<ref bean="midPriceReportVariables" />
+		<ref bean="orderFlowReportVariables" />
+		<ref bean="orderFlowTimeSeriesReport" />
+		<ref bean="setInitialSpreadReport" />
+		<!-- <ref bean="supplyAndDemandGraph"/> -->
+	</list>
+</property>
 </bean>
 
 <bean id="transactionPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
@@ -55,7 +49,6 @@
 	<property name="reportVariables" ref="transactionPriceTimeSeries"/>
 </bean>
 
-
 <bean id="midPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
 	<property name="eventPrototype">
 		<bean class="net.sourceforge.jasa.event.OrderPlacedEvent">
@@ -64,16 +57,30 @@
 	<property name="reportVariables" ref="midPriceTimeSeries"/>
 </bean>
 
+<bean id="orderFlowTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
+	<property name="eventPrototype">
+		<bean class="net.sourceforge.jasa.event.OrderPlacedEvent">
+		</bean>
+	</property>
+	<property name="reportVariables" ref="orderFlowTimeSeries"/>
+</bean>
+
 <bean id="priceTimeSeries" class="net.sourceforge.jabm.report.CombiSeriesReportVariables">
 	<property name="seriesList">
 		<list>
-			<ref bean="transactionPriceTimeSeries"/>
+<!-- 			<ref bean="transactionPriceTimeSeries"/> -->
 			<ref bean="midPriceTimeSeries"/>
+			<ref bean="orderFlowTimeSeries"/>
 		</list>
 	</property>
 </bean>
 
-<bean id="transactionPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
+<bean id="orderFlowTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
+	<property name="reportVariables" ref="orderFlowReportVariables" />
+</bean>
+
+<bean id="transactionPriceTimeSeries" 
+		class="net.sourceforge.jabm.report.SeriesReportVariables">
 	<property name="reportVariables" ref="transactionPriceReportVariables"/>
 </bean>
 
@@ -84,7 +91,7 @@
 	<property name="reportVariables" ref="midPriceReportVariables"/>
 </bean>
 
-<bean id="midPriceReportVariables" class="net.sourceforge.jasa.report.MidpriceReportVariables">
+<bean id="midPriceReportVariables" class="net.sourceforge.jasa.report.OfferPriceReportVariables">
 </bean>
 
 <bean id="priceTimeSeriesChart" 
@@ -104,9 +111,8 @@
     <property name="baseFilename" value="data/midpoint"/>
 </bean>
 
-<bean id="orderFlowTimeSeriesReport"
-    class="net.sourceforge.jasa.report.OrderFlowTimeSeriesReport">
-    <property name="baseFilename" value="data/orderflow"/>
+<bean id="orderFlowReportVariables"
+    class="net.sourceforge.jasa.report.MidPriceReportVariables">
 </bean>
 
 <bean id="setInitialSpreadReport"
@@ -137,7 +143,7 @@
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<property name="simulationController" ref="simulationController"/>
 	<property name="market" ref="market"/>
-	<property name="maximumDays" value="300"/>
+	<property name="maximumDays" value="600"/>
 	<property name="lengthOfDay" value="100"/>
 	<property name="population" ref="population"/>
     <property name="agentMixer" ref="randomArrivalAgentMixer"/>

@@ -4,12 +4,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.report.XYReportVariables;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
-public class MidpriceReportVariables implements XYReportVariables {
+public class MidPriceReportVariables implements XYReportVariables {
 
 	protected double midPrice;
 	
