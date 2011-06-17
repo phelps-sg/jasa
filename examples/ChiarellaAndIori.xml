@@ -62,7 +62,7 @@
 		<bean class="net.sourceforge.jasa.event.OrderPlacedEvent">
 		</bean>
 	</property>
-	<property name="reportVariables" ref="orderFlowTimeSeries"/>
+	<property name="reportVariables" ref="orderFlowCSVFile"/>
 </bean>
 
 <bean id="priceTimeSeries" class="net.sourceforge.jabm.report.CombiSeriesReportVariables">
@@ -91,7 +91,7 @@
 	<property name="reportVariables" ref="midPriceReportVariables"/>
 </bean>
 
-<bean id="midPriceReportVariables" class="net.sourceforge.jasa.report.OfferPriceReportVariables">
+<bean id="midPriceReportVariables" class="net.sourceforge.jasa.report.MidPriceReportVariables">
 </bean>
 
 <bean id="priceTimeSeriesChart" 
@@ -106,13 +106,21 @@
 <!--     <property name="baseFilename" value="data/transprice"/> -->
 <!-- </bean> -->
 
-<bean id="midPointTimeSeriesReport"
-    class="net.sourceforge.jasa.report.MidPointTimeSeriesReport">
-    <property name="baseFilename" value="data/midpoint"/>
+<!-- <bean id="midPointTimeSeriesReport" -->
+<!--     class="net.sourceforge.jasa.report.MidPointTimeSeriesReport"> -->
+<!--     <property name="baseFilename" value="data/midpoint"/> -->
+<!-- </bean> -->
+
+<bean id="orderFlowCSVFile"
+	class="net.sourceforge.jabm.report.CSVReportVariables">
+	<property name="reportVariables" ref="orderFlowReportVariables"/>
+	<property name="fileNamePrefix" value="data/" />
+	<property name="fileNameSuffix" value="orderflow" />
+	<property name="fileNameExtension" value=".csv" />
 </bean>
 
 <bean id="orderFlowReportVariables"
-    class="net.sourceforge.jasa.report.MidPriceReportVariables">
+    class="net.sourceforge.jasa.report.OfferPriceReportVariables">
 </bean>
 
 <bean id="setInitialSpreadReport"
