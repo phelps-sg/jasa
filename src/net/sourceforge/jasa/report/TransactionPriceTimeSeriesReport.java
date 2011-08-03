@@ -34,6 +34,6 @@ public class TransactionPriceTimeSeriesReport extends TimeSeriesReport {
 
 	public void onTransactionExecuted(TransactionExecutedEvent event) {
 		csvWriter.newData(event.getTime());
-		csvWriter.newData(event.getPrice());
+		csvWriter.newData(event.getPrice());		
 	}
 }
