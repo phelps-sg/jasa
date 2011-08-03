@@ -232,7 +232,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	 */
 	Order split(int excess) {
 		quantity -= excess;
-		Order newShout = new Order(agent, excess, price, isBid);
+		Order newShout = new Order(agent, excess, price, isBid, timeStamp);
 		child = newShout;
 		assert isValid();
 		assert newShout.isValid();
@@ -240,7 +240,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	Order splat(int excess) {
-		Order newShout = new Order(agent, quantity - excess, price, isBid);
+		Order newShout = new Order(agent, quantity - excess, price, isBid, timeStamp);
 		quantity = excess;
 		child = newShout;
 		assert isValid();
