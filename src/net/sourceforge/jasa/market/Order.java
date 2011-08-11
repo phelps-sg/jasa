@@ -22,7 +22,6 @@ import java.text.DecimalFormat;
 import java.io.Serializable;
 
 import net.sourceforge.jabm.SimulationTime;
-import net.sourceforge.jabm.util.IdAllocator;
 import net.sourceforge.jasa.agent.TradingAgent;
 
 /**
