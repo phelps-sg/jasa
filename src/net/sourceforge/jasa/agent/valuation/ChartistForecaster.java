@@ -12,6 +12,7 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.util.TimeSeriesWindow;
 import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
+import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketSimulation;
 
@@ -38,10 +39,10 @@ public class ChartistForecaster extends AbstractReturnForecaster
 		SummaryStatistics stats = new SummaryStatistics();
 		int n = history.getWindowSize() - 1;
 		for(int i=0; i<n; i++) {
-			double p1 = history.getValue(i);
-			double p0 = history.getValue(i+1);
+			double p0 = history.getValue(i);
+			double p1 = history.getValue(i+1);
 			double r;
-			if (p1 - p0 < 10E-8) {
+			if (Math.abs(p1 - p0) < 10E-8 || p0 < 10E-8) {
 				r = 0;
 			} else {
 				r = (p1 - p0) / p0;
@@ -52,18 +53,16 @@ public class ChartistForecaster extends AbstractReturnForecaster
 		return result;
 	}
 	
-	public void updatePriceHistory(RoundFinishedEvent event) {
-		MarketSimulation marketSimulation = 
-				(MarketSimulation) event.getSimulation();
-		double currentPrice = marketSimulation.getMarket().getCurrentPrice();
+	public void updatePriceHistory(RoundClosedEvent event) {
+		double currentPrice = event.getAuction().getCurrentPrice();
 		history.addValue(currentPrice);
 	}
 
 	@Override
 	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
-		if (event instanceof RoundFinishedEvent) {
-			onRoundFinished((RoundFinishedEvent) event);
+		if (event instanceof RoundClosedEvent) {
+			onRoundClosedEvent((RoundClosedEvent) event);
 		} else if (event instanceof SimulationStartingEvent) {
 			onSimulationStarting();
 		}
@@ -73,7 +72,7 @@ public class ChartistForecaster extends AbstractReturnForecaster
 		initialiseWindowSize();
 	}
 	
-	public void onRoundFinished(RoundFinishedEvent event) {
+	public void onRoundClosedEvent(RoundClosedEvent event) {
 		updatePriceHistory(event);
 	}
 	
@@ -84,7 +83,7 @@ public class ChartistForecaster extends AbstractReturnForecaster
 
 	@Override
 	public void subscribeToEvents(EventScheduler scheduler) {
-		scheduler.addListener(RoundFinishedEvent.class, this);
+		scheduler.addListener(RoundClosedEvent.class, this);
 		scheduler.addListener(SimulationStartingEvent.class, this);
 		super.subscribeToEvents(scheduler);
 	}
