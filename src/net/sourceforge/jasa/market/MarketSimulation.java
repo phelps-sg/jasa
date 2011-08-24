@@ -28,6 +28,7 @@ import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.RoundClosingEvent;
+import net.sourceforge.jasa.event.RoundOpeningEvent;
 
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 
@@ -127,12 +128,17 @@ public class MarketSimulation extends AbstractSimulation
 	public void informAuctionOpen() {
 		fireEvent(new MarketOpenEvent(market, getRound()));
 	}
+	
+	public void informRoundOpening() {
+		fireEvent(new RoundOpeningEvent(market, getRound()));
+	}
 
 	public void beginRound() {
 		if (closingCondition.eval()) {
 			close();
 		} else {			
 			endOfRound = false;
+			informRoundOpening();
 		}
 	}
 
