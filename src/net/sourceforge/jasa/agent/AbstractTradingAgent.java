@@ -25,6 +25,7 @@ import net.sourceforge.jabm.agent.AbstractAgent;
 import net.sourceforge.jabm.agent.utility.RiskNeutralUtilityFunction;
 import net.sourceforge.jabm.agent.utility.UtilityFunction;
 import net.sourceforge.jabm.event.AgentArrivalEvent;
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.IdAllocator;
 import net.sourceforge.jabm.util.Parameterizable;
@@ -39,7 +40,6 @@ import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionClosedException;
@@ -218,19 +218,13 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 			if (event instanceof MarketOpenEvent) {
 				onMarketOpen(event);
 			} else if (event instanceof MarketClosedEvent) {
-				onMarketClosed(event);
-			} else if (event instanceof RoundClosedEvent) {
-				onRoundClosed(event);
+				onMarketClosed(event);		
 			} else if (event instanceof EndOfDayEvent) {
 				onEndOfDay(event);
 			}
 		}
 //		valuer.eventOccurred(ev);
 //		strategy.eventOccurred(ev);
-	}
-
-	public void onRoundClosed(MarketEvent event) {
-		// Do nothing
 	}
 
 	public void onEndOfDay(MarketEvent event) {
@@ -370,11 +364,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		lastOrderFilled = true;
 		lastPayoff = calculatePayoff(auction, quantity, price);
 		totalPayoff += lastPayoff;
-		if (shout.isBid()) {
-			stock.remove(quantity);
-		} else {
-			account.credit((price - getValuation(auction)) * quantity);
-		}
 		valuer.consumeUnit(auction);
 	}
 
