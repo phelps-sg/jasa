@@ -15,13 +15,15 @@
 
 package net.sourceforge.jasa.report;
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.MarketQuote;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -70,15 +72,17 @@ public class MeanValueDataWriterReport extends DataWriterReport {
 		super();
 	}
 
-	public void eventOccurred(MarketEvent event) {
+	@Override
+	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
-		if (event instanceof RoundClosedEvent) {
-			roundClosed((RoundClosedEvent) event);
+		if (event instanceof RoundFinishedEvent) {
+			roundClosed((RoundFinishedEvent) event);
 		}
 	}
 
-	public void updateQuoteLog(RoundClosedEvent event) {
-		MarketQuote quote = event.getAuction().getQuote();
+	public void updateQuoteLog(RoundFinishedEvent event) {
+		MarketQuote quote = ((MarketSimulation) event.getSimulation()).getAuctioneer().getQuote();
+		getAuction().getQuote();
 		askQuoteStats.newData(quote.getAsk());
 		bidQuoteStats.newData(quote.getBid());
 	}
@@ -96,7 +100,7 @@ public class MeanValueDataWriterReport extends DataWriterReport {
 		}
 	}
 
-	public void roundClosed(RoundClosedEvent event) {
+	public void roundClosed(RoundFinishedEvent event) {
 
 		logger.debug("roundClosed(" + auction + ")");
 

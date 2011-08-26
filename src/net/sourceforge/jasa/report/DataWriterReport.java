@@ -18,13 +18,14 @@ package net.sourceforge.jasa.report;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.MarketQuote;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
 
@@ -88,14 +89,15 @@ public class DataWriterReport extends AbstractAuctionReport {
 			updateTransPriceLog((TransactionExecutedEvent) event);
 		} else if (event instanceof OrderPlacedEvent) {
 			updateShoutLog((OrderPlacedEvent) event);
-		} else if (event instanceof RoundClosedEvent) {
-			updateQuoteLog((RoundClosedEvent) event);
+		} else if (event instanceof RoundFinishedEvent) {
+			updateQuoteLog((RoundFinishedEvent) event);
 		}
 	}
 
-	public void updateQuoteLog(RoundClosedEvent event) {
-		int time = event.getTime();
-		MarketQuote quote = event.getAuction().getQuote();
+	public void updateQuoteLog(RoundFinishedEvent event) {
+		int time = (int) event.getSimulation().getSimulationTime().getTicks();
+		MarketSimulation simulation = (MarketSimulation) event.getSimulation();
+		MarketQuote quote = simulation.getMarket().getQuote();
 		if (askQuoteLog != null) {
 			askQuoteLog.newData(time);
 			askQuoteLog.newData(quote.getAsk());

@@ -20,16 +20,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Distribution;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.MarketQuote;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -66,8 +67,8 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 	}
 
 	public void eventOccurred(SimEvent event) {
-		if (event instanceof RoundClosedEvent) {
-			roundClosed((RoundClosedEvent) event);
+		if (event instanceof RoundFinishedEvent) {
+			roundClosed((RoundFinishedEvent) event);
 		} else if (event instanceof TransactionExecutedEvent) {
 			updateTransPriceLog((TransactionExecutedEvent) event);
 		} else if (event instanceof OrderPlacedEvent) {
@@ -78,8 +79,9 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 		}
 	}
 
-	public void roundClosed(RoundClosedEvent event) {
-		MarketQuote quote = event.getAuction().getQuote();
+	public void roundClosed(RoundFinishedEvent event) {
+		MarketSimulation simulation = (MarketSimulation) event.getSimulation();
+		MarketQuote quote = simulation.getMarket().getQuote();
 		stats[BID_QUOTE].newData((double) quote.getBid());
 		stats[ASK_QUOTE].newData((double) quote.getAsk());
 	}

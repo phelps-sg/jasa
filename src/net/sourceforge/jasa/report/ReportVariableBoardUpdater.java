@@ -33,7 +33,6 @@ import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.DuplicateShoutException;
@@ -211,8 +210,6 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
 			ReportVariableBoard.getInstance().reportValue(
 			    CUMULATIVE_CONVERGENCE_COEFFICIENT, new TimePeriodValue(time, alpha));
-
-		} else if (event instanceof RoundClosedEvent) {
 		}
 
 	}

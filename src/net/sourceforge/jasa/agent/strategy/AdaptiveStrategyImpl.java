@@ -33,10 +33,10 @@ public abstract class AdaptiveStrategyImpl extends FixedDirectionStrategy
 	public AdaptiveStrategyImpl() {
 		super();
 	}
-
-	public void onRoundClosed(Market auction) {
-		// super.endOfRound(market);
-		getLearner().monitor();
-	}
+//
+//	public void onRoundClosed(Market auction) {
+//		// super.endOfRound(market);
+//		getLearner().monitor();
+//	}
 
 }

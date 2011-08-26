@@ -17,8 +17,14 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
+import net.sourceforge.jabm.Simulation;
+import net.sourceforge.jabm.event.RoundFinishedEvent;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.event.SimulationFinishedEvent;
+import net.sourceforge.jabm.learning.Learner;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -56,11 +62,26 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 		super.initialise();
 	}
 
-
-	public void onRoundClosed(Market auction) {
+	public void onRoundFinished(RoundFinishedEvent event) {
 		if (agent.active()) {
+			MarketSimulation simulation = (MarketSimulation) event.getSimulation();
+			Market auction = simulation.getMarket();
 			learn(auction);
 		}
+	}
+
+	@Override
+	public void subscribeToEvents() {
+		super.subscribeToEvents();
+		scheduler.addListener(RoundFinishedEvent.class, this);
+	}
+
+	@Override
+	public void eventOccurred(SimEvent event) {
+		if (event instanceof RoundFinishedEvent) {			
+			onRoundFinished((RoundFinishedEvent) event); 
+		}
+		super.eventOccurred(event);
 	}
 
 	public boolean modifyShout(Order shout) {

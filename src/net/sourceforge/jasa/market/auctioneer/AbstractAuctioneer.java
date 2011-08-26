@@ -20,13 +20,13 @@ import java.util.Iterator;
 import java.util.List;
 
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.event.EndOfDayEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
 import net.sourceforge.jasa.market.IllegalOrderException;
@@ -230,7 +230,7 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof EndOfDayEvent) {
 			onEndOfDay();
-		} else if (event instanceof RoundClosedEvent) {
+		} else if (event instanceof RoundFinishedEvent) {
 			onRoundClosed();
 		}
 		if (event instanceof SimulationStartingEvent) {

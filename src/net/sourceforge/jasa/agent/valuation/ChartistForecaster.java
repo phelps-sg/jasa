@@ -12,7 +12,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.util.TimeSeriesWindow;
 import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketSimulation;
 
@@ -53,16 +52,17 @@ public class ChartistForecaster extends AbstractReturnForecaster
 		return result;
 	}
 	
-	public void updatePriceHistory(RoundClosedEvent event) {
-		double currentPrice = event.getAuction().getCurrentPrice();
+	public void updatePriceHistory(RoundFinishedEvent event) {
+		MarketSimulation simulation = (MarketSimulation) event.getSimulation();
+		double currentPrice = simulation.getMarket().getCurrentPrice();
 		history.addValue(currentPrice);
 	}
 
 	@Override
 	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
-		if (event instanceof RoundClosedEvent) {
-			onRoundClosedEvent((RoundClosedEvent) event);
+		if (event instanceof RoundFinishedEvent) {
+			onRoundClosedEvent((RoundFinishedEvent) event);
 		} else if (event instanceof SimulationStartingEvent) {
 			onSimulationStarting();
 		}
@@ -72,7 +72,7 @@ public class ChartistForecaster extends AbstractReturnForecaster
 		initialiseWindowSize();
 	}
 	
-	public void onRoundClosedEvent(RoundClosedEvent event) {
+	public void onRoundClosedEvent(RoundFinishedEvent event) {
 		updatePriceHistory(event);
 	}
 	
@@ -83,7 +83,7 @@ public class ChartistForecaster extends AbstractReturnForecaster
 
 	@Override
 	public void subscribeToEvents(EventScheduler scheduler) {
-		scheduler.addListener(RoundClosedEvent.class, this);
+		scheduler.addListener(RoundFinishedEvent.class, this);
 		scheduler.addListener(SimulationStartingEvent.class, this);
 		super.subscribeToEvents(scheduler);
 	}

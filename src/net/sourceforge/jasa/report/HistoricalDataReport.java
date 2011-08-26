@@ -25,10 +25,10 @@ import java.util.ListIterator;
 import java.util.Observable;
 import java.util.Observer;
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
@@ -208,7 +208,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		observableProxy.notifyObservers();
 	}
 
-	public void roundClosed(MarketEvent event) {
+	public void roundClosed(RoundFinishedEvent event) {
 		markMatched(asks);
 		markMatched(bids);
 		// if ( getNumberOfTrades() > memorySize ) {
@@ -220,8 +220,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
-		if (event instanceof RoundClosedEvent) {
-			roundClosed((RoundClosedEvent) event);
+		if (event instanceof RoundFinishedEvent) {
+			roundClosed((RoundFinishedEvent) event);
 		} else if (event instanceof OrderPlacedEvent) {
 			updateShoutLog((OrderPlacedEvent) event);
 		} else if (event instanceof TransactionExecutedEvent) {

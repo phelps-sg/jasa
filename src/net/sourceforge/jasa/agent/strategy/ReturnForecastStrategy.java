@@ -64,9 +64,6 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		return result;
 	}
 
-	@Override
-	public void onRoundClosed(Market auction) {
-	}
 
 //	public ReturnForecaster getForecaster() {
 //		return forecaster;

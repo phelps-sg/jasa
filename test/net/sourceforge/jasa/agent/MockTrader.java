@@ -45,8 +45,6 @@ public class MockTrader extends SimpleTradingAgent {
 
 	public boolean receivedEndOfDayAfterRequestShout = true;
 
-	public int receivedRoundClosed = 0;
-
 	public int receivedRequestShout = 0;
 
 	TestCase test;
@@ -129,17 +127,13 @@ public class MockTrader extends SimpleTradingAgent {
 	}
 
 	@Override
-	public void onRoundClosed(MarketEvent event) {
-		super.onRoundClosed(event);
-		receivedRoundClosed++;
-	}
-
-	@Override
 	public void onEndOfDay(MarketEvent event) {
 		int day = event.getAuction().getDay();
 		receivedEndOfDayAfterRequestShout = day <= requestShoutDay;
 	}
 
+	
+	
 	public boolean active() {
 		return true;
 	}

@@ -20,13 +20,13 @@ import java.util.List;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.agent.Agent;
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.StrategyExecutedEvent;
 import net.sourceforge.jabm.strategy.AbstractStrategy;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
@@ -105,17 +105,17 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 //		currentShout = new Order();
 	}
 
-	@Override
-	public void eventOccurred(SimEvent event) {
-		if (event instanceof RoundClosedEvent) {
-			onRoundClosed(((RoundClosedEvent) event).getAuction());
-		}
-	}
+//	@Override
+//	public void eventOccurred(SimEvent event) {
+//		if (event instanceof RoundFinishedEvent) {
+//			onRoundClosed((RoundFinishedEvent) event);
+//		}
+//	}
 	
 	@Override
-	public void subscribeToEvents(EventScheduler scheduler) {
-		scheduler.addListener(RoundClosedEvent.class, this);
-	}
+//	public void subscribeToEvents(EventScheduler scheduler) {
+//		scheduler.addListener(RoundClosedEvent.class, this);
+//	}
 
 	public AbstractTradingAgent getAgent() {
 		return agent;
@@ -143,5 +143,5 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 //		return null;
 //	}
 
-	public abstract void onRoundClosed(Market auction);
+//	public abstract void onRoundClosed(Market auction);
 }

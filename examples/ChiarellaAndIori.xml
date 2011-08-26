@@ -36,7 +36,7 @@
 		<ref bean="orderFlowReportVariables" />
 		<ref bean="orderFlowTimeSeriesReport" />
 		<ref bean="setInitialSpreadReport" />
-		<!-- <ref bean="supplyAndDemandGraph"/> -->
+<!-- 		<ref bean="supplyAndDemandGraph"/> -->
 	</list>
 </property>
 </bean>

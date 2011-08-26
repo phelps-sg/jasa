@@ -17,9 +17,6 @@ package net.sourceforge.jasa.view;
 
 import java.util.Map;
 
-import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 import net.sourceforge.jasa.report.TrueSupplyAndDemandStats;

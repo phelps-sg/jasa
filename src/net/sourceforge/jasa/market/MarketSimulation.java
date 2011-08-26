@@ -21,14 +21,15 @@ import java.util.Iterator;
 import net.sourceforge.jabm.AbstractSimulation;
 import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SimulationTime;
+import net.sourceforge.jabm.event.RoundFinishedEvent;
+import net.sourceforge.jabm.event.RoundStartingEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
+
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.RoundClosingEvent;
-import net.sourceforge.jasa.event.RoundOpeningEvent;
 
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 
@@ -130,7 +131,7 @@ public class MarketSimulation extends AbstractSimulation
 	}
 	
 	public void informRoundOpening() {
-		fireEvent(new RoundOpeningEvent(market, getRound()));
+		fireEvent(new RoundStartingEvent(this));
 	}
 
 	public void beginRound() {
@@ -247,11 +248,11 @@ public class MarketSimulation extends AbstractSimulation
 	}
 
 	public void informRoundClosing() {
-		fireEvent(new RoundClosingEvent(market, round));
+		fireEvent(new RoundClosingEvent(getMarket(), getAge()));
 	}
 
 	public void informRoundClosed() {
-		fireEvent(new RoundClosedEvent(market, round));
+		fireEvent(new RoundFinishedEvent(this));
 	}
 
 //	public void placeOrder(Order shout) throws AuctionException {

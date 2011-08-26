@@ -30,12 +30,12 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.report.DataSeriesWriter;
 import net.sourceforge.jabm.report.Report;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 
@@ -187,7 +187,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 
 	@Override
 	public void eventOccurred(SimEvent event) {
-		if (event instanceof RoundClosedEvent) {
+		if (event instanceof RoundFinishedEvent) {
 			updateGraph();
 		} else if (event instanceof SimulationStartingEvent) {
 			open();

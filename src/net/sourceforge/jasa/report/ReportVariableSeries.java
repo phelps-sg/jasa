@@ -15,13 +15,12 @@
 
 package net.sourceforge.jasa.report;
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.RoundClosedEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 import org.apache.log4j.Logger;
-import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.RegularTimePeriod;
 import org.jfree.data.time.TimePeriodValue;
 import org.jfree.data.time.TimeSeries;
@@ -102,7 +101,7 @@ public class ReportVariableSeries extends FreeChartSeries {
 	/**
 	 * @param event
 	 */
-	public void roundClosed(RoundClosedEvent event) {
+	public void roundClosed(RoundFinishedEvent event) {
 	}
 
 }
