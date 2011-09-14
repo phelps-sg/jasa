@@ -35,6 +35,7 @@ import org.jfree.data.time.TimePeriodValue;
  * 
  * @author Jinzhong Niu
  * @version $Revision$
+ * @deprecated
  */
 
 public class ReportVariableBoard {

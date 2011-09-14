@@ -50,6 +50,8 @@ import net.sourceforge.jabm.util.Parameterizable;
  * 
  * @author Steve Phelps
  * @version $Revision$
+ * 
+ * @deprecated
  */
 
 public class CSVReport extends DataWriterReport implements Parameterizable {
