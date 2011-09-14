@@ -18,7 +18,6 @@ package net.sourceforge.jasa.report;
 import java.io.Serializable;
 import java.util.Map;
 
-
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Distribution;
 import net.sourceforge.jabm.util.Resetable;

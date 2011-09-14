@@ -19,7 +19,6 @@ import java.io.Serializable;
 
 import net.sourceforge.jabm.learning.Learner;
 import net.sourceforge.jabm.learning.MDPLearner;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;

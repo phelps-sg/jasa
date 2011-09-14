@@ -16,14 +16,12 @@
 package net.sourceforge.jasa.agent;
 
 import junit.framework.TestCase;
-
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.AgentArrivalEvent;
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
 

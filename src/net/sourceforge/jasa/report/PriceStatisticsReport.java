@@ -16,9 +16,7 @@
 package net.sourceforge.jasa.report;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-
 
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
@@ -26,7 +24,6 @@ import net.sourceforge.jabm.util.Distribution;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.event.MarketClosedEvent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.MarketQuote;

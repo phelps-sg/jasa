@@ -37,6 +37,7 @@ import org.jfree.data.time.TimePeriodValue;
  * @version $Revision$
  */
 
+@SuppressWarnings("rawtypes")
 public class ReportVariableBoard {
 
 	static Logger logger = Logger.getLogger(ReportVariableBoard.class);

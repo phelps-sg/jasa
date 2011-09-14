@@ -17,7 +17,6 @@ package net.sourceforge.jasa.market.rules;
 
 import net.sourceforge.jabm.learning.MimicryLearner;
 import net.sourceforge.jabm.learning.SelfKnowledgable;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.IllegalOrderException;

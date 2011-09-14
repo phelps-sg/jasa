@@ -21,8 +21,8 @@ import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.EquilibriumReport;
 
 /**

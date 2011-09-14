@@ -18,11 +18,8 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
-import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
-import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.report.HistoricalDataReport;
 
 import org.apache.log4j.Logger;

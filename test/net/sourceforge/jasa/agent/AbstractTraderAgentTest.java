@@ -15,21 +15,19 @@
 
 package net.sourceforge.jasa.agent;
 
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
-
-import net.sourceforge.jabm.event.EventListener;
-import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.market.AuctionClosedException;
-import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
-import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
-import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.event.EventListener;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jasa.market.AuctionClosedException;
+import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Order;
+import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
+import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
+import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 public class AbstractTraderAgentTest extends TestCase implements EventListener {
 

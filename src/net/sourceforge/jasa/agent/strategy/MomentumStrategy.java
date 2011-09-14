@@ -26,10 +26,8 @@ import net.sourceforge.jasa.event.AgentPolledEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
-
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-
 
 import org.apache.log4j.Logger;
 

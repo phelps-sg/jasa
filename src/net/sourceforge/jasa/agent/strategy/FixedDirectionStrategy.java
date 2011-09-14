@@ -1,7 +1,6 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 public abstract class FixedDirectionStrategy extends FixedQuantityStrategyImpl {

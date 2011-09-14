@@ -15,8 +15,6 @@
 
 package net.sourceforge.jasa.report;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -25,17 +23,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Parameterizable;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.view.UserFrame;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartUtilities;
-import org.jfree.ui.RefineryUtilities;
 
 /**
  * A historicalDataReport that logs data to JFreeChart graphs.
@@ -176,6 +169,7 @@ public class FreeChartReport extends AbstractAuctionReport implements
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Map getVariables() {
 		HashMap vars = new HashMap();
 		return vars;

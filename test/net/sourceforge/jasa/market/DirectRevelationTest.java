@@ -15,14 +15,12 @@
 
 package net.sourceforge.jasa.market;
 
-import cern.jet.random.engine.RandomEngine;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
-import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.RandomValuer;
 import net.sourceforge.jasa.replication.electricity.ElectricityTest;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * @author Steve Phelps

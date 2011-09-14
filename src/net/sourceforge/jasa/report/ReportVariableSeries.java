@@ -65,6 +65,7 @@ public class ReportVariableSeries extends FreeChartSeries {
 
 	protected String varName;
 
+	@SuppressWarnings("rawtypes")
 	protected Class eventClass;
 
 	public ReportVariableSeries() {

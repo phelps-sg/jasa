@@ -16,16 +16,14 @@
 package net.sourceforge.jasa.report;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
-import net.sourceforge.jasa.agent.TokenTradingAgent;
-import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
 

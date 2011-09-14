@@ -17,9 +17,8 @@ package net.sourceforge.jasa.market;
 
 
 
-import java.text.DecimalFormat;
-
 import java.io.Serializable;
+import java.text.DecimalFormat;
 
 import net.sourceforge.jabm.SimulationTime;
 import net.sourceforge.jasa.agent.TradingAgent;

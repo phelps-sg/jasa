@@ -15,7 +15,8 @@
 
 package net.sourceforge.jasa.market.auctioneer;
 
-import net.sourceforge.jabm.util.Parameterizable;
+import java.io.Serializable;
+
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
@@ -27,8 +28,6 @@ import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
 
 import org.apache.log4j.Logger;
-
-import java.io.Serializable;
 
 /**
  * Auctioneer for standard multi-unit english ascending market.

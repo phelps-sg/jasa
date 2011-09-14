@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.market;
 
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
-import net.sourceforge.jasa.report.AuctionReport;
 
 /**
  * @author Steve Phelps

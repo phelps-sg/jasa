@@ -15,12 +15,11 @@
 
 package net.sourceforge.jasa.agent.valuation;
 
-import cern.jet.random.AbstractContinousDistribution;
-import cern.jet.random.engine.RandomEngine;
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * A valuation policy in which we are allocated a new random valuation at the

@@ -1,5 +1,6 @@
 package net.sourceforge.jasa.agent.strategy;
 
+import junit.framework.TestCase;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.valuation.NoiseTraderForecaster;
 import net.sourceforge.jasa.market.AuctionException;
@@ -11,7 +12,6 @@ import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
-import junit.framework.TestCase;
 
 public class ReturnForecastStrategyTest extends TestCase {
 

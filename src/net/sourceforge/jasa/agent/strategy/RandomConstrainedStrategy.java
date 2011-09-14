@@ -20,9 +20,7 @@ import java.io.Serializable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-
 import cern.jet.random.AbstractContinousDistribution;
-import cern.jet.random.Uniform;
 
 /**
  * <p>

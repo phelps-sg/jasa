@@ -16,15 +16,14 @@
 package net.sourceforge.jasa.report;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 
 
@@ -55,12 +54,12 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 
 	protected MarketFacade auction;
 
-	public CombiAuctionReport(List reports) {
+	public CombiAuctionReport(List<AuctionReport> reports) {
 		this.reports = reports;
 	}
 
 	public CombiAuctionReport() {
-		this.reports = new LinkedList();
+		this.reports = new LinkedList<AuctionReport>();
 	}
 
 //	public void setup(ParameterDatabase parameters, Parameter base) {
@@ -90,9 +89,9 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 	}
 
 	public void reset() {
-		Iterator i = reports.iterator();
+		Iterator<AuctionReport> i = reports.iterator();
 		while (i.hasNext()) {
-			AuctionReport logger = (AuctionReport) i.next();
+			AuctionReport logger = i.next();
 			if (logger instanceof Resetable) {
 				((Resetable) logger).reset();
 			}
@@ -100,14 +99,14 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 	}
 
 	public void produceUserOutput() {
-		Iterator i = reports.iterator();
+		Iterator<AuctionReport> i = reports.iterator();
 		while (i.hasNext()) {
 			AbstractAuctionReport logger = (AbstractAuctionReport) i.next();
 			logger.produceUserOutput();
 		}
 	}
 
-	public Iterator reportIterator() {
+	public Iterator<AuctionReport> reportIterator() {
 		return reports.iterator();
 	}
 

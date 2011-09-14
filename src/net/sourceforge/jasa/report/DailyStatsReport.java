@@ -19,8 +19,8 @@ import java.util.Vector;
 
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.SummaryStats;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
+import net.sourceforge.jasa.event.MarketEvent;
 
 import org.apache.log4j.Logger;
 

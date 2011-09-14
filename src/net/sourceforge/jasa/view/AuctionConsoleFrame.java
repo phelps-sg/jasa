@@ -40,9 +40,9 @@ import javax.swing.JPanel;
 
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.ShoutsNotVisibleException;
 
 import org.apache.log4j.Logger;

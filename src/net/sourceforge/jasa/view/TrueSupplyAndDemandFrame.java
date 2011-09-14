@@ -15,8 +15,6 @@
 
 package net.sourceforge.jasa.view;
 
-import java.util.Map;
-
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 import net.sourceforge.jasa.report.TrueSupplyAndDemandStats;

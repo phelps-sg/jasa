@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.report;
 
 import java.io.Serializable;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -111,9 +110,9 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 		logger.info("\nProfits per " + getKeyName());
 		logger.info("-----------------------");
 		logger.info("");
-		Iterator i = table.keySet().iterator();
+		Iterator<Object> i = table.keySet().iterator();
 		while (i.hasNext()) {
-			Object key = (Object) i.next();
+			Object key = i.next();
 			PayoffStats stats = (PayoffStats) table.get(key);
 			logger.info(stats.numAgents + " " + getReportText() + " " + key
 			    + "\n\ttotal profits: " + stats.profits + "\n\tmean payoff: "

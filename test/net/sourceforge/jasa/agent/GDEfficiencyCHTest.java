@@ -1,9 +1,9 @@
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
-import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
+import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
 
 public class GDEfficiencyCHTest extends GDEfficiencyTest {
 

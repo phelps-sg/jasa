@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.replication.electricity;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -26,11 +25,10 @@ import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
-import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.IllegalOrderException;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.report.ReportVariable;
 import net.sourceforge.jasa.report.SurplusReport;

@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.learning.DiscreteLearner;
 import net.sourceforge.jabm.learning.Learner;
 import net.sourceforge.jabm.report.CSVWriter;
@@ -33,7 +34,6 @@ import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
 import net.sourceforge.jasa.agent.strategy.FixedDirectionStrategy;
-import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
@@ -456,7 +456,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 		equilibPrice.newData(ep);
 		equilibQty.newData(eq);
 
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			SimpleTradingAgent t = (SimpleTradingAgent) i.next();
 			TradingStrategy s = (TradingStrategy) t.getStrategy();
@@ -536,7 +536,7 @@ public class ElectricityExperiment implements Parameterizable, Runnable {
 
 	protected void dumpStrategyData() {
 		if (collectStrategyData) {
-			Iterator i = auction.getTraderIterator();
+			Iterator<Agent> i = auction.getTraderIterator();
 			while (i.hasNext()) {
 				SimpleTradingAgent t = (SimpleTradingAgent) i.next();
 				TradingStrategy s = (TradingStrategy) t.getStrategy();

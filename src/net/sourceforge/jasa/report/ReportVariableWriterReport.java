@@ -26,10 +26,9 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.CSVWriter;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.SummaryStats;
-import net.sourceforge.jasa.event.MarketClosedEvent;
-import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
+import net.sourceforge.jasa.event.MarketClosedEvent;
+import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketFacade;
@@ -47,18 +46,6 @@ import org.jfree.data.time.TimePeriodValue;
 
 public class ReportVariableWriterReport implements AuctionReport,
     Parameterizable, Observer {
-
-	public static final String P_DEF_BASE = "reportvariablewriterreport";
-
-	private static String P_SETTING_LOG = "settinglog";
-
-	private static String P_AUCTION_LOG = "auctionlog";
-
-	private static String P_DAY_LOG = "daylog";
-
-	private static String P_ROUND_LOG = "roundlog";
-
-	private static String P_TRANSACTION_LOG = "transactionlog";
 
 	protected static boolean initialized = false;
 

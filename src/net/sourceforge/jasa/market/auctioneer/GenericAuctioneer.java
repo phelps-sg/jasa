@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.util.Observable;
 import java.util.Observer;
 
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.IllegalOrderException;

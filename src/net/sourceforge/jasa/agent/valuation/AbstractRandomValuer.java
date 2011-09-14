@@ -17,9 +17,7 @@ package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
-import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.Market;
-
 import cern.jet.random.AbstractContinousDistribution;
 
 public abstract class AbstractRandomValuer implements ValuationPolicy,

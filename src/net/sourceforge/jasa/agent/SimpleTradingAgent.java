@@ -17,10 +17,7 @@ package net.sourceforge.jasa.agent;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.AgentArrivalEvent;
-import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
-
 import net.sourceforge.jasa.event.MarketEvent;
-
 import net.sourceforge.jasa.market.Market;
 
 /**

@@ -15,19 +15,16 @@
 
 package net.sourceforge.jasa.report;
 
-import java.util.HashMap;
-import java.util.Map;
 
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.DataWriter;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
+import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.MarketFacade;
 
 /**
  * This class writes market data to the specified DataWriter objects, and thus

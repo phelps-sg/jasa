@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.market.rules;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
 

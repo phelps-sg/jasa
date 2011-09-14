@@ -1,12 +1,9 @@
 package net.sourceforge.jasa.agent.strategy;
 
+import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
+import net.sourceforge.jasa.market.Order;
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.engine.RandomEngine;
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
-import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketQuote;
-import net.sourceforge.jasa.market.Order;
 
 public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	

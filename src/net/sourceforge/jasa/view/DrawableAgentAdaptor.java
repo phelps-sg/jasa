@@ -17,7 +17,6 @@ package net.sourceforge.jasa.view;
 
 import java.awt.Color;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.agent.strategy.AdaptiveStrategy;
@@ -25,7 +24,6 @@ import net.sourceforge.jasa.agent.valuation.AbstractRandomValuer;
 import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-
 import uchicago.src.sim.gui.Drawable;
 import uchicago.src.sim.gui.SimGraphics;
 

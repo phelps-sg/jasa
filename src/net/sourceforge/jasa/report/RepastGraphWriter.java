@@ -24,8 +24,10 @@ import net.sourceforge.jabm.util.Parameterizable;
 /**
  * @author Steve Phelps
  * @version $Revision$
+ * @deprecated
  */
 
+@SuppressWarnings("all")
 public class RepastGraphWriter implements DataWriter, Parameterizable {
 
 	protected RepastGraphSequence graphSequence;

@@ -22,12 +22,8 @@ import java.util.Random;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.market.DuplicateShoutException;
-import net.sourceforge.jasa.market.FourHeapOrderBook;
-import net.sourceforge.jasa.market.Order;
 
 import org.apache.commons.collections.buffer.PriorityBuffer;
 
@@ -198,6 +194,7 @@ class TestShoutEngine extends FourHeapOrderBook {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static int countQty(PriorityBuffer heap) {
 		Iterator i = heap.iterator();
 		int qty = 0;

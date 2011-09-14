@@ -22,8 +22,6 @@ import net.sourceforge.jasa.event.OrderPlacedEvent;
 import org.apache.log4j.Logger;
 
 import cern.jet.random.AbstractDistribution;
-import cern.jet.random.Uniform;
-import cern.jet.random.engine.RandomEngine;
 
 /**
  * The class for expressing whether the market should be cleared or not.

@@ -28,7 +28,6 @@ import java.util.Observer;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Resetable;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
@@ -542,6 +541,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	 * increasing prices queried about.
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public class IncreasingQueryAccelerator implements Observer {
 
 		protected ListIterator asksI;
@@ -816,6 +816,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			this.name = name;
 		}
 
+		@SuppressWarnings("rawtypes")
 		public SortedTreeList(String name, Collection c) {
 			super(c);
 			this.name = name;
@@ -840,6 +841,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		 * @param e
 		 * @param o
 		 */
+		@SuppressWarnings("rawtypes")
 		private void insert(int b, int e, Object o) {
 			if (b > e)
 				add(b, o);
@@ -859,6 +861,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 		}
 
+		@SuppressWarnings("rawtypes")
 		public String toString() {
 			String s = "[";
 			ListIterator iterator = listIterator();

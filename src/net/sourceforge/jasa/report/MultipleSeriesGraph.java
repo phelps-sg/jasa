@@ -15,19 +15,9 @@
 
 package net.sourceforge.jasa.report;
 
-import java.awt.Color;
-
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.event.MarketEvent;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.ui.RectangleInsets;
-import org.jfree.util.UnitType;
 
 /**
  * A FreeChartGraph consisting multiple data series or markers.

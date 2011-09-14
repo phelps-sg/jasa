@@ -21,10 +21,6 @@ import net.sourceforge.jasa.market.Order;
 import org.apache.log4j.Logger;
 
 import cern.jet.random.AbstractDistribution;
-import cern.jet.random.Uniform;
-import cern.jet.random.engine.RandomEngine;
-//import ec.util.Parameter;
-//import ec.util.ParameterDatabase;
 
 /**
  * implements the shout-accepting rule under which a shout must be more

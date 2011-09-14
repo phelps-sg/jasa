@@ -43,11 +43,7 @@ import net.sourceforge.jasa.market.MarketFacade;
 public class CombiTimingCondition extends TimingCondition implements
     Parameterizable, AuctionClosingCondition, DayEndingCondition {
 
-	private static final String P_NUM = "n";
-
-	private static final String P_RELATION = "relation";
-
-	protected List conditions = null;
+	protected List<TimingCondition> conditions = null;
 
 	public static final int OR = 0;
 
@@ -59,7 +55,7 @@ public class CombiTimingCondition extends TimingCondition implements
 	// Logger.getLogger(CombiTimingCondition.class);
 
 	public CombiTimingCondition() {
-		this.conditions = new LinkedList();
+		this.conditions = new LinkedList<TimingCondition>();
 	}
 
 	/*
@@ -92,13 +88,13 @@ public class CombiTimingCondition extends TimingCondition implements
 		conditions.add(condition);
 	}
 
-	public Iterator conditionIterator() {
+	public Iterator<TimingCondition> conditionIterator() {
 		return conditions.iterator();
 	}
 
 	public void setAuction(MarketFacade auction) {
 		super.setAuction(auction);
-		Iterator i = conditionIterator();
+		Iterator<TimingCondition> i = conditionIterator();
 		while (i.hasNext()) {
 			TimingCondition condition = (TimingCondition) i.next();
 			condition.setAuction(auction);
@@ -108,7 +104,7 @@ public class CombiTimingCondition extends TimingCondition implements
 	public boolean eval() {
 
 		boolean isTrue = false;
-		Iterator i = conditionIterator();
+		Iterator<TimingCondition> i = conditionIterator();
 		while (i.hasNext()) {
 			TimingCondition condition = (TimingCondition) i.next();
 

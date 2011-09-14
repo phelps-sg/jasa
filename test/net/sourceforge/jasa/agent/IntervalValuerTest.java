@@ -15,11 +15,11 @@
 
 package net.sourceforge.jasa.agent;
 
-import cern.jet.random.engine.MersenneTwister64;
+import junit.framework.TestCase;
 import net.sourceforge.jasa.agent.valuation.IntervalValuer;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import junit.framework.TestCase;
+import cern.jet.random.engine.MersenneTwister64;
 
 /**
  * @author Steve Phelps

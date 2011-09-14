@@ -14,21 +14,21 @@
  */
 package net.sourceforge.jasa.agent;
 
-import cern.jet.random.engine.MersenneTwister64;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import net.sourceforge.jasa.agent.strategy.KaplanStrategy;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.ZeroFundsAccount;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.TransparentAuctioneer;
 import net.sourceforge.jasa.report.DailyStatsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import cern.jet.random.engine.MersenneTwister64;
 
 public class KaplanStrategyTest extends TestCase {
 

@@ -18,23 +18,16 @@ package net.sourceforge.jasa.replication.electricity;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
-
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.learning.NPTRothErevLearner;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
-import net.sourceforge.jasa.agent.SimpleTradingAgent;
-import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
-
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
-
-import net.sourceforge.jasa.replication.electricity.ElectricityStats;
-
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
 import org.apache.log4j.Logger;

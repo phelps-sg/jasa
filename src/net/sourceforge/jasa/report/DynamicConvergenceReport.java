@@ -15,12 +15,11 @@
 
 package net.sourceforge.jasa.report;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.sourceforge.jabm.util.Resetable;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
+import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 

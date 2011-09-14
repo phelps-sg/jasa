@@ -17,31 +17,24 @@ package net.sourceforge.jasa.report;
 
 import java.util.Iterator;
 
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
-
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.MathUtil;
-import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.DailyRandomValuer;
-import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.event.EndOfDayEvent;
+import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-import net.sourceforge.jasa.report.DynamicSurplusReport;
-import net.sourceforge.jasa.report.EquilibriumReport;
-import net.sourceforge.jasa.report.SurplusReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * @author Steve Phelps

@@ -17,7 +17,6 @@ package net.sourceforge.jasa.report;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Parameterizable;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 
 import org.apache.log4j.Logger;

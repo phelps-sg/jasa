@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.market.Market;
 
 /**
  * @author Steve Phelps

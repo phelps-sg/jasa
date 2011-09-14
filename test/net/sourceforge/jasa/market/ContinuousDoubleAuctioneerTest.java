@@ -15,14 +15,11 @@
 
 package net.sourceforge.jasa.market;
 
-import net.sourceforge.jasa.market.IllegalOrderException;
-import net.sourceforge.jasa.market.NotAnImprovementOverQuoteException;
-import net.sourceforge.jasa.market.Order;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * @author Steve Phelps

@@ -18,6 +18,7 @@ package net.sourceforge.jasa.replication.electricity;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.prng.PRNGFactory;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
@@ -76,7 +77,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
 	}
 
 	public void randomizePrivateValues(double[][] values, int iteration) {
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		int traderNumber = 0;
 		while (i.hasNext()) {
 			SimpleTradingAgent trader = (SimpleTradingAgent) i.next();
@@ -91,7 +92,7 @@ public class StandardRandomizer implements Parameterizable, Serializable {
 		for (int i = 0; i < numIterations; i++) {
 			privValuePRNG = PRNGFactory.getFactory().create(seeds[i]);
 			do {
-				Iterator traders = auction.getTraderIterator();
+				Iterator<Agent> traders = auction.getTraderIterator();
 				for (int t = 0; t < numTraders; t++) {
 					double value = randomPrivateValue();
 					AbstractTradingAgent agent = (AbstractTradingAgent) traders.next();

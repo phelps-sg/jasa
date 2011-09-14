@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.report;
 
-import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;

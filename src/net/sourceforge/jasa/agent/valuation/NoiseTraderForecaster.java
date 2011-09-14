@@ -7,10 +7,8 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
-
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Normal;
-import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 
 public class NoiseTraderForecaster extends AbstractReturnForecaster

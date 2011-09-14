@@ -17,10 +17,10 @@ package net.sourceforge.jasa.report;
 
 
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sourceforge.jabm.event.BatchFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.util.Parameterizable;
@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
  */
 
 public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
-    Parameterizable {
+    Parameterizable, Serializable {
 
 	static Logger logger = Logger.getLogger(AbstractAuctionReport.class);
 

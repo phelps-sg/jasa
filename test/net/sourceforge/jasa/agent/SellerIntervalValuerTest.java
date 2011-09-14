@@ -15,11 +15,10 @@
 
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jasa.agent.valuation.IntervalValuer;
-import net.sourceforge.jasa.agent.valuation.SellerIntervalValuer;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.jasa.agent.valuation.IntervalValuer;
+import net.sourceforge.jasa.agent.valuation.SellerIntervalValuer;
 
 /**
  * @author Steve Phelps

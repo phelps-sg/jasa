@@ -15,15 +15,12 @@
 
 package net.sourceforge.jasa.market;
 
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
+import junit.framework.TestCase;
 import net.sourceforge.jasa.agent.MockTrader;
-import net.sourceforge.jasa.market.IllegalOrderException;
-import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import junit.framework.TestCase;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 public abstract class AuctioneerTest extends TestCase {
 

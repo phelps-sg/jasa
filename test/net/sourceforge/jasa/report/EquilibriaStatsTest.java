@@ -17,19 +17,16 @@ package net.sourceforge.jasa.report;
 
 import java.util.Random;
 
-import cern.jet.random.engine.MersenneTwister64;
-
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
 import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.report.EquilibriumReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import cern.jet.random.engine.MersenneTwister64;
 
 public class EquilibriaStatsTest extends TestCase {
 

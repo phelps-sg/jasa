@@ -15,11 +15,10 @@
 
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.strategy.GDStrategy;
-import net.sourceforge.jasa.report.HistoricalDataReport;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.jasa.agent.strategy.GDStrategy;
+import net.sourceforge.jasa.report.HistoricalDataReport;
 
 /**
  * @author Steve Phelps

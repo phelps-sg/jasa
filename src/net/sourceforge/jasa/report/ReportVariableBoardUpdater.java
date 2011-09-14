@@ -29,10 +29,10 @@ import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
+import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
-import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.DuplicateShoutException;
@@ -49,6 +49,7 @@ import org.jfree.data.time.TimePeriodValue;
  * @version $Revision$
  */
 
+@SuppressWarnings("rawtypes")
 public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
     Parameterizable, Resetable {
 

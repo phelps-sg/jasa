@@ -18,15 +18,16 @@ package net.sourceforge.jasa.report;
 import java.util.Iterator;
 
 import net.sourceforge.jabm.report.DataWriter;
-
 import uchicago.src.sim.analysis.Sequence;
 
 /*
  * @author Steve Phelps
  * 
  * @version $Revision$
+ * @deprecated
  */
 
+@SuppressWarnings("all")
 public class RepastGraphSequence implements Sequence, DataWriter {
 
 	protected double lastValue;

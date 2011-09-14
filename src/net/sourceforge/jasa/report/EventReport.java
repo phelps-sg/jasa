@@ -1,11 +1,9 @@
 package net.sourceforge.jasa.report;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import net.sourceforge.jabm.event.SimEvent;
+
+import org.apache.log4j.Logger;
 
 public class EventReport extends AbstractAuctionReport {
 

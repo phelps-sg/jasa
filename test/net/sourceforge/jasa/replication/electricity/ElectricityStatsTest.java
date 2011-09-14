@@ -15,11 +15,11 @@
 
 package net.sourceforge.jasa.replication.electricity;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.strategy.PureSimpleStrategy;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * 

@@ -17,21 +17,12 @@ package net.sourceforge.jasa.market;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import net.sourceforge.jabm.util.Distribution;
 import net.sourceforge.jasa.agent.MockStrategy;
 import net.sourceforge.jasa.agent.MockTrader;
-import net.sourceforge.jasa.market.AuctionClosedException;
-import net.sourceforge.jasa.market.AuctionException;
-import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.MarketFacade;
-import net.sourceforge.jasa.market.ShoutsNotVisibleException;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-import net.sourceforge.jasa.report.DailyStatsReport;
-import net.sourceforge.jasa.report.HistoricalDataReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
 import org.apache.log4j.Logger;

@@ -19,16 +19,16 @@ import java.util.Iterator;
 
 import net.sourceforge.jasa.report.GraphReport;
 import net.sourceforge.jasa.report.RepastGraphSequence;
-
-
-import uchicago.src.sim.engine.SimModel;
 import uchicago.src.sim.analysis.OpenSequenceGraph;
+import uchicago.src.sim.engine.SimModel;
 
 /**
  * @author Steve Phelps
  * @version $Revision$
+ * @deprecated
  */
 
+@SuppressWarnings("all")
 public class RepastAuctionConsoleGraph extends OpenSequenceGraph {
 
 	public RepastAuctionConsoleGraph(String title, SimModel repastModel,

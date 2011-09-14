@@ -16,13 +16,12 @@
 package net.sourceforge.jasa.report;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
 

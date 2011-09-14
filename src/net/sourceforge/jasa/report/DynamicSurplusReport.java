@@ -18,7 +18,6 @@ package net.sourceforge.jasa.report;
 import gnu.trove.iterator.TObjectDoubleIterator;
 import gnu.trove.map.hash.TObjectDoubleHashMap;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -27,7 +26,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 
@@ -131,7 +129,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 
 	public double calculateTotalProfits() {
 		double totalProfits = 0;
-		Iterator i = auction.getTraderIterator();
+		Iterator<Agent> i = auction.getTraderIterator();
 		while (i.hasNext()) {
 			AbstractTradingAgent agent = (AbstractTradingAgent) i.next();
 			totalProfits += agent.getTotalPayoff();

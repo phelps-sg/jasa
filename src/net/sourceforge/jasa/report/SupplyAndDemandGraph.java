@@ -20,23 +20,17 @@ import java.util.Iterator;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.DataWriter;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.rules.EquilibriumBeatingAcceptingPolicy;
 
 import org.apache.log4j.Logger;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CombinedRangeXYPlot;
 import org.jfree.chart.plot.Marker;
 import org.jfree.chart.plot.XYPlot;
-import org.jfree.chart.renderer.xy.StandardXYItemRenderer;
-import org.jfree.chart.renderer.xy.XYItemRenderer;
 import org.jfree.data.time.TimePeriodValue;
 import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * A <code>FreeChartGraph</code> showing supply and demand curves.
@@ -161,6 +155,7 @@ public class SupplyAndDemandGraph extends FreeChartGraph {
 		public void close() {
 		}
 
+		@SuppressWarnings("rawtypes")
 		public void newData(Iterator i) {
 			throw newException();
 		}

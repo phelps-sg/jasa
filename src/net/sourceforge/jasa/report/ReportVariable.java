@@ -25,7 +25,7 @@ package net.sourceforge.jasa.report;
  * @version $Revision$
  */
 
-public class ReportVariable implements Comparable {
+public class ReportVariable implements Comparable<ReportVariable> {
 
 	protected String name;
 
@@ -48,8 +48,8 @@ public class ReportVariable implements Comparable {
 		return name + " (" + description + ")";
 	}
 
-	public int compareTo(Object other) {
-		return this.name.compareTo(((ReportVariable) other).name);
+	public int compareTo(ReportVariable other) {
+		return this.name.compareTo(other.name);
 	}
 
 	public boolean equals(Object other) {

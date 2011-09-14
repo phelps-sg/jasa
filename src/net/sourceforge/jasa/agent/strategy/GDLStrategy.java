@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
-
 import java.util.Iterator;
 
 import net.sourceforge.jabm.EventScheduler;
@@ -121,7 +120,8 @@ public class GDLStrategy extends FixedDirectionStrategy implements
 
 		super.modifyShout(shout);
 
-		Iterator sortedShouts = historicalDataReport.sortedShoutIterator();
+		Iterator<Order> sortedShouts = 
+			historicalDataReport.sortedShoutIterator();
 
 		double lastPoint = 0;
 		double lastP = 0;

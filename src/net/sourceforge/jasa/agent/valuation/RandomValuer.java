@@ -16,11 +16,6 @@
 package net.sourceforge.jasa.agent.valuation;
 
 
-import cern.jet.random.AbstractContinousDistribution;
-import cern.jet.random.AbstractDistribution;
-import cern.jet.random.Uniform;
-import cern.jet.random.engine.RandomEngine;
-
 import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;
@@ -28,6 +23,10 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.TradingAgent;
 
 import org.apache.log4j.Logger;
+
+import cern.jet.random.AbstractContinousDistribution;
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * A valuation policy in which we randomly determine our valuation across all

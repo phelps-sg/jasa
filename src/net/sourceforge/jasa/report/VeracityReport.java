@@ -14,13 +14,11 @@
  */
 package net.sourceforge.jasa.report;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.market.Order;
 

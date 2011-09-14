@@ -15,10 +15,9 @@
 
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.strategy.EquilibriumPriceStrategy;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.jasa.agent.strategy.EquilibriumPriceStrategy;
 
 /**
  * @author Steve Phelps

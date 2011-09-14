@@ -22,30 +22,19 @@ import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SimulationTime;
-
 import net.sourceforge.jabm.agent.Agent;
-
 import net.sourceforge.jabm.event.EventListener;
 import net.sourceforge.jabm.event.SimEvent;
-
 import net.sourceforge.jabm.init.BasicAgentInitialiser;
-
 import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
-
 import net.sourceforge.jabm.report.Report;
-
 import net.sourceforge.jabm.spring.BeanFactorySingleton;
-
 import net.sourceforge.jasa.agent.TradingAgent;
-
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
-
 import net.sourceforge.jasa.init.ResetterSimulationInitialiser;
-
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
-
 
 import org.apache.log4j.Logger;
 
@@ -364,6 +353,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
 	public void addListener(Class eventClass, EventListener listener) {
 		controller.addListener(eventClass, listener);
 	}

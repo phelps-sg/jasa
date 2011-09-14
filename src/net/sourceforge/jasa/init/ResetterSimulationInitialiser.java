@@ -1,10 +1,10 @@
 package net.sourceforge.jasa.init;
 
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-
 import net.sourceforge.jabm.Simulation;
 import net.sourceforge.jabm.init.SimulationInitialiser;
 import net.sourceforge.jasa.market.MarketSimulation;
+
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 
 public class ResetterSimulationInitialiser implements SimulationInitialiser {
 

@@ -16,11 +16,8 @@
 package net.sourceforge.jasa.agent;
 
 import net.sourceforge.jabm.agent.Agent;
-
 import net.sourceforge.jabm.agent.utility.UtilityFunction;
-
 import net.sourceforge.jasa.event.MarketEventListener;
-
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;

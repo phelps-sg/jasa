@@ -3,10 +3,7 @@ package net.sourceforge.jasa.report;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-
 import net.sourceforge.jabm.event.BatchFinishedEvent;
-import net.sourceforge.jabm.event.BatchStartingEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
@@ -14,7 +11,7 @@ import net.sourceforge.jabm.report.CSVWriter;
 import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
 
-
+import org.apache.log4j.Logger;
 
 public abstract class TimeSeriesReport extends AbstractAuctionReport {
 

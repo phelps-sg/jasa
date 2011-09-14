@@ -16,12 +16,10 @@
 package net.sourceforge.jasa.report;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.JPanel;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
 
 import org.apache.log4j.Logger;

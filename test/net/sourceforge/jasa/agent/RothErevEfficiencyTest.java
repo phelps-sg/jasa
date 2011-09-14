@@ -15,11 +15,10 @@
 
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jabm.learning.NPTRothErevLearner;
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.learning.NPTRothErevLearner;
+import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
 
 /**
  * @author Steve Phelps

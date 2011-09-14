@@ -2,13 +2,13 @@ package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
-import cern.jet.random.AbstractContinousDistribution;
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
+import cern.jet.random.AbstractContinousDistribution;
 
 public class LinearWeightedReturnForecaster extends AbstractReturnForecaster
 		implements Serializable {

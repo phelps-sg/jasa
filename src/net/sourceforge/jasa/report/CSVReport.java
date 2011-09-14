@@ -15,8 +15,6 @@
 
 package net.sourceforge.jasa.report;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 
 import net.sourceforge.jabm.report.CSVWriter;

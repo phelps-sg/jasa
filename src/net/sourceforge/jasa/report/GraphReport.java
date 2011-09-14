@@ -15,9 +15,9 @@
 
 package net.sourceforge.jasa.report;
 
-import javax.swing.event.EventListenerList;
-
 import java.util.Iterator;
+
+import javax.swing.event.EventListenerList;
 
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
@@ -76,8 +76,8 @@ public class GraphReport extends MeanValueDataWriterReport implements
 		// fireGraphChanged(new GraphDataEvent(this));
 	}
 
-	public Iterator getSequenceIterator() {
-		return new Iterator() {
+	public Iterator<Sequence> getSequenceIterator() {
+		return new Iterator<Sequence>() {
 
 			int currentSequence = 0;
 
@@ -85,7 +85,7 @@ public class GraphReport extends MeanValueDataWriterReport implements
 				return currentSequence < allSeries.length;
 			}
 
-			public Object next() {
+			public Sequence next() {
 				return (Sequence) allSeries[currentSequence++];
 			}
 

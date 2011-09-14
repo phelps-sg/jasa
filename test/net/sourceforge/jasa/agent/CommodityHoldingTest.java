@@ -1,6 +1,5 @@
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jasa.agent.CommodityHolding;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

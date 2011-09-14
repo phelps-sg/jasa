@@ -17,16 +17,14 @@ package net.sourceforge.jasa.report;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
 
 import net.sourceforge.jabm.report.DataWriter;
-import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Order;
+
+import org.apache.log4j.Logger;
 
 
 /**

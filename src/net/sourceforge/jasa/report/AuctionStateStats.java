@@ -22,8 +22,8 @@ import java.util.List;
 import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jasa.market.AscendingOrderComparator;
 import net.sourceforge.jasa.market.DescendingOrderComparator;
-import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
 

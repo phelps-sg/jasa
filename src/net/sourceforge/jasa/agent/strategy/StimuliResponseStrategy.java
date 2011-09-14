@@ -19,7 +19,6 @@ import java.io.Serializable;
 
 import net.sourceforge.jabm.learning.Learner;
 import net.sourceforge.jabm.learning.StimuliResponseLearner;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;

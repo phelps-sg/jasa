@@ -15,15 +15,13 @@
 
 package net.sourceforge.jasa.market;
 
-import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import java.io.Serializable;
+import java.util.List;
 
 import org.apache.commons.collections.buffer.PriorityBuffer;
 import org.apache.commons.collections.iterators.CollatingIterator;
-
 import org.apache.log4j.Logger;
 
 /**

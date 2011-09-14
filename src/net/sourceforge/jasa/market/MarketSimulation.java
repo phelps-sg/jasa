@@ -25,14 +25,11 @@ import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.RoundStartingEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
-
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.RoundClosingEvent;
-
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
-
 import net.sourceforge.jasa.market.rules.AuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.CombiTimingCondition;
 import net.sourceforge.jasa.market.rules.DayEndingCondition;
@@ -41,10 +38,6 @@ import net.sourceforge.jasa.market.rules.MaxRoundsAuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.MaxRoundsDayEndingCondition;
 import net.sourceforge.jasa.market.rules.NullAuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.TimingCondition;
-
-
-
-import net.sourceforge.jasa.view.AuctionConsoleFrame;
 
 import org.apache.log4j.Logger;
 
@@ -393,7 +386,8 @@ public class MarketSimulation extends AbstractSimulation
 		setAuctionClosingCondition(cond);
 	}
 
-	private TimingCondition getTimingCondition(TimingCondition cond,
+	@SuppressWarnings("rawtypes")
+	protected TimingCondition getTimingCondition(TimingCondition cond,
 	    Class conditionClass) {
 		if (cond != null) {
 			if (cond.getClass().equals(conditionClass)) {
@@ -412,12 +406,12 @@ public class MarketSimulation extends AbstractSimulation
 		return null;
 	}
 
-	@SuppressWarnings("all")
+	@SuppressWarnings("rawtypes")
 	public TimingCondition getAuctionClosingCondition(Class conditionClass) {
 		return getTimingCondition(closingCondition, conditionClass);
 	}
 
-	@SuppressWarnings("all")
+	@SuppressWarnings("rawtypes")
 	public TimingCondition getDayEndingCondition(Class conditionClass) {
 		return getTimingCondition(dayEndingCondition, conditionClass);
 	}

@@ -15,9 +15,8 @@
 
 package net.sourceforge.jasa.market;
 
-import java.util.Comparator;
-
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * This class can be used to as a Comparator to rank shouts in ascending order.

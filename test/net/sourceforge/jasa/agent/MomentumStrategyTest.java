@@ -15,13 +15,13 @@
 
 package net.sourceforge.jasa.agent;
 
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
-import net.sourceforge.jasa.agent.strategy.MomentumStrategy;
-import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jasa.agent.strategy.MomentumStrategy;
+import net.sourceforge.jasa.sim.PRNGTestSeeds;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 /**
  * @author Steve Phelps

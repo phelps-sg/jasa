@@ -13,17 +13,11 @@
  */
 package net.sourceforge.jasa.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import net.sourceforge.jabm.util.ObjectConverter;
 import net.sourceforge.jabm.util.Parameterizable;
 
 /**

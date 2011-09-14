@@ -18,9 +18,7 @@ package net.sourceforge.jasa.agent.valuation;
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
-
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 

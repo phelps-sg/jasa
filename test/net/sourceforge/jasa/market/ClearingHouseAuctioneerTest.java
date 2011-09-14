@@ -14,15 +14,12 @@
  */
 package net.sourceforge.jasa.market;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
-import net.sourceforge.jasa.market.IllegalOrderException;
-import net.sourceforge.jasa.market.MarketQuote;
-import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * @author Steve Phelps
