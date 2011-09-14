@@ -65,10 +65,10 @@ public class AuctionStateStats extends SupplyAndDemandStats {
 	}
 
 	public void writeDemandStats() {
-		Iterator i = auction.getAuctioneer().bidIterator();
-		List bids = new ArrayList();
+		Iterator<Order> i = auction.getAuctioneer().bidIterator();
+		List<Order> bids = new ArrayList<Order>();
 		while (i.hasNext()) {
-			Order bid = (Order) i.next();
+			Order bid = i.next();
 			assert bid.isBid();
 			bids.add(bid);
 		}
