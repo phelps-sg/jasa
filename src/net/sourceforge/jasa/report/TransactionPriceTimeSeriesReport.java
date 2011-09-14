@@ -3,6 +3,12 @@ package net.sourceforge.jasa.report;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
+/**
+ * 
+ * @deprecated Replaced by TransactionPriceReportVariables
+ * @author sphelps
+ *
+ */
 public class TransactionPriceTimeSeriesReport extends TimeSeriesReport {
 
 	public TransactionPriceTimeSeriesReport(String filename) {

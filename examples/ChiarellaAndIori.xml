@@ -62,13 +62,13 @@
 		<bean class="net.sourceforge.jasa.event.OrderPlacedEvent">
 		</bean>
 	</property>
-	<property name="reportVariables" ref="orderFlowCSVFile"/>
+	<property name="reportVariables" ref="orderFlowTimeSeries"/>
 </bean>
 
 <bean id="priceTimeSeries" class="net.sourceforge.jabm.report.CombiSeriesReportVariables">
 	<property name="seriesList">
 		<list>
-<!-- 			<ref bean="transactionPriceTimeSeries"/> -->
+			<ref bean="transactionPriceTimeSeries"/>
 			<ref bean="midPriceTimeSeries"/>
 			<ref bean="orderFlowTimeSeries"/>
 		</list>

@@ -15,9 +15,9 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 	
 	protected int time;
 	
-	public static final String NAME = "transactionprice";
+	public static final String NAME = "transaction";
 	
-	public static final String TRANSACTIONPRICE_VAR = "transactionprice";
+	public static final String TRANSACTIONPRICE_VAR = "price";
 	
 	@Override
 	public Map<Object, Number> getVariableBindings() {

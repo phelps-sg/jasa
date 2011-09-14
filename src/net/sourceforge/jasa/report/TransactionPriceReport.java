@@ -29,10 +29,13 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A historicalDataReport that keeps cummulative statistics on bid prices, ask prices,
- * transaction prices, and market quote prices.
+ * A historicalDataReport that keeps cummulative statistics on bid prices, ask
+ * prices, transaction prices, and market quote prices.
  * </p>
  * 
+ * @deprecated Replaced by various implementations of the ReportVariables
+ *             interface. See TransactionPriceReportVariables,
+ *             MidPriceReportVariables and OfferPriceReportVariables.
  * @author Steve Phelps
  * @version $Revision$
  */
