@@ -47,6 +47,8 @@ import org.jfree.data.time.TimePeriodValue;
  * 
  * @author Jinzhong Niu
  * @version $Revision$
+ * 
+ * @deprecated See ReportVariables interface and its implementors.
  */
 
 @SuppressWarnings("rawtypes")
@@ -80,8 +82,6 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 	public static final ReportVariable VAR_ALLOCATIVE_EFFICIENCY = new ReportVariable(
 	    ALLOCATIVE_EFFICIENCY, "The allocative efficiency");
 
-	public static String P_TRANS_PRICE_MEMORY = "transpricememory";
-
 	protected double equilPrice;
 
 	protected FixedLengthQueue transPriceMemory;
@@ -112,6 +112,8 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 		transPriceMemory.reset();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Deprecated
 	public Map getVariables() {
 		HashMap vars = new HashMap();
 

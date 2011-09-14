@@ -120,7 +120,8 @@ public class GDLStrategy extends FixedDirectionStrategy implements
 
 		super.modifyShout(shout);
 
-		Iterator<Order> sortedShouts = 
+		@SuppressWarnings("rawtypes")
+		Iterator sortedShouts = 
 			historicalDataReport.sortedShoutIterator();
 
 		double lastPoint = 0;

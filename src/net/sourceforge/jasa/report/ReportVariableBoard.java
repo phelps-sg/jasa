@@ -37,21 +37,20 @@ import org.jfree.data.time.TimePeriodValue;
  * @version $Revision$
  */
 
-@SuppressWarnings("rawtypes")
 public class ReportVariableBoard {
 
 	static Logger logger = Logger.getLogger(ReportVariableBoard.class);
 
 	private static ReportVariableBoard instance;
 
-	private Map board;
+	private Map<String, TimePeriodValue> board;
 
 	private ReportVariableBoard() {
 		if (instance != null)
 			throw new Error("ReportVariableBoard cannot be instantiated twice!");
 
 		instance = this;
-		board = Collections.synchronizedMap(new HashMap());
+		board = Collections.synchronizedMap(new HashMap<String, TimePeriodValue>());
 	}
 
 	public static ReportVariableBoard getInstance() {
@@ -66,12 +65,12 @@ public class ReportVariableBoard {
 			board.clear();
 	}
 
-	public Collection getVarNames() {
+	public Collection<String> getVarNames() {
 		return board.keySet();
 	}
 
 	public TimePeriodValue getValue(String varName) {
-		return (TimePeriodValue) board.get(varName);
+		return board.get(varName);
 	}
 
 	public TimePeriodValue getValue(ReportVariable var) {
@@ -91,6 +90,7 @@ public class ReportVariableBoard {
 		reportValue(varName, new TimePeriodValue(time, value));
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void reportValues(Map vars, MarketEvent event) {
 		Millisecond time = new Millisecond(new Date(event.getPhysicalTime()));
 

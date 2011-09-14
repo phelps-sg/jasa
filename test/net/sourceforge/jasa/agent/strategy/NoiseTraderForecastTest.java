@@ -6,7 +6,6 @@ import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
-import cern.jet.random.Uniform;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 
@@ -17,9 +16,8 @@ public class NoiseTraderForecastTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		RandomEngine prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		Uniform distribution = new Uniform(0, 1, prng);
 		forecaster = new NoiseTraderForecaster(prng);
-//		forecaster.setVolatilityDistribution(distribution);
+		forecaster.setPrng(prng);
 	}
 	
 	public void testForecast() {

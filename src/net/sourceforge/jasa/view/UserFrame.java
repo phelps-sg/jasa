@@ -89,6 +89,7 @@ import net.sourceforge.jabm.util.Parameterizable;
  * @version $Revision$
  */
 
+@Deprecated
 public class UserFrame extends JFrame implements Parameterizable {
 
 	public static final String P_TITLE = "title";
@@ -111,6 +112,8 @@ public class UserFrame extends JFrame implements Parameterizable {
 
 	// private static Logger report = Logger.getLogger(UserFrame.class);
 
+	@SuppressWarnings("unused")
+	@Deprecated
 	private String getDimName() {
 		Dimension dimension = getToolkit().getScreenSize();
 		return dimension.width + "x" + dimension.height;

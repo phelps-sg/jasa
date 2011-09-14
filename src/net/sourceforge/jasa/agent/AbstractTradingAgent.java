@@ -413,7 +413,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	}
 	
 	public boolean register(Market market) {
-		MarketFacade auction = (MarketFacade) market;
+//		MarketFacade auction = (MarketFacade) market;
 //		auction.addListener(this);
 		return markets.add(market);
 	}

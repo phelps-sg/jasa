@@ -29,6 +29,7 @@ import java.io.Serializable;
  * @author Steve Phelps
  */
 
+@SuppressWarnings("static-access")
 public class BuyerIntervalValuer extends IntervalValuer implements Serializable {
 
 	/**

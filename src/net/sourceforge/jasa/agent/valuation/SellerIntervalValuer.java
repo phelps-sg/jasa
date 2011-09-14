@@ -27,6 +27,7 @@ package net.sourceforge.jasa.agent.valuation;
  * @author Steve Phelps
  */
 
+@SuppressWarnings("static-access")
 public class SellerIntervalValuer extends IntervalValuer {
 
 	/**

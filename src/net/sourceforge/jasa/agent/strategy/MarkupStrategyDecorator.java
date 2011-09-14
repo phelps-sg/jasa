@@ -58,8 +58,8 @@ public class MarkupStrategyDecorator extends FixedDirectionStrategy
 		assert agent.equals(((AbstractTradingStrategy) subStrategy).getAgent());
 		double delta;
 		Order strategicShout = subStrategy.modifyOrder(shout, auction);
-		double strategicPrice = strategicShout.getPrice();
 		if (strategicShout != null) {
+			double strategicPrice = strategicShout.getPrice();
 			if (isSell()) {
 				delta = markup * strategicPrice;
 			} else {

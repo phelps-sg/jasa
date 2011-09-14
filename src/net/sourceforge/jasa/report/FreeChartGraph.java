@@ -62,18 +62,6 @@ public abstract class FreeChartGraph extends JPanel implements
 
 	static Logger logger = Logger.getLogger(FreeChartGraph.class);
 
-	public static final String P_DEF_BASE = "freechartgraph";
-
-	public static final String P_NAME = "name";
-
-	public static final String P_X = "x";
-
-	public static final String P_Y = "y";
-
-	public static final String P_WIDTH = "width";
-
-	public static final String P_HEIGHT = "height";
-
 	private FreeChartReport report;
 
 	private JFreeChart jfreechart;

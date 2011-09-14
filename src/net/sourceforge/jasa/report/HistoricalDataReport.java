@@ -327,7 +327,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		return getNumberOfShouts(bids, price, accepted);
 	}
 
-	public Iterator<Order> sortedShoutIterator() {
+	@SuppressWarnings("rawtypes")
+	public Iterator sortedShoutIterator() {
 		return sortedShouts.iterator();
 	}
 
@@ -454,6 +455,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			HistoricalDataReport.this.deleteObserver(this);
 		}
 
+		@SuppressWarnings("unchecked")
 		public void reset() {
 
 			sortedAsks = new SortedTreeList("sortedAsks", asks);
@@ -846,6 +848,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			if (b > e)
 				add(b, o);
 			else {
+				@SuppressWarnings("unchecked")
 				int c = ((Comparable) o).compareTo(get((b + e) / 2));
 
 				if (c == 1) {

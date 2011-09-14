@@ -121,6 +121,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 		TObjectDoubleIterator<AbstractTradingAgent> i = surplusTable.iterator();
 		while (i.hasNext()) {
 			i.advance();
+			@SuppressWarnings("unused")
 			AbstractTradingAgent agent = i.key();
 			totalSurplus += i.value();
 		}

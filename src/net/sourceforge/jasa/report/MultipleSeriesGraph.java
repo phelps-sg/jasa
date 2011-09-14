@@ -85,16 +85,6 @@ import org.jfree.data.xy.XYDataset;
  */
 public class MultipleSeriesGraph extends FreeChartGraph {
 
-	public static final String P_DEF_BASE = "multipleseriesgraph";
-
-	public static final String P_SERIES = "series";
-
-	public static final String P_MARKER = "marker";
-
-	public static final String P_RENDERER = "renderer";
-
-	public static final String P_NUM = "n";
-
 	protected FreeChartSeriesCollection fcCollections;
 
 	protected FreeChartMarker markers[];

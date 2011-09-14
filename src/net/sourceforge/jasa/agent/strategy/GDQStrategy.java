@@ -89,11 +89,12 @@ public class GDQStrategy extends FixedDirectionStrategy implements
 		return (TokenTradingAgent) agent;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public boolean modifyShout(Order shout) {
 
 		super.modifyShout(shout);
 
-		Iterator<Order> sortedShouts = historicalDataReport.sortedShoutIterator();
+		Iterator sortedShouts = historicalDataReport.sortedShoutIterator();
 
 		double lastPoint = 0;
 		double lastP = 0;

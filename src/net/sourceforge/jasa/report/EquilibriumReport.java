@@ -103,6 +103,7 @@ public class EquilibriumReport extends DirectRevelationReport implements
 		quantity = 0;
 		Iterator<Order> i = matchedShouts.iterator();
 		while (i.hasNext()) {
+			@SuppressWarnings("unused")
 			Order bid = i.next();
 			Order ask = i.next();
 			quantity += ask.getQuantity();

@@ -350,10 +350,12 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	// protected Iterator matchedAskDisassembler() {
 	// return new QueueDisassembler(sIn);
 	// }
+	@SuppressWarnings("unchecked")
 	public Iterator<Order> askIterator() {
 		return new CollatingIterator(greaterThan, sIn.iterator(), sOut.iterator());
 	}
 
+	@SuppressWarnings("unchecked")
 	public Iterator<Order> bidIterator() {
 		return new CollatingIterator(lessThan, bIn.iterator(), bOut.iterator());
 	}

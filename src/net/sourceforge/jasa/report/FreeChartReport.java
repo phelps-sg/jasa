@@ -62,26 +62,15 @@ import org.jfree.chart.ChartUtilities;
  * @version $Revision$
  */
 
+@Deprecated
 public class FreeChartReport extends AbstractAuctionReport implements
     Parameterizable, Serializable, Cloneable, WindowListener {
 
 	static Logger logger = Logger.getLogger(FreeChartReport.class);
 
-	public static final String P_DEF_BASE = "freechartreport";
-
-	public static final String P_NAME = "name";
-
-	public static final String P_GRAPH = "graph";
-
-	public static final String P_NUM = "n";
-
-	public static final String P_EXIT = "exit";
-
-	public static final String P_SAVETOFILE = "savetofile";
-
 	private boolean saveToFile = false;
 
-	private boolean exitOnClose = false;
+//	private boolean exitOnClose = false;
 
 	private UserFrame frame;
 
