@@ -24,23 +24,20 @@
 	<property name="simulationBeanName">
 	   <idref local="marketSimulation"/>
 	</property>
-	<property name="numSimulations" value="3"/>
-	<!-- <property name="simulationInitialiser">
-	   <bean class="net.sourceforge.jasa.init.ResetterSimulationInitialiser"/>
-	</property> --> 
+	<property name="numSimulations" value="3"/>	
 	<property name="reports">
-	<list>
-		<ref bean="priceTimeSeriesChart" />
-		<ref bean="transactionPriceTimeSeriesReport" />
-		<ref bean="transactionPriceReportVariables" />
-		<ref bean="midPriceTimeSeriesReport" />
-		<ref bean="midPriceReportVariables" />
-		<ref bean="orderFlowReportVariables" />
-		<ref bean="orderFlowTimeSeriesReport" />
+		<list>
+			<ref bean="priceTimeSeriesChart" />
+			<ref bean="transactionPriceTimeSeriesReport" />
+			<ref bean="transactionPriceReportVariables" />
+			<ref bean="midPriceTimeSeriesReport" />
+			<ref bean="midPriceReportVariables" />
+			<ref bean="orderFlowReportVariables" />
+			<ref bean="orderFlowTimeSeriesReport" />
 <!-- 		<ref bean="setInitialSpreadReport" /> -->
 <!-- 		<ref bean="supplyAndDemandGraph"/> -->
-	</list>
-</property>
+		</list>
+	</property>
 </bean>
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation"
