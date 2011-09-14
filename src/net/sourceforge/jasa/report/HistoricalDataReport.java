@@ -327,7 +327,6 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		return getNumberOfShouts(bids, price, accepted);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public Iterator sortedShoutIterator() {
 		return sortedShouts.iterator();
 	}

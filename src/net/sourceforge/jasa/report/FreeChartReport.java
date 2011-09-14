@@ -62,7 +62,6 @@ import org.jfree.chart.ChartUtilities;
  * @version $Revision$
  */
 
-@Deprecated
 public class FreeChartReport extends AbstractAuctionReport implements
     Parameterizable, Serializable, Cloneable, WindowListener {
 

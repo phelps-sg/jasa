@@ -47,8 +47,6 @@ import org.jfree.data.time.TimePeriodValue;
  * 
  * @author Jinzhong Niu
  * @version $Revision$
- * 
- * @deprecated See ReportVariables interface and its implementors.
  */
 
 @SuppressWarnings("rawtypes")
