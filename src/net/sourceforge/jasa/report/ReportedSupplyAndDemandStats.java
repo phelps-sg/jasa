@@ -44,12 +44,12 @@ public class ReportedSupplyAndDemandStats extends SupplyAndDemandStats {
 	/**
 	 * The sorted list of agent's truthful bids (ie buyers' private values).
 	 */
-	protected ArrayList bids = new ArrayList();
+	protected ArrayList<Order> bids = new ArrayList<Order>();
 
 	/**
 	 * The sorted list of agents' truthful asks (ie sellers' private values).
 	 */
-	protected ArrayList asks = new ArrayList();
+	protected ArrayList<Order> asks = new ArrayList<Order>();
 
 	static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
 

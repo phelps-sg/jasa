@@ -1,13 +1,13 @@
 package net.sourceforge.jasa.report;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.report.XYReportVariables;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 public class OfferPriceReportVariables implements XYReportVariables {
 
@@ -15,12 +15,15 @@ public class OfferPriceReportVariables implements XYReportVariables {
 	
 	protected int time;
 	
+	public static final String NAME = "offerprice";	
+	public static final String OFFERPRICE_VAR = "price";
+	
 	@Override
 	public Map<Object, Number> getVariableBindings() {
 		LinkedHashMap<Object, Number> result = 
 			new LinkedHashMap<Object, Number>();
 		result.put(getName() + ".t", time);
-		result.put(getName() + ".offerprice", price);
+		result.put(getName() + "." + OFFERPRICE_VAR, price);
 		return result;
 	}
 
@@ -42,7 +45,7 @@ public class OfferPriceReportVariables implements XYReportVariables {
 
 	@Override
 	public String getName() {
-		return toString();
+		return NAME;
 	}
 
 	@Override
@@ -66,6 +69,18 @@ public class OfferPriceReportVariables implements XYReportVariables {
 			this.price = event.getOrder().getPrice();
 			this.time = event.getTime();
 		}
+	}
+
+	@Override
+	public List<Object> getyVariableNames() {
+		LinkedList<Object> result = new LinkedList<Object>();
+		result.add(getName() + "." + OFFERPRICE_VAR);
+		return result;
+	}
+
+	@Override
+	public String getxVariableName() {
+		return getName() + ".t";
 	}
 
 }

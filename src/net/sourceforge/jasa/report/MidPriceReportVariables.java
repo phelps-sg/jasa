@@ -1,6 +1,8 @@
 package net.sourceforge.jasa.report;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
@@ -13,12 +15,16 @@ public class MidPriceReportVariables implements XYReportVariables {
 	
 	protected int time;
 	
+	public static final String NAME = "midprice";
+	
+	public static final String MIDPRICE_VAR = "price";
+	
 	@Override
 	public Map<Object, Number> getVariableBindings() {
 		LinkedHashMap<Object, Number> result = 
 			new LinkedHashMap<Object, Number>();
 		result.put(getName() + ".t", time);
-		result.put(getName() + ".midprice", midPrice);
+		result.put(getName() + "." + MIDPRICE_VAR, midPrice);
 		return result;
 	}
 
@@ -40,7 +46,7 @@ public class MidPriceReportVariables implements XYReportVariables {
 
 	@Override
 	public String getName() {
-		return toString();
+		return NAME;
 	}
 
 	@Override
@@ -64,6 +70,18 @@ public class MidPriceReportVariables implements XYReportVariables {
 			this.midPrice = event.getAuction().getQuote().getMidPoint();
 			this.time = event.getTime();
 		}
+	}
+
+	@Override
+	public List<Object> getyVariableNames() {
+		LinkedList<Object> result = new LinkedList<Object>();
+		result.add(getName() + "." + MIDPRICE_VAR);
+		return result;
+ 	}
+
+	@Override
+	public String getxVariableName() {
+		return getName() + ".t";
 	}
 
 }
