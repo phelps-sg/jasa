@@ -120,9 +120,10 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		prettyPrint("Runner-up asks", sOut);
 	}
 
+	@SuppressWarnings("all")
 	public void prettyPrint(String title, PriorityBuffer shouts) {
 		logger.info(title);
-		logger.info("--------------");
+		logger.info("--------------");		
 		Iterator i = shouts.iterator();
 		while (i.hasNext()) {
 			Order shout = (Order) i.next();

@@ -412,10 +412,12 @@ public class MarketSimulation extends AbstractSimulation
 		return null;
 	}
 
+	@SuppressWarnings("all")
 	public TimingCondition getAuctionClosingCondition(Class conditionClass) {
 		return getTimingCondition(closingCondition, conditionClass);
 	}
 
+	@SuppressWarnings("all")
 	public TimingCondition getDayEndingCondition(Class conditionClass) {
 		return getTimingCondition(dayEndingCondition, conditionClass);
 	}

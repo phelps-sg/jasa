@@ -25,8 +25,8 @@ import net.sourceforge.jabm.agent.AbstractAgent;
 import net.sourceforge.jabm.agent.utility.RiskNeutralUtilityFunction;
 import net.sourceforge.jabm.agent.utility.UtilityFunction;
 import net.sourceforge.jabm.event.AgentArrivalEvent;
-import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
+
 import net.sourceforge.jabm.util.IdAllocator;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Prototypeable;
