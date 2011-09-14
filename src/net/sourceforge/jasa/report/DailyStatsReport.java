@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 public class DailyStatsReport extends PriceStatisticsReport implements
     Parameterizable {
 
-	protected Vector dailyStats;
+	protected Vector<SummaryStats[]> dailyStats;
 
 	static Logger logger = Logger.getLogger(DailyStatsReport.class);
 
@@ -55,7 +55,7 @@ public class DailyStatsReport extends PriceStatisticsReport implements
 		if (day > dailyStats.size() - 1) {
 			return null;
 		}
-		return ((SummaryStats[]) dailyStats.get(day))[TRANS_PRICE];
+		return dailyStats.get(day)[TRANS_PRICE];
 	}
 
 	public SummaryStats getPreviousDayTransPriceStats() {
@@ -83,8 +83,7 @@ public class DailyStatsReport extends PriceStatisticsReport implements
 
 	public void produceUserOutput() {
 		for (int day = 0; day < dailyStats.size(); day++) {
-			SummaryStats[] todaysStats = (SummaryStats[]) dailyStats
-			    .get(day);
+			SummaryStats[] todaysStats = dailyStats.get(day);
 			logger.info("Stats for day " + day);
 			logger.info("");
 			for (int i = 0; i < todaysStats.length; i++) {
@@ -95,7 +94,7 @@ public class DailyStatsReport extends PriceStatisticsReport implements
 
 	public void initialise() {
 		super.initialise();
-		dailyStats = new Vector();
+		dailyStats = new Vector<SummaryStats[]>();
 	}
 
 	public void reset() {

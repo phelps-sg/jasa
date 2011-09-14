@@ -25,10 +25,10 @@ import java.util.Vector;
  */
 public class FreeChartSeriesCollection {
 
-	Vector collection;
+	Vector<FreeChartSeries> collection;
 
 	public FreeChartSeriesCollection() {
-		collection = new Vector();
+		collection = new Vector<FreeChartSeries>();
 	}
 
 	public void addSeries(FreeChartSeries series) {

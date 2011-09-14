@@ -231,7 +231,7 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 
 		// init
 		FourHeapOrderBook shoutEngine = new FourHeapOrderBook();
-		ArrayList<Order> orders = new ArrayList();
+		ArrayList<Order> orders = new ArrayList<Order>();
 
 		// simulate a direct revelation process
 		Iterator<Agent> traders = auction.getTraderIterator();

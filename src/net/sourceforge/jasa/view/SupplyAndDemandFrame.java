@@ -48,6 +48,8 @@ import uchicago.src.sim.analysis.plot.RepastPlot;
  * @version $Revision$
  */
 
+//TODO refactor this to use JFreeChart library
+
 public abstract class SupplyAndDemandFrame extends JFrame implements Report, Observer {
 
 	protected MarketFacade auction;
@@ -91,6 +93,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 			public void actionPerformed(ActionEvent event) {
 				graph.clear(0);
 				graph.clear(1);
+				updateGraph();
 			}
 		});
 		controlPanel.add(updateButton);
@@ -147,13 +150,16 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 	public abstract String getGraphName();
 
 	public abstract SupplyAndDemandStats getSupplyAndDemandStats();
-
-	protected void plotSupplyAndDemand() {
+	
+	public void updateData() {
 		supplyCurve = new DataSeriesWriter();
 		demandCurve = new DataSeriesWriter();
 		SupplyAndDemandStats stats = getSupplyAndDemandStats();
 		stats.calculate();
 		stats.produceUserOutput();
+	}
+
+	protected void plotSupplyAndDemand() {		
 		maxX = Float.NEGATIVE_INFINITY;
 		plotCurve(SERIES_SUPPLY, supplyCurve);
 		plotCurve(SERIES_DEMAND, demandCurve);
@@ -188,6 +194,7 @@ public abstract class SupplyAndDemandFrame extends JFrame implements Report, Obs
 	@Override
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof RoundFinishedEvent) {
+			updateData();
 			updateGraph();
 		} else if (event instanceof SimulationStartingEvent) {
 			open();
