@@ -18,11 +18,13 @@
 	<property name="controller" ref="simulationController"/>
 </bean>
 
-<bean id="simulationController" class="net.sourceforge.jabm.SpringSimulationController">
+<bean id="simulationController" 
+		class="net.sourceforge.jabm.SpringSimulationController"
+		scope="singleton">
 	<property name="simulationBeanName">
 	   <idref local="marketSimulation"/>
 	</property>
-	<property name="numSimulations" value="1"/>
+	<property name="numSimulations" value="3"/>
 	<!-- <property name="simulationInitialiser">
 	   <bean class="net.sourceforge.jasa.init.ResetterSimulationInitialiser"/>
 	</property> --> 
@@ -35,10 +37,21 @@
 		<ref bean="midPriceReportVariables" />
 		<ref bean="orderFlowReportVariables" />
 		<ref bean="orderFlowTimeSeriesReport" />
-		<ref bean="setInitialSpreadReport" />
+<!-- 		<ref bean="setInitialSpreadReport" /> -->
 <!-- 		<ref bean="supplyAndDemandGraph"/> -->
 	</list>
 </property>
+</bean>
+
+<bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation"
+		scope="prototype">
+	<property name="simulationController" ref="simulationController"/>
+	<property name="market" ref="market"/>
+	<property name="maximumDays" value="600"/>
+	<property name="lengthOfDay" value="100"/>
+	<property name="population" ref="population"/>
+    <property name="agentMixer" ref="randomArrivalAgentMixer"/>
+    <property name="agentInitialiser" ref="agentInitialiser"/>
 </bean>
 
 <bean id="transactionPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
@@ -131,7 +144,8 @@
     <property name="tradingAgent" ref="fixedPriceBuyerPrototype"/>
 </bean>
 
-<bean id="agentInitialiser" class="net.sourceforge.jasa.agent.MarketAgentInitialiser">
+<bean id="agentInitialiser" 
+		class="net.sourceforge.jasa.agent.MarketAgentInitialiser">
     <property name="market" ref="market"/>
 </bean>
 
@@ -146,16 +160,6 @@
     <!--  In this model the probability of an agent arriving represents the
             total liquidity of the market  -->
     <property name="arrivalProbability" value="0.2"/>
-</bean>
-
-<bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
-	<property name="simulationController" ref="simulationController"/>
-	<property name="market" ref="market"/>
-	<property name="maximumDays" value="600"/>
-	<property name="lengthOfDay" value="100"/>
-	<property name="population" ref="population"/>
-    <property name="agentMixer" ref="randomArrivalAgentMixer"/>
-    <property name="agentInitialiser" ref="agentInitialiser"/>
 </bean>
 
 <bean id="cda" 
@@ -181,7 +185,8 @@
 	</constructor-arg>
 </bean>
 
-<bean id="population" class="net.sourceforge.jabm.Population">
+<bean id="population" class="net.sourceforge.jabm.Population"
+		scope="prototype">
 	<property name="prng" ref="prng"/>
 	<property name="agentFactory" ref="linearCombinationTraderFactory"/>
 	<property name="size" value="100"/>
