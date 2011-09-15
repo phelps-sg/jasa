@@ -15,7 +15,7 @@ public class OfferPriceReportVariables implements XYReportVariables {
 	
 	protected int time;
 	
-	public static final String NAME = "offerprice";	
+	public static final String NAME = "offer";	
 	public static final String OFFERPRICE_VAR = "price";
 	
 	@Override

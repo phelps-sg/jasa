@@ -15,7 +15,7 @@ public class MidPriceReportVariables implements XYReportVariables {
 	
 	protected int time;
 	
-	public static final String NAME = "midprice";
+	public static final String NAME = "mid";
 	
 	public static final String MIDPRICE_VAR = "price";
 	

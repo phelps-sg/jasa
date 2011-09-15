@@ -23,6 +23,7 @@ package net.sourceforge.jasa.report;
  * 
  * @author Steve Phelps
  * @version $Revision$
+ * @deprecated See net.sourceforge.jabm.report.ReportVariables
  */
 
 public class ReportVariable implements Comparable<ReportVariable> {
