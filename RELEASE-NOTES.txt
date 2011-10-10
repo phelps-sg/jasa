@@ -1,3 +1,16 @@
+  Change log for JASA 1.1 - 10th October 2011
+  
+Changes since release 1.0:
+
+Modifications in line with JABM 0.6 refactoring.
+
+Fixed the following bugs:
+
+3398798 - RoundFinishedEvent is duplicated in jabm	
+3398796	- accounts with transactions with quantity > 1
+3398781 - AbstractTradingAgent.stock not correctly updated
+3397554 - net.sourceforge.jasa.event.RoundOpeningEvent is never fired
+3393009 - ChartistForecaster not listening to the correct event	 
 
   Change log for JASA 1.0 - 13th January 2011
   
