@@ -28,9 +28,12 @@ public class ChartistForecaster extends AbstractReturnForecaster
 	public ChartistForecaster(AbstractContinousDistribution windowSizeDistribution) {
 		this.windowSizeDistribution = windowSizeDistribution;
 	}
+	
+	public ChartistForecaster() {
+	}
 	 
 	@Override
-	public double determineValue(Market market) {
+	public double getReturnForecast(Market market) {
 		return calculateHistoricalMeanReturn();
 	}
 	
@@ -86,6 +89,15 @@ public class ChartistForecaster extends AbstractReturnForecaster
 		scheduler.addListener(RoundFinishedEvent.class, this);
 		scheduler.addListener(SimulationStartingEvent.class, this);
 		super.subscribeToEvents(scheduler);
+	}
+
+	public AbstractContinousDistribution getWindowSizeDistribution() {
+		return windowSizeDistribution;
+	}
+
+	public void setWindowSizeDistribution(
+			AbstractContinousDistribution windowSizeDistribution) {
+		this.windowSizeDistribution = windowSizeDistribution;
 	}
 	
 }

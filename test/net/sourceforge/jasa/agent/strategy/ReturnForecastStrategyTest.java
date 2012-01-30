@@ -3,6 +3,7 @@ package net.sourceforge.jasa.agent.strategy;
 import junit.framework.TestCase;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.valuation.NoiseTraderForecaster;
+import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
 import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
@@ -25,6 +26,8 @@ public class ReturnForecastStrategyTest extends TestCase {
 	
 	MockTrader trader;
 	
+	ReturnForecastValuationPolicy valuationPolicy;
+	
 	protected void setUp() throws Exception {
 		super.setUp();
 		strategy = new ReturnForecastStrategy();
@@ -32,7 +35,10 @@ public class ReturnForecastStrategyTest extends TestCase {
 		trader = new MockTrader(this, 1, 0, null);
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		forecaster = new NoiseTraderForecaster(prng);
-		trader.setValuationPolicy(forecaster);
+		valuationPolicy =
+				new ReturnForecastValuationPolicy();
+		valuationPolicy.setForecaster(forecaster);
+		trader.setValuationPolicy(valuationPolicy);
 		strategy.setAgent(trader);
 		strategy.auction = market;
 		strategy.setPrng(prng);
@@ -41,7 +47,7 @@ public class ReturnForecastStrategyTest extends TestCase {
 	public void testNoiseTraderForecast() {
 		MarketQuote quote = new MarketQuote(1.00, 1.00);
 		market.setQuote(quote);
-		double priceForecast = strategy.getPriceForecast(1);
+		double priceForecast = valuationPolicy.getPriceForecast(market);
 		System.out.println("priceForecast = " + priceForecast);
 		assertTrue(priceForecast <= Math.exp(1));
 	}

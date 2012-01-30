@@ -1,9 +1,12 @@
 package net.sourceforge.jasa.agent.valuation;
 
+import net.sourceforge.jabm.event.EventListener;
+import net.sourceforge.jabm.event.EventSubscriber;
+import net.sourceforge.jasa.market.Market;
 
-public interface ReturnForecaster extends ValuationPolicy {
+public interface ReturnForecaster extends EventListener, EventSubscriber {
 
-//	public double determineValue(Market market);
+	public double getReturnForecast(Market market);
 
 //	public void setStrategy(ReturnForecastStrategy strategy);
 }

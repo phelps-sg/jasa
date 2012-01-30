@@ -15,20 +15,20 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 
 	protected boolean isBuy;
 	
-	public double getReturnForecast() {
-		ReturnForecaster forecaster = 
-			(ReturnForecaster) agent.getValuationPolicy();
-		return forecaster.determineValue(auction);
-	}
-	
-	public double getPriceForecast(double currentPrice) {
-		if (currentPrice < 10E-5) {
-			currentPrice = 10E-5;
-		}
-		double forecastedReturn = getReturnForecast();
-		double result = currentPrice * Math.exp(forecastedReturn);
-		return result;
-	}
+//	public double getReturnForecast() {
+//		ReturnForecaster forecaster = 
+//			(ReturnForecaster) agent.getValuationPolicy();
+//		return forecaster.getReturnForecast(auction);
+//	}
+//	
+//	public double getPriceForecast(double currentPrice) {
+//		if (currentPrice < 10E-5) {
+//			currentPrice = 10E-5;
+//		}
+//		double forecastedReturn = getReturnForecast();
+//		double result = currentPrice * Math.exp(forecastedReturn);
+//		return result;
+//	}
 	
 	public boolean decideDirection(double currentPrice, 
 									double forecastedPrice) {
@@ -48,7 +48,7 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		if (!(currentPrice >= 0)) {
 			assert currentPrice >= 0;
 		}
-		double forecastedPrice = getPriceForecast(currentPrice);
+		double forecastedPrice = agent.getValuation(auction);
 		assert !Double.isNaN(forecastedPrice);
 		assert forecastedPrice >= -10E-5;
 		this.isBuy = decideDirection(currentPrice, forecastedPrice);

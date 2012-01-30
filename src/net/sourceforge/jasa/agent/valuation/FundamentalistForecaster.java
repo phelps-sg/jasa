@@ -16,7 +16,7 @@ public class FundamentalistForecaster extends AbstractReturnForecaster
 	}
 	
 	@Override
-	public double determineValue(Market market) {
+	public double getReturnForecast(Market market) {
 		double currentPrice = market.getCurrentPrice();
 		if (Double.isInfinite(currentPrice) || Double.isNaN(currentPrice)) {
 			return 0.0;

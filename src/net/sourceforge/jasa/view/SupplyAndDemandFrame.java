@@ -16,23 +16,17 @@
 package net.sourceforge.jasa.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import net.sourceforge.jabm.event.InteractionsFinishedEvent;
@@ -43,21 +37,20 @@ import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.report.DataSeriesWriter;
 import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jabm.view.XYDatasetAdaptor;
+import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 
 import org.apache.log4j.Logger;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.DomainOrder;
-import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.general.DatasetChangeListener;
 import org.jfree.data.general.DatasetGroup;
 import org.jfree.data.xy.XYDataset;
-
-import uchicago.src.sim.analysis.plot.RepastPlot;
 
 /**
  * @author Steve Phelps
@@ -115,54 +108,7 @@ public abstract class SupplyAndDemandFrame extends JFrame
 		ChartPanel chartPanel = new ChartPanel(graph, false);
         chartPanel.setPreferredSize(new Dimension(500, 270));
         getContentPane().add(chartPanel);
-        
-//		JPanel controlPanel = new JPanel();
-//		updateButton = new JButton("Update");
-//		updateButton.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent event) {
-//				updateGraph();
-//			}
-//		});
-//		controlPanel.add(updateButton);
-
-		// autoUpdate = new JCheckBox("Auto Update");
-		// autoUpdate.addActionListener(new ActionListener() {
-		// public void actionPerformed(ActionEvent event) {
-		// toggleAutoUpdate();
-		// }
-		// });
-		// controlPanel.add(autoUpdate);
-
-//		contentPane.add(controlPanel, BorderLayout.SOUTH);
-
-		updateTitle();
-
 		pack();
-	}
-
-	protected void toggleAutoUpdate() {
-		// if (autoUpdate.isSelected()) {
-		// auction.addObserver(this);
-		// } else {
-		// auction.deleteObserver(this);
-		// }
-		// TODO
-	}
-//
-//	public void update(Observable auction, Object o) {
-//	}
-//
-//	public void updateGraph() {
-//		// graph.clear(0);
-//		// graph.clear(1);
-//		graph.clearPoints();
-//		plotSupplyAndDemand();
-//		updateTitle();
-//	}
-
-	public void updateTitle() {
-		// setTitle(getGraphName() + " at time "
-		// + auction.getRound());
 	}
 
 	public void open() {
@@ -174,10 +120,6 @@ public abstract class SupplyAndDemandFrame extends JFrame
 		setVisible(false);
 	}
 
-	public abstract String getGraphName();
-
-	public abstract SupplyAndDemandStats getSupplyAndDemandStats();
-
 	public void updateData() {
 		supplyCurve.clear();
 		demandCurve.clear();
@@ -185,42 +127,10 @@ public abstract class SupplyAndDemandFrame extends JFrame
 		stats.calculate();
 		stats.produceUserOutput();
 	}
-//
-//	protected void plotSupplyAndDemand() {
-//		maxX = Float.NEGATIVE_INFINITY;
-//		plotCurve(SERIES_SUPPLY, supplyCurve);
-//		plotCurve(SERIES_DEMAND, demandCurve);
-//		finishCurve(SERIES_SUPPLY, supplyCurve);
-//		finishCurve(SERIES_DEMAND, demandCurve);
-//	}
-//
-//	protected void plotCurve(int seriesIndex, DataSeriesWriter curve) {
-//		if (curve.length() > 0) {
-//			for (int i = 0; i < curve.length(); i++) {
-//				graph.addPoint(seriesIndex, curve.getXCoord(i),
-//						curve.getYCoord(i), true);
-//			}
-//			float lastPointX = curve.getXCoord(curve.length() - 1);
-//			if (lastPointX > maxX) {
-//				maxX = lastPointX;
-//			}
-//		}
-//	}
-//
-//	protected void finishCurve(int seriesIndex, DataSeriesWriter curve) {
-//		if (curve.length() > 0) {
-//			int l = curve.length() - 1;
-//			double lastX = curve.getXCoord(l);
-//			double lastY = curve.getYCoord(l);
-//			if (lastX < maxX) {
-//				graph.addPoint(seriesIndex, maxX, lastY, true);
-//			}
-//		}
-//	}
 
 	@Override
 	public void eventOccurred(final SimEvent event) {
-		if (event instanceof InteractionsFinishedEvent) {
+		if (event instanceof OrderPlacedEvent) {
 			updateData();
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -231,8 +141,8 @@ public abstract class SupplyAndDemandFrame extends JFrame
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e);
+				throw new RuntimeException(e);
 			}
 		} else if (event instanceof SimulationStartingEvent) {
 			open();
@@ -245,97 +155,9 @@ public abstract class SupplyAndDemandFrame extends JFrame
 	public Map<Object, Number> getVariableBindings() {
 		return new HashMap<Object, Number>();
 	}
-	
-	
-	class SupplyAndDemandDataset implements XYDataset {
 
-		protected LinkedList<DatasetChangeListener> listeners 
-			= new LinkedList<DatasetChangeListener>();
-		
-		public DataSeriesWriter getDataSeries(int series) {
-			if (series == 0) {
-				return supplyCurve;
-			} else {
-				return demandCurve;
-			}
-		}
-		
-		@Override
-		public int getSeriesCount() {
-			return 2;
-		}
+	public abstract String getGraphName();
 
-		@Override
-		public Comparable getSeriesKey(int series) {
-			if (series==0) {
-				return "Supply";
-			} else {
-				return "Demand";
-			}
-		}
-
-		@Override
-		public int indexOf(Comparable seriesKey) {
-			if (seriesKey.equals("Supply")) {
-				return 0;
-			} else {
-				return 1;
-			}
-		}
-
-		@Override
-		public void addChangeListener(DatasetChangeListener listener) {
-			listeners.add(listener);
-		}
-
-		@Override
-		public void removeChangeListener(DatasetChangeListener listener) {
-			listeners.remove(listener);
-		}
-
-		@Override
-		public DatasetGroup getGroup() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public void setGroup(DatasetGroup group) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public DomainOrder getDomainOrder() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		public int getItemCount(int series) {
-			return getDataSeries(series).length();
-		}
-
-		@Override
-		public Number getX(int series, int item) {
-			return getDataSeries(series).getXCoord(item);
-		}
-
-		@Override
-		public double getXValue(int series, int item) {
-			return getDataSeries(series).getYCoord(item);
-		}
-
-		@Override
-		public Number getY(int series, int item) {
-			return getDataSeries(series).getYCoord(item);
-		}
-
-		@Override
-		public double getYValue(int series, int item) {
-			return getDataSeries(series).getXCoord(item);
-		}
-		
-	}
+	public abstract SupplyAndDemandStats getSupplyAndDemandStats();
 
 }

@@ -20,10 +20,10 @@ public class LinearWeightedReturnForecaster extends AbstractReturnForecaster
 	protected AbstractContinousDistribution[] distributions;
 
 	@Override
-	public double determineValue(Market auction) {
+	public double getReturnForecast(Market auction) {
 		double result = 0.0;
 		for(int i=0; i<forecasters.length; i++) {
-			double forecast = forecasters[i].determineValue(auction);
+			double forecast = forecasters[i].getReturnForecast(auction);
 			result += weights[i] * forecast;
 		}
 		return result;

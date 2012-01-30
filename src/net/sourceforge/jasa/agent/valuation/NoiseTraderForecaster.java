@@ -2,6 +2,8 @@ package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
+import org.springframework.beans.factory.annotation.Required;
+
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
@@ -23,8 +25,11 @@ public class NoiseTraderForecaster extends AbstractReturnForecaster
 		noiseDistribution = new Normal(0, 1.0, prng);
 	}
 	
+	public NoiseTraderForecaster() {
+	}
+	
 	@Override
-	public double determineValue(Market market) {
+	public double getReturnForecast(Market market) {
 		return noiseDistribution.nextDouble();
 	}
 
@@ -37,8 +42,10 @@ public class NoiseTraderForecaster extends AbstractReturnForecaster
 		return prng;
 	}
 
+	@Required
 	public void setPrng(RandomEngine prng) {
 		this.prng = prng;
+		noiseDistribution = new Normal(0, 1.0, prng);
 	}
 
 	@Override

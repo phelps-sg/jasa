@@ -5,9 +5,6 @@
 	<classpathentry kind="src" path="etc"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="lib" path="lib/trove-repast.jar"/>
-	<classpathentry kind="lib" path="lib/ptplot-repast.jar"/>
-	<classpathentry kind="lib" path="lib/repastj-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/trove-3.0.0a7/lib/trove-3.0.0a7.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/jabm"/>
 	<classpathentry kind="output" path="bin"/>
