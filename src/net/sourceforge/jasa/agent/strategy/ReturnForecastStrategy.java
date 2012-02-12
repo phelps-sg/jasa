@@ -1,7 +1,22 @@
+/*
+ * JASA Java Auction Simulator API
+ * Copyright (C) 2001-2009 Steve Phelps
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ */
+
 package net.sourceforge.jasa.agent.strategy;
 
-import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
 import net.sourceforge.jasa.market.Order;
+
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.engine.RandomEngine;
 
@@ -14,21 +29,6 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	protected AbstractContinousDistribution markupDistribution;
 
 	protected boolean isBuy;
-	
-//	public double getReturnForecast() {
-//		ReturnForecaster forecaster = 
-//			(ReturnForecaster) agent.getValuationPolicy();
-//		return forecaster.getReturnForecast(auction);
-//	}
-//	
-//	public double getPriceForecast(double currentPrice) {
-//		if (currentPrice < 10E-5) {
-//			currentPrice = 10E-5;
-//		}
-//		double forecastedReturn = getReturnForecast();
-//		double result = currentPrice * Math.exp(forecastedReturn);
-//		return result;
-//	}
 	
 	public boolean decideDirection(double currentPrice, 
 									double forecastedPrice) {

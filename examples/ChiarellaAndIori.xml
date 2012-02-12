@@ -6,7 +6,6 @@
 		A Simulation Analysis of the Microstructure of Double Auction Markets. 
 		Quantitative Finance 2, 346-353.
 		http://ssrn.com/abstract=841608
-
  -->
  
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -21,10 +20,13 @@
 <bean id="simulationController" 
 		class="net.sourceforge.jabm.SpringSimulationController"
 		scope="singleton">
+		
 	<property name="simulationBeanName">
 	   <idref local="marketSimulation"/>
 	</property>
+	
 	<property name="numSimulations" value="3"/>	
+	
 	<property name="reports">
 		<list>
 			<ref bean="priceTimeSeriesChart" />
@@ -37,6 +39,7 @@
 			<ref bean="supplyAndDemandGraph"/>
 		</list>
 	</property>
+	
 </bean>
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation"

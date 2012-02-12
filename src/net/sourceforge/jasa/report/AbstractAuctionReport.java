@@ -15,8 +15,6 @@
 
 package net.sourceforge.jasa.report;
 
-
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
