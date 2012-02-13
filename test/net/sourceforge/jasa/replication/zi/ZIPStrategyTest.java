@@ -33,40 +33,16 @@ import cern.jet.random.engine.MersenneTwister64;
 
 public class ZIPStrategyTest extends TestCase {
 
-	/**
-	 * @uml.property name="buyers"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	TokenTradingAgent[] buyers;
 
-	/**
-	 * @uml.property name="sellers"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	TokenTradingAgent[] sellers;
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
 	MarketFacade auction;
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
 	ClearingHouseAuctioneer auctioneer;
 
-	/**
-	 * @uml.property name="marketDataLogger"
-	 * @uml.associationEnd
-	 */
 	AuctionReport marketDataLogger;
 
-	/**
-	 * @uml.property name="prng"
-	 * @uml.associationEnd multiplicity="(1 1)"
-	 */
 	MersenneTwister64 prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 
 	static final int NUM_ROUNDS = 1000;
@@ -87,7 +63,7 @@ public class ZIPStrategyTest extends TestCase {
 
 	public ZIPStrategyTest(String name) {
 		super(name);
-//		org.apache.log4j.BasicConfigurator.configure();
+		org.apache.log4j.BasicConfigurator.configure();
 	}
 
 	public void setUp() {
@@ -108,13 +84,11 @@ public class ZIPStrategyTest extends TestCase {
 	}
 
 	public void testReplication() {
-		for (int day = 0; day < NUM_DAYS; day++) {
-			logger.debug("Day " + day);
+//		for (int day = 0; day < NUM_DAYS; day++) {
+//			logger.debug("Day " + day);
 			auction.run();
-//			auction.generateReport();
-			auction.reset();
-
-		}
+//			auction.reset();
+//		}
 	}
 
 	public void registerTraders(TokenTradingAgent[] traders, boolean areSellers) {
@@ -129,6 +103,7 @@ public class ZIPStrategyTest extends TestCase {
 					prng);
 			strategy.setLearner(learner);
 			traders[i].setStrategy(strategy);
+			strategy.setAgent(traders[i]);
 			auction.register(traders[i]);
 			privValue += PRIV_VALUE_INCREMENT;
 		}

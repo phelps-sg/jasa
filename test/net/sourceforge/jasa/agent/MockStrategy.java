@@ -15,12 +15,12 @@
 
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.strategy.AbstractTradingStrategy;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-
 
 /**
  * @author Steve Phelps
@@ -33,11 +33,10 @@ public class MockStrategy extends AbstractTradingStrategy {
 
 	public Order[] shouts;
 
-	public MockStrategy(Order[] shouts) {
+	public MockStrategy(Order[] shouts, EventScheduler scheduler) {
 		this.shouts = shouts;
+		setScheduler(scheduler);
 	}
-
-	
 
 	@Override
 	public void subscribeToEvents() {

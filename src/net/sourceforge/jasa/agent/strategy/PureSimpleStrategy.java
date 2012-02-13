@@ -82,7 +82,7 @@ public class PureSimpleStrategy extends FixedDirectionStrategy implements
 		} else {
 			delta = -margin;
 		}
-		shout.setPrice(agent.getValuation(auction) + delta);
+		shout.setPrice(getAgent().getValuation(auction) + delta);
 		shout.setQuantity(quantity);
 		if (shout.getPrice() < 0) {
 			shout.setPrice(0);

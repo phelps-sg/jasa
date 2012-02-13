@@ -59,12 +59,15 @@ public class DirectRevelationTest extends ElectricityTest {
 		TruthTellingStrategy truthTelling = new TruthTellingStrategy();
 		truthTelling.setQuantity(capacity);
 		agent.setStrategy(truthTelling);
+		truthTelling.setAgent(agent);
 		agent.initialise();
 	}
 
 	@Override
 	public void assignValuer(FixedDirectionTradingAgent agent) {
-		agent.setValuationPolicy(new RandomValuer(VALUE_MIN, VALUE_MAX, prng));
+		RandomValuer valuer = new RandomValuer(VALUE_MIN, VALUE_MAX, prng);
+		agent.setValuationPolicy(valuer);
+		valuer.setAgent(agent);
 	}
 
 	public static void main(String[] args) {

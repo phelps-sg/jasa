@@ -247,7 +247,7 @@ public class GDLStrategy extends FixedDirectionStrategy implements
 			assert p1 >= 0 && p1 <= (1 + 10E-6) && p2 >= 0 && p2 <= (1 + 10E-6);
 		}
 
-		double pvalue = agent.getValuation(auction);
+		double pvalue = getAgent().getValuation(auction);
 
 		double temp = 0;
 

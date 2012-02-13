@@ -81,7 +81,7 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
 	}
 
 	public void learn(Market auction) {
-		learner.reward(agent.getLastPayoff());
+		learner.reward(getAgent().getLastPayoff());
 	}
 
 	public void reset() {

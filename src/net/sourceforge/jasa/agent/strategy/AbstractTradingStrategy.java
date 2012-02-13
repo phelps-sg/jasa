@@ -37,7 +37,7 @@ import net.sourceforge.jasa.market.Order;
 public abstract class AbstractTradingStrategy extends AbstractStrategy
 		implements Serializable, TradingStrategy, Resetable, Cloneable {
 
-	protected AbstractTradingAgent agent;
+//	protected AbstractTradingAgent agent;
 //
 //	protected Order currentShout;
 
@@ -92,7 +92,7 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 	public boolean modifyShout(Order shout) {
 		//TODO Introduce a new class FixedDirectionStrategy
 //		shout.setIsBid(agent.isBuyer(auction));
-		shout.setAgent(agent);
+		shout.setAgent(getAgent());
 		return true;
 	}
 
@@ -113,7 +113,7 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 //	}
 
 	public AbstractTradingAgent getAgent() {
-		return agent;
+		return (AbstractTradingAgent) agent;
 	}
 
 	@Override

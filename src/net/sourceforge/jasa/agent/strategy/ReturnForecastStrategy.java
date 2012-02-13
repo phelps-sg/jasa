@@ -48,7 +48,7 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		if (!(currentPrice >= 0)) {
 			assert currentPrice >= 0;
 		}
-		double forecastedPrice = agent.getValuation(auction);
+		double forecastedPrice = getAgent().getValuation(auction);
 		assert !Double.isNaN(forecastedPrice);
 		assert forecastedPrice >= -10E-5;
 		this.isBuy = decideDirection(currentPrice, forecastedPrice);

@@ -43,23 +43,23 @@ public class BeatTheQuoteStrategy extends FixedDirectionStrategy {
 		MarketQuote quote = auction.getQuote();
 		if (isBuy()) {
 			double p = quote.getAsk();
-			if (!Double.isInfinite(p) && p < agent.getValuation(auction)) {
+			if (!Double.isInfinite(p) && p < getAgent().getValuation(auction)) {
 				// shout.setPrice(p + p * GlobalPRNG.getInstance().uniform(0,
 				// perterb));
 				shout.setPrice(p + p
 				    * new Uniform(0, perterb, prng).nextDouble());
 			} else {
-				shout.setPrice(agent.getValuation(auction));
+				shout.setPrice(getAgent().getValuation(auction));
 			}
 		} else {
 			double p = quote.getBid();
-			if (!Double.isInfinite(p) && p > agent.getValuation(auction)) {
+			if (!Double.isInfinite(p) && p > getAgent().getValuation(auction)) {
 				// shout.setPrice(p - p * GlobalPRNG.getInstance().uniform(0,
 				// perterb));
 				shout.setPrice(p - p
 				    * new Uniform(0, perterb, prng).nextDouble());
 			} else {
-				shout.setPrice(agent.getValuation(auction));
+				shout.setPrice(getAgent().getValuation(auction));
 			}
 		}
 		return super.modifyShout(shout);

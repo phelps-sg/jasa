@@ -108,9 +108,10 @@ public abstract class EfficiencyTest extends TestCase {
 		System.out.println("\ntestEfficiency()");
 		SummaryStats efficiency = new SummaryStats(
 		    "efficiency");
-		initialiseExperiment();
+//		initialiseExperiment();
 		for (int i = 0; i < NUM_EXPERIMENTS; i++) {
-			auction.reset();
+//			auction.reset();
+			initialiseExperiment();
 			auction.run();
 			SurplusReport surplus = new SurplusReport(auction);
 			surplus.calculate();

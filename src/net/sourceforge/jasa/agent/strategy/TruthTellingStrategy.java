@@ -28,7 +28,7 @@ import net.sourceforge.jasa.market.Order;
  */
 
 public class TruthTellingStrategy extends FixedDirectionStrategy implements
-    Serializable {
+		Serializable {
 
 	public TruthTellingStrategy(AbstractTradingAgent agent) {
 		super(agent);
@@ -39,7 +39,7 @@ public class TruthTellingStrategy extends FixedDirectionStrategy implements
 	}
 
 	public boolean modifyShout(Order shout) {
-		shout.setPrice(agent.getValuation(auction));
+		shout.setPrice(getAgent().getValuation(auction));
 		return super.modifyShout(shout);
 	}
 

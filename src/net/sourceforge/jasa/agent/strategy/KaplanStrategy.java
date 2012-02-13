@@ -139,14 +139,14 @@ public class KaplanStrategy extends FixedDirectionStrategy implements
 		quote = auction.getQuote();
 		if (timeRunningOut() || juicyOffer() || smallSpread()) {
 			logger.debug("quote = " + quote);
-			logger.debug("my priv value = " + agent.getValuation(auction));
-			shout.setPrice(agent.getValuation(auction));
+			logger.debug("my priv value = " + getAgent().getValuation(auction));
+			shout.setPrice(getAgent().getValuation(auction));
 			if (isBuy()) {
-				if (quote.getAsk() <= agent.getValuation(auction)) {
+				if (quote.getAsk() <= getAgent().getValuation(auction)) {
 					shout.setPrice(quote.getAsk());
 				}
 			} else {
-				if (quote.getBid() >= agent.getValuation(auction)) {
+				if (quote.getBid() >= getAgent().getValuation(auction)) {
 					shout.setPrice(quote.getBid());
 				}
 			}

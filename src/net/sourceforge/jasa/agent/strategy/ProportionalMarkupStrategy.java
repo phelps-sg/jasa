@@ -60,11 +60,11 @@ public class ProportionalMarkupStrategy extends FixedDirectionStrategy
 	public boolean modifyShout(Order shout) {
 		double delta;
 		if (isSell()) {
-			delta = markup * agent.getValuation(auction);
+			delta = markup * getAgent().getValuation(auction);
 		} else {
-			delta = -markup * agent.getValuation(auction);
+			delta = -markup * getAgent().getValuation(auction);
 		}
-		shout.setPrice(agent.getValuation(auction) + delta);
+		shout.setPrice(getAgent().getValuation(auction) + delta);
 		shout.setQuantity(quantity);
 		if (shout.getPrice() < 0) {
 			shout.setPrice(0);

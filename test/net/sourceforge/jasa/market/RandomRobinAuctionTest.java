@@ -69,17 +69,17 @@ public class RandomRobinAuctionTest extends TestCase {
 		MockTrader trader = traders[0];
 		trader.setStrategy(new MockStrategy(new Order[] {
 		    new Order(trader, 1, 500, true), new Order(trader, 1, 600, true),
-		    new Order(trader, 1, 700, true) }));
+		    new Order(trader, 1, 700, true) }, auction));
 
 		trader = traders[1];
 		trader.setStrategy(new MockStrategy(new Order[] {
 		    new Order(trader, 1, 500, true), new Order(trader, 1, 550, true),
-		    new Order(trader, 1, 750, true) }));
+		    new Order(trader, 1, 750, true) }, auction));
 
 		trader = traders[2];
 		trader.setStrategy(new MockStrategy(new Order[] {
 		    new Order(trader, 1, 900, false), new Order(trader, 1, 950, false),
-		    new Order(trader, 1, 725, false) }));
+		    new Order(trader, 1, 725, false) }, auction));
 		
 		for (int i = 0; i < traders.length; i++) {
 			System.out.println("Registering trader " + traders[i]);
@@ -310,10 +310,7 @@ public class RandomRobinAuctionTest extends TestCase {
 		auction.clear(testAsk, testBid, 200, 200, testQty);
 
 		// Test that 2 units were transfered from seller to buyer
-		// Note that the buyer will immediately cash-in the stock so
-		// net qty should remain unchanged
-		// @see net.sourceforge.jasa.agent.AbstractTradingAgent.cashIn()
-		assertTrue(buyer.getCommodityHolding().getQuantity() == buyerInitial + 0);
+		assertTrue(buyer.getCommodityHolding().getQuantity() == buyerInitial + 2);
 
 		// Test that 2 units were transfered from the seller
 		assertTrue(seller.getCommodityHolding().getQuantity() == sellerInitial

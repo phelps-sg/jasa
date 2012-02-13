@@ -180,7 +180,7 @@
 		scope="prototype">
 	<property name="prng" ref="prng"/>
 	<property name="agentFactory" ref="linearCombinationTraderFactory"/>
-	<property name="size" value="100"/>
+	<property name="size" value="60"/>
 </bean>
 
 <bean id="linearCombinationTraders" class="net.sourceforge.jabm.agent.AgentList">

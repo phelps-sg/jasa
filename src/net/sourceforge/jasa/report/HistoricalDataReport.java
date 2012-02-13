@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
@@ -62,7 +64,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	protected LinkedList<Order> bids = new LinkedList<Order>();
 
-	protected TreeBag sortedShouts = new TreeBag();
+	protected TreeSet<Order> sortedShouts = new TreeSet<Order>();
 
 	protected HashSet<Order> acceptedShouts = new HashSet<Order>();
 //
@@ -117,7 +119,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 	protected void removeNShouts(int n, LinkedList<Order> shouts) {
 		for (int i = 0; i < n; i++) {
 			Order shout = shouts.removeFirst();
-			if (!sortedShouts.remove(shout, 1)) {
+			if (!sortedShouts.remove(shout)) {
+				assert !sortedShouts.contains(shout);
 				throw new AuctionRuntimeException("Could not process " + shout);
 			}
 			acceptedShouts.remove(shout);
@@ -327,6 +330,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		return getNumberOfShouts(bids, price, accepted);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Iterator sortedShoutIterator() {
 		return sortedShouts.iterator();
 	}

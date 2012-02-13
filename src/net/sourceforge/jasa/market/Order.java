@@ -133,10 +133,17 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 			return 1;
 		} else if (price < other.price) {
 			return -1;
+//		} else if (timeStamp != null && timeStamp.getTicks() < other.timeStamp.getTicks()) {
+//			return 1;
+//		} else if (timeStamp != null && timeStamp.getTicks() > other.timeStamp.getTicks()) {
+//			return -1;
+//		} else if (this.hashCode() > other.hashCode()) {
+//			return 1;
+//		} else if (this.hashCode() < other.hashCode()) {
+//			return -1;
 		} else {
 			return 0;
 		}
-		// return new Long(this.price).compareTo(new Long(other.getPrice()));
 	}
 
 	public boolean isValid() {
@@ -230,21 +237,31 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	 * 
 	 */
 	Order split(int excess) {
-		quantity -= excess;
-		Order newShout = new Order(agent, excess, price, isBid, timeStamp);
-		child = newShout;
-		assert isValid();
-		assert newShout.isValid();
-		return newShout;
+		this.quantity -= excess;
+		try {
+			this.child = null;
+			this.child = (Order) this.clone();
+			this.child.setQuantity(excess);
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+		assert this.isValid();
+		assert child.isValid();
+		return this.child;
 	}
 
 	Order splat(int excess) {
-		Order newShout = new Order(agent, quantity - excess, price, isBid, timeStamp);
-		quantity = excess;
-		child = newShout;
-		assert isValid();
-		assert newShout.isValid();
-		return newShout;
+		try {
+			this.child = null;
+			this.child = (Order) this.clone();
+			this.child.setQuantity(this.quantity - excess);
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+		this.quantity = excess;
+		assert this.isValid();
+		assert child.isValid();
+		return this.child;
 	}
 
 	public void setIsBid(boolean isBid) {

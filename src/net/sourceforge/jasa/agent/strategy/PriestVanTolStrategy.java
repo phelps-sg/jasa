@@ -76,7 +76,7 @@ public class PriestVanTolStrategy extends MomentumStrategy implements
 
 	protected double calculatePrice(double margin) {
 		double price = super.calculatePrice(margin);
-		if (!agent.active()) {
+		if (!getAgent().active()) {
 			if (isBuy()) {
 				if (price > currentPrice) {
 					return currentPrice;

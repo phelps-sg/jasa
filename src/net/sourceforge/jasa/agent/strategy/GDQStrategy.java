@@ -209,7 +209,7 @@ public class GDQStrategy extends FixedDirectionStrategy implements
 			assert p1 >= 0 && p1 <= (1 + 10E-6) && p2 >= 0 && p2 <= (1 + 10E-6);
 		}
 
-		double pvalue = agent.getValuation(auction);
+		double pvalue = getAgent().getValuation(auction);
 
 		double a12 = a1 - a2;
 		double alpha2 = (s * a12 - (p1 - p2)) / (a12 * a12);

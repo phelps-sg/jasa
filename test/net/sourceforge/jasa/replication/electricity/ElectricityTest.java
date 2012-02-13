@@ -77,7 +77,7 @@ public abstract class ElectricityTest extends TestCase {
 	static final int ITERATIONS = 100;
 
 	static final int MAX_ROUNDS = 1000;
-
+	
 	static final int K = 40;
 
 	static final double R = 0.10;
@@ -173,6 +173,7 @@ public abstract class ElectricityTest extends TestCase {
 		NPTRothErevLearner learner = new NPTRothErevLearner(K, R, E, S1, prng);
 		strategy.setLearner(learner);
 		agent.setStrategy(strategy);
+		strategy.setAgent(agent);
 		assert agent.getVolume(auction) == capacity;
 		agent.initialise();
 	}

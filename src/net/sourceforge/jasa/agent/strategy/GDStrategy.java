@@ -205,7 +205,7 @@ public class GDStrategy extends FixedDirectionStrategy implements
 
 		assert p1 >= 0 && p1 <= (1 + 10E-6) && p2 >= 0 && p2 <= (1 + 10E-6);
 
-		double pvalue = agent.getValuation(auction);
+		double pvalue = getAgent().getValuation(auction);
 
 		// double denom = (-6 * a1 * a1 * a2 * a2) + (4 * a1 * a1 * a1 * a2)
 		// + (4 * a1 * a2 * a2 * a2) + (-1 * a1 * a1 * a1 * a1)

@@ -224,14 +224,14 @@ public abstract class MomentumStrategy extends FixedDirectionStrategy implements
 	protected double calculatePrice(double margin) {
 		if ((isBuy() && margin <= 0.0 && margin > -1.0)
 		    || (isSell() && margin >= 0.0)) {
-			return agent.getValuation(auction) * (1 + margin);
+			return getAgent().getValuation(auction) * (1 + margin);
 		} else {
 			return currentPrice;
 		}
 	}
 
 	protected double targetMargin(double targetPrice) {
-		double privValue = agent.getValuation(auction);
+		double privValue = getAgent().getValuation(auction);
 		double targetMargin = 0;
 		targetMargin = (targetPrice - privValue) / privValue;
 

@@ -64,9 +64,9 @@ public class RandomConstrainedStrategy extends FixedDirectionStrategy
 		double markup = markupDistribution.nextDouble();
 		double price = 0;
 		if (isBuy()) {
-			price = agent.getValuation(auction) - markup;
+			price = getAgent().getValuation(auction) - markup;
 		} else {
-			price = agent.getValuation(auction) + markup;
+			price = getAgent().getValuation(auction) + markup;
 		}
 		if (price > 0) {
 			shout.setPrice(price);

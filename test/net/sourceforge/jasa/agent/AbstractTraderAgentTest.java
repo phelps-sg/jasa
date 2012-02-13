@@ -61,12 +61,11 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 		auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
 		auction.setAuctioneer(auctioneer);
 		
-
 		MockStrategy strategy1 = new MockStrategy(new Order[] {
 			    new Order(trader1, 1, TRADER1_VALUE - 100, true),
 			    new Order(trader1, 1, TRADER1_VALUE - 50, true),
 			    new Order(trader1, 1, TRADER1_VALUE, true),
-			    new Order(trader1, 1, TRADER1_VALUE - 100, true) });
+			    new Order(trader1, 1, TRADER1_VALUE - 100, true) }, auction);
 		
 		trader1 = new MockTrader(this, TRADER1_STOCK, TRADER1_FUNDS,
 				TRADER1_VALUE, strategy1, auction);
@@ -75,7 +74,7 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 			    new Order(trader2, 1, TRADER2_VALUE + 100, false),
 			    new Order(trader2, 1, TRADER2_VALUE + 50, false),
 			    new Order(trader2, 1, TRADER2_VALUE, false),
-			    new Order(trader2, 1, TRADER2_VALUE + 100, false) });
+			    new Order(trader2, 1, TRADER2_VALUE + 100, false) }, auction);
 
 		trader2 = new MockTrader(this, TRADER2_STOCK, TRADER2_FUNDS,
 				TRADER2_VALUE, strategy2, auction);

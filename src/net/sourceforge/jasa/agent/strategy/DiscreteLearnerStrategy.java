@@ -60,7 +60,7 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 	}
 
 	public void onRoundFinished(RoundFinishedEvent event) {
-		if (agent.active()) {
+		if (getAgent().active()) {
 			MarketSimulation simulation = (MarketSimulation) event.getSimulation();
 			Market auction = simulation.getMarket();
 			learn(auction);
@@ -89,9 +89,9 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 		// Now turn the action into a price
 		double price;
 		if (isSell()) {
-			price = agent.getValuation(auction) + action * markupScale;
+			price = getAgent().getValuation(auction) + action * markupScale;
 		} else {
-			price = agent.getValuation(auction) - action * markupScale;
+			price = getAgent().getValuation(auction) - action * markupScale;
 		}
 		if (price < 0) {
 			// report.debug(this + ": set negative price- clipping at 0");

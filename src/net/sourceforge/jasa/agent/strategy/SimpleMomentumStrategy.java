@@ -36,9 +36,9 @@ public class SimpleMomentumStrategy extends MomentumStrategy implements
 	}
 
 	protected void adjustMargin() {
-		if (agent.lastOrderFilled()) {
+		if (getAgent().lastOrderFilled()) {
 			adjustMargin(1.0);
-		} else if (agent.active()) {
+		} else if (getAgent().active()) {
 			adjustMargin(0);
 		}
 	}

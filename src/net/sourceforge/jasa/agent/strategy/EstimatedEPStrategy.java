@@ -46,7 +46,7 @@ public class EstimatedEPStrategy extends FixedDirectionStrategy {
 	public boolean modifyShout(Order shout) {
 		double a = estimatedAskQuote();
 		double b = estimatedBidQuote();
-		double t = agent.getValuation(auction);
+		double t = getAgent().getValuation(auction);
 		double p = 0;
 		if (Double.isInfinite(a) || Double.isInfinite(b)) {
 			p = t;
