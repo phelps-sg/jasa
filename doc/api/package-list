@@ -1,6 +1,5 @@
 net.sourceforge.jasa.agent
 net.sourceforge.jasa.agent.strategy
-net.sourceforge.jasa.agent.utility
 net.sourceforge.jasa.agent.valuation
 net.sourceforge.jasa.event
 net.sourceforge.jasa.init

@@ -36,7 +36,7 @@
 			<ref bean="midPriceReportVariables" />
 			<ref bean="orderFlowReportVariables" />
 			<ref bean="orderFlowTimeSeriesReport" />
-			<ref bean="supplyAndDemandGraph"/>
+<!-- 			<ref bean="supplyAndDemandGraph"/> -->
 		</list>
 	</property>
 	
@@ -180,7 +180,7 @@
 		scope="prototype">
 	<property name="prng" ref="prng"/>
 	<property name="agentFactory" ref="linearCombinationTraderFactory"/>
-	<property name="size" value="60"/>
+	<property name="size" value="1000"/>
 </bean>
 
 <bean id="linearCombinationTraders" class="net.sourceforge.jabm.agent.AgentList">
@@ -189,17 +189,17 @@
 </bean>
 
 <bean id="noiseTraders" class="net.sourceforge.jabm.agent.AgentList">
-	<constructor-arg value="800"/>
+	<constructor-arg value="12"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
 </bean>
 
 <bean id="fundamentalists" class="net.sourceforge.jabm.agent.AgentList">
-    <constructor-arg value="50"/>
+    <constructor-arg value="12"/>
     <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 
 <bean id="chartists" class="net.sourceforge.jabm.agent.AgentList">
-    <constructor-arg value="150"/>
+    <constructor-arg value="50"/>
     <constructor-arg ref="chartistFactory"/>
 </bean>
 
@@ -400,7 +400,7 @@
 <bean id="chartistWeightDistribution" class="cern.jet.random.Normal"
         scope="prototype">
         <constructor-arg value="0"/>
-        <constructor-arg value="1"/>
+        <constructor-arg value="0.1"/>
         <constructor-arg ref="prng"/>
 </bean>
 
