@@ -391,7 +391,7 @@
         <constructor-arg>
 	        <bean class="cern.jet.random.Normal">
 		        <constructor-arg value="0"/>
-		        <constructor-arg value="0.1"/>
+		        <constructor-arg value="0.01"/>
 		        <constructor-arg ref="prng"/>
 	        </bean>
         </constructor-arg>
@@ -400,14 +400,14 @@
 <bean id="chartistWeightDistribution" class="cern.jet.random.Normal"
         scope="prototype">
         <constructor-arg value="0"/>
-        <constructor-arg value="0.1"/>
+        <constructor-arg value="0.2"/>
         <constructor-arg ref="prng"/>
 </bean>
 
 <bean id="noiseTraderWeightDistribution" class="cern.jet.random.Normal"
         scope="prototype">
     <constructor-arg value="0"/>
-    <constructor-arg value="0.3"/>
+    <constructor-arg value="0.03"/>
     <constructor-arg ref="prng"/>
 </bean>
 
