@@ -12,7 +12,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
+<bean id="market" class="net.sourceforge.jasa.market.MarketFacade" scope="singleton">
 	<property name="auctioneer" ref="cda"/>
 	<property name="controller" ref="simulationController"/>
 </bean>
@@ -46,7 +46,7 @@
 		scope="prototype">
 	<property name="simulationController" ref="simulationController"/>
 	<property name="market" ref="market"/>
-	<property name="maximumDays" value="600"/>
+	<property name="maximumDays" value="1200"/>
 	<property name="lengthOfDay" value="100"/>
 	<property name="population" ref="population"/>
     <property name="agentMixer" ref="randomArrivalAgentMixer"/>
@@ -154,7 +154,7 @@
 </bean>
 
 <bean id="cda" 
-        class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
+        class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer" scope="singleton">
 	<constructor-arg>
 		<ref bean="market"/>
 	</constructor-arg>
@@ -180,7 +180,7 @@
 		scope="prototype">
 	<property name="prng" ref="prng"/>
 	<property name="agentFactory" ref="linearCombinationTraderFactory"/>
-	<property name="size" value="1000"/>
+	<property name="size" value="100"/>
 </bean>
 
 <bean id="linearCombinationTraders" class="net.sourceforge.jabm.agent.AgentList">

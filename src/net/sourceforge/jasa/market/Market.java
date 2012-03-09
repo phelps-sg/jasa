@@ -15,6 +15,7 @@
 
 package net.sourceforge.jasa.market;
 
+import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 
 /**
@@ -22,7 +23,7 @@ import net.sourceforge.jasa.market.auctioneer.Auctioneer;
  * @version $Revision$
  */
 
-public interface Market extends QuoteProvider {
+public interface Market extends QuoteProvider, Resetable {
 
 	/**
 	 * Returns true if the market is closed.

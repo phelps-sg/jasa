@@ -197,6 +197,7 @@ public class MarketSimulation extends AbstractSimulation
 
 	public void begin() {
 		initialiseAgents();
+		market.reset();
 		fireEvent(new SimulationStartingEvent(this));
 		informAuctionOpen();
 	}

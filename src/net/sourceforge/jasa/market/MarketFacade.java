@@ -260,6 +260,7 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 
 	public void reset() {
 		getSimulation().reset();
+		this.lastTransactionPrice = 0.0;
 	}
 
 	public void setAuctioneer(Auctioneer auctioneer) {
