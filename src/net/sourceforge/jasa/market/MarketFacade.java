@@ -290,7 +290,6 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		return auctioneer.getLastShout();
 	}
 
-
 	public MarketQuote getQuote() {
 		return auctioneer.getQuote();
 	}
@@ -401,7 +400,6 @@ public class MarketFacade implements EventScheduler, Market, Serializable,
 		return (MarketSimulation) controller.getSimulation();
 	}
 	
-
 	public static void main(String[] args) {
 		Runnable market = 
 			(Runnable) BeanFactorySingleton.getBean("market");
