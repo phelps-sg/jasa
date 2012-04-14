@@ -7,6 +7,9 @@ import net.sourceforge.jasa.market.Market;
 public interface ReturnForecaster extends EventListener, EventSubscriber {
 
 	public double getReturnForecast(Market market);
-
-//	public void setStrategy(ReturnForecastStrategy strategy);
+	
+	public void setValuationPolicy(ValuationPolicy policy);
+	
+	public ValuationPolicy getValuationPolicy();
+	
 }

@@ -2,13 +2,13 @@ package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
-import org.springframework.beans.factory.annotation.Required;
-
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
-import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
+
+import org.springframework.beans.factory.annotation.Required;
+
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Normal;
 import cern.jet.random.engine.RandomEngine;

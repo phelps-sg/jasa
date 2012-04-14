@@ -15,15 +15,12 @@
 
 package net.sourceforge.jasa.agent.valuation;
 
-import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.EventSubscriber;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Market;
-
-
 
 /**
  * A commodity valuation policy for RoundRobinTrader agents.
@@ -47,6 +44,8 @@ public interface ValuationPolicy extends Resetable, Parameterizable, EventSubscr
 	public void consumeUnit(Market auction);
 
 	public void setAgent(TradingAgent agent);
+	
+	public TradingAgent getAgent();
 
 	public void initialise();
 

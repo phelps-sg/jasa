@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.agent.valuation;
 
-
 import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;

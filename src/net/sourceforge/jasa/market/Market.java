@@ -62,9 +62,15 @@ public interface Market extends QuoteProvider, Resetable {
 
 	/**
 	 * Handle a single clearing operation between two traders
+	 *  for a single unit.
 	 */
 	public void clear(Order ask, Order bid, double price);
 
+	/**
+	 * Handle a single clearing operation between two traders
+	 *  specifying the prices paid by each party and the volume of 
+	 *  the trade.
+	 */
 	public void clear(Order ask, Order bid, double buyerCharge,
 	    double sellerPayment, int quantity);
 
@@ -102,9 +108,5 @@ public interface Market extends QuoteProvider, Resetable {
 	public double getLastTransactionPrice();
 	
 	public double getCurrentPrice();
-
-//	public double getLastTransactionPrice();
-
-//	public AuctionReport getReport(Class reportClass);
 
 }

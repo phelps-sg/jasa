@@ -2,7 +2,6 @@ package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
-import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
 
 public class FundamentalistForecaster extends AbstractReturnForecaster

@@ -15,6 +15,7 @@
 <bean id="market" class="net.sourceforge.jasa.market.MarketFacade" scope="singleton">
 	<property name="auctioneer" ref="cda"/>
 	<property name="controller" ref="simulationController"/>
+<!-- 	<property name="lastTransactionPrice" value="0"/> -->
 </bean>
 
 <bean id="simulationController" 
@@ -46,7 +47,7 @@
 		scope="prototype">
 	<property name="simulationController" ref="simulationController"/>
 	<property name="market" ref="market"/>
-	<property name="maximumDays" value="1200"/>
+	<property name="maximumDays" value="1000"/>
 	<property name="lengthOfDay" value="100"/>
 	<property name="population" ref="population"/>
     <property name="agentMixer" ref="randomArrivalAgentMixer"/>

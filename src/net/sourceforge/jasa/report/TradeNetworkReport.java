@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.AbstractModel;
@@ -16,7 +14,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.report.Report;
-
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 import org.apache.log4j.Logger;

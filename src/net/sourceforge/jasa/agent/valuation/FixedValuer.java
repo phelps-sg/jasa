@@ -19,7 +19,6 @@ import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.Market;
 
 /**
@@ -30,7 +29,7 @@ import net.sourceforge.jasa.market.Market;
  * @version $Revision$
  */
 
-public class FixedValuer implements ValuationPolicy, Serializable {
+public class FixedValuer extends AbstractValuationPolicy implements Serializable {
 
 	protected double value;
 
@@ -62,10 +61,6 @@ public class FixedValuer implements ValuationPolicy, Serializable {
 
 	public void setValue(double value) {
 		this.value = value;
-	}
-
-	public void setAgent(TradingAgent agent) {
-		// No action required
 	}
 
 	public String toString() {

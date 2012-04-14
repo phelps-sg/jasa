@@ -22,7 +22,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.Market;
 import cern.jet.random.engine.RandomEngine;
 
-
 /**
  * A valuation policy which specifies a randomly-generated series of valuations
  * for each unit of commodity.

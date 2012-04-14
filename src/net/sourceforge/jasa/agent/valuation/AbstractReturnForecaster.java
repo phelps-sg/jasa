@@ -1,25 +1,25 @@
-package net.sourceforge.jasa.agent.strategy;
+package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
 
 public abstract class AbstractReturnForecaster 
 		implements ReturnForecaster, Serializable {
 
-	protected TradingAgent agent;
+	protected ValuationPolicy valuationPolicy;
 
-	public void setAgent(TradingAgent agent) {
-		this.agent = agent;
+	@Override
+	public void setValuationPolicy(ValuationPolicy policy) {
+		this.valuationPolicy = policy;
 	}
-	
-	public TradingAgent getAgent() {
-		return agent;
+
+	@Override
+	public ValuationPolicy getValuationPolicy() {
+		return valuationPolicy;
 	}
-	
+
 	public void subscribeToEvents(EventScheduler scheduler) {
 		// Do nothing
 	}

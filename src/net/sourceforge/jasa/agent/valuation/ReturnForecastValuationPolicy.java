@@ -2,10 +2,9 @@ package net.sourceforge.jasa.agent.valuation;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.market.Market;
-
-public class ReturnForecastValuationPolicy implements ValuationPolicy {
+  
+public class ReturnForecastValuationPolicy extends AbstractValuationPolicy {
 
 	protected ReturnForecaster forecaster;
 	
@@ -36,13 +35,8 @@ public class ReturnForecastValuationPolicy implements ValuationPolicy {
 	public void eventOccurred(SimEvent event) {
 	}
 
-
 	@Override
 	public void consumeUnit(Market auction) {
-	}
-
-	@Override
-	public void setAgent(TradingAgent agent) {
 	}
 
 	@Override
@@ -60,6 +54,7 @@ public class ReturnForecastValuationPolicy implements ValuationPolicy {
 
 	public void setForecaster(ReturnForecaster forecaster) {
 		this.forecaster = forecaster;
+		forecaster.setValuationPolicy(this);
 	}
 
 	

@@ -5,8 +5,6 @@ import java.io.Serializable;
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
-import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.agent.strategy.AbstractReturnForecaster;
 import net.sourceforge.jasa.market.Market;
 import cern.jet.random.AbstractContinousDistribution;
 
@@ -58,10 +56,10 @@ public class LinearWeightedReturnForecaster extends AbstractReturnForecaster
 	}
 
 	@Override
-	public void setAgent(TradingAgent agent) {
-		super.setAgent(agent);
+	public void setValuationPolicy(ValuationPolicy policy) {
+		super.setValuationPolicy(policy);
 		for(int i=0; i<forecasters.length; i++) {
-			forecasters[i].setAgent(agent);
+			forecasters[i].setValuationPolicy(policy);
 		}
 	}
 

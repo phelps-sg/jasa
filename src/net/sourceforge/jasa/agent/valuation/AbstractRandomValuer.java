@@ -20,7 +20,7 @@ import java.io.Serializable;
 import net.sourceforge.jasa.market.Market;
 import cern.jet.random.AbstractContinousDistribution;
 
-public abstract class AbstractRandomValuer implements ValuationPolicy,
+public abstract class AbstractRandomValuer extends AbstractValuationPolicy implements 
     Serializable {
 
 	/**

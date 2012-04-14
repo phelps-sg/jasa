@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.agent.strategy;
 
 import net.sourceforge.jasa.market.Order;
-
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.engine.RandomEngine;
 

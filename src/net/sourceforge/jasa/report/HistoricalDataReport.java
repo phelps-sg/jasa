@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import net.sourceforge.jabm.event.RoundFinishedEvent;
@@ -36,7 +35,6 @@ import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.ShoutsNotVisibleException;
 
-import org.apache.commons.collections.bag.TreeBag;
 import org.apache.commons.collections.list.TreeList;
 import org.apache.log4j.Logger;
 
