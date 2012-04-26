@@ -35,7 +35,7 @@ import net.sourceforge.jabm.report.DataSeriesWriter;
 import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jabm.view.XYDatasetAdaptor;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 
 import org.apache.log4j.Logger;
@@ -53,8 +53,8 @@ import org.jfree.chart.plot.PlotOrientation;
 
 public abstract class SupplyAndDemandFrame extends JFrame 
 		implements Report {
-
-	protected MarketFacade auction;
+	
+	protected Market auction;
 
 	protected JFreeChart graph;
 
@@ -76,9 +76,7 @@ public abstract class SupplyAndDemandFrame extends JFrame
 
 	static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
-	public SupplyAndDemandFrame(MarketFacade auction) {
-
-		this.auction = auction;
+	public SupplyAndDemandFrame() {
 		Container contentPane = getContentPane();
 		BorderLayout layout = new BorderLayout();
 		contentPane.setLayout(layout);
@@ -137,6 +135,8 @@ public abstract class SupplyAndDemandFrame extends JFrame
 				throw new RuntimeException(e);
 			}
 		} else if (event instanceof SimulationStartingEvent) {
+			this.auction = (Market) 
+					((SimulationStartingEvent) event).getSimulation();
 			open();
 		} else if (event instanceof SimulationFinishedEvent) {
 			close();

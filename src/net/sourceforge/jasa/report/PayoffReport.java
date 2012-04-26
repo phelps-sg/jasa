@@ -44,7 +44,7 @@ public abstract class PayoffReport extends DynamicSurplusReport implements
 
 	public void calculate() {
 		super.calculate();
-		int numAgents = auction.getNumberOfRegisteredTraders();
+		int numAgents = auction.getPopulation().size();
 		double averageSurplus = calculateTotalEquilibriumSurplus() / numAgents;
 		table.clear();
 		Iterator<Agent> i = auction.getTraderIterator();

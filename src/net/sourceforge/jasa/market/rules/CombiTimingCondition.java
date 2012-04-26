@@ -20,7 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.sourceforge.jabm.util.Parameterizable;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 
 /**
  * The class for expressing the combination of timing conditions.
@@ -92,7 +92,7 @@ public class CombiTimingCondition extends TimingCondition implements
 		return conditions.iterator();
 	}
 
-	public void setAuction(MarketFacade auction) {
+	public void setAuction(Market auction) {
 		super.setAuction(auction);
 		Iterator<TimingCondition> i = conditionIterator();
 		while (i.hasNext()) {

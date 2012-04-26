@@ -12,12 +12,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="market" class="net.sourceforge.jasa.market.MarketFacade" scope="singleton">
-	<property name="auctioneer" ref="cda"/>
-	<property name="controller" ref="simulationController"/>
-<!-- 	<property name="lastTransactionPrice" value="0"/> -->
-</bean>
-
 <bean id="simulationController" 
 		class="net.sourceforge.jabm.SpringSimulationController"
 		scope="singleton">
@@ -37,24 +31,25 @@
 			<ref bean="midPriceReportVariables" />
 			<ref bean="orderFlowReportVariables" />
 			<ref bean="orderFlowTimeSeriesReport" />
-<!-- 			<ref bean="supplyAndDemandGraph"/> -->
+			<ref bean="supplyAndDemandGraph"/>
 		</list>
 	</property>
-	
 </bean>
 
-<bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation"
-		scope="prototype">
+<bean id="marketSimulation" 
+	class="net.sourceforge.jasa.market.MarketSimulation"
+		scope="simulation">
 	<property name="simulationController" ref="simulationController"/>
-	<property name="market" ref="market"/>
-	<property name="maximumDays" value="1000"/>
+	<property name="auctioneer" ref="cda"/>
+	<property name="maximumDays" value="300"/>
 	<property name="lengthOfDay" value="100"/>
 	<property name="population" ref="population"/>
     <property name="agentMixer" ref="randomArrivalAgentMixer"/>
-    <property name="agentInitialiser" ref="agentInitialiser"/>
+    <property name="agentInitialiser" ref="agentInitialiserProxy"/>
 </bean>
 
-<bean id="transactionPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
+<bean id="transactionPriceTimeSeriesReport" 
+		class="net.sourceforge.jabm.report.SimEventReport">
 	<property name="eventPrototype">
 		<bean class="net.sourceforge.jasa.event.TransactionExecutedEvent">
 		</bean>
@@ -97,7 +92,8 @@
 	<property name="reportVariables" ref="transactionPriceReportVariables"/>
 </bean>
 
-<bean id="transactionPriceReportVariables" class="net.sourceforge.jasa.report.TransactionPriceReportVariables">
+<bean id="transactionPriceReportVariables" 
+	class="net.sourceforge.jasa.report.TransactionPriceReportVariables">
 </bean>
 
 <bean id="midPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
@@ -112,6 +108,11 @@
 	<property name="series" ref="priceTimeSeries"/>
 	<property name="chartTitle" value="Price time series"/>
 	<property name="rangeAxisLabel" value="Price ($)"/>
+</bean>
+
+
+<bean id="supplyAndDemandGraph"
+		class="net.sourceforge.jasa.view.ReportedSupplyAndDemandFrame">
 </bean>
 
 <!-- <bean id="transactionPriceTimeSeriesReport"  -->
@@ -136,17 +137,29 @@
     class="net.sourceforge.jasa.report.OfferPriceReportVariables">
 </bean>
 
-<bean id="agentInitialiser" 
+<bean id="agentInitialiserProxy" scope="simulation"
+		class="org.springframework.aop.framework.ProxyFactoryBean">
+	<property name="targetSource">
+		<bean class="org.springframework.aop.target.LazyInitTargetSource">
+			<property name="targetBeanName">
+				<idref local="agentInitialiser" />
+			</property>
+		</bean>
+	</property>
+</bean>
+
+<bean id="agentInitialiser" scope="simulation"
 		class="net.sourceforge.jasa.agent.MarketAgentInitialiser">
-    <property name="market" ref="market"/>
+    <property name="market" ref="marketSimulation"/>
 </bean>
 
 <bean id="randomRobinAgentMixer" 
-        class="net.sourceforge.jabm.mixing.RandomRobinAgentMixer">
+        class="net.sourceforge.jabm.mixing.RandomRobinAgentMixer"
+        scope="simulation">
 	<constructor-arg ref="prng"/>
 </bean>
 
-<bean id="randomArrivalAgentMixer" 
+<bean id="randomArrivalAgentMixer" scope="simulation"
         class="net.sourceforge.jabm.mixing.RandomArrivalAgentMixer">
     <constructor-arg ref="prng"/>
     <!--  In this model the probability of an agent arriving represents the
@@ -155,10 +168,9 @@
 </bean>
 
 <bean id="cda" 
-        class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer" scope="singleton">
-	<constructor-arg>
-		<ref bean="market"/>
-	</constructor-arg>
+        class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer" 
+        scope="simulation">
+<!-- 	<property name="market" ref="market"/> -->
 	<property name="pricingPolicy" ref="timePriorityPricing"/>
 </bean>
 
@@ -168,88 +180,96 @@
 </bean>
 
 <bean id="timePriorityPricing" 
-        class="net.sourceforge.jasa.market.rules.TimePriorityPricingPolicy">
+        class="net.sourceforge.jasa.market.rules.TimePriorityPricingPolicy"
+        scope="simulation">
 </bean>
 
-<bean id="prng" class="cern.jet.random.engine.MersenneTwister64">
+<bean id="prng" scope="singleton" 
+		class="cern.jet.random.engine.MersenneTwister64">
 	<constructor-arg>
 		<bean class="java.util.Date"/>
 	</constructor-arg>
 </bean>
 
 <bean id="population" class="net.sourceforge.jabm.Population"
-		scope="prototype">
+		scope="simulation">
 	<property name="prng" ref="prng"/>
 	<property name="agentFactory" ref="linearCombinationTraderFactory"/>
 	<property name="size" value="100"/>
 </bean>
 
-<bean id="linearCombinationTraders" class="net.sourceforge.jabm.agent.AgentList">
+<bean id="linearCombinationTraders" scope="simulation" 
+		class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="1000"/>
     <constructor-arg ref="linearCombinationTraderFactory"/>
 </bean>
 
-<bean id="noiseTraders" class="net.sourceforge.jabm.agent.AgentList">
+<bean id="noiseTraders" scope="simulation" 
+		class="net.sourceforge.jabm.agent.AgentList">
 	<constructor-arg value="12"/>
 	<constructor-arg ref="noiseTraderFactory"/> 	
 </bean>
 
-<bean id="fundamentalists" class="net.sourceforge.jabm.agent.AgentList">
+<bean id="fundamentalists" scope="simulation"
+		class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="12"/>
     <constructor-arg ref="fundamentalistFactory"/>
 </bean>
 
-<bean id="chartists" class="net.sourceforge.jabm.agent.AgentList">
+<bean id="chartists" scope="simulation"
+		class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="50"/>
     <constructor-arg ref="chartistFactory"/>
 </bean>
 
-<bean id="fixedPriceBuyers" class="net.sourceforge.jabm.agent.AgentList">
+<bean id="fixedPriceBuyers" scope="simulation"
+		class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="1"/>
     <constructor-arg ref="fixedPriceBuyerFactory"/>
 </bean>
 
-<bean id="fixedPriceSellers" class="net.sourceforge.jabm.agent.AgentList">
+<bean id="fixedPriceSellers" scope="simulation"
+		class="net.sourceforge.jabm.agent.AgentList">
     <constructor-arg value="1"/>
     <constructor-arg ref="fixedPriceSellerFactory"/>
 </bean>
 
-<bean id="fixedPriceBuyerFactory"
+<bean id="fixedPriceBuyerFactory" scope="simulation"
     class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
         <idref local="fixedPriceBuyerPrototype" />
     </property>
 </bean>
 
-<bean id="linearCombinationTraderFactory"
+<bean id="linearCombinationTraderFactory" scope="simulation"
         class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
         <idref local="linearCombinationTraderPrototype"/>
     </property>        
 </bean>
 
-<bean id="fixedPriceSellerFactory"
+<bean id="fixedPriceSellerFactory" scope="simulation"
     class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
         <idref local="fixedPriceSellerPrototype" />
     </property>
 </bean>
 
-<bean id="noiseTraderFactory"
+<bean id="noiseTraderFactory" scope="simulation"
 	class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
 	<property name="targetBeanName">
 		<idref local="noiseTraderPrototype" />
 	</property>
 </bean>
 
-<bean id="fundamentalistFactory"
+<bean id="fundamentalistFactory" scope="simulation"
     class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
         <idref local="fundamentalistPrototype" />
     </property>
 </bean>
 
-<bean id="chartistFactory"
+<bean id="chartistFactory" scope="simulation"
     class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
         <idref local="chartistPrototype" />
@@ -335,7 +355,8 @@
 	<property name="forecaster" ref="noiseTraderForecaster"/>
 </bean>
 
-<bean id="noiseTraderForecaster" class="net.sourceforge.jasa.agent.valuation.NoiseTraderForecaster">
+<bean id="noiseTraderForecaster" scope="simulation"
+		class="net.sourceforge.jasa.agent.valuation.NoiseTraderForecaster">
 	<property name="prng" ref="prng"/>
 </bean>
 
@@ -344,7 +365,7 @@
 	<property name="forecaster" ref="fundamentalistForecaster"/>
 </bean>
 
-<bean id="fundamentalistForecaster" 
+<bean id="fundamentalistForecaster" scope="simulation"
 	class="net.sourceforge.jasa.agent.valuation.FundamentalistForecaster">
 		    <property name="fundamentalPrice" value="500"/>
 		    <property name="timeHorizon" value="10"/>
@@ -426,9 +447,5 @@
 	<constructor-arg ref="prng"/>
 </bean>
 
-<bean id="supplyAndDemandGraph"
-		class="net.sourceforge.jasa.view.ReportedSupplyAndDemandFrame">
-		<constructor-arg ref="market"/>
-</bean>
 
 </beans>

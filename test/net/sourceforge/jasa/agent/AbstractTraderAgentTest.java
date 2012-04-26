@@ -21,7 +21,9 @@ import junit.framework.TestSuite;
 import net.sourceforge.jabm.event.EventListener;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.AuctionClosedException;
+import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
@@ -35,7 +37,7 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 
 	MockTrader trader2;
 
-	MarketFacade auction;	
+	MarketSimulation auction;	
 
 	public static final int TRADER1_STOCK = 0;
 
@@ -56,7 +58,7 @@ public class AbstractTraderAgentTest extends TestCase implements EventListener {
 	public void setUp() {
 
 		RandomEngine prng = new MersenneTwister64();		
-		auction = new MarketFacade(prng);		
+		auction = new MarketSimulation();	
 		AbstractAuctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auctioneer.setPricingPolicy(new UniformPricingPolicy(0.5));
 		auction.setAuctioneer(auctioneer);

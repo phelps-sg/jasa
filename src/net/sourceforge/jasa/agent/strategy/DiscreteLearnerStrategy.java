@@ -61,8 +61,8 @@ public abstract class DiscreteLearnerStrategy extends AdaptiveStrategyImpl
 
 	public void onRoundFinished(RoundFinishedEvent event) {
 		if (getAgent().active()) {
-			MarketSimulation simulation = (MarketSimulation) event.getSimulation();
-			Market auction = simulation.getMarket();
+			Market auction = (Market) event.getSimulation();
+//			Market auction = simulation.getMarket();
 			learn(auction);
 		}
 	}

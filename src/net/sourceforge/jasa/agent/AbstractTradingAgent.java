@@ -16,8 +16,10 @@
 package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import net.sourceforge.jabm.EventScheduler;
@@ -43,7 +45,6 @@ import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.AuctionRuntimeException;
 import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -242,7 +243,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	}
 
 	public void onMarketClosed(MarketEvent event) {
-		((MarketFacade) event.getAuction()).remove(this);
+		((Market) event.getAuction()).remove(this);
 	}
 
 	public Order getCurrentOrder() {
@@ -415,10 +416,9 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	public boolean register(Market market) {
 //		MarketFacade auction = (MarketFacade) market;
 //		auction.addListener(this);
+		markets = new HashSet<Market>();
 		return markets.add(market);
 	}
-
-	
 	
 	// TODO: jniu
 	public double equilibriumProfitsEachDay(Market auction,

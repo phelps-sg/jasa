@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sourceforge.jabm.report.DataWriter;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -56,7 +56,7 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 	 * @param demandStats
 	 *          The DataWriter to write the demand curve to.
 	 */
-	public SupplyAndDemandStats(MarketFacade auction,
+	public SupplyAndDemandStats(Market auction,
 	    DataWriter supplyStats, DataWriter demandStats) {
 		super(auction);
 		this.supplyStats = supplyStats;

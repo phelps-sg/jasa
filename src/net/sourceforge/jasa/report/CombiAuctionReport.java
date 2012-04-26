@@ -24,7 +24,6 @@ import java.util.Map;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
-import net.sourceforge.jasa.market.MarketFacade;
 
 
 /**
@@ -52,7 +51,7 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 
 	protected List<AuctionReport> reports = null;
 
-	protected MarketFacade auction;
+//	protected Market auction;
 
 	public CombiAuctionReport(List<AuctionReport> reports) {
 		this.reports = reports;

@@ -19,16 +19,26 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import net.sourceforge.jabm.AbstractSimulation;
+import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SimulationTime;
+import net.sourceforge.jabm.agent.Agent;
+import net.sourceforge.jabm.event.EventListener;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.RoundStartingEvent;
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
+import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
+import net.sourceforge.jasa.event.OrderPlacedEvent;
+import net.sourceforge.jasa.event.OrderReceivedEvent;
 import net.sourceforge.jasa.event.RoundClosingEvent;
+import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.rules.AuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.CombiTimingCondition;
@@ -41,6 +51,8 @@ import net.sourceforge.jasa.market.rules.TimingCondition;
 
 import org.apache.log4j.Logger;
 
+import com.sun.org.apache.xml.internal.utils.UnImplNode;
+
 /**
  * @author Steve Phelps
  * @version $Revision$
@@ -48,9 +60,11 @@ import org.apache.log4j.Logger;
  */
 
 public class MarketSimulation extends AbstractSimulation 
-		implements Serializable {
+		implements Serializable, Market {
 
-	protected Market market;
+	protected Auctioneer auctioneer = null;
+	
+//	protected Market market;
 	
 	protected boolean closed = false;
 	
@@ -74,6 +88,8 @@ public class MarketSimulation extends AbstractSimulation
 	protected TimingCondition dayEndingCondition;
 
 	protected boolean endOfRound = false;
+
+	protected double lastTransactionPrice;
 
 	public static final String ERROR_SHOUTSVISIBLE 
 	= "Auctioneer does not permit shout inspection";
@@ -100,7 +116,7 @@ public class MarketSimulation extends AbstractSimulation
 	
 	public void initialise() {
 		initialiseCounters();
-		addListener(market.getAuctioneer());
+		addListener(auctioneer);
 	}
 	
 	public void reset() {
@@ -108,11 +124,11 @@ public class MarketSimulation extends AbstractSimulation
 	}
 	
 	public void informAuctionClosed() {
-		fireEvent(new MarketClosedEvent(market, getRound()));
+		fireEvent(new MarketClosedEvent(this, getRound()));
 	}
 
 	public void informEndOfDay() {
-		fireEvent(new EndOfDayEvent(market, getRound()));
+		fireEvent(new EndOfDayEvent(this, getRound()));
 	}
 
 //	public void informBeginOfDay() {
@@ -120,7 +136,7 @@ public class MarketSimulation extends AbstractSimulation
 //	}
 
 	public void informAuctionOpen() {
-		fireEvent(new MarketOpenEvent(market, getRound()));
+		fireEvent(new MarketOpenEvent(this, getRound()));
 	}
 	
 	public void informRoundOpening() {
@@ -152,7 +168,7 @@ public class MarketSimulation extends AbstractSimulation
 	}
 	
 	public Auctioneer getAuctioneer() {
-		return market.getAuctioneer();
+		return auctioneer;
 	}
 
 	/**
@@ -197,7 +213,7 @@ public class MarketSimulation extends AbstractSimulation
 
 	public void begin() {
 		initialiseAgents();
-		market.reset();
+		reset();
 		fireEvent(new SimulationStartingEvent(this));
 		informAuctionOpen();
 	}
@@ -242,7 +258,7 @@ public class MarketSimulation extends AbstractSimulation
 	}
 
 	public void informRoundClosing() {
-		fireEvent(new RoundClosingEvent(getMarket(), getAge()));
+		fireEvent(new RoundClosingEvent(this, getAge()));
 	}
 
 	public void informRoundClosed() {
@@ -347,7 +363,7 @@ public class MarketSimulation extends AbstractSimulation
 	}
 
 	public void setLengthOfDay(int lengthOfDay) {
-		MaxRoundsDayEndingCondition cond = new MaxRoundsDayEndingCondition(market);
+		MaxRoundsDayEndingCondition cond = new MaxRoundsDayEndingCondition(this);
 		cond.setLengthOfDay(lengthOfDay);
 		setDayEndingCondition(cond);
 	}
@@ -364,7 +380,7 @@ public class MarketSimulation extends AbstractSimulation
 
 	public void setMaximumRounds(int maximumRounds) {
 		MaxRoundsAuctionClosingCondition cond = 
-			new MaxRoundsAuctionClosingCondition(market);
+			new MaxRoundsAuctionClosingCondition(this);
 		cond.setMaximumRounds(maximumRounds);
 		setAuctionClosingCondition(cond);
 	}
@@ -382,7 +398,7 @@ public class MarketSimulation extends AbstractSimulation
 
 	public void setMaximumDays(int maximumDays) {
 		MaxDaysAuctionClosingCondition cond = new MaxDaysAuctionClosingCondition(
-		    market);
+		    this);
 		cond.setMaximumDays(maximumDays);
 		setAuctionClosingCondition(cond);
 	}
@@ -426,18 +442,230 @@ public class MarketSimulation extends AbstractSimulation
 		assert (cond instanceof DayEndingCondition);
 		dayEndingCondition = cond;
 	}
-
-	public Market getMarket() {
-		return market;
-	}
-
-	public void setMarket(Market market) {
-		this.market = market;
-	}
+//
+//	public Market getMarket() {
+//		return market;
+//	}
+//
+//	public void setMarket(Market market) {
+//		this.market = market;
+//	}
 
 	@Override
 	public SimulationTime getSimulationTime() {
 		return new SimulationTime(age);
 	}
+
+	public void clear(Order ask, Order bid, double transactionPrice) {
+		assert ask.getQuantity() == bid.getQuantity();
+		assert transactionPrice >= ask.getPrice();
+		assert transactionPrice <= bid.getPrice();
+		lastTransactionPrice = transactionPrice;
+		clear(ask, bid, transactionPrice, transactionPrice, ask.getQuantity());
+	}
+
+	public void clear(Order ask, Order bid, double buyerCharge,
+	    double sellerPayment, int quantity) {
+
+		TradingAgent buyer = (TradingAgent) bid.getAgent();
+		TradingAgent seller = (TradingAgent) ask.getAgent();
+
+		TransactionExecutedEvent transactionEvent = new TransactionExecutedEvent(
+				this, getAge(), ask,
+				bid, buyerCharge, ask.getQuantity());
+		fireEvent(transactionEvent);
+		
+		auctioneer.getAccount().doubleEntry(buyer.getAccount(), buyerCharge*quantity,
+		    seller.getAccount(), sellerPayment*quantity);
+		
+		seller.getCommodityHolding()
+		    .transfer(buyer.getCommodityHolding(), quantity);
+
+		buyer.orderFilled(this, bid, buyerCharge, quantity);
+		seller.orderFilled(this, ask, sellerPayment, quantity);
+	}
+	
+	/**
+	 * Determines whether or not the given shout was matched in the current round
+	 * of trading.
+	 */
+	public boolean orderAccepted(Order shout) throws ShoutsNotVisibleException {
+		return auctioneer.orderFilled(shout);
+	}
+
+	/**
+	 * Determines whether or not any transactions have occured in the current
+	 * round of trading.
+	 */
+	public boolean transactionsOccurred() throws ShoutsNotVisibleException {
+		return auctioneer.transactionsOccurred();
+	}
+
+	/**
+	 * Remove a trader from the market.
+	 */
+	public void remove(TradingAgent trader) {
+//		if (!defunctTraders.contains(trader)) {
+//			defunctTraders.add(trader);
+//		}
+	}
+
+	/**
+	 * Return the number of traders currently active in the market.
+	 */
+	public int getNumberOfTraders() {
+		return getTraders().getAgentList().size();
+	}
+
+	/**
+	 * Return the total number of traders registered in the market.
+	 */
+	public int getNumberOfRegisteredTraders() {
+		return getNumberOfTraders();
+	}
+
+	protected void activate(TradingAgent agent) {
+//		activeTraders.add(agent);
+//		addAuctionEventListener(agent);
+	}
+
+
+//
+//	public SimulationController getController() {
+//		return controller;
+//	}
+//
+//	public void setController(SimulationController controller) {
+//		this.controller = controller;
+//	}
+
+	public Population getTraders() {
+		return getPopulation();
+	}
+	
+	
+
+//	public void reset() {
+//		getSimulation().reset();
+//		this.lastTransactionPrice = 0.0;
+//	}
+
+	public void setAuctioneer(Auctioneer auctioneer) {
+		this.auctioneer = auctioneer;
+		this.auctioneer.setMarket(this);
+	}
+
+	public boolean closed() {
+		return isClosed();
+	}
+
+	public Order getLastOrder() throws ShoutsNotVisibleException {
+		// if ( !auctioneer.shoutsVisible() ) {
+		// throw new ShoutsNotVisibleException();
+		// }
+		// return lastShout;
+		return auctioneer.getLastShout();
+	}
+
+	public MarketQuote getQuote() {
+		return auctioneer.getQuote();
+	}
+
+
+	public void removeOrder(Order shout) {
+		// Remove this shout and all of its children.
+		for (Order s = shout; s != null; s = s.getChild()) {
+			auctioneer.removeShout(s);
+			// if ( s != shout ) {
+			// ShoutPool.release(s);
+			// }
+		}
+		shout.makeChildless();
+	}
+	
+	/**
+	 * Handle a new shout in the market.
+	 * 
+	 * @param shout
+	 *          The new shout in the market.
+	 */
+	public void placeOrder(Order order) throws AuctionException {
+		if (closed()) {
+			throw new AuctionClosedException("Auction is closed.");
+		}
+		if (order == null) {
+			throw new IllegalOrderException("null shout");
+		}
+		fireEvent(new OrderReceivedEvent(this, getRound(), order));
+		order.setTimeStamp(getSimulationTime());
+		auctioneer.newOrder(order);
+		fireEvent(new OrderPlacedEvent(this, getAge(), order));
+	}
+
+	public void printState() {
+		auctioneer.printState();
+	}
+	
+	public void register(TradingAgent trader) {
+		getTraders().add(trader);
+		trader.register(this);		
+	}
+
+	public Iterator<Agent> getTraderIterator() {
+		return getTraders().getAgents().iterator();
+	}
+
+//	@Override
+//	public void addListener(EventListener listener) {
+//		controller.addListener(listener);
+//	}
+	
+//	@Override
+//	public void removeListener(EventListener listener) {
+//		controller.removeListener(listener);
+//	}
+//
+//	@Override
+//	@SuppressWarnings("rawtypes")
+//	public void addListener(Class eventClass, EventListener listener) {
+//		controller.addListener(eventClass, listener);
+//	}
+	
+//	public void addReport(Report report) {
+//		controller.addReport(report);
+//	}
+//
+//	public void fireEvent(SimEvent event) {
+//		controller.fireEvent(event);
+//	}	
+	
+//	public void initialise() {
+//		addListener(auctioneer);
+//	}
+
+	public double getLastTransactionPrice() {
+		return lastTransactionPrice;
+	}
+
+	public void setLastTransactionPrice(double lastTransactionPrice) {
+		this.lastTransactionPrice = lastTransactionPrice;
+	}
+	
+	@Override
+	public double getCurrentPrice() {
+		double result = getQuote().getMidPoint();
+		if (Double.isNaN(result)) {
+			result = getLastTransactionPrice();
+		}
+		return result;
+	}
+
+	@Override
+	public void remove(AbstractTradingAgent abstractTradingAgent) {
+		//TODO
+//		throw new RuntimeException("method not implemented");
+	}
+
+	
 	
 }

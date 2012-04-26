@@ -23,7 +23,7 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 
 import org.apache.log4j.Logger;
 
@@ -45,21 +45,21 @@ public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
 	/**
 	 * The market we are keeping statistics on.
 	 */
-	protected MarketFacade auction;
+	protected Market auction;
 
-	public AbstractAuctionReport(MarketFacade auction) {
+	public AbstractAuctionReport(Market auction) {
 		this.auction = auction;
 	}
 
 	public AbstractAuctionReport() {
 	}
 
-	public void setAuction(MarketFacade auction) {
+	public void setAuction(Market auction) {
 		this.auction = auction;
 		logger.debug("Set market to " + auction);
 	}
 
-	public MarketFacade getAuction() {
+	public Market getAuction() {
 		return auction;
 	}
 

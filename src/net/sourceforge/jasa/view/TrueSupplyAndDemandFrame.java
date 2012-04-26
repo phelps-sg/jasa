@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.view;
 
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 import net.sourceforge.jasa.report.TrueSupplyAndDemandStats;
 
@@ -28,8 +27,8 @@ public class TrueSupplyAndDemandFrame extends SupplyAndDemandFrame {
 
 	public static final String TITLE = "Supply and Demand Graph";
 
-	public TrueSupplyAndDemandFrame(MarketFacade auction) {
-		super(auction);
+	public TrueSupplyAndDemandFrame() {
+		super();
 	}
 
 	public String getGraphName() {

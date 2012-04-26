@@ -53,7 +53,7 @@ public class ChartistForecaster extends AbstractReturnForecaster
 	
 	public void updatePriceHistory(RoundFinishedEvent event) {
 		MarketSimulation simulation = (MarketSimulation) event.getSimulation();
-		double currentPrice = simulation.getMarket().getCurrentPrice();
+		double currentPrice = simulation.getCurrentPrice();
 		history.addValue(currentPrice);
 	}
 

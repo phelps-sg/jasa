@@ -15,7 +15,13 @@
 
 package net.sourceforge.jasa.market;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.util.Resetable;
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 
 /**
@@ -108,5 +114,11 @@ public interface Market extends QuoteProvider, Resetable {
 	public double getLastTransactionPrice();
 	
 	public double getCurrentPrice();
+
+	public Iterator<Agent> getTraderIterator();
+
+	public void remove(AbstractTradingAgent abstractTradingAgent);
+
+	public Population getPopulation();
 
 }

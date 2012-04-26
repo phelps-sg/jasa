@@ -21,7 +21,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
@@ -61,10 +60,6 @@ public class DataWriterReport extends AbstractAuctionReport {
 	 */
 	protected DataWriter transPriceLog = null;
 
-	/**
-	 * The market we are keeping statistics on.
-	 */
-	protected MarketFacade auction;
 
 	public DataWriterReport() {
 		this(null, null, null, null, null);
@@ -94,7 +89,7 @@ public class DataWriterReport extends AbstractAuctionReport {
 	public void updateQuoteLog(RoundFinishedEvent event) {
 		int time = (int) event.getSimulation().getSimulationTime().getTicks();
 		MarketSimulation simulation = (MarketSimulation) event.getSimulation();
-		MarketQuote quote = simulation.getMarket().getQuote();
+		MarketQuote quote = simulation.getQuote();
 		if (askQuoteLog != null) {
 			askQuoteLog.newData(time);
 			askQuoteLog.newData(quote.getAsk());
@@ -135,10 +130,6 @@ public class DataWriterReport extends AbstractAuctionReport {
 	}
 
 	public void produceUserOutput() {
-	}
-
-	public void setAuction(MarketFacade auction) {
-		this.auction = auction;
 	}
 
 	@Override

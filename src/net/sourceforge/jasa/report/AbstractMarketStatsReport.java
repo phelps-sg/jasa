@@ -18,7 +18,7 @@ package net.sourceforge.jasa.report;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 
 /**
  * A historicalDataReport that performs additional calculations at the end of an market
@@ -29,7 +29,7 @@ import net.sourceforge.jasa.market.MarketFacade;
  */
 public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
 
-	public AbstractMarketStatsReport(MarketFacade auction) {
+	public AbstractMarketStatsReport(Market auction) {
 		super(auction);
 	}
 

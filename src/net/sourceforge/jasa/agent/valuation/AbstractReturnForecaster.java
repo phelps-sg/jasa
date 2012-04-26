@@ -8,17 +8,17 @@ import net.sourceforge.jabm.event.SimEvent;
 public abstract class AbstractReturnForecaster 
 		implements ReturnForecaster, Serializable {
 
-	protected ValuationPolicy valuationPolicy;
-
-	@Override
-	public void setValuationPolicy(ValuationPolicy policy) {
-		this.valuationPolicy = policy;
-	}
-
-	@Override
-	public ValuationPolicy getValuationPolicy() {
-		return valuationPolicy;
-	}
+//	protected ValuationPolicy valuationPolicy;
+//
+//	@Override
+//	public void setValuationPolicy(ValuationPolicy policy) {
+//		this.valuationPolicy = policy;
+//	}
+//
+//	@Override
+//	public ValuationPolicy getValuationPolicy() {
+//		return valuationPolicy;
+//	}
 
 	public void subscribeToEvents(EventScheduler scheduler) {
 		// Do nothing

@@ -8,8 +8,8 @@ public interface ReturnForecaster extends EventListener, EventSubscriber {
 
 	public double getReturnForecast(Market market);
 	
-	public void setValuationPolicy(ValuationPolicy policy);
-	
-	public ValuationPolicy getValuationPolicy();
+//	public void setValuationPolicy(ValuationPolicy policy);
+//	
+//	public ValuationPolicy getValuationPolicy();
 	
 }

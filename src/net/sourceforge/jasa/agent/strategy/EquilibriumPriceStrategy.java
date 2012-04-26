@@ -21,7 +21,6 @@ import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.report.EquilibriumReport;
 
@@ -59,8 +58,7 @@ public class EquilibriumPriceStrategy extends FixedDirectionStrategy
 	}
 
 	public boolean modifyShout(Order shout) {
-		EquilibriumReport eqReport = new EquilibriumReport(
-		    (MarketFacade) auction);
+		EquilibriumReport eqReport = new EquilibriumReport(auction);
 		eqReport.calculate();
 		double price = eqReport.calculateMidEquilibriumPrice();
 		TokenTradingAgent tokenTradingAgent = (TokenTradingAgent) agent;

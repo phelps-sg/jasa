@@ -45,7 +45,7 @@ public class SerializationTests extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	MarketFacade auction;
+	Market auction;
 
 	public SerializationTests(String name) {
 		super(name);

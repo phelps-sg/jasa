@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.view;
 
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.report.AuctionStateStats;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 
@@ -29,8 +29,8 @@ public class AuctionStateFrame extends SupplyAndDemandFrame {
 
 	public static final String TITLE = "Auction State";
 
-	public AuctionStateFrame(MarketFacade auction) {
-		super(auction);
+	public AuctionStateFrame() {
+		super();
 	}
 
 	public String getGraphName() {

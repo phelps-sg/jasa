@@ -35,7 +35,6 @@
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
-	<property name="market" ref="market"/>
 	<property name="maximumRounds" value="100"/>
 	<property name="agentMixer" ref="agentMixer"/>
 	<property name="population" ref="populaton"/>

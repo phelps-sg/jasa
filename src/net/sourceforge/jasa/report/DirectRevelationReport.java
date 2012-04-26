@@ -24,7 +24,7 @@ import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -53,7 +53,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 
 	static Logger logger = Logger.getLogger(DirectRevelationReport.class);
 
-	public DirectRevelationReport(MarketFacade auction) {
+	public DirectRevelationReport(Market auction) {
 		super(auction);
 		shouts = new ArrayList<Order>();
 	}
@@ -62,7 +62,7 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 		this(null);
 	}
 
-	public void setAuction(MarketFacade auction) {
+	public void setAuction(Market auction) {
 		this.auction = auction;
 	}
 

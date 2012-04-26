@@ -6,7 +6,7 @@
     <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
-                value="%m%n"/>
+                value="%C{1} | %m%n"/>
         </layout>
     </appender>
     
@@ -24,4 +24,8 @@
     	<appender-ref ref="CONSOLE"/>
     </root>
     
+    <logger name="net.sourceforge.jabm">
+  		<level value="DEBUG"/> 
+	</logger>
+	
 </log4j:configuration>

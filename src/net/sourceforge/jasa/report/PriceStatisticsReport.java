@@ -78,7 +78,7 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 
 	public void roundClosed(RoundFinishedEvent event) {
 		MarketSimulation simulation = (MarketSimulation) event.getSimulation();
-		MarketQuote quote = simulation.getMarket().getQuote();
+		MarketQuote quote = simulation.getQuote();
 		stats[BID_QUOTE].newData((double) quote.getBid());
 		stats[ASK_QUOTE].newData((double) quote.getAsk());
 	}

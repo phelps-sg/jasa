@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import net.sourceforge.jabm.report.DataWriter;
 import net.sourceforge.jasa.market.AscendingOrderComparator;
 import net.sourceforge.jasa.market.DescendingOrderComparator;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -50,7 +50,7 @@ public class TrueSupplyAndDemandStats extends SupplyAndDemandStats {
 
 	static Logger logger = Logger.getLogger(TrueSupplyAndDemandStats.class);
 
-	public TrueSupplyAndDemandStats(MarketFacade auction,
+	public TrueSupplyAndDemandStats(Market auction,
 	    DataWriter supplyStats, DataWriter demandStats) {
 		super(auction, supplyStats, demandStats);
 	}

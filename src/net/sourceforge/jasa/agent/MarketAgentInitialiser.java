@@ -5,13 +5,12 @@ import java.io.Serializable;
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.init.BasicAgentInitialiser;
-import net.sourceforge.jasa.market.MarketFacade;
-
+import net.sourceforge.jasa.market.Market;
 
 public class MarketAgentInitialiser extends BasicAgentInitialiser implements
 		Serializable {
 
-	protected MarketFacade market;
+	protected Market market;
 
 	@Override
 	public void initialise(Population population) {
@@ -22,11 +21,11 @@ public class MarketAgentInitialiser extends BasicAgentInitialiser implements
 		}
 	}
 
-	public MarketFacade getMarket() {
+	public Market getMarket() {
 		return market;
 	}
 
-	public void setMarket(MarketFacade market) {
+	public void setMarket(Market market) {
 		this.market = market;
 	}
 

@@ -31,7 +31,6 @@ import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketFacade;
 
 import org.apache.log4j.Logger;
 import org.jfree.data.time.TimePeriodValue;
@@ -67,7 +66,7 @@ public class ReportVariableWriterReport implements AuctionReport,
 	/**
 	 * The market we are keeping statistics on.
 	 */
-	protected MarketFacade auction;
+	protected Market auction;
 
 	static DecimalFormat formatter = new DecimalFormat(
 	    "+#########0.000;-#########.000");
@@ -321,7 +320,7 @@ public class ReportVariableWriterReport implements AuctionReport,
 		return new HashMap<Object, Number>();
 	}
 
-	public void setAuction(MarketFacade auction) {
+	public void setAuction(Market auction) {
 		this.auction = auction;
 	}
 

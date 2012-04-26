@@ -50,6 +50,10 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 		account = new ZeroFundsAccount(this);
 		setPricingPolicy(new DiscriminatoryPricingPolicy(0));
 	}
+	
+	public ContinuousDoubleAuctioneer() {
+		this(null);
+	}
 
 	public void generateQuote() {
 //		if (!orderBook.isEmpty()) {

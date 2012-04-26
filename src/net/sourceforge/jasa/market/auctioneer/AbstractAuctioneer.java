@@ -67,6 +67,9 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	public AbstractAuctioneer(Market auction) {
 		this.market = auction;
 	}
+	
+	public AbstractAuctioneer() {
+	}
 
 	public Object protoClone() {
 		try {
@@ -265,7 +268,7 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	public void setClearingPolicy(ClearingPolicy clearingPolicy) {
 		this.clearingPolicy = clearingPolicy;
 	}
-
+	
 	public String toString() {
 		return "(" + getClass() + ")";
 	}

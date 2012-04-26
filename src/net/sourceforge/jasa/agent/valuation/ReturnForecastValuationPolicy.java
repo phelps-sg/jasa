@@ -54,7 +54,7 @@ public class ReturnForecastValuationPolicy extends AbstractValuationPolicy {
 
 	public void setForecaster(ReturnForecaster forecaster) {
 		this.forecaster = forecaster;
-		forecaster.setValuationPolicy(this);
+//		forecaster.setValuationPolicy(this);
 	}
 
 	

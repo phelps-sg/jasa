@@ -21,7 +21,7 @@ import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.Market;
 
 import org.apache.log4j.Logger;
 
@@ -68,7 +68,7 @@ public class DynamicConvergenceReport extends AbstractMarketStatsReport
 
 	static Logger logger = Logger.getLogger(DynamicConvergenceReport.class);
 
-	public void setAuction(MarketFacade auction) {
+	public void setAuction(Market auction) {
 		super.setAuction(auction);
 		equilibriaStats = new EquilibriumReport(auction);
 	}
