@@ -3,12 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-<bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
-	<property name="auctioneer" ref="clearingHouse"/>
-	<property name="controller" ref="simulationController"/>
-</bean>
-
 <bean id="simulationController" class="net.sourceforge.jabm.SpringSimulationController">
 	
 	<property name="simulationBeanName">
@@ -56,7 +50,6 @@
 
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 	<constructor-arg ref="simulationController"/>
-    <property name="market" ref="market"/>
 	<property name="maximumRounds" value="200"/>
 	<property name="agentInitialiser" ref="agentInitialiser"/>
     <property name="population" ref="population"/>

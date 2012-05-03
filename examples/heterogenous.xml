@@ -8,11 +8,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
-		<property name="auctioneer" ref="cda" />
-		<property name="controller" ref="simulationController" />
-	</bean>
-
 	<bean id="simulationController" class="net.sourceforge.jabm.SpringSimulationController">
 		<property name="simulationBeanName">
 			<idref local="marketSimulation" />
@@ -32,8 +27,6 @@
 			</list>
 		</property>
 	</bean>
-
-
 
 	<bean id="transactionPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
 		<property name="eventPrototype">
@@ -186,7 +179,6 @@
 
 	<bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation">
 		<property name="simulationController" ref="simulationController" />
-		<property name="market" ref="market" />
 		<property name="maximumDays" value="600" />
 		<property name="lengthOfDay" value="100" />
 		<property name="population" ref="population" />
@@ -196,9 +188,6 @@
 
 	<bean id="cda"
 		class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
-		<constructor-arg>
-			<ref bean="market" />
-		</constructor-arg>
 		<property name="pricingPolicy" ref="timePriorityPricing" />
 	</bean>
 
@@ -458,7 +447,6 @@
 	</bean>
 
 	<bean id="supplyAndDemandGraph" class="net.sourceforge.jasa.view.ReportedSupplyAndDemandFrame">
-		<constructor-arg ref="market" />
 	</bean>
 
 </beans>

@@ -3,12 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-
-<bean id="market" class="net.sourceforge.jasa.market.MarketFacade">
-	<property name="auctioneer" ref="cda"/>
-	<property name="controller" ref="simulationController"/>
-</bean>
-
 <bean id="simulationController" class="net.sourceforge.jabm.SpringSimulationController">
 	<property name="simulationBeanName" ref="marketSimulation"/>
 	<property name="numSimulations" value="100"/>
@@ -26,7 +20,7 @@
 </bean>
 
 <bean id="equilibriumReport" class="net.sourceforge.jasa.report.EquilibriumReport">
-	<constructor-arg ref="market" />
+	<constructor-arg ref="marketSimulation" />
 </bean>
 
 <bean id="agentMixer" class="net.sourceforge.jabm.mixing.RandomRobinAgentMixer">
