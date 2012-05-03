@@ -34,7 +34,7 @@ public class TradeNetworkReport extends AbstractModel implements
 
 	public int interactions;
 
-	protected double discountFactor = 0.95;
+	protected double alpha = 0.95;
 	
 	protected double threshold = 0.1;
 	
@@ -52,7 +52,8 @@ public class TradeNetworkReport extends AbstractModel implements
 //			}
 //
 //		};
-		distanceMetric = new DijkstraShortestPath<Agent, TransactionList>(graph);
+		distanceMetric = 
+				new DijkstraShortestPath<Agent, TransactionList>(graph);
 	}
 
 	public void eventOccurred(SimEvent ev) {
@@ -159,11 +160,11 @@ public class TradeNetworkReport extends AbstractModel implements
 	}
 
 	public double getDiscountFactor() {
-		return discountFactor;
+		return alpha;
 	}
 
 	public void setDiscountFactor(double discountFactor) {
-		this.discountFactor = discountFactor;
+		this.alpha = discountFactor;
 		if (logger.isDebugEnabled()) logger.debug("discountFactor = " + discountFactor);
 	}
 	
@@ -222,22 +223,22 @@ public class TradeNetworkReport extends AbstractModel implements
 	}
 	
 	
-	public static class TransactionList {
+	public class TransactionList {
 		
 		double value = 0.0;
 		
-		static double recency = 0.05;
+//		static double recency = 0.05;
 		
 		public TransactionList() {
 			super();
 		}
 		
 		public void add(TransactionExecutedEvent e) {
-			value = recency * value(e) + (1 - recency) * value;
+			value = alpha * value(e) + (1 - alpha) * value;
 		}
 		
 		public void add() {
-			value = (1 - recency) * value;
+			value = (1 - alpha) * value;
 		}
 		
 		public double value(TransactionExecutedEvent event) {
