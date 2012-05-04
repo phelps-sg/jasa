@@ -25,7 +25,7 @@
     </root>
     
     <logger name="net.sourceforge.jabm">
-  		<level value="DEBUG"/> 
+  		<level value="INFO"/> 
 	</logger>
 	
 </log4j:configuration>

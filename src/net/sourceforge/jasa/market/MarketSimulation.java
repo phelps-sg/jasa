@@ -54,11 +54,12 @@ import org.apache.log4j.Logger;
 import com.sun.org.apache.xml.internal.utils.UnImplNode;
 
 /**
+ * A simulation of an order-driven market.
+ * 
  * @author Steve Phelps
  * @version $Revision$
  * 
  */
-
 public class MarketSimulation extends AbstractSimulation 
 		implements Serializable, Market {
 

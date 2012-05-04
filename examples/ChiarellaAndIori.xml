@@ -110,7 +110,6 @@
 	<property name="rangeAxisLabel" value="Price ($)"/>
 </bean>
 
-
 <bean id="supplyAndDemandGraph"
 		class="net.sourceforge.jasa.view.ReportedSupplyAndDemandFrame">
 </bean>

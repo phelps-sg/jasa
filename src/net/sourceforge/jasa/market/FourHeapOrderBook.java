@@ -26,18 +26,13 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * This class provides market shout management services using the 4-Heap
+ * This class provides market order-matching services using the 4-Heap
  * algorithm. See:
  * </p>
  * 
  * <p>
  * "Flexible Double Auctions for Electronic Commerce: Theory and Implementation"
  * by Wurman, Walsh and Wellman 1998.
- * </p>
- * 
- * <p>
- * All state is maintained in memory resident data structures and no crash
- * recovery is provided.
  * </p>
  * 
  * @author Steve Phelps
@@ -66,9 +61,11 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 */
 	protected PriorityBuffer sOut = new PriorityBuffer(greaterThan);
 
-	protected static AscendingOrderComparator greaterThan = new AscendingOrderComparator();
+	protected static AscendingOrderComparator greaterThan = 
+			new AscendingOrderComparator();
 
-	protected static DescendingOrderComparator lessThan = new DescendingOrderComparator();
+	protected static DescendingOrderComparator lessThan = 
+			new DescendingOrderComparator();
 
 	static Logger logger = Logger.getLogger(FourHeapOrderBook.class);
 
