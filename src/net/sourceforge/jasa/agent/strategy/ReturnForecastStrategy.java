@@ -15,10 +15,20 @@
 
 package net.sourceforge.jasa.agent.strategy;
 
+import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
 import net.sourceforge.jasa.market.Order;
 import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.engine.RandomEngine;
 
+/**
+ * A strategy which sets the current price and direction of the agent's order
+ * based on a forecast of the next period price, as specified by the agent's
+ * valuation policy.
+ * 
+ * @see ReturnForecastValuationPolicy
+ * @author Steve Phelps
+ *
+ */
 public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	
 	protected RandomEngine prng;
@@ -59,15 +69,6 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		}
 		return result;
 	}
-
-
-//	public ReturnForecaster getForecaster() {
-//		return forecaster;
-//	}
-//
-//	public void setForecaster(ReturnForecaster forecaster) {
-//		this.forecaster = forecaster;
-//	}
 
 	public RandomEngine getPrng() {
 		return prng;

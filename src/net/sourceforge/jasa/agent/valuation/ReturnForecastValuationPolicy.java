@@ -4,6 +4,14 @@ import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.Market;
   
+/**
+ * A valuation policy which decides the valuation by making a forecast of
+ * the next period return.  
+ * 
+ * @see ReturnForecaster
+ * @author Steve Phelps
+ *
+ */
 public class ReturnForecastValuationPolicy extends AbstractValuationPolicy {
 
 	protected ReturnForecaster forecaster;
