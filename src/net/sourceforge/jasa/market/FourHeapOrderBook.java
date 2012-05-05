@@ -290,7 +290,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 			Order sOutTop = getLowestUnmatchedAsk();
 			Order bInTop = getLowestMatchedBid();
 
-			if (sOutTop != null && bidVal >= sOutTop.getPrice()
+			if (sOutTop != null && sOutTop.matches(bid)
 			    && (bInTop == null || bInTop.getPrice() >= sOutTop.getPrice())) {
 
 				// found match
@@ -384,6 +384,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 				Order remainder = sInTop.split(nS - nB);
 				sIn.add(remainder);
 			}
+			assert bInTop.getAgent() != sInTop.getAgent();
 			result.add(bInTop);
 			result.add(sInTop);
 		}
