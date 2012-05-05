@@ -13,7 +13,9 @@ import net.sourceforge.jabm.event.InteractionsFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
+import net.sourceforge.jabm.report.RelationshipTracker;
 import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jabm.report.WeightedEdge;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 import org.apache.log4j.Logger;
@@ -23,12 +25,12 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 
 public class TradeNetworkReport extends AbstractModel implements
-		 Report, Serializable {
+		 Report, Serializable, RelationshipTracker {
 	
-	protected Graph<Agent, TransactionList> graph = 
-		new DirectedSparseGraph<Agent, TransactionList>();
+	protected Graph<Agent, WeightedEdge> graph = 
+		new DirectedSparseGraph<Agent, WeightedEdge>();
 	
-	protected DijkstraShortestPath<Agent, TransactionList> distanceMetric;
+	protected DijkstraShortestPath<Agent, WeightedEdge> distanceMetric;
 	
 	protected double maximumInvestment = Double.NEGATIVE_INFINITY;
 
@@ -53,7 +55,7 @@ public class TradeNetworkReport extends AbstractModel implements
 //
 //		};
 		distanceMetric = 
-				new DijkstraShortestPath<Agent, TransactionList>(graph);
+				new DijkstraShortestPath<Agent, WeightedEdge>(graph);
 	}
 
 	public void eventOccurred(SimEvent ev) {
@@ -79,9 +81,9 @@ public class TradeNetworkReport extends AbstractModel implements
 	}
 	
 	public void clearEdges() {
-		ArrayList<TransactionList> edges = new ArrayList<TransactionList>(
+		ArrayList<WeightedEdge> edges = new ArrayList<WeightedEdge>(
 				graph.getEdges());
-		for (TransactionList edge : edges) {
+		for (WeightedEdge edge : edges) {
 			graph.removeEdge(edge);
 		}
 	}
@@ -117,11 +119,13 @@ public class TradeNetworkReport extends AbstractModel implements
 	
 	public void record(Agent x, Agent y, TransactionExecutedEvent transaction) {
 		assert x != null && y != null;
-		TransactionList edge = graph.findEdge(x, y);
+		TransactionList edge = (TransactionList) graph.findEdge(x, y);
 		if (edge == null) {
 			edge = new TransactionList();
 			edge.add(transaction);
-			if (edge.getValue() >= threshold) graph.addEdge(edge, x, y);
+			if (edge.getValue() >= threshold) {
+				graph.addEdge(edge, x, y);
+			}
 		} else {
 			edge.add(transaction);
 //			edge.setValue(discountFactor  * edge.getValue() + (1 - discountFactor) * amount);
@@ -132,16 +136,16 @@ public class TradeNetworkReport extends AbstractModel implements
 		if (edge.getValue() < threshold) {
 			graph.removeEdge(edge);
 		}
-		LinkedList<TransactionList> removals = new LinkedList<TransactionList>();
-		for(TransactionList otherEdge : graph.getEdges()) {
+		LinkedList<WeightedEdge> removals = new LinkedList<WeightedEdge>();
+		for(WeightedEdge otherEdge : graph.getEdges()) {
 			if (otherEdge != edge) {
-				otherEdge.add();
+				((TransactionList) otherEdge).add();
 				if (otherEdge.getValue() < threshold) {
 					removals.add(otherEdge);
 				}
 			}
 		}
-		for(TransactionList deleteEdge : removals) {
+		for(WeightedEdge deleteEdge : removals) {
 			graph.removeEdge(deleteEdge);
 		}
 	}
@@ -155,7 +159,7 @@ public class TradeNetworkReport extends AbstractModel implements
 		return null;
 	}
 
-	public Graph<Agent, TransactionList> getGraph() {
+	public Graph<Agent, WeightedEdge> getGraph() {
 		return graph;
 	}
 
@@ -181,7 +185,7 @@ public class TradeNetworkReport extends AbstractModel implements
 	}
 	
 	public double edgeStrength(Agent i, Agent j) {
-		TransactionList edge = graph.findEdge(i, j);
+		WeightedEdge edge = graph.findEdge(i, j);
 		if (edge != null) {
 			return edge.getValue();
 		} else {
@@ -191,7 +195,7 @@ public class TradeNetworkReport extends AbstractModel implements
 	
 	public double vertexStrength(Agent i) {
 		double s = 0.0;
-		for(TransactionList edge : graph.getIncidentEdges(i)) {
+		for(WeightedEdge edge : graph.getIncidentEdges(i)) {
 			s += edge.getValue();
 		}
 		return s;
@@ -201,8 +205,14 @@ public class TradeNetworkReport extends AbstractModel implements
 		return graph.degree(i);
 	}
 	
+	@Override
 	public int outDegree(Agent i) {
 		return graph.outDegree(i);
+	}
+
+	@Override
+	public int inDegree(Agent vertex) {
+		return graph.inDegree(vertex);
 	}
 	
 	public double getDistance(Agent i, Agent j) {
@@ -223,7 +233,7 @@ public class TradeNetworkReport extends AbstractModel implements
 	}
 	
 	
-	public class TransactionList {
+	public class TransactionList implements WeightedEdge {
 		
 		double value = 0.0;
 		

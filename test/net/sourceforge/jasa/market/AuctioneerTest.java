@@ -26,7 +26,7 @@ public abstract class AuctioneerTest extends TestCase {
 
 	Auctioneer auctioneer;
 
-	MarketFacade auction;
+	Market auction;
 
 	MockTrader[] traders;
 	
@@ -38,7 +38,7 @@ public abstract class AuctioneerTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		auction = new MarketFacade(prng);
+		auction = new MarketSimulation();
 
 		traders = new MockTrader[5];
 		traders[0] = new MockTrader(this, 30, 1000, 1000, auction);

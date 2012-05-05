@@ -20,7 +20,6 @@ import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -119,7 +118,7 @@ public class MockTrader extends SimpleTradingAgent {
 	public void onMarketClosed(MarketEvent event) {
 		super.onMarketClosed(event);
 		logger.debug(this + ": recieved auctionClosed()");
-		((MarketFacade) event.getAuction()).remove(this);
+		event.getAuction().remove(this);
 		receivedAuctionClosed = true;
 		receivedAuctionClosedAfterAuctionOpen = receivedAuctionOpen;
 	}
@@ -130,8 +129,6 @@ public class MockTrader extends SimpleTradingAgent {
 		receivedEndOfDayAfterRequestShout = day <= requestShoutDay;
 	}
 
-	
-	
 	public boolean active() {
 		return true;
 	}

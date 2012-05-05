@@ -1,8 +1,10 @@
 package net.sourceforge.jasa.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Paint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -22,6 +24,8 @@ import net.sourceforge.jabm.event.InteractionsFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jabm.report.WeightedEdge;
+import net.sourceforge.jasa.agent.MarketMakerAgent;
 import net.sourceforge.jasa.report.TradeNetworkReport;
 
 import org.apache.commons.collections15.Transformer;
@@ -40,9 +44,9 @@ public class TradeNetworkView extends JFrame implements Report,
 
 	protected TradeNetworkReport tradeNetwork;
 
-	protected VisualizationViewer<Agent, TradeNetworkReport.TransactionList> viewer;
+	protected VisualizationViewer<Agent, WeightedEdge> viewer;
 
-	protected SpringLayout<Agent, TradeNetworkReport.TransactionList> layout;
+	protected SpringLayout<Agent, WeightedEdge> layout;
 
 	protected int updates = 0;
 
@@ -50,15 +54,13 @@ public class TradeNetworkView extends JFrame implements Report,
 
 	protected boolean dyadsOnly = false;
 
-	protected JLabel meanImageScore;
-
 	// protected JButton exportButton;
 
 	protected int interactions;
 	
 	protected int updateFrequency = 10;
 
-	protected Graph<Agent, TradeNetworkReport.TransactionList> myGraph;
+	protected Graph<Agent, WeightedEdge> myGraph;
 
 	public String fileName = "data/graph.net";
 
@@ -73,14 +75,14 @@ public class TradeNetworkView extends JFrame implements Report,
 	public TradeNetworkView(
 			final TradeNetworkReport relationshipTracker) {
 		this.tradeNetwork = relationshipTracker;
-		myGraph = new DirectedSparseGraph<Agent, TradeNetworkReport.TransactionList>();
-		layout = new SpringLayout<Agent, TradeNetworkReport.TransactionList>(myGraph);
+		myGraph = new DirectedSparseGraph<Agent, WeightedEdge>();
+		layout = new SpringLayout<Agent, WeightedEdge>(myGraph);
 		// PluggableRenderer pr = new PluggableRenderer();
 		// pr.setVertexStringer(this);
 		// pr.setEdgeStringer(this);
 		// pr.setVertexPaintFunction(this);
 		// viewer = new VisualizationViewer(layout, pr);
-		viewer = new VisualizationViewer<Agent, TradeNetworkReport.TransactionList>(layout);
+		viewer = new VisualizationViewer<Agent, WeightedEdge>(layout);
 //		viewer.getRenderContext().setVertexLabelTransformer(
 //				new Transformer<Agent, String>() {
 //					public String transform(Agent agent) {
@@ -90,15 +92,19 @@ public class TradeNetworkView extends JFrame implements Report,
 //						// return graph.degree(agent) + "";
 //					}
 ////				});
-//		viewer.getRenderContext().setVertexFillPaintTransformer(
-//				new Transformer<Agent, Paint>() {
-//					public Paint transform(Agent agent) {
-//						Agent imageScoreAgent = (Agent) agent;
-//							return new Color(0.0f, 1.0f, 0.0f,
-//									(float) (imageScore - 0.5) * 2);
-//						}
-//					}
-//				});
+		viewer.getRenderContext().setVertexFillPaintTransformer(
+				new Transformer<Agent, Paint>() {
+					public Paint transform(Agent agent) {
+						Agent imageScoreAgent = (Agent) agent;
+						Color result = null;
+						if (imageScoreAgent instanceof MarketMakerAgent) {
+							result = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+						} else {
+							result = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+						}
+						return result;
+					}
+				});
 //		viewer.getRenderContext().setEdgeStrokeTransformer(
 //				new Transformer<RelationshipTracker.TransactionList, Stroke>() {
 //					public Stroke transform(RelationshipTracker.TransactionList strength) {
@@ -108,8 +114,8 @@ public class TradeNetworkView extends JFrame implements Report,
 //					}
 //				});
 		viewer.getRenderContext().setEdgeLabelTransformer(
-				new Transformer<TradeNetworkReport.TransactionList, String>() {
-					public String transform(TradeNetworkReport.TransactionList strength) {
+				new Transformer<WeightedEdge, String>() {
+					public String transform(WeightedEdge strength) {
 						return scoreFormatter.format(strength.getValue());
 					}
 				});
@@ -137,8 +143,6 @@ public class TradeNetworkView extends JFrame implements Report,
 		// contentPane.add(thresholdSlider, BorderLayout.SOUTH);
 		// contentPane.add(dyadsCheckBox, BorderLayout.NORTH);
 
-		meanImageScore = new JLabel();
-
 		// exportButton = new JButton("Export");
 		// exportButton.addActionListener(new ActionListener() {
 		// public void actionPerformed(ActionEvent e) {
@@ -146,12 +150,11 @@ public class TradeNetworkView extends JFrame implements Report,
 		// }
 		// });
 		viewer.setPreferredSize(new Dimension(1024,800));
-		contentPane.add(meanImageScore, BorderLayout.NORTH);
 		contentPane.add(viewer, BorderLayout.CENTER);
 		// contentPane.add(exportButton, BorderLayout.SOUTH);
 
 		// updateVertices();
-		setTitle("JABM: Image score relationship graph");
+		setTitle("JASA: Trade network graph");
 		
 		pack();
 		setVisible(true);
@@ -183,11 +186,11 @@ public class TradeNetworkView extends JFrame implements Report,
 				public void run() {
 					viewer.getModel().getRelaxer().pause();
 					clearEdges();
-					Graph<Agent, TradeNetworkReport.TransactionList> graph = tradeNetwork
+					Graph<Agent, WeightedEdge> graph = tradeNetwork
 							.getGraph();
-					Collection<TradeNetworkReport.TransactionList> edges = new LinkedList<TradeNetworkReport.TransactionList>(
+					Collection<WeightedEdge> edges = new LinkedList<WeightedEdge>(
 							graph.getEdges());
-					for (TradeNetworkReport.TransactionList edge : edges) {
+					for (WeightedEdge edge : edges) {
 						Pair<Agent> endPoints = graph.getEndpoints(edge);
 						Agent first = endPoints.getFirst();
 						Agent second = endPoints.getSecond();
@@ -224,9 +227,9 @@ public class TradeNetworkView extends JFrame implements Report,
 	}
 
 	public void clearEdges() {
-		Collection<TradeNetworkReport.TransactionList> currentEdges = new LinkedList<TradeNetworkReport.TransactionList>(
+		Collection<WeightedEdge> currentEdges = new LinkedList<WeightedEdge>(
 				myGraph.getEdges());
-		for (TradeNetworkReport.TransactionList edge : currentEdges) {
+		for (WeightedEdge edge : currentEdges) {
 			myGraph.removeEdge(edge);
 		}
 	}

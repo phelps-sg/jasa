@@ -55,14 +55,6 @@ public class LinearWeightedReturnForecaster extends AbstractReturnForecaster
 		}
 	}
 
-//	@Override
-//	public void setValuationPolicy(ValuationPolicy policy) {
-//		super.setValuationPolicy(policy);
-//		for(int i=0; i<forecasters.length; i++) {
-//			forecasters[i].setValuationPolicy(policy);
-//		}
-//	}
-
 	public AbstractReturnForecaster[] getForecasters() {
 		return forecasters;
 	}

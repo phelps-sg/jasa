@@ -57,22 +57,38 @@ public class FourHeapTest extends TestCase {
 	}
 	
 	/**
-	 * Test for bug #2803011
+	 * Test for bug #2803011 and #3523823
 	 */
 	public void testSameSide() {
 		try {
+			
 			TradingAgent trader1 = new MockTrader(this, 10, 0, null);
+			
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader1, 1, 5.0, false);
 			shoutEngine.add(buy);
 			shoutEngine.add(sell);
-			// No match should result because the orders are from the same trader
-			List<Order> matched = shoutEngine.matchOrders();
-			assertTrue("Matching shouts from the same agent", matched.isEmpty());
+			
+			assertNoMatches();
+			
+			// Test for bug #3523823
+			shoutEngine.add(sell);
+			shoutEngine.add(buy);
+			
+			assertNoMatches();
+			
 		} catch (DuplicateShoutException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		}
+	}
+	
+	public void assertNoMatches() {
+		// No match should result because the orders are from the same
+		// trader
+		List<Order> matched = shoutEngine.matchOrders();
+		assertTrue("Matching shouts from the same agent", 
+				matched.isEmpty());
 	}
 	
 	public void testSimpleMatch() {

@@ -9,6 +9,7 @@ import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.report.ReportVariables;
+import net.sourceforge.jabm.report.WeightedEdge;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.report.TradeNetworkReport.TransactionList;
 
@@ -38,8 +39,8 @@ public class TradeNetworkGraphExporter implements ReportVariables {
 
 	public void exportGraph() {
 		
-		PajekNetWriter<Agent, TransactionList> graphWriter = 
-			new PajekNetWriter<Agent, TransactionList>();
+		PajekNetWriter<Agent, WeightedEdge> graphWriter = 
+			new PajekNetWriter<Agent, WeightedEdge>();
 //		DotWriter<Agent, TransactionList> graphWriter =
 //			new DotWriter<Agent, RelationshipStrength>();
 		
@@ -48,10 +49,10 @@ public class TradeNetworkGraphExporter implements ReportVariables {
 			String fileName = baseFileName + "-" + this.graphNumber + ".net";
 			PrintWriter out = new PrintWriter(fileName);
 			
-			Transformer<TransactionList, Number> nev =
-				new Transformer<TransactionList, Number>() {
+			Transformer<WeightedEdge, Number> nev =
+				new Transformer<WeightedEdge, Number>() {
 
-					public Number transform(TransactionList str) {
+					public Number transform(WeightedEdge str) {
 						return new Double(str.getValue());
 					}
 				
@@ -61,10 +62,11 @@ public class TradeNetworkGraphExporter implements ReportVariables {
 				new Transformer<Agent, String>() {
 
 					public String transform(Agent agent) {
-						AbstractTradingAgent tradingAgent = (AbstractTradingAgent) agent;
-						double score = tradingAgent.getFunds();
+//						AbstractTradingAgent tradingAgent = (AbstractTradingAgent) agent;
+//						double score = tradingAgent.getFunds();
 //						return "" + imageScoreAgent.hashCode() + ":" + score;
-						return new DecimalFormat("#.00").format(score);
+//						return new DecimalFormat("#.00").format(score);
+						return agent.getClass().toString();
 					}
 				
 			};
