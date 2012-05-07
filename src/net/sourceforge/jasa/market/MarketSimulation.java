@@ -585,7 +585,7 @@ public class MarketSimulation extends AbstractSimulation
 	}
 	
 	/**
-	 * Handle a new shout in the market.
+	 * Submit a new order to the market.
 	 * 
 	 * @param shout
 	 *          The new shout in the market.

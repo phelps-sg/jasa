@@ -153,6 +153,9 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		if (quantity < 1) {
 			return false;
 		}
+		if (Double.isInfinite(price) || Double.isNaN(price)) {
+			return false;
+		}
 		return true;
 	}
 

@@ -13,15 +13,17 @@ import net.sourceforge.jasa.market.Order;
 
 public class MarketMakerAgent extends AbstractTradingAgent {
 
-	protected double priceOffset = 2.0;
+	protected double priceOffset = 10.0;
+	
+	protected double minMargin = 1.0;
 	
 	protected Order bid;
 	
 	protected Order ask;
 	
-	protected int bidQuantity = 1;
+	protected int bidQuantity = 50;
 	
-	protected int askQuantity = 1;
+	protected int askQuantity = 50;
 	
 	static Logger logger = Logger.getLogger(MarketMakerAgent.class);
 	
@@ -41,31 +43,48 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 	@Override
 	public void onAgentArrival(Market market, AgentArrivalEvent event) {
 		try {
+			if (bid != null) {
+				market.removeOrder(bid);
+			}
+			if (ask != null) {
+				market.removeOrder(ask);
+			}
 			double quoteAsk = market.getQuote().getAsk();
 			double quoteBid = market.getQuote().getBid();
+			double minPrice = Math.max(priceOffset, market.getLastTransactionPrice());
 			if (Double.isInfinite(quoteAsk)) {
-				quoteAsk = 0;
+				quoteAsk = minPrice;
 			}
 			if (Double.isInfinite(quoteBid)) {
-				quoteBid = 1000;
+				quoteBid = minPrice + priceOffset;
 			}
-			double bidPrice = quoteAsk + priceOffset;
-			double askPrice= quoteBid - priceOffset;
-			if (askPrice < priceOffset) {
-				askPrice = priceOffset;
+			logger.debug("quoteBid = " + quoteBid);
+			logger.debug("quoteAsk = " + quoteAsk);
+			double askPrice = quoteAsk - priceOffset;
+			double bidPrice= quoteBid + priceOffset;
+			if (askPrice < minPrice) {
+				askPrice = minPrice;
+			}
+			if (bidPrice < minPrice) {
+				bidPrice = minPrice;
+			}
+			if (bidPrice + minMargin < askPrice) { 
+				askPrice = bidPrice + minMargin;
 			}
 			if (bid == null) {
-				bid = new Order(this, bidQuantity, bidPrice, true);
-				market.placeOrder(bid);
+				bid = new Order(this, bidQuantity, bidPrice, true);				
 			} else {
 				bid.setPrice(bidPrice);
 			}
 			if (ask == null) {
-				ask = new Order(this, askQuantity, askPrice, false);
-				market.placeOrder(ask);
+				ask = new Order(this, askQuantity, askPrice, false);				
 			} else {
 				ask.setPrice(askPrice);
 			}
+			market.placeOrder(bid);
+			market.placeOrder(ask);
+			logger.debug("askPrice = " + askPrice);
+			logger.debug("bidPrice = " + bidPrice);
 		} catch (AuctionException e) {
 			throw new RuntimeException(e);
 		}
@@ -79,13 +98,13 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 		
 		if (filledOrder == ask) {
 			logger.debug("ask filled: " + ask);
-			auction.removeOrder(filledOrder);
-			ask = null;
+//			auction.removeOrder(filledOrder);
+//			ask = null;
 		}
 		if (filledOrder == bid) {
 			logger.debug("bid filled: " + bid);
-			auction.removeOrder(filledOrder);
-			bid = null;
+//			auction.removeOrder(filledOrder);
+//			bid = null;
 		}
 		
 	}
