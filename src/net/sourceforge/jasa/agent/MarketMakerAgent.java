@@ -75,11 +75,13 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 				bid = new Order(this, bidQuantity, bidPrice, true);				
 			} else {
 				bid.setPrice(bidPrice);
+				bid.setQuantity(bidQuantity);
 			}
 			if (ask == null) {
 				ask = new Order(this, askQuantity, askPrice, false);				
 			} else {
 				ask.setPrice(askPrice);
+				ask.setQuantity(askQuantity);
 			}
 			market.placeOrder(bid);
 			market.placeOrder(ask);
@@ -121,6 +123,22 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 
 	public void setPriceOffset(double priceOffset) {
 		this.priceOffset = priceOffset;
+	}
+
+	public int getBidQuantity() {
+		return bidQuantity;
+	}
+
+	public void setBidQuantity(int bidQuantity) {
+		this.bidQuantity = bidQuantity;
+	}
+
+	public int getAskQuantity() {
+		return askQuantity;
+	}
+
+	public void setAskQuantity(int askQuantity) {
+		this.askQuantity = askQuantity;
 	}
 
 	
