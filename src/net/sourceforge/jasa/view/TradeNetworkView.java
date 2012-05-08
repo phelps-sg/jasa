@@ -83,6 +83,8 @@ public class TradeNetworkView extends JFrame implements Report,
 		// pr.setVertexPaintFunction(this);
 		// viewer = new VisualizationViewer(layout, pr);
 		viewer = new VisualizationViewer<Agent, WeightedEdge>(layout);
+		viewer.setSize(2024, 1600);
+		layout.setSize(new Dimension(2024,1600));
 //		viewer.getRenderContext().setVertexLabelTransformer(
 //				new Transformer<Agent, String>() {
 //					public String transform(Agent agent) {
