@@ -4,31 +4,28 @@ import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.report.SeriesReportVariables;
 
 public abstract class AbstractReturnForecaster 
 		implements ReturnForecaster, Serializable {
-
-//	protected ValuationPolicy valuationPolicy;
-//
-//	@Override
-//	public void setValuationPolicy(ValuationPolicy policy) {
-//		this.valuationPolicy = policy;
-//	}
-//
-//	@Override
-//	public ValuationPolicy getValuationPolicy() {
-//		return valuationPolicy;
-//	}
+	
+	protected SeriesReportVariables returnTimeSeries;
+	
+	protected int horizon = 10;
 
 	public void subscribeToEvents(EventScheduler scheduler) {
-		// Do nothing
+//		scheduler.addListener(InteractionsFinishedEvent.class, this);
 	}
 
 	@Override
 	public void eventOccurred(SimEvent event) {
-		//  Do nothing
-		
+//		if (event instanceof InteractionsFinishedEvent) {
+//			int t = (int)
+//					((InteractionsFinishedEvent) event).getSimulation().getSimulationTime().getTicks();
+//			double historicalReturn = returnTimeSeries.getY(0, t - horizon).doubleValue();
+//			
+//		}
 	}
 
-	
+
 }

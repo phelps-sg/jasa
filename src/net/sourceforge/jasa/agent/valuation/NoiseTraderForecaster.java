@@ -13,7 +13,7 @@ import cern.jet.random.AbstractContinousDistribution;
 import cern.jet.random.Normal;
 import cern.jet.random.engine.RandomEngine;
 
-public class NoiseTraderForecaster extends AbstractReturnForecaster
+public class NoiseTraderForecaster extends ReturnForecasterWithTimeHorizon
 		implements Serializable {
 
 	protected AbstractContinousDistribution noiseDistribution;
@@ -29,7 +29,7 @@ public class NoiseTraderForecaster extends AbstractReturnForecaster
 	}
 	
 	@Override
-	public double getReturnForecast(Market market) {
+	public double getNextPeriodReturnForecast(Market market) {
 		return noiseDistribution.nextDouble();
 	}
 

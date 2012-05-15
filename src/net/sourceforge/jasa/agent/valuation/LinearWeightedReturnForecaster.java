@@ -8,20 +8,21 @@ import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jasa.market.Market;
 import cern.jet.random.AbstractContinousDistribution;
 
-public class LinearWeightedReturnForecaster extends AbstractReturnForecaster
+public class LinearWeightedReturnForecaster extends ReturnForecasterWithTimeHorizon
 		implements Serializable {
 
-	protected AbstractReturnForecaster[] forecasters;
+	protected ReturnForecasterWithTimeHorizon[] forecasters;
 	
 	protected double[] weights;
 	
 	protected AbstractContinousDistribution[] distributions;
 
 	@Override
-	public double getReturnForecast(Market auction) {
+	public double getNextPeriodReturnForecast(Market auction) {
 		double result = 0.0;
-		for(int i=0; i<forecasters.length; i++) {
-			double forecast = forecasters[i].getReturnForecast(auction);
+		for (int i = 0; i < forecasters.length; i++) {
+			double forecast = forecasters[i]
+					.getNextPeriodReturnForecast(auction);
 			result += weights[i] * forecast;
 		}
 		return result;
@@ -55,11 +56,11 @@ public class LinearWeightedReturnForecaster extends AbstractReturnForecaster
 		}
 	}
 
-	public AbstractReturnForecaster[] getForecasters() {
+	public ReturnForecasterWithTimeHorizon[] getForecasters() {
 		return forecasters;
 	}
 
-	public void setForecasters(AbstractReturnForecaster[] forecasters) {
+	public void setForecasters(ReturnForecasterWithTimeHorizon[] forecasters) {
 		this.forecasters = forecasters;
 	}
 

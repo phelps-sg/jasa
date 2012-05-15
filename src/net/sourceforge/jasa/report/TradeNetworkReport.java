@@ -3,8 +3,10 @@ package net.sourceforge.jasa.report;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.agent.Agent;
@@ -20,6 +22,7 @@ import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 import org.apache.log4j.Logger;
 
+import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
@@ -44,17 +47,18 @@ public class TradeNetworkReport extends AbstractModel implements
 	
 	static Logger logger = Logger.getLogger(TradeNetworkReport.class);
 
+//	protected Set<Set<Agent>> communities; 
+//
+//	protected EdgeBetweennessClusterer<Agent, WeightedEdge> clusterer;
+//	
+	public static final int COMMUNITY_N = 5;
+
 	public TradeNetworkReport() {
 		super();
-//		Transformer<RelationshipStrength, Number> transformer = 
-//				new Transformer<RelationshipStrength, Number>() {
-//
-//			public Number transform(RelationshipStrength edge) {
-//				return 1.0 / edge.getValue();
-//			}
-//
-//		};
-		distanceMetric = 
+//		this.communities = new HashSet<Set<Agent>>();
+//		this.clusterer = 
+//				new EdgeBetweennessClusterer<Agent, WeightedEdge>(COMMUNITY_N);
+//		distanceMetric = 
 				new DijkstraShortestPath<Agent, WeightedEdge>(graph);
 	}
 
@@ -70,11 +74,21 @@ public class TradeNetworkReport extends AbstractModel implements
 	
 	public void onInteractionsFinished(InteractionsFinishedEvent ev) {
 		interactions++;
-		this.distanceMetric.reset();
+//		this.distanceMetric.reset();
 //		if ((interactions % 1000) == 0) {
-//			clearEdges();
+//			computeCommunityStructure();
 //		}
 	}
+//	
+//	public Set<Set<Agent>> getCommunities() {
+//		return communities;
+//	}
+//	
+//	public void computeCommunityStructure() {
+//		if (graph.getEdges().size() > COMMUNITY_N) {
+//			communities = clusterer.transform(graph);
+//		}
+//	}
 
 	public void onSimulationStarting(SimulationStartingEvent event) {		
 		resetGraph(event);
@@ -108,6 +122,7 @@ public class TradeNetworkReport extends AbstractModel implements
 	public void clearGraph() {
 		clearEdges();
 		clearVertices();
+//		communities = new HashSet<Set<Agent>>();
 	}
 
 

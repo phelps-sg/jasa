@@ -14,7 +14,7 @@ import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 
 import cern.jet.random.AbstractContinousDistribution;
 
-public class ChartistForecaster extends AbstractReturnForecaster 
+public class ChartistForecaster extends ReturnForecasterWithTimeHorizon 
 		implements Serializable {
 
 	protected TimeSeriesWindow history;
@@ -29,7 +29,7 @@ public class ChartistForecaster extends AbstractReturnForecaster
 	}
 	 
 	@Override
-	public double getReturnForecast(Market market) {
+	public double getNextPeriodReturnForecast(Market market) {
 		return calculateHistoricalMeanReturn();
 	}
 	

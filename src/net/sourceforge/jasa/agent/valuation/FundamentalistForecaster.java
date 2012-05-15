@@ -4,18 +4,16 @@ import java.io.Serializable;
 
 import net.sourceforge.jasa.market.Market;
 
-public class FundamentalistForecaster extends AbstractReturnForecaster
+public class FundamentalistForecaster extends ReturnForecasterWithTimeHorizon
 		implements Serializable {
 
-	protected int timeHorizon;
-	
 	protected double fundamentalPrice;
 
 	public FundamentalistForecaster() {
 	}
 	
 	@Override
-	public double getReturnForecast(Market market) {
+	public double getNextPeriodReturnForecast(Market market) {
 		double currentPrice = market.getCurrentPrice();
 		if (Double.isInfinite(currentPrice) || Double.isNaN(currentPrice)) {
 			return 0.0;
@@ -24,15 +22,7 @@ public class FundamentalistForecaster extends AbstractReturnForecaster
 			currentPrice = 10E-5;
 		}
 		double r = Math.log(fundamentalPrice / currentPrice);
-		return r ;
-	}
-
-	public int getTimeHorizon() {
-		return timeHorizon;
-	}
-
-	public void setTimeHorizon(int timeHorizon) {
-		this.timeHorizon = timeHorizon;
+		return r;
 	}
 
 	public double getFundamentalPrice() {

@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
@@ -74,9 +75,12 @@ public class TradeNetworkView extends JFrame implements Report,
 
 	public TradeNetworkView(
 			final TradeNetworkReport relationshipTracker) {
+		
 		this.tradeNetwork = relationshipTracker;
+		
 		myGraph = new DirectedSparseGraph<Agent, WeightedEdge>();
 		layout = new SpringLayout<Agent, WeightedEdge>(myGraph);
+		
 		// PluggableRenderer pr = new PluggableRenderer();
 		// pr.setVertexStringer(this);
 		// pr.setEdgeStringer(this);
@@ -85,15 +89,23 @@ public class TradeNetworkView extends JFrame implements Report,
 		viewer = new VisualizationViewer<Agent, WeightedEdge>(layout);
 		viewer.setSize(2024, 1600);
 		layout.setSize(new Dimension(2024,1600));
+		
 //		viewer.getRenderContext().setVertexLabelTransformer(
 //				new Transformer<Agent, String>() {
 //					public String transform(Agent agent) {
-//						return fitnessFormatter.format(agent.getPayoff()) + " " + ((Taggable) agent.getStrategy()).getTag();
-//						// return ((ImageScoreAgent) agent).getImageScore() +
-//						// "";
-//						// return graph.degree(agent) + "";
-//					}
-////				});
+//						int i = 0;
+//						for (Set<Agent> community : tradeNetwork
+//								.getCommunities()) {
+//							if (community.contains(agent)) {
+//								return i + "";
+//							}
+//							i++;
+//						}
+//						return "";
+//						return tradeNetwork.getCommunities().size() + "";
+//				}
+//				});
+		
 		viewer.getRenderContext().setVertexFillPaintTransformer(
 				new Transformer<Agent, Paint>() {
 					public Paint transform(Agent agent) {
@@ -107,6 +119,7 @@ public class TradeNetworkView extends JFrame implements Report,
 						return result;
 					}
 				});
+		
 //		viewer.getRenderContext().setEdgeStrokeTransformer(
 //				new Transformer<RelationshipTracker.TransactionList, Stroke>() {
 //					public Stroke transform(RelationshipTracker.TransactionList strength) {
@@ -115,13 +128,16 @@ public class TradeNetworkView extends JFrame implements Report,
 //						return new BasicStroke((float) r);
 //					}
 //				});
+		
 		viewer.getRenderContext().setEdgeLabelTransformer(
 				new Transformer<WeightedEdge, String>() {
 					public String transform(WeightedEdge strength) {
 						return scoreFormatter.format(strength.getValue());
 					}
 				});
+		
 		viewer.setDoubleBuffered(true);
+		
 		// viewer.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 		DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList> gm = new DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList>();
 		gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
