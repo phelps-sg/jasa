@@ -76,9 +76,9 @@ public class TradeNetworkView extends JFrame implements Report,
 	static Logger logger = Logger.getLogger(TradeNetworkView.class);
 
 	public TradeNetworkView(
-			final TradeNetworkReport relationshipTracker) {
+			final TradeNetworkReport tradeNetwork) {
 		
-		this.tradeNetwork = relationshipTracker;
+		this.tradeNetwork = tradeNetwork;
 		
 		myGraph = new DirectedSparseGraph<Agent, WeightedEdge>();
 		layout = new SpringLayout<Agent, WeightedEdge>(myGraph);
@@ -126,8 +126,8 @@ public class TradeNetworkView extends JFrame implements Report,
 				new Transformer<WeightedEdge, Stroke>() {
 					public Stroke transform(WeightedEdge strength) {
 						double r = strength.getValue()
-								/ relationshipTracker.getMaximumInvestment();
-						return new BasicStroke((float) r);
+								/ tradeNetwork.getMaximumInvestment();
+						return new BasicStroke((float) r * 5f);
 					}
 				});
 		
@@ -262,4 +262,5 @@ public class TradeNetworkView extends JFrame implements Report,
 		this.updateFrequency = updateFrequency;
 	}
 
+	
 }

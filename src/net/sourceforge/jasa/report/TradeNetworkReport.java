@@ -35,13 +35,13 @@ public class TradeNetworkReport extends AbstractModel implements
 	
 	protected DijkstraShortestPath<Agent, WeightedEdge> distanceMetric;
 	
-	protected double maximumInvestment = Double.NEGATIVE_INFINITY;
+	protected double maximumWeight = Double.NEGATIVE_INFINITY;
 
 	public int interactions;
 
 	protected double alpha = 0.95;
 	
-	protected double threshold = 0.1;
+	protected double threshold = 0.01;
 	
 	protected Population population;
 	
@@ -110,7 +110,7 @@ public class TradeNetworkReport extends AbstractModel implements
 	}
 	
 	public void resetGraph(SimulationEvent event) {
-		maximumInvestment = Double.NEGATIVE_INFINITY;
+		maximumWeight = Double.NEGATIVE_INFINITY;
 		clearGraph();
 		Population population = 
 			event.getSimulation().getSimulationController().getPopulation();
@@ -125,48 +125,63 @@ public class TradeNetworkReport extends AbstractModel implements
 //		communities = new HashSet<Set<Agent>>();
 	}
 
-
 	public void onTransactionExecuted(TransactionExecutedEvent event) {
-		Agent x = event.getAsk().getAgent();
-		Agent y = event.getBid().getAgent();		
-		record(x, y, event);
+		Agent seller = event.getAsk().getAgent();
+		Agent buyer = event.getBid().getAgent();		
+		record(seller, buyer, event);
 	}
 	
 	public void record(Agent x, Agent y, TransactionExecutedEvent transaction) {
+		
 		assert x != null && y != null;
+		
 		TransactionList edge = (TransactionList) graph.findEdge(x, y);
+		
 		if (edge == null) {
 			edge = new TransactionList();
 			edge.add(transaction);
-			if (edge.getValue() >= threshold) {
+//			if (edge.getValue() >= threshold) {
 				graph.addEdge(edge, x, y);
-			}
+//			}
 		} else {
 			edge.add(transaction);
 //			edge.setValue(discountFactor  * edge.getValue() + (1 - discountFactor) * amount);
 		}
-		if (edge.getValue() > maximumInvestment) {
-			maximumInvestment = edge.getValue();
+		
+		if (edge.getValue() > maximumWeight) {
+			maximumWeight = edge.getValue();
 		}
+		
 		if (edge.getValue() < threshold) {
 			graph.removeEdge(edge);
 		}
-		LinkedList<WeightedEdge> removals = new LinkedList<WeightedEdge>();
+		
+		LinkedList<WeightedEdge> edgeRemovals = new LinkedList<WeightedEdge>();
 		for(WeightedEdge otherEdge : graph.getEdges()) {
 			if (otherEdge != edge) {
 				((TransactionList) otherEdge).add();
 				if (otherEdge.getValue() < threshold) {
-					removals.add(otherEdge);
+					edgeRemovals.add(otherEdge);
 				}
 			}
 		}
-		for(WeightedEdge deleteEdge : removals) {
+		for(WeightedEdge deleteEdge : edgeRemovals) {
 			graph.removeEdge(deleteEdge);
 		}
+//		
+//		LinkedList<Agent> vertexRemovals = new LinkedList<Agent>();
+//		for(Agent i : graph.getVertices()) {
+//			if (graph.inDegree(i) == 0 && graph.outDegree(i) == 0) {
+//				vertexRemovals.add(i);
+//			}
+//		}
+//		for(Agent i : vertexRemovals) {
+//			graph.removeVertex(i);
+//		}
 	}
 	
 	public double getMaximumInvestment() {
-		return maximumInvestment;
+		return maximumWeight;
 	}
 
 	public Map<Object, Number> getVariableBindings() {
@@ -267,7 +282,8 @@ public class TradeNetworkReport extends AbstractModel implements
 		}
 		
 		public double value(TransactionExecutedEvent event) {
-			return event.getPrice() * event.getQuantity();
+			return (1.0/500.0) * event.getPrice() * event.getQuantity();
+//			return event.getQuantity();
 		}
 		
 		public double getValue() {

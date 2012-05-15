@@ -83,8 +83,10 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 				ask.setPrice(askPrice);
 				ask.setQuantity(askQuantity);
 			}
-			logger.debug("askPrice = " + askPrice);
-			logger.debug("bidPrice = " + bidPrice);
+			if (logger.isDebugEnabled()) {
+				logger.debug("askPrice = " + askPrice);
+				logger.debug("bidPrice = " + bidPrice);
+			}
 			assert bid.getPrice() <= ask.getPrice();
 			market.placeOrder(bid);
 			market.placeOrder(ask);
