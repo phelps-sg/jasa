@@ -68,7 +68,7 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 			if (bidPrice < minPrice) {
 				bidPrice = minPrice;
 			}
-			if (bidPrice + minMargin < askPrice) { 
+			if (bidPrice > askPrice - minMargin) { 
 				askPrice = bidPrice + minMargin;
 			}
 			if (bid == null) {
@@ -83,10 +83,11 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 				ask.setPrice(askPrice);
 				ask.setQuantity(askQuantity);
 			}
-			market.placeOrder(bid);
-			market.placeOrder(ask);
 			logger.debug("askPrice = " + askPrice);
 			logger.debug("bidPrice = " + bidPrice);
+			assert bid.getPrice() <= ask.getPrice();
+			market.placeOrder(bid);
+			market.placeOrder(ask);
 		} catch (AuctionException e) {
 			throw new RuntimeException(e);
 		}
