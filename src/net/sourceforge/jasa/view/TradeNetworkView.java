@@ -1,10 +1,12 @@
 package net.sourceforge.jasa.view;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Paint;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.Serializable;
@@ -120,14 +122,14 @@ public class TradeNetworkView extends JFrame implements Report,
 					}
 				});
 		
-//		viewer.getRenderContext().setEdgeStrokeTransformer(
-//				new Transformer<RelationshipTracker.TransactionList, Stroke>() {
-//					public Stroke transform(RelationshipTracker.TransactionList strength) {
-//						double r = strength.getValue()
-//								/ relationshipTracker.getMaximumInvestment();
-//						return new BasicStroke((float) r);
-//					}
-//				});
+		viewer.getRenderContext().setEdgeStrokeTransformer(
+				new Transformer<WeightedEdge, Stroke>() {
+					public Stroke transform(WeightedEdge strength) {
+						double r = strength.getValue()
+								/ relationshipTracker.getMaximumInvestment();
+						return new BasicStroke((float) r);
+					}
+				});
 		
 		viewer.getRenderContext().setEdgeLabelTransformer(
 				new Transformer<WeightedEdge, String>() {
