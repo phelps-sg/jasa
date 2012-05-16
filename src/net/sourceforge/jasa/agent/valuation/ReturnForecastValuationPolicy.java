@@ -12,7 +12,8 @@ import net.sourceforge.jasa.market.Market;
  * @author Steve Phelps
  *
  */
-public class ReturnForecastValuationPolicy extends AbstractValuationPolicy {
+public class ReturnForecastValuationPolicy extends AbstractValuationPolicy 
+		implements Cloneable {
 
 	protected ReturnForecaster forecaster;
 	
@@ -65,5 +66,17 @@ public class ReturnForecastValuationPolicy extends AbstractValuationPolicy {
 //		forecaster.setValuationPolicy(this);
 	}
 
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		ReturnForecastValuationPolicy result = 
+				(ReturnForecastValuationPolicy) super.clone();
+		result.setForecaster((ReturnForecaster) this.forecaster.clone());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "ReturnForecastValuationPolicy [forecaster=" + forecaster + "]";
+	}
 	
 }

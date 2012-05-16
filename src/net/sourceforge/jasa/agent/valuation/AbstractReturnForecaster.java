@@ -8,10 +8,10 @@ import net.sourceforge.jabm.report.SeriesReportVariables;
 
 public abstract class AbstractReturnForecaster 
 		implements ReturnForecaster, Serializable {
-	
-	protected SeriesReportVariables returnTimeSeries;
-	
-	protected int horizon = 10;
+//	
+//	protected SeriesReportVariables returnTimeSeries;
+//	
+//	protected int horizon = 10;
 
 	public void subscribeToEvents(EventScheduler scheduler) {
 //		scheduler.addListener(InteractionsFinishedEvent.class, this);
@@ -26,6 +26,9 @@ public abstract class AbstractReturnForecaster
 //			
 //		}
 	}
-
+	
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 }

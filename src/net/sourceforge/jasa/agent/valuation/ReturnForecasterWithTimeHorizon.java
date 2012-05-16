@@ -10,7 +10,7 @@ import net.sourceforge.jabm.util.TimeSeriesWindow;
 import net.sourceforge.jasa.market.Market;
 
 public abstract class ReturnForecasterWithTimeHorizon 
-	extends	AbstractReturnForecaster implements InitializingBean {
+	extends	AbstractReturnForecaster implements InitializingBean, Cloneable {
 
 	protected double timeHorizon = 1.0;
 	
@@ -40,11 +40,15 @@ public abstract class ReturnForecasterWithTimeHorizon
 		historicalPrices.addValue(currentPrice);
 		int lag = (int) Math.round(timeHorizon);
 		double currentReturn = 
-				Math.log(currentPrice) - Math.log(historicalPrices.getValue(lag));
-		double previousPredictedReturn = historicalPredictions.getValue(lag);
+				(Math.log(currentPrice) - Math.log(historicalPrices.getValue(lag-1))) / timeHorizon;
+		double previousPredictedReturn = historicalPredictions.getValue(lag-1);
 		double error = currentReturn - previousPredictedReturn;
-		if (!Double.isNaN(error)) {
-			totalSquaredError += error * error;
+		if (!Double.isInfinite(currentReturn)) {
+			if (Double.isNaN(totalSquaredError)) {
+				totalSquaredError = error * error;
+			} else {
+				totalSquaredError = 0.01 * totalSquaredError + 0.99 * error * error;
+			}
 		}
 		if (logger.isDebugEnabled()) {
 			logger.debug("previousPredictedReturn = " + previousPredictedReturn);
@@ -53,6 +57,10 @@ public abstract class ReturnForecasterWithTimeHorizon
 			logger.debug("totalSquaredError = " + totalSquaredError);
 			logger.debug("error = " + error);
 		}
+	}
+	
+	public double getForecastError() {
+		return totalSquaredError;
 	}
 	
 	@Override
@@ -74,6 +82,18 @@ public abstract class ReturnForecasterWithTimeHorizon
 		if (event instanceof RoundFinishedEvent) {
 			onRoundFinished((RoundFinishedEvent) event);
 		}
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		ReturnForecasterWithTimeHorizon result = 
+				(ReturnForecasterWithTimeHorizon) super.clone();
+		try {
+			result.afterPropertiesSet();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return result;
 	}
 	
 	@Override

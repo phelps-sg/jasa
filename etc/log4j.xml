@@ -32,10 +32,12 @@
 <!--   		<level value="DEBUG"/>  -->
 <!-- 	</logger> -->
 	
-	
 <!--     <logger name="net.sourceforge.jasa.agent.valuation.ReturnForecasterWithTimeHorizon"> -->
 <!--   		<level value="DEBUG"/>  -->
 <!-- 	</logger> -->
 	
+	  <logger name="net.sourceforge.jasa.agent.valuation.evolution.ValuationPolicyImitationOperator"> 
+  		<level value="DEBUG"/> 
+	</logger>
 	
 </log4j:configuration>

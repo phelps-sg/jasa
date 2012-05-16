@@ -1,15 +1,19 @@
 package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import net.sourceforge.jabm.EventScheduler;
+
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
+
 import net.sourceforge.jasa.market.Market;
+
 import cern.jet.random.AbstractContinousDistribution;
 
-public class LinearWeightedReturnForecaster extends ReturnForecasterWithTimeHorizon
-		implements Serializable {
+public class LinearWeightedReturnForecaster extends
+		ReturnForecasterWithTimeHorizon implements Serializable {
 
 	protected ReturnForecasterWithTimeHorizon[] forecasters;
 	
@@ -79,7 +83,13 @@ public class LinearWeightedReturnForecaster extends ReturnForecasterWithTimeHori
 	public void setDistributions(AbstractContinousDistribution[] distributions) {
 		this.distributions = distributions;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "LinearWeightedReturnForecaster [forecasters="
+				+ Arrays.toString(forecasters) + ", weights="
+				+ Arrays.toString(weights) + ", distributions="
+				+ Arrays.toString(distributions) + "]";
+	}
 	
 }
