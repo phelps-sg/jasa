@@ -28,6 +28,7 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jabm.report.WeightedEdge;
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MarketMakerAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.valuation.LinearWeightedReturnForecaster;
@@ -116,24 +117,29 @@ public class TradeNetworkView extends JFrame implements Report,
 				new Transformer<Agent, Paint>() {
 					public Paint transform(Agent agent) {
 						Color result = null;
+						float alpha = 0.3f;
 						if (agent instanceof MarketMakerAgent) {
-							result = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-						} else if (agent instanceof SimpleTradingAgent) {
-							LinearWeightedReturnForecaster forecaster = 
-									(LinearWeightedReturnForecaster) ((ReturnForecastValuationPolicy) ((SimpleTradingAgent) agent).getValuationPolicy()).getForecaster();
-							double[] weights = forecaster.getWeights();
-							float[] colors = new float[3];
-							float maxWeight = Float.NEGATIVE_INFINITY;
-							for(int i=0; i<weights.length; i++) {
-								if (Math.abs(weights[i]) > maxWeight) {
-									maxWeight = (float) Math.abs(weights[i]);
-								}
-							}
-							for(int i=0; i<colors.length; i++) {
-								colors[i] = (float) Math.abs(weights[i]) / maxWeight;
-							}
-							result = new Color(colors[0], colors[1], colors[2], 0.5f);
+							alpha = 1.0f;
+						} else {
+							alpha = 0.3f;
 						}
+						LinearWeightedReturnForecaster forecaster = 
+								(LinearWeightedReturnForecaster) ((ReturnForecastValuationPolicy) ((AbstractTradingAgent) agent)
+								.getValuationPolicy()).getForecaster();
+						double[] weights = forecaster.getWeights();
+						float[] colors = new float[3];
+						float maxWeight = Float.NEGATIVE_INFINITY;
+						for (int i = 0; i < weights.length; i++) {
+							if (Math.abs(weights[i]) > maxWeight) {
+								maxWeight = (float) Math.abs(weights[i]);
+							}
+						}
+						for (int i = 0; i < colors.length; i++) {
+							colors[i] = (float) Math.abs(weights[i])
+									/ maxWeight;
+						}
+						result = new Color(colors[0], colors[1], colors[2],
+								alpha);
 						return result;
 					}
 				});

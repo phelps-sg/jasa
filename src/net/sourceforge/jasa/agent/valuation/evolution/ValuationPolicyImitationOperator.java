@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.evolution.ImitationOperator;
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
@@ -14,14 +15,14 @@ public class ValuationPolicyImitationOperator implements ImitationOperator {
 
 	@Override
 	public void inheritBehaviour(Agent child, Agent parent) {
-		if (parent instanceof SimpleTradingAgent && child instanceof SimpleTradingAgent) {
+		if (parent instanceof AbstractTradingAgent && child instanceof AbstractTradingAgent) {
 			try {
-				SimpleTradingAgent tradingAgent = (SimpleTradingAgent) parent;
+				AbstractTradingAgent tradingAgent = (AbstractTradingAgent) parent;
 				ReturnForecastValuationPolicy policy = (ReturnForecastValuationPolicy) tradingAgent
 						.getValuationPolicy();
 				ReturnForecastValuationPolicy newPolicy;
 				newPolicy = (ReturnForecastValuationPolicy) policy.clone();
-				((SimpleTradingAgent) child).setValuationPolicy(newPolicy);
+				((AbstractTradingAgent) child).setValuationPolicy(newPolicy);
 				newPolicy.setAgent((TradingAgent) child);
 				if (logger.isDebugEnabled())
 					logger.debug("Inheriting " + newPolicy + " for " + child);
