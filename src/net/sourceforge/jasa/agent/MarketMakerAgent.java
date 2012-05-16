@@ -39,6 +39,21 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 	public boolean active() {
 		return true;
 	}
+	
+	@Override
+	public boolean isBuyer() {
+		return true;
+	}
+
+	@Override
+	public boolean isSeller() {
+		return true;
+	}
+
+	@Override
+	public int determineQuantity(Market auction) {
+		return bidQuantity + askQuantity;
+	}
 
 	@Override
 	public void onAgentArrival(Market market, AgentArrivalEvent event) {
@@ -51,7 +66,8 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 			}
 			double quoteAsk = market.getQuote().getAsk();
 			double quoteBid = market.getQuote().getBid();
-			double minPrice = Math.max(priceOffset, market.getLastTransactionPrice());
+			double minPrice = Math.max(priceOffset, 
+					market.getLastTransactionPrice());
 			if (Double.isInfinite(quoteAsk)) {
 				quoteAsk = minPrice;
 			}

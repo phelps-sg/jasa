@@ -29,9 +29,13 @@ import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jabm.report.WeightedEdge;
 import net.sourceforge.jasa.agent.MarketMakerAgent;
+import net.sourceforge.jasa.agent.SimpleTradingAgent;
+import net.sourceforge.jasa.agent.valuation.LinearWeightedReturnForecaster;
+import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
 import net.sourceforge.jasa.report.TradeNetworkReport;
 
 import org.apache.commons.collections15.Transformer;
+import org.apache.commons.math.optimization.linear.LinearConstraint;
 import org.apache.log4j.Logger;
 
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
@@ -111,12 +115,24 @@ public class TradeNetworkView extends JFrame implements Report,
 		viewer.getRenderContext().setVertexFillPaintTransformer(
 				new Transformer<Agent, Paint>() {
 					public Paint transform(Agent agent) {
-						Agent imageScoreAgent = (Agent) agent;
 						Color result = null;
-						if (imageScoreAgent instanceof MarketMakerAgent) {
+						if (agent instanceof MarketMakerAgent) {
 							result = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-						} else {
-							result = new Color(0.0f, 1.0f, 0.0f, 1.0f);
+						} else if (agent instanceof SimpleTradingAgent) {
+							LinearWeightedReturnForecaster forecaster = 
+									(LinearWeightedReturnForecaster) ((ReturnForecastValuationPolicy) ((SimpleTradingAgent) agent).getValuationPolicy()).getForecaster();
+							double[] weights = forecaster.getWeights();
+							float[] colors = new float[3];
+							float maxWeight = Float.NEGATIVE_INFINITY;
+							for(int i=0; i<weights.length; i++) {
+								if (Math.abs(weights[i]) > maxWeight) {
+									maxWeight = (float) Math.abs(weights[i]);
+								}
+							}
+							for(int i=0; i<colors.length; i++) {
+								colors[i] = (float) Math.abs(weights[i]) / maxWeight;
+							}
+							result = new Color(colors[0], colors[1], colors[2], 0.5f);
 						}
 						return result;
 					}
@@ -134,7 +150,7 @@ public class TradeNetworkView extends JFrame implements Report,
 		viewer.getRenderContext().setEdgeLabelTransformer(
 				new Transformer<WeightedEdge, String>() {
 					public String transform(WeightedEdge strength) {
-						return scoreFormatter.format(strength.getValue());
+						return scoreFormatter.format(strength.getValue() * 500.0f);
 					}
 				});
 		
