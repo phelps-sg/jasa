@@ -21,6 +21,8 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 	
 	protected AbstractContinousDistribution windowSizeDistribution;
 	
+	protected int sampleInterval = 1;
+	
 	public ChartistForecaster(AbstractContinousDistribution windowSizeDistribution) {
 		this.windowSizeDistribution = windowSizeDistribution;
 	}
@@ -36,14 +38,12 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 	public double calculateHistoricalMeanReturn() {
 		SummaryStatistics stats = new SummaryStatistics();
 		int n = history.getWindowSize() - 1;
-		for(int i=0; i<n; i++) {
+		for(int i=0; i<n; i+= sampleInterval) {
 			double p0 = history.getValue(i);
-			double p1 = history.getValue(i+1);
-			double r;
-			if (Math.abs(p1 - p0) < 10E-8 || p0 < 10E-8) {
-				r = 0;
-			} else {
-				r = (p1 - p0) / p0;
+			double p1 = history.getValue(i + sampleInterval);
+			double r = 0.0;
+			if (p1 > 0 && p0 > 0) {
+				r = Math.log(p0) - Math.log(p1);
 			}
 			stats.addValue(r);
 		}
@@ -94,6 +94,14 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 	public void setWindowSizeDistribution(
 			AbstractContinousDistribution windowSizeDistribution) {
 		this.windowSizeDistribution = windowSizeDistribution;
+	}
+
+	public int getSampleInterval() {
+		return sampleInterval;
+	}
+
+	public void setSampleInterval(int sampleInterval) {
+		this.sampleInterval = sampleInterval;
 	}
 	
 }
