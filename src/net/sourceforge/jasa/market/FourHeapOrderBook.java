@@ -17,6 +17,7 @@ package net.sourceforge.jasa.market;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -458,6 +459,27 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	public boolean isEmpty() {
 		return bIn.isEmpty() && sIn.isEmpty() && 
 					bOut.isEmpty() && bIn.isEmpty();
+	}
+
+	@Override
+	public int getDepth() {
+		return Math.max(bOut.size(), sOut.size());
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Order> getUnmatchedBids() {
+		ArrayList<Order> bids = new ArrayList<Order>(bOut);
+		Collections.sort(bids, lessThan);
+		return bids;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Order> getUnmatchedAsks() {
+		ArrayList<Order> asks = new ArrayList<Order>(sOut);
+		Collections.sort(asks, greaterThan);
+		return asks;
 	}
 
 }

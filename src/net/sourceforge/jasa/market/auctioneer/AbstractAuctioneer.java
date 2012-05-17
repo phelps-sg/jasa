@@ -17,6 +17,7 @@ package net.sourceforge.jasa.market.auctioneer;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
 
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
@@ -251,6 +252,14 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 
 	public void setOrderBook(OrderBook orderBook) {
 		this.orderBook = orderBook;
+	}
+	
+	public List<Order> getUnmatchedAsks() {
+		return orderBook.getUnmatchedAsks();
+	}
+	
+	public List<Order> getUnmatchedBids() {
+		return orderBook.getUnmatchedBids();
 	}
 
 	public MarketQuote getClearingQuote() {

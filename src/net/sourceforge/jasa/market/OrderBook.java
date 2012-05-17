@@ -85,4 +85,10 @@ public interface OrderBook extends net.sourceforge.jabm.util.Resetable {
 
 	public boolean isEmpty();
 
+	public int getDepth();
+
+	public List<Order> getUnmatchedBids();
+
+	public List<Order> getUnmatchedAsks();
+
 }

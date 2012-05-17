@@ -16,6 +16,7 @@
 package net.sourceforge.jasa.market.auctioneer;
 
 import java.util.Iterator;
+import java.util.List;
 
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Account;
@@ -97,5 +98,9 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	 * mechanisms.
 	 */
 	public Account getAccount();
+
+	public List<Order> getUnmatchedBids();
+
+	public List<Order> getUnmatchedAsks();
 
 }
