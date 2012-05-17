@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Order;
@@ -88,15 +89,6 @@ public class OrderBookView implements Report, TableModel, InitializingBean {
 		for(TableModelListener l : listeners) {
 			l.tableChanged(new TableModelEvent(this));
 		}
-	}
-	
-	public Auctioneer getAuctioneer() {
-		return auctioneer;
-	}
-
-	@Required
-	public void setAuctioneer(Auctioneer auctioneer) {
-		this.auctioneer = auctioneer;
 	}
 	
 	public void update() {
@@ -188,7 +180,9 @@ public class OrderBookView implements Report, TableModel, InitializingBean {
 
 	@Override
 	public void eventOccurred(SimEvent event) {
-		if (event instanceof OrderPlacedEvent || event instanceof TransactionExecutedEvent) {
+		if (event instanceof MarketEvent) {
+			this.auctioneer =
+					((MarketEvent) event).getAuction().getAuctioneer();
 			update();
 			notifyTableChanged();
 		}
