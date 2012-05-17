@@ -28,6 +28,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import net.sourceforge.jabm.event.InteractionsFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
@@ -120,28 +121,44 @@ public abstract class SupplyAndDemandFrame extends JFrame
 
 	@Override
 	public void eventOccurred(final SimEvent event) {
-		if (event instanceof OrderPlacedEvent) {
-			updateData();
-			try {
-				SwingUtilities.invokeAndWait(new Runnable() {
-					public void run() {
-						dataset.datasetChanged(event);
-					}
-				});
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			} catch (InvocationTargetException e) {
-				logger.error(e);
-				throw new RuntimeException(e);
-			}
-		} else if (event instanceof SimulationStartingEvent) {
-			this.auction = (Market) 
-					((SimulationStartingEvent) event).getSimulation();
-			open();
+		if (event instanceof SimulationStartingEvent) {
+			onSimulationStarting(event);
 		} else if (event instanceof SimulationFinishedEvent) {
-			close();
+			onSimulationFinished();
+		} else if (event instanceof InteractionsFinishedEvent) {
+			onInteractionsFinished((InteractionsFinishedEvent) event);
 		}
 	}
+
+	public void onInteractionsFinished(final InteractionsFinishedEvent event) {
+		try {
+			updateData();
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					dataset.datasetChanged(event);
+				}
+			});
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} catch (InvocationTargetException e) {
+			logger.error(e);
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void onSimulationFinished() {
+		close();
+	}
+
+	public void onSimulationStarting(final SimEvent event) {
+		this.auction = (Market) 
+				((SimulationStartingEvent) event).getSimulation();
+		open();
+	}
+
+//	public void onOrderPlaced() {
+//		updateData();
+//	}
 
 	@Override
 	public Map<Object, Number> getVariableBindings() {
