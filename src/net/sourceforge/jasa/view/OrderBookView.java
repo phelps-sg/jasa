@@ -16,6 +16,7 @@ package net.sourceforge.jasa.view;
 
 import java.awt.Dimension;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,13 +37,6 @@ import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 
-/**
- * JFrameReportVariables automatically record other ReportVariables to a 
- * swing JTable on a window whenever they are computed.
- * 
- * @author Steve Phelps
- *
- */
 public class OrderBookView implements Report, TableModel, InitializingBean {
 
 	protected JFrame frame;
@@ -55,32 +49,45 @@ public class OrderBookView implements Report, TableModel, InitializingBean {
 	
 	Map<Object, Number> variableBindings;
 	
+	protected int currentDepth;
+	
+	protected List<Order> bids = new ArrayList<Order>(0);
+	
+	protected List<Order> asks = new ArrayList<Order>(0);
+	
 	protected int maxDepth;
 	
 	DecimalFormat priceFormat
 		= new DecimalFormat("#00000.00");
 	
-
 	DecimalFormat qtyFormat
 		= new DecimalFormat("#00000");
 	
+	public static final int NUM_COLUMNS = 4;
 	
 	public OrderBookView() {
 	}
 
-	public DecimalFormat getFormat() {
+	public DecimalFormat getPriceFormat() {
 		return priceFormat;
 	}
 
-	public void setFormat(DecimalFormat format) {
+	public void setPriceFormat(DecimalFormat format) {
 		this.priceFormat = format;
+	}
+	
+	public DecimalFormat getQtyFormat() {
+		return qtyFormat;
+	}
+
+	public void setQtyFormat(DecimalFormat qtyFormat) {
+		this.qtyFormat = qtyFormat;
 	}
 
 	public void notifyTableChanged() {
 		for(TableModelListener l : listeners) {
 			l.tableChanged(new TableModelEvent(this));
 		}
-		
 	}
 	
 	public Auctioneer getAuctioneer() {
@@ -90,6 +97,11 @@ public class OrderBookView implements Report, TableModel, InitializingBean {
 	@Required
 	public void setAuctioneer(Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
+	}
+	
+	public void update() {
+		this.bids = auctioneer.getUnmatchedBids();
+		this.asks = auctioneer.getUnmatchedAsks();
 	}
 
 	public int getMaxDepth() {
@@ -102,14 +114,14 @@ public class OrderBookView implements Report, TableModel, InitializingBean {
 
 	@Override
 	public int getRowCount() {
-		int currentDepth = Math.max(auctioneer.getUnmatchedAsks().size(),
-					auctioneer.getUnmatchedBids().size());
+		this.currentDepth = Math.max(asks.size(),
+					bids.size());
 		return Math.max(maxDepth, currentDepth);
 	}
 
 	@Override
 	public int getColumnCount() {
-		return 4;
+		return NUM_COLUMNS;
 	}
 
 	@Override
@@ -136,11 +148,9 @@ public class OrderBookView implements Report, TableModel, InitializingBean {
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
 		return false;
 	}
-
+	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		List<Order> bids = auctioneer.getUnmatchedBids();
-		List<Order> asks = auctioneer.getUnmatchedAsks();
 		switch (columnIndex) {
 		case 0:
 			return rowIndex < bids.size() 
@@ -179,6 +189,7 @@ public class OrderBookView implements Report, TableModel, InitializingBean {
 	@Override
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof OrderPlacedEvent || event instanceof TransactionExecutedEvent) {
+			update();
 			notifyTableChanged();
 		}
 	}
