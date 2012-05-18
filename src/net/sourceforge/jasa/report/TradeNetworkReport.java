@@ -140,12 +140,11 @@ public class TradeNetworkReport extends AbstractModel implements
 		if (edge == null) {
 			edge = new TransactionList();
 			edge.add(transaction);
-//			if (edge.getValue() >= threshold) {
+			if (edge.getValue() >= threshold) {
 				graph.addEdge(edge, x, y);
-//			}
+			}
 		} else {
 			edge.add(transaction);
-//			edge.setValue(discountFactor  * edge.getValue() + (1 - discountFactor) * amount);
 		}
 		
 		if (edge.getValue() > maximumWeight) {
@@ -265,7 +264,7 @@ public class TradeNetworkReport extends AbstractModel implements
 	
 	public class TransactionList implements WeightedEdge {
 		
-		double value = 0.0;
+		double value = Double.NaN;
 		
 //		static double recency = 0.05;
 		
@@ -274,7 +273,11 @@ public class TradeNetworkReport extends AbstractModel implements
 		}
 		
 		public void add(TransactionExecutedEvent e) {
-			value = alpha * value(e) + (1 - alpha) * value;
+			if (Double.isNaN(value)) {
+				value = value(e);
+			} else {
+				value = alpha * value(e) + (1 - alpha) * value;
+			}
 		}
 		
 		public void add() {
