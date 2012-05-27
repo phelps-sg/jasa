@@ -50,6 +50,8 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
     Resetable {
 
 	protected List<AuctionReport> reports = null;
+	
+	protected String name = "";
 
 //	protected Market auction;
 
@@ -132,5 +134,15 @@ public class CombiAuctionReport implements AuctionReport, Parameterizable,
 //			logger.setAuction(auction);
 //		}
 //	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
 
 }

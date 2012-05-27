@@ -75,8 +75,14 @@ public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
 		return new HashMap<Object,Number>();
 	}
 	
+	@Override
+	public String getName() {
+		return null;
+	}
 
 	public void produceUserOutput() {
 	}
+	
+	
 
 }

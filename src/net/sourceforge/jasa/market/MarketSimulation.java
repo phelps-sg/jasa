@@ -225,6 +225,11 @@ public class MarketSimulation extends AbstractSimulation
 	}
 
 	public void step() throws AuctionClosedException {
+		try {
+			super.step();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 		runSingleRound();
 	}
 

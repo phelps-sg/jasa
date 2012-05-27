@@ -120,4 +120,9 @@ public class BidPriceReport extends AbstractAuctionReport implements
 		return new ReportVariable("pricestats." + varName + "." + moment, varName
 		    + " distribution " + moment);
 	}
+
+	@Override
+	public String getName() {
+		return "Bid Price";
+	}
 }

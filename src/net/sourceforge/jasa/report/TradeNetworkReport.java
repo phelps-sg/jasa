@@ -295,4 +295,10 @@ public class TradeNetworkReport extends AbstractModel implements
 		
 	}
 
+	@Override
+	public String getName() {
+		return "Trade network";
+	}
+
+	
 }

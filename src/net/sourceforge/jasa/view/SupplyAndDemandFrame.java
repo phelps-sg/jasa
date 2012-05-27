@@ -26,6 +26,7 @@ import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 
 import net.sourceforge.jabm.event.InteractionsFinishedEvent;
@@ -52,7 +53,7 @@ import org.jfree.chart.plot.PlotOrientation;
 
 //TODO refactor this to use JFreeChart library
 
-public abstract class SupplyAndDemandFrame extends JFrame 
+public abstract class SupplyAndDemandFrame extends JInternalFrame 
 		implements Report {
 	
 	protected Market auction;
@@ -99,7 +100,7 @@ public abstract class SupplyAndDemandFrame extends JFrame
 		ChartPanel chartPanel = new ChartPanel(graph, false);
         chartPanel.setPreferredSize(new Dimension(500, 270));
         getContentPane().add(chartPanel);
-		pack();
+		pack();	
 	}
 
 	public void open() {

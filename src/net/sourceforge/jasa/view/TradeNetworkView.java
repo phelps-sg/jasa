@@ -15,11 +15,10 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 
 import net.sourceforge.jabm.agent.Agent;
@@ -30,13 +29,11 @@ import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jabm.report.WeightedEdge;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MarketMakerAgent;
-import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.valuation.LinearWeightedReturnForecaster;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
 import net.sourceforge.jasa.report.TradeNetworkReport;
 
 import org.apache.commons.collections15.Transformer;
-import org.apache.commons.math.optimization.linear.LinearConstraint;
 import org.apache.log4j.Logger;
 
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
@@ -47,7 +44,7 @@ import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 
-public class TradeNetworkView extends JFrame implements Report,
+public class TradeNetworkView extends JInternalFrame implements Report,
 		Serializable {
 
 	protected TradeNetworkReport tradeNetwork;
@@ -198,7 +195,7 @@ public class TradeNetworkView extends JFrame implements Report,
 		// updateVertices();
 		setTitle("JASA: Trade network graph");
 		
-		pack();
+		pack();	
 		setVisible(true);
 	}
 
@@ -284,5 +281,8 @@ public class TradeNetworkView extends JFrame implements Report,
 		this.updateFrequency = updateFrequency;
 	}
 
-	
+	@Override
+	public String getName() {
+		return "Trade network";
+	}
 }

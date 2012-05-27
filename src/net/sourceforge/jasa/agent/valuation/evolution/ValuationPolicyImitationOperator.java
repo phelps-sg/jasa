@@ -6,7 +6,6 @@ import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.evolution.ImitationOperator;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MarketMakerAgent;
-import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
 

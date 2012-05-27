@@ -49,8 +49,6 @@ public class NetworkedImitationBreeder extends FitnessProportionateBreeder {
 		return super.getFitness(i) * weight;
 	}
 
-
-
 	public TradeNetworkReport getTradeNetwork() {
 		return tradeNetwork;
 	}

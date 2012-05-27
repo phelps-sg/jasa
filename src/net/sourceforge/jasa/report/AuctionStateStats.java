@@ -75,4 +75,9 @@ public class AuctionStateStats extends SupplyAndDemandStats {
 		writeStats(demandStats, bids, new DescendingOrderComparator());
 	}
 
+	@Override
+	public String getName() {
+		return "Supply and demand: auction state";
+	}
+
 }

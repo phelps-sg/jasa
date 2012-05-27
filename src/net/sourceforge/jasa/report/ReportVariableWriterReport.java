@@ -433,4 +433,11 @@ public class ReportVariableWriterReport implements AuctionReport,
 			}
 		}
 	}
+
+	@Override
+	public String getName() {
+		return null;
+	}
+	
+	
 }
