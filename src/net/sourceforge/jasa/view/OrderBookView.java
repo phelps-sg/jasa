@@ -29,13 +29,10 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Required;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 

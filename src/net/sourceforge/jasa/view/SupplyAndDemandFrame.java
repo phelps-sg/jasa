@@ -79,6 +79,14 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 	static Logger logger = Logger.getLogger(SupplyAndDemandFrame.class);
 
 	public SupplyAndDemandFrame() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				initialiseGUI();
+			}
+		});
+	}
+	
+	public void initialiseGUI() {
 		Container contentPane = getContentPane();
 		BorderLayout layout = new BorderLayout();
 		contentPane.setLayout(layout);
@@ -164,6 +172,11 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 	@Override
 	public Map<Object, Number> getVariableBindings() {
 		return new HashMap<Object, Number>();
+	}
+	
+	@Override
+	public String getName() {
+		return "JASA: " + getGraphName();
 	}
 
 	public abstract String getGraphName();

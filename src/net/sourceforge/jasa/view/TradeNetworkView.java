@@ -81,10 +81,17 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 			final TradeNetworkReport tradeNetwork) {
 		
 		this.tradeNetwork = tradeNetwork;
-		
 		myGraph = new DirectedSparseGraph<Agent, WeightedEdge>();
 		layout = new SpringLayout<Agent, WeightedEdge>(myGraph);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				intialiseGUI();
+			}
+		});
+	}
 		
+		
+	public void intialiseGUI() {
 		// PluggableRenderer pr = new PluggableRenderer();
 		// pr.setVertexStringer(this);
 		// pr.setEdgeStringer(this);
