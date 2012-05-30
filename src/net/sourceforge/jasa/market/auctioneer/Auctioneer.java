@@ -26,8 +26,10 @@ import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.QuoteProvider;
 import net.sourceforge.jasa.market.ShoutsNotVisibleException;
 
-
 /**
+ * Classes implementing this interface define the rules for matching
+ * orders in the marketplace and producing the resulting transaction set.
+ *  
  * @author Steve Phelps
  * @version $Revision$
  */
@@ -82,7 +84,7 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	 */
 	public boolean shoutsVisible();
 
-	public boolean orderFilled(Order shout) throws ShoutsNotVisibleException;
+	public boolean orderFilled(Order order) throws ShoutsNotVisibleException;
 
 	public boolean transactionsOccurred() throws ShoutsNotVisibleException;
 
