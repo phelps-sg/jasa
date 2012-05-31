@@ -90,7 +90,9 @@ public class MarketSimulation extends AbstractSimulation
 
 	protected boolean endOfRound = false;
 
-	protected double lastTransactionPrice;
+	protected double lastTransactionPrice = Double.NaN;
+	
+	protected double initialPrice = 0.0;
 
 	public static final String ERROR_SHOUTSVISIBLE 
 	= "Auctioneer does not permit shout inspection";
@@ -663,6 +665,9 @@ public class MarketSimulation extends AbstractSimulation
 		if (Double.isNaN(result)) {
 			result = getLastTransactionPrice();
 		}
+		if (Double.isNaN(result)) {
+			result = initialPrice;
+		}
 		return result;
 	}
 
@@ -670,6 +675,14 @@ public class MarketSimulation extends AbstractSimulation
 	public void remove(AbstractTradingAgent abstractTradingAgent) {
 		//TODO
 //		throw new RuntimeException("method not implemented");
+	}
+
+	public double getInitialPrice() {
+		return initialPrice;
+	}
+
+	public void setInitialPrice(double initialPrice) {
+		this.initialPrice = initialPrice;
 	}
 
 	
