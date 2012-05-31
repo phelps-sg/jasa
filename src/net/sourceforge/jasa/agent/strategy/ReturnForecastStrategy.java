@@ -63,9 +63,9 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 		this.isBuy = decideDirection(currentPrice, forecastedPrice);
 		shout.setIsBid(isBuy);
 		if (isBuy) {
-			shout.setPrice(forecastedPrice * (1 - markup));
-		} else {
 			shout.setPrice(forecastedPrice * (1 + markup));
+		} else {
+			shout.setPrice(forecastedPrice * (1 - markup));
 		}
 		return result;
 	}
