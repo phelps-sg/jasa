@@ -661,12 +661,19 @@ public class MarketSimulation extends AbstractSimulation
 	
 	@Override
 	public double getCurrentPrice() {
-		double result = getQuote().getMidPoint();
-		if (Double.isNaN(result)) {
-			result = getLastTransactionPrice();
-		}
-		if (Double.isNaN(result)) {
-			result = initialPrice;
+		if (age == 0) {
+			return getInitialPrice();
+		} 
+		double result = getLastTransactionPrice();
+		try {
+			if (!transactionsOccurred()) {
+				result = getQuote().getMidPoint();
+			}
+			if (Double.isNaN(result)) {
+				return getInitialPrice();
+			}
+		} catch (ShoutsNotVisibleException e) {
+			throw new RuntimeException(e);
 		}
 		return result;
 	}
