@@ -84,12 +84,12 @@ public class MarketQuote implements Serializable {
 		if (!isValid()) {
 			return Double.NaN;
 		}
-//		if (!isValid(ask)) {
-//			return bid;
-//		}
-//		if (!isValid(bid)) {
-//			return ask;
-//		}
+		if (!isValid(ask)) {
+			return bid;
+		}
+		if (!isValid(bid)) {
+			return ask;
+		}
 		return (ask + bid) / 2.0;
 	}
 
