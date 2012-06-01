@@ -21,6 +21,8 @@ public abstract class ReturnForecasterWithTimeHorizon
 	protected double currentPrediction;
 	
 	protected double totalSquaredError = 0.0;
+	
+	protected double alpha = 0.01;
 
 	static Logger logger = Logger
 			.getLogger(ReturnForecasterWithTimeHorizon.class);
@@ -39,15 +41,17 @@ public abstract class ReturnForecasterWithTimeHorizon
 		double currentPrice = market.getCurrentPrice();
 		historicalPrices.addValue(currentPrice);
 		int lag = (int) Math.round(timeHorizon);
-		double currentReturn = 
-				(Math.log(currentPrice) - Math.log(historicalPrices.getValue(lag-1))) / timeHorizon;
-		double previousPredictedReturn = historicalPredictions.getValue(lag-1);
+		double currentReturn = (Math.log(currentPrice) - Math
+				.log(historicalPrices.getValue(lag - 1))) * timeHorizon;
+		double previousPredictedReturn = historicalPredictions
+				.getValue(lag - 1);
 		double error = currentReturn - previousPredictedReturn;
 		if (!Double.isInfinite(currentReturn)) {
 			if (Double.isNaN(totalSquaredError)) {
 				totalSquaredError = error * error;
 			} else {
-				totalSquaredError = 0.01 * totalSquaredError + 0.99 * error * error;
+				totalSquaredError = alpha * totalSquaredError + (1.0 - alpha)
+						* error * error;
 			}
 		}
 		if (logger.isDebugEnabled()) {
@@ -63,6 +67,14 @@ public abstract class ReturnForecasterWithTimeHorizon
 		return totalSquaredError;
 	}
 	
+	public double getAlpha() {
+		return alpha;
+	}
+
+	public void setAlpha(double alpha) {
+		this.alpha = alpha;
+	}
+
 	@Override
 	public double getReturnForecast(Market market) {
 		this.currentPrediction = 

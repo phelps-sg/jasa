@@ -52,8 +52,8 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 	}
 	
 	public void updatePriceHistory(RoundFinishedEvent event) {
-		MarketSimulation simulation = (MarketSimulation) event.getSimulation();
-		double currentPrice = simulation.getCurrentPrice();
+		Market market = (Market) event.getSimulation();
+		double currentPrice = market.getCurrentPrice();
 		history.addValue(currentPrice);
 	}
 
@@ -76,10 +76,9 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 	}
 	
 	public void initialiseWindowSize() {
-		int windowSize = windowSizeDistribution.nextInt();
-		history = new TimeSeriesWindow(windowSize);
+		setWindowSize(windowSizeDistribution.nextInt());
 	}
-
+	
 	@Override
 	public void subscribeToEvents(EventScheduler scheduler) {
 		scheduler.addListener(RoundFinishedEvent.class, this);
@@ -102,6 +101,10 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 
 	public void setSampleInterval(int sampleInterval) {
 		this.sampleInterval = sampleInterval;
+	}
+	
+	public void setWindowSize(int windowSize) {
+		history = new TimeSeriesWindow(windowSize);
 	}
 	
 }
