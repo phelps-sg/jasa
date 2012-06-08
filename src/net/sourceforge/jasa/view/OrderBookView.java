@@ -60,6 +60,7 @@ public class OrderBookView extends JTable implements Report, TableModel,
 	public static final int NUM_COLUMNS = 4;
 
 	public OrderBookView() {
+		super();
 	}
 
 	public DecimalFormat getPriceFormat() {
