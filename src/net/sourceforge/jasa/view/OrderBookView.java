@@ -169,8 +169,14 @@ public class OrderBookView extends JTable implements Report, TableModel,
 	@Override
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof MarketEvent) {
-			this.auctioneer = ((MarketEvent) event).getAuction()
-					.getAuctioneer();
+			onMarketEvent(event);
+		}
+	}
+
+	public void onMarketEvent(SimEvent event) {
+		this.auctioneer = ((MarketEvent) event).getAuction()
+				.getAuctioneer();
+		if (this.isShowing()) {
 			update();
 			notifyTableChanged();
 		}

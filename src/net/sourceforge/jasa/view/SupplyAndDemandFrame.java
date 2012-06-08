@@ -140,18 +140,20 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 	}
 
 	public void onInteractionsFinished(final InteractionsFinishedEvent event) {
-		try {
-			updateData();
-			SwingUtilities.invokeAndWait(new Runnable() {
-				public void run() {
-					dataset.datasetChanged(event);
-				}
-			});
-		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
-		} catch (InvocationTargetException e) {
-			logger.error(e);
-			throw new RuntimeException(e);
+		if (isShowing()) {
+			try {
+				updateData();
+				SwingUtilities.invokeAndWait(new Runnable() {
+					public void run() {
+						dataset.datasetChanged(event);
+					}
+				});
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			} catch (InvocationTargetException e) {
+				logger.error(e);
+				throw new RuntimeException(e);
+			}
 		}
 	}
 

@@ -261,7 +261,6 @@ public class TradeNetworkReport extends AbstractModel implements
 		this.population = population;
 	}
 	
-	
 	public class TransactionList implements WeightedEdge {
 		
 		double value = Double.NaN;
