@@ -9,6 +9,9 @@ import java.awt.Paint;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
@@ -35,14 +38,21 @@ import net.sourceforge.jasa.report.TradeNetworkReport;
 
 import org.apache.commons.collections15.Transformer;
 import org.apache.log4j.Logger;
+import org.pf.joi.Inspector;
 
+import edu.uci.ics.jung.algorithms.layout.GraphElementAccessor;
+import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.AbstractGraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
+import edu.uci.ics.jung.visualization.picking.PickedState;
 
 public class TradeNetworkView extends JInternalFrame implements Report,
 		Serializable {
@@ -168,7 +178,9 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 		
 		// viewer.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 		DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList> gm = new DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList>();
-		gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+		gm.setMode(ModalGraphMouse.Mode.PICKING);
+		GraphMousePlugin plugin = new AgentPickedMousePlugin();
+		gm.add(plugin);
 		viewer.setGraphMouse(gm);
 
 		//
@@ -291,5 +303,22 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 	@Override
 	public String getName() {
 		return "Trade network";
+	}
+	
+	public static class AgentPickedMousePlugin<V,E> extends PickingGraphMousePlugin<V,E> {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		    Point2D ip = e.getPoint();
+		    VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
+		    GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
+		    Layout<V,E> layout = vv.getGraphLayout();
+            vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
+            if (vertex != null) {
+            	Inspector.inspect(vertex);
+            }
+		}
+
+		
 	}
 }
