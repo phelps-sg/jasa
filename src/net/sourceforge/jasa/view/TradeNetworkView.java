@@ -178,8 +178,8 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 		
 		// viewer.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 		DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList> gm = new DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList>();
-		gm.setMode(ModalGraphMouse.Mode.PICKING);
-		GraphMousePlugin plugin = new AgentPickedMousePlugin();
+		gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+		GraphMousePlugin plugin = new AgentPickingGraphMousePlugin();
 		gm.add(plugin);
 		viewer.setGraphMouse(gm);
 
@@ -305,20 +305,21 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 		return "Trade network";
 	}
 	
-	public static class AgentPickedMousePlugin<V,E> extends PickingGraphMousePlugin<V,E> {
+	public static class AgentPickingGraphMousePlugin<V, E> extends
+			PickingGraphMousePlugin<V, E> {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-		    Point2D ip = e.getPoint();
-		    VisualizationViewer<V,E> vv = (VisualizationViewer)e.getSource();
-		    GraphElementAccessor<V,E> pickSupport = vv.getPickSupport();
-		    Layout<V,E> layout = vv.getGraphLayout();
-            vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
-            if (vertex != null) {
-            	Inspector.inspect(vertex);
-            }
+			Point2D ip = e.getPoint();
+			VisualizationViewer<V, E> vv = (VisualizationViewer) e.getSource();
+			GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
+			Layout<V, E> layout = vv.getGraphLayout();
+			vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
+			if (vertex != null) {
+				Inspector.inspect(vertex);
+			}
 		}
 
-		
 	}
+	
 }
