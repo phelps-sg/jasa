@@ -15,19 +15,23 @@
 package net.sourceforge.jasa.view;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
+import org.pf.joi.Inspector;
 import org.springframework.beans.factory.InitializingBean;
 
 import net.sourceforge.jabm.event.SimEvent;
@@ -192,6 +196,26 @@ public class OrderBookView extends JTable implements Report, TableModel,
 	public void afterPropertiesSet() throws Exception {
 		this.setModel(this);
 		this.setPreferredSize(new Dimension(400, 200));
+		JPopupMenu popup = new JPopupMenu();
+        popup.add(new AbstractAction("Inspect order") {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	int row = getSelectedRow();
+            	int column = getSelectedColumn();
+            	Order order = null;
+            	if (column > 1) {
+            		order = asks.get(row);
+            	} else {
+            		order = bids.get(row);
+            	}
+            	if (order != null) {
+            		Inspector.inspect(order);
+            	}                
+            }
+        });
+        
+        setComponentPopupMenu(popup);
 	}
 
 	@Override
