@@ -78,5 +78,9 @@ public class ReturnForecastValuationPolicy extends AbstractValuationPolicy
 	public String toString() {
 		return "ReturnForecastValuationPolicy [forecaster=" + forecaster + "]";
 	}
+
+	public void dispose() {
+		forecaster.dispose();
+	}
 	
 }

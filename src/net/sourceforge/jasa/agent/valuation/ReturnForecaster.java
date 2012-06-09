@@ -10,4 +10,6 @@ public interface ReturnForecaster extends EventListener, EventSubscriber, Clonea
 	
 	public Object clone() throws CloneNotSupportedException;
 	
+	public void dispose();
+	
 }

@@ -8,9 +8,10 @@ import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.TimeSeriesWindow;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.market.MarketSimulation;
 
-public abstract class ReturnForecasterWithTimeHorizon 
-	extends	AbstractReturnForecaster implements InitializingBean, Cloneable {
+public abstract class ReturnForecasterWithTimeHorizon extends
+		AbstractReturnForecaster implements InitializingBean, Cloneable {
 
 	protected double timeHorizon = 1.0;
 	
@@ -23,6 +24,8 @@ public abstract class ReturnForecasterWithTimeHorizon
 	protected double totalSquaredError = 0.0;
 	
 	protected double alpha = 0.01;
+	
+	protected MarketSimulation market;
 
 	static Logger logger = Logger
 			.getLogger(ReturnForecasterWithTimeHorizon.class);
@@ -36,7 +39,7 @@ public abstract class ReturnForecasterWithTimeHorizon
 	}
 	
 	public void onRoundFinished(RoundFinishedEvent event) {
-		Market market = (Market) event.getSimulation();
+		this.market = (MarketSimulation) event.getSimulation();
 		historicalPredictions.addValue(this.currentPrediction);
 		double currentPrice = market.getCurrentPrice();
 		historicalPrices.addValue(currentPrice);
@@ -55,11 +58,13 @@ public abstract class ReturnForecasterWithTimeHorizon
 			}
 		}
 		if (logger.isDebugEnabled()) {
-			logger.debug("previousPredictedReturn = " + previousPredictedReturn);
+//			logger.debug("this = " + this);
+			logger.debug("t = " + event.getSimulation().getSimulationTime());
+//			logger.debug("previousPredictedReturn = " + previousPredictedReturn);
 			logger.debug("currentPrice = " + currentPrice);
-			logger.debug("currentReturn = " + currentReturn);
-			logger.debug("totalSquaredError = " + totalSquaredError);
-			logger.debug("error = " + error);
+//			logger.debug("currentReturn = " + currentReturn);
+//			logger.debug("totalSquaredError = " + totalSquaredError);
+//			logger.debug("error = " + error);
 		}
 	}
 	
@@ -102,10 +107,16 @@ public abstract class ReturnForecasterWithTimeHorizon
 				(ReturnForecasterWithTimeHorizon) super.clone();
 		try {
 			result.afterPropertiesSet();
+			market.addListener(result);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 		return result;
+	}
+	
+	@Override
+	public void dispose() {
+		market.getSimulationController().removeListener(this);
 	}
 	
 	@Override
