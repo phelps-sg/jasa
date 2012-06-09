@@ -77,7 +77,7 @@ public class MarketQuote implements Serializable {
 	}
 	
 	public boolean isValid() {
-		return isValid(ask) && isValid(bid);
+		return isValid(ask) || isValid(bid);
 	}
 	
 	public double getMidPoint() {	
