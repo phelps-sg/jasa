@@ -63,17 +63,28 @@ import org.apache.log4j.Logger;
 public class MarketSimulation extends AbstractSimulation 
 		implements Serializable, Market {
 
+	/**
+	 * The auctioneer for this market.
+	 */
 	protected Auctioneer auctioneer = null;
 	
+	/**
+	 * Is the market currently closed.
+	 */
 	protected boolean closed = false;
 	
 	/**
-	 * The current round.
+	 * The current "round".  A round, a.k.a. a "tick", represents a discrete
+	 * unit of time.  The round attribute thus corresponds to the simulation
+	 * clock.
 	 */
 	protected int round;
 
 	protected int age = 0;
 
+	/**
+	 * Records the surplus of the mechanism if it is not budget-balanced.
+	 */
 	protected Account account = new Account();
 
 	/**
@@ -88,8 +99,14 @@ public class MarketSimulation extends AbstractSimulation
 
 	protected boolean endOfRound = false;
 
+	/**
+	 * The price of the most recent transaction.
+	 */
 	protected double lastTransactionPrice = Double.NaN;
 	
+	/**
+	 * The initial price in the market.
+	 */
 	protected double initialPrice = 0.0;
 
 	public static final String ERROR_SHOUTSVISIBLE 
@@ -647,6 +664,4 @@ public class MarketSimulation extends AbstractSimulation
 		this.initialPrice = initialPrice;
 	}
 
-	
-	
 }
