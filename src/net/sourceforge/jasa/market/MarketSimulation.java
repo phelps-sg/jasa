@@ -23,8 +23,6 @@ import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SimulationTime;
 
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jabm.agent.Agent;
 
 import net.sourceforge.jabm.event.RoundFinishedEvent;
@@ -32,6 +30,8 @@ import net.sourceforge.jabm.event.RoundStartingEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 
+import net.sourceforge.jasa.agent.AbstractTradingAgent;
+import net.sourceforge.jasa.agent.TradingAgent;
 
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
