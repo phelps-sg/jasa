@@ -22,17 +22,13 @@ import net.sourceforge.jabm.AbstractSimulation;
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SimulationTime;
-
 import net.sourceforge.jabm.agent.Agent;
-
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.RoundStartingEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
-
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingAgent;
-
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
@@ -40,9 +36,7 @@ import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.event.OrderReceivedEvent;
 import net.sourceforge.jasa.event.RoundClosingEvent;
 import net.sourceforge.jasa.event.TransactionExecutedEvent;
-
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
-
 import net.sourceforge.jasa.market.rules.AuctionClosingCondition;
 import net.sourceforge.jasa.market.rules.CombiTimingCondition;
 import net.sourceforge.jasa.market.rules.DayEndingCondition;

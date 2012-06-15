@@ -23,22 +23,20 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
-import org.pf.joi.Inspector;
-import org.springframework.beans.factory.InitializingBean;
-
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
+
+import org.pf.joi.Inspector;
+import org.springframework.beans.factory.InitializingBean;
 
 public class OrderBookView extends JTable implements Report, TableModel,
 		InitializingBean {

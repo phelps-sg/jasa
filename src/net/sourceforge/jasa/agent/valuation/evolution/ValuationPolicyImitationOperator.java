@@ -1,15 +1,12 @@
 package net.sourceforge.jasa.agent.valuation.evolution;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Required;
-
-import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.evolution.ImitationOperator;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MarketMakerAgent;
-import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
+
+import org.apache.log4j.Logger;
 
 public class ValuationPolicyImitationOperator implements ImitationOperator {
 	

@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.agent.valuation;
 
 import net.sourceforge.jabm.event.EventSubscriber;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.TradingAgent;
 import net.sourceforge.jasa.event.MarketEventListener;
@@ -29,7 +28,7 @@ import net.sourceforge.jasa.market.Market;
  * @version $Revision$
  */
 
-public interface ValuationPolicy extends Resetable, Parameterizable, EventSubscriber,
+public interface ValuationPolicy extends Resetable, EventSubscriber,
     MarketEventListener {
 
 	/**

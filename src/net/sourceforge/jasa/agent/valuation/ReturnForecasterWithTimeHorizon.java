@@ -1,14 +1,14 @@
 package net.sourceforge.jasa.agent.valuation;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
-
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.TimeSeriesWindow;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketSimulation;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
 
 public abstract class ReturnForecasterWithTimeHorizon extends
 		AbstractReturnForecaster implements InitializingBean, Cloneable {

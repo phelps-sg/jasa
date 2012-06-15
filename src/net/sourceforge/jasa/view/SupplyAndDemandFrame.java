@@ -25,7 +25,6 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 
@@ -36,7 +35,6 @@ import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.report.DataSeriesWriter;
 import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jabm.view.XYDatasetAdaptor;
-import net.sourceforge.jasa.event.OrderPlacedEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 

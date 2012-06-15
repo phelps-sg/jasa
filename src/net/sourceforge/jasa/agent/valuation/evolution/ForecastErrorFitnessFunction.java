@@ -3,7 +3,6 @@ package net.sourceforge.jasa.agent.valuation.evolution;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.evolution.FitnessFunction;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.agent.SimpleTradingAgent;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
 import net.sourceforge.jasa.agent.valuation.ReturnForecasterWithTimeHorizon;
 

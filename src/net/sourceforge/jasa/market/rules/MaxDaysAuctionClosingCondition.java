@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.market.rules;
 
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.market.Market;
 
 /**
@@ -27,9 +26,7 @@ import net.sourceforge.jasa.market.Market;
  */
 
 public class MaxDaysAuctionClosingCondition extends TimingCondition implements
-    Parameterizable, AuctionClosingCondition {
-
-	public static final String P_MAXIMUM_DAYS = "maximumdays";
+    AuctionClosingCondition {
 
 	/**
 	 * The maximum number of trading days before the market closes

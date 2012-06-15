@@ -22,7 +22,6 @@ import java.util.List;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.event.EndOfDayEvent;
@@ -49,7 +48,7 @@ import org.apache.log4j.Logger;
  */
 
 public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
-    Resetable, Prototypeable, Cloneable, Parameterizable {
+    Resetable, Prototypeable, Cloneable {
 
 	protected Market market;
 

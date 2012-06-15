@@ -37,10 +37,6 @@ import net.sourceforge.jasa.market.Order;
 public abstract class AbstractTradingStrategy extends AbstractStrategy
 		implements Serializable, TradingStrategy, Resetable, Cloneable {
 
-//	protected AbstractTradingAgent agent;
-//
-//	protected Order currentShout;
-
 	protected Market auction;
 
 	public AbstractTradingStrategy() {
@@ -90,27 +86,12 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 	 * @return false if no shout is to be placed at this time
 	 */
 	public boolean modifyShout(Order shout) {
-		//TODO Introduce a new class FixedDirectionStrategy
-//		shout.setIsBid(agent.isBuyer(auction));
 		shout.setAgent(getAgent());
 		return true;
 	}
 
 	public void initialise() {
-//		currentShout = new Order();
 	}
-
-//	@Override
-//	public void eventOccurred(SimEvent event) {
-//		if (event instanceof RoundFinishedEvent) {
-//			onRoundClosed((RoundFinishedEvent) event);
-//		}
-//	}
-	
-	@Override
-//	public void subscribeToEvents(EventScheduler scheduler) {
-//		scheduler.addListener(RoundClosedEvent.class, this);
-//	}
 
 	public AbstractTradingAgent getAgent() {
 		return (AbstractTradingAgent) agent;
@@ -121,22 +102,9 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		return super.clone();
 	}
 
-//	@Override
-//	public void execute(List<Agent> otherAgents) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
 	@Override
 	public void setAgent(Agent agent) {
 		this.agent = (AbstractTradingAgent) agent;
 	}
 
-//	@Override
-//	public Strategy transfer(Agent newAgent) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
-//	public abstract void onRoundClosed(Market auction);
 }

@@ -24,7 +24,6 @@ import java.util.Observer;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.CSVWriter;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
@@ -44,7 +43,7 @@ import org.jfree.data.time.TimePeriodValue;
  */
 
 public class ReportVariableWriterReport implements AuctionReport,
-    Parameterizable, Observer {
+     Observer {
 
 	protected static boolean initialized = false;
 

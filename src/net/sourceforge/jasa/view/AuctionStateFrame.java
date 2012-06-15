@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.view;
 
-import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.report.AuctionStateStats;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 

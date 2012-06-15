@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.market.rules;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.IllegalOrderException;
 import net.sourceforge.jasa.market.Order;
@@ -30,7 +29,7 @@ import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
  * @version $Revision$
  */
 
-public abstract class OrderAcceptancePolicy implements Parameterizable,
+public abstract class OrderAcceptancePolicy implements 
     MarketEventListener {
 
 	protected AbstractAuctioneer auctioneer;

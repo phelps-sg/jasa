@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.market.rules;
 
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.OrderPlacedEvent;
 
@@ -30,11 +29,8 @@ import cern.jet.random.AbstractDistribution;
  * 
  * @author Jinzhong Niu
  * @version $Revision$
- * 
  */
-
-public class ProbabilisticClearingCondition extends RoundClearingCondition
-    implements Parameterizable {
+public class ProbabilisticClearingCondition extends RoundClearingCondition {
 
 	AbstractDistribution distribution;
 
@@ -49,7 +45,6 @@ public class ProbabilisticClearingCondition extends RoundClearingCondition
 		super();
 		this.distribution = distribution;
 	}
-
 
 	public void eventOccurred(MarketEvent event) {
 		super.eventOccurred(event);

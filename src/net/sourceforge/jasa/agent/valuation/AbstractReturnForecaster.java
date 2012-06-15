@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.report.SeriesReportVariables;
 
 public abstract class AbstractReturnForecaster 
 		implements ReturnForecaster, Serializable {

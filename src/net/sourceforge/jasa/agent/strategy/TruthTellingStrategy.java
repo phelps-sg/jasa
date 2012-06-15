@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.agent.strategy;
 
-
 import java.io.Serializable;
 
 import net.sourceforge.jasa.agent.AbstractTradingAgent;

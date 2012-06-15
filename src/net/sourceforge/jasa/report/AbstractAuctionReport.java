@@ -21,7 +21,6 @@ import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.market.Market;
 
@@ -37,8 +36,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class AbstractAuctionReport implements AuctionReport, Resetable,
-    Parameterizable, Serializable {
+public abstract class AbstractAuctionReport implements AuctionReport,
+		Resetable, Serializable {
 
 	static Logger logger = Logger.getLogger(AbstractAuctionReport.class);
 

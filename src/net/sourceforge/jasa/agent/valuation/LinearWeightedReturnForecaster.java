@@ -4,12 +4,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import net.sourceforge.jabm.EventScheduler;
-
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
-
 import net.sourceforge.jasa.market.Market;
-
 import cern.jet.random.AbstractContinousDistribution;
 
 public class LinearWeightedReturnForecaster extends

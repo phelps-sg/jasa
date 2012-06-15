@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Resetable;
 
 
@@ -31,23 +30,11 @@ import net.sourceforge.jabm.util.Resetable;
  * A historicalDataReport that combines several different reports.
  * </p>
  * 
- * <p>
- * <b>Parameters</b><br>
- * </p>
- * <table>
- * <tr>
- * <td valign=top><i>base</i><tt>.n</tt><br>
- * <font size=-1>int &gt;= 1</font></td>
- * <td valign=top>(the number of different loggers to configure)</td>
- * <tr> </table>
- * 
- * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public class CombiAuctionReport implements AuctionReport, Parameterizable,
-    Resetable {
+public class CombiAuctionReport implements AuctionReport, Resetable {
 
 	protected List<AuctionReport> reports = null;
 	

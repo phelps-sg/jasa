@@ -1,13 +1,14 @@
 package net.sourceforge.jasa.agent.valuation.evolution;
 
-import org.springframework.beans.factory.annotation.Required;
-
-import edu.uci.ics.jung.graph.Graph;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.agent.AgentList;
 import net.sourceforge.jabm.evolution.FitnessProportionateBreeder;
 import net.sourceforge.jabm.report.WeightedEdge;
 import net.sourceforge.jasa.report.TradeNetworkReport;
+
+import org.springframework.beans.factory.annotation.Required;
+
+import edu.uci.ics.jung.graph.Graph;
 
 public class NetworkedImitationBreeder extends FitnessProportionateBreeder {
 

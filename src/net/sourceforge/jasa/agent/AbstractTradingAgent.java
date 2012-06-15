@@ -21,28 +21,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.sourceforge.jabm.EventScheduler;
-
 import net.sourceforge.jabm.agent.AbstractAgent;
 import net.sourceforge.jabm.agent.utility.RiskNeutralUtilityFunction;
 import net.sourceforge.jabm.agent.utility.UtilityFunction;
-
 import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jabm.event.SimEvent;
-
 import net.sourceforge.jabm.util.IdAllocator;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jabm.util.Resetable;
-
 import net.sourceforge.jasa.agent.strategy.FixedQuantityStrategy;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
 import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
-
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketClosedEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.event.MarketOpenEvent;
-
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.AuctionException;
@@ -64,7 +57,7 @@ import org.apache.log4j.Logger;
  */
 
 public abstract class AbstractTradingAgent extends AbstractAgent implements TradingAgent,
-    Serializable, Parameterizable, Prototypeable, Cloneable {
+    Serializable, Prototypeable, Cloneable {
 
 	/**
 	 * The number of items of stock this agent posseses.

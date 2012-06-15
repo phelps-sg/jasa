@@ -16,55 +16,18 @@
 package net.sourceforge.jasa.report;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.event.MarketEventListener;
 
 import org.apache.log4j.Logger;
-
 
 /**
  * A class defining the common properties and methods of data series and
  * markers.
  * 
- * <p>
- * <b>Parameters</b><br>
- * 
- * <table>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.name</tt><br>
- * <font size=-1> string </font></td>
- * <td valign=top></td>
- * </tr>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.axis</tt><br>
- * <font size=-1> int </font></td>
- * <td valign=top>(the index of the axis this chart item is associated with)</td>
- * </tr>
- * 
- * <tr>
- * <td valign=top><i>base</i><tt>.renderer</tt><br>
- * <font size=-1> int </font></td>
- * <td valign=top>(the index of the renderer this chart item uses)</td>
- * </tr>
- * 
- * </table>
- * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
-public class FreeChartItem implements MarketEventListener, Parameterizable {
-
-	static Logger logger = Logger.getLogger(FreeChartItem.class);
-
-	public static final String P_DEF_BASE = "freechartitem";
-
-	public static final String P_NAME = "name";
-
-	public static final String P_AXIS = "axis";
-
-	public static final String P_RENDERER = "renderer";
+public class FreeChartItem implements MarketEventListener {
 
 	protected String name;
 
@@ -73,6 +36,8 @@ public class FreeChartItem implements MarketEventListener, Parameterizable {
 	protected int axisIndex;
 
 	protected int rendererIndex;
+
+	static Logger logger = Logger.getLogger(FreeChartItem.class);
 
 	public FreeChartItem() {
 		name = "";

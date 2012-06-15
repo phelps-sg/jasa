@@ -17,27 +17,14 @@ package net.sourceforge.jasa.market.rules;
 
 import java.io.Serializable;
 
-import net.sourceforge.jabm.util.Parameterizable;
-
 /**
  * Abstract superclass for auctioneer pricing policies parameterised by k.
- * 
- * <p>
- * <b>Parameters </b> <br>
- * </p>
- * <table>
- * <tr>
- * <td valign=top><i>base </i> <tt>.k</tt><br>
- * <font size=-1>0 <=int <=1 </font></td>
- * <td valign=top>(determining a value in a given price range)</td>
- * <tr></table>
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class KPricingPolicy implements Serializable, PricingPolicy,
-    Parameterizable {
+public abstract class KPricingPolicy implements Serializable, PricingPolicy {
 
 	protected double k = 0.5;
 

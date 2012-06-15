@@ -2,7 +2,6 @@ package net.sourceforge.jasa.report;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.Map;
 
 import net.sourceforge.jabm.agent.Agent;
@@ -10,8 +9,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.report.ReportVariables;
 import net.sourceforge.jabm.report.WeightedEdge;
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
-import net.sourceforge.jasa.report.TradeNetworkReport.TransactionList;
 
 import org.apache.commons.collections15.Transformer;
 

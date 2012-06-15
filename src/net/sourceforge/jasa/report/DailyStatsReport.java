@@ -17,7 +17,6 @@ package net.sourceforge.jasa.report;
 
 import java.util.Vector;
 
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketEvent;
@@ -31,8 +30,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class DailyStatsReport extends PriceStatisticsReport implements
-    Parameterizable {
+public class DailyStatsReport extends PriceStatisticsReport {
 
 	protected Vector<SummaryStats[]> dailyStats;
 

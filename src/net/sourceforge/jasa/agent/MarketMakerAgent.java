@@ -1,15 +1,13 @@
 package net.sourceforge.jasa.agent;
 
-import org.apache.log4j.Logger;
-
 import net.sourceforge.jabm.EventScheduler;
-
 import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jasa.event.MarketEvent;
-
 import net.sourceforge.jasa.market.AuctionException;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+
+import org.apache.log4j.Logger;
 
 public class MarketMakerAgent extends AbstractTradingAgent {
 

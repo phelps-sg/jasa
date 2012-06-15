@@ -19,7 +19,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.market.Market;
 
 /**
@@ -41,7 +40,7 @@ import net.sourceforge.jasa.market.Market;
  */
 
 public class CombiTimingCondition extends TimingCondition implements
-    Parameterizable, AuctionClosingCondition, DayEndingCondition {
+     AuctionClosingCondition, DayEndingCondition {
 
 	protected List<TimingCondition> conditions = null;
 

@@ -17,7 +17,6 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
-import net.sourceforge.jabm.util.Parameterizable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
@@ -26,22 +25,12 @@ import net.sourceforge.jasa.market.Order;
  * 
  * An abstract implementation of FixedQuantityStrategy.
  * 
- * </p>
- * <p>
- * <b>Parameters</b><br>
- * <table>
- * <tr>
- * <td valign=top><i>base</i><tt>.quantity</tt><br>
- * <font size=-1>int &gt;= 0</font></td>
- * <td valign=top>(the quantity to bid for in each market round)</td>
- * </tr>
- * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
 public abstract class FixedQuantityStrategyImpl extends AbstractTradingStrategy
-    implements FixedQuantityStrategy, Parameterizable, Serializable {
+		implements FixedQuantityStrategy, Serializable {
 
 	int quantity = 1;
 

@@ -8,8 +8,6 @@ import java.util.Map;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.XYReportVariables;
-import net.sourceforge.jasa.event.OrderPlacedEvent;
-import net.sourceforge.jasa.market.MarketSimulation;
 
 public abstract class MarketPriceReportVariables implements XYReportVariables {
 

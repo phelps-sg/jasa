@@ -3,10 +3,8 @@ package net.sourceforge.jasa.report;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.agent.Agent;
@@ -22,7 +20,6 @@ import net.sourceforge.jasa.event.TransactionExecutedEvent;
 
 import org.apache.log4j.Logger;
 
-import edu.uci.ics.jung.algorithms.cluster.EdgeBetweennessClusterer;
 import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
