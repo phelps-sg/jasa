@@ -295,6 +295,5 @@ public class TradeNetworkReport extends AbstractModel implements
 	public String getName() {
 		return "Trade network";
 	}
-
 	
 }
