@@ -19,6 +19,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 
@@ -27,6 +28,7 @@ import net.sourceforge.jabm.event.InteractionsFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jabm.report.ReportWithGUI;
 import net.sourceforge.jabm.report.WeightedEdge;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MarketMakerAgent;
@@ -50,7 +52,7 @@ import edu.uci.ics.jung.visualization.control.GraphMousePlugin;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.PickingGraphMousePlugin;
 
-public class TradeNetworkView extends JInternalFrame implements Report,
+public class TradeNetworkView  implements ReportWithGUI,
 		Serializable {
 
 	protected TradeNetworkReport tradeNetwork;
@@ -183,16 +185,16 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 		//
 		// viewer.getRenderContext().setEdgeLabelTransformer(
 		// new ToStringLabeller());
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new BorderLayout());
+//		Container contentPane = getContentPane();
+//		contentPane.setLayout(new BorderLayout());
 
-		dyadsCheckBox = new JCheckBox("Dyads only", dyadsOnly);
-		dyadsCheckBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dyadsOnly = dyadsCheckBox.getModel().isSelected();
-				// updateGraph();
-			}
-		});
+//		dyadsCheckBox = new JCheckBox("Dyads only", dyadsOnly);
+//		dyadsCheckBox.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				dyadsOnly = dyadsCheckBox.getModel().isSelected();
+//				// updateGraph();
+//			}
+//		});
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// contentPane.add(thresholdSlider, BorderLayout.SOUTH);
 		// contentPane.add(dyadsCheckBox, BorderLayout.NORTH);
@@ -204,14 +206,14 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 		// }
 		// });
 		viewer.setPreferredSize(new Dimension(1024,800));
-		contentPane.add(viewer, BorderLayout.CENTER);
+//		contentPane.add(viewer, BorderLayout.CENTER);
 		// contentPane.add(exportButton, BorderLayout.SOUTH);
 
 		// updateVertices();
-		setTitle("JASA: Trade network graph");
+//		setTitle("JASA: Trade network graph");
 		
-		pack();	
-		setVisible(true);
+//		pack();	
+//		setVisible(true);
 	}
 
 	public void eventOccurred(SimEvent event) {		
@@ -316,6 +318,11 @@ public class TradeNetworkView extends JInternalFrame implements Report,
 			}
 		}
 
+	}
+
+	@Override
+	public JComponent getComponent() {
+		return viewer;
 	}
 	
 }

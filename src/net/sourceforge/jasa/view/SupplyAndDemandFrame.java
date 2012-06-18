@@ -25,7 +25,9 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import net.sourceforge.jabm.event.InteractionsFinishedEvent;
@@ -34,6 +36,7 @@ import net.sourceforge.jabm.event.SimulationFinishedEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.report.DataSeriesWriter;
 import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jabm.report.ReportWithGUI;
 import net.sourceforge.jabm.view.XYDatasetAdaptor;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
@@ -51,8 +54,8 @@ import org.jfree.chart.plot.PlotOrientation;
 
 //TODO refactor this to use JFreeChart library
 
-public abstract class SupplyAndDemandFrame extends JInternalFrame 
-		implements Report {
+public abstract class SupplyAndDemandFrame
+		implements ReportWithGUI {
 	
 	protected Market auction;
 
@@ -70,6 +73,8 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 
 	protected float maxX;
 
+	private JPanel panel;
+
 	public static final int SERIES_SUPPLY = 0;
 
 	public static final int SERIES_DEMAND = 1;
@@ -85,9 +90,9 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 	}
 	
 	public void initialiseGUI() {
-		Container contentPane = getContentPane();
+		panel = new JPanel();
 		BorderLayout layout = new BorderLayout();
-		contentPane.setLayout(layout);
+		panel.setLayout(layout);
 
 		ArrayList<DataSeriesWriter> dataSeries = new ArrayList<DataSeriesWriter>(2);
 		dataSeries.add(0, supplyCurve);
@@ -105,17 +110,16 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 		
 		ChartPanel chartPanel = new ChartPanel(graph, false);
         chartPanel.setPreferredSize(new Dimension(500, 270));
-        getContentPane().add(chartPanel);
-		pack();	
+        panel.add(chartPanel);
 	}
 
 	public void open() {
-		pack();
-		setVisible(true);
+//		pack();
+		panel.setVisible(true);
 	}
 
 	public void close() {
-		setVisible(false);
+		panel.setVisible(false);
 	}
 
 	public void updateData() {
@@ -138,7 +142,7 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 	}
 
 	public void onInteractionsFinished(final InteractionsFinishedEvent event) {
-		if (isShowing()) {
+		if (panel.isShowing()) {
 			try {
 				updateData();
 				SwingUtilities.invokeAndWait(new Runnable() {
@@ -176,7 +180,12 @@ public abstract class SupplyAndDemandFrame extends JInternalFrame
 	
 	@Override
 	public String getName() {
-		return "JASA: " + getGraphName();
+		return getGraphName();
+	}
+	
+	@Override
+	public JComponent getComponent() {
+		return panel;
 	}
 
 	public abstract String getGraphName();

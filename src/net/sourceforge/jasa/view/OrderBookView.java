@@ -14,6 +14,7 @@
  */
 package net.sourceforge.jasa.view;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.text.DecimalFormat;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.AbstractAction;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
@@ -30,7 +33,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jabm.report.ReportWithGUI;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
@@ -38,14 +41,14 @@ import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import org.pf.joi.Inspector;
 import org.springframework.beans.factory.InitializingBean;
 
-public class OrderBookView extends JTable implements Report, TableModel,
+public class OrderBookView extends JTable implements ReportWithGUI, TableModel,
 		InitializingBean {
 
 	protected LinkedList<TableModelListener> listeners = new LinkedList<TableModelListener>();
 
 	protected Auctioneer auctioneer;
 
-	Map<Object, Number> variableBindings;
+	protected Map<Object, Number> variableBindings;
 
 	protected int currentDepth;
 
@@ -218,6 +221,14 @@ public class OrderBookView extends JTable implements Report, TableModel,
 
 	@Override
 	public String getName() {
-		return "JASA: Order Book";
+		return "Order Book";
+	}
+
+	@Override
+	public JComponent getComponent() {
+		JPanel result = new JPanel();
+		result.setLayout(new BorderLayout());
+		result.add(this, BorderLayout.CENTER);
+		return result;
 	}
 }

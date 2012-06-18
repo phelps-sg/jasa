@@ -18,12 +18,10 @@ package net.sourceforge.jasa.view;
 import net.sourceforge.jasa.report.ReportedSupplyAndDemandStats;
 import net.sourceforge.jasa.report.SupplyAndDemandStats;
 
-
 /**
  * @author Steve Phelps
  * @version $Revision$
  */
-
 public class ReportedSupplyAndDemandFrame extends SupplyAndDemandFrame {
 
 	public static final String TITLE = "Reported Supply and Demand";
@@ -37,7 +35,8 @@ public class ReportedSupplyAndDemandFrame extends SupplyAndDemandFrame {
 	}
 
 	public SupplyAndDemandStats getSupplyAndDemandStats() {
-		return new ReportedSupplyAndDemandStats(auction, supplyCurve, demandCurve);
+		return new ReportedSupplyAndDemandStats(auction, supplyCurve,
+				demandCurve);
 	}
 
 }
