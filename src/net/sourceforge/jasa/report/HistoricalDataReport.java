@@ -54,7 +54,7 @@ import org.apache.log4j.Logger;
  * @author Steve Phelps
  * @version $Revision$
  */
-
+@Deprecated
 public class HistoricalDataReport extends AbstractAuctionReport implements
     Serializable, Resetable {
 
