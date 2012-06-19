@@ -106,13 +106,6 @@
 
 	<bean id="orderFlowReportVariables" class="net.sourceforge.jasa.report.OfferPriceReportVariables">
 	</bean>
-
-	<bean id="setInitialSpreadReport" class="net.sourceforge.jasa.report.SetInitialSpreadReport">
-		<property name="askPrice" value="1500" />
-		<property name="bidPrice" value="500" />
-		<property name="market" ref="market" />
-		<property name="tradingAgent" ref="fixedPriceBuyerPrototype" />
-	</bean>
 	
 	<bean id="agentInitialiser"
 		class="net.sourceforge.jabm.init.CombiAgentInitialiser">

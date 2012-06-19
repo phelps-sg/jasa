@@ -105,7 +105,8 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 			market.placeOrder(bid);
 			market.placeOrder(ask);
 		} catch (AuctionException e) {
-			throw new RuntimeException(e);
+//			throw new RuntimeException(e);
+			logger.warn(e);
 		}
 	}
 

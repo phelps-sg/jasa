@@ -32,9 +32,6 @@
 <bean id="priceStatisticsReport" class="net.sourceforge.jasa.report.PriceStatisticsReport">
 </bean>
 
-<bean id="transactionPriceReport" class="net.sourceforge.jasa.report.TransactionPriceReport">
-</bean>
-
 <bean id="bidPriceReport" class="net.sourceforge.jasa.report.BidPriceReport">
 </bean>
 
