@@ -104,7 +104,7 @@ public abstract class SupplyAndDemandFrame
 		
 		dataset = new XYDatasetAdaptor(dataSeries, seriesNames); 
 		graph = ChartFactory
-				.createXYLineChart("Supply and demand", "Price", "Quantity",
+				.createXYLineChart(getGraphName(), "Price", "Quantity",
 						dataset, PlotOrientation.HORIZONTAL, 
 						true, true, false);
 		
