@@ -15,7 +15,11 @@ public class SpreadReportVariables extends MarketPriceReportVariables {
 	public double getPrice(RoundFinishedEvent event) {
 		MarketQuote quote = ((MarketSimulation) event.getSimulation())
 				.getQuote();
-		return quote.getBid() - quote.getAsk();
+		double spread = quote.getAsk() - quote.getBid();
+		if (Double.isInfinite(spread)) {
+			spread = Double.NaN;
+		}
+		return spread;
 	}
 
 }
