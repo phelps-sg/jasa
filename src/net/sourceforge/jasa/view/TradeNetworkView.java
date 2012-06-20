@@ -308,13 +308,15 @@ public class TradeNetworkView  implements ReportWithGUI,
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			Point2D ip = e.getPoint();
-			VisualizationViewer<V, E> vv = (VisualizationViewer) e.getSource();
-			GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
-			Layout<V, E> layout = vv.getGraphLayout();
-			vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
-			if (vertex != null) {
-				Inspector.inspect(vertex);
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				Point2D ip = e.getPoint();
+				VisualizationViewer<V, E> vv = (VisualizationViewer) e.getSource();
+				GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
+				Layout<V, E> layout = vv.getGraphLayout();
+				vertex = pickSupport.getVertex(layout, ip.getX(), ip.getY());
+				if (vertex != null) {
+					Inspector.inspect(vertex);
+				}
 			}
 		}
 
