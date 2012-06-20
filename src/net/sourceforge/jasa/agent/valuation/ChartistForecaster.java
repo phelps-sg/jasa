@@ -62,11 +62,11 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 		if (event instanceof RoundFinishedEvent) {
 			onRoundClosedEvent((RoundFinishedEvent) event);
 		} else if (event instanceof SimulationStartingEvent) {
-			onSimulationStarting();
+			onSimulationStarting((SimulationStartingEvent) event);
 		}
 	}
 
-	public void onSimulationStarting() {
+	public void onSimulationStarting(SimulationStartingEvent event) {
 		initialiseWindowSize();
 	}
 	
