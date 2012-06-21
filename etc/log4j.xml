@@ -23,21 +23,5 @@
     	<level value="INFO"/>
     	<appender-ref ref="CONSOLE"/>
     </root>
-    
-    <logger name="net.sourceforge.jabm">
-  		<level value="INFO"/> 
-	</logger>
-	
-<!--     <logger name="net.sourceforge.jasa.agent.MarketMakerAgent"> -->
-<!--   		<level value="DEBUG"/>  -->
-<!-- 	</logger> -->
-	
-<!--     <logger name="net.sourceforge.jasa.agent.valuation.ReturnForecasterWithTimeHorizon"> -->
-<!--   		<level value="DEBUG"/>  -->
-<!-- 	</logger> -->
-	
-<!-- 	  <logger name="net.sourceforge.jasa.agent.valuation.evolution.ValuationPolicyImitationOperator">  -->
-<!--   		<level value="DEBUG"/>  -->
-<!-- 	</logger> -->
 	
 </log4j:configuration>
