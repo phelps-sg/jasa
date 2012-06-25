@@ -246,12 +246,8 @@ public class MarketSimulation extends AbstractSimulation
 	/**
 	 * Step through a single tick of the simulation.
 	 */
-	public void step() throws AuctionClosedException {
-		try {
-			super.step();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public void step() {
+		super.step();
 		runSingleRound();
 	}
 
@@ -277,7 +273,7 @@ public class MarketSimulation extends AbstractSimulation
 		return closed;
 	}
 
-	public void runSingleRound() throws AuctionClosedException {
+	public void runSingleRound() {
 		if (isClosed()) {
 			throw new AuctionClosedException("Auction is closed.");
 		}
@@ -318,7 +314,7 @@ public class MarketSimulation extends AbstractSimulation
 		// report.debug("day = " + day + " of " + getMaximumDays());
 		round = 0;
 		informEndOfDay();
-//		getAuctioneer().endOfDayProcessing();
+//		getAuctioneer().endOfDayProcessing();Exception 
 		day++;
 	}
 

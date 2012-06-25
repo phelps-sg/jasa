@@ -15,7 +15,7 @@
 
 package net.sourceforge.jasa.market;
 
-public class AuctionClosedException extends AuctionException {
+public class AuctionClosedException extends AuctionRuntimeException {
 
 	public AuctionClosedException(String message) {
 		super(message);
