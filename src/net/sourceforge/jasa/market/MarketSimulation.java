@@ -274,9 +274,6 @@ public class MarketSimulation extends AbstractSimulation
 	}
 
 	public void runSingleRound() {
-		if (isClosed()) {
-			throw new AuctionClosedException("Auction is closed.");
-		}
 		if (closingCondition.eval()) {
 			close();
 		} else {
