@@ -19,6 +19,9 @@ import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
 
 /**
+ * Set the transaction price at the price of the order which arrived 
+ * at the market first.
+ * 
  * @author Jinzhong Niu
  * @version $Revision$
  */
