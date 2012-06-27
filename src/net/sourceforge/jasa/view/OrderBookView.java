@@ -44,11 +44,10 @@ import org.springframework.beans.factory.InitializingBean;
 public class OrderBookView extends JTable implements ReportWithGUI, TableModel,
 		InitializingBean {
 
-	protected LinkedList<TableModelListener> listeners = new LinkedList<TableModelListener>();
+	protected LinkedList<TableModelListener> listeners 
+		= new LinkedList<TableModelListener>();
 
 	protected Auctioneer auctioneer;
-
-	protected Map<Object, Number> variableBindings;
 
 	protected int currentDepth;
 
