@@ -42,17 +42,17 @@ public interface Market extends QuoteProvider, Resetable {
 	public void close();
 
 	/**
-	 * Place a new shout in the market.
+	 * Place a new order in the market.
 	 */
 	public void placeOrder(Order shout) throws AuctionException;
 
 	/**
-	 * Remove a shout from the market.
+	 * Remove an order from the market.
 	 */
 	public void removeOrder(Order shout);
 
 	/**
-	 * Return the last shout placed in the market.
+	 * Return the most recent order placed in the market.
 	 */
 	public Order getLastOrder() throws ShoutsNotVisibleException;
 
@@ -111,8 +111,16 @@ public interface Market extends QuoteProvider, Resetable {
 	 */
 	public boolean transactionsOccurred() throws ShoutsNotVisibleException;
 
+	/**
+	 * Return the price of the most transaction that occurred in the market.
+	 * @return
+	 */
 	public double getLastTransactionPrice();
 	
+	/**
+	 * Return the current price.  This is typically a mid-price or
+	 * a recent transaction price.
+	 */
 	public double getCurrentPrice();
 
 	public Iterator<Agent> getTraderIterator();
