@@ -213,13 +213,8 @@ public class MarketSimulation extends AbstractSimulation
 
 		begin();
 
-		try {
-			while (!closed) {
-				step();
-			}
-
-		} catch (AuctionClosedException e) {
-			throw new AuctionRuntimeException(e);
+		while (!closed) {
+			step();
 		}
 
 		end();
