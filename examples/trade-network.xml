@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--  A JASA implementation of the model described in the following paper:
+
+		Iori, G., Chiarella, C., November 2002. 
+		A Simulation Analysis of the Microstructure of Double Auction Markets. 
+		Quantitative Finance 2, 346-353.
+		http://ssrn.com/abstract=841608
+ -->
+ 
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<import resource="model.xml"/>
+	
+	<bean id="simulationController" 
+			class="net.sourceforge.jabm.SpringSimulationController"
+			scope="singleton">
+			
+		<property name="simulationBeanName">
+		   <idref local="marketSimulation"/>
+		</property>
+	
+		<property name="numSimulations" value="10"/>	
+		
+		<property name="reports">
+			<list>
+				<ref bean="priceTimeSeriesChart" />
+				<ref bean="spreadTimeSeriesChart" />
+	<!-- 			<ref bean="transactionPriceTimeSeriesReport" /> -->
+	<!-- 			<ref bean="transactionPriceReportVariables" /> -->
+	<!-- 			<ref bean="transactionPriceCSVReport" /> -->
+	<!-- 			<ref bean="svwapReportVariables" /> -->
+	<!-- 			<ref bean="svwapTimeSeriesChart"/> -->
+	<!-- 			<ref bean="svwapTimeSeriesReport"/> -->
+	<!-- 			<ref bean="midPriceTimeSeriesReport" /> -->
+	<!-- 			<ref bean="midPriceReportVariables" /> -->
+	
+				<ref bean="currentPriceTimeSeriesReport" />
+				<ref bean="currentPriceReportVariables" />
+				<ref bean="currentPriceCSVReport" />
+				
+				<ref bean="spreadTimeSeriesReport" />
+				<ref bean="spreadReportVariables" />
+				<ref bean="spreadCSVReport" />
+				
+	<!-- 			<ref bean="populationWeightsTimeSeriesChart"/> -->
+	<!-- 			<ref bean="populationWeightsTimeSeries"/> -->
+	<!-- 			<ref bean="populationWeightsReport" /> -->
+	<!-- 			<ref bean="populationWeightsReportVariables" /> -->
+	<!-- 			<ref bean="populationWeightsCSVReport" /> -->
+				
+	<!-- 			<ref bean="orderFlowReportVariables" /> -->
+	<!-- 			<ref bean="orderFlowTimeSeriesReport" /> -->
+				<ref bean="reportedSupplyAndDemandGraph"/>
+				<ref bean="auctionStateSupplyAndDemandGraph"/>
+				<ref bean="tradeNetworkReport"/>
+				<ref bean="relationshipGraphView"/>
+				<ref bean="pajekNetGraphExporter"/>
+				<ref bean="graphMetricsReport"/>
+				<ref bean="orderBookView"/>
+			</list>
+		</property>
+		
+	</bean>
+
+	<bean id="fileNamePrefix" class="net.sourceforge.jabm.util.MutableStringWrapper"
+		scope="singleton">
+		<constructor-arg value="data/scratch/" />
+	</bean>
+
+
+</beans>
