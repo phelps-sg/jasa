@@ -59,7 +59,7 @@ public interface TradingAgent extends Agent, MarketEventListener {
 
 	public Account getAccount();
 
-	public CommodityHolding getCommodityHolding();
+	public Inventory getCommodityHolding();
 
 	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity);

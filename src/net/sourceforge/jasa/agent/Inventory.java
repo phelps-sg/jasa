@@ -17,17 +17,30 @@ package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
 
-public class CommodityHolding implements Serializable {
+/**
+ * Class to track inventories of agents.  The inventory will typically
+ * specify the number of shares currently held by the specified agent.
+ * 
+ * @author Steve Phelps
+ */
+public class Inventory implements Serializable {
 
+	/**
+	 * The number of shares held by the agent.
+	 */
 	protected int quantity;
 
+	/**
+	 * The agent whose inventory we are tracking.
+	 */
 	protected TradingAgent owner;
 
-	public CommodityHolding() {
+	
+	public Inventory() {
 		this(0);
 	}
 
-	public CommodityHolding(int quantity) {
+	public Inventory(int quantity) {
 		this.quantity = quantity;
 	}
 
@@ -39,7 +52,7 @@ public class CommodityHolding implements Serializable {
 		this.quantity -= quantity;
 	}
 
-	public void transfer(CommodityHolding other, int quantity) {
+	public void transfer(Inventory other, int quantity) {
 		this.remove(quantity);
 		other.add(quantity);
 	}
