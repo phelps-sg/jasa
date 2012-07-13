@@ -22,7 +22,9 @@ import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Market;
 
 /**
- * A commodity valuation policy for RoundRobinTrader agents.
+ * A valuation policy for trading agents.  The valuation policy
+ * is responsible for determining the long-run expected value of the 
+ * asset or commodity being traded in the specified market.
  * 
  * @author Steve Phelps
  * @version $Revision$
