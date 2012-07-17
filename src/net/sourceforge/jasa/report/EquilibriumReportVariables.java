@@ -25,6 +25,8 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
+import org.pf.joi.Inspector;
+import org.springframework.beans.factory.InitializingBean;
 
 
 /**
@@ -37,8 +39,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class EquilibriumReport extends DirectRevelationReport implements
-    Serializable {
+public class EquilibriumReportVariables extends DirectRevelationReportVariables
+		implements Serializable, InitializingBean {
 
 	/**
 	 * The minimum equilibrium price.
@@ -71,14 +73,14 @@ public class EquilibriumReport extends DirectRevelationReport implements
 	public static final ReportVariable VAR_QUANTITY = new ReportVariable(
 	    "equilibria.quantity", "Equilibrium quantity");
 
-	static Logger logger = Logger.getLogger(EquilibriumReport.class);
+	static Logger logger = Logger.getLogger(EquilibriumReportVariables.class);
 
 
-	public EquilibriumReport() {
+	public EquilibriumReportVariables() {
 		this(null);
 	}
 
-	public EquilibriumReport(Market auction) {
+	public EquilibriumReportVariables(Market auction) {
 		super("equilibrium");
 		this.auction = auction;
 	}
@@ -173,15 +175,26 @@ public class EquilibriumReport extends DirectRevelationReport implements
 	@Override
 	public Map<Object,Number> getVariableBindings() {
 		Map<Object,Number> reportVars = super.getVariableBindings();
-		if (equilibriaFound) {
-			reportVars.put(VAR_EXISTS, new Integer(1));
-		} else {
-			reportVars.put(VAR_EXISTS, new Integer(0));
-		}
-		reportVars.put(VAR_QUANTITY, new Long(quantity));
+//		if (equilibriaFound) {
+//			reportVars.put(VAR_EXISTS, new Integer(1));
+//		} else {
+//			reportVars.put(VAR_EXISTS, new Integer(0));
+//		}
+//		reportVars.put(VAR_QUANTITY, new Long(quantity));
 		reportVars.put(VAR_MINPRICE, new Double(minPrice));
-		reportVars.put(VAR_MAXPRICE, new Double(maxPrice));
+//		reportVars.put(VAR_MAXPRICE, new Double(maxPrice));
+		Inspector.inspect(this);
 		return reportVars;
 	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+//		yVariableNames.add(VAR_EXISTS);
+//		yVariableNames.add(VAR_QUANTITY);
+		yVariableNames.add(VAR_MINPRICE);
+//		yVariableNames.add(VAR_MAXPRICE);
+	}
+	
+	
 
 }

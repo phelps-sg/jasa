@@ -32,7 +32,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class SupplyAndDemandStats extends DirectRevelationReport {
+public abstract class SupplyAndDemandStats extends DirectRevelationReportVariables {
 
 	/**
 	 * The DataWriter to write the supply curve to.

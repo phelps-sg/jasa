@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class DirectRevelationReport extends AbstractReportVariables
+public abstract class DirectRevelationReportVariables extends AbstractReportVariables
 		implements ReportVariables, Serializable {
 
 	protected Market auction;
@@ -57,7 +57,7 @@ public abstract class DirectRevelationReport extends AbstractReportVariables
 	 */
 	protected ArrayList<Order> shouts = new ArrayList<Order>();
 
-	static Logger logger = Logger.getLogger(DirectRevelationReport.class);
+	static Logger logger = Logger.getLogger(DirectRevelationReportVariables.class);
 
 	
 	
@@ -71,12 +71,12 @@ public abstract class DirectRevelationReport extends AbstractReportVariables
 //		this(null);
 //	}
 	
-	public DirectRevelationReport(String name, Market auction) {
+	public DirectRevelationReportVariables(String name, Market auction) {
 		super(name);
 		this.auction = auction;
 	}
 
-	public DirectRevelationReport(String name) {
+	public DirectRevelationReportVariables(String name) {
 		super(name);
 	}
 

@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public class SurplusReport extends EquilibriumReport {
+public class SurplusReport extends EquilibriumReportVariables {
 
 	/**
 	 * The profits of the buyers in theoretical equilibrium.

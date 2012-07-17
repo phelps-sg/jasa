@@ -22,7 +22,7 @@ import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.report.EquilibriumReport;
+import net.sourceforge.jasa.report.EquilibriumReportVariables;
 
 /**
  * A strategy which will bid at the true equilibrium price, if profitable, or
@@ -58,7 +58,7 @@ public class EquilibriumPriceStrategy extends FixedDirectionStrategy
 	}
 
 	public boolean modifyShout(Order shout) {
-		EquilibriumReport eqReport = new EquilibriumReport(auction);
+		EquilibriumReportVariables eqReport = new EquilibriumReportVariables(auction);
 		eqReport.calculate();
 		double price = eqReport.calculateMidEquilibriumPrice();
 		TokenTradingAgent tokenTradingAgent = (TokenTradingAgent) agent;

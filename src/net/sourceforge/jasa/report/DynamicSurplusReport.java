@@ -52,7 +52,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 	/**
 	 * The historicalDataReport used to calculate the equilibrium price.
 	 */
-	protected EquilibriumReport equilibriaStats;
+	protected EquilibriumReportVariables equilibriaStats;
 
 	/**
 	 * Total theoretically available profits per agent. This table maps
@@ -80,7 +80,7 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 
 	public void setAuction(Market auction) {
 		super.setAuction(auction);
-		equilibriaStats = new EquilibriumReport(auction);
+		equilibriaStats = new EquilibriumReportVariables(auction);
 	}
 //
 //	public void eventOccurred(SimEvent event) {

@@ -46,7 +46,7 @@ public class DynamicConvergenceReport extends AbstractMarketStatsReport
 	/**
 	 * The historicalDataReport used to calculate the equilibrium price.
 	 */
-	protected EquilibriumReport equilibriaStats;
+	protected EquilibriumReportVariables equilibriaStats;
 
 	/**
 	 * The quantity that each agent can theoretically trade per day. This should
@@ -71,7 +71,7 @@ public class DynamicConvergenceReport extends AbstractMarketStatsReport
 
 	public void setAuction(Market auction) {
 		super.setAuction(auction);
-		equilibriaStats = new EquilibriumReport();
+		equilibriaStats = new EquilibriumReportVariables();
 	}
 
 //	public void eventOccurred(MarketEvent event) {

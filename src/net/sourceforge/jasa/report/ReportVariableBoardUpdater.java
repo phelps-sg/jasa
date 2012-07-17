@@ -47,6 +47,8 @@ import org.jfree.data.time.TimePeriodValue;
  * 
  * @author Jinzhong Niu
  * @version $Revision$
+ * 
+ * @deprecated See ReportVariables interface and its implementors.
  */
 
 @SuppressWarnings("rawtypes")
@@ -159,7 +161,7 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 			transPriceAuction.devSquareSum += Math.pow(
 			    ((TransactionExecutedEvent) event).getPrice() - equilPrice, 2);
 		} else if (event instanceof MarketOpenEvent) {
-			EquilibriumReport eqmReport = new EquilibriumReport(getAuction());
+			EquilibriumReportVariables eqmReport = new EquilibriumReportVariables(getAuction());
 			eqmReport.calculate();
 			equilPrice = eqmReport.calculateMidEquilibriumPrice();
 			ReportVariableBoard.getInstance().reportValue(EQUIL_PRICE,
