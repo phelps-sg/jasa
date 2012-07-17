@@ -26,6 +26,7 @@ import net.sourceforge.jasa.market.Market;
  * 
  * @author Steve Phelps
  * @version $Revision$
+ * @deprecated
  */
 public abstract class AbstractMarketStatsReport extends AbstractAuctionReport {
 

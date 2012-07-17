@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.sourceforge.jabm.agent.Agent;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.event.SimulationEvent;
+import net.sourceforge.jabm.report.AbstractReportVariables;
+import net.sourceforge.jabm.report.ReportVariables;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
@@ -38,9 +42,11 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class DirectRevelationReport extends AbstractMarketStatsReport
-		implements Resetable, Serializable {
+public abstract class DirectRevelationReport extends AbstractReportVariables
+		implements ReportVariables, Serializable {
 
+	protected Market auction;
+	
 	/**
 	 * The market state after forced direct revelation.
 	 */
@@ -49,24 +55,37 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 	/**
 	 * The truthful shouts of all traders in the market.
 	 */
-	protected ArrayList<Order> shouts;
+	protected ArrayList<Order> shouts = new ArrayList<Order>();
 
 	static Logger logger = Logger.getLogger(DirectRevelationReport.class);
 
-	public DirectRevelationReport(Market auction) {
-		super(auction);
-		shouts = new ArrayList<Order>();
+	
+	
+//	
+//	public DirectRevelationReport(Market auction) {
+////		super(auction);
+//		shouts = new ArrayList<Order>();
+//	}
+
+//	public DirectRevelationReport() {
+//		this(null);
+//	}
+	
+	public DirectRevelationReport(String name, Market auction) {
+		super(name);
+		this.auction = auction;
 	}
 
-	public DirectRevelationReport() {
-		this(null);
+	public DirectRevelationReport(String name) {
+		super(name);
 	}
 
 	public void setAuction(Market auction) {
 		this.auction = auction;
 	}
 
-	public void calculate() {
+	@Override
+	public void compute(SimEvent event) {
 		initialise();
 		simulateDirectRevelation();
 	}
@@ -91,10 +110,10 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 		shouts.clear();
 		shoutEngine.reset();
 	}
-
-	public void reset() {
-		initialise();
-	}
+//
+//	public void reset() {
+//		initialise();
+//	}
 
 	/**
 	 * Process a truthful shout from an agent
@@ -107,8 +126,28 @@ public abstract class DirectRevelationReport extends AbstractMarketStatsReport
 			shoutEngine.add(shout);
 		} catch (DuplicateShoutException e) {
 			logger.error(e.getMessage());
-			throw new Error(e);
+			throw new RuntimeException(e);
 		}
 	}
 
+	@Override
+	public void dispose(SimEvent event) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void initialise(SimEvent ev) {
+		if (ev instanceof SimulationEvent) {
+			SimulationEvent event = (SimulationEvent) ev;
+			this.auction = (Market) event.getSimulation();
+		}
+	}
+
+//	@Override
+//	public String getName() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+	
 }

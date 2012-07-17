@@ -19,7 +19,7 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 /**
- * An event that is fired every time an order is placed in an market.
+ * An event that is fired every time an order is placed in a market.
  * 
  * @author Steve Phelps
  * @version $Revision$

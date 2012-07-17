@@ -19,9 +19,9 @@
 	</property>
 </bean>
 
-<bean id="equilibriumReport" class="net.sourceforge.jasa.report.EquilibriumReport">
-	<constructor-arg ref="marketSimulation" />
-</bean>
+<!-- <bean id="equilibriumReport" class="net.sourceforge.jasa.report.EquilibriumReport"> -->
+<!-- 	<constructor-arg ref="marketSimulation" /> -->
+<!-- </bean> -->
 
 <bean id="agentMixer" class="net.sourceforge.jabm.mixing.RandomRobinAgentMixer">
 	<constructor-arg ref="prng"/>

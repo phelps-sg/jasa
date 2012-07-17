@@ -34,9 +34,9 @@ import org.apache.log4j.Logger;
 
 /**
  * <p>
- * A historicalDataReport that keeps track of the surplus available to each agent in
- * theoretical equilibrium. The equilibrium price is recomputed at the end of
- * each day, thus this class can be used to keep track of theoretically
+ * A historicalDataReport that keeps track of the surplus available to each
+ * agent in theoretical equilibrium. The equilibrium price is recomputed at the
+ * end of each day, thus this class can be used to keep track of theoretically
  * available surplus even when supply and demand are changing over time. Each
  * agent is assumed to be hypothetically able to trade the specified quantity of
  * units in each day.
@@ -82,13 +82,13 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 		super.setAuction(auction);
 		equilibriaStats = new EquilibriumReport(auction);
 	}
-
-	public void eventOccurred(SimEvent event) {
-		super.eventOccurred(event);
-		if (event instanceof EndOfDayEvent) {
-			recalculate(event);
-		}
-	}
+//
+//	public void eventOccurred(SimEvent event) {
+//		super.eventOccurred(event);
+//		if (event instanceof EndOfDayEvent) {
+//			recalculate(event);
+//		}
+//	}
 
 	public void calculate() {
 		efficiency = calculateTotalProfits() / calculateTotalEquilibriumSurplus();
@@ -98,9 +98,8 @@ public class DynamicSurplusReport extends AbstractMarketStatsReport implements
 		return efficiency;
 	}
 
-	public void recalculate(SimEvent event) {
-
-		equilibriaStats.recalculate();
+	public void compute(SimEvent event) {
+		equilibriaStats.compute(event);
 		double ep = equilibriaStats.calculateMidEquilibriumPrice();
 
 		Iterator<Agent> i = auction.getTraderIterator();

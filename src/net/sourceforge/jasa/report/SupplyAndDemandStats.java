@@ -58,7 +58,7 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 	 */
 	public SupplyAndDemandStats(Market auction,
 	    DataWriter supplyStats, DataWriter demandStats) {
-		super(auction);
+		super("Supply & Demand", auction);
 		this.supplyStats = supplyStats;
 		this.demandStats = demandStats;
 	}
@@ -67,11 +67,6 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 		writeSupplyStats();
 		writeDemandStats();
 	}
-
-	public abstract void writeSupplyStats();
-
-	public abstract void writeDemandStats();
-
 	public void writeStats(DataWriter stats, List<Order> shouts, 
 							Comparator<Order> comparator) {
 		int qty = 0, qty1 = 0;
@@ -92,4 +87,10 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReport {
 			qty = qty1;
 		}
 	}
+
+
+	public abstract void writeSupplyStats();
+
+	public abstract void writeDemandStats();
+
 }

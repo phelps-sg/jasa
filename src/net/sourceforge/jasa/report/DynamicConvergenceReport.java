@@ -17,6 +17,7 @@ package net.sourceforge.jasa.report;
 
 import java.util.Map;
 
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketEvent;
@@ -70,17 +71,17 @@ public class DynamicConvergenceReport extends AbstractMarketStatsReport
 
 	public void setAuction(Market auction) {
 		super.setAuction(auction);
-		equilibriaStats = new EquilibriumReport(auction);
+		equilibriaStats = new EquilibriumReport();
 	}
 
-	public void eventOccurred(MarketEvent event) {
-		super.eventOccurred(event);
-		if (event instanceof EndOfDayEvent) {
-			recalculate();
-		} else if (event instanceof TransactionExecutedEvent) {
-			newPrice(((TransactionExecutedEvent) event).getPrice());
-		}
-	}
+//	public void eventOccurred(MarketEvent event) {
+//		super.eventOccurred(event);
+//		if (event instanceof EndOfDayEvent) {
+//			compute();
+//		} else if (event instanceof TransactionExecutedEvent) {
+//			newPrice(((TransactionExecutedEvent) event).getPrice());
+//		}
+//	}
 
 	public void calculate() {
 
@@ -90,8 +91,8 @@ public class DynamicConvergenceReport extends AbstractMarketStatsReport
 		return alpha;
 	}
 
-	protected void recalculate() {
-		equilibriaStats.recalculate();
+	protected void compute(SimEvent event) {
+		equilibriaStats.compute(event);
 		equilibriumPrice = equilibriaStats.calculateMidEquilibriumPrice();
 	}
 

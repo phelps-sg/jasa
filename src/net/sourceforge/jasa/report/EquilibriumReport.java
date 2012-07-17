@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
@@ -72,21 +73,24 @@ public class EquilibriumReport extends DirectRevelationReport implements
 
 	static Logger logger = Logger.getLogger(EquilibriumReport.class);
 
-	public EquilibriumReport(Market auction) {
-		super(auction);
-	}
 
 	public EquilibriumReport() {
-		super();
+		this(null);
 	}
 
-	public void recalculate() {
-		reset();
-		calculate();
+	public EquilibriumReport(Market auction) {
+		super("equilibrium");
+		this.auction = auction;
 	}
 
-	public void calculate() {
-		super.calculate();
+//	public void recalculate() {
+//		reset();
+//		calculate();
+//	}
+
+	@Override
+	public void compute(SimEvent event) {
+		super.compute(event);
 		Order hiAsk = shoutEngine.getHighestMatchedAsk();
 		Order loBid = shoutEngine.getLowestMatchedBid();
 		if (hiAsk == null || loBid == null) {
@@ -97,6 +101,10 @@ public class EquilibriumReport extends DirectRevelationReport implements
 			matchedShouts = shoutEngine.matchOrders();
 			calculateEquilibriaQuantity();
 		}
+	}
+	
+	public void calculate() {
+		compute(null);
 	}
 
 	protected void calculateEquilibriaQuantity() {

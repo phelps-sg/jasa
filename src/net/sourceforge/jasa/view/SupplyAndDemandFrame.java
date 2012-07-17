@@ -126,7 +126,7 @@ public abstract class SupplyAndDemandFrame
 		supplyCurve.clear();
 		demandCurve.clear();
 		SupplyAndDemandStats stats = getSupplyAndDemandStats();
-		stats.calculate();
+		stats.compute(null);
 		stats.produceUserOutput();
 	}
 
