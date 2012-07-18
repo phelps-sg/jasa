@@ -46,22 +46,26 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	/**
 	 * Matched bids in ascending order
 	 */
-	protected PriorityQueue<Order> bIn = new PriorityQueue<Order>(new TreeSet<Order>(greaterThan));
+	protected PriorityQueue<Order> bIn = new PriorityQueue<Order>(
+			new TreeSet<Order>(greaterThan));
 
 	/**
 	 * Unmatched bids in descending order
 	 */
-	protected PriorityQueue<Order> bOut = new PriorityQueue<Order>(new TreeSet<Order>(lessThan));
+	protected PriorityQueue<Order> bOut = new PriorityQueue<Order>(
+			new TreeSet<Order>(lessThan));
 
 	/**
 	 * Matched asks in descending order
 	 */
-	protected PriorityQueue<Order> sIn = new PriorityQueue<Order>(new TreeSet<Order>(lessThan));
+	protected PriorityQueue<Order> sIn = new PriorityQueue<Order>(
+			new TreeSet<Order>(lessThan));
 
 	/**
 	 * Unmatched asks in ascending order
 	 */
-	protected PriorityQueue<Order> sOut = new PriorityQueue<Order>(new TreeSet<Order>(greaterThan));
+	protected PriorityQueue<Order> sOut = new PriorityQueue<Order>(
+			new TreeSet<Order>(greaterThan));
 
 	protected static AscendingOrderComparator greaterThan = 
 			new AscendingOrderComparator();

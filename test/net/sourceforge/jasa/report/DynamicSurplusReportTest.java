@@ -209,7 +209,7 @@ public class DynamicSurplusReportTest extends TestCase implements
 	public void eventOccurred(SimEvent event) {
 		if (event instanceof EndOfDayEvent) {
 			// System.out.println("At end of day " + market.getDay());
-			EquilibriumReport eqStats = new EquilibriumReport(auction);
+			EquilibriumReportVariables eqStats = new EquilibriumReportVariables(auction);
 			eqStats.calculate();
 			double eqPrice = eqStats.calculateMidEquilibriumPrice();
 			// System.out.println("equilibria found? " + eqStats.equilibriaExists());

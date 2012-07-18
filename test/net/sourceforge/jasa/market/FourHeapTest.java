@@ -23,12 +23,8 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 import net.sourceforge.jabm.SpringSimulationController;
-import net.sourceforge.jabm.util.PriorityQueue;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.TradingAgent;
-
-import org.apache.commons.collections.buffer.PriorityBuffer;
-
 
 /**
  * @author Steve Phelps

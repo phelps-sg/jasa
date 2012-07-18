@@ -85,7 +85,7 @@ public class EquilibriaStatsTest extends TestCase {
 	 * 
 	 */
 	public void testZeroEP() {
-		EquilibriumReport ep = new EquilibriumReport(auction);
+		EquilibriumReportVariables ep = new EquilibriumReportVariables(auction);
 		ep.calculate();
 		assertTrue(ep.calculateMidEquilibriumPrice() == 0);
 	}
@@ -107,7 +107,7 @@ public class EquilibriaStatsTest extends TestCase {
 	 */
 	public void testNoEP() {
 		setValuations(NO_EP);
-		EquilibriumReport ep = new EquilibriumReport(auction);
+		EquilibriumReportVariables ep = new EquilibriumReportVariables(auction);
 		ep.calculate();
 		assertTrue(!ep.equilibriaExists());
 	}
@@ -117,14 +117,14 @@ public class EquilibriaStatsTest extends TestCase {
 	 */
 	public void testNoTraders() {
 		initialiseAuction();
-		EquilibriumReport ep = new EquilibriumReport(auction);
+		EquilibriumReportVariables ep = new EquilibriumReportVariables(auction);
 		ep.calculate();
 		assertTrue(!ep.equilibriaExists());
 	}
 
 	protected void checkEP(double[] valuations, double correctEP) {
 		setValuations(valuations);
-		EquilibriumReport ep = new EquilibriumReport(auction);
+		EquilibriumReportVariables ep = new EquilibriumReportVariables(auction);
 		ep.calculate();
 		double mep = ep.calculateMidEquilibriumPrice();
 		System.out.println("Mid EP = " + mep);

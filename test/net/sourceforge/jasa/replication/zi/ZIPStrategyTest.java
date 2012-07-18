@@ -28,7 +28,7 @@ import net.sourceforge.jasa.agent.strategy.ZIPStrategy;
 import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.report.AuctionReport;
-import net.sourceforge.jasa.report.EquilibriumReport;
+import net.sourceforge.jasa.report.EquilibriumReportVariables;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
 import org.apache.log4j.Logger;
@@ -86,7 +86,8 @@ public class ZIPStrategyTest extends TestCase {
 		sellers = new TokenTradingAgent[NUM_SELLERS];
 		registerTraders(buyers, false);
 		registerTraders(sellers, true);
-		EquilibriumReport eqStats = new EquilibriumReport(auction);
+		EquilibriumReportVariables eqStats = 
+				new EquilibriumReportVariables(auction);
 		eqStats.calculate();
 		logger.info(eqStats);
 	}
