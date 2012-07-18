@@ -48,10 +48,6 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		this.agent = agent;
 	}
 
-	public void setAgent(AbstractTradingAgent agent) {
-		this.agent = agent;
-	}
-
 	public void reset() {
 		initialise();
 	}
@@ -66,6 +62,13 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		}
 	}
 
+	/**
+	 * Modify the price and quantity of the given shout according to this
+	 * strategy.
+	 * 
+	 * @return false if no shout is to be placed at this time
+	 */
+	@Override
 	public Order modifyOrder(Order currentShout, Market auction) {
 		this.auction = auction;
 		if (currentShout == null) {
@@ -78,13 +81,7 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 			return null;
 		}
 	}
-
-	/**
-	 * Modify the price and quantity of the given shout according to this
-	 * strategy.
-	 * 
-	 * @return false if no shout is to be placed at this time
-	 */
+	
 	public boolean modifyShout(Order shout) {
 		shout.setAgent(getAgent());
 		return true;
@@ -97,14 +94,13 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		return (AbstractTradingAgent) agent;
 	}
 
+	public void setAgent(AbstractTradingAgent agent) {
+		this.agent = agent;
+	}
+	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return super.clone();
-	}
-
-	@Override
-	public void setAgent(Agent agent) {
-		this.agent = (AbstractTradingAgent) agent;
 	}
 
 }

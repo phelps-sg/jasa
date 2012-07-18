@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.TreeSet;
 
-import org.apache.commons.collections.buffer.PriorityBuffer;
 import org.apache.commons.collections.iterators.CollatingIterator;
 import org.apache.log4j.Logger;
 
@@ -45,22 +46,22 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	/**
 	 * Matched bids in ascending order
 	 */
-	protected PriorityBuffer bIn = new PriorityBuffer(greaterThan);
+	protected PriorityQueue<Order> bIn = new PriorityQueue<Order>(new TreeSet<Order>(greaterThan));
 
 	/**
 	 * Unmatched bids in descending order
 	 */
-	protected PriorityBuffer bOut = new PriorityBuffer(lessThan);
+	protected PriorityQueue<Order> bOut = new PriorityQueue<Order>(new TreeSet<Order>(lessThan));
 
 	/**
 	 * Matched asks in descending order
 	 */
-	protected PriorityBuffer sIn = new PriorityBuffer(lessThan);
+	protected PriorityQueue<Order> sIn = new PriorityQueue<Order>(new TreeSet<Order>(lessThan));
 
 	/**
 	 * Unmatched asks in ascending order
 	 */
-	protected PriorityBuffer sOut = new PriorityBuffer(greaterThan);
+	protected PriorityQueue<Order> sOut = new PriorityQueue<Order>(new TreeSet<Order>(greaterThan));
 
 	protected static AscendingOrderComparator greaterThan = 
 			new AscendingOrderComparator();
@@ -117,7 +118,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	}
 
 	@SuppressWarnings("all")
-	public void prettyPrint(String title, PriorityBuffer shouts) {
+	public void prettyPrint(String title, PriorityQueue shouts) {
 		logger.info(title);
 		logger.info("--------------");		
 		Iterator i = shouts.iterator();
@@ -137,7 +138,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 *          The shout to insert
 	 * 
 	 */
-	private static void insertShout(PriorityBuffer heap, Order shout)
+	private static void insertShout(PriorityQueue<Order> heap, Order shout)
 	    throws DuplicateShoutException {
 		try {
 			heap.add(shout);
@@ -171,7 +172,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		if (bOut.isEmpty()) {
 			return null;
 		}
-		return (Order) bOut.get();
+		return (Order) bOut.peek();
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		if (bIn.isEmpty()) {
 			return null;
 		}
-		return (Order) bIn.get();
+		return (Order) bIn.peek();
 	}
 
 	/**
@@ -191,7 +192,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		if (sOut.isEmpty()) {
 			return null;
 		}
-		return (Order) sOut.get();
+		return (Order) sOut.peek();
 	}
 
 	/**
@@ -201,7 +202,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		if (sIn.isEmpty()) {
 			return null;
 		}
-		return (Order) sIn.get();
+		return (Order) sIn.peek();
 	}
 
 	/**
@@ -217,9 +218,9 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * @return A reference to the, possibly modified, shout.
 	 * 
 	 */
-	protected static Order unifyShout(Order shout, PriorityBuffer heap) {
+	protected static Order unifyShout(Order shout, PriorityQueue<Order> heap) {
 
-		Order top = (Order) heap.get();
+		Order top = (Order) heap.peek();
 
 		if (shout.getQuantity() > top.getQuantity()) {
 			shout = shout.splat(shout.getQuantity() - top.getQuantity());
@@ -233,17 +234,16 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		return shout;
 	}
 
-	protected int displaceShout(Order shout, PriorityBuffer from,
-	    PriorityBuffer to) throws DuplicateShoutException {
+	protected int displaceShout(Order shout, PriorityQueue<Order> from,
+			PriorityQueue<Order> to) throws DuplicateShoutException {
 		shout = unifyShout(shout, from);
 		to.add(from.remove());
 		insertShout(from, shout);
 		return shout.getQuantity();
 	}
 
-	public int promoteShout(Order shout, PriorityBuffer from, PriorityBuffer to,
-	    PriorityBuffer matched) throws DuplicateShoutException {
-
+	public int promoteShout(Order shout, PriorityQueue<Order> from, PriorityQueue<Order> to,
+			PriorityQueue<Order> matched) throws DuplicateShoutException {
 		shout = unifyShout(shout, from);
 		insertShout(matched, shout);
 		to.add(from.remove());
@@ -431,7 +431,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * @param quantity
 	 *          The total quantity to remove.
 	 */
-	protected void reinsert(PriorityBuffer heap, int quantity) {
+	protected void reinsert(PriorityQueue<Order> heap, int quantity) {
 
 		while (quantity > 0) {
 
@@ -455,6 +455,13 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		}
 	}
 
+	/**
+	 * Compute the total number of orders in the book.
+	 */
+	public int size() {
+		return bIn.size() + bOut.size() + sIn.size() + sOut.size();
+	}
+	
 	@Override
 	public boolean isEmpty() {
 		return bIn.isEmpty() && sIn.isEmpty() && 
@@ -467,7 +474,6 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Order> getUnmatchedBids() {
 		ArrayList<Order> bids = new ArrayList<Order>(bOut);
 		Collections.sort(bids, lessThan);
@@ -475,7 +481,6 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public List<Order> getUnmatchedAsks() {
 		ArrayList<Order> asks = new ArrayList<Order>(sOut);
 		Collections.sort(asks, greaterThan);

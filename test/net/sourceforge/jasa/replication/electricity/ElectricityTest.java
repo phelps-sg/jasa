@@ -34,6 +34,7 @@ import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.DiscriminatoryPricingPolicy;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.log4j.Logger;
 
 import cern.jet.random.engine.MersenneTwister64;
@@ -121,10 +122,10 @@ public abstract class ElectricityTest extends TestCase {
 			auction.run();
 			stats.calculate();
 			if (stats.equilibriaExists()) {
+				System.out.println("EA = " + stats.getEA());
 				updateStats();
-				logger.debug("EA = " + stats.getEA());
 			} else {
-				logger.debug("no equilibrium price");
+				System.out.println("no equilibrium price");
 			}
 		}
 		System.out.println(eA);
@@ -132,11 +133,22 @@ public abstract class ElectricityTest extends TestCase {
 		System.out.println(mPB);
 		traderReport();
 	}
+	
+	public void testSummaryStatistics() {
+		SummaryStats summaryStatistics = new SummaryStats();
+		summaryStatistics.newData(100.0);
+		for(int i=0; i<99; i++) {
+			summaryStatistics.newData(0.0);
+		}
+		assertTrue(summaryStatistics.getMean() <= summaryStatistics.getMax());
+		System.out.println(summaryStatistics);
+	}
 
 	public void updateStats() {
 		mPS.newData(stats.getMPS());
 		mPB.newData(stats.getMPB());
 		eA.newData(stats.getEA());
+		assertTrue(eA.getMean() <= eA.getMax());
 	}
 
 	public void initStats() {

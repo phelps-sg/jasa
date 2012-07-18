@@ -26,7 +26,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	
 	protected double alpha = 0.01;
 	
-	protected MarketSimulation market;
+	protected Market market;
 
 	static Logger logger = Logger
 			.getLogger(ReturnForecasterWithTimeHorizon.class);
@@ -40,7 +40,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	}
 	
 	public void onRoundFinished(RoundFinishedEvent event) {
-		this.market = (MarketSimulation) event.getSimulation();
+		this.market = (Market) event.getSimulation();
 		historicalPredictions.addValue(this.currentPrediction);
 		double currentPrice = market.getCurrentPrice();
 		historicalPrices.addValue(currentPrice);
@@ -115,7 +115,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 				(ReturnForecasterWithTimeHorizon) super.clone();
 		try {
 			result.afterPropertiesSet();
-			market.addListener(result);
+			((EventScheduler) market).addListener(result);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -124,9 +124,10 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	
 	@Override
 	public void dispose() {
-		market.getSimulationController().removeListener(this);
+		((MarketSimulation) market).getSimulationController().removeListener(
+				this);
 	}
-	
+
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		int n = (int) Math.round(timeHorizon);

@@ -22,6 +22,8 @@ import java.util.Random;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.util.PriorityQueue;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.TradingAgent;
 
@@ -36,24 +38,32 @@ import org.apache.commons.collections.buffer.PriorityBuffer;
 public class FourHeapTest extends TestCase {
 
 	TestShoutEngine shoutEngine;
+	
+	MarketSimulation auction;
 
 	Random randGenerator;
 
 	public FourHeapTest(String name) {
 		super(name);
 	}
+	
+	public void initialiseAuction() {
+		auction = new MarketSimulation();
+		auction.setSimulationController(new SpringSimulationController());
+	}
 
 	public void setUp() {
 		shoutEngine = new TestShoutEngine();
 		randGenerator = new Random();
+		initialiseAuction();
 //		org.apache.log4j.BasicConfigurator.configure();
 	}
 
-	public Order randomShout() {
+	public Order randomShout(MockTrader trader) {
 		int quantity = randGenerator.nextInt(50);
-		double price = randGenerator.nextDouble() * 100;
+		double price = Math.round(randGenerator.nextDouble() * 10000) / 100.0;
 		boolean isBid = randGenerator.nextBoolean();
-		return new Order(new MockTrader(this, 0, 0, null), quantity, price, isBid);
+		return new Order(trader, quantity, price, isBid);
 	}
 	
 	/**
@@ -62,7 +72,7 @@ public class FourHeapTest extends TestCase {
 	public void testSameSide() {
 		try {
 			
-			TradingAgent trader1 = new MockTrader(this, 10, 0, null);
+			TradingAgent trader1 = new MockTrader(this, 10, 0, auction);
 			
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader1, 1, 5.0, false);
@@ -93,8 +103,8 @@ public class FourHeapTest extends TestCase {
 	
 	public void testSimpleMatch() {
 		try {
-			TradingAgent trader1 = new MockTrader(this, 0, 0, null);
-			TradingAgent trader2 = new MockTrader(this, 0, 0, null);
+			TradingAgent trader1 = new MockTrader(this, 0, 0, auction);
+			TradingAgent trader2 = new MockTrader(this, 0, 0, auction);
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader2, 1, 5.0, false);
 			shoutEngine.add(buy);
@@ -114,45 +124,70 @@ public class FourHeapTest extends TestCase {
 
 		try {
 
+			int numOrders = 200;
+			MockTrader[] traders = new MockTrader[numOrders];
+			for(int i=0; i<numOrders; i++) {
+				traders[i] = new MockTrader(this, 0, 0, auction);
+			}
+			MockTrader cancellingAgent = new MockTrader(this, 0, 0, auction);
+			
 			Order testRemoveShout = null, testRemoveShout2 = null;
 
 			for (int round = 0; round < 700; round++) {
 
+				System.out.println("Iteration " + round + ".. ");
+				
 				if (testRemoveShout != null) {
 					shoutEngine.remove(testRemoveShout);
 					shoutEngine.remove(testRemoveShout2);
 				}
-
-				for (int shout = 0; shout < 200; shout++) {
-					shoutEngine.add(randomShout());
+				
+				System.out.println("Placing " + numOrders + " random orders.. ");
+				long t0 = System.currentTimeMillis();
+				for (int i = 0; i < numOrders; i++) {
+					Order randomShout = randomShout(traders[i]);
+					shoutEngine.add(randomShout);
+					shoutEngine.checkBalanced();
 				}
+				long t1 = System.currentTimeMillis();
+				long elapsed = t1 - t0;
+				System.out.println("completed. (" + elapsed + "ms)");
 
-				shoutEngine.add(testRemoveShout = randomShout());
+				shoutEngine.add(testRemoveShout = randomShout(cancellingAgent));
 				testRemoveShout2 = new Order(testRemoveShout.getAgent(),
 				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
 				    !testRemoveShout.isBid());
 				shoutEngine.add(testRemoveShout2);
-
-				if ((round & 0x01) > 0) {
-					continue;
+				
+				int size = shoutEngine.size();
+				System.out.println("order book size = " + size);
+				
+				if ((round % 16) == 0) {
+					System.out.println("Clearing the market.. ");
+					List<Order> matched = shoutEngine.matchOrders();
+					Iterator<Order> i = matched.iterator();
+					while (i.hasNext()) {
+						matches++;
+						Order bid = i.next();
+						Order ask = i.next();
+						assertTrue(bid.isBid());
+						assertTrue(ask.isAsk());
+						assertTrue(bid.getPrice() >= ask.getPrice());
+						// System.out.print(bid + "/" + ask + " ");
+					}
+					System.out.println("clearing complete.");
+					assertTrue(shoutEngine.sIn.isEmpty());
+					assertTrue(shoutEngine.bIn.isEmpty());
+//					System.out.println("Removing remaining orders from book");
+//					shoutEngine.sOut.clear();
+//					shoutEngine.bOut.clear();
 				}
 
-				List<Order> matched = shoutEngine.matchOrders();
-				Iterator<Order> i = matched.iterator();
-				while (i.hasNext()) {
-					matches++;
-					Order bid = i.next();
-					Order ask = i.next();
-					assertTrue(bid.isBid());
-					assertTrue(ask.isAsk());
-					assertTrue(bid.getPrice() >= ask.getPrice());
-					// System.out.print(bid + "/" + ask + " ");
-				}
-				// System.out.println("");
+				System.out.println("iteration complete.");
 			}
 
 		} catch (Exception e) {
-			shoutEngine.printState();
+//			shoutEngine.printState();
 			e.printStackTrace();
 			fail();
 		}
@@ -173,6 +208,8 @@ public class FourHeapTest extends TestCase {
 
 class TestShoutEngine extends FourHeapOrderBook {
 
+	private static final double TOLERANCE = 0.01;
+
 	protected void preRemovalProcessing() {
 		checkBalanced();
 	}
@@ -182,11 +219,10 @@ class TestShoutEngine extends FourHeapOrderBook {
 	}
 
 	protected void checkBalanced() {
-
 		int nS = countQty(sIn);
 		int nB = countQty(bIn);
 		if (nS != nB) {
-			printState();
+//			printState();
 			throw new Error("shout heaps not balanced nS=" + nS + " nB=" + nB);
 		}
 
@@ -202,17 +238,16 @@ class TestShoutEngine extends FourHeapOrderBook {
 	}
 
 	protected void checkBalanced(Order s1, Order s2, String condition) {
-		if (!((s1 == null || s2 == null) || s1.getPrice() >= s2.getPrice())) {
-			printState();
+		if (!((s1 == null || s2 == null) || s1.getPrice() >= (s2.getPrice() - TOLERANCE))) {
+//			printState();
 			System.out.println("shout1 = " + s1);
 			System.out.println("shout2 = " + s2);
 			throw new RuntimeException("Heaps not balanced! - " + condition);
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public static int countQty(PriorityBuffer heap) {
-		Iterator i = heap.iterator();
+	public static int countQty(java.util.PriorityQueue<Order> heap) {
+		Iterator<Order> i = heap.iterator();
 		int qty = 0;
 		while (i.hasNext()) {
 			Order s = (Order) i.next();
