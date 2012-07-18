@@ -544,11 +544,9 @@ public class MarketSimulation extends AbstractSimulation
 	protected void activate(TradingAgent agent) {
 	}
 
-
 	public Population getTraders() {
 		return getPopulation();
 	}
-	
 
 	public void setAuctioneer(Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
