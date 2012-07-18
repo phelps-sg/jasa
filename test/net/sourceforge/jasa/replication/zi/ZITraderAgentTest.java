@@ -18,10 +18,14 @@ package net.sourceforge.jasa.replication.zi;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.market.AuctionClosedException;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 
@@ -36,7 +40,7 @@ public class ZITraderAgentTest extends TestCase {
 
 	TokenTradingAgent seller;
 
-	MarketFacade auction;
+	MarketSimulation auction;
 
 	ClearingHouseAuctioneer auctioneer;
 
@@ -56,12 +60,15 @@ public class ZITraderAgentTest extends TestCase {
 	}
 
 	public void setUp() {
-		auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		auction = new MarketSimulation();
+		auction.setSimulationController(new SpringSimulationController());
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(new MersenneTwister64()));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
 		buyer = new TokenTradingAgent(BUYER_PRIV_VALUE, TRADE_ENTITLEMENT,
-				 auction);
+				 auction.getSimulationController());
 		seller = new TokenTradingAgent(SELLER_PRIV_VALUE, TRADE_ENTITLEMENT,
-				auction);
+				auction.getSimulationController());
 		buyer.setStrategy(new TruthTellingStrategy(buyer));
 		seller.setStrategy(new TruthTellingStrategy(seller));
 		buyer.setIsBuyer(true);

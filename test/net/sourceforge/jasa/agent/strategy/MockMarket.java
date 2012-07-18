@@ -196,5 +196,11 @@ public class MockMarket implements Market, Simulation {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void slow(int slowSleepInterval) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

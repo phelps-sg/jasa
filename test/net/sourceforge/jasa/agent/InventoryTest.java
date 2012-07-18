@@ -1,21 +1,23 @@
 package net.sourceforge.jasa.agent;
 
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jasa.market.MarketSimulation;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-public class CommodityHoldingTest extends TestCase {
+public class InventoryTest extends TestCase {
 
-	protected CommodityHolding holding;
+	protected Inventory holding;
 
 	public static final int INITIAL = 10;
 
-	public CommodityHoldingTest(String name) {
+	public InventoryTest(String name) {
 		super(name);
 	}
 
 	public void setUp() {
-		holding = new CommodityHolding(INITIAL);
+		holding = new Inventory(INITIAL);
 	}
 
 	public void testRemove() {
@@ -32,14 +34,16 @@ public class CommodityHoldingTest extends TestCase {
 	}
 
 	public void testSetOwner() {
-		MockTrader owner = new MockTrader(this, 0, 0, null);
+		MarketSimulation simulation = new MarketSimulation();
+		simulation.setSimulationController(new SpringSimulationController());
+		MockTrader owner = new MockTrader(this, 0, 0, simulation);
 		holding.setOwner(owner);
 		assertTrue(holding.getOwner().equals(owner));
 	}
 
 	public void testTransfer() {
 		int transferQty = 6;
-		CommodityHolding other = new CommodityHolding(0);
+		Inventory other = new Inventory(0);
 		holding.transfer(other, transferQty);
 		assertTrue(holding.getQuantity() == (INITIAL - transferQty));
 		assertTrue(other.getQuantity() == (0 + transferQty));
@@ -50,7 +54,7 @@ public class CommodityHoldingTest extends TestCase {
 	}
 
 	public static Test suite() {
-		return new TestSuite(CommodityHoldingTest.class);
+		return new TestSuite(InventoryTest.class);
 	}
 
 }

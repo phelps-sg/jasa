@@ -17,22 +17,28 @@ package net.sourceforge.jasa.agent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jasa.agent.strategy.KaplanStrategy;
 import net.sourceforge.jasa.market.Account;
 import net.sourceforge.jasa.market.AuctionClosedException;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketFacade;
 import net.sourceforge.jasa.market.MarketQuote;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.ZeroFundsAccount;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.TransparentAuctioneer;
 import net.sourceforge.jasa.report.DailyStatsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 public class KaplanStrategyTest extends TestCase {
 
-	MarketFacade auction;
+	MarketSimulation auction;
 
 	MockTrader trader;
 
@@ -53,7 +59,13 @@ public class KaplanStrategyTest extends TestCase {
 	}
 
 	public void setUp() {
-		auction = new MarketFacade(new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		RandomEngine prng = new MersenneTwister64();
+		this.auction = new MarketSimulation();
+		SimulationController controller = new SpringSimulationController();
+		auction.setSimulationController(controller);
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
 		trader = new MockTrader(this, 0, 0, 10, auction);
 		strategy = new KaplanStrategy();
 		strategy.setS(S);
@@ -64,7 +76,8 @@ public class KaplanStrategyTest extends TestCase {
 		auction.setMaximumRounds(100);
 		auction.register(trader);
 		dailyStats = new DailyStatsReport();
-		auction.addReport(dailyStats);
+//		auction.addReport(dailyStats);
+		controller.addListener(dailyStats);
 		dailyStats.setAuction(auction);
 		strategy.setDailyStatsReport(dailyStats);
 		quote = new MarketQuote(100, 110);

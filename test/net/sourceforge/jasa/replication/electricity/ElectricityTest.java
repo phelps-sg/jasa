@@ -18,12 +18,16 @@ package net.sourceforge.jasa.replication.electricity;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jabm.agent.Agent;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
 import net.sourceforge.jabm.learning.NPTRothErevLearner;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
@@ -50,7 +54,7 @@ public abstract class ElectricityTest extends TestCase {
 
 	protected Auctioneer auctioneer;
 
-	protected MarketFacade auction;
+	protected MarketSimulation auction;
 
 	protected ElectricityStats stats;
 
@@ -73,6 +77,8 @@ public abstract class ElectricityTest extends TestCase {
 	protected int cb;
 
 	protected RandomEngine prng;
+
+	private SpringSimulationController controller;
 
 	static final int ITERATIONS = 100;
 
@@ -139,12 +145,21 @@ public abstract class ElectricityTest extends TestCase {
 		eA = new SummaryStats("EA");
 	}
 
+	public void initialiseAuction() {
+		auction = new MarketSimulation();
+		controller = new SpringSimulationController();
+		auction.setSimulationController(controller);
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
+	}
+	
 	public void experimentSetup(int ns, int nb, int cs, int cb) {
 		this.ns = ns;
 		this.nb = nb;
 		this.cs = cs;
 		this.cb = cb;
-		auction = new MarketFacade(prng);
+		initialiseAuction();
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		((AbstractAuctioneer) auctioneer)
 				.setPricingPolicy(new DiscriminatoryPricingPolicy(0.5));
@@ -155,11 +170,11 @@ public abstract class ElectricityTest extends TestCase {
 		stats = new ElectricityStats(auction);
 	}
 
-	public void registerTraders(MarketFacade auction, boolean areSellers,
+	public void registerTraders(MarketSimulation auction, boolean areSellers,
 			int num, int capacity, double[] values) {
 		for (int i = 0; i < num; i++) {
 			double value = values[i % values.length];
-			FixedDirectionTradingAgent agent = new FixedDirectionTradingAgent(value, auction);
+			FixedDirectionTradingAgent agent = new FixedDirectionTradingAgent(auction.getSimulationController());
 			assignStrategy(capacity, agent);
 			agent.setIsSeller(areSellers);
 			assignValuer(agent);

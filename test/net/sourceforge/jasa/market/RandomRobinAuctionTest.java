@@ -17,6 +17,10 @@ package net.sourceforge.jasa.market;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jasa.agent.MockStrategy;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
@@ -32,22 +36,10 @@ import cern.jet.random.engine.RandomEngine;
 
 public class RandomRobinAuctionTest extends TestCase {
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
 	Auctioneer auctioneer;
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
-	MarketFacade auction;
+	MarketSimulation auction;
 
-	/**
-	 * @uml.property name="traders"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	MockTrader[] traders;
 	
 	protected RandomEngine prng;
@@ -101,7 +93,11 @@ public class RandomRobinAuctionTest extends TestCase {
 	}
 
 	public void setUpAuction() {
-		auction = new MarketFacade(prng);
+		auction = new MarketSimulation();
+		auction.setSimulationController(new SpringSimulationController());
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
 		auction.setMaximumRounds(3);
 	}
 

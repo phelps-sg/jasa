@@ -20,15 +20,20 @@ import java.util.Iterator;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.DailyRandomValuer;
 import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.event.MarketEventListener;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.market.rules.UniformPricingPolicy;
@@ -41,12 +46,14 @@ import cern.jet.random.engine.RandomEngine;
  * @version $Revision$
  */
 
-public class EquilibriumSurplusLoggerTest extends TestCase implements
+public class DynamicSurplusReportTest extends TestCase implements
     MarketEventListener {
 
 	protected ClearingHouseAuctioneer auctioneer;
 
-	protected MarketFacade auction;
+	protected MarketSimulation auction;
+	
+	protected SimulationController controller;
 
 	protected DynamicSurplusReport eqLogger;
 	
@@ -72,7 +79,7 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 
 	protected static final int DAY_LEN = 20;
 
-	public EquilibriumSurplusLoggerTest(String name) {
+	public DynamicSurplusReportTest(String name) {
 		super(name);
 	}
 
@@ -80,9 +87,17 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 	}
 
+	public void initialiseAuction() {
+		auction = new MarketSimulation();
+		controller = new SpringSimulationController();
+		auction.setSimulationController(controller);
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
+	}
+	
 	public void initWithParams(int ns, int nb, int tradeEnt) {
-		auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		initialiseAuction();
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		((AbstractAuctioneer) auctioneer)
 		    .setPricingPolicy(new UniformPricingPolicy(0.5));
@@ -90,13 +105,13 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 		auction.setMaximumDays(MAX_DAYS);
 		auction.setLengthOfDay(DAY_LEN);
 		eqLogger = new DynamicSurplusReport();
-		auction.addReport(eqLogger);  
+//		auction.addReport(eqLogger);
+		controller.addListener(eqLogger);
 		eqLogger.setAuction(auction);
 		eqLogger.setQuantity(tradeEnt);
 
 		for (int i = 0; i < ns + nb; i++) {
-			TokenTradingAgent agent = new TokenTradingAgent(auction);
-
+			TokenTradingAgent agent = new TokenTradingAgent(controller);
 			agent.setStrategy(new TruthTellingStrategy(agent));
 			agent.setInitialTradeEntitlement(tradeEnt);
 			if (i < ns) {
@@ -227,6 +242,6 @@ public class EquilibriumSurplusLoggerTest extends TestCase implements
 	}
 
 	public static Test suite() {
-		return new TestSuite(EquilibriumSurplusLoggerTest.class);
+		return new TestSuite(DynamicSurplusReportTest.class);
 	}
 }

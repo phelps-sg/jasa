@@ -20,6 +20,7 @@ import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.strategy.AbstractTradingStrategy;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 
 /**
@@ -33,9 +34,9 @@ public class MockStrategy extends AbstractTradingStrategy {
 
 	public Order[] shouts;
 
-	public MockStrategy(Order[] shouts, EventScheduler scheduler) {
+	public MockStrategy(Order[] shouts, MarketSimulation marketSimulation) {
 		this.shouts = shouts;
-		setScheduler(scheduler);
+		setScheduler(marketSimulation.getSimulationController());
 	}
 
 	@Override

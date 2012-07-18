@@ -16,6 +16,8 @@
 package net.sourceforge.jasa.market;
 
 import junit.framework.TestCase;
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
@@ -26,7 +28,7 @@ public abstract class AuctioneerTest extends TestCase {
 
 	Auctioneer auctioneer;
 
-	Market auction;
+	MarketSimulation auction;
 
 	MockTrader[] traders;
 	
@@ -39,6 +41,7 @@ public abstract class AuctioneerTest extends TestCase {
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		auction = new MarketSimulation();
+		auction.setSimulationController(new SpringSimulationController());
 
 		traders = new MockTrader[5];
 		traders[0] = new MockTrader(this, 30, 1000, 1000, auction);
@@ -64,7 +67,7 @@ public abstract class AuctioneerTest extends TestCase {
 			e.printStackTrace();
 		}
 
-		auctioneer.removeShout(testShout);
+		auctioneer.removeOrder(testShout);
 		// auctioneer.endOfRoundProcessing();
 
 		auctioneer.printState();

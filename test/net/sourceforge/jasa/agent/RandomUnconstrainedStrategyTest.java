@@ -18,9 +18,14 @@ package net.sourceforge.jasa.agent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.strategy.RandomUnconstrainedStrategy;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.report.PriceStatisticsReport;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
@@ -30,34 +35,16 @@ import cern.jet.random.engine.RandomEngine;
 
 public class RandomUnconstrainedStrategyTest extends TestCase {
 
-	/**
-	 * @uml.property name="testStrategy"
-	 * @uml.associationEnd
-	 */
 	protected RandomUnconstrainedStrategy testStrategy;
 
-	/**
-	 * @uml.property name="testAgent"
-	 * @uml.associationEnd
-	 */
+	
 	protected TokenTradingAgent testAgent;
 
-	/**
-	 * @uml.property name="auctioneer"
-	 * @uml.associationEnd
-	 */
+	
 	protected ClearingHouseAuctioneer auctioneer;
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
-	protected MarketFacade auction;
-
-	/**
-	 * @uml.property name="report"
-	 * @uml.associationEnd
-	 */
+	protected MarketSimulation auction;
+	
 	protected PriceStatisticsReport logger;
 	
 	protected RandomEngine prng;
@@ -74,18 +61,23 @@ public class RandomUnconstrainedStrategyTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		auction = new MarketSimulation();
+		SimulationController controller = new SpringSimulationController();
+		auction.setSimulationController(controller);
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
-		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, auction);
+		testAgent = new TokenTradingAgent(PRIV_VALUE, 100, controller);
 		Uniform distribution = new Uniform(0, MAX_PRICE, prng);
 		testStrategy = new RandomUnconstrainedStrategy(distribution, testAgent);
 		testStrategy.setBuy(false);
 		testAgent.setStrategy(testStrategy);
 		
 		logger = new PriceStatisticsReport();
-		auction.addReport(logger);
+//		auction.addReport(logger);
+		controller.addListener(logger);
 		auction.register(testAgent);
 		auction.setMaximumRounds(MAX_ROUNDS);
 	}

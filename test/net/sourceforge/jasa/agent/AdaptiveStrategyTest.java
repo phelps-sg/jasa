@@ -18,7 +18,11 @@ package net.sourceforge.jasa.agent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.market.auctioneer.ClearingHouseAuctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
@@ -27,10 +31,6 @@ import cern.jet.random.engine.RandomEngine;
 
 public class AdaptiveStrategyTest extends TestCase {
 
-	/**
-	 * @uml.property name="strategy"
-	 * @uml.associationEnd
-	 */
 	TestLearnerStrategy strategy;
 	
 	RandomEngine prng;
@@ -49,11 +49,17 @@ public class AdaptiveStrategyTest extends TestCase {
 	}
 
 	public void testActionsAndRewards() {
-		MarketFacade auction = new MarketFacade(prng);
+		MarketSimulation auction = new MarketSimulation();
+		auction = new MarketSimulation();
+		auction.setSimulationController(new SpringSimulationController());
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
 		Auctioneer auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 		auction.setMaximumRounds(NUM_ROUNDS);
-		TokenTradingAgent agent = new TokenTradingAgent(10, 100, auction);
+		TokenTradingAgent agent = new TokenTradingAgent(10, 100,
+				auction.getSimulationController());
 		agent.setStrategy(strategy);
 		strategy.setBuy(true);
 		auction.register(agent);

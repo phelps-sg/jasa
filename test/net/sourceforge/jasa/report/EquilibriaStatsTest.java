@@ -20,31 +20,25 @@ import java.util.Random;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import cern.jet.random.engine.MersenneTwister64;
 
 public class EquilibriaStatsTest extends TestCase {
 
-	/**
-	 * @uml.property name="market"
-	 * @uml.associationEnd
-	 */
-	MarketFacade auction;
+	MarketSimulation auction;
 
-	/**
-	 * @uml.property name="traders"
-	 * @uml.associationEnd multiplicity="(0 -1)"
-	 */
 	MockTrader[] traders;
 
-	/**
-	 * @uml.property name="randGenerator"
-	 */
 	Random randGenerator = new Random();
 
 	static double[] NO_EP = { 100, 90, 80, 10, 20, 30 };
@@ -66,8 +60,7 @@ public class EquilibriaStatsTest extends TestCase {
 	}
 
 	public void setUp() {
-		auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		initialiseAuction();
 		traders = new MockTrader[N];
 		for (int i = 0; i < N; i++) {
 			traders[i] = new MockTrader(this, 0, 0, 0, auction);
@@ -76,6 +69,15 @@ public class EquilibriaStatsTest extends TestCase {
 			strategy.setBuy(i >= NS);
 			auction.register(traders[i]);
 		}
+	}
+	
+	public void initialiseAuction() {
+		auction = new MarketSimulation();
+		SimulationController controller = new SpringSimulationController();
+		auction.setSimulationController(controller);
+		auction.setPopulation(new Population());
+//		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
 	}
 
 	/**
@@ -114,8 +116,7 @@ public class EquilibriaStatsTest extends TestCase {
 	 * Check that no equilibria exists when there are no traders.
 	 */
 	public void testNoTraders() {
-		auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
+		initialiseAuction();
 		EquilibriumReport ep = new EquilibriumReport(auction);
 		ep.calculate();
 		assertTrue(!ep.equilibriaExists());

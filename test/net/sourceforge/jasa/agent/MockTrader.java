@@ -20,6 +20,7 @@ import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.AgentArrivalEvent;
 import net.sourceforge.jasa.event.MarketEvent;
 import net.sourceforge.jasa.market.Market;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
@@ -49,14 +50,14 @@ public class MockTrader extends SimpleTradingAgent {
 	static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
 	public MockTrader(TestCase test, int stock, long funds,
-			EventScheduler scheduler) {
-		super(stock, funds, scheduler);
+			MarketSimulation simulation) {
+		super(stock, funds, simulation.getSimulationController());
 		this.test = test;
 	}
 
 	public MockTrader(TestCase test, int stock, double funds,
-	    double privateValue, EventScheduler scheduler) {
-		super(stock, funds, privateValue, scheduler);
+	    double privateValue, MarketSimulation simulation) {
+		super(stock, funds, privateValue, simulation.getSimulationController());
 		this.test = test;
 	}
 
@@ -81,8 +82,8 @@ public class MockTrader extends SimpleTradingAgent {
 	// }
 
 	public MockTrader(TestCase test, int stock, double funds, double privateValue,
-			TradingStrategy strategy, EventScheduler scheduler) {
-		super(stock, funds, privateValue, strategy, scheduler);
+			TradingStrategy strategy, MarketSimulation simulation) {
+		super(stock, funds, privateValue, strategy, simulation.getSimulationController());
 		this.test = test;
 	}
 

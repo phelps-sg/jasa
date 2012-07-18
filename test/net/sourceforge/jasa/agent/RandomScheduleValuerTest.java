@@ -18,9 +18,14 @@ package net.sourceforge.jasa.agent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SimulationController;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jasa.agent.valuation.RandomScheduleValuer;
 import net.sourceforge.jasa.market.Market;
-import net.sourceforge.jasa.market.MarketFacade;
+import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.Order;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import cern.jet.random.engine.MersenneTwister64;
@@ -33,6 +38,8 @@ public class RandomScheduleValuerTest extends TestCase {
 	protected MockRandomScheduleValuer valuer;
 	
 	protected RandomEngine prng;
+	
+	protected MarketSimulation auction;
 
 	public static final double MIN = 10;
 
@@ -44,14 +51,19 @@ public class RandomScheduleValuerTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		agent = new MockTrader(this, 2, 0, null);
+		auction = new MarketSimulation();
+		SimulationController controller = new SpringSimulationController();
+		auction.setSimulationController(controller);
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
+		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
+		agent = new MockTrader(this, 2, 0, auction);
 		valuer = new MockRandomScheduleValuer(MIN, MAX, prng);
 		agent.setValuationPolicy(valuer);
 	}
 
 	public void testValueChanges() {
-		MarketFacade auction = new MarketFacade(
-				new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED));
 		agent.orderFilled(auction, new Order(agent, 1, 100, true), 100, 1);
 		assertTrue(valuer.consumed);
 	}

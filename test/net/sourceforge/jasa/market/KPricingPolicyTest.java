@@ -44,7 +44,7 @@ public class KPricingPolicyTest extends TestCase {
 	 * @uml.property name="market"
 	 * @uml.associationEnd
 	 */
-	MarketFacade auction;
+	MarketSimulation auction;
 
 	/**
 	 * @uml.property name="agents"
@@ -60,7 +60,7 @@ public class KPricingPolicyTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		auction = new MarketFacade(prng);
+		auction = new MarketSimulation();
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
 
