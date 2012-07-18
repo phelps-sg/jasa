@@ -43,22 +43,22 @@ public interface Auctioneer extends QuoteProvider, MarketEventListener {
 	public void clear();
 
 	/**
-	 * Code for handling a new shout in the market. Subclasses should override
+	 * Code for handling a new order in the market. Subclasses should override
 	 * this method if they wish to provide different handling for different
 	 * market rules.
 	 * 
-	 * @param shout
+	 * @param order
 	 *          The new shout to be processed
 	 * 
 	 * @exception IllegalOrderException
-	 *              Thrown if the shout is invalid in some way.
+	 *              Thrown if the order is invalid in some way.
 	 */
 	public void newOrder(Order order) throws IllegalOrderException;
 
 	/**
-	 * Handle a request to retract a shout.
+	 * Cancel an existing order.
 	 */
-	public void removeShout(Order order);
+	public void removeOrder(Order order);
 
 	/**
 	 * Log the current state of the market.

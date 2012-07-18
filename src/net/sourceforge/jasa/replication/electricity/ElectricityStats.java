@@ -252,7 +252,7 @@ public class ElectricityStats extends SurplusReport implements Cloneable {
 		Iterator<Order> shoutIterator = shouts.iterator();
 		while (shoutIterator.hasNext()) {
 			Order s = shoutIterator.next();
-			auctioneer.removeShout(s);
+			auctioneer.removeOrder(s);
 		}
 	}
 

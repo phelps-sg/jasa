@@ -571,7 +571,7 @@ public class MarketSimulation extends AbstractSimulation
 	public void removeOrder(Order shout) {
 		// Remove this shout and all of its children.
 		for (Order s = shout; s != null; s = s.getChild()) {
-			auctioneer.removeShout(s);
+			auctioneer.removeOrder(s);
 			// if ( s != shout ) {
 			// ShoutPool.release(s);
 			// }

@@ -139,7 +139,7 @@ public abstract class AbstractAuctioneer implements Serializable, Auctioneer,
 	/**
 	 * Handle a request to retract a shout.
 	 */
-	public void removeShout(Order shout) {
+	public void removeOrder(Order shout) {
 		orderBook.remove(shout);
 	}
 

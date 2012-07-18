@@ -75,7 +75,7 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 			logger.debug("quoteBid = " + quoteBid);
 			logger.debug("quoteAsk = " + quoteAsk);
 			double askPrice = quoteAsk - priceOffset;
-			double bidPrice= quoteBid + priceOffset;
+			double bidPrice = quoteBid + priceOffset;
 			if (askPrice < minPrice) {
 				askPrice = minPrice;
 			}
