@@ -117,6 +117,11 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return !isBid;
 	}
 
+	/**
+	 * Check whether two orders "cross"; that is, check whether this order could
+	 * potentially be matched against the supplied order resulting in a
+	 * transaction.
+	 */
 	public boolean matches(Order other) {
 		if (this.getAgent() == other.getAgent()) {
 			return false;

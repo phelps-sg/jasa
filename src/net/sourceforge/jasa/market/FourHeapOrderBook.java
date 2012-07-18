@@ -324,7 +324,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 
 			if (bOutTop != null && bOutTop.matches(ask)
 			    && (sInTop == null || sInTop.matches(bOutTop))) {
-
+				//TODO alter logic so that this maintains heap constraints
 				uninsertedUnits -= promoteHighestUnmatchedBid(ask);
 
 			} else if (sInTop != null && ask.getPrice() <= sInTop.getPrice()) {
@@ -340,18 +340,6 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		}
 	}
 
-	/*
-	 * public void newShout( Shout shout ) throws DuplicateShoutException { if (
-	 * shout.isAsk() ) { newAsk(shout); } else { newBid(shout); } }
-	 */
-
-	// protected Iterator matchedBidDisassembler() {
-	// return new QueueDisassembler(bIn);
-	// }
-	//
-	// protected Iterator matchedAskDisassembler() {
-	// return new QueueDisassembler(sIn);
-	// }
 	@SuppressWarnings("unchecked")
 	public Iterator<Order> askIterator() {
 		return new CollatingIterator(greaterThan, sIn.iterator(), sOut.iterator());
