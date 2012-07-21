@@ -42,8 +42,8 @@ import org.apache.log4j.Logger;
  * @version $Revision$
  */
 
-public abstract class DirectRevelationReportVariables extends AbstractReportVariables
-		implements ReportVariables, Serializable {
+public abstract class DirectRevelationReportVariables extends
+		AbstractReportVariables implements ReportVariables, Serializable {
 
 	protected Market auction;
 	

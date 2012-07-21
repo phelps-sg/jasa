@@ -115,7 +115,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 				(ReturnForecasterWithTimeHorizon) super.clone();
 		try {
 			result.afterPropertiesSet();
-			((EventScheduler) market).addListener(result);
+			((MarketSimulation) market).addListener(result);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

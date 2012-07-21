@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
@@ -110,6 +111,15 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 	
 	public void calculate() {
 		compute(null);
+	}
+
+	@Override
+	public void eventOccurred(SimEvent event) {
+		super.eventOccurred(event);
+		if (event instanceof RoundFinishedEvent) {
+			this.auction = (Market) ((RoundFinishedEvent) event).getSimulation();
+			compute(event);
+		} 
 	}
 
 	protected void calculateEquilibriaQuantity() {
