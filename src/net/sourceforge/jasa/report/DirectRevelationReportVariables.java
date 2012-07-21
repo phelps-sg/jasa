@@ -86,6 +86,7 @@ public abstract class DirectRevelationReportVariables extends AbstractReportVari
 
 	@Override
 	public void compute(SimEvent event) {
+		super.compute(event);
 		initialise();
 		simulateDirectRevelation();
 	}

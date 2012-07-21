@@ -206,11 +206,8 @@ class TestShoutEngine extends FourHeapOrderBook {
 
 	private static final double TOLERANCE = 0.01;
 
-	protected void preRemovalProcessing() {
-		checkBalanced();
-	}
-
-	protected void postRemovalProcessing() {
+	@Override
+	public void checkIntegrity() {
 		checkBalanced();
 	}
 

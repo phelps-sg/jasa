@@ -16,6 +16,7 @@
 package net.sourceforge.jasa.report;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -64,8 +65,10 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 	public static final ReportVariable VAR_EXISTS = new ReportVariable(
 	    "equilibria.exists", "Does an equilibrium exist?");
 
-	public static final ReportVariable VAR_MINPRICE = new ReportVariable(
-	    "equilibria.minprice", "Minimum equilibrium price");
+	public static final String VAR_MINPRICE = "equilibria.minprice";
+	
+//	public static final ReportVariable VAR_MINPRICE = new ReportVariable(
+//	    "equilibria.minprice", "Minimum equilibrium price");
 
 	public static final ReportVariable VAR_MAXPRICE = new ReportVariable(
 	    "equilibria.maxprice", "Maximum equilibrium price");
@@ -183,7 +186,7 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 //		reportVars.put(VAR_QUANTITY, new Long(quantity));
 		reportVars.put(VAR_MINPRICE, new Double(minPrice));
 //		reportVars.put(VAR_MAXPRICE, new Double(maxPrice));
-		Inspector.inspect(this);
+//		Inspector.inspect(this);
 		return reportVars;
 	}
 
@@ -194,6 +197,13 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 		yVariableNames.add(VAR_MINPRICE);
 //		yVariableNames.add(VAR_MAXPRICE);
 	}
+//
+//	@Override
+//	public List<Object> getyVariableNames() {
+//		ArrayList<Object> result = new ArrayList<Object>();
+//		result.add(VAR_MINPRICE);
+//		return result;
+//	}
 	
 	
 

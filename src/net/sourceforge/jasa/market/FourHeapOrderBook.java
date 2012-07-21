@@ -79,14 +79,13 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		initialise();
 	}
 
-	public synchronized void remove(Order shout) {
-		preRemovalProcessing();
+	public void remove(Order shout) {
 		if (shout.isAsk()) {
 			removeAsk(shout);
 		} else {
 			removeBid(shout);
 		}
-		postRemovalProcessing();
+		checkIntegrity();
 	}
 
 	protected void removeAsk(Order shout) {
@@ -283,6 +282,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		} else {
 			addAsk(shout);
 		}
+		checkIntegrity();
 	}
 
 	protected void addBid(Order bid) throws DuplicateShoutException {
@@ -338,11 +338,13 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 
 			}
 		}
+
 	}
 
 	@SuppressWarnings("unchecked")
 	public Iterator<Order> askIterator() {
-		return new CollatingIterator(greaterThan, sIn.iterator(), sOut.iterator());
+		return new CollatingIterator(greaterThan, sIn.iterator(),
+				sOut.iterator());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -362,7 +364,8 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * </p>
 	 */
 	public List<Order> matchOrders() {
-		ArrayList<Order> result = new ArrayList<Order>(sIn.size() + bIn.size());
+		ArrayList<Order> result = 
+				new ArrayList<Order>(sIn.size() + bIn.size());
 		while (!sIn.isEmpty()) {
 			Order sInTop = (Order) sIn.remove();
 			Order bInTop = (Order) bIn.remove();
@@ -382,6 +385,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 			result.add(sInTop);
 		}
 		assert bIn.isEmpty();
+		checkIntegrity();
 		return result;
 	}
 
@@ -397,31 +401,15 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	}
 
 	/**
-	 * Sub-classes should override this method if they wish to check market state
-	 * integrity before shout removal. This is useful for testing/debugging.
-	 */
-	protected void preRemovalProcessing() {
-		// Do nothing
-	}
-
-	/**
-	 * Sub-classes should override this method if they wish to check market state
-	 * integrity after shout removal. This is useful for testing/debugging.
-	 */
-	protected void postRemovalProcessing() {
-		// Do nothing
-	}
-
-	/**
 	 * Remove, possibly several, shouts from heap such that quantity(heap) is
-	 * reduced by the supplied quantity and reinsert the shouts using the standard
-	 * insertion logic. quantity(heap) is defined as the total quantity of every
-	 * shout in the heap.
+	 * reduced by the supplied quantity and reinsert the shouts using the
+	 * standard insertion logic. quantity(heap) is defined as the total quantity
+	 * of every shout in the heap.
 	 * 
 	 * @param heap
-	 *          The heap to remove shouts from.
+	 *            The heap to remove shouts from.
 	 * @param quantity
-	 *          The total quantity to remove.
+	 *            The total quantity to remove.
 	 */
 	protected void reinsert(PriorityQueue<Order> heap, int quantity) {
 
@@ -445,6 +433,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 				throw new AuctionRuntimeException("Invalid market state");
 			}
 		}
+		
 	}
 
 	/**
@@ -477,6 +466,24 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		ArrayList<Order> asks = new ArrayList<Order>(sOut);
 		Collections.sort(asks, greaterThan);
 		return asks;
+	}
+
+	public void checkIntegrity() {
+		Order bInTop = getLowestMatchedBid();
+		Order sInTop = getHighestMatchedAsk();
+		Order bOutTop = getHighestUnmatchedBid();
+		Order sOutTop = getLowestUnmatchedAsk();
+
+		checkBalanced(bInTop, bOutTop, "bIn >= bOut");
+		checkBalanced(sOutTop, sInTop, "sOut >= sIn");
+		checkBalanced(sOutTop, bOutTop, "sOut >= bOut");
+		checkBalanced(bInTop, sInTop, "bIn >= sIn");
+	}
+	
+	protected void checkBalanced(Order s1, Order s2, String condition) {
+		if (!((s1 == null || s2 == null) || s1.getPrice() >= (s2.getPrice()))) {
+			throw new RuntimeException("Heaps not balanced! - " + condition);
+		}
 	}
 
 }
