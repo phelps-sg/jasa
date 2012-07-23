@@ -23,6 +23,8 @@ import java.util.Map;
 
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.event.SimulationEvent;
+import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
@@ -63,19 +65,13 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 
 	protected int quantity;
 
-	public static final ReportVariable VAR_EXISTS = new ReportVariable(
-	    "equilibria.exists", "Does an equilibrium exist?");
+	public static final String VAR_EXISTS = "equilibria.exists";
 
 	public static final String VAR_MINPRICE = "equilibria.minprice";
-	
-//	public static final ReportVariable VAR_MINPRICE = new ReportVariable(
-//	    "equilibria.minprice", "Minimum equilibrium price");
 
-	public static final ReportVariable VAR_MAXPRICE = new ReportVariable(
-	    "equilibria.maxprice", "Maximum equilibrium price");
+	public static final String VAR_MAXPRICE = "equilibria.maxprice";
 
-	public static final ReportVariable VAR_QUANTITY = new ReportVariable(
-	    "equilibria.quantity", "Equilibrium quantity");
+	public static final String VAR_QUANTITY = "equilibria.quantity";
 
 	static Logger logger = Logger.getLogger(EquilibriumReportVariables.class);
 
@@ -88,11 +84,6 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 		super("equilibrium");
 		this.auction = auction;
 	}
-
-//	public void recalculate() {
-//		reset();
-//		calculate();
-//	}
 
 	@Override
 	public void compute(SimEvent event) {
@@ -116,9 +107,9 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 	@Override
 	public void eventOccurred(SimEvent event) {
 		super.eventOccurred(event);
-		if (event instanceof RoundFinishedEvent) {
-			this.auction = (Market) ((RoundFinishedEvent) event).getSimulation();
-			compute(event);
+		if (event instanceof SimulationStartingEvent) {
+			this.auction = (Market) ((SimulationStartingEvent) event).getSimulation();
+//			compute(event);
 		} 
 	}
 
@@ -188,25 +179,25 @@ public class EquilibriumReportVariables extends DirectRevelationReportVariables
 	@Override
 	public Map<Object,Number> getVariableBindings() {
 		Map<Object,Number> reportVars = super.getVariableBindings();
-//		if (equilibriaFound) {
-//			reportVars.put(VAR_EXISTS, new Integer(1));
-//		} else {
-//			reportVars.put(VAR_EXISTS, new Integer(0));
-//		}
-//		reportVars.put(VAR_QUANTITY, new Long(quantity));
 		reportVars.put(VAR_MINPRICE, new Double(minPrice));
-//		reportVars.put(VAR_MAXPRICE, new Double(maxPrice));
-//		Inspector.inspect(this);
+		if (equilibriaFound) {
+			reportVars.put(VAR_EXISTS, new Integer(1));
+		} else {
+			reportVars.put(VAR_EXISTS, new Integer(0));
+		}
+		reportVars.put(VAR_QUANTITY, new Long(quantity));
+		reportVars.put(VAR_MAXPRICE, new Double(maxPrice));
 		return reportVars;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-//		yVariableNames.add(VAR_EXISTS);
-//		yVariableNames.add(VAR_QUANTITY);
 		yVariableNames.add(VAR_MINPRICE);
-//		yVariableNames.add(VAR_MAXPRICE);
+		yVariableNames.add(VAR_EXISTS);
+		yVariableNames.add(VAR_QUANTITY);
+		yVariableNames.add(VAR_MAXPRICE);
 	}
+	
 //
 //	@Override
 //	public List<Object> getyVariableNames() {
