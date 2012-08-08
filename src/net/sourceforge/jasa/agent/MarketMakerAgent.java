@@ -101,9 +101,10 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 				logger.debug("askPrice = " + askPrice);
 				logger.debug("bidPrice = " + bidPrice);
 			}
-			assert bid.getPrice() <= ask.getPrice();
-			market.placeOrder(bid);
-			market.placeOrder(ask);
+			if (bid.getPrice() <= ask.getPrice()) {
+				market.placeOrder(bid);
+				market.placeOrder(ask);
+			} 
 		} catch (AuctionException e) {
 //			throw new RuntimeException(e);
 			logger.warn(e);
