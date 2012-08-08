@@ -41,6 +41,12 @@ import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import org.pf.joi.Inspector;
 import org.springframework.beans.factory.InitializingBean;
 
+/**
+ * A report which provides a graphical table depicting the order-book
+ * which is updated live as the simulation progresses.
+ * 
+ * @author Steve Phelps
+ */
 public class OrderBookView extends JTable implements ReportWithGUI, TableModel,
 		InitializingBean {
 

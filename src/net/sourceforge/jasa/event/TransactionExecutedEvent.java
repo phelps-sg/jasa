@@ -19,7 +19,7 @@ import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 /**
- * An event that is fired every time a good is sold in an market.
+ * An event that is fired every time an order is fulfilled.
  * 
  * @author Steve Phelps
  * @version $Revision$
