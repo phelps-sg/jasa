@@ -12,7 +12,6 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  */
-
 package net.sourceforge.jasa.agent;
 
 import java.io.Serializable;
@@ -51,13 +50,14 @@ import org.apache.log4j.Logger;
  * An abstract class representing a simple agent trading in a round-robin
  * market. Traders of this type deal in a single commodity for which they have
  * a well-defined valuation.
+ * </p>
  * 
  * @author Steve Phelps
  * @version $Revision$
  */
 
-public abstract class AbstractTradingAgent extends AbstractAgent implements TradingAgent,
-    Serializable, Prototypeable, Cloneable {
+public abstract class AbstractTradingAgent extends AbstractAgent implements
+		TradingAgent, Serializable, Prototypeable, Cloneable {
 
 	/**
 	 * The inventory of the agent.
@@ -257,7 +257,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		return account;
 	}
 
-	public synchronized void giveFunds(AbstractTradingAgent recipient,
+	public void giveFunds(AbstractTradingAgent recipient,
 			double amount) {
 		account.transfer(recipient.getAccount(), amount);
 	}
@@ -269,7 +269,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	 * @param amount
 	 *          The total amount of money to give to the seller
 	 */
-	public synchronized void pay(double amount) {
+	public void pay(double amount) {
 		account.credit(amount);
 	}
 
@@ -315,15 +315,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		((FixedValuer) valuer).setValue(privateValue);
 	}
 
-//	public void setStrategy(TradingStrategy strategy) {
-//		this.strategy = strategy;
-//		strategy.setAgent(this);
-//	}
-//
-//	public TradingStrategy getStrategy() {
-//		return strategy;
-//	}
-
 	/**
 	 * Return the profit made in the most recent market round. This can be used
 	 * as, e.g. input to a re-inforcement learning algorithm.
@@ -355,9 +346,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 		double profit = calculateProfit(auction, quantity, price);
 		return utilityFunction.calculatePayoff(profit);
 	}
-
-//	public abstract double calculateProfit(Market auction, int quantity,
-//			double price);
 
 	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity) {
@@ -430,7 +418,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
-		// TODO Auto-generated method stub
 		return super.clone();
 	}
 
@@ -451,7 +438,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 
 	@Override
 	public boolean isInteracted() {
-		// TODO Auto-generated method stub
 		return active();
 	}
 
@@ -473,9 +459,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 
 	@Override
 	public double calculateProfit(Market auction, int quantity, double price) {
-		// if (currentOrder == null) {
-		// return 0;
-		// }
 		if (isBuyer()) {
 			return (getValuation(auction) - price) * quantity;
 		} else {
@@ -489,7 +472,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements Trad
 	 */
 	public double equilibriumProfits(Market auction, double equilibriumPrice,
 			int quantity) {
-		// TODO Auto-generated method stub
 		return calculateProfit(auction, quantity, equilibriumPrice);
 	}
 	
