@@ -22,7 +22,7 @@ public class FundamentalistForecasterTest extends TestCase {
 	}
 
 	public void testGetter() {
-		assertTrue(forecaster.getFundamentalPrice() == FUNDAMENTAL_PRICE);
+		assertTrue(forecaster.getFundamentalPrice().equals(FUNDAMENTAL_PRICE));
 	}
 
 	public double getNextPeriodReturnForecast() {

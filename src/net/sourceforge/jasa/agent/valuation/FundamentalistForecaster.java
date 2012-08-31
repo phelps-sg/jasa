@@ -7,7 +7,7 @@ import net.sourceforge.jasa.market.Market;
 public class FundamentalistForecaster extends ReturnForecasterWithTimeHorizon
 		implements Serializable {
 
-	protected double fundamentalPrice;
+	protected Number fundamentalPrice;
 
 	public FundamentalistForecaster() {
 	}
@@ -21,15 +21,15 @@ public class FundamentalistForecaster extends ReturnForecasterWithTimeHorizon
 		if (currentPrice < 10E-5) {
 			currentPrice = 10E-5;
 		}
-		double r = Math.log(fundamentalPrice / currentPrice);
+		double r = Math.log(getFundamentalPrice().doubleValue() / currentPrice);
 		return r;
 	}
 
-	public double getFundamentalPrice() {
+	public Number getFundamentalPrice() {
 		return fundamentalPrice;
 	}
 
-	public void setFundamentalPrice(double fundamentalPrice) {
+	public void setFundamentalPrice(Number fundamentalPrice) {
 		this.fundamentalPrice = fundamentalPrice;
 	}
 	

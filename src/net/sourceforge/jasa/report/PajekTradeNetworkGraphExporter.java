@@ -2,11 +2,8 @@ package net.sourceforge.jasa.report;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import net.sourceforge.jabm.agent.Agent;
-import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.report.ReportVariables;
 import net.sourceforge.jabm.report.WeightedEdge;
 
@@ -14,32 +11,28 @@ import org.apache.commons.collections15.Transformer;
 
 import edu.uci.ics.jung.io.PajekNetWriter;
 
-public class TradeNetworkGraphExporter implements ReportVariables {
+public class PajekTradeNetworkGraphExporter extends
+		AbstractTradeNetworkGraphExporter {
 
-	protected TradeNetworkReport tradeNetworkReport;
+	public PajekTradeNetworkGraphExporter() {
+		super();
+	}
 	
-	protected String baseFileName;
-	
-	protected int graphNumber = 0;
-	
-	public TradeNetworkGraphExporter(TradeNetworkReport relationshipTracker,
+	public PajekTradeNetworkGraphExporter(TradeNetworkReport relationshipTracker,
 			Object fileNamePrefix, Object fileNameSuffix) {
 		super();
 		this.tradeNetworkReport = relationshipTracker;
-		this.baseFileName = "" + fileNamePrefix + fileNameSuffix;
-	}
-
-	public Map<Object, Number> getVariableBindings() {
-		// TODO Auto-generated method stub
-		return null;
+		this.fileNamePrefix = fileNamePrefix;
+		this.fileNameSuffix = fileNameSuffix;
+		initialise();
 	}
 
 	public void exportGraph() {
 		
 		PajekNetWriter<Agent, WeightedEdge> graphWriter = 
 			new PajekNetWriter<Agent, WeightedEdge>();
-//		DotWriter<Agent, TransactionList> graphWriter =
-//			new DotWriter<Agent, RelationshipStrength>();
+//		DotWriter<Agent, WeightedEdge> graphWriter =
+//			new DotWriter<Agent, WeightedEdge>();
 		
 		try {
 			
@@ -75,42 +68,6 @@ public class TradeNetworkGraphExporter implements ReportVariables {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public TradeNetworkReport getTradeNetworkReport() {
-		return tradeNetworkReport;
-	}
-
-	public void setTradeNetworkReport(TradeNetworkReport relationshipTracker) {
-		this.tradeNetworkReport = relationshipTracker;
-	}
-
-	public String getFileName() {
-		return baseFileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.baseFileName = fileName;
-	}
-
-	public void compute(SimEvent event) {
-		exportGraph();
-	}
-
-	public void reset(SimulationEvent event) {
-	}
-
-	public void eventOccurred(SimEvent event) {
-	}
-
-	public void dispose(SimEvent event) {
-	}
-	
-	public void initialise(SimEvent event) {
-	}
-
-	public String getName() {
-		return getClass().getName();
 	}
 	
 }
