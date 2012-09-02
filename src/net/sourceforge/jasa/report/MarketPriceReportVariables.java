@@ -1,5 +1,6 @@
 package net.sourceforge.jasa.report;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +10,8 @@ import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.report.XYReportVariables;
 
-public abstract class MarketPriceReportVariables implements XYReportVariables {
+public abstract class MarketPriceReportVariables implements Serializable,
+		XYReportVariables {
 
 	protected double price;
 	
@@ -59,11 +61,14 @@ public abstract class MarketPriceReportVariables implements XYReportVariables {
 	@Override
 	public void eventOccurred(SimEvent ev) {
 		if (ev instanceof RoundFinishedEvent) {
-			RoundFinishedEvent event = (RoundFinishedEvent) ev;
-			this.price = getPrice(event);
-			this.time = (int) 
-					event.getSimulation().getSimulationTime().getTicks();
+			onRoundFinished((RoundFinishedEvent) ev);
 		}
+	}
+
+	public void onRoundFinished(RoundFinishedEvent event) {
+		this.price = getPrice(event);
+		this.time = (int) 
+				event.getSimulation().getSimulationTime().getTicks();
 	}
 
 	@Override

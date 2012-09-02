@@ -1,5 +1,6 @@
 package net.sourceforge.jasa.agent.valuation;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -12,13 +13,15 @@ import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.report.Report;
+import net.sourceforge.jabm.util.MutableDoubleWrapper;
+import net.sourceforge.jasa.report.MarketPriceReportVariables;
 
-public class GeometricBrownianMotionPriceProcess extends Number implements
-		Report, InitializingBean {
+public class GeometricBrownianMotionPriceProcess extends
+		MarketPriceReportVariables implements InitializingBean {
 
-	protected Double currentPrice;
+	protected double currentPrice;
 	
-	protected Double initialPrice;
+	protected double initialPrice;
 	
 	protected double weinerProcess;
 	
@@ -28,15 +31,16 @@ public class GeometricBrownianMotionPriceProcess extends Number implements
 	
 	protected double dt;
 	
+	protected MutableDoubleWrapper priceWrapper = new MutableDoubleWrapper();
+	
 	protected RandomEngine prng;
 	
 	protected Normal noiseDistribution;
 	
 	@Override
 	public void eventOccurred(SimEvent event) {
-		if (event instanceof RoundFinishedEvent) {
-			onRoundFinished((RoundFinishedEvent) event);
-		} else if (event instanceof SimulationStartingEvent) {
+		super.eventOccurred(event);
+		if (event instanceof SimulationStartingEvent) {
 			onSimulationStarting((SimulationStartingEvent) event);
 		}
 	}
@@ -45,58 +49,37 @@ public class GeometricBrownianMotionPriceProcess extends Number implements
 		initialise();
 	}
 	
+	@Override
 	public void onRoundFinished(RoundFinishedEvent event) {
-		weinerProcess += noiseDistribution.nextDouble() * Math.sqrt(dt);
+		weinerProcess = noiseDistribution.nextDouble() * Math.sqrt(dt);
+//		System.out.println(weinerProcess);
 		currentPrice *= Math.exp((drift - (volatility * volatility) / 2) * dt
 				+ volatility * weinerProcess);
+		priceWrapper.setValue(currentPrice);
+		super.onRoundFinished(event);
 	}
 
 	@Override
 	public Map<Object, Number> getVariableBindings() {
+		HashMap<Object, Number> result = new HashMap<Object, Number>();
+		result.put("gbm.price", this.currentPrice);
 		return null;
 	}
 
 	@Override
 	public String getName() {
-		return "GBMprice";
-	}
-
-	@Override
-	public int intValue() {
-		return currentPrice.intValue();
-	}
-
-	@Override
-	public long longValue() {
-		return currentPrice.longValue();
-	}
-
-	@Override
-	public float floatValue() {
-		return currentPrice.floatValue();
-	}
-
-	@Override
-	public double doubleValue() {
-		return currentPrice.doubleValue();
+		return "GBM";
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		noiseDistribution = new Normal(0.0, 1.0, prng);
+		initialPrice = priceWrapper.getValue();
 	}
 	
 	public void initialise() {
 		currentPrice = initialPrice;
 		weinerProcess = 0.0;
-	}
-
-	public Double getInitialPrice() {
-		return initialPrice;
-	}
-
-	public void setInitialPrice(Double initialPrice) {
-		this.initialPrice = initialPrice;
 	}
 
 	public double getDrift() {
@@ -131,5 +114,20 @@ public class GeometricBrownianMotionPriceProcess extends Number implements
 	public void setPrng(RandomEngine prng) {
 		this.prng = prng;
 	}
+
+	@Override
+	public double getPrice(RoundFinishedEvent event) {
+		return this.currentPrice;
+	}
+
+	public MutableDoubleWrapper getPriceWrapper() {
+		return priceWrapper;
+	}
+
+	public void setPriceWrapper(MutableDoubleWrapper priceWrapper) {
+		this.priceWrapper = priceWrapper;
+	}
+	
+	
 	
 }
