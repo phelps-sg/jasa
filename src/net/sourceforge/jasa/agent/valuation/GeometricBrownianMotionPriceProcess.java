@@ -58,13 +58,13 @@ public class GeometricBrownianMotionPriceProcess extends
 		priceWrapper.setValue(currentPrice);
 		super.onRoundFinished(event);
 	}
-
-	@Override
-	public Map<Object, Number> getVariableBindings() {
-		HashMap<Object, Number> result = new HashMap<Object, Number>();
-		result.put("gbm.price", this.currentPrice);
-		return null;
-	}
+//
+//	@Override
+//	public Map<Object, Number> getVariableBindings() {
+//		HashMap<Object, Number> result = new HashMap<Object, Number>();
+//		result.put("gbm.price", this.currentPrice);
+//		return result;
+//	}
 
 	@Override
 	public String getName() {
