@@ -48,6 +48,7 @@ public abstract class AbstractTradeNetworkGraphExporter implements
 
 	public void compute(SimEvent event) {
 		exportGraph();
+		this.graphNumber++;
 	}
 
 	public void reset(SimulationEvent event) {

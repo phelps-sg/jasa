@@ -168,7 +168,7 @@ public class TradeNetworkView  implements ReportWithGUI,
 		viewer.getRenderContext().setEdgeLabelTransformer(
 				new Transformer<WeightedEdge, String>() {
 					public String transform(WeightedEdge strength) {
-						return scoreFormatter.format(strength.getValue() * 500.0f);
+						return scoreFormatter.format(strength.getValue());
 					}
 				});
 		

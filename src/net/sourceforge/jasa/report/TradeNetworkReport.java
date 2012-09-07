@@ -189,11 +189,11 @@ public class TradeNetworkReport extends AbstractModel implements
 		return graph;
 	}
 
-	public double getDiscountFactor() {
+	public double getAlpha() {
 		return alpha;
 	}
 
-	public void setDiscountFactor(double discountFactor) {
+	public void setAlpha(double discountFactor) {
 		this.alpha = discountFactor;
 		if (logger.isDebugEnabled()) logger.debug("discountFactor = " + discountFactor);
 	}
@@ -281,8 +281,8 @@ public class TradeNetworkReport extends AbstractModel implements
 		}
 		
 		public double value(TransactionExecutedEvent event) {
-			return (1.0/500.0) * event.getPrice() * event.getQuantity();
-//			return event.getQuantity();
+//			return (1.0/500.0) * event.getPrice() * event.getQuantity();
+			return event.getQuantity();
 		}
 		
 		public double getValue() {
