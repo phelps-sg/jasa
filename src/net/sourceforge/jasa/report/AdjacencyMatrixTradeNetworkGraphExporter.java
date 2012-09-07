@@ -13,6 +13,11 @@ import cern.colt.matrix.impl.SparseDoubleMatrix2D;
 import edu.uci.ics.jung.algorithms.matrix.GraphMatrixOperations;
 import edu.uci.ics.jung.graph.Graph;
 
+/**
+ * Export the trade network as an adjacency matrix.
+ *  
+ * @author Steve Phelps
+ */
 public class AdjacencyMatrixTradeNetworkGraphExporter extends
 		AbstractTradeNetworkGraphExporter {
 
