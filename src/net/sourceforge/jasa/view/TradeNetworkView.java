@@ -159,9 +159,9 @@ public class TradeNetworkView  implements ReportWithGUI,
 		viewer.getRenderContext().setEdgeStrokeTransformer(
 				new Transformer<WeightedEdge, Stroke>() {
 					public Stroke transform(WeightedEdge strength) {
-						double r = strength.getValue()
-								/ tradeNetwork.getMaximumInvestment();
-						return new BasicStroke((float) r * 5f);
+						double r = strength.getValue();
+//								/ tradeNetwork.getMaximumInvestment();
+						return new BasicStroke((float) r); 
 					}
 				});
 		
