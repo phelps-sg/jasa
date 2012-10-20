@@ -40,8 +40,8 @@ public abstract class MarketPriceReportVariables implements Serializable,
 
 	@Override
 	public void initialise(SimEvent event) {
-		// Do nothing
-
+		this.price = Double.NaN;
+		this.time = 0;
 	}
 
 	@Override
