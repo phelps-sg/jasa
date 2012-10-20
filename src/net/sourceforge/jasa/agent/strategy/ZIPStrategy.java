@@ -41,6 +41,10 @@ import cern.jet.random.engine.RandomEngine;
 public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 
 	static Logger logger = Logger.getLogger(ZIPStrategy.class);
+	
+	public ZIPStrategy() {
+		super();
+	}
 
 	public ZIPStrategy(AbstractTradingAgent agent, RandomEngine prng) {
 		super(agent, prng);
@@ -106,5 +110,5 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 			}
 		}
 	}
-
+	
 }
