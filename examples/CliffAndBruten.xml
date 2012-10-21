@@ -391,23 +391,25 @@
 			<bean class="net.sourceforge.jabm.learning.WidrowHoffLearnerWithMomentum">
 			</bean>
 		</property>
-		<property name="tradeDirectionPolicy">
-			<bean class="net.sourceforge.jasa.agent.strategy.FixedTradeDirectionPolicy">
-				<property name="buy" value="true"/>
-			</bean>
-		</property>
+		<property name="tradeDirectionPolicy" ref="forecastTradeDirectionPolicy"/>
+	</bean>
+
+	<bean name="forecastTradeDirectionPolicy"
+		class="net.sourceforge.jasa.agent.strategy.ForecastTradeDirectionPolicy">
+		<property name="prng" ref="prng" />
 	</bean>
 
 	<bean id="returnForecastStrategy" scope="prototype" parent="strategy"
 		class="net.sourceforge.jasa.agent.strategy.SimpleMarkupStrategy">
 		<property name="markupDistribution" ref="markupDistribution" />
 		<property name="prng" ref="prng" />
+		<property name="tradeDirectionPolicy" ref="forecastTradeDirectionPolicy" />
 	</bean>
 
 	<bean id="markupDistribution" scope="singleton"
 		class="net.sourceforge.jabm.distribution.UniformDistribution">
 		<property name="min" value="0.0" />
-		<property name="max" value="0.5" />
+		<property name="max" value="0.1" />
 		<property name="prng" ref="prng" />
 	</bean>
 
