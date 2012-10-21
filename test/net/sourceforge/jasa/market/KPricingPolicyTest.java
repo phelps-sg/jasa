@@ -111,7 +111,7 @@ public class KPricingPolicyTest extends TestCase {
 		auction.run();
 
 		for (int i = 0; i < agents.length; i++) {
-			if (agents[i].lastOrderFilled() && agents[i].isBuyer()) {
+			if (agents[i].lastOrderFilled() && agents[i].isBuyer(auction)) {
 				assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i]
 				    .getValuation(auction)));
 			}
@@ -125,7 +125,7 @@ public class KPricingPolicyTest extends TestCase {
 		auction.run();
 
 		for (int i = 0; i < agents.length; i++) {
-			if (agents[i].isSeller()) {
+			if (agents[i].isSeller(auction)) {
 				assertTrue(MathUtil.approxEqual(agents[i].lastWinningPrice, agents[i]
 				    .getValuation(auction)));
 			}

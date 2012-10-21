@@ -385,8 +385,13 @@
 	</bean>
 
 	<bean id="returnForecastStrategy" scope="prototype" parent="strategy"
-		class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
+		class="net.sourceforge.jasa.agent.strategy.SimpleMarkupStrategy">
 		<property name="markupDistribution" ref="markupDistribution" />
+		<property name="tradeDirectionPolicy">
+			<bean class="net.sourceforge.jasa.agent.strategy.ForecastTradeDirectionPolicy">
+				<property name="prng" ref="prng"/>
+			</bean>
+		</property>
 		<property name="prng" ref="prng" />
 	</bean>
 

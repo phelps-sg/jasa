@@ -391,10 +391,15 @@
 			<bean class="net.sourceforge.jabm.learning.WidrowHoffLearnerWithMomentum">
 			</bean>
 		</property>
+		<property name="tradeDirectionPolicy">
+			<bean class="net.sourceforge.jasa.agent.strategy.FixedTradeDirectionPolicy">
+				<property name="buy" value="true"/>
+			</bean>
+		</property>
 	</bean>
 
 	<bean id="returnForecastStrategy" scope="prototype" parent="strategy"
-		class="net.sourceforge.jasa.agent.strategy.ReturnForecastStrategy">
+		class="net.sourceforge.jasa.agent.strategy.SimpleMarkupStrategy">
 		<property name="markupDistribution" ref="markupDistribution" />
 		<property name="prng" ref="prng" />
 	</bean>

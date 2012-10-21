@@ -26,7 +26,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TokenTradingAgent;
-import net.sourceforge.jasa.event.EndOfDayEvent;
 import net.sourceforge.jasa.market.Market;
 
 import org.apache.log4j.Logger;

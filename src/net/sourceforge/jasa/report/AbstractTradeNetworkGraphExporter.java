@@ -2,11 +2,11 @@ package net.sourceforge.jasa.report;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.InitializingBean;
-
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.report.ReportVariables;
+
+import org.springframework.beans.factory.InitializingBean;
 
 public abstract class AbstractTradeNetworkGraphExporter implements
 		InitializingBean, ReportVariables {

@@ -19,9 +19,6 @@ import java.util.Map;
 
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.util.Resetable;
-import net.sourceforge.jasa.event.EndOfDayEvent;
-import net.sourceforge.jasa.event.MarketEvent;
-import net.sourceforge.jasa.event.TransactionExecutedEvent;
 import net.sourceforge.jasa.market.Market;
 
 import org.apache.log4j.Logger;

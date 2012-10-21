@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import net.sourceforge.jabm.agent.Agent;
-import net.sourceforge.jabm.report.ReportVariables;
 import net.sourceforge.jabm.report.WeightedEdge;
 
 import org.apache.commons.collections15.Transformer;

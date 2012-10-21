@@ -2,14 +2,14 @@ package net.sourceforge.jasa.agent.valuation;
 
 import java.io.Serializable;
 
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
-
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jabm.util.TimeSeriesWindow;
 import net.sourceforge.jasa.market.Market;
+
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 import cern.jet.random.AbstractContinousDistribution;
 

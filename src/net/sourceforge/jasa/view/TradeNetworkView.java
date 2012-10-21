@@ -1,14 +1,10 @@
 package net.sourceforge.jasa.view;
 
 import java.awt.BasicStroke;
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Paint;
 import java.awt.Stroke;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -20,14 +16,12 @@ import java.util.Map;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jabm.event.InteractionsFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationFinishedEvent;
-import net.sourceforge.jabm.report.Report;
 import net.sourceforge.jabm.report.ReportWithGUI;
 import net.sourceforge.jabm.report.WeightedEdge;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;

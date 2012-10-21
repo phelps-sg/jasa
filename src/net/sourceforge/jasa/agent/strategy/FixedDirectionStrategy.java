@@ -5,8 +5,6 @@ import net.sourceforge.jasa.market.Order;
 
 public abstract class FixedDirectionStrategy extends FixedQuantityStrategyImpl {
 
-	protected boolean isBuy;
-	
 	public FixedDirectionStrategy() {
 		super();
 	}
@@ -16,12 +14,11 @@ public abstract class FixedDirectionStrategy extends FixedQuantityStrategyImpl {
 	}
 
 	public boolean modifyShout(Order shout) {
-		shout.setIsBid(isBuy);
 		return super.modifyShout(shout);
 	}
 
 	public boolean isBuy() {
-		return isBuy;
+		return tradeDirectionPolicy.isBuy(this.auction, getAgent());
 	}
 	
 	public boolean isSell() {
@@ -29,8 +26,8 @@ public abstract class FixedDirectionStrategy extends FixedQuantityStrategyImpl {
 	}
 
 	public void setBuy(boolean isBuy) {
-		this.isBuy = isBuy;
+		this.tradeDirectionPolicy = new FixedTradeDirectionPolicy();
+		((FixedTradeDirectionPolicy) tradeDirectionPolicy).setBuy(isBuy);
 	}
-	
 	
 }

@@ -1,20 +1,16 @@
 package net.sourceforge.jasa.agent.valuation;
 
-import java.util.HashMap;
-import java.util.Map;
+import net.sourceforge.jabm.event.RoundFinishedEvent;
+import net.sourceforge.jabm.event.SimEvent;
+import net.sourceforge.jabm.event.SimulationStartingEvent;
+import net.sourceforge.jabm.util.MutableDoubleWrapper;
+import net.sourceforge.jasa.report.MarketPriceReportVariables;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 
 import cern.jet.random.Normal;
 import cern.jet.random.engine.RandomEngine;
-
-import net.sourceforge.jabm.event.RoundFinishedEvent;
-import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.event.SimulationStartingEvent;
-import net.sourceforge.jabm.report.Report;
-import net.sourceforge.jabm.util.MutableDoubleWrapper;
-import net.sourceforge.jasa.report.MarketPriceReportVariables;
 
 public class GeometricBrownianMotionPriceProcess extends
 		MarketPriceReportVariables implements InitializingBean {

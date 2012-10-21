@@ -21,7 +21,7 @@ import cern.jet.random.engine.RandomEngine;
 
 public class ReturnForecastStrategyTest extends TestCase {
 
-	ReturnForecastStrategy strategy;
+	SimpleMarkupStrategy strategy;
 	
 	RandomEngine prng;
 	
@@ -35,7 +35,7 @@ public class ReturnForecastStrategyTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		strategy = new ReturnForecastStrategy();
+		strategy = new SimpleMarkupStrategy();
 		market = new MockMarket();
 		trader = new MockTrader(this, 1, 0, null);
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);

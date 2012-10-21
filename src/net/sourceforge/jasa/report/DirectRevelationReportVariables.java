@@ -24,7 +24,6 @@ import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.report.AbstractReportVariables;
 import net.sourceforge.jabm.report.ReportVariables;
-import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.DuplicateShoutException;
 import net.sourceforge.jasa.market.FourHeapOrderBook;
@@ -100,7 +99,7 @@ public abstract class DirectRevelationReportVariables extends
 			AbstractTradingAgent trader = (AbstractTradingAgent) traders.next();
 			int quantity = trader.determineQuantity(auction);
 			double value = trader.getValuation(auction);
-			boolean isBid = trader.isBuyer();
+			boolean isBid = trader.isBuyer(auction);
 			Order shout = new Order(trader, quantity, value, isBid);
 			shouts.add(shout);
 			enumerateTruthfulShout(shout);

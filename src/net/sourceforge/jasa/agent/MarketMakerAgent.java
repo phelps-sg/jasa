@@ -39,12 +39,12 @@ public class MarketMakerAgent extends AbstractTradingAgent {
 	}
 	
 	@Override
-	public boolean isBuyer() {
+	public boolean isBuyer(Market market) {
 		return true;
 	}
 
 	@Override
-	public boolean isSeller() {
+	public boolean isSeller(Market market) {
 		return true;
 	}
 

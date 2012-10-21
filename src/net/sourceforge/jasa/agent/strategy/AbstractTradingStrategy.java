@@ -17,7 +17,8 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
-import net.sourceforge.jabm.agent.Agent;
+import org.springframework.beans.factory.annotation.Required;
+
 import net.sourceforge.jabm.strategy.AbstractStrategy;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
@@ -38,6 +39,8 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		implements Serializable, TradingStrategy, Resetable, Cloneable {
 
 	protected Market auction;
+	
+	protected TradeDirectionPolicy tradeDirectionPolicy;
 
 	public AbstractTradingStrategy() {
 		initialise();
@@ -84,6 +87,7 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 	
 	public boolean modifyShout(Order shout) {
 		shout.setAgent(getAgent());
+		shout.setIsBid(tradeDirectionPolicy.isBuy(this.auction, getAgent()));
 		return true;
 	}
 
@@ -103,4 +107,17 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		return super.clone();
 	}
 
+	public boolean isBuy(Market market) {
+		return tradeDirectionPolicy.isBuy(market, getAgent());
+	}
+
+	public TradeDirectionPolicy getTradeDirectionPolicy() {
+		return tradeDirectionPolicy;
+	}
+
+	@Required
+	public void setTradeDirectionPolicy(TradeDirectionPolicy tradeDirectionPolicy) {
+		this.tradeDirectionPolicy = tradeDirectionPolicy;
+	}
+	
 }

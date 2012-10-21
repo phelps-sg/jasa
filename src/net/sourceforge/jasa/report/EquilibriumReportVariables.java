@@ -16,20 +16,16 @@
 package net.sourceforge.jasa.report;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
-import net.sourceforge.jabm.event.SimulationEvent;
 import net.sourceforge.jabm.event.SimulationStartingEvent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 import org.apache.log4j.Logger;
-import org.pf.joi.Inspector;
 import org.springframework.beans.factory.InitializingBean;
 
 

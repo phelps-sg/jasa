@@ -28,7 +28,7 @@ import cern.jet.random.engine.RandomEngine;
  * @see ReturnForecastValuationPolicy
  * @author Steve Phelps
  */
-public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
+public class SimpleMarkupStrategy extends FixedQuantityStrategyImpl {
 	
 	protected RandomEngine prng;
 	
@@ -36,32 +36,33 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	
 	protected AbstractContinousDistribution markupDistribution;
 
-	protected boolean isBuy;
-	
-	public boolean decideDirection(double currentPrice, 
-									double forecastedPrice) {
-		if (Double.isNaN(currentPrice)) {
-			return prng.nextDouble() >= 0.5;
-		} else if (Math.abs(forecastedPrice - currentPrice) < 10E-5) {
-			return prng.nextDouble() >= 0.5;
-		} else {
-			return forecastedPrice > currentPrice;
-		}
-	}
+//	protected boolean isBuy;
+//	
+//	public boolean decideDirection(double currentPrice, 
+//									double forecastedPrice) {
+//		if (Double.isNaN(currentPrice)) {
+//			return prng.nextDouble() >= 0.5;
+//		} else if (Math.abs(forecastedPrice - currentPrice) < 10E-5) {
+//			return prng.nextDouble() >= 0.5;
+//		} else {
+//			return forecastedPrice > currentPrice;
+//		}
+//	}
 	
 	@Override
 	public boolean modifyShout(Order shout) {
 		boolean result = super.modifyShout(shout);
-		double currentPrice = auction.getCurrentPrice();
-		if (!(currentPrice >= 0)) {
-			assert currentPrice >= 0;
-		}
+//		double currentPrice = auction.getCurrentPrice();
+//		if (!(currentPrice >= 0)) {
+//			assert currentPrice >= 0;
+//		}
+//		double forecastedPrice = getAgent().getValuation(auction);
+//		assert !Double.isNaN(forecastedPrice);
+//		assert forecastedPrice >= -10E-5;
+//		this.isBuy = decideDirection(currentPrice, forecastedPrice);
+//		shout.setIsBid(isBuy);
 		double forecastedPrice = getAgent().getValuation(auction);
-		assert !Double.isNaN(forecastedPrice);
-		assert forecastedPrice >= -10E-5;
-		this.isBuy = decideDirection(currentPrice, forecastedPrice);
-		shout.setIsBid(isBuy);
-		if (isBuy) {
+		if (shout.isBid()) {
 			shout.setPrice(forecastedPrice * (1 - markup));
 		} else {
 			shout.setPrice(forecastedPrice * (1 + markup));
@@ -90,9 +91,9 @@ public class ReturnForecastStrategy extends FixedQuantityStrategyImpl {
 	public void initialiseMarkup() {
 		this.markup = markupDistribution.nextDouble();
 	}
-	
-	public boolean isBuy() {
-		return isBuy;
-	}
+//	
+//	public boolean isBuy() {
+//		return isBuy;
+//	}
 
 }

@@ -445,21 +445,21 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 		return ((FixedQuantityStrategy) strategy).getQuantity();
 	}
 
-	public boolean isBuyer() {
+	public boolean isBuyer(Market auction) {
 		if (currentOrder == null) {
-			return getTradingStrategy().isBuy();
+			return getTradingStrategy().isBuy(auction);
 		} else {
 			return currentOrder.isBid();
 		}
 	}
 	
-	public boolean isSeller() {
-		return !isBuyer();
+	public boolean isSeller(Market auction) {
+		return !isBuyer(auction);
 	}
 
 	@Override
 	public double calculateProfit(Market auction, int quantity, double price) {
-		if (isBuyer()) {
+		if (isBuyer(auction)) {
 			return (getValuation(auction) - price) * quantity;
 		} else {
 			return (price - getValuation(auction)) * quantity;
