@@ -39,6 +39,11 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 		this.timeHorizon = timeHorizon;
 	}
 	
+	/**
+	 * Calculate the forecast error at the end of each round.
+	 * 
+	 * @param event
+	 */
 	public void onRoundFinished(RoundFinishedEvent event) {
 		this.market = (Market) event.getSimulation();
 		historicalPredictions.addValue(this.currentPrediction);
@@ -84,7 +89,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	@Override
 	public double getReturnForecast(Market market) {
 		this.currentPrediction = 
-				getNextPeriodReturnForecast(market) / timeHorizon;
+				getNextPeriodReturnForecast(market) * timeHorizon;
 		return this.currentPrediction;
 	}
 	
