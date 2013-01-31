@@ -19,7 +19,7 @@ public class GeometricBrownianMotionPriceProcess extends
 	
 	protected double initialPrice;
 	
-	protected double weinerProcess;
+	protected double wienerProcess;
 	
 	protected double drift;
 	
@@ -47,10 +47,10 @@ public class GeometricBrownianMotionPriceProcess extends
 	
 	@Override
 	public void onRoundFinished(RoundFinishedEvent event) {
-		weinerProcess = noiseDistribution.nextDouble() * Math.sqrt(dt);
+		wienerProcess = noiseDistribution.nextDouble() * Math.sqrt(dt);
 //		System.out.println(weinerProcess);
 		currentPrice *= Math.exp((drift - (volatility * volatility) / 2) * dt
-				+ volatility * weinerProcess);
+				+ volatility * wienerProcess);
 		priceWrapper.setValue(currentPrice);
 		super.onRoundFinished(event);
 	}
@@ -75,7 +75,7 @@ public class GeometricBrownianMotionPriceProcess extends
 	
 	public void initialise() {
 		currentPrice = initialPrice;
-		weinerProcess = 0.0;
+		wienerProcess = 0.0;
 	}
 
 	public double getDrift() {
