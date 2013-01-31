@@ -49,13 +49,15 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 		historicalPredictions.addValue(this.currentPrediction);
 		double currentPrice = market.getCurrentPrice();
 		historicalPrices.addValue(currentPrice);
-		int lag = (int) Math.round(timeHorizon);
-		double currentReturn = (Math.log(currentPrice) - Math
-				.log(historicalPrices.getValue(lag - 1))) * timeHorizon;
+		//TODO decide correct use of timeHorizon
+//		int lag = (int) Math.round(timeHorizon);
+		int lag = 1;
+		double previousReturn = (Math.log(currentPrice) - Math
+				.log(historicalPrices.getValue(lag - 1))); //  * timeHorizon;
 		double previousPredictedReturn = historicalPredictions
 				.getValue(lag - 1);
-		double error = currentReturn - previousPredictedReturn;
-		if (!Double.isInfinite(currentReturn)) {
+		double error = previousReturn - previousPredictedReturn;
+		if (!Double.isInfinite(previousReturn)) {
 			if (Double.isNaN(totalSquaredError)) {
 				totalSquaredError = error * error;
 			} else {
@@ -88,8 +90,9 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 
 	@Override
 	public double getReturnForecast(Market market) {
+		// TODO: Decide how to correctly implement the timeHorizon
 		this.currentPrediction = 
-				getNextPeriodReturnForecast(market) * timeHorizon;
+				getNextPeriodReturnForecast(market); // * timeHorizon;
 		return this.currentPrediction;
 	}
 	
