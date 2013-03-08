@@ -252,7 +252,6 @@
 
 	<bean id="staticPopulation" class="net.sourceforge.jabm.Population"
 		scope="simulation">
-		<property name="agentFactory" ref="linearCombinationTraderFactory" />
 		<property name="agentList" ref="agents" />
 	</bean>
 
