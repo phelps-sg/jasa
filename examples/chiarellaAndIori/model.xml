@@ -301,20 +301,6 @@
 	<constructor-arg ref="prng"/>
 </bean>
 
-<bean id="reportedSupplyAndDemandGraph"
-		class="net.sourceforge.jasa.view.ReportedSupplyAndDemandFrame">
-</bean>
-
-<bean id="auctionStateSupplyAndDemandGraph"
-		class="net.sourceforge.jasa.view.AuctionStateFrame">
-</bean>
-
-<bean id="tradeNetworkReport"
-		class="net.sourceforge.jasa.report.TradeNetworkReport">
-	<property name="threshold" value="0.99"/>
-	<property name="alpha" value="0.00005"/>
-</bean>
-
 
 <!-- Beans defining co-evolutionary learning   -->
 

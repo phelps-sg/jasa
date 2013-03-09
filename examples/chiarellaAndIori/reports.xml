@@ -270,4 +270,11 @@
     class="net.sourceforge.jasa.report.OfferPriceReportVariables">
 </bean>
 
+<bean id="reportedSupplyAndDemandGraph"
+		class="net.sourceforge.jasa.view.ReportedSupplyAndDemandFrame">
+</bean>
+
+<bean id="auctionStateSupplyAndDemandGraph"
+		class="net.sourceforge.jasa.view.AuctionStateFrame">
+</bean>
 </beans>

@@ -30,54 +30,24 @@
 				<ref bean="gbmPriceProcess" />
 				<ref bean="gbmPriceTimeSeriesReport" />
 				<ref bean="priceTimeSeriesChart" />
-<!-- 				<ref bean="spreadTimeSeriesChart" /> -->
 				<ref bean="equilibriumPriceTimeSeriesChart" />
 				<ref bean="equilibriumPriceTimeSeriesReport"/>
 				<ref bean="equilibriumPriceReportVariables"/>
 				<ref bean="equilibriumPriceUpdater"/>
-<!-- 				<ref bean="equilibriumPriceTimeSeries"/> -->
 				<ref bean="equilibriumPriceCSVReport"/>
-	<!-- 			<ref bean="transactionPriceTimeSeriesReport" /> -->
-	<!-- 			<ref bean="transactionPriceReportVariables" /> -->
-	<!-- 			<ref bean="transactionPriceCSVReport" /> -->
-	<!-- 			<ref bean="svwapReportVariables" /> -->
-	<!-- 			<ref bean="svwapTimeSeriesChart"/> -->
-	<!-- 			<ref bean="svwapTimeSeriesReport"/> -->
-	<!-- 			<ref bean="midPriceTimeSeriesReport" /> -->
-	<!-- 			<ref bean="midPriceReportVariables" /> -->
-	
 				<ref bean="currentPriceTimeSeriesReport" />
 				<ref bean="currentPriceReportVariables" />
-<!-- 				<ref bean="currentPriceCSVReport" /> -->
-				
 				<ref bean="spreadTimeSeriesReport" />
 				<ref bean="spreadReportVariables" />
-<!-- 				<ref bean="spreadCSVReport" /> -->
-				
-	<!-- 			<ref bean="populationWeightsTimeSeriesChart"/> -->
-	<!-- 			<ref bean="populationWeightsTimeSeries"/> -->
-	<!-- 			<ref bean="populationWeightsReport" /> -->
-	<!-- 			<ref bean="populationWeightsReportVariables" /> -->
-	<!-- 			<ref bean="populationWeightsCSVReport" /> -->
-				
-	<!-- 			<ref bean="orderFlowReportVariables" /> -->
-	<!-- 			<ref bean="orderFlowTimeSeriesReport" /> -->
 				<ref bean="reportedSupplyAndDemandGraph"/>
 				<ref bean="auctionStateSupplyAndDemandGraph"/>
-<!-- 				<ref bean="tradeNetworkReport"/> -->
-<!-- 				<ref bean="relationshipGraphView"/> -->
-<!-- 				<ref bean="pajekNetGraphExporter"/> -->
-				
-<!-- 				<ref bean="graphMetricsReport"/> -->
-<!-- 				<ref bean="graphMetricsCSVReport"/> -->
-<!-- 				<ref bean="graphMetrics"/>	 -->
-				
 				<ref bean="orderBookView"/>
 			</list>
 		</property>
 		
-		<property name="modelDescription" value="Iori and Chiarella - A Simulation analysis of a the microstructure of double auction markets"/>
-		
+		<property name="modelDescription" 
+			value="Iori and Chiarella - A Simulation analysis of a the microstructure of double auction markets"/>
+			
 	</bean>
 
 	<bean id="fileNamePrefix" class="net.sourceforge.jabm.util.MutableStringWrapper"
