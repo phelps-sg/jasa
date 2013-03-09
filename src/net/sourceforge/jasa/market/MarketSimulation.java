@@ -542,6 +542,12 @@ public class MarketSimulation extends AbstractSimulation
 		return getPopulation();
 	}
 
+	/**
+	 * Configure the Auctioneer for this market.  The auctioneer is responsible
+	 * for matching orders and clearing the market.
+	 * 
+	 * @param auctioneer
+	 */
 	public void setAuctioneer(Auctioneer auctioneer) {
 		this.auctioneer = auctioneer;
 		this.auctioneer.setMarket(this);
@@ -640,6 +646,11 @@ public class MarketSimulation extends AbstractSimulation
 		return initialPrice;
 	}
 
+	/**
+	 * Set the price which will be used at the opening of the market.
+	 * 
+	 * @param initialPrice The initial price.
+	 */
 	public void setInitialPrice(double initialPrice) {
 		this.initialPrice = initialPrice;
 	}

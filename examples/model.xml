@@ -12,10 +12,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="populationWeightsTimeSeriesChart" class="net.sourceforge.jabm.view.TimeSeriesChart">
-	<property name="series" ref="populationWeightsTimeSeries"/>
-</bean>
-
+<!--  This is the top-level bean defining the experiment to be run -->
 <bean id="marketSimulation" class="net.sourceforge.jasa.market.MarketSimulation"
 		scope="simulation">
 	<property name="simulationController" ref="simulationController"/>
@@ -28,272 +25,24 @@
     <property name="initialPrice" value="100"/>
 </bean>
 
-<bean id="orderBookView" class="net.sourceforge.jasa.view.OrderBookView">
-	<property name="maxDepth" value="20"/>
+<!-- A continuous double auction (CDA) will be used to model the exchange -->
+<bean id="cda" scope="simulation"
+        class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
+	<property name="pricingPolicy" ref="timePriorityPricing"/>
 </bean>
 
-<bean id="transactionPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jasa.event.TransactionExecutedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="transactionPriceTimeSeries"/>
+<!-- Transaction prices are set to the price of the earliest order to arrive -->
+<bean id="timePriorityPricing" scope="simulation"
+        class="net.sourceforge.jasa.market.rules.TimePriorityPricingPolicy">
 </bean>
 
-<bean id="currentPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jabm.event.InteractionsFinishedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="currentPriceTimeSeries"/>
-</bean>
-
-<bean id="gbmPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jabm.event.InteractionsFinishedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="gbmPriceTimeSeries"/>
-</bean>
-
-<bean id="spreadTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jabm.event.RoundFinishedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="spreadTimeSeries"/>
-</bean>
-
-<bean id="equilibriumPriceTimeSeriesReport" 
-		class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jabm.event.InteractionsFinishedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="equilibriumPriceTimeSeries"/>
-</bean>
-
-<bean id="svwapTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jasa.event.TransactionExecutedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="svwapTimeSeries"/>
-</bean>
-
-<bean id="svwapReportVariables" class="net.sourceforge.jasa.networkedherding.SVWAPReportVariables">
-</bean>
-
-<bean id="midPriceTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jasa.event.OrderPlacedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="midPriceTimeSeries"/>
-</bean>
-
-<bean id="orderFlowTimeSeriesReport" class="net.sourceforge.jabm.report.SimEventReport">
-	<property name="eventPrototype">
-		<bean class="net.sourceforge.jasa.event.OrderPlacedEvent">
-		</bean>
-	</property>
-	<property name="reportVariables" ref="orderFlowTimeSeries"/>
-</bean>
-
-<bean id="priceTimeSeries" class="net.sourceforge.jabm.report.CombiSeriesReportVariables">
-	<property name="seriesList">
-		<list>
-<!-- 			<ref bean="transactionPriceTimeSeries"/> -->
-<!-- 			<ref bean="midPriceTimeSeries"/> -->
-<!-- 			<ref bean="orderFlowTimeSeries"/> -->
-			<ref bean="gbmPriceTimeSeries"/>
-			<ref bean="currentPriceTimeSeries"/>
-			<ref bean="equilibriumPriceTimeSeries"/>
-		</list>
-	</property>
-</bean>
-
-<bean id="orderFlowTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="orderFlowReportVariables" />
-</bean>
-
-<bean id="transactionPriceCSVReport"
-	class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables" ref="transactionPriceCSVReportVariables"/>
-	<property name="sampleInterval" value="1"/>
-</bean>
-
-<bean id="transactionPriceCSVReportVariables"
-	class="net.sourceforge.jabm.report.CSVReportVariables">
-	<property name="reportVariables" ref="transactionPriceReportVariables"/>
-	<property name="fileNamePrefix" ref="fileNamePrefix" />
-	<property name="fileNameSuffix" value="transprice" />
-	<property name="fileNameExtension" value=".csv" />
-	<property name="passThrough" value="true" />
-</bean>
-
-<bean id="gbmPriceCSVReportVariables"	
-		class="net.sourceforge.jabm.report.CSVReportVariables">
-	<property name="reportVariables" ref="gbmPriceProcess"/>
-	<property name="fileNamePrefix" ref="fileNamePrefix" />
-	<property name="fileNameSuffix" value="gbmprice" />
-	<property name="fileNameExtension" value=".csv" />
-	<property name="passThrough" value="true" />
-</bean>
-
-<bean id="currentPriceCSVReport" class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables" ref="currentPriceCSVReportVariables"/>
-	<property name="sampleInterval" value="1"/>
-</bean>
-
-<bean id="gbmPriceCSVReport" class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables" ref="gbmPriceCSVReportVariables"/>
-	<property name="sampleInterval" value="1"/>
-</bean>
-
-<bean id="equilibriumPriceCSVReport" class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables" ref="equilibriumPriceCSVReportVariables"/>
-	<property name="sampleInterval" value="1"/>
-</bean>
-
-<bean id="spreadCSVReport" class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables" ref="spreadCSVReportVariables"/>
-	<property name="sampleInterval" value="1"/>
-</bean>
-
-<bean id="spreadCSVReportVariables" class="net.sourceforge.jabm.report.CSVReportVariables">
-	<property name="reportVariables" ref="spreadReportVariables"/>
-	<property name="fileNamePrefix" ref="fileNamePrefix"/>
-	<property name="fileNameSuffix" value="spread"/>
-	<property name="fileNameExtension" value=".csv"/>
-</bean>
-
-<bean id="currentPriceCSVReportVariables" 
-		class="net.sourceforge.jabm.report.CSVReportVariables">
-	<property name="reportVariables" ref="currentPriceReportVariables"/>
-	<property name="fileNamePrefix" ref="fileNamePrefix"/>
-	<property name="fileNameSuffix" value="price"/>
-	<property name="fileNameExtension" value=".csv"/>
-</bean>
-
-<bean id="equilibriumPriceCSVReportVariables" 
-		class="net.sourceforge.jabm.report.CSVReportVariables">
-	<property name="reportVariables" ref="equilibriumPriceReportVariables"/>
-	<property name="fileNamePrefix" ref="fileNamePrefix"/>
-	<property name="fileNameSuffix" value="equilibrium-price"/>
-	<property name="fileNameExtension" value=".csv"/>
-</bean>
-
-<bean id="transactionPriceTimeSeries" 
-		class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="transactionPriceReportVariables"/>
-</bean>
-
-<bean id="svwapTimeSeries" 
-		class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="svwapReportVariables"/>
-</bean>
-
-<bean id="populationWeightsTimeSeries"
-		class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="populationWeightsReportVariables"/>
-</bean>
-
-<bean id="populationWeightsCSVReport"
-		class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables" ref="csvPopulationWeights"/>
-	<property name="sampleInterval" value="1"/>
-</bean>
-
-<bean id="transactionPriceReportVariables" 
-	class="net.sourceforge.jasa.report.TransactionPriceReportVariables">
-</bean>
-
-<bean id="midPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="midPriceReportVariables"/>
-</bean>
-
-<bean id="currentPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="currentPriceReportVariables"/>
-</bean>
-
-<bean id="spreadTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="spreadReportVariables"/>
-</bean>
-
-<bean id="equilibriumPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="equilibriumPriceReportVariables"/>
-</bean>
-
-<bean id="gbmPriceTimeSeries" class="net.sourceforge.jabm.report.SeriesReportVariables">
-	<property name="reportVariables" ref="gbmPriceProcess"/>
-</bean>
-
-<bean id="midPriceReportVariables" class="net.sourceforge.jasa.report.MidPriceReportVariables">
-</bean>
-
-<bean id="currentPriceReportVariables" class="net.sourceforge.jasa.report.CurrentPriceReportVariables">
-</bean>
-
-<bean id="equilibriumPriceUpdater" class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="sampleInterval" value="1"/>
-	<property name="reportVariables" ref="equilibriumPriceReportVariables"/>
-</bean>
-
-<bean id="equilibriumPriceReportVariables" class="net.sourceforge.jasa.report.EquilibriumReportVariables">
-</bean>
-
-<bean id="spreadReportVariables" class="net.sourceforge.jasa.report.SpreadReportVariables">
-</bean>
-
-<bean id="priceTimeSeriesChart" 
-		class="net.sourceforge.jabm.view.TimeSeriesChart">
-	<property name="series" ref="priceTimeSeries"/>
-	<property name="chartTitle" value="Price time series"/>
-	<property name="rangeAxisLabel" value="Price ($)"/>
-</bean>
-
-<bean id="spreadTimeSeriesChart"
-		class="net.sourceforge.jabm.view.TimeSeriesChart">
-	<property name="series" ref="spreadTimeSeries"/>
-	<property name="chartTitle" value="Spread"/>
-	<property name="rangeAxisLabel" value="$"/>
-</bean>
-
-<bean id="equilibriumPriceTimeSeriesChart"
-	class="net.sourceforge.jabm.view.TimeSeriesChart">
-	<property name="series" ref="equilibriumPriceTimeSeries"/>
-	<property name="chartTitle" value="Equilibrium Price"/>
-</bean>
-
-<bean id="svwapTimeSeriesChart" 
-		class="net.sourceforge.jabm.view.TimeSeriesChart">
-	<property name="series" ref="svwapTimeSeries"/>
-	<property name="chartTitle" value="SVWAP"/>
-	<property name="rangeAxisLabel" value="$"/>
-</bean>
-
-
-<!-- <bean id="transactionPriceTimeSeriesReport"  -->
-<!--     class="net.sourceforge.jasa.report.TransactionPriceTimeSeriesReport"> -->
-<!--     <property name="baseFilename" value="data/transprice"/> -->
-<!-- </bean> -->
-
-<!-- <bean id="midPointTimeSeriesReport" -->
-<!--     class="net.sourceforge.jasa.report.MidPointTimeSeriesReport"> -->
-<!--     <property name="baseFilename" value="data/midpoint"/> -->
-<!-- </bean> -->
-
-<bean id="orderFlowCSVFile"
-	class="net.sourceforge.jabm.report.CSVReportVariables">
-	<property name="reportVariables" ref="orderFlowReportVariables"/>
-	<property name="fileNamePrefix" ref="fileNamePrefix" />
-	<property name="fileNameSuffix" value="orderflow" />
-	<property name="fileNameExtension" value=".csv" />
-</bean>
-
-<bean id="orderFlowReportVariables"
-    class="net.sourceforge.jasa.report.OfferPriceReportVariables">
+<!-- Agents will arrive at the market with the specified probability -->
+<bean id="randomArrivalAgentMixer" scope="simulation"
+        class="net.sourceforge.jabm.mixing.RandomArrivalAgentMixer">
+    <constructor-arg ref="prng"/>
+    <!--  In this model the probability of an agent arriving represents the
+            total liquidity of the market  -->
+    <property name="arrivalProbability" value="0.5"/>
 </bean>
 
 <bean id="agentInitialiserProxy" scope="simulation"
@@ -312,27 +61,6 @@
     <property name="market" ref="marketSimulation"/>
 </bean>
 
-<bean id="randomRobinAgentMixer" scope="simulation"
-        class="net.sourceforge.jabm.mixing.RandomRobinAgentMixer">
-	<constructor-arg ref="prng"/>
-</bean>
-
-<bean id="randomArrivalAgentMixer" scope="simulation"
-        class="net.sourceforge.jabm.mixing.RandomArrivalAgentMixer">
-    <constructor-arg ref="prng"/>
-    <!--  In this model the probability of an agent arriving represents the
-            total liquidity of the market  -->
-    <property name="arrivalProbability" value="0.5"/>
-</bean>
-
-<bean id="cda" scope="simulation"
-        class="net.sourceforge.jasa.market.auctioneer.ContinuousDoubleAuctioneer">
-	<property name="pricingPolicy" ref="timePriorityPricing"/>
-</bean>
-
-<bean id="timePriorityPricing" scope="simulation"
-        class="net.sourceforge.jasa.market.rules.TimePriorityPricingPolicy">
-</bean>
 
 <bean id="prng" class="cern.jet.random.engine.MersenneTwister64">
 	<constructor-arg>
@@ -340,90 +68,14 @@
 	</constructor-arg>
 </bean>
 
-<bean id="evolvingPopulation" parent="staticPopulation"
-		class="net.sourceforge.jabm.evolution.EvolvingPopulation" 
-		scope="simulation">
-	<property name="prng" ref="prng"/>
-	<property name="breeder" ref="uniformBreeder"/>
-	<property name="breedingInterval" value="1"/>
-</bean> 
-
 <bean id="staticPopulation" class="net.sourceforge.jabm.Population" 
 		scope="simulation" >
 <!-- 	<property name="agentFactory" ref="linearCombinationTraderFactory"/> -->
-	<property name="agentList" ref="withoutMarketMakers"/>		
+	<property name="agentList" ref="linearCombinationTraders"/>		
 </bean> 
 
-<bean id="withMarketMakers" scope="simulation" class="net.sourceforge.jabm.agent.AgentList">
-	<constructor-arg>
-		<list>
-			<ref bean="linearCombinationTraders"/>
-			<ref bean="marketMakers"/>
-		</list>
-	</constructor-arg>
-</bean>
-
-<bean id="withoutMarketMakers" scope="simulation" 
-		class="net.sourceforge.jabm.agent.AgentList">
-	<constructor-arg>
-		<list>
-			<ref bean="linearCombinationTraders"/>
-		</list>
-	</constructor-arg>
-</bean>
-
-<bean id="networkedBreeder" class="net.sourceforge.jabm.evolution.CombiBreeder">
-	<property name="breedingPipeline">
-		<list>
-			<ref bean="networkedImitationBreeder"/>
-			<ref bean="mutationBreeder"/>
-		</list>
-	</property>
-</bean>
-
-<bean id="uniformBreeder" class="net.sourceforge.jabm.evolution.CombiBreeder">
-	<property name="breedingPipeline">
-		<list>
-			<ref bean="fitnessProportionateBreeder"/>
-			<ref bean="mutationBreeder"/>
-		</list>
-	</property>
-</bean>
-
-<bean id="mutationBreeder"
-	class="net.sourceforge.jabm.evolution.MutationBreeder">
-	<property name="mutationProbability" value="0.005"/>
-	<property name="prng" ref="prng"/>
-	<property name="mutationOperator">
-		<bean class="net.sourceforge.jasa.agent.valuation.evolution.WeightMutationOperator"/>
-	</property>
-</bean>
-
-<bean id="fitnessProportionateBreeder" 
-	class="net.sourceforge.jabm.evolution.FitnessProportionateBreeder"
-		scope="simulation">
-	
-	<property name="prng" ref="prng"/>
-	
-	<property name="fitnessFunction">
-		<bean class="net.sourceforge.jasa.agent.valuation.evolution.ForecastErrorFitnessFunction"
-				scope="simulation"/>
-	</property>
-	
-	<property name="imitationOperator">
-		<bean class="net.sourceforge.jasa.agent.valuation.evolution.ValuationPolicyImitationOperator"/>
-	</property>	
-	
-	<property name="imitationProbability" value="0.2"/>
-	
-</bean>
-
-<bean id="networkedImitationBreeder" parent="fitnessProportionateBreeder"
-	class="net.sourceforge.jasa.agent.valuation.evolution.NetworkedImitationBreeder"
-		scope="simulation">
-	<property name="tradeNetwork" ref="tradeNetworkReport"/>
-</bean>
-
+<!--  The population consists of 200 agents using linear-combination
+		forecasting rules -->
 <bean id="linearCombinationTraders" 
 	scope="simulation" class="net.sourceforge.jabm.agent.AgentList"
 		init-method="populateFromFactory">
@@ -431,45 +83,10 @@
     <property name="agentFactory" ref="linearCombinationTraderFactory"/>
 </bean>
 
-<bean id="marketMakers" 
-	scope="simulation" class="net.sourceforge.jabm.agent.AgentList"
-		init-method="populateFromFactory">
-	<property name="size" value="10"/>
-	<property name="agentFactory" ref="marketMakerAgentFactory"/>	
-</bean>
-
-<bean id="noiseTraders" scope="simulation"
-		class="net.sourceforge.jabm.agent.AgentList"
-			init-method="populateFromFactory">
-	<property name="size" value="12"/>
-	<property name="agentFactory" ref="noiseTraderFactory"/> 	
-</bean>
-
-<bean id="fundamentalists" scope="simulation"
-		class="net.sourceforge.jabm.agent.AgentList"
-			init-method="populateFromFactory">
-    <property name="size" value="12"/>
-    <property name="agentFactory" ref="fundamentalistFactory"/>
-</bean>
-
-<bean id="chartists" scope="simulation"
-		class="net.sourceforge.jabm.agent.AgentList"
-			init-method="populateFromFactory">
-    <constructor-arg value="50"/>
-    <constructor-arg ref="chartistFactory"/>
-</bean>
-
 <bean id="linearCombinationTraderFactory" scope="simulation"
         class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
         <idref local="linearCombinationTraderPrototype"/>
-    </property>        
-</bean>
-
-<bean id="marketMakerAgentFactory" scope="simulation"
-        class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
-    <property name="targetBeanName">
-        <idref local="marketMakerAgentPrototype"/>
     </property>        
 </bean>
 
@@ -492,14 +109,6 @@
     <property name="targetBeanName">
         <idref local="chartistPrototype" />
     </property>
-</bean>
-
-<bean id="marketMakerAgentPrototype" scope="prototype"
-			class="net.sourceforge.jasa.agent.MarketMakerAgent">
-	<property name="priceOffset" value="2.0"/>
-	<property name="bidQuantity" value="1"/>
-	<property name="askQuantity" value="1"/>			
-	<property name="valuationPolicy" ref="linearCombinationValuationPolicy"/>
 </bean>
 
 <bean id="linearCombinationTraderPrototype" scope="prototype"
@@ -563,7 +172,6 @@
 <bean id="chartistForecaster" parent="timeHorizonForecaster" scope="prototype"
             class="net.sourceforge.jasa.agent.valuation.ChartistForecaster">
     <property name="windowSizeDistribution" ref="chartistWindowSizeDistribution"/>
-<!--     <property name="sampleInterval" value="10"/>       -->
  <property name="sampleInterval" value="1"/>  
 </bean>
 
@@ -640,7 +248,7 @@
        <property name="underlyingDistribution">
 	        <bean class="net.sourceforge.jabm.distribution.NormalDistribution">
 	        	<property name="mean" value="0.0"/>
-				<property name="stdev" ref="uniformDistribution0_1to3_0"/>
+				<property name="stdev" ref="weightStdevDistribution"/>
 	        	<property name="prng" ref="prng"/>
 	        </bean>
         </property>
@@ -655,7 +263,7 @@
 	<bean id="chartistNormal" class="net.sourceforge.jabm.distribution.NormalDistribution"
 		scope="prototype">
 		<property name="mean" value="0.0" />
-		<property name="stdev" ref="uniformDistribution0_1to3_0" />
+		<property name="stdev" ref="weightStdevDistribution" />
 		<property name="prng" ref="prng" />
 	</bean>
 
@@ -663,11 +271,11 @@
 	class="net.sourceforge.jabm.distribution.NormalDistribution"
         scope="prototype">
 	<property name="mean" value="0.0"/>
-	<property name="stdev" ref="uniformDistribution0_1to3_0"/>
+	<property name="stdev" ref="weightStdevDistribution"/>
 	<property name="prng" ref="prng"/>
 </bean>
 
-<bean id="uniformDistribution0_1to3_0" 
+<bean id="weightStdevDistribution" 
 	class="net.sourceforge.jabm.spring.RandomDoubleFactoryBean">
 	<property name="distribution">
 		<bean class="net.sourceforge.jabm.distribution.UniformDistribution">
@@ -677,7 +285,6 @@
 		</bean>
 	</property>
 </bean>
-
 
 <bean id="chartistWindowSizeDistribution" 
 		class="net.sourceforge.jabm.distribution.UniformDistribution"
@@ -708,72 +315,53 @@
 	<property name="alpha" value="0.00005"/>
 </bean>
 
-<bean id="relationshipGraphView"
-		class="net.sourceforge.jasa.view.TradeNetworkView">
-		<constructor-arg ref="tradeNetworkReport"/>
-</bean>
 
-<bean id="pajekNetGraphExporter"
-	class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables">
-		<bean class="net.sourceforge.jasa.report.PajekTradeNetworkGraphExporter">
-			<property name="tradeNetworkReport" ref="tradeNetworkReport" />
-			<property name="fileNamePrefix" ref="fileNamePrefix"/>
-			<property name="fileNameSuffix" value="graph"/>
-		</bean>
+<!-- Beans defining co-evolutionary learning   -->
+
+<bean id="evolvingPopulation" parent="staticPopulation"
+		class="net.sourceforge.jabm.evolution.EvolvingPopulation" 
+		scope="simulation">
+	<property name="prng" ref="prng"/>
+	<property name="breeder" ref="uniformBreeder"/>
+	<property name="breedingInterval" value="1"/>
+</bean> 
+
+<bean id="uniformBreeder" class="net.sourceforge.jabm.evolution.CombiBreeder">
+	<property name="breedingPipeline">
+		<list>
+			<ref bean="fitnessProportionateBreeder"/>
+			<ref bean="mutationBreeder"/>
+		</list>
 	</property>
-	<property name="sampleInterval" value="200" />
 </bean>
 
-<bean id="adjancyMatrixGraphExporter"
-	class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables">
-		<bean class="net.sourceforge.jasa.report.AdjacencyMatrixTradeNetworkGraphExporter">
-			<property name="tradeNetworkReport" ref="tradeNetworkReport" />
-			<property name="fileNamePrefix" ref="fileNamePrefix"/>
-			<property name="fileNameSuffix" value="graph"/>
-		</bean>
+<bean id="mutationBreeder"
+	class="net.sourceforge.jabm.evolution.MutationBreeder">
+	<property name="mutationProbability" value="0.005"/>
+	<property name="prng" ref="prng"/>
+	<property name="mutationOperator">
+		<bean class="net.sourceforge.jasa.agent.valuation.evolution.WeightMutationOperator"/>
 	</property>
-	<property name="sampleInterval" value="2000" />
 </bean>
 
-<bean id="graphMetricsReport"
-		class="net.sourceforge.jabm.report.InteractionIntervalReport">
-		<property name="reportVariables" ref="graphMetrics" />
-		<property name="sampleInterval" value="100" />
+<bean id="fitnessProportionateBreeder" 
+	class="net.sourceforge.jabm.evolution.FitnessProportionateBreeder"
+		scope="simulation">
+	
+	<property name="prng" ref="prng"/>
+	
+	<property name="fitnessFunction">
+		<bean class="net.sourceforge.jasa.agent.valuation.evolution.ForecastErrorFitnessFunction"
+				scope="simulation"/>
+	</property>
+	
+	<property name="imitationOperator">
+		<bean class="net.sourceforge.jasa.agent.valuation.evolution.ValuationPolicyImitationOperator"/>
+	</property>	
+	
+	<property name="imitationProbability" value="0.2"/>
+	
 </bean>
 
-<bean id="graphMetricsCSVReport"
-		class="net.sourceforge.jabm.report.InteractionIntervalReport">
-		<property name="reportVariables" ref="csvGraphMetrics" />
-		<property name="sampleInterval" value="100" />
-</bean>
-
-<bean id="populationWeightsReport" 
-	class="net.sourceforge.jabm.report.InteractionIntervalReport">
-	<property name="reportVariables" ref="populationWeightsReportVariables"/>
-	<property name="sampleInterval" value="1" />
-</bean>
-
-<bean id="graphMetrics" class="net.sourceforge.jabm.report.WeightedGraphMetrics">
-	<constructor-arg ref="tradeNetworkReport" />
-</bean>
-
-<bean id="populationWeightsReportVariables" 
-	class="net.sourceforge.jasa.networkedherding.PopulationWeightsReportVariables">
-</bean>
-
-<bean id="csvPopulationWeights"
-	class="net.sourceforge.jabm.report.CSVReportVariables">
-	<property name="reportVariables" ref="populationWeightsReportVariables"/>
-	<property name="fileNameSuffix" value="weights"/>
-	<property name="fileNamePrefix" ref="fileNamePrefix"/>
-</bean>
-
-<bean id="csvGraphMetrics" class="net.sourceforge.jabm.report.CSVReportVariables">
-	<constructor-arg value="graphmetrics" />
-	<constructor-arg ref="graphMetrics" />
-	<property name="fileNamePrefix" ref="fileNamePrefix" />
-</bean>
 
 </beans>

@@ -13,6 +13,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<import resource="model.xml"/>
+	<import resource="reports.xml" />
 	
 	<bean id="simulationController" 
 			class="net.sourceforge.jabm.SpringSimulationController"
