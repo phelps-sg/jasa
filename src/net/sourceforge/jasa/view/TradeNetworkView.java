@@ -155,7 +155,7 @@ public class TradeNetworkView  implements ReportWithGUI,
 					public Stroke transform(WeightedEdge strength) {
 						double r = strength.getValue();
 //								/ tradeNetwork.getMaximumInvestment();
-						return new BasicStroke((float) r); 
+						return new BasicStroke((float) r * 2.0f); 
 					}
 				});
 		
