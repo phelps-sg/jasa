@@ -186,7 +186,7 @@
 	<property name="value" value="500.0"/>
 </bean>
 
-<bean id="gbmFundamentalPrice" scope="simulation"
+<bean id="gbmFundamentalPrice" scope="singleton"
  		class="net.sourceforge.jabm.util.MutableDoubleWrapper">
 	<property name="value" value="500.0"/>
 </bean>
