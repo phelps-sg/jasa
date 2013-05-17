@@ -15,9 +15,12 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 	
 	protected int time;
 	
+	protected boolean buyerInitiated;
+	
 	public static final String NAME = "transaction";
 	
 	public static final String TRANSACTIONPRICE_VAR = "price";
+	public static final String BUYERINITIATED_VAR = "buyerinitated";
 	
 	@Override
 	public Map<Object, Number> getVariableBindings() {
@@ -25,12 +28,13 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 			new LinkedHashMap<Object, Number>();
 		result.put(getName() + ".t", time);
 		result.put(getName() + "." + TRANSACTIONPRICE_VAR, lastTransactionPrice);
+		result.put(getName() + "." + BUYERINITIATED_VAR, buyerInitiated ? 1 : 0);
 		return result;
 	}
 
 	@Override
 	public void compute(SimEvent ev) {
-		
+		eventOccurred(ev);
 	}
 
 	@Override
@@ -69,6 +73,11 @@ public class TransactionPriceReportVariables implements XYReportVariables {
 			TransactionExecutedEvent event = (TransactionExecutedEvent) ev;
 			this.lastTransactionPrice = event.getPrice();
 			this.time = event.getTime();
+			// In a CDA, the transaction is buyer-initiated i.f.f. the bid 
+			//  was submitted later than the ask
+			this.buyerInitiated = 
+					(event.getBid().getTimeStamp().getTicks() > 
+						event.getAsk().getTimeStamp().getTicks());
 		}
 	}
 
