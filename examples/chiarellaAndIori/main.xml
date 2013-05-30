@@ -29,20 +29,20 @@
 			<list>
 				<ref bean="gbmPriceProcess" />
 				<ref bean="gbmPriceTimeSeriesReport" />
-<!-- 				<ref bean="priceTimeSeriesChart" /> -->
-<!-- 				<ref bean="equilibriumPriceTimeSeriesChart" /> -->
-<!-- 				<ref bean="equilibriumPriceTimeSeriesReport"/> -->
-<!-- 				<ref bean="equilibriumPriceReportVariables"/> -->
-<!-- 				<ref bean="equilibriumPriceUpdater"/> -->
-<!-- 				<ref bean="equilibriumPriceCSVReport"/> -->
+				<ref bean="priceTimeSeriesChart" />
+				<ref bean="equilibriumPriceTimeSeriesChart" />
+				<ref bean="equilibriumPriceTimeSeriesReport"/>
+				<ref bean="equilibriumPriceReportVariables"/>
+				<ref bean="equilibriumPriceUpdater"/>
+				<ref bean="equilibriumPriceCSVReport"/>
 				<ref bean="currentPriceTimeSeriesReport" />
-				<ref bean="currentPriceCSVReport" />
+				<ref bean="currentPriceCSVReport"/>
 				<ref bean="currentPriceReportVariables" />
-<!-- 				<ref bean="spreadTimeSeriesReport" /> -->
-<!-- 				<ref bean="spreadReportVariables" /> -->
-<!-- 				<ref bean="reportedSupplyAndDemandGraph"/> -->
-<!-- 				<ref bean="auctionStateSupplyAndDemandGraph"/> -->
-<!-- 				<ref bean="orderBookView"/> -->
+				<ref bean="spreadTimeSeriesReport" />
+				<ref bean="spreadReportVariables" />
+				<ref bean="reportedSupplyAndDemandGraph"/>
+				<ref bean="auctionStateSupplyAndDemandGraph"/>
+				<ref bean="orderBookView"/>
 			</list>
 		</property>
 		
