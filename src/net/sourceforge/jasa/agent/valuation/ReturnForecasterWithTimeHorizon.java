@@ -26,6 +26,8 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	
 	protected double alpha = 0.01;
 	
+	protected double scaling = 0.01;
+	
 	protected Market market;
 
 	static Logger logger = Logger
@@ -92,7 +94,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	public double getReturnForecast(Market market) {
 		// TODO: Decide how to correctly implement the timeHorizon
 		this.currentPrediction = 
-				getNextPeriodReturnForecast(market); // * timeHorizon;
+				getNextPeriodReturnForecast(market) * scaling; // * timeHorizon;
 		return this.currentPrediction;
 	}
 	
