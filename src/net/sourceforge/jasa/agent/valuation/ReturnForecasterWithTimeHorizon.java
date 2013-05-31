@@ -26,7 +26,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	
 	protected double alpha = 0.01;
 	
-	protected double scaling = 0.01;
+	protected double scaling = 0.2;
 	
 	protected Market market;
 
