@@ -3,7 +3,9 @@ package net.sourceforge.jasa.agent.strategy;
 import java.util.Iterator;
 
 import junit.framework.TestCase;
+import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jabm.agent.Agent;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MockTrader;
@@ -37,9 +39,14 @@ public class ReturnForecastStrategyTest extends TestCase {
 		super.setUp();
 		strategy = new SimpleMarkupStrategy();
 		market = new MockMarket();
-		trader = new MockTrader(this, 1, 0, null);
+		EventScheduler scheduler = new SpringSimulationController();
+		trader = new MockTrader(this, 1, 0, scheduler);
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		forecaster = new NoiseTraderForecaster(prng);
+		ForecastTradeDirectionPolicy direction = new ForecastTradeDirectionPolicy();
+		direction.setPrng(prng);
+		strategy.setTradeDirectionPolicy(direction);
+		strategy.setPrng(prng);
 		valuationPolicy =
 				new ReturnForecastValuationPolicy();
 		valuationPolicy.setForecaster(forecaster);

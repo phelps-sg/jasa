@@ -62,12 +62,18 @@ public class DirectRevelationTest extends ElectricityTest {
 		truthTelling.setAgent(agent);
 		agent.initialise();
 	}
-
+	
 	@Override
-	public void assignValuer(FixedDirectionTradingAgent agent) {
-		RandomValuer valuer = new RandomValuer(VALUE_MIN, VALUE_MAX, prng);
-		agent.setValuationPolicy(valuer);
-		valuer.setAgent(agent);
+	public void registerTraders(MarketSimulation auction, boolean areSellers,
+			int num, int capacity, double[] values) {
+		for (int i = 0; i < num; i++) {
+			FixedDirectionTradingAgent agent = 
+					new FixedDirectionTradingAgent(auction.getSimulationController());
+			assignStrategy(capacity, agent);
+			agent.setIsSeller(areSellers);
+			agent.setValuationPolicy(new RandomValuer(VALUE_MIN, VALUE_MAX, prng));
+			auction.register(agent);
+		}
 	}
 
 	public static void main(String[] args) {

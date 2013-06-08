@@ -50,41 +50,37 @@ public class MockTrader extends SimpleTradingAgent {
 	static Logger logger = Logger.getLogger(AbstractTradingAgent.class);
 
 	public MockTrader(TestCase test, int stock, long funds,
-			MarketSimulation simulation) {
-		super(stock, funds, simulation.getSimulationController());
+			EventScheduler scheduler) {
+		super(stock, funds, scheduler);
 		this.test = test;
 	}
 
 	public MockTrader(TestCase test, int stock, double funds,
-	    double privateValue, MarketSimulation simulation) {
-		super(stock, funds, privateValue, simulation.getSimulationController());
+	    double privateValue, EventScheduler scheduler) {
+		super(stock, funds, privateValue, scheduler);
 		this.test = test;
 	}
 
-	// public void informOfSeller( Auction market, Shout winningShout,
-	// TradingAgent seller, double price, int quantity ) {
-	// super.informOfSeller(market, winningShout, seller, price, quantity);
-	// test.assertTrue(((AbstractTradingAgent) seller).isSeller());
-	// System.out.println(this + ": winning shout " + winningShout + " at price "
-	// + price + " and quantity " + quantity + " and seller: " + seller);
-	// lastWinningShout = winningShout;
-	// lastWinningPrice = price;
-	// purchaseFrom(market, (AbstractTradingAgent) seller, quantity, price);
-	// }
-	//
-	// public void informOfBuyer( Auction market, TradingAgent buyer, double
-	// price,
-	// int quantity ) {
-	// super.informOfBuyer(market, buyer, price, quantity);
-	// test.assertTrue(((AbstractTradingAgent) buyer).isBuyer());
-	// lastWinningPrice = price;
-	// lastWinningShout = getCurrentShout();
-	// }
+	public MockTrader(TestCase test, int stock, double funds, double privateValue,
+			TradingStrategy strategy, EventScheduler scheduler) {
+		super(stock, funds, privateValue, strategy, scheduler);
+		this.test = test;
+	}
+
+	public MockTrader(TestCase test,
+			int stock, double funds, double privateValue,
+			MockStrategy strategy1, MarketSimulation auction) {
+		this(test, stock, funds, privateValue, strategy1, auction.getSimulationController());
+	}
 
 	public MockTrader(TestCase test, int stock, double funds, double privateValue,
-			TradingStrategy strategy, MarketSimulation simulation) {
-		super(stock, funds, privateValue, strategy, simulation.getSimulationController());
-		this.test = test;
+			MarketSimulation auction) {
+		this(test, stock, funds, privateValue, auction.getSimulationController());
+	}
+
+	public MockTrader(TestCase test, int stock, int funds,
+			MarketSimulation auction) {
+		this(test, stock, funds, auction.getSimulationController());
 	}
 
 	@Override

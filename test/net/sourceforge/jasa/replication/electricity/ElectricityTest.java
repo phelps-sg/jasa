@@ -27,6 +27,7 @@ import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jabm.util.SummaryStats;
 import net.sourceforge.jasa.agent.FixedDirectionTradingAgent;
 import net.sourceforge.jasa.agent.strategy.StimuliResponseStrategy;
+import net.sourceforge.jasa.agent.valuation.FixedValuer;
 import net.sourceforge.jasa.market.MarketSimulation;
 import net.sourceforge.jasa.market.auctioneer.AbstractAuctioneer;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;
@@ -189,7 +190,7 @@ public abstract class ElectricityTest extends TestCase {
 			FixedDirectionTradingAgent agent = new FixedDirectionTradingAgent(auction.getSimulationController());
 			assignStrategy(capacity, agent);
 			agent.setIsSeller(areSellers);
-			assignValuer(agent);
+			agent.setValuationPolicy(new FixedValuer(value));
 			auction.register(agent);
 		}
 	}
@@ -203,10 +204,6 @@ public abstract class ElectricityTest extends TestCase {
 		strategy.setAgent(agent);
 		assert agent.getVolume(auction) == capacity;
 		agent.initialise();
-	}
-
-	public void assignValuer(FixedDirectionTradingAgent agent) {
-		// Stick with default fixed valuation
 	}
 
 	public void traderReport() {

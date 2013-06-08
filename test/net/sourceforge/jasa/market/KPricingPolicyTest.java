@@ -18,6 +18,10 @@ package net.sourceforge.jasa.market;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.Population;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jabm.init.BasicAgentInitialiser;
+import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
@@ -61,8 +65,13 @@ public class KPricingPolicyTest extends TestCase {
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
 		auction = new MarketSimulation();
+		auction.setSimulationController(new SpringSimulationController());
+		auction.setPopulation(new Population());
+		auction.setAgentMixer(new RandomRobinAgentMixer(prng));
+		auction.setAgentInitialiser(new BasicAgentInitialiser());
 		auctioneer = new ClearingHouseAuctioneer(auction);
 		auction.setAuctioneer(auctioneer);
+		auction.setPopulation(new Population());
 
 		agents = new MockTrader[4];
 
@@ -75,9 +84,7 @@ public class KPricingPolicyTest extends TestCase {
 		for (int i = 0; i < agents.length; i++) {
 			TruthTellingStrategy strategy = new TruthTellingStrategy(agents[i]);
 			agents[i].setStrategy(strategy);
-			if (i < 2) {
-				strategy.setBuy(true);
-			}
+			strategy.setBuy(i < 2);
 			auction.register(agents[i]);
 		}
 

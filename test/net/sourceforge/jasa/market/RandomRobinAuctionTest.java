@@ -166,7 +166,9 @@ public class RandomRobinAuctionTest extends TestCase {
 
 	public void testProtocol() {
 
-		assertTrue(auction.getNumberOfTraders() == traders.length);
+		int n = auction.getNumberOfTraders();
+		System.out.println("Simulation reports " + n + " traders");
+		assertTrue(n == traders.length);
 		assertTrue(!auction.closed());
 
 		auction.setMaximumRounds(2);

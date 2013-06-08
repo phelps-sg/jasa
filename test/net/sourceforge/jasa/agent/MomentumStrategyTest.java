@@ -18,6 +18,8 @@ package net.sourceforge.jasa.agent;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.EventScheduler;
+import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jasa.agent.strategy.MomentumStrategy;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import cern.jet.random.engine.MersenneTwister64;
@@ -55,7 +57,8 @@ public class MomentumStrategyTest extends TestCase {
 
 	public void setUp() {
 		prng = new MersenneTwister64(PRNGTestSeeds.UNIT_TEST_SEED);
-		testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, null);
+		EventScheduler scheduler = new SpringSimulationController();
+		testTrader = new MockTrader(this, 0, 0, PRIV_VALUE, scheduler);
 		testStrategy = new MockMomentumStrategy(testTrader, prng);
 		testStrategy.setBuy(false);
 		testTrader.setStrategy(testStrategy);
