@@ -8,7 +8,8 @@ import cern.jet.random.engine.RandomEngine;
 
 /**
  * Decide whether to long or short based on whether the agents' valuation
- * for the asset is greater than the current price.
+ * for the asset is greater than the current price.  If there is no difference
+ * between the actual price and the forecast then choose a direction randomly.
  * 
  * @author Steve Phelps
  *
