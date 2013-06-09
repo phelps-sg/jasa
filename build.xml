@@ -131,18 +131,6 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="jabm ChiarellaAndIori.xml">
-        <java classname="net.sourceforge.jabm.DesktopSimulationManager" failonerror="true" fork="yes">
-            <jvmarg line="-Djabm.config=examples/ChiarellaAndIori.xml"/>
-            <classpath refid="jasa.classpath"/>
-        </java>
-    </target>
-    <target name="jabm CliffAndBruten.xml">
-        <java classname="net.sourceforge.jabm.DesktopSimulationManager" failonerror="true" fork="yes">
-            <jvmarg line="-Djabm.config=examples/CliffAndBruten.xml"/>
-            <classpath refid="jasa.classpath"/>
-        </java>
-    </target>
     <target name="net.sourceforge.jasa.market">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
@@ -155,11 +143,6 @@
             <test name="net.sourceforge.jasa.market.RandomRobinAuctionTest" todir="${junit.output.dir}"/>
             <classpath refid="jasa.classpath"/>
         </junit>
-    </target>
-    <target name="FourHeapTest">
-        <java classname="net.sourceforge.jasa.market.FourHeapTest" failonerror="true" fork="yes">
-            <classpath refid="jasa.classpath"/>
-        </java>
     </target>
     <target name="test">
         <mkdir dir="${junit.output.dir}"/>
@@ -193,6 +176,12 @@
             <test name="net.sourceforge.jasa.report.EquilibriaStatsTest" todir="${junit.output.dir}"/>
             <classpath refid="jasa.classpath"/>
         </junit>
+    </target>
+    <target name="chiarellaAndIori">
+        <java classname="net.sourceforge.jabm.DesktopSimulationManager" failonerror="true" fork="yes">
+            <jvmarg line="-Djabm.config=examples/chiarellaAndIori/main.xml"/>
+            <classpath refid="jasa.classpath"/>
+        </java>
     </target>
     <target name="junitreport">
         <junitreport todir="${junit.output.dir}">

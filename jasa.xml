@@ -2,7 +2,7 @@
 	
 <project basedir="." name="jasa-user">
 
-	<property name="version" value="1.1.1"/>
+	<property name="version" value="1.2"/>
 
 	<target name="jar">
 		<jar destfile="dist/jasa-${version}.jar"
@@ -12,7 +12,11 @@
 	
 	<target name="doc">
 		<javadoc classpathref="jasa.classpath" author="true" sourcepath="src/"
-			 destdir="doc/api/">
+			 destdir="doc/api/"
+			docletpath="/usr/local/java/yworks-uml-doclet-3.0_02-jdk1.5/resources;/usr/local/java/yworks-uml-doclet-3.0_02-jdk1.5/lib/ydoc.jar"
+			additionalparam="-umlautogen"
+			doclet="ydoc.doclets.YStandard"
+			>
 		</javadoc>
 	</target>
 	
