@@ -1,22 +1,13 @@
 package net.sourceforge.jasa.agent.strategy;
 
-import java.util.Iterator;
-
 import junit.framework.TestCase;
 import net.sourceforge.jabm.EventScheduler;
-import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.SpringSimulationController;
-import net.sourceforge.jabm.agent.Agent;
-import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.valuation.NoiseTraderForecaster;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
-import net.sourceforge.jasa.market.AuctionException;
-import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.MarketQuote;
 import net.sourceforge.jasa.market.Order;
-import net.sourceforge.jasa.market.ShoutsNotVisibleException;
-import net.sourceforge.jasa.market.auctioneer.Auctioneer;
 import net.sourceforge.jasa.sim.PRNGTestSeeds;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;

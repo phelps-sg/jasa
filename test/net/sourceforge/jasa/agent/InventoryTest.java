@@ -1,10 +1,10 @@
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jabm.SpringSimulationController;
-import net.sourceforge.jasa.market.MarketSimulation;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import net.sourceforge.jabm.SpringSimulationController;
+import net.sourceforge.jasa.market.MarketSimulation;
 
 public class InventoryTest extends TestCase {
 

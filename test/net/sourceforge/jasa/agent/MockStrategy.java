@@ -15,7 +15,6 @@
 
 package net.sourceforge.jasa.agent;
 
-import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jabm.event.SimEvent;
 import net.sourceforge.jasa.agent.strategy.AbstractTradingStrategy;

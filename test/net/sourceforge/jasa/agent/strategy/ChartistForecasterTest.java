@@ -1,8 +1,8 @@
 package net.sourceforge.jasa.agent.strategy;
 
+import junit.framework.TestCase;
 import net.sourceforge.jabm.event.RoundFinishedEvent;
 import net.sourceforge.jasa.agent.valuation.ChartistForecaster;
-import junit.framework.TestCase;
 
 public class ChartistForecasterTest extends TestCase {
 

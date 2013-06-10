@@ -24,14 +24,11 @@ import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jabm.init.BasicAgentInitialiser;
-import net.sourceforge.jabm.mixing.RandomRobinAgentMixer;
 import net.sourceforge.jabm.util.MathUtil;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.strategy.TruthTellingStrategy;
 import net.sourceforge.jasa.agent.valuation.FixedValuer;
 import net.sourceforge.jasa.market.MarketSimulation;
-import net.sourceforge.jasa.sim.PRNGTestSeeds;
-import cern.jet.random.engine.MersenneTwister64;
 
 public class EquilibriaStatsTest extends TestCase {
 

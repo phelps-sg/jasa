@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.market;
 
 import junit.framework.TestCase;
-import net.sourceforge.jabm.SimulationController;
 import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.market.auctioneer.Auctioneer;

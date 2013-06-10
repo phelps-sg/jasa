@@ -17,14 +17,14 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
-import org.springframework.beans.factory.annotation.Required;
-
 import net.sourceforge.jabm.strategy.AbstractStrategy;
 import net.sourceforge.jabm.util.Resetable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
+
+import org.springframework.beans.factory.annotation.Required;
 
 /**
  * <p>
