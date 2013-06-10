@@ -1,5 +1,16 @@
-  Change log for JASA 1.1 - 10th October 2011
+  Change log for JASA 1.2 - 10th June 2013
   
+Changes since release 1.1:
+
+- Modifications for compatibility with JABM 0.8 refactoring
+- scaling attribute introduced into LinearCombinationForecaster
+- chiarellaAndIori model split into separate bean configuration files
+- deprecated examples removed
+- FourHeapOrderHeap no longer checks heap integrity by checking heap constraints
+- the direction (buy/sell) of trading strategies is now encapsulated in
+	the DirectionPolicy interface.  This will break source compatibility with
+	trading strategies implemented in previous versions of JASA.
+
 Changes since release 1.0:
 
 Modifications in line with JABM 0.6 refactoring.

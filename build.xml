@@ -19,7 +19,7 @@
         <pathelement location="bin"/>
         <path refid="JUnit 3.libraryclasspath"/>
         <pathelement location="lib/trove-3.0.0a7/lib/trove-3.0.0a7.jar"/>
-        <pathelement location="dist/jabm-0.8.jar"/>
+        <pathelement location="dist/jabm-0.8-with-libs.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
