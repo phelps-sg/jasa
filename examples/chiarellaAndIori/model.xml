@@ -240,6 +240,8 @@
             <ref bean="noiseTraderWeightDistribution"/>
         </list>
     </property>
+    
+    <property name="scaling" value="1.0"/>
 </bean>
 
 <bean id="fundamentalistWeightDistribution" 

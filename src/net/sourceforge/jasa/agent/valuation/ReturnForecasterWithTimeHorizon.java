@@ -26,7 +26,6 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	
 	protected double alpha = 0.01;
 	
-	protected double scaling = 0.2;
 	
 	protected Market market;
 
@@ -94,7 +93,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	public double getReturnForecast(Market market) {
 		// TODO: Decide how to correctly implement the timeHorizon
 		this.currentPrediction = 
-				getNextPeriodReturnForecast(market) * scaling; // * timeHorizon;
+				getNextPeriodReturnForecast(market); // * timeHorizon;
 		return this.currentPrediction;
 	}
 	
@@ -144,6 +143,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 		historicalPredictions = new TimeSeriesWindow(n);
 		historicalPrices = new TimeSeriesWindow(n);
 	}
+	
 
 	public abstract double getNextPeriodReturnForecast(Market market);
 

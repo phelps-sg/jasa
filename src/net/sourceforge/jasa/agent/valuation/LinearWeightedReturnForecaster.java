@@ -17,6 +17,8 @@ public class LinearWeightedReturnForecaster extends
 	protected double[] weights;
 	
 	protected AbstractContinousDistribution[] distributions;
+	
+	protected double scaling = 0.2;
 
 	@Override
 	public double getNextPeriodReturnForecast(Market auction) {
@@ -26,7 +28,7 @@ public class LinearWeightedReturnForecaster extends
 					.getNextPeriodReturnForecast(auction);
 			result += weights[i] * forecast;
 		}
-		return result;
+		return result * scaling;
 	}
 	
 	@Override
@@ -79,6 +81,19 @@ public class LinearWeightedReturnForecaster extends
 
 	public void setDistributions(AbstractContinousDistribution[] distributions) {
 		this.distributions = distributions;
+	}
+
+	public double getScaling() {
+		return scaling;
+	}
+
+	/**
+	 * Configure the scaling parameter for the return forecast.
+	 * 
+	 * @param scaling
+	 */
+	public void setScaling(double scaling) {
+		this.scaling = scaling;
 	}
 
 	@Override
