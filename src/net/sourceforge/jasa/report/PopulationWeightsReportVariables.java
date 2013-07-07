@@ -3,6 +3,8 @@ package net.sourceforge.jasa.report;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
+
 import net.sourceforge.jabm.Population;
 import net.sourceforge.jabm.Simulation;
 import net.sourceforge.jabm.agent.Agent;
@@ -14,8 +16,6 @@ import net.sourceforge.jasa.agent.valuation.LinearWeightedReturnForecaster;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
 import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
 import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
-
-import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 
 public class PopulationWeightsReportVariables extends AbstractReportVariables 
 		implements Serializable {

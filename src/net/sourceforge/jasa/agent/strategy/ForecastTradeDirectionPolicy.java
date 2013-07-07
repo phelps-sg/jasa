@@ -1,10 +1,9 @@
 package net.sourceforge.jasa.agent.strategy;
 
-import net.sourceforge.jasa.agent.TradingAgent;
-import net.sourceforge.jasa.market.Market;
-
 import org.springframework.beans.factory.annotation.Required;
 
+import net.sourceforge.jasa.agent.TradingAgent;
+import net.sourceforge.jasa.market.Market;
 import cern.jet.random.engine.RandomEngine;
 
 /**
