@@ -347,6 +347,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 		return utilityFunction.calculatePayoff(profit);
 	}
 
+	@Override
 	public void orderFilled(Market auction, Order shout, double price,
 	    int quantity) {
 		lastOrderFilled = true;

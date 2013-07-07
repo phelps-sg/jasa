@@ -87,7 +87,7 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 	
 	public boolean modifyShout(Order shout) {
 		shout.setAgent(getAgent());
-		shout.setIsBid(tradeDirectionPolicy.isBuy(this.auction, getAgent()));
+		shout.setIsBid(this.isBuy(this.auction));
 		return true;
 	}
 
@@ -107,6 +107,7 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		return super.clone();
 	}
 
+	@Override
 	public boolean isBuy(Market market) {
 		return tradeDirectionPolicy.isBuy(market, getAgent());
 	}

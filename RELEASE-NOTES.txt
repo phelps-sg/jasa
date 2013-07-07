@@ -10,6 +10,7 @@ Changes since release 1.1:
 - the direction (buy/sell) of trading strategies is now encapsulated in
 	the DirectionPolicy interface.  This will break source compatibility with
 	trading strategies implemented in previous versions of JASA.
+- the release now contains a (fat) jar of the required version of JABM (0.8).
 
 Changes since release 1.0:
 
