@@ -111,7 +111,11 @@ public class OrderBookView extends JTable implements ReportWithGUI, TableModel,
 	@Override
 	public int getRowCount() {
 		this.currentDepth = Math.max(asks.size(), bids.size());
-		return Math.max(maxDepth, currentDepth);
+		if (maxDepth > 0) {
+			return Math.min(maxDepth, currentDepth);
+		} else {
+			return currentDepth;
+		}
 	}
 
 	@Override
@@ -236,4 +240,13 @@ public class OrderBookView extends JTable implements ReportWithGUI, TableModel,
 		result.add(this, BorderLayout.CENTER);
 		return result;
 	}
+
+	public Auctioneer getAuctioneer() {
+		return auctioneer;
+	}
+
+	public void setAuctioneer(Auctioneer auctioneer) {
+		this.auctioneer = auctioneer;
+	}
+	
 }
