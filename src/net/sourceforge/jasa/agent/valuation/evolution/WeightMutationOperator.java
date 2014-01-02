@@ -19,5 +19,5 @@ public class WeightMutationOperator implements MutationOperator {
 			forecaster.initialiseWeights();
 		}
 	}
-
+	
 }
