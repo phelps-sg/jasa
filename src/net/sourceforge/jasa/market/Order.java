@@ -123,7 +123,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	 * transaction.
 	 */
 	public boolean matches(Order other) {
-		if (this.getAgent() == other.getAgent()) {
+		if (this.getAgent().equals(other.getAgent())) {
 			return false;
 		}
 		if (this.isBid()) {
