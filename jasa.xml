@@ -2,7 +2,7 @@
 	
 <project basedir="." name="jasa-user">
 
-	<property name="version" value="1.2"/>
+	<property name="version" value="1.2.1"/>
 
 	<target name="jar">
 		<jar destfile="dist/jasa-${version}.jar"
