@@ -50,7 +50,7 @@
 	<property name="targetSource">
 		<bean class="org.springframework.aop.target.LazyInitTargetSource">
 			<property name="targetBeanName">
-				<idref local="agentInitialiser" />
+				<idref bean="agentInitialiser" />
 			</property>
 		</bean>
 	</property>
@@ -86,28 +86,28 @@
 <bean id="linearCombinationTraderFactory" scope="simulation"
         class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
-        <idref local="linearCombinationTraderPrototype"/>
+        <idref bean="linearCombinationTraderPrototype"/>
     </property>        
 </bean>
 
 <bean id="noiseTraderFactory" scope="simulation"
 	class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
 	<property name="targetBeanName">
-		<idref local="noiseTraderPrototype" />
+		<idref bean="noiseTraderPrototype" />
 	</property>
 </bean>
 
 <bean id="fundamentalistFactory" scope="simulation"
     class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
-        <idref local="fundamentalistPrototype" />
+        <idref bean="fundamentalistPrototype" />
     </property>
 </bean>
 
 <bean id="chartistFactory" scope="simulation"
     class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
     <property name="targetBeanName">
-        <idref local="chartistPrototype" />
+        <idref bean="chartistPrototype" />
     </property>
 </bean>
 

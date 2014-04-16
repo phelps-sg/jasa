@@ -20,7 +20,7 @@
 			scope="singleton">
 			
 		<property name="simulationBeanName">
-		   <idref local="marketSimulation"/>
+		   <idref bean="marketSimulation"/>
 		</property>
 	
 		<property name="numSimulations" value="10"/>	
