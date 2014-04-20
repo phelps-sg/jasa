@@ -34,13 +34,9 @@ import net.sourceforge.jasa.market.Order;
  */
 
 public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
-    implements Serializable, Parameterizable {
-
-	public static final String P_SHOUTNUMEACHPERIOD = "shoutnumeachperiod";
+    implements Serializable {
 
 	public static final int DEF_SHOUTNUMEACHPERIOD = 6;
-
-	public static final String P_DEF_BASE = "pch";
 
 	private int shoutNumEachPeriod;
 
@@ -79,4 +75,21 @@ public class PeriodicClearingHouseAuctioneer extends ClearingHouseAuctioneer
 			clear();
 		}
 	}
+
+	public int getShoutNumEachPeriod() {
+		return shoutNumEachPeriod;
+	}
+
+	public void setShoutNumEachPeriod(int shoutNumEachPeriod) {
+		this.shoutNumEachPeriod = shoutNumEachPeriod;
+	}
+
+	public int getShoutNum() {
+		return shoutNum;
+	}
+
+	public void setShoutNum(int shoutNum) {
+		this.shoutNum = shoutNum;
+	}
+	
 }
