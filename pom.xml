@@ -1,17 +1,38 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.jasa</groupId>
 	<artifactId>jasa</artifactId>
 	<version>1.2.1-SNAPSHOT</version>
 	<name>jasa</name>
 	<description>The Java Auction Simulator API (JASA) is a framework for building agent-based models of auction markets.</description>
+
 	<build>
 
 		<plugins>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+						<descriptorRef>bin</descriptorRef>
+						<descriptorRef>project</descriptorRef>
+						<descriptorRef>src</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>net.sourceforge.jabm.DesktopSimulationManager</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -21,13 +42,32 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh</artifactId>
+			</extension>
+		</extensions>
+
 	</build>
+
+	<distributionManagement>
+		<downloadUrl>http://jabm.sourceforge.net/mvn-repo/jabm</downloadUrl>
+		<repository>
+			<id>jasa.web.sourceforge.net</id>
+			<name>Maven repo on web.sourceforge.net via sftp</name>
+			<url>sftp://web.sourceforge.net/home/project-web/jasa/htdocs/mvn-repo/jasa</url>
+		</repository>
+	</distributionManagement>
+
 	<repositories>
 		<repository>
 			<id>jabm.sourceforge.net</id>
 			<url>http://jabm.sourceforge.net/mvn-repo/jabm</url>
 		</repository>
 	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>jabm</groupId>
@@ -55,4 +95,5 @@
 			<version>2.0.1</version>
 		</dependency>
 	</dependencies>
+
 </project>

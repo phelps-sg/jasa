@@ -380,7 +380,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 				Order remainder = sInTop.split(nS - nB);
 				sIn.add(remainder);
 			}
-			assert bInTop.getAgent() != sInTop.getAgent();
+//			assert bInTop.getAgent() != sInTop.getAgent();
 			result.add(bInTop);
 			result.add(sInTop);
 		}
