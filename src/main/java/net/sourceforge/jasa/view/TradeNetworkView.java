@@ -171,6 +171,7 @@ public class TradeNetworkView  implements ReportWithGUI,
 		// viewer.getRenderer().getVertexLabelRenderer().setPosition(Position.CNTR);
 		DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList> gm = new DefaultModalGraphMouse<Agent, TradeNetworkReport.TransactionList>();
 		gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
+		@SuppressWarnings("rawtypes")
 		GraphMousePlugin plugin = new AgentPickingGraphMousePlugin();
 		gm.add(plugin);
 		viewer.setGraphMouse(gm);
@@ -300,10 +301,12 @@ public class TradeNetworkView  implements ReportWithGUI,
 	public static class AgentPickingGraphMousePlugin<V, E> extends
 			PickingGraphMousePlugin<V, E> {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void mousePressed(MouseEvent e) {
 			if (e.getButton() == MouseEvent.BUTTON3) {
 				Point2D ip = e.getPoint();
+				@SuppressWarnings("rawtypes")
 				VisualizationViewer<V, E> vv = (VisualizationViewer) e.getSource();
 				GraphElementAccessor<V, E> pickSupport = vv.getPickSupport();
 				Layout<V, E> layout = vv.getGraphLayout();
