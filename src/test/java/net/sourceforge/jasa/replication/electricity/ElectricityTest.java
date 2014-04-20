@@ -81,7 +81,8 @@ public abstract class ElectricityTest extends TestCase {
 
 	private SpringSimulationController controller;
 
-	static final int ITERATIONS = 100;
+	//TODO: refactor these tests to use Spring and SimulationController
+	static final int ITERATIONS = 1;
 
 	static final int MAX_ROUNDS = 1000;
 	
