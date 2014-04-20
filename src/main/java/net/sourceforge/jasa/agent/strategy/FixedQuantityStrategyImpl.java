@@ -28,7 +28,6 @@ import net.sourceforge.jasa.market.Order;
  * @author Steve Phelps
  * @version $Revision$
  */
-
 public abstract class FixedQuantityStrategyImpl extends AbstractTradingStrategy
 		implements FixedQuantityStrategy, Serializable {
 

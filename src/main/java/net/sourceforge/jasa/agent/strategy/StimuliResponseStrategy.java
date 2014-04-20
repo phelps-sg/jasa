@@ -52,18 +52,6 @@ public class StimuliResponseStrategy extends DiscreteLearnerStrategy implements
 		super();
 	}
 
-//	public void setup(ParameterDatabase parameters, Parameter base) {
-//
-//		super.setup(parameters, base);
-//
-//		Parameter learnerParameter = base.push(P_LEARNER);
-//		learner = (StimuliResponseLearner) parameters.getInstanceForParameter(
-//		    learnerParameter, new Parameter(P_DEF_BASE).push(P_LEARNER),
-//		    StimuliResponseLearner.class);
-//
-//		((Parameterizable) learner).setup(parameters, learnerParameter);
-//	}
-
 	public Object protoClone() {
 		StimuliResponseStrategy clonedStrategy;
 		try {

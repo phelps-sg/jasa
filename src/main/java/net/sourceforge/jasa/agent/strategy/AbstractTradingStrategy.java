@@ -94,10 +94,12 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 	public void initialise() {
 	}
 
+	@Override
 	public AbstractTradingAgent getAgent() {
 		return (AbstractTradingAgent) agent;
 	}
 
+	@Override
 	public void setAgent(AbstractTradingAgent agent) {
 		this.agent = agent;
 	}
