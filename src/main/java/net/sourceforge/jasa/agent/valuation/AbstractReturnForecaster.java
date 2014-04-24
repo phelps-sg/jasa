@@ -6,7 +6,7 @@ import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.event.SimEvent;
 
 public abstract class AbstractReturnForecaster 
-		implements ReturnForecaster, Serializable {
+		implements Cloneable, ReturnForecaster, Serializable {
 //	
 //	protected SeriesReportVariables returnTimeSeries;
 //	

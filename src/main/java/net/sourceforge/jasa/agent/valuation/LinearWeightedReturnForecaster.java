@@ -10,7 +10,7 @@ import net.sourceforge.jasa.market.Market;
 import cern.jet.random.AbstractContinousDistribution;
 
 public class LinearWeightedReturnForecaster extends
-		ReturnForecasterWithTimeHorizon implements Serializable {
+		ReturnForecasterWithTimeHorizon implements Cloneable, Serializable {
 
 	protected ReturnForecasterWithTimeHorizon[] forecasters;
 	
@@ -103,5 +103,15 @@ public class LinearWeightedReturnForecaster extends
 				+ Arrays.toString(weights) + ", distributions="
 				+ Arrays.toString(distributions) + "]";
 	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		LinearWeightedReturnForecaster result = 
+				(LinearWeightedReturnForecaster) super.clone();
+		result.weights = this.weights.clone();
+		return result;
+	}
+	
+	
 	
 }
