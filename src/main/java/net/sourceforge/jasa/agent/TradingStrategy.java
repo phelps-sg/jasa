@@ -1,6 +1,6 @@
 /*
  * JASA Java Auction Simulator API
- * Copyright (C) 2013 Steve Phelps
+ * Copyright (C) 2014 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -17,23 +17,18 @@ package net.sourceforge.jasa.agent;
 
 import net.sourceforge.jabm.EventScheduler;
 import net.sourceforge.jabm.strategy.Strategy;
-import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.event.MarketEventListener;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 /**
  * <p>
- * Classes implementing this interface define trading strategies for round-robin
- * traders.
+ * Classes implementing this interface define trading strategies for traders.
  * </p>
  * 
  * @author Steve Phelps
- * @version $Revision$
  */
-
-public interface TradingStrategy extends Strategy, Prototypeable, 
-		MarketEventListener {
+public interface TradingStrategy extends Strategy, MarketEventListener {
 
 	/**
 	 * Modify the trader's current shout according to the trading strategy being
@@ -46,15 +41,38 @@ public interface TradingStrategy extends Strategy, Prototypeable,
 	 * @return The new shout, or null if no shout is to be placed.
 	 */
 	public Order modifyOrder(Order shout, Market auction);
-
+	
+	/**
+	 * Configure the agent for this strategy.
+	 * 
+	 * @param agent  The agent associated with this strategy.
+	 * 				
+	 */
 	public void setAgent(AbstractTradingAgent agent);
 
+	/**
+	 * The current volume traded by this strategy in the specified market.
+	 * This is mainly used for computing supply and demand statistics.
+	 * 
+	 * @param auction	The market we are querying.
+	 * @return	The current volume traded in auction.
+	 */
 	public int determineQuantity(Market auction);
 
+	/**
+	 * Initialise the strategy.
+	 */
 	public void initialise();
 
 	public void subscribeToEvents(EventScheduler scheduler);
 	
+	/**
+	 * Query the current trade direction taken by this strategy.
+	 * 
+	 * @param auction
+	 * 
+	 * @return true for a long position or false for a short position.
+	 */
 	public boolean isBuy(Market auction);
 
 }
