@@ -18,7 +18,6 @@ package net.sourceforge.jasa.agent.strategy;
 import java.io.Serializable;
 
 import net.sourceforge.jabm.EventScheduler;
-import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.TradingStrategy;
 import net.sourceforge.jasa.event.MarketEvent;
@@ -34,7 +33,7 @@ import net.sourceforge.jasa.market.Order;
  */
 
 public class MarkupStrategyDecorator extends FixedDirectionStrategy
-    implements Serializable, Prototypeable {
+    implements Serializable {
 
 	/**
 	 * The component strategy to decorate.
@@ -96,16 +95,16 @@ public class MarkupStrategyDecorator extends FixedDirectionStrategy
 		subStrategy.setAgent(agent);
 	}
 
-	public Object protoClone() {
-		Object clonedStrategy;
-		try {
-			clonedStrategy = this.clone();
-			((MarkupStrategyDecorator) clonedStrategy).subStrategy = (TradingStrategy) subStrategy
-			    .protoClone();
-		} catch (CloneNotSupportedException e) {
-			throw new Error(e);
-		}
-		return clonedStrategy;
-	}
+//	public Object protoClone() {
+//		Object clonedStrategy;
+//		try {
+//			clonedStrategy = this.clone();
+//			((MarkupStrategyDecorator) clonedStrategy).subStrategy = (TradingStrategy) subStrategy
+//			    .protoClone();
+//		} catch (CloneNotSupportedException e) {
+//			throw new Error(e);
+//		}
+//		return clonedStrategy;
+//	}
 
 }

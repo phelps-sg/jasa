@@ -21,6 +21,7 @@ public class MaxInventoryTradeDirectionPolicy implements TradeDirectionPolicy {
 	public boolean isBuy(Market market, TradingAgent agent) {
 		int currentInventory = agent.getCommodityHolding().getQuantity();
 		if (Math.abs(currentInventory) >= maxInventory) {
+			// sell if at inventory limit
 			return currentInventory < 0;
 		} else {
 			return chainedPolicy.isBuy(market, agent);

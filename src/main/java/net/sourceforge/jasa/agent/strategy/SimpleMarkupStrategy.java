@@ -1,6 +1,6 @@
 /*
  * JASA Java Auction Simulator API
- * Copyright (C) 2013 Steve Phelps
+ * Copyright (C) 2014 Steve Phelps
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -36,31 +36,9 @@ public class SimpleMarkupStrategy extends FixedQuantityStrategyImpl {
 	
 	protected AbstractContinousDistribution markupDistribution;
 
-//	protected boolean isBuy;
-//	
-//	public boolean decideDirection(double currentPrice, 
-//									double forecastedPrice) {
-//		if (Double.isNaN(currentPrice)) {
-//			return prng.nextDouble() >= 0.5;
-//		} else if (Math.abs(forecastedPrice - currentPrice) < 10E-5) {
-//			return prng.nextDouble() >= 0.5;
-//		} else {
-//			return forecastedPrice > currentPrice;
-//		}
-//	}
-	
 	@Override
 	public boolean modifyShout(Order shout) {
 		boolean result = super.modifyShout(shout);
-//		double currentPrice = auction.getCurrentPrice();
-//		if (!(currentPrice >= 0)) {
-//			assert currentPrice >= 0;
-//		}
-//		double forecastedPrice = getAgent().getValuation(auction);
-//		assert !Double.isNaN(forecastedPrice);
-//		assert forecastedPrice >= -10E-5;
-//		this.isBuy = decideDirection(currentPrice, forecastedPrice);
-//		shout.setIsBid(isBuy);
 		double forecastedPrice = getAgent().getValuation(auction);
 		if (shout.isBid()) {
 			shout.setPrice(forecastedPrice * (1 - markup));
@@ -91,9 +69,5 @@ public class SimpleMarkupStrategy extends FixedQuantityStrategyImpl {
 	public void initialiseMarkup() {
 		this.markup = markupDistribution.nextDouble();
 	}
-//	
-//	public boolean isBuy() {
-//		return isBuy;
-//	}
 
 }

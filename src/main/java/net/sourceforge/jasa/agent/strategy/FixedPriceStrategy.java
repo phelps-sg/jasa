@@ -17,18 +17,15 @@ package net.sourceforge.jasa.agent.strategy;
 
 import java.io.Serializable;
 
-import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.market.Market;
 import net.sourceforge.jasa.market.Order;
 
 /**
  * @author Steve Phelps
- * @version $Revision$
  */
-
 public class FixedPriceStrategy extends FixedDirectionStrategy implements
-    Serializable, Prototypeable {
+    Serializable {
 
 	protected double price;
 
@@ -42,16 +39,16 @@ public class FixedPriceStrategy extends FixedDirectionStrategy implements
 	public FixedPriceStrategy() {
 		super(null);
 	}
-
-	public Object protoClone() {
-		Object clonedStrategy;
-		try {
-			clonedStrategy = this.clone();
-		} catch (CloneNotSupportedException e) {
-			throw new Error(e);
-		}
-		return clonedStrategy;
-	}
+//
+//	public Object protoClone() {
+//		Object clonedStrategy;
+//		try {
+//			clonedStrategy = this.clone();
+//		} catch (CloneNotSupportedException e) {
+//			throw new Error(e);
+//		}
+//		return clonedStrategy;
+//	}
 
 	public boolean modifyShout(Order shout) {
 //		if (agent.isBuyer(auction) && price <= agent.getValuation(auction)

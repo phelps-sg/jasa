@@ -15,14 +15,11 @@
 
 package net.sourceforge.jasa.agent.strategy;
 
-import net.sourceforge.jabm.learning.MimicryLearner;
-import net.sourceforge.jabm.util.Prototypeable;
 import net.sourceforge.jasa.agent.AbstractTradingAgent;
 
 import org.apache.log4j.Logger;
 
 import cern.jet.random.engine.RandomEngine;
-
 
 /**
  * <p>
@@ -35,10 +32,8 @@ import cern.jet.random.engine.RandomEngine;
  * </p>
  * 
  * @author Steve Phelps
- * @version $Revision$
  */
-
-public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
+public class ZIPStrategy extends MomentumStrategy {
 
 	static Logger logger = Logger.getLogger(ZIPStrategy.class);
 	
@@ -54,14 +49,14 @@ public class ZIPStrategy extends MomentumStrategy implements Prototypeable {
 		this(null, prng);
 	}
 
-	public Object protoClone() {
-		ZIPStrategy clone = new ZIPStrategy(prng);
-		clone.scaling = this.scaling;
-		clone.learner = (MimicryLearner) ((Prototypeable) this.learner)
-		    .protoClone();
-		clone.reset();
-		return clone;
-	}
+//	public Object protoClone() {
+//		ZIPStrategy clone = new ZIPStrategy(prng);
+//		clone.scaling = this.scaling;
+//		clone.learner = (MimicryLearner) ((Prototypeable) this.learner)
+//		    .protoClone();
+//		clone.reset();
+//		return clone;
+//	}
 
 	protected void adjustMargin() {
 		if (isSell()) {
