@@ -105,7 +105,7 @@ public abstract class SupplyAndDemandFrame
 						dataset, PlotOrientation.HORIZONTAL, 
 						true, true, false);
 		
-		ChartPanel chartPanel = new ChartPanel(graph, false);
+		ChartPanel chartPanel = new ChartPanel(graph, true);
         chartPanel.setPreferredSize(new Dimension(500, 270));
         panel.add(chartPanel);
 	}
