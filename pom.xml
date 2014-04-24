@@ -53,7 +53,7 @@
 	</build>
 
 	<distributionManagement>
-		<downloadUrl>http://jabm.sourceforge.net/mvn-repo/jabm</downloadUrl>
+		<downloadUrl>http://jasa.sourceforge.net/mvn-repo/jasa</downloadUrl>
 		<repository>
 			<id>jasa.web.sourceforge.net</id>
 			<name>Maven repo on web.sourceforge.net via sftp</name>
