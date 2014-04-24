@@ -422,6 +422,10 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 		return super.clone();
 	}
 
+	public void setPayoff(double payoff) {
+		this.totalPayoff = payoff;
+	}
+
 	@Override
 	public double getPayoff() {
 		return totalPayoff;
