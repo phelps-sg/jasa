@@ -39,5 +39,4 @@ public class TrueSupplyAndDemandFrame extends SupplyAndDemandFrame {
 		return new TrueSupplyAndDemandStats(auction, supplyCurve, demandCurve);
 	}
 
-
 }
