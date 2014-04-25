@@ -28,7 +28,7 @@ public class ValuationPolicyImitationOperator implements ImitationOperator {
 				child.setValuationPolicy(newPolicy);
 				oldPolicy.dispose();
 				newPolicy.setAgent(child);
-				child.setPayoff(parent.getPayoff());
+//				child.setPayoff(parent.getLastPayoff());
 				if (logger.isDebugEnabled())
 					logger.debug("Inheriting " + newPolicy + " for " + child);
 
