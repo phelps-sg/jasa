@@ -13,7 +13,8 @@ public class ChartistForecasterTest extends TestCase {
 	public void setUp() {
 		market = new MockMarket();
 		forecaster = new ChartistForecaster();
-		forecaster.setWindowSize(3);
+		//TODO
+//		forecaster.setWindowSize(3);
 		try {
 			forecaster.afterPropertiesSet();
 		} catch (Exception e) {
