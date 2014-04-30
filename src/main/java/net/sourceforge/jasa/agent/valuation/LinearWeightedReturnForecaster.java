@@ -18,7 +18,7 @@ public class LinearWeightedReturnForecaster extends
 	
 	protected AbstractContinousDistribution[] distributions;
 	
-	protected double scaling = 0.2;
+	protected double scaling = 1.0;
 
 	@Override
 	public double getNextPeriodReturnForecast(Market auction) {
