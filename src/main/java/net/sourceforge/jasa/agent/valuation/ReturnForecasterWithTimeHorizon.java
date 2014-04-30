@@ -15,18 +15,21 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 		AbstractReturnForecaster implements InitializingBean, Cloneable {
 
 	protected double timeHorizon = 1.0;
-	
+
 	protected TimeSeriesWindow historicalPredictions;
-	
+
 	protected TimeSeriesWindow historicalPrices;
-	
+
 	protected double currentPrediction;
-	
+
 	protected double totalSquaredError = 0.0;
-	
+
 	protected double alpha = 0.01;
+
+	protected int sampleCount = 0;
 	
-	
+	protected int sampleInterval = 50;
+
 	protected Market market;
 
 	static Logger logger = Logger
@@ -39,48 +42,52 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	public void setTimeHorizon(double timeHorizon) {
 		this.timeHorizon = timeHorizon;
 	}
-	
+
 	/**
 	 * Calculate the forecast error at the end of each round.
 	 * 
 	 * @param event
 	 */
 	public void onRoundFinished(RoundFinishedEvent event) {
-		this.market = (Market) event.getSimulation();
-		historicalPredictions.addValue(this.currentPrediction);
-		double currentPrice = market.getCurrentPrice();
-		historicalPrices.addValue(currentPrice);
-		//TODO decide correct use of timeHorizon
-//		int lag = (int) Math.round(timeHorizon);
-		int lag = 1;
-		double previousReturn = (Math.log(currentPrice) - Math
-				.log(historicalPrices.getValue(lag - 1))); //  * timeHorizon;
-		double previousPredictedReturn = historicalPredictions
-				.getValue(lag - 1);
-		double error = previousReturn - previousPredictedReturn;
-		if (!Double.isInfinite(previousReturn)) {
-			if (Double.isNaN(totalSquaredError)) {
-				totalSquaredError = error * error;
-			} else {
-				totalSquaredError = alpha * totalSquaredError + (1.0 - alpha)
-						* error * error;
+		if ((sampleCount++ % sampleInterval) == 0) {
+			this.market = (Market) event.getSimulation();
+			getReturnForecast(market);
+			historicalPredictions.addValue(this.currentPrediction);
+			double currentPrice = market.getCurrentPrice();
+			historicalPrices.addValue(currentPrice);
+			// TODO decide correct use of timeHorizon
+			// int lag = (int) Math.round(timeHorizon);
+			int lag = 1;
+			double previousReturn = (Math.log(currentPrice) - Math
+					.log(historicalPrices.getValue(lag - 1))); // * timeHorizon;
+			double previousPredictedReturn = historicalPredictions
+					.getValue(lag - 1);
+			double error = previousReturn - previousPredictedReturn;
+			if (!Double.isInfinite(previousReturn)) {
+				if (Double.isNaN(totalSquaredError)) {
+					totalSquaredError = error * error;
+				} else {
+					totalSquaredError = alpha * totalSquaredError
+							+ (1.0 - alpha) * error * error;
+				}
+			}
+			if (logger.isDebugEnabled()) {
+				// logger.debug("this = " + this);
+				logger.debug("t = " + event.getSimulation().getSimulationTime());
+				// logger.debug("previousPredictedReturn = " +
+				// previousPredictedReturn);
+				logger.debug("currentPrice = " + currentPrice);
+				// logger.debug("currentReturn = " + currentReturn);
+				// logger.debug("totalSquaredError = " + totalSquaredError);
+				// logger.debug("error = " + error);
 			}
 		}
-		if (logger.isDebugEnabled()) {
-//			logger.debug("this = " + this);
-			logger.debug("t = " + event.getSimulation().getSimulationTime());
-//			logger.debug("previousPredictedReturn = " + previousPredictedReturn);
-			logger.debug("currentPrice = " + currentPrice);
-//			logger.debug("currentReturn = " + currentReturn);
-//			logger.debug("totalSquaredError = " + totalSquaredError);
-//			logger.debug("error = " + error);
-		}
 	}
-	
+
 	public double getForecastError() {
 		return totalSquaredError;
 	}
-	
+
 	public double getAlpha() {
 		return alpha;
 	}
@@ -92,11 +99,11 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	@Override
 	public double getReturnForecast(Market market) {
 		// TODO: Decide how to correctly implement the timeHorizon
-		this.currentPrediction = 
-				getNextPeriodReturnForecast(market); // * timeHorizon;
+		this.currentPrediction = getNextPeriodReturnForecast(market); // *
+																		// timeHorizon;
 		return this.currentPrediction;
 	}
-	
+
 	@Override
 	public void subscribeToEvents(EventScheduler scheduler) {
 		super.subscribeToEvents(scheduler);
@@ -113,15 +120,15 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 			onSimulationStarting((SimulationStartingEvent) event);
 		}
 	}
-	
+
 	public void onSimulationStarting(SimulationStartingEvent event) {
 		this.market = (MarketSimulation) event.getSimulation();
 	}
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		ReturnForecasterWithTimeHorizon result = 
-				(ReturnForecasterWithTimeHorizon) super.clone();
+		ReturnForecasterWithTimeHorizon result = (ReturnForecasterWithTimeHorizon) super
+				.clone();
 		try {
 			result.afterPropertiesSet();
 			((MarketSimulation) market).addListener(result);
@@ -130,7 +137,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 		}
 		return result;
 	}
-	
+
 	@Override
 	public void dispose() {
 		((MarketSimulation) market).getSimulationController().removeListener(
@@ -143,7 +150,6 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 		historicalPredictions = new TimeSeriesWindow(n);
 		historicalPrices = new TimeSeriesWindow(n);
 	}
-	
 
 	public abstract double getNextPeriodReturnForecast(Market market);
 
