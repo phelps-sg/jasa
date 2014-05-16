@@ -49,7 +49,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 	 * @param event
 	 */
 	public void onRoundFinished(RoundFinishedEvent event) {
-		if ((sampleCount++ % sampleInterval) == 0) {
+//		if ((sampleCount++ % sampleInterval) == 0) {
 			this.market = (Market) event.getSimulation();
 			getReturnForecast(market);
 			historicalPredictions.addValue(this.currentPrediction);
@@ -81,7 +81,7 @@ public abstract class ReturnForecasterWithTimeHorizon extends
 				// logger.debug("totalSquaredError = " + totalSquaredError);
 				// logger.debug("error = " + error);
 			}
-		}
+//		}
 	}
 
 	public double getForecastError() {
