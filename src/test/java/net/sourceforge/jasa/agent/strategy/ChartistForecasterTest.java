@@ -25,6 +25,8 @@ public class ChartistForecasterTest extends TestCase {
 	
 	public void testUpwardTrend() {
 		double[] prices = new double[] { 100.0, 200.0, 300.0 };
+		//TODO
+		forecaster.setForecast(+0.1);
 		simulatePrices(prices);
 		double forecastedReturn = 
 				forecaster.getNextPeriodReturnForecast(market);
@@ -36,6 +38,8 @@ public class ChartistForecasterTest extends TestCase {
 	
 	public void testDownardTrend() {
 		double[] prices = new double[] { 300.0, 200.0, 100.0 };
+		//TODO
+		forecaster.setForecast(-0.1);
 		simulatePrices(prices);
 		double forecastedReturn = 
 				forecaster.getNextPeriodReturnForecast(market);

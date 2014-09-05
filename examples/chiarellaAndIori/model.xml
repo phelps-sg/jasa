@@ -171,8 +171,8 @@
 
 <bean id="chartistForecaster" parent="timeHorizonForecaster" scope="prototype"
             class="net.sourceforge.jasa.agent.valuation.ChartistForecaster">
-    <property name="windowSizeDistribution" ref="chartistWindowSizeDistribution"/>
- <property name="sampleInterval" value="1"/>  
+<!--     <property name="windowSizeDistribution" ref="chartistWindowSizeDistribution"/> -->
+<!--  <property name="sampleInterval" value="1"/>   -->
 </bean>
 
 <bean id="fundamentalistForecaster" parent="timeHorizonForecaster"
