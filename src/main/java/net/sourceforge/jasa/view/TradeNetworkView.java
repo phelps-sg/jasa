@@ -28,6 +28,8 @@ import net.sourceforge.jasa.agent.AbstractTradingAgent;
 import net.sourceforge.jasa.agent.MarketMakerAgent;
 import net.sourceforge.jasa.agent.valuation.LinearWeightedReturnForecaster;
 import net.sourceforge.jasa.agent.valuation.ReturnForecastValuationPolicy;
+import net.sourceforge.jasa.agent.valuation.ReturnForecaster;
+import net.sourceforge.jasa.agent.valuation.ValuationPolicy;
 import net.sourceforge.jasa.report.TradeNetworkReport;
 
 import org.apache.commons.collections15.Transformer;
@@ -66,6 +68,8 @@ public class TradeNetworkView  implements ReportWithGUI,
 	protected int interactions;
 	
 	protected int updateFrequency = 10;
+	
+	protected float weightScale = 2.0f;
 
 	protected Graph<Agent, WeightedEdge> myGraph;
 
@@ -129,21 +133,30 @@ public class TradeNetworkView  implements ReportWithGUI,
 						} else {
 							alpha = 0.3f;
 						}
-						LinearWeightedReturnForecaster forecaster = 
-								(LinearWeightedReturnForecaster) ((ReturnForecastValuationPolicy) ((AbstractTradingAgent) agent)
-								.getValuationPolicy()).getForecaster();
-						double[] weights = forecaster.getWeights();
 						float[] colors = new float[3];
-						float maxWeight = Float.NEGATIVE_INFINITY;
-						for (int i = 0; i < weights.length; i++) {
-							if (Math.abs(weights[i]) > maxWeight) {
-								maxWeight = (float) Math.abs(weights[i]);
+						if (agent instanceof AbstractTradingAgent) {
+							ValuationPolicy valuer = ((AbstractTradingAgent) agent)
+									.getValuationPolicy();
+							if (valuer instanceof ReturnForecastValuationPolicy) {
+								ReturnForecaster forecaster = ((ReturnForecastValuationPolicy) valuer)
+										.getForecaster();
+								if (forecaster instanceof LinearWeightedReturnForecaster) {
+									double[] weights = ((LinearWeightedReturnForecaster) forecaster)
+											.getWeights();
+									float maxWeight = Float.NEGATIVE_INFINITY;
+									for (int i = 0; i < weights.length; i++) {
+										if (Math.abs(weights[i]) > maxWeight) {
+											maxWeight = (float) Math
+													.abs(weights[i]);
+										}
+									}
+									for (int i = 0; i < colors.length; i++) {
+										colors[i] = (float) Math
+												.abs(weights[i]) / maxWeight;
+									}
+								}
 							}
-						}
-						for (int i = 0; i < colors.length; i++) {
-							colors[i] = (float) Math.abs(weights[i])
-									/ maxWeight;
-						}
+						} 
 						result = new Color(colors[0], colors[1], colors[2],
 								alpha);
 						return result;
@@ -155,7 +168,7 @@ public class TradeNetworkView  implements ReportWithGUI,
 					public Stroke transform(WeightedEdge strength) {
 						double r = strength.getValue();
 //								/ tradeNetwork.getMaximumInvestment();
-						return new BasicStroke((float) r * 2.0f); 
+						return new BasicStroke((float) r * weightScale); 
 					}
 				});
 		
@@ -323,5 +336,16 @@ public class TradeNetworkView  implements ReportWithGUI,
 	public JComponent getComponent() {
 		return viewer;
 	}
+
+
+	public float getWeightScale() {
+		return weightScale;
+	}
+
+
+	public void setWeightScale(float weightScale) {
+		this.weightScale = weightScale;
+	}
+	
 	
 }
