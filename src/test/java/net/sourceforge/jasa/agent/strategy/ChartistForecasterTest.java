@@ -13,8 +13,7 @@ public class ChartistForecasterTest extends TestCase {
 	public void setUp() {
 		market = new MockMarket();
 		forecaster = new ChartistForecaster();
-		//TODO
-//		forecaster.setWindowSize(3);
+		forecaster.setWindowSize(3);
 		try {
 			forecaster.afterPropertiesSet();
 		} catch (Exception e) {
@@ -24,27 +23,25 @@ public class ChartistForecasterTest extends TestCase {
 	}
 	
 	public void testUpwardTrend() {
-		//TODO
-//		double[] prices = new double[] { 100.0, 200.0, 300.0 };
-//		simulatePrices(prices);
-//		double forecastedReturn = 
-//				forecaster.getNextPeriodReturnForecast(market);
-//		System.out.println("forecastedReturn = " + forecastedReturn);
-//		assertTrue(forecastedReturn > 0.0);
-//		double forecastedPrice = market.price * Math.exp(forecastedReturn);
-//		System.out.println("forecastedPrice = " + forecastedPrice);
+		double[] prices = new double[] { 100.0, 200.0, 300.0 };
+		simulatePrices(prices);
+		double forecastedReturn = 
+				forecaster.getNextPeriodReturnForecast(market);
+		System.out.println("forecastedReturn = " + forecastedReturn);
+		assertTrue(forecastedReturn > 0.0);
+		double forecastedPrice = market.price * Math.exp(forecastedReturn);
+		System.out.println("forecastedPrice = " + forecastedPrice);
 	}
 	
 	public void testDownardTrend() {
-		//TODO
-//		double[] prices = new double[] { 300.0, 200.0, 100.0 };
-//		simulatePrices(prices);
-//		double forecastedReturn = 
-//				forecaster.getNextPeriodReturnForecast(market);
-//		System.out.println("forecastedReturn = " + forecastedReturn);
-//		assertTrue(forecastedReturn < 0.0);
-//		double forecastedPrice = market.price * Math.exp(forecastedReturn);
-//		System.out.println("forecastedPrice = " + forecastedPrice);
+		double[] prices = new double[] { 300.0, 200.0, 100.0 };
+		simulatePrices(prices);
+		double forecastedReturn = 
+				forecaster.getNextPeriodReturnForecast(market);
+		System.out.println("forecastedReturn = " + forecastedReturn);
+		assertTrue(forecastedReturn < 0.0);
+		double forecastedPrice = market.price * Math.exp(forecastedReturn);
+		System.out.println("forecastedPrice = " + forecastedPrice);
 	}
 	
 	public void simulatePrices(double[] prices) {
