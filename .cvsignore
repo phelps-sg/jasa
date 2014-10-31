@@ -5,4 +5,5 @@ version.properties
 jasa-*.tar.gz
 *.attach_pid*
 target
+target/**
 *.iml
