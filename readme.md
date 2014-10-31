@@ -15,7 +15,7 @@ economics.
 
 This package is currently at alpha. This code is not stable or fully
 tested. Please report any bugs, issues or suggestions to [Steve
-Phelps](mailto:phelps.sg@gmail.com).
+Phelps](mailto:sphelps@sphelps.net).
 
 ### License
 
@@ -39,27 +39,7 @@ The latest release of JASA can be downloaded from
 -   JASA is built on top of the [](http://jabm.sourceforge.net)JABM
     framework which must be installed before using JASA.
 
-Running the examples
---------------------
-
-### Using Apache Ant
-
-The examples can be run using [Apache Ant](ant.apache.org). Launch a
-command window or shell and set your working directory to the `jasa/`
-subdirectory. Next [run ant](http://ant.apache.org/manual/running.html)
-` ant chiarellaAndIori`
-
-### From the command line
-
-Alternatively, configure the
-[CLASSPATH](http://download.oracle.com/javase/tutorial/essential/environment/paths.html)
-environment variable to include all the `jar` files in the `lib/`
-directory and the `dist/` directory and use a command similar to the
-following:
-
-`  java -Djabm.config=examples/chiarellaAndIori/main.xml         net.sourceforge.jabm.DesktopSimulationManager`
-
-### From the Eclipse IDE
+### Running the examples from the Eclipse IDE
 
 The distribution archive can be imported directly into the [Eclipse
 IDE](http://www.eclipse.org/) by using the

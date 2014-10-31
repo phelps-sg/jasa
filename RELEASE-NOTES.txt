@@ -1,4 +1,8 @@
-  Change log for JASA 1.2 - 10th June 2013
+  Change log for JASA 1.2.2 - Oct 2014
+
+Changes since release 1.2:
+
+- Migrated to Maven for dependency management
   
 Changes since release 1.1:
 
