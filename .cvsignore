@@ -4,6 +4,7 @@ jasa.jar
 version.properties
 jasa-*.tar.gz
 *.attach_pid*
-target
+target/
 target/**
+target/*
 *.iml
