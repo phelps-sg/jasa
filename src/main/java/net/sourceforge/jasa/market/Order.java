@@ -138,6 +138,10 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 			return 1;
 		} else if (price < other.price) {
 			return -1;
+		} else if (quantity < other.quantity) {
+			return 1;
+		} else if (quantity > other.quantity) {
+			return -1;
 //		} else if (timeStamp != null && timeStamp.getTicks() < other.timeStamp.getTicks()) {
 //			return 1;
 //		} else if (timeStamp != null && timeStamp.getTicks() > other.timeStamp.getTicks()) {
