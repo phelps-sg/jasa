@@ -67,6 +67,10 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	protected PriorityQueue<Order> sOut = new PriorityQueue<Order>(
 			new TreeSet<Order>(greaterThan));
 
+	//TODO: Shouts should be ordered on quantity as well as price
+	//         but the quantity ordering should be the same
+	//			for both bids and asks.
+	
 	protected static AscendingOrderComparator greaterThan = 
 			new AscendingOrderComparator();
 
@@ -371,15 +375,16 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 			Order bInTop = (Order) bIn.remove();
 			int nS = sInTop.getQuantity();
 			int nB = bInTop.getQuantity();
-			if (nS < nB) {
-				// split the bid
-				Order remainder = bInTop.split(nB - nS);
-				bIn.add(remainder);
-			} else if (nB < nS) {
-				// split the ask
-				Order remainder = sInTop.split(nS - nB);
-				sIn.add(remainder);
-			}
+			assert nS == nB;
+//			if (nS < nB) {
+//				// split the bid
+//				Order remainder = bInTop.split(nB - nS);
+//				bIn.add(remainder);
+//			} else if (nB < nS) {
+//				// split the ask
+//				Order remainder = sInTop.split(nS - nB);
+//				sIn.add(remainder);
+//			}
 //			assert bInTop.getAgent() != sInTop.getAgent();
 			result.add(bInTop);
 			result.add(sInTop);
