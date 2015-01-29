@@ -17,6 +17,9 @@ package net.sourceforge.jasa.market;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import net.sourceforge.jabm.SimulationTime;
 import net.sourceforge.jasa.agent.TradingAgent;
@@ -63,11 +66,13 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	 * The time that this order was placed.
 	 */
 	protected SimulationTime timeStamp;
-
+	
 	/**
 	 * The child of this order.
 	 */
 	protected Order child = null;
+	
+	protected boolean filled = false;
 
 	static DecimalFormat currencyFormatter = new DecimalFormat(
 	    "+#########0.00;-#########.00");
@@ -296,5 +301,54 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		this.timeStamp = timeStamp;
 	}
 
+	public boolean isFilled() {
+		return filled;
+	}
+
+	public void setFilled(boolean filled) {
+		this.filled = filled;
+	}
 	
+	public long aggregateVolume() {
+		long result = 0;
+		for (Order p = this; p != null; p = p.getChild()) {
+			result += p.getQuantity();
+		}
+		return result;
+	}
+
+	public long aggregateFilledVolume() {
+		long result = 0;
+		for (Order p = this; p != null; p = p.getChild()) {
+			if (p.isFilled()) result += p.getQuantity();
+		}
+		return result;
+	}
+
+	public long aggregateUnfilledVolume() {
+		long result = 0;
+		for (Order p = this; p != null; p = p.getChild()) {
+			if (!p.isFilled()) result += p.getQuantity();
+		}
+		return result;
+	}	
+	
+	public List<Order> getUnfilledFraction() {
+		List<Order> result = new LinkedList<Order>();
+		for (Order p = this; p!= null; p = p.getChild()) {
+			if (!p.isFilled()) result.add(p);
+		}
+		return result;
+	}
+
+	public static int totalVolume(Iterable<Order> orders) {
+		Iterator<Order> i = orders.iterator();
+		int qty = 0;
+		while (i.hasNext()) {
+			Order s = (Order) i.next();
+			qty += s.getQuantity();
+		}
+		return qty;
+	}
+
 }
