@@ -15,6 +15,7 @@
 
 package net.sourceforge.jasa.market;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -240,7 +241,58 @@ public class FourHeapTest extends TestCase {
 			fail(e.getMessage());
 		}
 	}
-	
+	public void testWalkingBookSell() {
+		try {
+			// Create two test traders
+			TradingAgent trader1 = new MockTrader(this, 0, 0, auction);
+			TradingAgent trader2 = new MockTrader(this, 0, 0, auction);
+			
+			// The total volume of buy orders
+			int sellQuantity = 20;
+			
+			// The volume of the sell orders
+			int buy1Quantity = 10;
+			int buy2Quantity = 8;
+			
+			// The total tradable volume and remaining volumes
+			int tradableVolume = buy1Quantity + buy2Quantity;
+			int untradedVolume = sellQuantity - tradableVolume;
+
+			// Create the limit-orders
+			Order sell = new Order(trader1, sellQuantity, 2.0, false);
+			Order buy1 = new Order(trader2, buy1Quantity, 5.0, true);
+			Order buy2 = new Order(trader2, buy2Quantity, 5.0, true);
+
+			// Submit them to the exchange
+			book.add(buy1);
+			book.add(buy2);
+			book.add(sell);
+			
+			// Uncross the market
+			List<Order> matched = book.matchOrders();
+			System.out.println(matched);
+
+			// The total volume of uncrossed orders should be 18.
+			// We multiply by two because we count both bids and asks.
+			assertTrue(Order.totalVolume(matched) == tradableVolume * 2);
+			
+			// The untraded volume is held in the child of of the child
+			// the original order, since we have split it three times.
+			Order remainingOrder = sell.getUnfilledFraction().get(0);
+			assertTrue(remainingOrder.getQuantity() == untradedVolume);
+
+			// An order with this remaining volume should remain on the book.
+			assertTrue(book.sOut.contains(remainingOrder));
+
+			// There should be no remaining volume on the bid side.
+			assertTrue(book.bOut.isEmpty());
+
+		} catch (DuplicateShoutException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}	
+
 	public void testWalkingBookBuy() {
 		try {
 			// Create two test traders
@@ -346,7 +398,70 @@ public class FourHeapTest extends TestCase {
 			fail(e.getMessage());
 		}
 	}
+
+	public void testBalanceDifferentQuantity() {
+
+		int numOrders = 8;
+		MockTrader[] traders = new MockTrader[numOrders];
+		for (int i = 0; i < numOrders; i++) {
+			traders[i] = new MockTrader(this, 0, 0, auction);
+		}
+
+		int i = 0;
+		ArrayList<Order> demand = new ArrayList<Order>();
+		demand.add(new Order(traders[i++], 10, 10.0, true));
+		demand.add(new Order(traders[i++], 5,  9.0, true));
+		demand.add(new Order(traders[i++], 8,  2.0, true));
+		demand.add(new Order(traders[i++], 10,  1.0, true));
+		
+		ArrayList<Order> supply = new ArrayList<Order>();
+		supply.add(new Order(traders[i++], 10, 3.0, false));
+		supply.add(new Order(traders[i++], 3, 4.0, false));
+		supply.add(new Order(traders[i++], 9, 5.0, false));
+		supply.add(new Order(traders[i++], 10, 6.0, false));
+
+		submitOrders(demand);
+		submitOrders(supply);
+	}
 	
+	public void submitOrders(List<Order> orders) {
+		try {
+		for (Order order : orders) {
+			System.out.println(order);
+			book.add(order);
+			book.checkBalanced();
+		}
+		} catch (DuplicateShoutException e) {
+			e.printStackTrace();
+			fail(e.getMessage());	
+		}
+	}
+	
+
+	public void testBalanceSameQuantity() {
+
+		int numOrders = 8;
+		MockTrader[] traders = new MockTrader[numOrders];
+		for (int i = 0; i < numOrders; i++) {
+			traders[i] = new MockTrader(this, 0, 0, auction);
+		}
+
+		int i = 0;
+		ArrayList<Order> demand = new ArrayList<Order>();
+		demand.add(new Order(traders[i++], 10, 10.0, true));
+		demand.add(new Order(traders[i++], 10,  9.0, true));
+		demand.add(new Order(traders[i++], 10,  2.0, true));
+		demand.add(new Order(traders[i++], 10,  1.0, true));
+		
+		ArrayList<Order> supply = new ArrayList<Order>();
+		supply.add(new Order(traders[i++], 10, 3.0, false));
+		supply.add(new Order(traders[i++], 10, 4.0, false));
+		supply.add(new Order(traders[i++], 10, 5.0, false));
+		supply.add(new Order(traders[i++], 10, 6.0, false));
+
+		submitOrders(demand);
+		submitOrders(supply);
+	}
 
 	public void testRandom() {
 
@@ -448,8 +563,8 @@ class TestShoutEngine extends FourHeapOrderBook {
 	}
 
 	protected void checkBalanced() {
-		int nS = Order.totalVolume(sIn);
-		int nB = Order.totalVolume(bIn);
+		long nS = Order.totalVolume(sIn);
+		long nB = Order.totalVolume(bIn);
 		if (nS != nB) {
 //			printState();
 			throw new Error("shout heaps not balanced nS=" + nS + " nB=" + nB);
