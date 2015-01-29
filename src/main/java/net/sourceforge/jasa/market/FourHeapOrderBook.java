@@ -389,6 +389,8 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 				// assert bInTop.getAgent() != sInTop.getAgent();
 				result.add(bInTop);
 				result.add(sInTop);
+				bInTop.setFilled(true);
+				sInTop.setFilled(true);
 			}
 			assert bIn.isEmpty();
 			checkIntegrity();
