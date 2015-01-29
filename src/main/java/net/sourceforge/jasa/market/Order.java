@@ -68,10 +68,17 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	protected SimulationTime timeStamp;
 	
 	/**
-	 * The child of this order.
+	 * The child of this order.  When orders are partially filled 
+	 *  they are split into multiple orders.  The complete set of
+	 *  orders, both filled and unfilled, can be retrieved
+	 *  by recursively following the child references.
 	 */
 	protected Order child = null;
 	
+	/**
+	 * True if this order has been completely filled
+	 * against a matching one.
+	 */
 	protected boolean filled = false;
 
 	static DecimalFormat currencyFormatter = new DecimalFormat(
@@ -309,6 +316,13 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		this.filled = filled;
 	}
 	
+	/**
+	 * Calculate the aggregate volume of this order,
+	 *  which includes both the filled quantities and 
+	 *  outstanding quantity.
+	 * 
+	 * @return  A long representing the aggregate volume.
+	 */
 	public long aggregateVolume() {
 		long result = 0;
 		for (Order p = this; p != null; p = p.getChild()) {
@@ -317,6 +331,11 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return result;
 	}
 
+	/**
+	 * Calculate the total filled quantity of this order.
+	 * 
+	 * @return  A long representing the aggregate filled volume.
+	 */
 	public long aggregateFilledVolume() {
 		long result = 0;
 		for (Order p = this; p != null; p = p.getChild()) {
@@ -325,6 +344,11 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return result;
 	}
 
+	/**
+	 * Calculate the total unfilled quantity of this order.
+	 * 
+	 * @return A long representing the aggregate outstanding volume.
+	 */
 	public long aggregateUnfilledVolume() {
 		long result = 0;
 		for (Order p = this; p != null; p = p.getChild()) {
@@ -333,6 +357,14 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return result;
 	}	
 	
+	/**
+	 * If an order results in a partial fill then it 
+	 * will get split into two or more orders.  This
+	 * method fetches the fragmented orders which have not yet
+	 * been filled.
+	 * 
+	 * @return A list of the unfilled order fragments.
+	 */
 	public List<Order> getUnfilledFraction() {
 		List<Order> result = new LinkedList<Order>();
 		for (Order p = this; p!= null; p = p.getChild()) {
@@ -341,9 +373,16 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return result;
 	}
 
-	public static int totalVolume(Iterable<Order> orders) {
+	/**
+	 * A utility method to calculate the total
+	 * volume of the supplied orders.
+	 * 
+	 * @param orders  An Iterable collection of orders.
+	 * @return  	 	The total quantity of the orders.
+	 */
+	public static long totalVolume(Iterable<Order> orders) {
 		Iterator<Order> i = orders.iterator();
-		int qty = 0;
+		long qty = 0;
 		while (i.hasNext()) {
 			Order s = (Order) i.next();
 			qty += s.getQuantity();
