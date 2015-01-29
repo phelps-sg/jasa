@@ -142,14 +142,10 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 			return 1;
 		} else if (quantity > other.quantity) {
 			return -1;
-//		} else if (timeStamp != null && timeStamp.getTicks() < other.timeStamp.getTicks()) {
-//			return 1;
-//		} else if (timeStamp != null && timeStamp.getTicks() > other.timeStamp.getTicks()) {
-//			return -1;
-//		} else if (this.hashCode() > other.hashCode()) {
-//			return 1;
-//		} else if (this.hashCode() < other.hashCode()) {
-//			return -1;
+		} else if (timeStamp != null && timeStamp.getTicks() < other.timeStamp.getTicks()) {
+			return 1;
+		} else if (timeStamp != null && timeStamp.getTicks() > other.timeStamp.getTicks()) {
+			return -1;
 		} else {
 			return 0;
 		}
@@ -251,7 +247,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	Order split(int excess) {
 		this.quantity -= excess;
 		try {
-			this.child = null;
+//			this.child = null;
 			this.child = (Order) this.clone();
 			this.child.setQuantity(excess);
 		} catch (CloneNotSupportedException e) {
@@ -264,7 +260,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 
 	Order splat(int excess) {
 		try {
-			this.child = null;
+//			this.child = null;
 			this.child = (Order) this.clone();
 			this.child.setQuantity(this.quantity - excess);
 		} catch (CloneNotSupportedException e) {

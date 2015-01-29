@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.market;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
 /**
  * A comparator that can be used for arranging shouts in descending order; that
@@ -25,14 +24,12 @@ import java.util.Comparator;
  * @author Steve Phelps
  * @version $Revision$
  */
-
-public class DescendingOrderComparator implements 
-		Comparator<Order>, Serializable {
+public class DescendingOrderComparator extends OrderComparator
+		implements Serializable {
 
 	public DescendingOrderComparator() {
+		super(-1);
 	}
 
-	public int compare(Order shout1, Order shout2) {
-		return shout2.compareTo(shout1);
-	}
+
 }

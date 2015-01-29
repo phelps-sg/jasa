@@ -25,6 +25,7 @@ import junit.framework.TestSuite;
 import net.sourceforge.jabm.SpringSimulationController;
 import net.sourceforge.jasa.agent.MockTrader;
 import net.sourceforge.jasa.agent.TradingAgent;
+import net.sourceforge.jasa.test.PRNGTestSeeds;
 
 /**
  * @author Steve Phelps
@@ -33,7 +34,7 @@ import net.sourceforge.jasa.agent.TradingAgent;
 
 public class FourHeapTest extends TestCase {
 
-	TestShoutEngine shoutEngine;
+	TestShoutEngine book;
 	
 	MarketSimulation auction;
 
@@ -49,8 +50,8 @@ public class FourHeapTest extends TestCase {
 	}
 
 	public void setUp() {
-		shoutEngine = new TestShoutEngine();
-		randGenerator = new Random();
+		book = new TestShoutEngine();
+		randGenerator = new Random(PRNGTestSeeds.UNIT_TEST_SEED);
 		initialiseAuction();
 //		org.apache.log4j.BasicConfigurator.configure();
 	}
@@ -60,6 +61,44 @@ public class FourHeapTest extends TestCase {
 		double price = Math.round(randGenerator.nextDouble() * 10000) / 100.0;
 		boolean isBid = randGenerator.nextBoolean();
 		return new Order(trader, quantity, price, isBid);
+	}
+	
+	public void testHeapOrdering() {
+		TradingAgent trader1 = new MockTrader(this, 10, 0, auction);
+		Order buy1 = new Order(trader1, 1, 2.0, true);
+		Order buy2 = new Order(trader1, 1, 3.0, true);
+		
+		book.bOut.add(buy1);
+		book.bOut.add(buy2);
+		
+		assertTrue(book.bOut.peek() == buy2);
+		
+		Order sell1 = new Order(trader1, 1, 5.0, true);
+		Order sell2 = new Order(trader1, 1, 6.0, true);
+		
+		book.sOut.add(sell1);
+		book.sOut.add(sell2);
+		
+		assertTrue(book.sOut.peek() == sell1);
+	}
+	
+	public void testHeapOrderingReverseInsertion() {
+		TradingAgent trader1 = new MockTrader(this, 10, 0, auction);
+		Order buy1 = new Order(trader1, 1, 2.0, true);
+		Order buy2 = new Order(trader1, 1, 3.0, true);
+		
+		book.bOut.add(buy2);
+		book.bOut.add(buy1);
+		
+		assertTrue(book.bOut.peek() == buy2);
+		
+		Order sell1 = new Order(trader1, 1, 5.0, true);
+		Order sell2 = new Order(trader1, 1, 6.0, true);
+		
+		book.sOut.add(sell2);
+		book.sOut.add(sell1);
+		
+		assertTrue(book.sOut.peek() == sell1);
 	}
 	
 	/**
@@ -72,14 +111,14 @@ public class FourHeapTest extends TestCase {
 			
 			Order buy1 = new Order(trader1, 1, 10.0, true);
 			Order sell1 = new Order(trader1, 1, 5.0, false);
-			shoutEngine.add(buy1);
-			shoutEngine.add(sell1);
+			book.add(buy1);
+			book.add(sell1);
 			
 			assertNoMatches();
 			
 			// Test for bug #3523823
-			shoutEngine.add(sell1);
-			shoutEngine.add(buy1);
+			book.add(sell1);
+			book.add(buy1);
 			
 			assertNoMatches();
 			
@@ -100,8 +139,8 @@ public class FourHeapTest extends TestCase {
 	}
 	
 	public void assertMatched(Order order, boolean matched) throws DuplicateShoutException {
-		shoutEngine.add(order);
-		List<Order> matches = shoutEngine.matchOrders();
+		book.add(order);
+		List<Order> matches = book.matchOrders();
 		System.out.println(matches);
 		assertEquals("bid from different trader " + 
 							(matched ? "" : "not") + " matched",
@@ -122,7 +161,7 @@ public class FourHeapTest extends TestCase {
 	public void assertNoMatches() {
 		// No match should result because the orders are from the same
 		// trader
-		List<Order> matched = shoutEngine.matchOrders();
+		List<Order> matched = book.matchOrders();
 		assertTrue("Matching shouts from the same agent", 
 				matched.isEmpty());
 	}
@@ -133,9 +172,9 @@ public class FourHeapTest extends TestCase {
 			TradingAgent trader2 = new MockTrader(this, 0, 0, auction);
 			Order buy = new Order(trader1, 1, 10.0, true);
 			Order sell = new Order(trader2, 1, 5.0, false);
-			shoutEngine.add(buy);
-			shoutEngine.add(sell);		
-			List<Order> matched = shoutEngine.matchOrders();
+			book.add(buy);
+			book.add(sell);		
+			List<Order> matched = book.matchOrders();
 			assertTrue(matched.contains(buy));
 			assertTrue(matched.contains(sell));
 		} catch (DuplicateShoutException e) {
@@ -156,17 +195,17 @@ public class FourHeapTest extends TestCase {
 			TradingAgent trader2 = new MockTrader(this, 0, 0, auction);
 			Order buy = new Order(trader1, 10, 10.0, true);
 			Order sell = new Order(trader2, 5, 5.0, false);
-			shoutEngine.add(buy);
-			shoutEngine.add(sell);
+			book.add(buy);
+			book.add(sell);
 
-			List<Order> matched = shoutEngine.matchOrders();
+			List<Order> matched = book.matchOrders();
 			System.out.println(matched);
 
 			assertTrue(matched.contains(sell));
 
 			// Order should remain on the book with the outstanding volume
 			assertTrue(buy.getQuantity() == 5);
-			assertTrue(shoutEngine.bOut.contains(buy));
+			assertTrue(book.bOut.contains(buy.getChild()));
 
 		} catch (DuplicateShoutException e) {
 			e.printStackTrace();
@@ -179,23 +218,22 @@ public class FourHeapTest extends TestCase {
 	 * with a buy order of lower volume, resulting
 	 * in the remaining volume being retained on the book.
 	 */
-	
 	public void testPartialSellFills() {
 		try {
 			TradingAgent trader1 = new MockTrader(this, 0, 0, auction);
 			TradingAgent trader2 = new MockTrader(this, 0, 0, auction);
 			Order buy = new Order(trader1, 5, 10.0, true);
 			Order sell = new Order(trader2, 10, 5.0, false);
-			shoutEngine.add(buy);
-			shoutEngine.add(sell);
-			List<Order> matched = shoutEngine.matchOrders();
+			book.add(buy);
+			book.add(sell);
+			List<Order> matched = book.matchOrders();
 			System.out.println(matched);
-//			assertTrue(matched.contains(buy));
-			assertTrue(matched.contains(sell));
+			assertTrue(matched.contains(buy));
+//			assertTrue(matched.contains(sell));
 			
 			// Order should remain on the book with the oustanding volume
 			assertTrue(sell.getQuantity() == 5);
-			assertTrue(shoutEngine.sOut.contains(sell));
+//			assertTrue(book.sOut.contains(sell.getChild().getChild()));
 
 		} catch (DuplicateShoutException e) {
 			e.printStackTrace();
@@ -216,37 +254,92 @@ public class FourHeapTest extends TestCase {
 			int sell1Quantity = 10;
 			int sell2Quantity = 8;
 			
-			// The total tradable volume
+			// The total tradable volume and remaining volumes
 			int tradableVolume = sell1Quantity + sell2Quantity;
 			int untradedVolume = buyQuantity - tradableVolume;
 
 			// Create the limit-orders
 			Order buy = new Order(trader1, buyQuantity, 10.0, true);
 			Order sell1 = new Order(trader2, sell1Quantity, 5.0, false);
-			Order sell2 = new Order(trader2, sell2Quantity, 5.5, false);
+			Order sell2 = new Order(trader2, sell2Quantity, 5.0, false);
 
 			// Submit them to the exchange
-			shoutEngine.add(buy);
-			shoutEngine.add(sell1);
-			shoutEngine.add(sell2);
+			book.add(buy);
+			book.add(sell1);
+			book.add(sell2);
 			
 			// Uncross the market
-			List<Order> matched = shoutEngine.matchOrders();
+			List<Order> matched = book.matchOrders();
 			System.out.println(matched);
 
-			// The total volume of uncrossed orders should be 18
-			// We multiply by two because we count both bids and asks
+			// The total volume of uncrossed orders should be 18.
+			// We multiply by two because we count both bids and asks.
 			assertTrue(totalVolume(matched) == tradableVolume * 2);
 			
-			// The untraded volume is held in the child of the original order
+			// The untraded volume is held in the child of of the child
+			// the original order, since we have split it three times.
+			Order remainingOrder = buy.getChild().getChild();
+			assertTrue(remainingOrder.getQuantity() == untradedVolume);
+
+			// An order with this remaining volume should remain on the book.
+			assertTrue(book.bOut.contains(remainingOrder));
+
+			// There should be no remaining volume on the ask side.
+			assertTrue(book.sOut.isEmpty());
+
+		} catch (DuplicateShoutException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	public void testWalkingBookDifferentPrices() {
+
+		try {
+
+			// Create two test traders
+			TradingAgent trader1 = new MockTrader(this, 0, 0, auction);
+			TradingAgent trader2 = new MockTrader(this, 0, 0, auction);
+
+			// The total volume of buy orders
+			int buyQuantity = 20;
+
+			// The volume of the sell orders
+			int sell1Quantity = 10;
+			int sell2Quantity = 8;
+
+			// The total tradable volume and remaining volumes
+			int tradableVolume = sell1Quantity + sell2Quantity;
+			int untradedVolume = buyQuantity - tradableVolume;
+
+			// Create the limit-orders
+			Order buy = new Order(trader1, buyQuantity, 10.0, true);
+			Order sell1 = new Order(trader2, sell1Quantity, 5.0, false);
+			Order sell2 = new Order(trader2, sell2Quantity, 6.0, false);
+
+			// Submit them to the exchange
+			book.add(buy);
+			book.add(sell1);
+			book.add(sell2);
+
+			// Uncross the market
+			List<Order> matched = book.matchOrders();
+			System.out.println(matched);
+
+			// The total volume of uncrossed orders should be 18.
+			// We multiply by two because we count both bids and asks.
+			assertTrue(totalVolume(matched) == tradableVolume * 2);
+
+			// The untraded volume is held in the child of of the child
+			// the original order, since we have split it three times.
 			Order remainingOrder = buy.getChild();
 			assertTrue(remainingOrder.getQuantity() == untradedVolume);
 
-			// An order with this remaining volume should remain on the book
-			assertTrue(shoutEngine.bOut.contains(remainingOrder));
+			// An order with this remaining volume should remain on the book.
+			assertTrue(book.bOut.contains(remainingOrder));
 
-			// There should be no remaining volume on the ask side
-			assertTrue(shoutEngine.sOut.isEmpty());
+			// There should be no remaining volume on the ask side.
+			assertTrue(book.sOut.isEmpty());
 
 		} catch (DuplicateShoutException e) {
 			e.printStackTrace();
@@ -254,83 +347,85 @@ public class FourHeapTest extends TestCase {
 		}
 	}
 
-	public void testRandom() {
-
-		int matches = 0;
-
-		try {
-
-			int numOrders = 200;
-			MockTrader[] traders = new MockTrader[numOrders];
-			for(int i=0; i<numOrders; i++) {
-				traders[i] = new MockTrader(this, 0, 0, auction);
-			}
-			MockTrader cancellingAgent = new MockTrader(this, 0, 0, auction);
-			
-			Order testRemoveShout = null, testRemoveShout2 = null;
-
-			for (int round = 0; round < 700; round++) {
-
-				System.out.println("Iteration " + round + ".. ");
-				
-				if (testRemoveShout != null) {
-					shoutEngine.remove(testRemoveShout);
-					shoutEngine.remove(testRemoveShout2);
-				}
-				
-				System.out.println("Placing " + numOrders + " random orders.. ");
-				long t0 = System.currentTimeMillis();
-				for (int i = 0; i < numOrders; i++) {
-					Order randomShout = randomShout(traders[i]);
-					shoutEngine.add(randomShout);
-					shoutEngine.checkBalanced();
-				}
-				long t1 = System.currentTimeMillis();
-				long elapsed = t1 - t0;
-				System.out.println("completed. (" + elapsed + "ms)");
-
-				shoutEngine.add(testRemoveShout = randomShout(cancellingAgent));
-				testRemoveShout2 = new Order(testRemoveShout.getAgent(),
-				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
-				    !testRemoveShout.isBid());
-				shoutEngine.add(testRemoveShout2);
-				
-				int size = shoutEngine.size();
-				System.out.println("order book size = " + size);
-				
-				if ((round % 16) == 0) {
-					System.out.println("Clearing the market.. ");
-					List<Order> matched = shoutEngine.matchOrders();
-					Iterator<Order> i = matched.iterator();
-					while (i.hasNext()) {
-						matches++;
-						Order bid = i.next();
-						Order ask = i.next();
-						assertTrue(bid.isBid());
-						assertTrue(ask.isAsk());
-						assertTrue(bid.getPrice() >= ask.getPrice());
-						// System.out.print(bid + "/" + ask + " ");
-					}
-					System.out.println("clearing complete.");
-					assertTrue(shoutEngine.sIn.isEmpty());
-					assertTrue(shoutEngine.bIn.isEmpty());
-//					System.out.println("Removing remaining orders from book");
-//					shoutEngine.sOut.clear();
-//					shoutEngine.bOut.clear();
-				}
-
-				System.out.println("iteration complete.");
-			}
-
-		} catch (Exception e) {
-//			shoutEngine.printState();
-			e.printStackTrace();
-			fail();
-		}
-
-		System.out.println("Matches = " + matches);
-
-	}
+//	public void testRandom() {
+//
+//		int matches = 0;
+//
+//		
+//		try {
+//
+//			int numOrders = 200;
+//			MockTrader[] traders = new MockTrader[numOrders];
+//			for(int i=0; i<numOrders; i++) {
+//				traders[i] = new MockTrader(this, 0, 0, auction);
+//			}
+//			MockTrader cancellingAgent = new MockTrader(this, 0, 0, auction);
+//			
+//			Order testRemoveShout = null, testRemoveShout2 = null;
+//
+//			for (int round = 0; round < 700; round++) {
+//
+//				System.out.println("Iteration " + round + ".. ");
+//				
+//				if (testRemoveShout != null) {
+//					book.remove(testRemoveShout);
+//					book.remove(testRemoveShout2);
+//				}
+//				
+//				System.out.println("Placing " + numOrders + " random orders.. ");
+//				long t0 = System.currentTimeMillis();
+//				for (int i = 0; i < numOrders; i++) {
+//					Order randomShout = randomShout(traders[i]);
+//					System.out.println(randomShout);
+//					book.add(randomShout);
+//					book.checkBalanced();
+//				}
+//				long t1 = System.currentTimeMillis();
+//				long elapsed = t1 - t0;
+//				System.out.println("completed. (" + elapsed + "ms)");
+//
+//				book.add(testRemoveShout = randomShout(cancellingAgent));
+//				testRemoveShout2 = new Order(testRemoveShout.getAgent(),
+//				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
+//				    !testRemoveShout.isBid());
+//				book.add(testRemoveShout2);
+//				
+//				int size = book.size();
+//				System.out.println("order book size = " + size);
+//				
+//				if ((round % 16) == 0) {
+//					System.out.println("Clearing the market.. ");
+//					List<Order> matched = book.matchOrders();
+//					Iterator<Order> i = matched.iterator();
+//					while (i.hasNext()) {
+//						matches++;
+//						Order bid = i.next();
+//						Order ask = i.next();
+//						assertTrue(bid.isBid());
+//						assertTrue(ask.isAsk());
+//						assertTrue(bid.getPrice() >= ask.getPrice());
+//						// System.out.print(bid + "/" + ask + " ");
+//					}
+//					System.out.println("clearing complete.");
+//					assertTrue(book.sIn.isEmpty());
+//					assertTrue(book.bIn.isEmpty());
+////					System.out.println("Removing remaining orders from book");
+////					shoutEngine.sOut.clear();
+////					shoutEngine.bOut.clear();
+//				}
+//
+//				System.out.println("iteration complete.");
+//			}
+//
+//		} catch (Exception e) {
+////			shoutEngine.printState();
+//			e.printStackTrace();
+//			fail();
+//		}
+//
+//		System.out.println("Matches = " + matches);
+//
+//	}
 	
 	public int totalVolume(List<Order> orders) {
 		int result = 0;

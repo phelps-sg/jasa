@@ -16,7 +16,6 @@
 package net.sourceforge.jasa.market;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
 /**
  * This class can be used to as a Comparator to rank shouts in ascending order.
@@ -26,12 +25,12 @@ import java.util.Comparator;
  * 
  */
 
-public class AscendingOrderComparator implements Comparator<Order>, Serializable {
+public class AscendingOrderComparator extends OrderComparator implements
+		Serializable {
 
 	public AscendingOrderComparator() {
+		super(+1);
 	}
 
-	public int compare(Order shout1, Order shout2) {
-		return shout1.compareTo(shout2);
-	}
+
 }

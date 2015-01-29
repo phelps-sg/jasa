@@ -67,10 +67,6 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	protected PriorityQueue<Order> sOut = new PriorityQueue<Order>(
 			new TreeSet<Order>(greaterThan));
 
-	//TODO: Shouts should be ordered on quantity as well as price
-	//         but the quantity ordering should be the same
-	//			for both bids and asks.
-	
 	protected static AscendingOrderComparator greaterThan = 
 			new AscendingOrderComparator();
 
@@ -225,35 +221,40 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * @return A reference to the, possibly modified, shout.
 	 * 
 	 */
-	protected static Order unifyShout(Order shout, PriorityQueue<Order> heap) {
+	protected static Order unifyShout(Order shout, PriorityQueue<Order> from,
+							PriorityQueue<Order> to) {
 
-		Order top = (Order) heap.peek();
+		Order top = (Order) from.peek();
 
 		if (shout.getQuantity() > top.getQuantity()) {
 			shout = shout.splat(shout.getQuantity() - top.getQuantity());
 		} else {
 			if (top.getQuantity() > shout.getQuantity()) {
 				Order remainder = top.split(top.getQuantity() - shout.getQuantity());
-				heap.add(remainder);
+				from.add(remainder);
+				to.add(from.remove());
+//				to.add(remainder);
+				return shout;
 			}
 		}
 
+		to.add(from.remove());
 		return shout;
 	}
 
 	protected int displaceShout(Order shout, PriorityQueue<Order> from,
 			PriorityQueue<Order> to) throws DuplicateShoutException {
-		shout = unifyShout(shout, from);
-		to.add(from.remove());
+		shout = unifyShout(shout, from, to);
+//		to.add(from.remove());
 		insertShout(from, shout);
 		return shout.getQuantity();
 	}
 
 	public int promoteShout(Order shout, PriorityQueue<Order> from, PriorityQueue<Order> to,
 			PriorityQueue<Order> matched) throws DuplicateShoutException {
-		shout = unifyShout(shout, from);
+		shout = unifyShout(shout, from, to);
+//		to.add(from.remove());
 		insertShout(matched, shout);
-		to.add(from.remove());
 		return shout.getQuantity();
 	}
 
@@ -291,7 +292,6 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 
 	protected void addBid(Order bid) throws DuplicateShoutException {
 
-		double bidVal = bid.getPrice();
 		int uninsertedUnits = bid.getQuantity();
 
 		while (uninsertedUnits > 0) {
@@ -305,7 +305,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 				// found match
 				uninsertedUnits -= promoteLowestUnmatchedAsk(bid);
 
-			} else if (bInTop != null && bidVal > bInTop.getPrice()) {
+			} else if (bInTop != null && bid.getPrice() > bInTop.getPrice()) {
 
 				uninsertedUnits -= displaceLowestMatchedBid(bid);
 
@@ -328,10 +328,10 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 
 			if (bOutTop != null && bOutTop.matches(ask)
 			    && (sInTop == null || sInTop.matches(bOutTop))) {
-				//TODO alter logic so that this maintains heap constraints
+
 				uninsertedUnits -= promoteHighestUnmatchedBid(ask);
 
-			} else if (sInTop != null && ask.getPrice() <= sInTop.getPrice()) {
+			} else if (sInTop != null && ask.getPrice() < sInTop.getPrice()) {
 
 				uninsertedUnits -= displaceHighestMatchedAsk(ask);
 
@@ -368,30 +368,34 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * </p>
 	 */
 	public List<Order> matchOrders() {
-		ArrayList<Order> result = 
-				new ArrayList<Order>(sIn.size() + bIn.size());
-		while (!sIn.isEmpty()) {
-			Order sInTop = (Order) sIn.remove();
-			Order bInTop = (Order) bIn.remove();
-			int nS = sInTop.getQuantity();
-			int nB = bInTop.getQuantity();
-			assert nS == nB;
-//			if (nS < nB) {
-//				// split the bid
-//				Order remainder = bInTop.split(nB - nS);
-//				bIn.add(remainder);
-//			} else if (nB < nS) {
-//				// split the ask
-//				Order remainder = sInTop.split(nS - nB);
-//				sIn.add(remainder);
-//			}
-//			assert bInTop.getAgent() != sInTop.getAgent();
-			result.add(bInTop);
-			result.add(sInTop);
+		try {
+			ArrayList<Order> result = new ArrayList<Order>(sIn.size()
+					+ bIn.size());
+			while (!sIn.isEmpty()) {
+				Order sInTop = (Order) sIn.remove();
+				Order bInTop = (Order) bIn.remove();
+				int nS = sInTop.getQuantity();
+				int nB = bInTop.getQuantity();
+				// assert nS == nB;
+				if (nS < nB) {
+					// split the bid
+					Order remainder = bInTop.split(nB - nS);
+					addBid(remainder);
+				} else if (nB < nS) {
+					// split the ask
+					Order remainder = sInTop.split(nS - nB);
+					addAsk(remainder);
+				}
+				// assert bInTop.getAgent() != sInTop.getAgent();
+				result.add(bInTop);
+				result.add(sInTop);
+			}
+			assert bIn.isEmpty();
+			checkIntegrity();
+			return result;
+		} catch (DuplicateShoutException e) {
+			throw new RuntimeException(e);
 		}
-		assert bIn.isEmpty();
-		checkIntegrity();
-		return result;
 	}
 
 	protected void initialise() {
