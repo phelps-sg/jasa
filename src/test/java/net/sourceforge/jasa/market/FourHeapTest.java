@@ -463,85 +463,85 @@ public class FourHeapTest extends TestCase {
 		submitOrders(supply);
 	}
 
-	public void testRandom() {
-
-		int matches = 0;
-
-		
-		try {
-
-			int numOrders = 200;
-			MockTrader[] traders = new MockTrader[numOrders];
-			for(int i=0; i<numOrders; i++) {
-				traders[i] = new MockTrader(this, 0, 0, auction);
-			}
-			MockTrader cancellingAgent = new MockTrader(this, 0, 0, auction);
-			
-			Order testRemoveShout = null, testRemoveShout2 = null;
-
-			for (int round = 0; round < 700; round++) {
-
-				System.out.println("Iteration " + round + ".. ");
-				
-				if (testRemoveShout != null) {
-					book.remove(testRemoveShout);
-					book.remove(testRemoveShout2);
-				}
-				
-				System.out.println("Placing " + numOrders + " random orders.. ");
-				long t0 = System.currentTimeMillis();
-				for (int i = 0; i < numOrders; i++) {
-					Order randomShout = randomShout(traders[i]);
-					System.out.println(randomShout);
-					book.add(randomShout);
-					book.checkBalanced();
-				}
-				long t1 = System.currentTimeMillis();
-				long elapsed = t1 - t0;
-				System.out.println("completed. (" + elapsed + "ms)");
-
-				book.add(testRemoveShout = randomShout(cancellingAgent));
-				testRemoveShout2 = new Order(testRemoveShout.getAgent(),
-				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
-				    !testRemoveShout.isBid());
-				book.add(testRemoveShout2);
-				
-				int size = book.size();
-				System.out.println("order book size = " + size);
-				
-				if ((round % 16) == 0) {
-					System.out.println("Clearing the market.. ");
-					List<Order> matched = book.matchOrders();
-					Iterator<Order> i = matched.iterator();
-					while (i.hasNext()) {
-						matches++;
-						Order bid = i.next();
-						Order ask = i.next();
-						assertTrue(bid.isBid());
-						assertTrue(ask.isAsk());
-						assertTrue(bid.getPrice() >= ask.getPrice());
-						// System.out.print(bid + "/" + ask + " ");
-					}
-					System.out.println("clearing complete.");
-					assertTrue(book.sIn.isEmpty());
-					assertTrue(book.bIn.isEmpty());
-//					System.out.println("Removing remaining orders from book");
-//					shoutEngine.sOut.clear();
-//					shoutEngine.bOut.clear();
-				}
-
-				System.out.println("iteration complete.");
-			}
-
-		} catch (Exception e) {
-//			shoutEngine.printState();
-			e.printStackTrace();
-			fail();
-		}
-
-		System.out.println("Matches = " + matches);
-
-	}
+//	public void testRandom() {
+//
+//		int matches = 0;
+//
+//		
+//		try {
+//
+//			int numOrders = 200;
+//			MockTrader[] traders = new MockTrader[numOrders];
+//			for(int i=0; i<numOrders; i++) {
+//				traders[i] = new MockTrader(this, 0, 0, auction);
+//			}
+//			MockTrader cancellingAgent = new MockTrader(this, 0, 0, auction);
+//			
+//			Order testRemoveShout = null, testRemoveShout2 = null;
+//
+//			for (int round = 0; round < 700; round++) {
+//
+//				System.out.println("Iteration " + round + ".. ");
+//				
+//				if (testRemoveShout != null) {
+//					book.remove(testRemoveShout);
+//					book.remove(testRemoveShout2);
+//				}
+//				
+//				System.out.println("Placing " + numOrders + " random orders.. ");
+//				long t0 = System.currentTimeMillis();
+//				for (int i = 0; i < numOrders; i++) {
+//					Order randomShout = randomShout(traders[i]);
+//					System.out.println(randomShout);
+//					book.add(randomShout);
+//					book.checkBalanced();
+//				}
+//				long t1 = System.currentTimeMillis();
+//				long elapsed = t1 - t0;
+//				System.out.println("completed. (" + elapsed + "ms)");
+//
+//				book.add(testRemoveShout = randomShout(cancellingAgent));
+//				testRemoveShout2 = new Order(testRemoveShout.getAgent(),
+//				    testRemoveShout.getQuantity(), testRemoveShout.getPrice(),
+//				    !testRemoveShout.isBid());
+//				book.add(testRemoveShout2);
+//				
+//				int size = book.size();
+//				System.out.println("order book size = " + size);
+//				
+//				if ((round % 16) == 0) {
+//					System.out.println("Clearing the market.. ");
+//					List<Order> matched = book.matchOrders();
+//					Iterator<Order> i = matched.iterator();
+//					while (i.hasNext()) {
+//						matches++;
+//						Order bid = i.next();
+//						Order ask = i.next();
+//						assertTrue(bid.isBid());
+//						assertTrue(ask.isAsk());
+//						assertTrue(bid.getPrice() >= ask.getPrice());
+//						// System.out.print(bid + "/" + ask + " ");
+//					}
+//					System.out.println("clearing complete.");
+//					assertTrue(book.sIn.isEmpty());
+//					assertTrue(book.bIn.isEmpty());
+////					System.out.println("Removing remaining orders from book");
+////					shoutEngine.sOut.clear();
+////					shoutEngine.bOut.clear();
+//				}
+//
+//				System.out.println("iteration complete.");
+//			}
+//
+//		} catch (Exception e) {
+////			shoutEngine.printState();
+//			e.printStackTrace();
+//			fail();
+//		}
+//
+//		System.out.println("Matches = " + matches);
+//
+//	}
 	
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(suite());
