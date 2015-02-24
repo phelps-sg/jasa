@@ -79,6 +79,12 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		initialise();
 	}
 
+	public void removeAll(Order shout) {
+		for(Order i = shout; i != null; i = i.getChild()) {
+			remove(i);
+		}
+	}
+
 	public void remove(Order shout) {
 		if (shout.isAsk()) {
 			removeAsk(shout);
