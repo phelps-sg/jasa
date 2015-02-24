@@ -53,7 +53,7 @@ public class ChartistForecaster extends ReturnForecasterWithTimeHorizon
 			double p1 = history.getValue(i + sampleInterval);
 			double r = 0.0;
 			if (p1 > 0 && p0 > 0) {
-				r = Math.log(p0) - Math.log(p1);
+				r = Math.log(p1) - Math.log(p0);
 			}
 			stats.addValue(r);
 		}

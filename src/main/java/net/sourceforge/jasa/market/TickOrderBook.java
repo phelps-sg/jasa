@@ -25,19 +25,20 @@ package net.sourceforge.jasa.market;
  */
 public class TickOrderBook extends FourHeapOrderBook {
 
-	public static final int DEFAULT_TICK_SIZE = 4;
+	public static final int DEFAULT_DECIMAL_PLACES = 4;
 	
 	protected int decimalPlaces;
 	
-	protected double multiplier = Math.pow(10, decimalPlaces);
-	
-	public TickOrderBook(int tickSize) {
+	protected double multiplier;	
+
+	public TickOrderBook(int decimalPlaces) {
 		super();
-		this.decimalPlaces = tickSize;
+		this.decimalPlaces = decimalPlaces;
+		this.multiplier = Math.pow(10, decimalPlaces);
 	}
 	
 	public TickOrderBook() {
-		this(DEFAULT_TICK_SIZE);
+		this(DEFAULT_DECIMAL_PLACES);
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class TickOrderBook extends FourHeapOrderBook {
 	}
 	
 	protected void roundPrice(Order order) {
-		order.setPrice(Math.round(order.getPrice() * multiplier) / multiplier);
+		order.setPrice(new Double(Math.round(order.getPrice() * multiplier)) / multiplier);
 	}
 
 	public int getDecimalPlaces() {
