@@ -14,8 +14,13 @@ public class MidPriceReportVariables extends MarketPriceReportVariables {
 
 	@Override
 	public double getPrice(RoundFinishedEvent event) {
-		return ((MarketSimulation) event.getSimulation())
+		double p = ((MarketSimulation) event.getSimulation())
 				.getQuote().getMidPoint();
+		if (Double.isNaN(p)) {
+			return 0.0;
+		} else {
+			return p;
+		}
 	}
 
 }
