@@ -480,6 +480,11 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 		return calculateProfit(auction, quantity, equilibriumPrice);
 	}
 	
+	@Override
+	public double getPayoffDelta() {
+		return getLastPayoff();
+	}
+
 	/**
 	 * Determine whether or not this trader is active. Inactive traders do not
 	 * place shouts in the market, but do carry on learning through their
