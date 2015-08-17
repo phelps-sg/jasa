@@ -130,8 +130,6 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 	 *          The amount of money for this trader.
 	 * @param privateValue
 	 *          The private value of the commodity traded by this trader.
-	 * @param isSeller
-	 *          Whether or not this trader is a seller.
 	 */
 	public AbstractTradingAgent(int stock, double funds, double privateValue,
 			EventScheduler scheduler) {
@@ -465,9 +463,11 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 	@Override
 	public double calculateProfit(Market auction, int quantity, double price) {
 		if (isBuyer(auction)) {
-			return (getValuation(auction) - price) * quantity;
+			//TODO
+			return Math.log(getValuation(auction)) - Math.log(price);
+//			return (getValuation(auction) - price) * quantity;
 		} else {
-			return (price - getValuation(auction)) * quantity;
+			return Math.log(price - getValuation(auction));
 		}
 	}
 	
