@@ -93,6 +93,8 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 	 * The utility function of this agent.
 	 */
 	protected UtilityFunction utilityFunction;
+
+    protected ProfitFunction profitFunction = new SimpleProfitFunction();
 	
 	/**
 	 * The profit made in the last round.
@@ -462,13 +464,7 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 
 	@Override
 	public double calculateProfit(Market auction, int quantity, double price) {
-		if (isBuyer(auction)) {
-			//TODO
-			return Math.log(getValuation(auction)) - Math.log(price);
-//			return (getValuation(auction) - price) * quantity;
-		} else {
-			return Math.log(price - getValuation(auction));
-		}
+        return profitFunction.calculateProfit(this, auction, quantity, price);
 	}
 	
 	/**
@@ -493,5 +489,13 @@ public abstract class AbstractTradingAgent extends AbstractAgent implements
 	 * @return true if the trader is active.
 	 */
 	public abstract boolean active();
+
+    public ProfitFunction getProfitFunction() {
+        return profitFunction;
+    }
+
+    public void setProfitFunction(ProfitFunction profitFunction) {
+        this.profitFunction = profitFunction;
+    }
 
 }
