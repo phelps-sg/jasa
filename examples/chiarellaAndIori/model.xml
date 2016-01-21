@@ -18,7 +18,7 @@
 	<property name="simulationController" ref="simulationController"/>
 	<property name="maximumDays" value="1"/>
 	<property name="lengthOfDay" value="200000"/>
-	<property name="population" ref="staticPopulation"/>
+	<property name="population" ref="evolvingPopulation"/>
     <property name="agentMixer" ref="randomArrivalAgentMixer"/>
     <property name="agentInitialiser" ref="agentInitialiserProxy"/>
     <property name="auctioneer" ref="cda"/>
