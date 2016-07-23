@@ -63,7 +63,7 @@ public class OrderBookView extends JTable implements ReportWithGUI, TableModel,
 
 	protected int maxDepth;
 
-	DecimalFormat priceFormat = new DecimalFormat("#00000.00");
+	DecimalFormat priceFormat = new DecimalFormat("#00000.0000");
 
 	DecimalFormat qtyFormat = new DecimalFormat("#00000");
 
