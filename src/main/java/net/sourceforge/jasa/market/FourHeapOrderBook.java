@@ -85,6 +85,25 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		}
 	}
 
+    /**
+     * Removed an order from one of the unmatched collections (sOut or bOut)
+     * without rebalancing the book.
+     *
+     * @param shout     The order to be removed.
+     */
+	public void removeUnmatchedOrder(Order shout) {
+	    if (shout.isAsk()) {
+	        sOut.remove(shout);
+        } else {
+            bOut.remove(shout);
+        }
+    }
+
+    /**
+     * Remove an order from the book, rebalancing if necessary.
+     *
+     * @param shout     The order to be removed.
+     */
 	public void remove(Order shout) {
 		if (shout.isAsk()) {
 			removeAsk(shout);
@@ -227,7 +246,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * @return A reference to the, possibly modified, shout.
 	 * 
 	 */
-	protected static Order unifyShout(Order shout, PriorityQueue<Order> from,
+	protected Order unifyShout(Order shout, PriorityQueue<Order> from,
 							PriorityQueue<Order> to) {
 
 		Order top = (Order) from.peek();
@@ -238,6 +257,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 			if (top.getQuantity() > shout.getQuantity()) {
 				Order remainder = top.split(top.getQuantity() - shout.getQuantity());
 				from.add(remainder);
+                assert((remainder.isBid && from == bOut) || ((!remainder.isBid) && from == sOut));
 				to.add(from.remove());
 //				to.add(remainder);
 				return shout;
@@ -261,6 +281,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		shout = unifyShout(shout, from, to);
 //		to.add(from.remove());
 		insertShout(matched, shout);
+        checkIntegrity();
 		return shout.getQuantity();
 	}
 
@@ -494,10 +515,16 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 		//  TODO: Prove this and then update integrity checks to take into
 		//       	account unmatched orders from the same trader.
 		
-//		Order bInTop = getLowestMatchedBid();
-//		Order sInTop = getHighestMatchedAsk();
-//		Order bOutTop = getHighestUnmatchedBid();
-//		Order sOutTop = getLowestUnmatchedAsk();
+		Order bInTop = getLowestMatchedBid();
+		Order sInTop = getHighestMatchedAsk();
+		Order bOutTop = getHighestUnmatchedBid();
+		Order sOutTop = getLowestUnmatchedAsk();
+
+		assert(bInTop == null || bInTop.isBid);
+		assert(bOutTop == null || bOutTop.isBid);
+		assert(sInTop == null || !sInTop.isBid);
+		assert(sOutTop == null || !sOutTop.isBid);
+
 //
 //		checkBalanced(bInTop, bOutTop, "bIn >= bOut");
 //		checkBalanced(sOutTop, sInTop, "sOut >= sIn");
