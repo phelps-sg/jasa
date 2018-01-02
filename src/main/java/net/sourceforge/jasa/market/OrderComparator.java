@@ -12,15 +12,16 @@ public abstract class OrderComparator implements Comparator<Order> {
 	}
 
 	public int comparePrices(Order shout1, Order shout2) {
-		double p1 = shout1.price * priceDirection;
-		double p2 = shout2.price * priceDirection;
-		if (p1 > p2) {
-			return 1;
-		} else if (p1 < p2) {
-			return -1;
-		} else {
-			return 0;
-		}
+		return shout1.price.compareTo(shout2.price) * priceDirection;
+//		double p1 = shout1.price * priceDirection;
+//		double p2 = shout2.price * priceDirection;
+//		if (p1 > p2) {
+//			return 1;
+//		} else if (p1 < p2) {
+//			return -1;
+//		} else {
+//			return 0;
+//		}
 	}
 	
 	public int compareQuantities(Order shout1, Order shout2) {

@@ -50,7 +50,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	/**
 	 * The price of this offer.
 	 */
-	protected double price;
+	protected Price price;
 
 	/**
 	 * The agent placing this order.
@@ -87,7 +87,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	public Order(TradingAgent agent, int quantity, double price, boolean isBid) {
 		this(agent);
 		this.quantity = quantity;
-		this.price = price;
+		this.price = new Price(price);
 		this.isBid = isBid;
 	}
 	
@@ -114,7 +114,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public double getPrice() {
-		return price;
+		return price.doubleValue();
 	}
 
 	public TradingAgent getAgent() {
@@ -146,10 +146,9 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public int compareTo(Order other) {
-		if (price > other.price) {
-			return 1;
-		} else if (price < other.price) {
-			return -1;
+		int priceComparision = price.compareTo(other.price);
+		if (priceComparision != 0) {
+			return priceComparision;
 		} else if (quantity < other.quantity) {
 			return 1;
 		} else if (quantity > other.quantity) {
@@ -164,16 +163,17 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public boolean isValid() {
-		if (price < 0) {
-			return false;
-		}
-		if (quantity < 1) {
-			return false;
-		}
-		if (Double.isInfinite(price) || Double.isNaN(price)) {
-			return false;
-		}
-		return true;
+	    return !price.isNegative() && quantity > 0;
+//		if (price.isNegative()) {
+//			return false;
+//		}
+//		if (quantity < 1) {
+//			return false;
+//		}
+//		if (Double.isInfinite(price) || Double.isNaN(price)) {
+//			return false;
+//		}
+//		return true;
 	}
 
 	public Object clone() throws CloneNotSupportedException {
@@ -186,11 +186,12 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public String toPrettyString() {
-		double p = price;
-		if (!isBid) {
-			p = -p;
-		}
-		return currencyFormatter.format(p) + "/" + quantity;
+//		double p = price;
+//		if (!isBid) {
+//			p = -p;
+//		}
+		String orderSign = isBid ? "+" : "-";
+		return orderSign + " " + price.toPrettyString() + "/" + quantity;
 	}
 
 	public static double maxPrice(Order s1, Order s2) {
@@ -239,7 +240,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public void copyFrom(Order other) {
-		this.price = other.getPrice();
+		this.price = other.price;
 		this.agent = other.getAgent();
 		this.quantity = other.getQuantity();
 		this.isBid = other.isBid();
@@ -293,7 +294,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public void setPrice(double price) {
-		this.price = price;
+		this.price = new Price(price);
 	}
 
 	public void setQuantity(int quantity) {
