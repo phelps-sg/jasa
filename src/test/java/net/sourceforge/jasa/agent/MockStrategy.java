@@ -69,7 +69,7 @@ public class MockStrategy extends AbstractTradingStrategy implements TradeDirect
 		super.modifyShout(shout);
 //		lastShoutAccepted = agent.lastOrderFilled();
 		Order current = shouts[currentShout];
-		shout.setPrice(current.getPrice());
+		shout.setPrice(current.getPriceAsDouble());
 		shout.setQuantity(current.getQuantity());
 //		shout.setIsBid(current.isBid());
 		System.out.println("Placing order " + shout);

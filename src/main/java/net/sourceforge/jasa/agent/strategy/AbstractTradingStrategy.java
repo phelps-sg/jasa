@@ -79,7 +79,7 @@ public abstract class AbstractTradingStrategy extends AbstractStrategy
 		}
 		if (modifyShout(currentShout)) {
 			return new Order(currentShout.getAgent(), currentShout.getQuantity(),
-			    currentShout.getPrice(), currentShout.isBid());
+			    currentShout.getPriceAsDouble(), currentShout.isBid());
 		} else {
 			return null;
 		}

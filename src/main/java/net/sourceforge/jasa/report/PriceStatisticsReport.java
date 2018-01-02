@@ -90,9 +90,9 @@ public class PriceStatisticsReport extends AbstractAuctionReport implements
 	public void updateShoutLog(OrderPlacedEvent event) {
 		Order shout = event.getOrder();
 		if (shout.isBid()) {
-			stats[BID_PRICE].newData(shout.getPrice());
+			stats[BID_PRICE].newData(shout.getPriceAsDouble());
 		} else {
-			stats[ASK_PRICE].newData(shout.getPrice());
+			stats[ASK_PRICE].newData(shout.getPriceAsDouble());
 		}
 	}
 

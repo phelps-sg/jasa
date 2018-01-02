@@ -47,12 +47,12 @@ public class MarketQuote implements Serializable {
 		if (ask == null) {
 			this.ask = Double.NaN;
 		} else {
-			this.ask = ask.getPrice();
+			this.ask = ask.getPriceAsDouble();
 		}
 		if (bid == null) {
 			this.bid = Double.NaN;
 		} else {
-			this.bid = bid.getPrice();
+			this.bid = bid.getPriceAsDouble();
 		}
 	}
 

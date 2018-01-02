@@ -111,8 +111,8 @@ public class GDQStrategy extends FixedDirectionStrategy implements
 
 		while (sortedShouts.hasNext()) {
 			Order nextShout = (Order) sortedShouts.next();
-			if (nextShout.getPrice() > lastPoint) {
-				currentPoint = nextShout.getPrice();
+			if (nextShout.getPriceAsDouble() > lastPoint) {
+				currentPoint = nextShout.getPriceAsDouble();
 				currentP = calculateProbability(currentPoint);
 				slope = getMax(lastPoint, lastP, currentPoint, currentP, slope);
 				lastPoint = currentPoint;

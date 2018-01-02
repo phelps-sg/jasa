@@ -66,7 +66,7 @@ public class ProportionalMarkupStrategy extends FixedDirectionStrategy
 		}
 		shout.setPrice(getAgent().getValuation(auction) + delta);
 		shout.setQuantity(quantity);
-		if (shout.getPrice() < 0) {
+		if (shout.getPriceAsDouble() < 0) {
 			shout.setPrice(0);
 		}
 		return super.modifyShout(shout);

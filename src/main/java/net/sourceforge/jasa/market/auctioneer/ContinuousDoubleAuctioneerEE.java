@@ -139,11 +139,11 @@ public class ContinuousDoubleAuctioneerEE extends ContinuousDoubleAuctioneer
 		super.checkImprovement(shout);
 
 		if (shout.isBid()) {
-			if (shout.getPrice() < expectedLowestBid) {
+			if (shout.getPriceAsDouble() < expectedLowestBid) {
 				bidNotAnImprovementException();
 			}
 		} else {
-			if (shout.getPrice() > expectedHighestAsk) {
+			if (shout.getPriceAsDouble() > expectedHighestAsk) {
 				askNotAnImprovementException();
 			}
 		}

@@ -45,7 +45,7 @@ public class QuoteBeatingAcceptingPolicy extends OrderAcceptancePolicy {
 		double quote;
 		if (shout.isBid()) {
 			quote = auctioneer.bidQuote();
-			if (shout.getPrice() < quote) {
+			if (shout.getPriceAsDouble() < quote) {
 				if (bidException == null) {
 					// Only construct a new exception the once (for improved
 					// performance)
@@ -55,7 +55,7 @@ public class QuoteBeatingAcceptingPolicy extends OrderAcceptancePolicy {
 			}
 		} else {
 			quote = auctioneer.askQuote();
-			if (shout.getPrice() > quote) {
+			if (shout.getPriceAsDouble() > quote) {
 				if (askException == null) {
 					// Only construct a new exception the once (for improved
 					// performance)

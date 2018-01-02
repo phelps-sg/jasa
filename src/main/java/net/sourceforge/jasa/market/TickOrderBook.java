@@ -48,7 +48,7 @@ public class TickOrderBook extends FourHeapOrderBook {
 	}
 	
 	protected void roundPrice(Order order) {
-		order.setPrice(new Double(Math.round(order.getPrice() * multiplier)) / multiplier);
+		order.setPrice(new Double(Math.round(order.getPriceAsDouble() * multiplier)) / multiplier);
 	}
 
 	public int getDecimalPlaces() {

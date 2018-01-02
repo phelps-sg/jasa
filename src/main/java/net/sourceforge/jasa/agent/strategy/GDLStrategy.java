@@ -142,8 +142,8 @@ public class GDLStrategy extends FixedDirectionStrategy implements
 
 		while (sortedShouts.hasNext()) {
 			Order nextShout = (Order) sortedShouts.next();
-			if (nextShout.getPrice() > lastPoint) {
-				currentPoint = nextShout.getPrice();
+			if (nextShout.getPriceAsDouble() > lastPoint) {
+				currentPoint = nextShout.getPriceAsDouble();
 				currentP = calculateProbability(currentPoint);
 				// find the point in (lastPoint, currentPoint] maximizing
 				// probability

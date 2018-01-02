@@ -582,7 +582,7 @@ class TestShoutEngine extends FourHeapOrderBook {
 	}
 
 	protected void checkBalanced(Order s1, Order s2, String condition) {
-		if (!((s1 == null || s2 == null) || s1.getPrice() >= (s2.getPrice() - TOLERANCE))) {
+		if (!((s1 == null || s2 == null) || s1.getPriceAsDouble() >= (s2.getPriceAsDouble() - TOLERANCE))) {
 //			printState();
 			System.out.println("shout1 = " + s1);
 			System.out.println("shout2 = " + s2);

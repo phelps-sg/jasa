@@ -49,7 +49,7 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReportVariabl
 	/**
 	 * Constructor.
 	 * 
-	 * @param market
+	 * @param auction
 	 *          The market to compute supply and demand stats for.
 	 * @param supplyStats
 	 *          The DataWriter to write the supply curve to.
@@ -81,9 +81,9 @@ public abstract class SupplyAndDemandStats extends DirectRevelationReportVariabl
 			if (logger.isDebugEnabled()) logger.debug(shout);
 			qty1 = qty + shout.getQuantity();
 			stats.newData(qty);
-			stats.newData(shout.getPrice());
+			stats.newData(shout.getPriceAsDouble());
 			stats.newData(qty1);
-			stats.newData(shout.getPrice());
+			stats.newData(shout.getPriceAsDouble());
 			qty = qty1;
 		}
 	}

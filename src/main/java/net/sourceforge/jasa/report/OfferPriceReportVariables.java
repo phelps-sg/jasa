@@ -66,7 +66,7 @@ public class OfferPriceReportVariables implements XYReportVariables {
 	public void eventOccurred(SimEvent ev) {
 		if (ev instanceof OrderPlacedEvent) {
 			OrderPlacedEvent event = (OrderPlacedEvent) ev;
-			this.price = event.getOrder().getPrice();
+			this.price = event.getOrder().getPriceAsDouble();
 			this.time = event.getTime();
 		}
 	}

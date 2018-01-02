@@ -97,7 +97,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public Order(Order existing) {
-		this(existing.getAgent(), existing.getQuantity(), existing.getPrice(),
+		this(existing.getAgent(), existing.getQuantity(), existing.getPriceAsDouble(),
 		    existing.isBid());
 	}
 
@@ -113,9 +113,13 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		return quantity;
 	}
 
-	public double getPrice() {
+	public double getPriceAsDouble() {
 		return price.doubleValue();
 	}
+
+	public Price getPrice() {
+	    return price;
+    }
 
 	public TradingAgent getAgent() {
 		return agent;
@@ -139,9 +143,9 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 			return false;
 		}
 		if (this.isBid()) {
-			return other.isAsk() && this.getPrice() >= other.getPrice();
+			return other.isAsk() && this.getPriceAsDouble() >= other.getPriceAsDouble();
 		} else {
-			return other.isBid() && other.getPrice() >= this.getPrice();
+			return other.isBid() && other.getPriceAsDouble() >= this.getPriceAsDouble();
 		}
 	}
 
@@ -208,7 +212,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 		if (s == null) {
 			return alt;
 		} else {
-			return s.getPrice();
+			return s.getPriceAsDouble();
 		}
 	}
 
@@ -295,6 +299,10 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 
 	public void setPrice(double price) {
 		this.price = new Price(price);
+	}
+
+	public void setPrice(Price price) {
+		this.price = price;
 	}
 
 	public void setQuantity(int quantity) {

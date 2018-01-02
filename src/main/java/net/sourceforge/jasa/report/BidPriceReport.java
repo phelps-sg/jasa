@@ -53,7 +53,7 @@ public class BidPriceReport extends AbstractAuctionReport implements
 		if (event instanceof OrderPlacedEvent) {
 			Order order = ((OrderPlacedEvent) event).getOrder();
 			if (order.isBid()) {
-				stats.newData(order.getPrice());
+				stats.newData(order.getPriceAsDouble());
 			}
 		}
 	}

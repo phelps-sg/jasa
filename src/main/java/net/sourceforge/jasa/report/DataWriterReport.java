@@ -115,12 +115,12 @@ public class DataWriterReport extends AbstractAuctionReport {
 		if (shout.isBid()) {
 			if (bidLog != null) {
 				bidLog.newData(time);
-				bidLog.newData(shout.getPrice());
+				bidLog.newData(shout.getPriceAsDouble());
 			}
 		} else {
 			if (askLog != null) {
 				askLog.newData(time);
-				askLog.newData(shout.getPrice());
+				askLog.newData(shout.getPriceAsDouble());
 			}
 		}
 		dataUpdated();

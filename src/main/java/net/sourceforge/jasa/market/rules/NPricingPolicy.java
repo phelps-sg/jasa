@@ -61,12 +61,12 @@ public class NPricingPolicy implements PricingPolicy, Resetable, Serializable {
 	public double determineClearingPrice(Order bid, Order ask,
 	    MarketQuote clearingQuote) {
 
-		queue.newData(bid.getPrice());
-		queue.newData(ask.getPrice());
+		queue.newData(bid.getPriceAsDouble());
+		queue.newData(ask.getPriceAsDouble());
 		double avg = queue.getMean();
 
-		double price = (avg >= bid.getPrice()) ? bid.getPrice() : ((avg <= ask
-		    .getPrice()) ? ask.getPrice() : avg);
+		double price = (avg >= bid.getPriceAsDouble()) ? bid.getPriceAsDouble() : ((avg <= ask
+		    .getPriceAsDouble()) ? ask.getPriceAsDouble() : avg);
 
 		return price;
 	}

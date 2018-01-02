@@ -55,15 +55,15 @@ public class McAfeeClearingPolicy implements ClearingPolicy {
 		    || orderBook.getLowestUnmatchedAsk() == null) {
 			efficientClearing = false;
 		} else {
-			a0 = orderBook.getHighestUnmatchedBid().getPrice();
-			b0 = orderBook.getLowestUnmatchedAsk().getPrice();
+			a0 = orderBook.getHighestUnmatchedBid().getPriceAsDouble();
+			b0 = orderBook.getLowestUnmatchedAsk().getPriceAsDouble();
 			p0 = (a0 + b0) / 2;
-			efficientClearing = orderBook.getHighestMatchedAsk().getPrice() <= p0
-			    && p0 <= orderBook.getLowestMatchedBid().getPrice();
+			efficientClearing = orderBook.getHighestMatchedAsk().getPriceAsDouble() <= p0
+			    && p0 <= orderBook.getLowestMatchedBid().getPriceAsDouble();
 		}
 		if (!efficientClearing) {
-			a1 = orderBook.getLowestMatchedBid().getPrice();
-			b1 = orderBook.getHighestMatchedAsk().getPrice();
+			a1 = orderBook.getLowestMatchedBid().getPriceAsDouble();
+			b1 = orderBook.getHighestMatchedAsk().getPriceAsDouble();
 		}
 		Iterator<Order> matchedShouts = orderBook.matchOrders().iterator();
 		while (matchedShouts.hasNext()) {
@@ -72,7 +72,7 @@ public class McAfeeClearingPolicy implements ClearingPolicy {
 			if (efficientClearing) {
 				auctioneer.clear(ask, bid, p0);
 			} else {
-				if (bid.getPrice() > a1) {
+				if (bid.getPriceAsDouble() > a1) {
 					auctioneer.clear(ask, bid, a1, b1, ask.getQuantity());
 				}
 			}

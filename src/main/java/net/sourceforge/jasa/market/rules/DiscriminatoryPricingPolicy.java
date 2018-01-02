@@ -43,9 +43,9 @@ public class DiscriminatoryPricingPolicy extends KPricingPolicy implements
 
 	public double determineClearingPrice(Order bid, Order ask,
 	    MarketQuote clearingQuote) {
-		assert bid.getPrice() >= ask.getPrice();
+		assert bid.getPriceAsDouble() >= ask.getPriceAsDouble();
 
-		return kInterval(ask.getPrice(), bid.getPrice());
+		return kInterval(ask.getPriceAsDouble(), bid.getPriceAsDouble());
 	}
 
 }

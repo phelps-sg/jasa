@@ -105,12 +105,12 @@ public class ContinuousDoubleAuctioneer extends TransparentAuctioneer implements
 		double quote;
 		if (shout.isBid()) {
 			quote = bidQuote();
-			if (shout.getPrice() <= quote) {
+			if (shout.getPriceAsDouble() <= quote) {
 				bidNotAnImprovementException();
 			}
 		} else {
 			quote = askQuote();
-			if (shout.getPrice() >= quote) {
+			if (shout.getPriceAsDouble() >= quote) {
 				askNotAnImprovementException();
 			}
 		}

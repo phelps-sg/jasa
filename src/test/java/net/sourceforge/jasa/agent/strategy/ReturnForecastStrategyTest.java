@@ -61,7 +61,7 @@ public class ReturnForecastStrategyTest extends TestCase {
 		Order currentShout = new Order();
 		Order newShout = strategy.modifyOrder(currentShout, market);
 		System.out.println("newShout = " + newShout);
-		assertFalse(Double.isNaN(newShout.getPrice()));
+		assertFalse(Double.isNaN(newShout.getPriceAsDouble()));
 	}
 
 }

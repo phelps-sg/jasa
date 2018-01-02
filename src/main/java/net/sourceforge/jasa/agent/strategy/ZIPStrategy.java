@@ -80,8 +80,8 @@ public class ZIPStrategy extends MomentumStrategy {
 			}
 		} else {
 			if (getAgent().active()) {
-				adjustMargin(targetMargin(lastShout.getPrice()
-				    - perterb(lastShout.getPrice())));
+				adjustMargin(targetMargin(lastShout.getPriceAsDouble()
+				    - perterb(lastShout.getPriceAsDouble())));
 			}
 		}
 	}
@@ -100,8 +100,8 @@ public class ZIPStrategy extends MomentumStrategy {
 			}
 		} else {
 			if (getAgent().active()) {
-				adjustMargin(targetMargin(lastShout.getPrice()
-				    + perterb(lastShout.getPrice())));
+				adjustMargin(targetMargin(lastShout.getPriceAsDouble()
+				    + perterb(lastShout.getPriceAsDouble())));
 			}
 		}
 	}

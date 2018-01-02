@@ -1,5 +1,6 @@
 package net.sourceforge.jasa.market;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 public class Price implements Comparable<Price> {
@@ -31,13 +32,26 @@ public class Price implements Comparable<Price> {
         this(whole, fractional, DEFAULT_EXPONENT);
     }
 
-    public Price(long whole) {
-        this(whole, 0);
+    public Price(long whole, int exponent) {
+        this(whole, 0, exponent);
+    }
+
+    public Price(double price, int exponent) {
+        this((long) price, exponent);
+        this.fractional = (long) (Math.abs(price - whole) * multiplier);
     }
 
     public Price(double price) {
-        this((long) price);
-        this.fractional = (long) (Math.abs(price - whole) * multiplier);
+        this(price, DEFAULT_EXPONENT);
+    }
+
+    public Price(BigDecimal price, int exponent) {
+        this(price.intValue(), exponent);
+        this.fractional = price.multiply(new BigDecimal(multiplier)).longValue();
+    }
+
+    public Price(BigDecimal price) {
+        this(price, DEFAULT_EXPONENT);
     }
 
     public long longValue() {

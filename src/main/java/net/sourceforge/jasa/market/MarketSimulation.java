@@ -453,8 +453,8 @@ public class MarketSimulation extends AbstractSimulation
 	 */
 	public void clear(Order ask, Order bid, double transactionPrice) {
 		assert ask.getQuantity() == bid.getQuantity();
-		assert transactionPrice >= ask.getPrice();
-		assert transactionPrice <= bid.getPrice();
+		assert transactionPrice >= ask.getPriceAsDouble();
+		assert transactionPrice <= bid.getPriceAsDouble();
 		lastTransactionPrice = transactionPrice;
 		clear(ask, bid, transactionPrice, transactionPrice, ask.getQuantity());
 	}
@@ -580,8 +580,8 @@ public class MarketSimulation extends AbstractSimulation
 	/**
 	 * Submit a new order to the market.
 	 * 
-	 * @param shout
-	 *          The new shout in the market.
+	 * @param order
+	 *          The new order in the market.
 	 */
 	public void placeOrder(Order order) throws AuctionException {
 		if (closed()) {

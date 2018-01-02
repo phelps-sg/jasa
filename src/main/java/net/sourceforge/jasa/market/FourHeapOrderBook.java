@@ -240,8 +240,8 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	 * 
 	 * @param shout
 	 *          The shout.
-	 * @param heap
-	 *          The heap.
+	 * @param to
+	 *          The heap being moved to.
 	 * 
 	 * @return A reference to the, possibly modified, shout.
 	 * 
@@ -327,12 +327,12 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 			Order bInTop = getLowestMatchedBid();
 
 			if (sOutTop != null && sOutTop.matches(bid)
-			    && (bInTop == null || bInTop.getPrice() >= sOutTop.getPrice())) {
+			    && (bInTop == null || bInTop.getPriceAsDouble() >= sOutTop.getPriceAsDouble())) {
 
 				// found match
 				uninsertedUnits -= promoteLowestUnmatchedAsk(bid);
 
-			} else if (bInTop != null && bid.getPrice() > bInTop.getPrice()) {
+			} else if (bInTop != null && bid.getPriceAsDouble() > bInTop.getPriceAsDouble()) {
 
 				uninsertedUnits -= displaceLowestMatchedBid(bid);
 
@@ -358,7 +358,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 
 				uninsertedUnits -= promoteHighestUnmatchedBid(ask);
 
-			} else if (sInTop != null && ask.getPrice() < sInTop.getPrice()) {
+			} else if (sInTop != null && ask.getPriceAsDouble() < sInTop.getPriceAsDouble()) {
 
 				uninsertedUnits -= displaceHighestMatchedAsk(ask);
 
@@ -533,7 +533,7 @@ public class FourHeapOrderBook implements OrderBook, Serializable {
 	}
 	
 	protected void checkBalanced(Order s1, Order s2, String condition) {
-		if (!((s1 == null || s2 == null) || s1.getPrice() >= (s2.getPrice()))) {
+		if (!((s1 == null || s2 == null) || s1.getPriceAsDouble() >= (s2.getPriceAsDouble()))) {
 			throw new RuntimeException("Heaps not balanced! - " + condition);
 		}
 	}

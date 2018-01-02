@@ -167,8 +167,8 @@ public abstract class MomentumStrategy extends FixedDirectionStrategy implements
 		    || lastShout.isBid() && event.getBid().equals(lastShout);
 		if (lastShoutAccepted) {
 			trPrice = event.getPrice();
-			trBidPrice = event.getBid().getPrice();
-			trAskPrice = event.getAsk().getPrice();
+			trBidPrice = event.getBid().getPriceAsDouble();
+			trAskPrice = event.getAsk().getPriceAsDouble();
 		}
 	}
 

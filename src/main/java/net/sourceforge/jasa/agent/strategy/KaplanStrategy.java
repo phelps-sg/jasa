@@ -150,7 +150,7 @@ public class KaplanStrategy extends FixedDirectionStrategy implements
 					shout.setPrice(quote.getBid());
 				}
 			}
-			logger.debug(this + ": price = " + shout.getPrice());
+			logger.debug(this + ": price = " + shout.getPriceAsDouble());
 			return true;
 		} else {
 			return false;

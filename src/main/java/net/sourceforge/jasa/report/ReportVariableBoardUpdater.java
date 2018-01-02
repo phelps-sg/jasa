@@ -141,16 +141,16 @@ public class ReportVariableBoardUpdater extends AbstractAuctionReport implements
 			ReportVariableBoard.getInstance().reportValue(
 			    TRANS_PRICE_SPREAD,
 			    new TimePeriodValue(time, ((TransactionExecutedEvent) event).getBid()
-			        .getPrice()
-			        - ((TransactionExecutedEvent) event).getAsk().getPrice()));
+			        .getPriceAsDouble()
+			        - ((TransactionExecutedEvent) event).getAsk().getPriceAsDouble()));
 			ReportVariableBoard.getInstance().reportValue(
 			    TRANS_ASK_PRICE,
 			    new TimePeriodValue(time, ((TransactionExecutedEvent) event).getAsk()
-			        .getPrice()));
+			        .getPriceAsDouble()));
 			ReportVariableBoard.getInstance().reportValue(
 			    TRANS_BID_PRICE,
 			    new TimePeriodValue(time, ((TransactionExecutedEvent) event).getBid()
-			        .getPrice()));
+			        .getPriceAsDouble()));
 
 			transPriceDay.count++;
 			transPriceDay.devSquareSum += Math.pow(((TransactionExecutedEvent) event)

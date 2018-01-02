@@ -58,7 +58,7 @@ public class MarkupStrategyDecorator extends FixedDirectionStrategy
 		double delta;
 		Order strategicShout = subStrategy.modifyOrder(shout, auction);
 		if (strategicShout != null) {
-			double strategicPrice = strategicShout.getPrice();
+			double strategicPrice = strategicShout.getPriceAsDouble();
 			if (isSell()) {
 				delta = markup * strategicPrice;
 			} else {
@@ -66,7 +66,7 @@ public class MarkupStrategyDecorator extends FixedDirectionStrategy
 			}
 			shout.setPrice(strategicPrice + delta);
 			shout.setQuantity(quantity);
-			if (shout.getPrice() < 0) {
+			if (shout.getPriceAsDouble() < 0) {
 				shout.setPrice(0);
 			}
 			return super.modifyShout(shout);

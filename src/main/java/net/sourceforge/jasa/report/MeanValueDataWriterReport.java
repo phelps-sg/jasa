@@ -93,9 +93,9 @@ public class MeanValueDataWriterReport extends DataWriterReport {
 	public void updateShoutLog(OrderPlacedEvent event) {
 		Order shout = event.getOrder();
 		if (shout.isBid()) {
-			bidStats.newData(shout.getPrice());
+			bidStats.newData(shout.getPriceAsDouble());
 		} else {
-			askStats.newData(shout.getPrice());
+			askStats.newData(shout.getPriceAsDouble());
 		}
 	}
 

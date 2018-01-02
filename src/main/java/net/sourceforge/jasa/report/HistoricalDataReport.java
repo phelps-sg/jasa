@@ -178,23 +178,23 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		if (shout.isAsk()) {
 			asks.add(shout);
 			memoryAsks[currentMemoryCell]++;
-			if (shout.getPrice() < lowestAskPrice) {
-				lowestAskPrice = shout.getPrice();
+			if (shout.getPriceAsDouble() < lowestAskPrice) {
+				lowestAskPrice = shout.getPriceAsDouble();
 			}
 
 			if (lowestUnacceptedAsk == null
-			    || lowestUnacceptedAsk.getPrice() > shout.getPrice()) {
+			    || lowestUnacceptedAsk.getPriceAsDouble() > shout.getPriceAsDouble()) {
 				lowestUnacceptedAsk = shout;
 			}
 		} else {
 			bids.add(shout);
 			memoryBids[currentMemoryCell]++;
-			if (shout.getPrice() > highestBidPrice) {
-				highestBidPrice = shout.getPrice();
+			if (shout.getPriceAsDouble() > highestBidPrice) {
+				highestBidPrice = shout.getPriceAsDouble();
 			}
 
 			if (highestUnacceptedBid == null
-			    || highestUnacceptedBid.getPrice() < shout.getPrice()) {
+			    || highestUnacceptedBid.getPriceAsDouble() < shout.getPriceAsDouble()) {
 				highestUnacceptedBid = shout;
 			}
 
@@ -243,7 +243,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	public double getHighestUnacceptedBidPrice() {
 		if (highestUnacceptedBid != null) {
-			return highestUnacceptedBid.getPrice();
+			return highestUnacceptedBid.getPriceAsDouble();
 		}
 
 		Iterator<Order> i = bids.iterator();
@@ -251,8 +251,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		while (i.hasNext()) {
 			Order s = i.next();
 			if (!accepted(s)) {
-				if (s.getPrice() > highestUnacceptedBidPrice) {
-					highestUnacceptedBidPrice = s.getPrice();
+				if (s.getPriceAsDouble() > highestUnacceptedBidPrice) {
+					highestUnacceptedBidPrice = s.getPriceAsDouble();
 					highestUnacceptedBid = s;
 				}
 			}
@@ -266,8 +266,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		while (i.hasNext()) {
 			Order s = i.next();
 			if (accepted(s)) {
-				if (s.getPrice() < lowestAcceptedBidPrice) {
-					lowestAcceptedBidPrice = s.getPrice();
+				if (s.getPriceAsDouble() < lowestAcceptedBidPrice) {
+					lowestAcceptedBidPrice = s.getPriceAsDouble();
 				}
 			}
 		}
@@ -277,7 +277,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 
 	public double getLowestUnacceptedAskPrice() {
 		if (lowestUnacceptedAsk != null) {
-			return lowestUnacceptedAsk.getPrice();
+			return lowestUnacceptedAsk.getPriceAsDouble();
 		}
 
 		Iterator<Order> i = asks.iterator();
@@ -285,8 +285,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		while (i.hasNext()) {
 			Order s = i.next();
 			if (!accepted(s)) {
-				if (s.getPrice() < lowestUnacceptedBidPrice) {
-					lowestUnacceptedBidPrice = s.getPrice();
+				if (s.getPriceAsDouble() < lowestUnacceptedBidPrice) {
+					lowestUnacceptedBidPrice = s.getPriceAsDouble();
 					lowestUnacceptedAsk = s;
 				}
 			}
@@ -300,8 +300,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		while (i.hasNext()) {
 			Order s = i.next();
 			if (accepted(s)) {
-				if (s.getPrice() > highestAcceptedAskPrice) {
-					highestAcceptedAskPrice = s.getPrice();
+				if (s.getPriceAsDouble() > highestAcceptedAskPrice) {
+					highestAcceptedAskPrice = s.getPriceAsDouble();
 				}
 			}
 		}
@@ -352,8 +352,8 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 		Iterator<Order> i = shouts.iterator();
 		while (i.hasNext()) {
 			Order shout = i.next();
-			if ((price >= 0 && shout.getPrice() >= price)
-			    || (price < 0 && shout.getPrice() <= -price)) {
+			if ((price >= 0 && shout.getPriceAsDouble() >= price)
+			    || (price < 0 && shout.getPriceAsDouble() <= -price)) {
 				if (accepted) {
 					if (acceptedShouts.contains(shout)) {
 						numShouts++;
@@ -671,7 +671,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			priceForAsksBelow = price;
 
 			while (asksI.hasNext())
-				if (((Order) asksI.next()).getPrice() <= price) {
+				if (((Order) asksI.next()).getPriceAsDouble() <= price) {
 					numOfAsksBelow++;
 				} else {
 					try {
@@ -694,7 +694,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			priceForBidsAbove = price;
 
 			while (bidsI.hasNext()) {
-				if (((Order) bidsI.next()).getPrice() < price) {
+				if (((Order) bidsI.next()).getPriceAsDouble() < price) {
 					numOfBidsAbove--;
 				} else {
 					try {
@@ -718,7 +718,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			priceForAcceptedAsksAbove = price;
 
 			while (acceptedAsksI.hasNext())
-				if (((Order) acceptedAsksI.next()).getPrice() < price) {
+				if (((Order) acceptedAsksI.next()).getPriceAsDouble() < price) {
 					numOfAcceptedAsksAbove--;
 				} else {
 					try {
@@ -741,7 +741,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			priceForAcceptedBidsBelow = price;
 
 			while (acceptedBidsI.hasNext())
-				if (((Order) acceptedBidsI.next()).getPrice() <= price) {
+				if (((Order) acceptedBidsI.next()).getPriceAsDouble() <= price) {
 					numOfAcceptedBidsBelow++;
 				} else {
 					// NOTE: due to a possible bug in TreeList,
@@ -768,7 +768,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			priceForRejectedAsksBelow = price;
 
 			while (rejectedAsksI.hasNext())
-				if (((Order) rejectedAsksI.next()).getPrice() <= price) {
+				if (((Order) rejectedAsksI.next()).getPriceAsDouble() <= price) {
 					numOfRejectedAsksBelow++;
 				} else {
 					try {
@@ -792,7 +792,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			priceForRejectedBidsAbove = price;
 
 			while (rejectedBidsI.hasNext())
-				if (((Order) rejectedBidsI.next()).getPrice() < price) {
+				if (((Order) rejectedBidsI.next()).getPriceAsDouble() < price) {
 					numOfRejectedBidsAbove--;
 				} else {
 					try {
@@ -870,7 +870,7 @@ public class HistoricalDataReport extends AbstractAuctionReport implements
 			String s = "[";
 			ListIterator iterator = listIterator();
 			while (iterator.hasNext()) {
-				s += ((Order) iterator.next()).getPrice() + " ";
+				s += ((Order) iterator.next()).getPriceAsDouble() + " ";
 			}
 			s += "] ";
 			return "(" + getClass() + s + "name: " + name + " size: " + size() + ")";

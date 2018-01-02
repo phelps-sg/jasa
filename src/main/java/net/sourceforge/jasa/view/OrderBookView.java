@@ -153,13 +153,13 @@ public class OrderBookView extends JTable implements ReportWithGUI, TableModel,
 		switch (columnIndex) {
 		case 0:
 			return rowIndex < bids.size() ? priceFormat.format(bids.get(
-					rowIndex).getPrice()) : "";
+					rowIndex).getPriceAsDouble()) : "";
 		case 1:
 			return rowIndex < bids.size() ? qtyFormat.format(bids.get(rowIndex)
 					.getQuantity()) : "";
 		case 2:
 			return rowIndex < asks.size() ? priceFormat.format(asks.get(
-					rowIndex).getPrice()) : "";
+					rowIndex).getPriceAsDouble()) : "";
 		case 3:
 			return rowIndex < asks.size() ? qtyFormat.format(asks.get(rowIndex)
 					.getQuantity()) : "";
