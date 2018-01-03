@@ -150,7 +150,7 @@ public class Order implements Comparable<Order>, Cloneable, Serializable {
 	}
 
 	public int compareTo(Order other) {
-		int priceComparision = price.compareTo(other.price);
+		int priceComparision = other.price.compareTo(this.price);
 		if (priceComparision != 0) {
 			return priceComparision;
 		} else if (quantity < other.quantity) {

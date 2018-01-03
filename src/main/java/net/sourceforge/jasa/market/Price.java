@@ -64,7 +64,10 @@ public class Price implements Comparable<Price> {
 
     @Override
     public int compareTo(Price other) {
-        return (int) (this.longValue() - other.longValue());
+        if (this.exponent != other.exponent) {
+            throw new UnsupportedOperationException("Comparision of prices with different tick sizes is not supported.");
+        }
+        return (int) (other.longValue() - this.longValue());
     }
 
     public boolean isPositive() {
@@ -90,7 +93,7 @@ public class Price implements Comparable<Price> {
     }
 
     public static void main(String[] args) {
-        Price p = new Price(3, 14);
+        Price p = new Price(3, 14L);
         System.out.println(p);
         System.out.println(p.toPrettyString());
 
