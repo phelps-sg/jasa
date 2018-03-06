@@ -10,10 +10,6 @@ public class Price extends java.lang.Number implements Comparable<Price> {
 
     protected long longValue;
 
-//    protected long fractional;
-
-//    protected int exponent;
-
     protected int multiplier;
 
 	static DecimalFormat currencyFormatter = new DecimalFormat(
@@ -29,7 +25,6 @@ public class Price extends java.lang.Number implements Comparable<Price> {
     public Price(long longValue, int exponent) {
 	    this(exponent);
         this.longValue = longValue;
-//        this.exponent = exponent;
     }
 
     public Price(long whole, long fractional, int exponent) {
@@ -40,10 +35,6 @@ public class Price extends java.lang.Number implements Comparable<Price> {
     public Price(long longValue) {
         this(longValue, DEFAULT_EXPONENT);
     }
-
-//    public Price(long longValue, int exponent) {
-//        this(longValue, 0, exponent);
-//    }
 
     public Price(double price, int exponent) {
 	    this(exponent);
