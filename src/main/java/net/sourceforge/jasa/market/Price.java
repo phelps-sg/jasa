@@ -92,6 +92,16 @@ public class Price extends java.lang.Number implements Comparable<Price> {
         return currencyFormatter.format(doubleValue());
     }
 
+    @Override
+    public int hashCode() {
+        return intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	    return this.longValue == ((Price) obj).longValue;
+    }
+
 //    @Override
 //    public String toString() {
 //        return "Price{" +
