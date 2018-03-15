@@ -72,6 +72,10 @@ public class Price extends java.lang.Number implements Comparable<Price> {
         return ((double) longValue) / multiplier;
     }
 
+    public BigDecimal toBigDecimal() {
+	    return new BigDecimal(longValue).divide(new BigDecimal(multiplier));
+    }
+
     @Override
     public int compareTo(Price other) {
         if (this.multiplier != other.multiplier) {
