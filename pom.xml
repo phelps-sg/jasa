@@ -8,7 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.jasa</groupId>
 	<artifactId>jasa</artifactId>
-	<version>1.3.0</version>
+	<version>1.3.1</version>
 	<name>jasa</name>
 	<description>The Java Auction Simulator API (JASA) is a framework for building agent-based models of auction markets.</description>
 	<url>https://jasa.sourceforge.net/</url>
@@ -174,7 +174,7 @@
 		<dependency>
 			<groupId>net.sourceforge.jabm</groupId>
 			<artifactId>jabm</artifactId>
-			<version>0.9.3-SNAPSHOT</version>
+			<version>0.9.5</version>
 		</dependency>
 	</dependencies>
 
