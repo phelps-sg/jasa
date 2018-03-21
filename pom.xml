@@ -8,7 +8,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourceforge.jasa</groupId>
 	<artifactId>jasa</artifactId>
-	<version>1.3.2</version>
+	<version>1.3.3</version>
 	<name>jasa</name>
 	<description>The Java Auction Simulator API (JASA) is a framework for building agent-based models of auction markets.</description>
 	<url>https://jasa.sourceforge.net/</url>
@@ -150,12 +150,14 @@
 		<!--</repository>-->
 	<!--</repositories>-->
 
+    <repositories>
+        <repository>
+            <id>programmers-friend</id>
+            <url>http://programmers-friend.org/maven/repo/</url>
+        </repository>
+    </repositories>
+
 	<dependencies>
-		<dependency>
-			<groupId>programmers-friend</groupId>
-			<artifactId>pf-joi</artifactId>
-			<version>3.0</version>
-		</dependency>
 		<dependency>
 			<groupId>net.sf.trove4j</groupId>
 			<artifactId>trove4j</artifactId>
@@ -174,8 +176,14 @@
 		<dependency>
 			<groupId>net.sourceforge.jabm</groupId>
 			<artifactId>jabm</artifactId>
-			<version>0.9.7</version>
+			<version>0.9.9</version>
 		</dependency>
+		<dependency>
+		<groupId>org.pfsw</groupId>
+		<artifactId>pf-joi</artifactId>
+		<version>3.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 </project>
