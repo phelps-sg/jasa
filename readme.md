@@ -1,10 +1,6 @@
 README for JASA
 ---------------
 
-Last modified: $Author$\
- $Date$\
- $Revision$\
-
 ### About
 
 JASA is a high-performance auction simulator written in JAVA. It is
